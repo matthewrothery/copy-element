@@ -58,18 +58,17 @@ pointer-events
 
 # Asset Handling
 
-Replace:
+Replace with placeholders:
 
 ```
 
-img
-svg
 video
 canvas
+iframe
 
 ```
 
-with placeholders.
+Inline SVGs: preserve when cloning. Use `createElementNS` with SVG namespace for SVG elements and descendants so they render correctly. SVG sprite references (`<use href="...">`) rely on base URL resolution in preview; same-origin sprites load when sourceUrl is set.
 
 ---
 

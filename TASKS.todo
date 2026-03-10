@@ -1,10 +1,1 @@
 
-
-
-Improvements:
-  - [ ] The extension popup needs redesigning
-  - [ ] When opening the library, it should open a new tab with the library
-  - [ ] When you click "Capture" it should close the popup
-  - [ ] post-capture, I want a large, zoomed in image of the captured element and details in the modal. Improve what we have, make suggestions.
-  - [ ] The CSS generated is too verbose. I want it to be more concise. Which may mean removing "none" etc. values. 
-  - [ ] Do we consider saving images too?

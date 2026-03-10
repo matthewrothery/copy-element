@@ -1,5 +1,6 @@
 import { nanoid } from "nanoid";
 import type { CapturedElementData, Snippet } from "../shared/types/snippet";
+import { buildPreviewForCapture } from "../shared/utils/preview-srcdoc-builder";
 import { generateSnippetName } from "../shared/utils/snippet-name";
 import { TOKENS_CSS } from "../shared/tokens-css";
 
@@ -215,7 +216,13 @@ export class CaptureConfirmationModal {
       const iframe = document.createElement("iframe");
       iframe.sandbox.add("allow-same-origin");
       iframe.style.cssText = "width:100%;height:120px;border:0;";
-      iframe.srcdoc = capture.html;
+      iframe.srcdoc = buildPreviewForCapture({
+        html: capture.html,
+        styleBlock: capture.styleBlock,
+        width: capture.width,
+        height: capture.height,
+        sourceUrl: window.location.href
+      });
       preview.appendChild(iframe);
     }
     modal.appendChild(preview);

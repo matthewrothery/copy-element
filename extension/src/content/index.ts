@@ -1,6 +1,7 @@
 import { nanoid } from "nanoid";
 import { cloneElementTreeWithInlineStyles } from "../shared/utils/dom-cloner";
 import { serializeElementToHtml } from "../shared/utils/html-serializer";
+import { inlineSvgSprites } from "../shared/utils/svg-sprite-inliner";
 import { htmlToJsx } from "../shared/utils/jsx-converter";
 import { buildRenderContextFromElement } from "../shared/utils/parent-layout-extractor";
 import { buildBaseStyleBlock } from "../shared/utils/style-block-builder";
@@ -80,6 +81,7 @@ function ensurePicker(): ElementPicker {
           const rootId = `snippet-root-${nanoid()}`;
           cloned.setAttribute("id", rootId);
           cloned.setAttribute("data-snippet-root", "true");
+          await inlineSvgSprites(cloned, window.location.href);
           const html = serializeElementToHtml(cloned);
           const jsx = htmlToJsx(html);
 

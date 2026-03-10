@@ -58,6 +58,20 @@ describe("buildPreviewSrcDoc", () => {
     expect(doc).toContain("width:1px");
     expect(doc).toContain("height:1px");
   });
+
+  it("injects base tag when sourceUrl is present for relative URL resolution", () => {
+    const snippet = baseSnippet({ sourceUrl: "https://chat.example.com/chat" });
+    const doc = buildPreviewSrcDoc(snippet);
+
+    expect(doc).toContain('<base href="https://chat.example.com/">');
+  });
+
+  it("omits base tag when sourceUrl is invalid", () => {
+    const snippet = baseSnippet({ sourceUrl: "not-a-valid-url" });
+    const doc = buildPreviewSrcDoc(snippet);
+
+    expect(doc).not.toContain("<base ");
+  });
 });
 
 describe("buildCopyHtml", () => {

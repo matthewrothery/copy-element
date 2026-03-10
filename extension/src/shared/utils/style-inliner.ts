@@ -7,7 +7,7 @@ export function styleMapToInlineString(styleMap: StyleMap): string {
     .join(";");
 }
 
-export function applyInlineStyles(element: HTMLElement, styleMap: StyleMap): void {
+export function applyInlineStyles(element: Element, styleMap: StyleMap): void {
   const styleString = styleMapToInlineString(styleMap);
   if (styleString.length === 0) {
     element.removeAttribute("style");

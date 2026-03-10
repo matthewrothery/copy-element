@@ -3,13 +3,27 @@ import { buildPseudoElementClone } from "./pseudo-element-extractor";
 import { extractVisualStyles } from "./style-extractor";
 import { applyInlineStyles } from "./style-inliner";
 
+const SVG_NS = "http://www.w3.org/2000/svg";
+
 function shouldSkipTag(element: Element): boolean {
   const tagName = element.tagName.toLowerCase();
   return tagName === "script" || tagName === "noscript";
 }
 
-function cloneWithInlineStyles(source: Element, documentRef: Document): HTMLElement {
-  const clone = documentRef.createElement(source.tagName.toLowerCase());
+function isSvgElement(element: Element): boolean {
+  return element.namespaceURI === SVG_NS;
+}
+
+function createClone(source: Element, documentRef: Document): Element {
+  const tagName = source.tagName.toLowerCase();
+  if (isSvgElement(source)) {
+    return documentRef.createElementNS(SVG_NS, tagName);
+  }
+  return documentRef.createElement(tagName);
+}
+
+function cloneWithInlineStyles(source: Element, documentRef: Document): Element {
+  const clone = createClone(source, documentRef);
   const sourceElement = source as HTMLElement;
   const sourceStyles = extractVisualStyles(source);
 
