@@ -1,0 +1,94 @@
+---
+alwaysApply: true
+description: Chrome extension development rules
+---
+
+# Chrome Extension Rules
+
+This project builds a Chrome Extension using Manifest V3.
+
+---
+
+# Extension Structure
+
+Directory structure:
+
+```
+
+extension/
+background/
+content/
+overlay/
+popup/
+
+```
+
+---
+
+# Content Script Rules
+
+Content scripts must:
+
+- avoid blocking page scripts
+- avoid modifying page styles
+- isolate injected UI
+
+Use shadow DOM when needed.
+
+---
+
+# Overlay Rules
+
+Overlay must:
+
+- be non intrusive
+- use pointer events carefully
+- highlight elements accurately
+
+---
+
+# Permissions
+
+Use minimal permissions.
+
+Preferred:
+
+```
+
+activeTab
+storage
+scripting
+
+```
+
+Avoid unnecessary host permissions.
+
+---
+
+# Performance
+
+DOM operations must be efficient.
+
+Avoid:
+
+```
+
+full page traversal
+expensive query selectors
+
+```
+
+---
+
+# Storage
+
+Use:
+
+```
+
+chrome.storage.local
+
+```
+
+Never store large binary data unnecessarily.
+```

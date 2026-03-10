@@ -1,0 +1,28 @@
+# Testing Standards
+
+This project uses Vitest for unit testing and React Testing Library for UI component tests.
+
+---
+
+# Required Testing Approach
+
+- Write unit tests for all new utility modules.
+- Prefer pure functions where possible to simplify testability.
+- Place tests next to source files using `*.test.ts` and `*.test.tsx`.
+- Mock `chrome.*` APIs in tests; never rely on real extension APIs in test runs.
+- For React tests, assert user-visible behavior and accessible labels.
+
+---
+
+# Coverage Expectations
+
+- Utility modules should target at least 80% statement coverage.
+- Core flows (capture pipeline, snippet storage, export conversion) must have explicit tests.
+
+---
+
+# MVP Minimum Test Gates
+
+- `npm test` must pass before merging.
+- New capture pipeline logic requires at least one happy-path and one edge-case test.
+- Storage CRUD requires create/read/delete test coverage.

@@ -1,0 +1,156 @@
+---
+alwaysApply: true
+description: Global coding standards for the Element Capture project
+---
+
+
+# Project Rules
+
+This project is an AI-assisted development environment using Cursor and AI agents.
+
+All code must follow these principles.
+
+---
+
+# Tech Stack
+
+Language:
+
+TypeScript only.
+
+Frameworks:
+
+React
+Node.js
+
+CSS:
+
+Less or standard CSS only.
+
+Do not use Tailwind.
+
+---
+
+# Code Quality
+
+Code must be:
+
+- strongly typed
+- modular
+- readable
+- well structured
+
+Avoid:
+
+````
+
+any
+large files
+deep nesting
+
+```
+
+Prefer:
+
+```
+
+pure functions
+small modules
+clear naming
+
+```
+
+---
+
+# File Size Guidelines
+
+Files should generally stay under:
+
+```
+
+300 lines
+
+```
+
+If larger, split into modules.
+
+---
+
+# Naming Conventions
+
+Variables:
+
+```
+
+camelCase
+
+```
+
+Components:
+
+```
+
+PascalCase
+
+```
+
+Constants:
+
+```
+
+UPPER_CASE
+
+```
+
+---
+
+# React Rules
+
+Use:
+
+```
+
+functional components
+hooks
+
+```
+
+Avoid:
+
+```
+
+class components
+
+```
+
+---
+
+# Error Handling
+
+Always handle failures:
+
+```
+
+DOM capture failures
+storage failures
+MCP network errors
+
+```
+
+---
+
+# AI Agent Behavior
+
+If a recurring problem appears:
+
+Add documentation.
+
+If architecture changes:
+
+Update:
+
+```
+
+ARCHITECTURE.md
+
+```

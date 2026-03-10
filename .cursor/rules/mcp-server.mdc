@@ -1,0 +1,119 @@
+---
+alwaysApply: true
+description: MCP server integration rules
+---
+
+# MCP Server Rules
+
+The MCP server exposes snippet data to AI coding tools.
+
+---
+
+# Server Stack
+
+Use:
+
+```
+
+Node.js
+TypeScript
+Express
+
+```
+
+---
+
+# Server Responsibilities
+
+The server must:
+
+```
+
+serve snippet metadata
+serve snippet HTML
+support AI tooling
+
+```
+
+---
+
+# API Endpoints
+
+List snippets:
+
+```
+
+GET /snippets
+
+```
+
+Get snippet:
+
+```
+
+GET /snippets/:id
+
+```
+
+---
+
+# Response Format
+
+Always return JSON.
+
+Example:
+
+```
+
+{
+id,
+title,
+html,
+jsx,
+thumbnail,
+sourceUrl
+}
+
+```
+
+---
+
+# AI Tool Integration
+
+Expose tools:
+
+```
+
+list_snippets
+get_snippet
+
+```
+
+These tools allow AI editors to fetch UI components.
+
+---
+
+# Security
+
+Do not expose:
+
+```
+
+private browsing data
+sensitive content
+
+```
+
+---
+
+# Future MCP Features
+
+Potential additions:
+
+```
+
+search_snippets
+similar_ui_search
+
+```
+```

@@ -1,0 +1,999 @@
+---
+alwaysApply: true
+description: UI/UX design rules and guidelines for the Element Capture Chrome Extension
+---
+
+# UI Design Rules
+
+This document defines **UI and UX standards** for the Element Capture Extension.
+
+The goal is to achieve **exceptional usability and polish** so the product can reach a **>4.5 Chrome Web Store rating**.
+
+All UI built by developers or AI agents must follow these rules.
+
+This file exists to ensure:
+
+- visual consistency
+- intuitive workflows
+- minimal friction
+- high perceived quality
+
+---
+
+# Core Design Principles
+
+The UI must always follow these principles.
+
+## 1. Simplicity First
+
+The extension should feel:
+
+- lightweight
+- fast
+- focused
+
+Avoid:
+
+- complex navigation
+- nested menus
+- unnecessary settings
+
+Users should be able to:
+
+1. open the extension
+2. capture an element
+3. save it
+4. reuse it
+
+in **less than 10 seconds**.
+
+---
+
+## 2. Minimal Cognitive Load
+
+Users should never feel confused.
+
+Always prioritize:
+
+- clear labels
+- simple controls
+- obvious interactions
+
+Every button must clearly communicate its purpose.
+
+Bad example:
+
+```
+
+Action
+
+```
+
+Good example:
+
+```
+
+Capture Element
+
+```
+
+---
+
+## 3. Visual Feedback
+
+Every action must provide immediate feedback.
+
+Examples:
+
+- hover highlights
+- capture overlay
+- loading states
+- success notifications
+
+Without feedback the extension will feel broken.
+
+---
+
+## 4. Speed Perception
+
+The UI must **feel extremely fast**.
+
+Rules:
+
+- avoid blocking UI
+- show loaders for operations >200ms
+- keep animations short
+
+Animation duration:
+
+```
+
+120ms–200ms
+
+```
+
+Never exceed:
+
+```
+
+300ms
+
+```
+
+---
+
+# Extension UI Structure
+
+The extension popup should contain three primary sections.
+
+```
+
+Header
+Main Content
+Footer
+
+```
+
+---
+
+# Header
+
+The header must contain:
+
+```
+
+Extension name
+Primary action button
+
+```
+
+Example layout:
+
+```
+
+Element Capture
+
+[ Capture Element ]
+
+```
+
+Rules:
+
+- header height: 56px
+- primary button always visible
+- no clutter
+
+---
+
+# Main Content
+
+Main content switches between:
+
+```
+
+Library View
+Snippet Preview
+Empty State
+
+```
+
+Only **one view visible at a time**.
+
+---
+
+# Footer
+
+Footer contains small utility actions.
+
+Example:
+
+```
+
+Settings
+Help
+Version
+
+```
+
+Rules:
+
+- keep minimal
+- low visual weight
+
+---
+
+# Popup Dimensions
+
+Chrome extension popups should stay within:
+
+Width:
+
+```
+
+360px
+
+```
+
+Height:
+
+```
+
+500px–600px
+
+```
+
+Do not exceed this.
+
+If content grows, make the **library scrollable**.
+
+---
+
+# Capture Mode UI
+
+Capture mode appears on the webpage when the user activates element selection.
+
+---
+
+## Overlay Design
+
+The overlay highlights the hovered element.
+
+Overlay must show:
+
+```
+
+bounding box
+subtle background highlight
+
+```
+
+Example:
+
+```
+
+┌───────────────────────┐
+│                       │
+│  highlighted element  │
+│                       │
+└───────────────────────┘
+
+```
+
+---
+
+## Overlay Rules
+
+Overlay border:
+
+```
+
+2px solid #3b82f6
+
+```
+
+Overlay background:
+
+```
+
+rgba(59,130,246,0.08)
+
+```
+
+Do not fully block page visibility.
+
+---
+
+## Hover Behavior
+
+When hovering elements:
+
+- border should appear immediately
+- movement should be smooth
+
+Avoid flickering.
+
+---
+
+## Element Tooltip
+
+When hovering an element show a tooltip.
+
+Example:
+
+```
+
+div.hero-section
+320 × 180
+
+```
+
+Tooltip style:
+
+```
+
+dark background
+white text
+small padding
+rounded corners
+
+```
+
+Tooltip helps developers confirm the selected element.
+
+---
+
+# Capture Confirmation Modal
+
+After clicking an element, show a modal preview.
+
+Layout:
+
+```
+
+Preview
+Element info
+Actions
+
+```
+
+---
+
+## Modal Layout
+
+```
+
++----------------------+
+| Element Captured     |
+|                      |
+| [Preview Thumbnail]  |
+|                      |
+| div.hero             |
+| 320x180              |
+|                      |
+| [Save] [Cancel]      |
++----------------------+
+
+```
+
+---
+
+## Modal Rules
+
+Modal width:
+
+```
+
+320px
+
+```
+
+Buttons:
+
+Primary:
+
+```
+
+Save
+
+```
+
+Secondary:
+
+```
+
+Cancel
+
+```
+
+Primary button must always appear **right aligned**.
+
+---
+
+# Library UI
+
+The snippet library is the most important screen.
+
+Users should easily browse saved UI components.
+
+---
+
+# Library Layout
+
+Use a **card grid layout**.
+
+Example:
+
+```
+
+[ Thumbnail ]
+Button
+
+[ Thumbnail ]
+Hero Section
+
+[ Thumbnail ]
+Pricing Card
+
+```
+
+Cards should align in **two columns**.
+
+---
+
+# Card Design
+
+Each card contains:
+
+```
+
+Thumbnail
+Title
+Source site
+Quick actions
+
+```
+
+---
+
+## Card Example
+
+```
+
+┌─────────────────────┐
+│     Thumbnail       │
+│                     │
+├─────────────────────┤
+│ Hero Banner         │
+│ example.com         │
+│ Copy  Delete        │
+└─────────────────────┘
+
+```
+
+---
+
+# Card Rules
+
+Card width:
+
+```
+
+160px
+
+```
+
+Thumbnail height:
+
+```
+
+100px
+
+```
+
+Card spacing:
+
+```
+
+12px
+
+```
+
+Card border:
+
+```
+
+1px solid #e5e7eb
+
+```
+
+Card radius:
+
+```
+
+8px
+
+```
+
+---
+
+# Thumbnail Design
+
+Thumbnail is a small preview of the captured element.
+
+Rules:
+
+- must be visible
+- must load quickly
+- must represent layout accurately
+
+Thumbnail background:
+
+```
+
+#f8fafc
+
+```
+
+Images must scale to fit container.
+
+---
+
+# Card Hover Behavior
+
+On hover:
+
+- elevate slightly
+- show quick actions
+
+Elevation shadow:
+
+```
+
+0 4px 10px rgba(0,0,0,0.08)
+
+```
+
+---
+
+# Card Actions
+
+Card actions appear at bottom.
+
+Allowed actions:
+
+```
+
+Copy HTML
+Copy JSX
+Delete
+Preview
+
+```
+
+Actions must be icons with labels.
+
+Example:
+
+```
+
+📋 Copy
+🧩 JSX
+🗑 Delete
+
+```
+
+---
+
+# Snippet Preview Screen
+
+Clicking a card opens a snippet preview.
+
+Layout:
+
+```
+
+Preview
+Metadata
+Actions
+
+```
+
+---
+
+## Preview Panel
+
+Show rendered snippet.
+
+Example:
+
+```
+
++----------------------+
+|   rendered snippet   |
++----------------------+
+
+```
+
+The preview should render **sandboxed HTML**.
+
+Never execute scripts.
+
+---
+
+# Metadata Section
+
+Show:
+
+```
+
+Title
+Source URL
+Capture date
+Dimensions
+
+```
+
+Example:
+
+```
+
+Hero Banner
+example.com
+Captured: Mar 2026
+320 × 180
+
+```
+
+---
+
+# Export Actions
+
+Export actions appear below preview.
+
+Buttons:
+
+```
+
+Copy HTML
+Copy JSX
+
+```
+
+Buttons should be primary UI controls.
+
+---
+
+# Empty State Design
+
+When the library has no snippets show:
+
+```
+
+Empty illustration
+Instruction text
+Capture button
+
+```
+
+Example:
+
+```
+
+No snippets yet
+
+Capture UI elements from websites
+to build your snippet library.
+
+[ Capture Element ]
+
+```
+
+Empty states are important for onboarding.
+
+---
+
+# Settings Screen
+
+Settings must be minimal.
+
+Allowed settings:
+
+```
+
+thumbnail size
+asset replacement mode
+export format preference
+
+```
+
+Avoid adding unnecessary configuration.
+
+---
+
+# Notifications
+
+Small toast notifications should confirm actions.
+
+Examples:
+
+```
+
+Snippet saved
+Copied to clipboard
+Snippet deleted
+
+```
+
+Toast position:
+
+```
+
+bottom center
+
+```
+
+Duration:
+
+```
+
+2 seconds
+
+```
+
+---
+
+# Color System
+
+Use a minimal neutral palette.
+
+Primary color:
+
+```
+
+#3b82f6
+
+```
+
+Neutral backgrounds:
+
+```
+
+#ffffff
+#f8fafc
+
+```
+
+Borders:
+
+```
+
+#e5e7eb
+
+```
+
+Text:
+
+```
+
+#111827
+
+```
+
+Muted text:
+
+```
+
+#6b7280
+
+```
+
+---
+
+# Typography
+
+Use system fonts.
+
+Preferred stack:
+
+```
+
+-apple-system
+BlinkMacSystemFont
+Segoe UI
+Roboto
+sans-serif
+
+```
+
+Font sizes:
+
+```
+
+Title: 16px
+Body: 14px
+Meta: 12px
+
+```
+
+---
+
+# Iconography
+
+Icons must be:
+
+- simple
+- recognizable
+- consistent
+
+Recommended icon library:
+
+```
+
+Lucide
+Feather icons
+
+```
+
+Icons should be:
+
+```
+
+16px
+
+```
+
+---
+
+# Spacing System
+
+Use a consistent spacing scale.
+
+```
+
+4px
+8px
+12px
+16px
+24px
+32px
+
+```
+
+Never use arbitrary spacing.
+
+---
+
+# Animation Rules
+
+Animations should feel subtle.
+
+Allowed animations:
+
+```
+
+hover elevation
+fade in preview
+button hover
+
+```
+
+Duration:
+
+```
+
+120ms–200ms
+
+```
+
+Avoid:
+
+```
+
+large transitions
+complex motion
+
+```
+
+---
+
+# Accessibility
+
+UI must remain accessible.
+
+Rules:
+
+- maintain contrast ratio >4.5
+- clickable areas >32px
+- keyboard navigation supported
+
+Buttons must always include:
+
+```
+
+aria-label
+
+```
+
+---
+
+# Performance UX Rules
+
+Library UI must remain fast.
+
+Rules:
+
+- lazy load thumbnails
+- virtualize lists if >100 items
+- avoid heavy renders
+
+Target:
+
+```
+
+UI interaction <100ms
+
+```
+
+---
+
+# AI Generated UI Code Rules
+
+When AI agents generate UI:
+
+They must:
+
+- follow spacing system
+- use consistent card layout
+- avoid introducing new design systems
+
+Do not introduce:
+
+```
+
+Tailwind
+Material UI
+Chakra
+
+```
+
+Keep UI **simple and native-feeling**.
+
+---
+
+# UX Rules for Chrome Store Success
+
+To achieve a **>4.5 star rating**, the UI must avoid common extension problems.
+
+Avoid:
+
+```
+
+confusing workflows
+slow loading UI
+hidden features
+
+```
+
+Focus on:
+
+```
+
+clarity
+speed
+polish
+
+```
+
+---
+
+# Future UI Enhancements
+
+Possible improvements:
+
+```
+
+search bar for snippets
+tagging system
+snippet folders
+drag reorder
+
+```
+
+These features should only be added once the core UI is stable.
+
+---
+
+# Final Rule
+
+The UI must always feel:
+
+```
+
+fast
+clean
+developer-friendly
+
+```
+
+If any design change increases complexity or confusion, it should be rejected.
+```

@@ -1,0 +1,114 @@
+---
+alwaysApply: true
+description: DOM capture and style extraction rules
+---
+
+# DOM Capture Rules
+
+Element capture must produce a portable snippet.
+
+---
+
+# Capture Process
+
+Steps:
+
+1. detect clicked element
+2. clone subtree
+3. traverse DOM
+4. extract computed styles
+5. inline styles
+6. remove external assets
+
+---
+
+# Inline Style Rules
+
+Only include visual styles:
+
+```
+
+display
+position
+margin
+padding
+font
+color
+background
+border
+flex
+grid
+
+```
+
+Ignore:
+
+```
+
+transition
+animation
+cursor
+pointer-events
+
+```
+
+---
+
+# Asset Handling
+
+Replace:
+
+```
+
+img
+svg
+video
+canvas
+
+```
+
+with placeholders.
+
+---
+
+# Script Removal
+
+Remove:
+
+```
+
+script
+iframe
+tracking pixels
+
+```
+
+---
+
+# Output HTML
+
+Output must be:
+
+```
+
+clean
+portable
+framework neutral
+
+```
+
+---
+
+# Export Formats
+
+Generate:
+
+```
+
+HTML
+JSX
+
+```
+
+JSX must convert style syntax correctly.
+```
