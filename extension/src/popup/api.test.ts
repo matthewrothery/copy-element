@@ -1,14 +1,21 @@
 import { beforeEach, describe, expect, it, vi } from "vitest";
-import { RuntimeRequestError, formatCaptureStartError, startCapture } from "./api";
+import {
+  RuntimeRequestError,
+  formatCaptureStartError,
+  openLibraryInNewTab,
+  startCapture
+} from "./api";
 
 describe("popup api", () => {
   beforeEach(() => {
     vi.stubGlobal("chrome", {
       tabs: {
-        query: vi.fn(async () => [{ id: 42 }])
+        query: vi.fn(async () => [{ id: 42 }]),
+        create: vi.fn()
       },
       runtime: {
-        sendMessage: vi.fn(async () => ({ ok: true, payload: null }))
+        sendMessage: vi.fn(async () => ({ ok: true, payload: null })),
+        getURL: vi.fn((path: string) => `chrome-extension://mock-id/${path}`)
       }
     });
   });
@@ -37,5 +44,13 @@ describe("popup api", () => {
   it("formats capture start errors by code", () => {
     const formatted = formatCaptureStartError(new RuntimeRequestError("x", "UNSUPPORTED_TAB_URL"));
     expect(formatted).toBe("Capture is not supported on this page.");
+  });
+
+  it("opens library in new tab", () => {
+    openLibraryInNewTab();
+    expect(chrome.runtime.getURL).toHaveBeenCalledWith("library.html");
+    expect(chrome.tabs.create).toHaveBeenCalledWith({
+      url: "chrome-extension://mock-id/library.html"
+    });
   });
 });

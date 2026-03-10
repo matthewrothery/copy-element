@@ -1,0 +1,37 @@
+
+
+Phase 0 - Project Setup
+- [x] Setup Vite + CRXJS + Vitest configuration, manifest, and folder structure
+- [x] Add `.cursor/rules/testing.mdc` with MVP testing standards
+
+Phase 1 - Core DOM Capture Engine
+- [x] Build `dom-cloner.ts` for recursive DOM subtree cloning
+- [x] Build `style-extractor.ts` for visual computed style extraction
+- [x] Build `style-inliner.ts` for inline style conversion
+- [x] Build `asset-replacer.ts` for `img/svg/video/canvas/iframe` placeholders
+- [x] Build `html-serializer.ts` and `jsx-converter.ts` export utilities
+- [x] Add Vitest unit tests for capture utilities
+
+Phase 2 - Element Picker and Overlay
+- [x] Build `element-picker.ts` for hover/select behavior
+- [x] Build `capture-overlay.ts` for highlight box and tooltip
+- [x] Build content script entry with runtime message handling
+
+Phase 3 - Storage and Data Layer
+- [x] Define shared snippet types/interfaces
+- [x] Build `snippet-storage.ts` CRUD using `chrome.storage.local`
+- [x] Build `thumbnail-generator.ts` using `html2canvas`
+- [x] Add unit tests for storage operations
+
+Phase 4 - Popup UI and Library
+- [x] Build popup shell (`App.tsx`) and header capture action
+- [x] Build snippet library/card components
+- [x] Build snippet preview and capture confirmation modals
+- [x] Build empty state onboarding component
+- [x] Add React Testing Library component tests
+
+Phase 5 - Integration and Polish
+- [x] Build background message routing between popup/content/storage
+- [x] Wire end-to-end capture -> preview -> save flow
+- [x] Add toast notifications and basic error handling
+- [x] Validate build/test flow and performance-friendly defaults

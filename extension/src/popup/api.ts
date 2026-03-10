@@ -85,3 +85,7 @@ export async function saveSnippetFromCapture(
 export async function deleteSnippetFromBackground(id: string): Promise<void> {
   await sendRuntimeMessage<null>({ type: "DELETE_SNIPPET", payload: { id } });
 }
+
+export function openLibraryInNewTab(): void {
+  chrome.tabs.create({ url: chrome.runtime.getURL("library.html") });
+}

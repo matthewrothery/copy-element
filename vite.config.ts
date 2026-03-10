@@ -7,6 +7,11 @@ export default defineConfig({
   plugins: [react(), crx({ manifest })],
   build: {
     outDir: "dist",
-    sourcemap: true
+    sourcemap: true,
+    rollupOptions: {
+      input: {
+        library: "library.html"
+      }
+    }
   }
 });
