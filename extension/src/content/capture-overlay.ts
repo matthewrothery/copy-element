@@ -27,6 +27,10 @@ export class CaptureOverlay {
     this.tooltipElement.style.color = TOKEN_VALUES.tooltipText;
     this.tooltipElement.style.background = TOKEN_VALUES.tooltipBg;
     this.tooltipElement.style.display = "none";
+    this.tooltipElement.style.maxWidth = "280px";
+    this.tooltipElement.style.overflow = "hidden";
+    this.tooltipElement.style.textOverflow = "ellipsis";
+    this.tooltipElement.style.whiteSpace = "nowrap";
 
     document.body.appendChild(this.boxElement);
     document.body.appendChild(this.tooltipElement);
@@ -41,10 +45,21 @@ export class CaptureOverlay {
     this.boxElement.style.height = `${rect.height}px`;
 
     const label = `${element.tagName.toLowerCase()}${element.className ? `.${String(element.className).split(" ").join(".")}` : ""}`;
-    this.tooltipElement.textContent = `${label}  ${Math.round(rect.width)} x ${Math.round(rect.height)}`;
+    this.tooltipElement.textContent = `${label}  ${Math.round(rect.width)} × ${Math.round(rect.height)}`;
     this.tooltipElement.style.display = "block";
-    this.tooltipElement.style.left = `${Math.max(8, rect.left)}px`;
-    this.tooltipElement.style.top = `${Math.max(8, rect.top - 30)}px`;
+
+    const TOOLTIP_GAP = 8;
+    const MIN_SPACE_ABOVE = 40;
+    const hasSpaceAbove = rect.top >= MIN_SPACE_ABOVE;
+
+    this.tooltipElement.style.left = `${Math.max(8, Math.min(rect.left, window.innerWidth - 288))}px`;
+    if (hasSpaceAbove) {
+      this.tooltipElement.style.top = `${rect.top - TOOLTIP_GAP}px`;
+      this.tooltipElement.style.transform = "translateY(-100%)";
+    } else {
+      this.tooltipElement.style.top = `${rect.bottom + TOOLTIP_GAP}px`;
+      this.tooltipElement.style.transform = "";
+    }
   }
 
   public hide(): void {
