@@ -1,9 +1,19 @@
 import html2canvas from "html2canvas";
 
-export async function generateThumbnail(element: HTMLElement, maxWidth = 200, maxHeight = 120): Promise<string> {
+const DEFAULT_MAX_WIDTH = 480;
+const DEFAULT_MAX_HEIGHT = 360;
+const JPEG_QUALITY = 0.85;
+
+export async function generateThumbnail(
+  element: HTMLElement,
+  maxWidth = DEFAULT_MAX_WIDTH,
+  maxHeight = DEFAULT_MAX_HEIGHT
+): Promise<string> {
+  const deviceScale = Math.min(2, window.devicePixelRatio || 1);
+
   const canvas = await html2canvas(element, {
     backgroundColor: "#ffffff",
-    scale: 1,
+    scale: deviceScale,
     useCORS: true,
     logging: false
   });
@@ -27,5 +37,5 @@ export async function generateThumbnail(element: HTMLElement, maxWidth = 200, ma
   const y = Math.round((maxHeight - drawHeight) / 2);
   ctx.drawImage(canvas, x, y, drawWidth, drawHeight);
 
-  return targetCanvas.toDataURL("image/png");
+  return targetCanvas.toDataURL("image/jpeg", JPEG_QUALITY);
 }

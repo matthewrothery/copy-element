@@ -131,6 +131,7 @@ body {
   border-radius: 8px;
   background: #ffffff;
   overflow: hidden;
+  transition: box-shadow 150ms ease;
 }
 
 .thumbnail-button {
@@ -144,10 +145,14 @@ body {
 .thumbnail,
 .thumbnail-fallback {
   width: 100%;
-  height: 100px;
-  object-fit: cover;
+  height: 120px;
+  object-fit: contain;
   display: block;
   background: #f8fafc;
+}
+
+.snippet-card:hover {
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.08);
 }
 
 .snippet-meta {
@@ -212,9 +217,19 @@ body {
   padding: 12px;
 }
 
+.snippet-preview-modal {
+  width: 600px;
+  max-width: 90vw;
+  max-height: 80vh;
+}
+
 .modal h2 {
   margin: 0 0 12px;
   font-size: 16px;
+}
+
+.snippet-preview-title {
+  font-size: 18px;
 }
 
 .capture-preview {
@@ -225,11 +240,35 @@ body {
   padding: 8px;
 }
 
-.snippet-preview-frame iframe {
-  width: 100%;
-  height: 180px;
+.snippet-preview-frame {
+  overflow: auto;
   border: 1px solid #e5e7eb;
   border-radius: 8px;
+  background: #f8fafc;
+}
+
+.snippet-preview-frame iframe {
+  width: 100%;
+  height: 400px;
+  min-height: 200px;
+  border: 0;
+  display: block;
+}
+
+.snippet-preview-meta {
+  margin-top: 12px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16px;
+}
+
+.snippet-preview-meta .meta {
+  margin: 0;
+}
+
+.meta-label {
+  font-weight: 500;
+  color: #111827;
 }
 
 .meta {

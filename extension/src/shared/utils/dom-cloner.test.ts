@@ -25,7 +25,8 @@ describe("cloneElementTreeWithInlineStyles", () => {
     const clone = cloneElementTreeWithInlineStyles(target);
 
     expect(clone.tagName).toBe("SECTION");
-    expect(clone.getAttribute("style")).toContain("display:block");
+    expect(clone.getAttribute("style")).toContain("padding:8px");
+    expect(clone.getAttribute("style")).not.toContain("display:block");
     expect(clone.textContent).toContain("Hello");
   });
 });

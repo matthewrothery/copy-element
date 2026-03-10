@@ -41,6 +41,8 @@ grid
 
 ```
 
+Omit default values (e.g. `position: static`, `margin: 0`, `opacity: 1`) for conciseness.
+
 Ignore:
 
 ```
