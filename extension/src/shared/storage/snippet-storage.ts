@@ -1,9 +1,20 @@
-import type { Snippet } from "../types/snippet";
+import type { RenderContext, Snippet } from "../types/snippet";
 
 const STORAGE_KEY = "element-capture-snippets";
 
 interface SnippetStorageShape {
   [STORAGE_KEY]?: unknown;
+}
+
+function isRenderContext(value: unknown): value is RenderContext {
+  if (!value || typeof value !== "object") {
+    return false;
+  }
+  const obj = value as Record<string, unknown>;
+  if (obj.parentLayout && typeof obj.parentLayout !== "object") {
+    return false;
+  }
+  return true;
 }
 
 function isSnippetRecord(value: unknown): value is Snippet {
@@ -25,10 +36,20 @@ function isSnippetRecord(value: unknown): value is Snippet {
 }
 
 function normalizeSnippet(value: Snippet): Snippet {
-  return {
+  const normalized: Snippet = {
     ...value,
     thumbnail: typeof value.thumbnail === "string" ? value.thumbnail : ""
   };
+  if (isRenderContext(value.renderContext)) {
+    normalized.renderContext = value.renderContext;
+  }
+  if (typeof value.styleBlock === "string") {
+    normalized.styleBlock = value.styleBlock;
+  }
+  if (typeof value.rootId === "string") {
+    normalized.rootId = value.rootId;
+  }
+  return normalized;
 }
 
 function sortSnippets(snippets: Snippet[]): Snippet[] {

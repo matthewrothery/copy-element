@@ -3,6 +3,7 @@ import {
   deleteSnippetFromBackground,
   getSnippetsFromBackground
 } from "../popup/api";
+import { DeleteConfirmationModal } from "../popup/components/DeleteConfirmationModal";
 import { EmptyState } from "../popup/components/EmptyState";
 import { SnippetLibrary } from "../popup/components/SnippetLibrary";
 import { SnippetPreview } from "../popup/components/SnippetPreview";
@@ -37,6 +38,7 @@ function copyToClipboard(value: string): Promise<void> {
 export function LibraryApp(): JSX.Element {
   const [snippets, setSnippets] = useState<Snippet[]>([]);
   const [selectedSnippet, setSelectedSnippet] = useState<Snippet | null>(null);
+  const [snippetToDelete, setSnippetToDelete] = useState<Snippet | null>(null);
   const [toastMessage, setToastMessage] = useState("");
 
   const hasSnippets = useMemo(() => snippets.length > 0, [snippets.length]);
@@ -68,9 +70,17 @@ export function LibraryApp(): JSX.Element {
       await deleteSnippetFromBackground(id);
       setSnippets((prev) => prev.filter((snippet) => snippet.id !== id));
       setSelectedSnippet((prev) => (prev?.id === id ? null : prev));
+      setSnippetToDelete(null);
       setToastMessage("Snippet deleted");
     } catch {
       setToastMessage("Failed to delete snippet");
+    }
+  }
+
+  function handleDeleteClick(id: string): void {
+    const snippet = snippets.find((s) => s.id === id);
+    if (snippet) {
+      setSnippetToDelete(snippet);
     }
   }
 
@@ -94,7 +104,7 @@ export function LibraryApp(): JSX.Element {
           <SnippetLibrary
             snippets={snippets}
             onOpen={setSelectedSnippet}
-            onDelete={(id) => void handleDeleteSnippet(id)}
+            onDelete={handleDeleteClick}
             onCopy={(value, label) => void handleCopy(value, label)}
           />
         ) : (
@@ -107,6 +117,13 @@ export function LibraryApp(): JSX.Element {
           snippet={selectedSnippet}
           onClose={() => setSelectedSnippet(null)}
           onCopy={(value, label) => void handleCopy(value, label)}
+        />
+      )}
+      {snippetToDelete && (
+        <DeleteConfirmationModal
+          snippetTitle={snippetToDelete.title}
+          onConfirm={() => void handleDeleteSnippet(snippetToDelete.id)}
+          onCancel={() => setSnippetToDelete(null)}
         />
       )}
       {toastMessage && <Toast message={toastMessage} />}

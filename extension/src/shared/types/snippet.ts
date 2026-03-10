@@ -1,3 +1,32 @@
+/**
+ * Minimal parent layout CSS needed to reproduce flex/grid context.
+ * Used when the captured element is a flex/grid child.
+ */
+export interface ParentLayoutContext {
+  display: string;
+  flexDirection?: string;
+  flexWrap?: string;
+  justifyContent?: string;
+  alignItems?: string;
+  alignContent?: string;
+  gap?: string;
+  columnGap?: string;
+  rowGap?: string;
+  gridTemplateColumns?: string;
+  gridTemplateRows?: string;
+  gridAutoFlow?: string;
+  width?: string;
+  minWidth?: string;
+  maxWidth?: string;
+  height?: string;
+  minHeight?: string;
+  maxHeight?: string;
+}
+
+export interface RenderContext {
+  parentLayout?: ParentLayoutContext;
+}
+
 export interface Snippet {
   id: string;
   title: string;
@@ -8,6 +37,12 @@ export interface Snippet {
   createdAt: number;
   width: number;
   height: number;
+  /** Optional layout context for preview fidelity (new captures only). */
+  renderContext?: RenderContext;
+  /** Optional CSS block (base + @media/@container) for preview/copy. */
+  styleBlock?: string;
+  /** Stable ID for snippet root so style block can target it. */
+  rootId?: string;
 }
 
 export interface CapturedElementData {
@@ -17,6 +52,9 @@ export interface CapturedElementData {
   height: number;
   elementLabel: string;
   thumbnail?: string;
+  renderContext?: RenderContext;
+  styleBlock?: string;
+  rootId?: string;
 }
 
 export type CaptureState = "idle" | "active";

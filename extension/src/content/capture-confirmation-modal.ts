@@ -43,7 +43,10 @@ export function buildSnippetFromCapture(capture: CapturedElementData): Snippet {
     thumbnail: getThumbnail(capture),
     createdAt: Date.now(),
     width: capture.width,
-    height: capture.height
+    height: capture.height,
+    renderContext: capture.renderContext,
+    styleBlock: capture.styleBlock,
+    rootId: capture.rootId
   };
 }
 
@@ -92,11 +95,11 @@ export class CaptureConfirmationModal {
       }
       .modal h2 {
         margin: 0 0 var(--space-4);
-        font-size: 16px;
+        font-size: var(--text-md);
         color: var(--color-text-primary);
       }
       .preview {
-        max-height: 180px;
+        max-height: 240px;
         overflow: auto;
         border: 1px solid var(--color-border);
         border-radius: var(--radius-2);
@@ -110,7 +113,7 @@ export class CaptureConfirmationModal {
       }
       .meta {
         margin: var(--space-3) 0 0;
-        font-size: 12px;
+        font-size: var(--text-caption);
         color: var(--color-text-muted);
       }
       .format-toggle {
@@ -125,10 +128,14 @@ export class CaptureConfirmationModal {
         flex: 1;
         border: 0;
         padding: var(--space-2) var(--space-4);
-        font-size: 12px;
+        font-size: var(--text-caption);
         cursor: pointer;
         background: var(--color-surface);
         color: var(--color-text-muted);
+      }
+      .format-toggle button:focus-visible {
+        outline: 2px solid var(--color-accent);
+        outline-offset: -2px;
       }
       .format-toggle button.active {
         background: var(--color-accent);
@@ -146,9 +153,13 @@ export class CaptureConfirmationModal {
         border-radius: var(--radius-1_5);
         background: var(--color-surface);
         cursor: pointer;
-        font-size: 12px;
+        font-size: var(--text-caption);
         padding: 0 var(--space-4);
         font-family: var(--font-sans);
+      }
+      .actions button:focus-visible {
+        outline: 2px solid var(--color-accent);
+        outline-offset: 2px;
       }
       .actions button.primary {
         background: var(--color-accent);
@@ -163,7 +174,7 @@ export class CaptureConfirmationModal {
         transform: translateX(-50%);
         background: var(--color-surface-inverse);
         color: var(--color-text-inverse);
-        font-size: 12px;
+        font-size: var(--text-caption);
         border-radius: var(--radius-full);
         padding: var(--space-2) var(--space-4);
         z-index: ${Z_INDEX + 1};

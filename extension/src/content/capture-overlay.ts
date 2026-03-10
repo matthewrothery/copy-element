@@ -1,3 +1,5 @@
+import { TOKEN_VALUES } from "../shared/token-values";
+
 export class CaptureOverlay {
   private readonly boxElement: HTMLDivElement;
   private readonly tooltipElement: HTMLDivElement;
@@ -11,19 +13,19 @@ export class CaptureOverlay {
     this.boxElement.style.position = "fixed";
     this.boxElement.style.pointerEvents = "none";
     this.boxElement.style.zIndex = "2147483646";
-    this.boxElement.style.border = "2px solid #3b82f6";
-    this.boxElement.style.background = "rgba(59,130,246,0.08)";
+    this.boxElement.style.border = `2px solid ${TOKEN_VALUES.overlayBorder}`;
+    this.boxElement.style.background = TOKEN_VALUES.overlayHighlight;
     this.boxElement.style.display = "none";
 
     this.tooltipElement.style.position = "fixed";
     this.tooltipElement.style.pointerEvents = "none";
     this.tooltipElement.style.zIndex = "2147483647";
-    this.tooltipElement.style.padding = "4px 8px";
-    this.tooltipElement.style.borderRadius = "6px";
+    this.tooltipElement.style.padding = `${TOKEN_VALUES.space1} ${TOKEN_VALUES.space2}`;
+    this.tooltipElement.style.borderRadius = TOKEN_VALUES.radiusSm;
     this.tooltipElement.style.fontSize = "12px";
-    this.tooltipElement.style.fontFamily = "-apple-system, BlinkMacSystemFont, Segoe UI, Roboto, sans-serif";
-    this.tooltipElement.style.color = "#ffffff";
-    this.tooltipElement.style.background = "#111827";
+    this.tooltipElement.style.fontFamily = TOKEN_VALUES.fontSans;
+    this.tooltipElement.style.color = TOKEN_VALUES.tooltipText;
+    this.tooltipElement.style.background = TOKEN_VALUES.tooltipBg;
     this.tooltipElement.style.display = "none";
 
     document.body.appendChild(this.boxElement);

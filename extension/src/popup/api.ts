@@ -19,7 +19,7 @@ function getCaptureStartErrorMessage(code: RuntimeErrorCode): string {
     case "UNSUPPORTED_TAB_URL":
       return "Capture is not supported on this page.";
     case "CONTENT_SCRIPT_UNREACHABLE":
-      return "Capture script is not available on this tab.";
+      return "Capture script is not available on this tab. Refresh the page and try again.";
     case "UNKNOWN_ERROR":
     default:
       return "Unable to start capture.";

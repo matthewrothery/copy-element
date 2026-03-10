@@ -14,5 +14,11 @@
   --color-accent-hover: var(--blue-600);
   --color-accent-subtle: var(--blue-50);
   --color-overlay: rgba(17, 24, 39, 0.35);
+  --color-overlay-highlight: rgba(59, 130, 246, 0.08);
+  --color-overlay-border: var(--color-accent);
   --color-danger: #ef4444;
+  --color-danger-subtle: rgba(239, 68, 68, 0.08);
+  --text-heading: var(--text-lg);
+  --text-body: var(--text-sm);
+  --text-caption: var(--text-xs);
 }

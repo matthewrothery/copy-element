@@ -12,13 +12,13 @@ export function Header({ onCapture, onLibrary, onMCP }: HeaderProps): JSX.Elemen
   return (
     <header className="header">
       <div className="header-brand">
-        <img src={logoUrl} alt="" className="header-logo" width={100} height={24} />
-        {/* <h1 className="header-title">SnappyMCP</h1> */}
+        <img src={logoUrl} alt="" className="header-logo" width={32} height={32} />
+        <h1 className="header-title">SnappyMCP</h1>
       </div>
       <hr className="header-separator" />
       <nav className="nav-buttons">
         <button
-          className="nav-button"
+          className="nav-button nav-button-primary"
           onClick={onCapture}
           type="button"
           aria-label="Capture Element"
@@ -33,14 +33,16 @@ export function Header({ onCapture, onLibrary, onMCP }: HeaderProps): JSX.Elemen
         >
           Library
         </button>
-        <button
-          className="nav-button"
-          onClick={onMCP}
-          type="button"
-          aria-label="MCP"
-        >
-          MCP
-        </button>
+        {onMCP && (
+          <button
+            className="nav-button"
+            onClick={onMCP}
+            type="button"
+            aria-label="MCP"
+          >
+            MCP
+          </button>
+        )}
       </nav>
     </header>
   );

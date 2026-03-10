@@ -1,4 +1,5 @@
 import { replaceAssetsWithPlaceholders } from "./asset-replacer";
+import { buildPseudoElementClone } from "./pseudo-element-extractor";
 import { extractVisualStyles } from "./style-extractor";
 import { applyInlineStyles } from "./style-inliner";
 
@@ -18,13 +19,15 @@ function cloneWithInlineStyles(source: Element, documentRef: Document): HTMLElem
     if (attribute.name.startsWith("on")) {
       continue;
     }
-    if (attribute.name === "src" || attribute.name === "srcset") {
-      continue;
-    }
     if (attribute.name === "style") {
       continue;
     }
     clone.setAttribute(attribute.name, attribute.value);
+  }
+
+  const beforePseudo = buildPseudoElementClone(sourceElement, "::before", documentRef);
+  if (beforePseudo) {
+    clone.appendChild(beforePseudo);
   }
 
   const textNodes = Array.from(source.childNodes).filter((node) => node.nodeType === Node.TEXT_NODE);
@@ -43,6 +46,11 @@ function cloneWithInlineStyles(source: Element, documentRef: Document): HTMLElem
     const childClone = cloneWithInlineStyles(child, documentRef);
     clone.appendChild(childClone);
   });
+
+  const afterPseudo = buildPseudoElementClone(sourceElement, "::after", documentRef);
+  if (afterPseudo) {
+    clone.appendChild(afterPseudo);
+  }
 
   if (sourceElement instanceof HTMLInputElement || sourceElement instanceof HTMLTextAreaElement) {
     clone.textContent = "";

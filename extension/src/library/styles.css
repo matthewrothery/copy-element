@@ -42,7 +42,7 @@
 
 .library-header-title {
   margin: 0;
-  font-size: 18px;
-  font-weight: 600;
+  font-size: var(--text-heading);
+  font-weight: var(--font-weight-semibold);
   color: var(--color-text-primary);
 }

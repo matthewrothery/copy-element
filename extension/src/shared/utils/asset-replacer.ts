@@ -21,23 +21,12 @@ function createPlaceholderForElement(source: Element, documentRef: Document): HT
 }
 
 export function replaceAssetsWithPlaceholders(root: HTMLElement): HTMLElement {
-  const selectors = "img,svg,video,canvas,iframe";
+  const selectors = "video,canvas,iframe";
   const assets = Array.from(root.querySelectorAll(selectors));
 
   assets.forEach((asset) => {
     const placeholder = createPlaceholderForElement(asset, root.ownerDocument);
     asset.replaceWith(placeholder);
-  });
-
-  const styledNodes = Array.from(root.querySelectorAll<HTMLElement>("[style]"));
-  styledNodes.forEach((node) => {
-    const inlineStyle = node.getAttribute("style");
-    if (!inlineStyle || !inlineStyle.includes("background-image")) {
-      return;
-    }
-
-    const sanitizedStyle = inlineStyle.replace(/background-image\s*:[^;]+;?/gi, "");
-    node.setAttribute("style", `${sanitizedStyle};background:${PLACEHOLDER_COLOR}`.replace(/;;/g, ";"));
   });
 
   return root;

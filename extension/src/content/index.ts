@@ -1,6 +1,10 @@
+import { nanoid } from "nanoid";
 import { cloneElementTreeWithInlineStyles } from "../shared/utils/dom-cloner";
 import { serializeElementToHtml } from "../shared/utils/html-serializer";
 import { htmlToJsx } from "../shared/utils/jsx-converter";
+import { buildRenderContextFromElement } from "../shared/utils/parent-layout-extractor";
+import { buildBaseStyleBlock } from "../shared/utils/style-block-builder";
+import { extractMediaAndContainerRules } from "../shared/utils/stylesheet-media-extractor";
 import { generateThumbnail } from "../shared/utils/thumbnail-generator";
 import type { CapturedElementData } from "../shared/types/snippet";
 import {
@@ -73,6 +77,9 @@ function ensurePicker(): ElementPicker {
       void (async () => {
         try {
           const cloned = cloneElementTreeWithInlineStyles(result.element);
+          const rootId = `snippet-root-${nanoid()}`;
+          cloned.setAttribute("id", rootId);
+          cloned.setAttribute("data-snippet-root", "true");
           const html = serializeElementToHtml(cloned);
           const jsx = htmlToJsx(html);
 
@@ -83,13 +90,22 @@ function ensurePicker(): ElementPicker {
             console.warn("Thumbnail generation failed, using fallback.", thumbnailError);
           }
 
+          const renderContext = buildRenderContextFromElement(result.element);
+
+          const baseBlock = buildBaseStyleBlock(result.element, rootId);
+          const mediaBlock = extractMediaAndContainerRules(result.element, rootId);
+          const styleBlock = [baseBlock, mediaBlock].filter(Boolean).join("");
+
           const capture: CapturedElementData = {
             html,
             jsx,
             width: result.width,
             height: result.height,
             elementLabel: result.label,
-            thumbnail
+            thumbnail,
+            renderContext,
+            rootId,
+            styleBlock: styleBlock || undefined
           };
 
           picker?.stop();
@@ -156,7 +172,12 @@ async function handleSaveAndCaptureAnother(capture: CapturedElementData): Promis
 }
 
 async function handleCopy(capture: CapturedElementData, format: CopyFormat): Promise<void> {
-  const value = format === "html" ? capture.html : capture.jsx;
+  const value =
+    format === "html"
+      ? capture.styleBlock
+        ? `<style>${capture.styleBlock}</style>${capture.html}`
+        : capture.html
+      : capture.jsx;
   const ok = await copyToClipboard(value);
   if (ok && modal) {
     modal.showToast("Copied to clipboard");

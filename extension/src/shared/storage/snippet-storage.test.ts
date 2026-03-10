@@ -80,6 +80,73 @@ describe("snippet-storage", () => {
     expect(snippets[0].id).toBe("2");
   });
 
+  it("preserves renderContext when saving and reading", async () => {
+    const snippet: Snippet = {
+      id: "ctx-1",
+      title: "With context",
+      sourceUrl: "https://example.com",
+      html: "<div></div>",
+      jsx: "<div></div>",
+      thumbnail: "",
+      createdAt: 1,
+      width: 100,
+      height: 100,
+      renderContext: {
+        parentLayout: {
+          display: "flex",
+          gap: "12px"
+        }
+      }
+    };
+
+    await saveSnippet(snippet);
+    const snippets = await getSnippets();
+    expect(snippets).toHaveLength(1);
+    expect(snippets[0].renderContext).toBeDefined();
+    expect(snippets[0].renderContext?.parentLayout?.display).toBe("flex");
+    expect(snippets[0].renderContext?.parentLayout?.gap).toBe("12px");
+  });
+
+  it("preserves styleBlock and rootId when saving and reading", async () => {
+    const snippet: Snippet = {
+      id: "style-1",
+      title: "With style",
+      sourceUrl: "https://example.com",
+      html: '<div id="snippet-root-x">x</div>',
+      jsx: '<div id="snippet-root-x">x</div>',
+      thumbnail: "",
+      createdAt: 1,
+      width: 100,
+      height: 100,
+      styleBlock: "#snippet-root-x{display:flex}",
+      rootId: "snippet-root-x"
+    };
+
+    await saveSnippet(snippet);
+    const snippets = await getSnippets();
+    expect(snippets[0].styleBlock).toBe("#snippet-root-x{display:flex}");
+    expect(snippets[0].rootId).toBe("snippet-root-x");
+  });
+
+  it("accepts snippets without renderContext (backward compatible)", async () => {
+    const snippet: Snippet = {
+      id: "old-1",
+      title: "Old snippet",
+      sourceUrl: "https://example.com",
+      html: "<span></span>",
+      jsx: "<span></span>",
+      thumbnail: "",
+      createdAt: 1,
+      width: 50,
+      height: 50
+    };
+
+    await saveSnippet(snippet);
+    const snippets = await getSnippets();
+    expect(snippets).toHaveLength(1);
+    expect(snippets[0].renderContext).toBeUndefined();
+  });
+
   it("returns snippets sorted by createdAt desc", async () => {
     (memory as unknown as { ["element-capture-snippets"]: Snippet[] })["element-capture-snippets"] = [
       {
