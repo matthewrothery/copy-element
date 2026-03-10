@@ -12,8 +12,8 @@ export function Header({ onCapture, onLibrary, onMCP }: HeaderProps): JSX.Elemen
   return (
     <header className="header">
       <div className="header-brand">
-        <img src={logoUrl} alt="" className="header-logo" width={32} height={32} />
-        <h1 className="header-title">SnappyMCP</h1>
+        <img src={logoUrl} alt="" className="header-logo" width={100} height={24} />
+        {/* <h1 className="header-title">SnappyMCP</h1> */}
       </div>
       <hr className="header-separator" />
       <nav className="nav-buttons">

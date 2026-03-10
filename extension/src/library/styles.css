@@ -7,7 +7,7 @@
 .library-shell .main-content {
   max-width: 1200px;
   margin: 0 auto;
-  padding: 24px;
+  padding: var(--space-7);
 }
 
 .library-shell .snippet-grid {
@@ -27,16 +27,22 @@
 }
 
 .library-header {
-  padding: 16px 24px;
-  border-bottom: 1px solid #e5e7eb;
+  --library-header-bg: var(--color-surface);
+  --library-header-border: var(--color-border);
+  --library-header-padding: var(--space-5) var(--space-7);
+  --library-header-gap: var(--space-3);
+
+  padding: var(--library-header-padding);
+  border-bottom: 1px solid var(--library-header-border);
   display: flex;
   align-items: center;
-  gap: 8px;
-  background: #ffffff;
+  gap: var(--library-header-gap);
+  background: var(--library-header-bg);
 }
 
 .library-header-title {
   margin: 0;
   font-size: 18px;
   font-weight: 600;
+  color: var(--color-text-primary);
 }

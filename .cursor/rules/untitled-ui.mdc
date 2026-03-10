@@ -1,0 +1,114 @@
+---
+alwaysApply: true
+description: Untitled UI-inspired design system and 3-layer token architecture
+---
+
+# Untitled UI-Inspired Design System
+
+This project uses [Untitled UI](https://www.untitledui.com/react/) as **design inspiration**—similar aesthetic (clean, modern, neutral) but not a pixel-perfect copy. Implementation is **CSS-only** with a 3-layer design token system. No Tailwind.
+
+---
+
+# Design Inspiration
+
+Untitled UI informs our visual language:
+
+- Neutral gray palette with blue accent
+- Consistent spacing scale (4px base)
+- Subtle shadows and borders
+- Clean typography (system font stack)
+
+We aim for a similar feel without using Untitled UI components or Tailwind.
+
+---
+
+# Token Architecture
+
+All styling flows through a **3-layer token system**. No component should reference raw colors or spacing directly.
+
+**Layer 1 — Primitives** (`extension/src/styles/tokens/primitives.css`)
+
+Raw design values. No UI meaning.
+
+- Colors: `--gray-100`, `--gray-900`, `--blue-500`, etc.
+- Spacing: `--space-1` through `--space-8`
+- Radius: `--radius-1` through `--radius-4`
+- Typography: `--font-sans`, `--font-mono`
+- Shadows: `--shadow-sm`, `--shadow-md`, `--shadow-lg`
+
+**Layer 2 — Semantic** (`extension/src/styles/tokens/semantic.css`)
+
+UI meaning mapped from primitives.
+
+- `--color-text-primary`, `--color-text-secondary`, `--color-text-muted`
+- `--color-surface`, `--color-surface-alt`, `--color-panel`
+- `--color-border`, `--color-border-strong`
+- `--color-accent`, `--color-accent-hover`, `--color-accent-subtle`
+- `--color-overlay`, `--color-danger`
+
+**Layer 3 — Component tokens**
+
+Defined in each component root. Map to semantic or spacing tokens.
+
+Example:
+
+```css
+.snippet-card {
+  --card-bg: var(--color-panel);
+  --card-border: var(--color-border);
+  --card-radius: var(--radius-2);
+  --card-padding: var(--space-3);
+  --card-shadow-hover: var(--shadow-md);
+
+  background: var(--card-bg);
+  border: 1px solid var(--card-border);
+  border-radius: var(--card-radius);
+  padding: var(--card-padding);
+}
+```
+
+---
+
+# Load Order
+
+In each entry (popup, library):
+
+1. `styles/tokens/index.css`
+2. `styles/base.css`
+3. Component CSS (popup/styles.css, library/styles.css)
+
+---
+
+# Content Script Overlay
+
+The capture confirmation modal ([`extension/src/content/capture-confirmation-modal.ts`](extension/src/content/capture-confirmation-modal.ts)) runs in page context with Shadow DOM. It cannot import extension CSS.
+
+It must inject a `<style>` block that defines the same primitive and semantic variables (via `tokens-css.ts` or raw import) so the modal matches the extension UI visually.
+
+---
+
+# Icons
+
+Use Lucide or Feather icons (per ui-design.mdc). Do not use `@untitledui/icons`.
+
+---
+
+# Hard Rules
+
+Do NOT:
+
+- hardcode colors, spacing, or radius in components
+- reference primitive tokens inside component style rules (use semantic or component tokens)
+- reference semantic tokens directly in deeply nested elements (create component tokens)
+
+Always:
+
+- create component tokens for each component
+- map component tokens to semantic or spacing tokens
+- follow the 3-layer architecture for all new UI
+
+---
+
+# No Runtime Themes
+
+This project does not support runtime theme switching. All tokens are fixed in CSS. To change the look, edit `primitives.css` and/or `semantic.css`.

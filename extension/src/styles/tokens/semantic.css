@@ -1,0 +1,18 @@
+:root {
+  --color-text-primary: var(--gray-900);
+  --color-text-secondary: var(--gray-600);
+  --color-text-muted: var(--gray-500);
+  --color-text-inverse: var(--white);
+  --color-surface: var(--white);
+  --color-surface-alt: var(--gray-50);
+  --color-surface-inverse: var(--gray-800);
+  --color-surface-inverse-hover: var(--gray-700);
+  --color-panel: var(--white);
+  --color-border: var(--gray-200);
+  --color-border-strong: var(--gray-300);
+  --color-accent: var(--blue-500);
+  --color-accent-hover: var(--blue-600);
+  --color-accent-subtle: var(--blue-50);
+  --color-overlay: rgba(17, 24, 39, 0.35);
+  --color-danger: #ef4444;
+}

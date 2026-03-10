@@ -1,6 +1,8 @@
 import React from "react";
 import { createRoot } from "react-dom/client";
 import { LibraryApp } from "./App";
+import "../styles/tokens/index.css";
+import "../styles/base.css";
 import "../popup/styles.css";
 import "./styles.css";
 

@@ -1,8 +1,9 @@
 import { nanoid } from "nanoid";
 import type { CapturedElementData, Snippet } from "../shared/types/snippet";
+import { generateSnippetName } from "../shared/utils/snippet-name";
+import { TOKENS_CSS } from "../shared/tokens-css";
 
 const Z_INDEX = 2147483647;
-const FONT_STACK = "-apple-system, BlinkMacSystemFont, Segoe UI, Roboto, sans-serif";
 
 export type CopyFormat = "html" | "jsx";
 
@@ -32,7 +33,7 @@ function getThumbnail(capture: CapturedElementData): string {
 export function buildSnippetFromCapture(capture: CapturedElementData): Snippet {
   const sourceUrl = window.location.href;
   const domain = getDomain(sourceUrl);
-  const title = `${capture.elementLabel} - ${domain}`;
+  const title = `${generateSnippetName()} - ${domain}`;
   return {
     id: nanoid(),
     title,
@@ -63,39 +64,44 @@ export class CaptureConfirmationModal {
   }
 
   private injectStyles(): void {
+    const tokensForShadow = TOKENS_CSS.replace(/:root\s*\{/g, ":host {");
+    const tokenStyle = document.createElement("style");
+    tokenStyle.textContent = tokensForShadow;
+    this.shadow.appendChild(tokenStyle);
+
     const style = document.createElement("style");
     style.textContent = `
       * { box-sizing: border-box; }
       .backdrop {
         position: fixed;
         inset: 0;
-        background: rgba(17, 24, 39, 0.35);
+        background: var(--color-overlay);
         display: flex;
         align-items: center;
         justify-content: center;
-        font-family: ${FONT_STACK};
+        font-family: var(--font-sans);
       }
       .modal {
         width: 320px;
         max-height: 90vh;
         overflow-y: auto;
-        background: #ffffff;
-        border-radius: 8px;
-        border: 1px solid #e5e7eb;
-        padding: 12px;
+        background: var(--color-surface);
+        border-radius: var(--radius-2);
+        border: 1px solid var(--color-border);
+        padding: var(--space-4);
       }
       .modal h2 {
-        margin: 0 0 12px;
+        margin: 0 0 var(--space-4);
         font-size: 16px;
-        color: #111827;
+        color: var(--color-text-primary);
       }
       .preview {
         max-height: 180px;
         overflow: auto;
-        border: 1px solid #e5e7eb;
-        border-radius: 8px;
-        padding: 8px;
-        background: #f8fafc;
+        border: 1px solid var(--color-border);
+        border-radius: var(--radius-2);
+        padding: var(--space-3);
+        background: var(--color-surface-alt);
       }
       .preview img {
         max-width: 100%;
@@ -103,63 +109,63 @@ export class CaptureConfirmationModal {
         display: block;
       }
       .meta {
-        margin: 8px 0 0;
+        margin: var(--space-3) 0 0;
         font-size: 12px;
-        color: #6b7280;
+        color: var(--color-text-muted);
       }
       .format-toggle {
         display: flex;
         gap: 0;
-        margin-top: 12px;
-        border: 1px solid #e5e7eb;
-        border-radius: 6px;
+        margin-top: var(--space-4);
+        border: 1px solid var(--color-border);
+        border-radius: var(--radius-1_5);
         overflow: hidden;
       }
       .format-toggle button {
         flex: 1;
         border: 0;
-        padding: 6px 12px;
+        padding: var(--space-2) var(--space-4);
         font-size: 12px;
         cursor: pointer;
-        background: #ffffff;
-        color: #6b7280;
+        background: var(--color-surface);
+        color: var(--color-text-muted);
       }
       .format-toggle button.active {
-        background: #3b82f6;
-        color: #ffffff;
+        background: var(--color-accent);
+        color: var(--color-text-inverse);
       }
       .actions {
-        margin-top: 12px;
+        margin-top: var(--space-4);
         display: flex;
-        gap: 8px;
+        gap: var(--space-3);
         flex-wrap: wrap;
       }
       .actions button {
         min-height: 32px;
-        border: 1px solid #e5e7eb;
-        border-radius: 6px;
-        background: #ffffff;
+        border: 1px solid var(--color-border);
+        border-radius: var(--radius-1_5);
+        background: var(--color-surface);
         cursor: pointer;
         font-size: 12px;
-        padding: 0 12px;
-        font-family: ${FONT_STACK};
+        padding: 0 var(--space-4);
+        font-family: var(--font-sans);
       }
       .actions button.primary {
-        background: #3b82f6;
-        color: #ffffff;
-        border-color: #3b82f6;
+        background: var(--color-accent);
+        color: var(--color-text-inverse);
+        border-color: var(--color-accent);
       }
       .actions .spacer { flex: 1; }
       .toast {
         position: fixed;
-        bottom: 12px;
+        bottom: var(--space-4);
         left: 50%;
         transform: translateX(-50%);
-        background: #111827;
-        color: #ffffff;
+        background: var(--color-surface-inverse);
+        color: var(--color-text-inverse);
         font-size: 12px;
-        border-radius: 999px;
-        padding: 6px 12px;
+        border-radius: var(--radius-full);
+        padding: var(--space-2) var(--space-4);
         z-index: ${Z_INDEX + 1};
       }
     `;
