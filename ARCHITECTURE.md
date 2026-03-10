@@ -22,6 +22,7 @@ Browser
 ├── Content Script
 │   ├── Element Picker
 │   ├── Highlight Overlay
+│   ├── Capture Confirmation Modal (in-page)
 │   └── DOM Extraction
 │
 ├── Extension UI (React)
@@ -73,6 +74,7 @@ mouse tracking
 element selection
 DOM extraction
 style computation
+in-page capture confirmation modal (Save, Copy, Save & Capture another, Cancel)
 ```
 
 ---
@@ -352,8 +354,9 @@ AI-generated component conversion
 The current implementation follows the architecture in this document and includes:
 
 - MV3 extension scaffold with Vite + CRXJS.
-- Content script picker + capture overlay.
+- Content script picker + capture overlay + in-page capture confirmation modal.
 - DOM clone pipeline that inlines visual styles and replaces media assets with placeholders.
+- In-page modal on element click: Save to library, Copy (HTML/JSX toggle), Save & Capture another, Cancel.
 - Popup React library UI with capture action, snippet cards, preview modal, copy/delete actions, and toast feedback.
 - Local snippet persistence via `chrome.storage.local`.
 - Background-script message routing between popup and content script.

@@ -2,64 +2,48 @@ import { useEffect, useMemo, useState, type JSX } from "react";
 import {
   deleteSnippetFromBackground,
   formatCaptureStartError,
-  getLatestCapture,
   getSnippetsFromBackground,
-  saveSnippetFromCapture,
   startCapture
 } from "./api";
-import { CaptureModal } from "./components/CaptureModal";
 import { EmptyState } from "./components/EmptyState";
 import { Header } from "./components/Header";
 import { SnippetLibrary } from "./components/SnippetLibrary";
 import { SnippetPreview } from "./components/SnippetPreview";
 import { Toast } from "./components/Toast";
-import type { CapturedElementData, Snippet } from "../shared/types/snippet";
-import { getCaptureThumbnail } from "./thumbnail";
+import type { Snippet } from "../shared/types/snippet";
 
-function getDomain(url: string): string {
-  try {
-    return new URL(url).hostname;
-  } catch {
-    return "unknown";
-  }
-}
-
-async function copyToClipboard(value: string): Promise<void> {
-  await navigator.clipboard.writeText(value);
+function copyToClipboard(value: string): Promise<void> {
+  return new Promise((resolve, reject) => {
+    const textarea = document.createElement("textarea");
+    textarea.value = value;
+    textarea.style.cssText = "position:fixed;top:0;left:0;opacity:0;pointer-events:none";
+    document.body.appendChild(textarea);
+    textarea.focus();
+    textarea.select();
+    try {
+      const ok = document.execCommand("copy");
+      document.body.removeChild(textarea);
+      if (ok) {
+        resolve();
+      } else {
+        reject(new Error("Copy failed"));
+      }
+    } catch (err) {
+      document.body.removeChild(textarea);
+      reject(err);
+    }
+  });
 }
 
 export function App(): JSX.Element {
   const [snippets, setSnippets] = useState<Snippet[]>([]);
   const [selectedSnippet, setSelectedSnippet] = useState<Snippet | null>(null);
-  const [captureData, setCaptureData] = useState<CapturedElementData | null>(null);
-  const [isCapturing, setIsCapturing] = useState(false);
   const [toastMessage, setToastMessage] = useState("");
 
   const hasSnippets = useMemo(() => snippets.length > 0, [snippets.length]);
 
   useEffect(() => {
     void loadSnippets();
-  }, []);
-
-  useEffect(() => {
-    void getLatestCapture().then((capture) => {
-      if (capture) {
-        setCaptureData(capture);
-        setIsCapturing(false);
-      }
-    });
-  }, []);
-
-  useEffect(() => {
-    const listener = (message: { type?: string; payload?: unknown }): void => {
-      if (message.type === "CAPTURE_READY") {
-        setCaptureData(message.payload as CapturedElementData);
-        setIsCapturing(false);
-      }
-    };
-
-    chrome.runtime.onMessage.addListener(listener);
-    return () => chrome.runtime.onMessage.removeListener(listener);
   }, []);
 
   useEffect(() => {
@@ -82,34 +66,10 @@ export function App(): JSX.Element {
 
   async function handleCapture(): Promise<void> {
     try {
-      setIsCapturing(true);
       await startCapture();
       setToastMessage("Select an element on the page");
     } catch (error: unknown) {
-      setIsCapturing(false);
       setToastMessage(formatCaptureStartError(error));
-    }
-  }
-
-  async function handleSaveCapture(): Promise<void> {
-    if (!captureData) {
-      return;
-    }
-
-    try {
-      const [tab] = await chrome.tabs.query({ active: true, currentWindow: true });
-      const sourceUrl = tab?.url ?? "about:blank";
-      const title = `${captureData.elementLabel} - ${getDomain(sourceUrl)}`;
-      const snippetWithThumbnail: CapturedElementData = {
-        ...captureData,
-        thumbnail: getCaptureThumbnail(captureData)
-      };
-      const snippet = await saveSnippetFromCapture(snippetWithThumbnail, title, sourceUrl);
-      setSnippets((prev) => [snippet, ...prev]);
-      setCaptureData(null);
-      setToastMessage("Snippet saved");
-    } catch {
-      setToastMessage("Failed to save snippet");
     }
   }
 
@@ -134,7 +94,7 @@ export function App(): JSX.Element {
 
   return (
     <div className="app-shell">
-      <Header onCapture={() => void handleCapture()} isCapturing={isCapturing} />
+      <Header onCapture={() => void handleCapture()} />
       <main className="main-content">
         {hasSnippets ? (
           <SnippetLibrary
@@ -153,7 +113,6 @@ export function App(): JSX.Element {
         <span>v0.1.0</span>
       </footer>
 
-      {captureData && <CaptureModal capture={captureData} onSave={() => void handleSaveCapture()} onCancel={() => setCaptureData(null)} />}
       {selectedSnippet && (
         <SnippetPreview snippet={selectedSnippet} onClose={() => setSelectedSnippet(null)} onCopy={(value, label) => void handleCopy(value, label)} />
       )}

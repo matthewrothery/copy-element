@@ -5,7 +5,7 @@ import { Header } from "./Header";
 describe("Header", () => {
   it("triggers capture click", () => {
     const onCapture = vi.fn();
-    render(<Header onCapture={onCapture} isCapturing={false} />);
+    render(<Header onCapture={onCapture} />);
 
     fireEvent.click(screen.getByRole("button", { name: "Capture Element" }));
     expect(onCapture).toHaveBeenCalledTimes(1);
