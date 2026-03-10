@@ -5,7 +5,7 @@ export default defineManifest({
   name: "Element Capture",
   description: "Capture and save styled page elements as reusable snippets.",
   version: "0.1.0",
-  permissions: ["activeTab", "storage", "scripting"],
+  permissions: ["activeTab", "tabs", "storage", "scripting"],
   action: {
     default_title: "Element Capture",
     default_popup: "popup.html"

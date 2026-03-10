@@ -16,6 +16,7 @@ export interface CapturedElementData {
   width: number;
   height: number;
   elementLabel: string;
+  thumbnail?: string;
 }
 
 export type CaptureState = "idle" | "active";

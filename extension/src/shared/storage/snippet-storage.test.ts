@@ -58,4 +58,56 @@ describe("snippet-storage", () => {
     const snippet = await getSnippetById("1");
     expect(snippet).toBeNull();
   });
+
+  it("filters malformed records and keeps valid ones", async () => {
+    (memory as unknown as { ["element-capture-snippets"]: unknown[] })["element-capture-snippets"] = [
+      { id: "bad-only" },
+      {
+        id: "2",
+        title: "Two",
+        sourceUrl: "https://example.com",
+        html: "<div></div>",
+        jsx: "<div></div>",
+        thumbnail: "",
+        createdAt: 2,
+        width: 10,
+        height: 10
+      }
+    ];
+
+    const snippets = await getSnippets();
+    expect(snippets).toHaveLength(1);
+    expect(snippets[0].id).toBe("2");
+  });
+
+  it("returns snippets sorted by createdAt desc", async () => {
+    (memory as unknown as { ["element-capture-snippets"]: Snippet[] })["element-capture-snippets"] = [
+      {
+        id: "older",
+        title: "Older",
+        sourceUrl: "https://example.com",
+        html: "<div></div>",
+        jsx: "<div></div>",
+        thumbnail: "",
+        createdAt: 1,
+        width: 10,
+        height: 10
+      },
+      {
+        id: "newer",
+        title: "Newer",
+        sourceUrl: "https://example.com",
+        html: "<div></div>",
+        jsx: "<div></div>",
+        thumbnail: "",
+        createdAt: 3,
+        width: 10,
+        height: 10
+      }
+    ];
+
+    const snippets = await getSnippets();
+    expect(snippets[0].id).toBe("newer");
+    expect(snippets[1].id).toBe("older");
+  });
 });

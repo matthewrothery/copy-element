@@ -1,5 +1,12 @@
-import React, { useEffect, useMemo, useState } from "react";
-import { deleteSnippetFromBackground, getSnippetsFromBackground, saveSnippetFromCapture, startCapture } from "./api";
+import { useEffect, useMemo, useState, type JSX } from "react";
+import {
+  deleteSnippetFromBackground,
+  formatCaptureStartError,
+  getLatestCapture,
+  getSnippetsFromBackground,
+  saveSnippetFromCapture,
+  startCapture
+} from "./api";
 import { CaptureModal } from "./components/CaptureModal";
 import { EmptyState } from "./components/EmptyState";
 import { Header } from "./components/Header";
@@ -7,6 +14,7 @@ import { SnippetLibrary } from "./components/SnippetLibrary";
 import { SnippetPreview } from "./components/SnippetPreview";
 import { Toast } from "./components/Toast";
 import type { CapturedElementData, Snippet } from "../shared/types/snippet";
+import { getCaptureThumbnail } from "./thumbnail";
 
 function getDomain(url: string): string {
   try {
@@ -20,11 +28,6 @@ async function copyToClipboard(value: string): Promise<void> {
   await navigator.clipboard.writeText(value);
 }
 
-function buildFallbackThumbnail(): string {
-  const svg = `<svg xmlns="http://www.w3.org/2000/svg" width="200" height="120"><rect width="200" height="120" fill="#f8fafc"/><rect x="16" y="16" width="168" height="88" fill="#e5e7eb" rx="8"/></svg>`;
-  return `data:image/svg+xml;base64,${btoa(svg)}`;
-}
-
 export function App(): JSX.Element {
   const [snippets, setSnippets] = useState<Snippet[]>([]);
   const [selectedSnippet, setSelectedSnippet] = useState<Snippet | null>(null);
@@ -36,6 +39,15 @@ export function App(): JSX.Element {
 
   useEffect(() => {
     void loadSnippets();
+  }, []);
+
+  useEffect(() => {
+    void getLatestCapture().then((capture) => {
+      if (capture) {
+        setCaptureData(capture);
+        setIsCapturing(false);
+      }
+    });
   }, []);
 
   useEffect(() => {
@@ -73,9 +85,9 @@ export function App(): JSX.Element {
       setIsCapturing(true);
       await startCapture();
       setToastMessage("Select an element on the page");
-    } catch {
+    } catch (error: unknown) {
       setIsCapturing(false);
-      setToastMessage("Unable to start capture");
+      setToastMessage(formatCaptureStartError(error));
     }
   }
 
@@ -88,7 +100,11 @@ export function App(): JSX.Element {
       const [tab] = await chrome.tabs.query({ active: true, currentWindow: true });
       const sourceUrl = tab?.url ?? "about:blank";
       const title = `${captureData.elementLabel} - ${getDomain(sourceUrl)}`;
-      const snippet = await saveSnippetFromCapture(captureData, title, sourceUrl, buildFallbackThumbnail());
+      const snippetWithThumbnail: CapturedElementData = {
+        ...captureData,
+        thumbnail: getCaptureThumbnail(captureData)
+      };
+      const snippet = await saveSnippetFromCapture(snippetWithThumbnail, title, sourceUrl);
       setSnippets((prev) => [snippet, ...prev]);
       setCaptureData(null);
       setToastMessage("Snippet saved");
