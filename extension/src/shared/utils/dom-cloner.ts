@@ -1,79 +1,157 @@
+import { SVG_NS } from "../constants";
 import { replaceAssetsWithPlaceholders } from "./asset-replacer";
 import { buildPseudoElementClone } from "./pseudo-element-extractor";
 import { extractVisualStyles } from "./style-extractor";
 import { applyInlineStyles } from "./style-inliner";
+import {
+  minimizeStyleMap,
+  removeRedundantInheritedStyles
+} from "./style-minimizer";
+import { transformStyleMapForPortability } from "./url-absolutizer";
 
-const SVG_NS = "http://www.w3.org/2000/svg";
+const SVG_PRESERVE_ATTRS = new Set([
+  "viewbox",
+  "viewBox",
+  "xmlns",
+  "xmlns:xlink",
+  "preserveaspectratio",
+  "preserveAspectRatio",
+  "fill",
+  "stroke",
+  "href",
+  "xlink:href",
+  "cx",
+  "cy",
+  "r",
+  "x",
+  "y",
+  "width",
+  "height",
+  "d",
+  "transform",
+  "id"
+]);
 
 function shouldSkipTag(element: Element): boolean {
   const tagName = element.tagName.toLowerCase();
   return tagName === "script" || tagName === "noscript";
 }
 
-function isSvgElement(element: Element): boolean {
-  return element.namespaceURI === SVG_NS;
+function isAbsoluteOrFixed(element: HTMLElement): boolean {
+  const position =
+    element.style.position || window.getComputedStyle(element).getPropertyValue("position").trim();
+  return position === "absolute" || position === "fixed";
 }
 
-function createClone(source: Element, documentRef: Document): Element {
-  const tagName = source.tagName.toLowerCase();
-  if (isSvgElement(source)) {
-    return documentRef.createElementNS(SVG_NS, tagName);
+function shouldRemoveAttribute(name: string, element: Element): boolean {
+  if (element.namespaceURI === SVG_NS) {
+    const lower = name.toLowerCase();
+    if (SVG_PRESERVE_ATTRS.has(name) || SVG_PRESERVE_ATTRS.has(lower)) {
+      return false;
+    }
   }
-  return documentRef.createElement(tagName);
+  const lower = name.toLowerCase();
+  if (lower.startsWith("on")) {
+    return true;
+  }
+  if (lower === "data-testid") {
+    return true;
+  }
+  if (lower.startsWith("data-react")) {
+    return true;
+  }
+  if (lower.startsWith("ng-") || lower.startsWith("data-ng-") || lower.startsWith("x-ng-")) {
+    return true;
+  }
+  return false;
 }
 
-function cloneWithInlineStyles(source: Element, documentRef: Document): Element {
-  const clone = createClone(source, documentRef);
-  const sourceElement = source as HTMLElement;
-  const sourceStyles = extractVisualStyles(source);
-
-  applyInlineStyles(clone, sourceStyles);
-
-  for (const attribute of Array.from(source.attributes)) {
-    if (attribute.name.startsWith("on")) {
-      continue;
+function sanitizeAttributes(clone: Element): void {
+  const toRemove: string[] = [];
+  for (const attr of Array.from(clone.attributes)) {
+    if (shouldRemoveAttribute(attr.name, clone)) {
+      toRemove.push(attr.name);
     }
-    if (attribute.name === "style") {
-      continue;
-    }
-    clone.setAttribute(attribute.name, attribute.value);
+  }
+  toRemove.forEach((name) => clone.removeAttribute(name));
+}
+
+function sanitizeAndApplyStyles(
+  original: Element,
+  clone: Element,
+  documentRef: Document,
+  parent: Element | null,
+  baseUrl: string
+): void {
+  if (original.nodeType !== Node.ELEMENT_NODE || clone.nodeType !== Node.ELEMENT_NODE) {
+    return;
   }
 
-  const beforePseudo = buildPseudoElementClone(sourceElement, "::before", documentRef);
+  const originalEl = original as HTMLElement;
+  const cloneEl = clone as HTMLElement;
+
+  sanitizeAttributes(cloneEl);
+
+  const sourceStyles = extractVisualStyles(originalEl);
+  let portableStyles = transformStyleMapForPortability(sourceStyles, baseUrl);
+  portableStyles = minimizeStyleMap(portableStyles);
+  if (parent) {
+    const parentComputed = window.getComputedStyle(parent);
+    portableStyles = removeRedundantInheritedStyles(portableStyles, parentComputed);
+  }
+  applyInlineStyles(cloneEl, portableStyles);
+
+  const origChildren = Array.from(original.childNodes);
+  const cloneChildren = Array.from(clone.childNodes);
+
+  // Text nodes are preserved in clone but not processed (no getComputedStyle).
+  // They inherit typography and color from their parent element.
+  const beforePseudo = buildPseudoElementClone(originalEl, "::before", documentRef);
+  const afterPseudo = buildPseudoElementClone(originalEl, "::after", documentRef);
+
+  const hasAbsolutePseudo =
+    (beforePseudo && isAbsoluteOrFixed(beforePseudo)) ||
+    (afterPseudo && isAbsoluteOrFixed(afterPseudo));
+  if (hasAbsolutePseudo) {
+    const clonePosition =
+      cloneEl.style.position || window.getComputedStyle(cloneEl).getPropertyValue("position").trim();
+    if (clonePosition === "static" || !clonePosition) {
+      cloneEl.style.position = "relative";
+    }
+  }
+
   if (beforePseudo) {
-    clone.appendChild(beforePseudo);
+    cloneEl.insertBefore(beforePseudo, cloneEl.firstChild);
   }
 
-  const textNodes = Array.from(source.childNodes).filter((node) => node.nodeType === Node.TEXT_NODE);
-  textNodes.forEach((node) => {
-    const text = node.textContent ?? "";
-    if (text.trim().length > 0) {
-      clone.appendChild(documentRef.createTextNode(text));
+  for (let i = 0; i < origChildren.length; i++) {
+    const origChild = origChildren[i];
+    const cloneChild = cloneChildren[i];
+
+    if (origChild.nodeType === Node.ELEMENT_NODE) {
+      const origElement = origChild as Element;
+      if (shouldSkipTag(origElement)) {
+        cloneChild.remove();
+        continue;
+      }
+      sanitizeAndApplyStyles(origElement, cloneChild as Element, documentRef, originalEl, baseUrl);
     }
-  });
+  }
 
-  Array.from(source.children).forEach((child) => {
-    if (shouldSkipTag(child)) {
-      return;
-    }
-
-    const childClone = cloneWithInlineStyles(child, documentRef);
-    clone.appendChild(childClone);
-  });
-
-  const afterPseudo = buildPseudoElementClone(sourceElement, "::after", documentRef);
   if (afterPseudo) {
-    clone.appendChild(afterPseudo);
+    cloneEl.appendChild(afterPseudo);
   }
 
-  if (sourceElement instanceof HTMLInputElement || sourceElement instanceof HTMLTextAreaElement) {
-    clone.textContent = "";
+  if (originalEl instanceof HTMLInputElement || originalEl instanceof HTMLTextAreaElement) {
+    cloneEl.textContent = "";
   }
-
-  return clone;
 }
 
-export function cloneElementTreeWithInlineStyles(element: HTMLElement): HTMLElement {
-  const clonedRoot = cloneWithInlineStyles(element, document);
+export function cloneElementTreeWithInlineStyles(
+  element: HTMLElement,
+  baseUrl: string
+): HTMLElement {
+  const clonedRoot = element.cloneNode(true) as HTMLElement;
+  sanitizeAndApplyStyles(element, clonedRoot, document, null, baseUrl);
   return replaceAssetsWithPlaceholders(clonedRoot);
 }

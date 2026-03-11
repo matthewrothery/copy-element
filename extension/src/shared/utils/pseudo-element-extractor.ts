@@ -5,21 +5,28 @@ import type { StyleMap } from "./style-extractor";
 
 type PseudoElementType = "::before" | "::after";
 
-function parsePseudoContent(content: string): string | null {
+type ParsedContent = { type: "text"; value: string } | { type: "url"; value: string } | null;
+
+function parsePseudoContent(content: string): ParsedContent {
   const normalized = content.trim();
   if (normalized.length === 0 || normalized === "none" || normalized === "normal") {
     return null;
   }
 
-  const quotedMatch = normalized.match(/^(['"])([\s\S]*)\1$/);
-  if (!quotedMatch) {
-    return normalized;
+  const urlMatch = normalized.match(/^url\s*\(\s*["']?([^"')]+)["']?\s*\)$/i);
+  if (urlMatch) {
+    return { type: "url", value: urlMatch[1].trim() };
   }
 
-  return quotedMatch[2]
-    .replace(/\\a\s?/gi, "\n")
-    .replace(/\\(['"])/g, "$1")
-    .replace(/\\\\/g, "\\");
+  const quotedMatch = normalized.match(/^(['"])([\s\S]*)\1$/);
+  const text = quotedMatch
+    ? quotedMatch[2]
+        .replace(/\\a\s?/gi, "\n")
+        .replace(/\\(['"])/g, "$1")
+        .replace(/\\\\/g, "\\")
+    : normalized;
+
+  return { type: "text", value: text };
 }
 
 function extractPseudoStyles(element: HTMLElement, pseudo: PseudoElementType): StyleMap {
@@ -41,20 +48,27 @@ export function buildPseudoElementClone(
   pseudo: PseudoElementType,
   documentRef: Document
 ): HTMLElement | null {
+  const pseudoStyles = extractPseudoStyles(sourceElement, pseudo);
   const computed = window.getComputedStyle(sourceElement, pseudo);
   const content = parsePseudoContent(computed.getPropertyValue("content"));
-  if (content === null) {
+
+  const hasVisualStyles = Object.keys(pseudoStyles).length > 0;
+  if (content === null && !hasVisualStyles) {
     return null;
   }
 
-  const pseudoNode = documentRef.createElement("span");
-  const pseudoStyles = extractPseudoStyles(sourceElement, pseudo);
-  applyInlineStyles(pseudoNode, pseudoStyles);
-
-  if (content.length > 0) {
-    pseudoNode.textContent = content;
+  let pseudoNode: HTMLElement;
+  if (content?.type === "url") {
+    pseudoNode = documentRef.createElement("img");
+    pseudoNode.setAttribute("src", content.value);
+  } else {
+    pseudoNode = documentRef.createElement("span");
+    if (content?.type === "text" && content.value.length > 0) {
+      pseudoNode.textContent = content.value;
+    }
   }
 
+  applyInlineStyles(pseudoNode, pseudoStyles);
   pseudoNode.setAttribute("data-pseudo-element", pseudo);
   pseudoNode.setAttribute("aria-hidden", "true");
   return pseudoNode;

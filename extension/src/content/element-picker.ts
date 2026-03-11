@@ -1,4 +1,5 @@
 import { CaptureOverlay } from "./capture-overlay";
+import { isOverlayPosition, shouldSkipElement } from "./element-picker-skip";
 
 export interface ElementSelectionResult {
   element: HTMLElement;
@@ -14,6 +15,8 @@ export class ElementPicker {
   private readonly onSelected: ElementSelectedHandler;
   private active = false;
   private currentHover: HTMLElement | null = null;
+  /** When set, overrides currentHover for display and capture (parent traversal). */
+  private currentSelected: HTMLElement | null = null;
 
   public constructor(onSelected: ElementSelectedHandler) {
     this.overlay = new CaptureOverlay();
@@ -39,6 +42,7 @@ export class ElementPicker {
     }
     this.active = false;
     this.currentHover = null;
+    this.currentSelected = null;
     document.removeEventListener("mousemove", this.handleMouseMove, true);
     document.removeEventListener("click", this.handleClick, true);
     document.removeEventListener("keydown", this.handleKeyDown, true);
@@ -56,12 +60,13 @@ export class ElementPicker {
     }
 
     const target = event.target as HTMLElement | null;
-    if (!target || target.closest("[data-element-capture-overlay]")) {
+    if (!target || shouldSkipElement(target)) {
       return;
     }
 
     this.currentHover = target;
-    this.overlay.showForElement(target);
+    this.currentSelected = null;
+    this.overlay.showForElement(target, { isOverlay: isOverlayPosition(target) });
   }
 
   private handleClick(event: MouseEvent): void {
@@ -71,8 +76,11 @@ export class ElementPicker {
     event.preventDefault();
     event.stopPropagation();
 
-    const target = this.currentHover;
-    if (!target) {
+    const target = event.altKey
+      ? this.getElementUnderOverlay(event.clientX, event.clientY)
+      : this.currentSelected ?? this.currentHover;
+
+    if (!target || shouldSkipElement(target)) {
       return;
     }
 
@@ -85,9 +93,69 @@ export class ElementPicker {
     });
   }
 
+  /**
+   * Alt+Click: get element underneath fixed/sticky overlays by temporarily
+   * setting pointer-events: none on blocking elements.
+   */
+  private getElementUnderOverlay(clientX: number, clientY: number): HTMLElement | null {
+    const modified: Array<{ el: HTMLElement; original: string }> = [];
+    let el: Element | null = document.elementFromPoint(clientX, clientY);
+
+    while (el && el !== document.body) {
+      const htmlEl = el as HTMLElement;
+      if (shouldSkipElement(el)) {
+        el = el.parentElement;
+        continue;
+      }
+      if (!isOverlayPosition(el)) {
+        break;
+      }
+      const original = htmlEl.style.pointerEvents;
+      htmlEl.style.pointerEvents = "none";
+      modified.push({ el: htmlEl, original });
+      el = document.elementFromPoint(clientX, clientY);
+    }
+
+    for (const { el: m, original } of modified) {
+      m.style.pointerEvents = original;
+    }
+
+    return el && el !== document.body ? (el as HTMLElement) : null;
+  }
+
   private handleKeyDown(event: KeyboardEvent): void {
     if (event.key === "Escape") {
       this.stop();
+      return;
+    }
+
+    const base = this.currentSelected ?? this.currentHover;
+    if (!base) {
+      return;
+    }
+
+    if (event.key === "ArrowUp" || event.key === "[") {
+      event.preventDefault();
+      let candidate = base.parentElement;
+      while (candidate && candidate !== document.body && shouldSkipElement(candidate)) {
+        candidate = candidate.parentElement;
+      }
+      if (candidate && candidate !== document.body) {
+        this.currentSelected = candidate;
+        this.overlay.showForElement(candidate, { isOverlay: isOverlayPosition(candidate) });
+      }
+      return;
+    }
+
+    if (event.key === "ArrowDown" || event.key === "]") {
+      event.preventDefault();
+      this.currentSelected = null;
+      if (this.currentHover) {
+        this.overlay.showForElement(this.currentHover, {
+          isOverlay: isOverlayPosition(this.currentHover)
+        });
+      }
+      return;
     }
   }
 }

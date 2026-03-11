@@ -1,5 +1,7 @@
 import { nanoid } from "nanoid";
 import { cloneElementTreeWithInlineStyles } from "../shared/utils/dom-cloner";
+import { processImageUrls } from "../shared/utils/image-url-processor";
+import { hasShadowDomInSubtree } from "../shared/utils/shadow-dom-detector";
 import { serializeElementToHtml } from "../shared/utils/html-serializer";
 import { inlineSvgSprites } from "../shared/utils/svg-sprite-inliner";
 import { htmlToJsx } from "../shared/utils/jsx-converter";
@@ -13,6 +15,7 @@ import {
   CaptureConfirmationModal,
   type CopyFormat
 } from "./capture-confirmation-modal";
+import { buildCopyHtml } from "../shared/utils/preview-srcdoc-builder";
 import { ElementPicker } from "./element-picker";
 
 const TOAST_Z_INDEX = 2147483648;
@@ -77,11 +80,13 @@ function ensurePicker(): ElementPicker {
     picker = new ElementPicker((result) => {
       void (async () => {
         try {
-          const cloned = cloneElementTreeWithInlineStyles(result.element);
+          const baseUrl = window.location.href;
+          const cloned = cloneElementTreeWithInlineStyles(result.element, baseUrl);
           const rootId = `snippet-root-${nanoid()}`;
           cloned.setAttribute("id", rootId);
           cloned.setAttribute("data-snippet-root", "true");
-          await inlineSvgSprites(cloned, window.location.href);
+          processImageUrls(cloned, baseUrl);
+          await inlineSvgSprites(cloned, baseUrl);
           const html = serializeElementToHtml(cloned);
           const jsx = htmlToJsx(html);
 
@@ -94,8 +99,12 @@ function ensurePicker(): ElementPicker {
 
           const renderContext = buildRenderContextFromElement(result.element);
 
-          const baseBlock = buildBaseStyleBlock(result.element, rootId);
-          const mediaBlock = extractMediaAndContainerRules(result.element, rootId);
+          const baseBlock = buildBaseStyleBlock(result.element, rootId, baseUrl);
+          const mediaBlock = extractMediaAndContainerRules(
+            result.element,
+            rootId,
+            baseUrl
+          );
           const styleBlock = [baseBlock, mediaBlock].filter(Boolean).join("");
 
           const capture: CapturedElementData = {
@@ -107,7 +116,8 @@ function ensurePicker(): ElementPicker {
             thumbnail,
             renderContext,
             rootId,
-            styleBlock: styleBlock || undefined
+            styleBlock: styleBlock || undefined,
+            hasShadowDom: hasShadowDomInSubtree(result.element)
           };
 
           picker?.stop();
@@ -175,10 +185,10 @@ async function handleSaveAndCaptureAnother(capture: CapturedElementData): Promis
 
 async function handleCopy(capture: CapturedElementData, format: CopyFormat): Promise<void> {
   const value =
-    format === "html"
-      ? capture.styleBlock
-        ? `<style>${capture.styleBlock}</style>${capture.html}`
-        : capture.html
+    format === "html" || format === "html-inline"
+      ? buildCopyHtml(buildSnippetFromCapture(capture), {
+          includeStyleBlock: format !== "html-inline"
+        })
       : capture.jsx;
   const ok = await copyToClipboard(value);
   if (ok && modal) {

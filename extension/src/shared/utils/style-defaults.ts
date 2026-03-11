@@ -49,6 +49,7 @@ const DEFAULT_VALUE_MAP: Record<string, Set<string>> = {
   "border-right": new Set(["none", "0", "0px", "0px none"]),
   "border-bottom": new Set(["none", "0", "0px", "0px none"]),
   "border-left": new Set(["none", "0", "0px", "0px none"]),
+  "box-sizing": new Set(["content-box"]),
   "border-radius": ZERO_VALUES,
   "box-shadow": NONE_VALUES,
   outline: new Set(["none", "0", "0px"]),
@@ -93,7 +94,12 @@ const DEFAULT_VALUE_MAP: Record<string, Set<string>> = {
   filter: NONE_VALUES,
   "clip-path": NONE_VALUES,
   "object-fit": new Set(["fill"]),
-  "object-position": new Set(["50% 50%"])
+  "object-position": new Set(["50% 50%"]),
+  "list-style": new Set(["none", "disc"]),
+  "list-style-type": new Set(["disc", "decimal", "circle", "square", "decimal-leading-zero"]),
+  cursor: new Set(["auto"]),
+  "user-select": new Set(["auto"]),
+  "pointer-events": new Set(["auto"])
 };
 
 function normalizeForComparison(value: string): string {

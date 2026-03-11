@@ -1,4 +1,5 @@
 import type { ParentLayoutContext } from "../types/snippet";
+import { isDefaultValue } from "./style-defaults";
 
 const LAYOUT_DISPLAYS = new Set([
   "flex",
@@ -6,6 +7,9 @@ const LAYOUT_DISPLAYS = new Set([
   "grid",
   "inline-grid"
 ]);
+
+/** Display classification for layout parents. */
+export type LayoutDisplayKind = "flex" | "grid";
 
 const CSS_TO_CONTEXT_KEY: Record<string, keyof ParentLayoutContext> = {
   "flex-direction": "flexDirection",
@@ -52,17 +56,25 @@ export function findNearestLayoutParent(element: Element): Element | null {
 }
 
 /**
+ * Classifies layout display into flex or grid.
+ */
+export function getLayoutDisplayKind(display: string): LayoutDisplayKind {
+  const d = display.trim().toLowerCase();
+  return d === "grid" || d === "inline-grid" ? "grid" : "flex";
+}
+
+/**
  * Extracts minimal layout CSS from a parent element for preview fidelity.
+ * Omits default values to keep context compact.
  */
 export function extractParentLayoutContext(parent: Element): ParentLayoutContext {
   const computed = window.getComputedStyle(parent);
-  const ctx: ParentLayoutContext = {
-    display: computed.getPropertyValue("display").trim() || "flex"
-  };
+  const rawDisplay = computed.getPropertyValue("display").trim() || "flex";
+  const ctx: ParentLayoutContext = { display: rawDisplay };
 
   for (const [cssProp, contextKey] of Object.entries(CSS_TO_CONTEXT_KEY)) {
     const value = computed.getPropertyValue(cssProp).trim();
-    if (value.length > 0) {
+    if (value.length > 0 && !isDefaultValue(cssProp, value)) {
       ctx[contextKey] = value;
     }
   }

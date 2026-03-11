@@ -48,6 +48,9 @@ export function SnippetPreview({ snippet, onClose, onCopy }: SnippetPreviewProps
           <button type="button" className="btn-primary" onClick={() => onCopy(buildCopyHtml(snippet), "HTML")} aria-label="Copy HTML">
             Copy HTML
           </button>
+          <button type="button" className="btn-secondary" onClick={() => onCopy(buildCopyHtml(snippet, { includeStyleBlock: false }), "HTML (inline)")} aria-label="Copy HTML inline only">
+            Copy Inline
+          </button>
           <button type="button" className="btn-primary" onClick={() => onCopy(snippet.jsx, "JSX")} aria-label="Copy JSX">
             Copy JSX
           </button>

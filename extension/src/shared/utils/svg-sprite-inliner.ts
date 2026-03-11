@@ -4,7 +4,7 @@
  * so the preview renders without external requests (avoids CORS/sandbox issues).
  */
 
-const SVG_NS = "http://www.w3.org/2000/svg";
+import { createSvgElement, SVG_NS } from "../constants";
 
 interface UseRef {
   element: SVGUseElement;
@@ -37,7 +37,7 @@ function findUseElements(root: Element): UseRef[] {
     const href = use.getAttribute("href") ?? use.getAttribute("xlink:href");
     if (!href || !href.includes("#")) continue;
     const parsed = parseUseHref(href);
-    if (!parsed) continue;
+    if (!parsed || !parsed.url.trim()) continue;
     results.push({
       element: use as SVGUseElement,
       spriteUrl: parsed.url,
@@ -68,7 +68,7 @@ function findSymbol(spriteDoc: Document, fragmentId: string): Element | null {
 function ensureDefs(parentSvg: Element, doc: Document): Element {
   let defs = parentSvg.querySelector("defs");
   if (!defs) {
-    defs = doc.createElementNS(SVG_NS, "defs");
+    defs = createSvgElement(doc, "defs");
     parentSvg.insertBefore(defs, parentSvg.firstChild);
   }
   return defs;

@@ -55,6 +55,8 @@ export interface CapturedElementData {
   renderContext?: RenderContext;
   styleBlock?: string;
   rootId?: string;
+  /** True when the captured element or its subtree involves Shadow DOM. */
+  hasShadowDom?: boolean;
 }
 
 export type CaptureState = "idle" | "active";

@@ -59,4 +59,32 @@ describe("extractVisualStyles", () => {
     expect(styles.margin).toBeUndefined();
     expect(styles["margin-top"]).toBeUndefined();
   });
+
+  it("omits box-sizing content-box and keeps border-box", () => {
+    vi.spyOn(window, "getComputedStyle").mockImplementation(
+      (element: Element) =>
+        ({
+          getPropertyValue: (property: string) => {
+            if (property === "box-sizing") return "content-box";
+            return "";
+          }
+        }) as CSSStyleDeclaration
+    );
+    document.body.innerHTML = `<div id="target"></div>`;
+    const target = document.getElementById("target") as HTMLElement;
+    const stylesContentBox = extractVisualStyles(target);
+    expect(stylesContentBox["box-sizing"]).toBeUndefined();
+
+    vi.spyOn(window, "getComputedStyle").mockImplementation(
+      (element: Element) =>
+        ({
+          getPropertyValue: (property: string) => {
+            if (property === "box-sizing") return "border-box";
+            return "";
+          }
+        }) as CSSStyleDeclaration
+    );
+    const stylesBorderBox = extractVisualStyles(target);
+    expect(stylesBorderBox["box-sizing"]).toBe("border-box");
+  });
 });

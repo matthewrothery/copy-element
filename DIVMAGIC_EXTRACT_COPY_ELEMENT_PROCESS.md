@@ -1,6 +1,8 @@
 # DivMagic 2.1.22 — Extract/Copy Element Process
 
-This document outlines how the DivMagic Chrome extension extracts elements and retains their styles for copying. It is derived from analysis of the `divmagic` directory (extension version 2.1.22).
+This document outlines how the DivMagic Chrome extension extracts elements and retains their styles for copying. It is derived from analysis of the `competitors/divmagic` directory (extension version 2.1.22).
+
+**Evidence source:** `competitors/divmagic/` — validated against manifest.json, blockRegistration.bundle.js, locale messages, and bundle contents.
 
 ---
 
@@ -21,6 +23,8 @@ DivMagic copies elements from any webpage as reusable web components, producing 
 | Background | `background.bundle.js` | Service worker; coordinates messaging |
 | Popup | `popup.html`, `popup.bundle.js` | Quick capture from popup |
 
+**Evidence:** `manifest.json` — `devtools_page: devtools.html`, `background.service_worker`, `action.default_popup: popup.html`, `web_accessible_resources: blockRegistration.bundle.js`, `content_scripts` (wordpress.bundle.js for `https://*.wordpress.com/wp-admin/*`). Permissions: `scripting`, `activeTab`, `storage`, `contextMenus`.
+
 ---
 
 ## Copy Modes
@@ -33,6 +37,8 @@ The extension supports three copy modes that control how much style information 
 | **Balanced** | Includes pseudo-elements (`::before`, `::after`) that affect visuals, without excessive bloat. |
 | **Exact** | Full copy of all styles so the element matches the source as closely as possible. |
 
+**Evidence:** `_locales/en/messages.json` — `modalCopyModeSelectionAdaptable`, `modalCopyModeSelectionBalanced`, `modalCopyModeSelectionExact` with tooltips. Balanced tooltip: "Incorporates pseudo-elements like ::before and ::after, which can affect the visual outcome significantly but don't bloat the code excessively."
+
 ---
 
 ## Style Output Formats
@@ -42,6 +48,8 @@ Styles can be emitted in three formats:
 - **Inline CSS** — Styles applied via `style` attributes on elements
 - **External CSS** — Styles in a separate stylesheet
 - **Local CSS** — Styles scoped to the component (e.g., scoped or namespaced)
+
+**Evidence:** `_locales/en/messages.json` — `popupSettingsStyleFormatInlineCSS`, `popupSettingsStyleFormatExternalCSS`, `popupSettingsStyleFormatLocalCSS`.
 
 ---
 
@@ -86,6 +94,8 @@ From `blockRegistration.bundle.js`, the extension uses a whitelist of CSS proper
 - `outline`, `outline-color`, `outline-style`, `outline-width`
 - `white-space`
 
+**Evidence:** `blockRegistration.bundle.js` — whitelist array `const t=[...]` (line 1); `t.includes(e)` filters properties. Note: `gap` is referenced in core/group layout mapping but is not in the whitelist (may come from copy output elsewhere).
+
 ---
 
 ## Extraction Process (WordPress / Block Registration)
@@ -113,9 +123,11 @@ The most detailed extraction logic is in `blockRegistration.bundle.js`, which ta
 
 ### 4. Media Query Handling
 
-- Media queries are parsed with: `@media\s*([^{]+)\s*\{`.
+- Media queries are parsed with: `@media\s*([^{]+)\s*\{` and `@media[^{]+\{([\s\S]+?\})\s*\}/g`.
 - Styles are stored per media query so responsive behavior can be preserved.
 - At render time, `window.matchMedia(mediaQuery).matches` decides which media block to apply.
+
+**Evidence:** `blockRegistration.bundle.js` — regex `l=/@media[^{]+\{([\s\S]+?\})\s*\}/g`; `for(const t in a.media) window.matchMedia(t).matches&&(s={...s,...a.media[t]})`.
 
 ### 5. Element Traversal
 
@@ -145,6 +157,8 @@ For WordPress blocks, styles are converted into block attributes:
 - **Borders:** `border-*` → `border` with `style`, `width`, `color`, `radius`
 - **Layout:** `display`, `flex-direction`, `justify-content`, `align-items` → `layout`
 
+**Evidence:** `blockRegistration.bundle.js` — `switch(n.toLowerCase())` with cases `p`,`span`,`a`,`div`→`core/group`; `h1`–`h6`→`core/heading`; `img`→`core/image`; `button`→`core/button`; `svg`→`divmagic/svg`. Style-to-block via function `e(t,e)`.
+
 ---
 
 ## DOM Parsing & Output Libraries
@@ -155,11 +169,13 @@ The `devtoolContent.bundle.js` and `contentScript.bundle.js` bundles use:
 - **html-to-react** — Converting parsed HTML to React elements
 - **Prettier** — Formatting output code
 
+**Evidence:** Prettier confirmed in both bundles (parser/format options, `tabWidth`, `useTabs`, `embeddedLanguageFormatting`). htmlparser2 and html-to-react are standard for HTML→React/JSX conversion; names minified in bundles.
+
 ---
 
 ## Element Selection UI
 
-- **Highlight overlay:** `inject_css.css` defines `.divmagichighlight` with red outline and background.
+- **Highlight overlay:** `inject_css.css` defines `.divmagichighlight` with red outline and background (`outline: 2px solid red`, `background-color: rgba(255,0,0,0.1)`).
 - **Inspector:** Element details view in the toolbox.
 - **Copy Element:** Toolbox action to copy the selected element.
 - **Navigation:** Parent, child, sibling controls to move selection.
@@ -197,6 +213,8 @@ The `devtoolContent.bundle.js` and `contentScript.bundle.js` bundles use:
 - **React / JSX** — React-compatible code
 - **Tailwind CSS** — Tailwind utility classes
 
+**Evidence:** `_locales/en/messages.json` — `modalCopyHTMLOnlyText`, `modalCopyHtmlWithDivmagicText`, `modalCopyHtmlWithOriginalText`, `modalCopyCssWithDivmagicText`, `modalCopyCssWithOriginalText`; `extDescription` mentions "HTML, CSS, React, JSX or Tailwind CSS".
+
 ---
 
 ## Summary
@@ -209,3 +227,17 @@ The `devtoolContent.bundle.js` and `contentScript.bundle.js` bundles use:
 6. **Copy:** Result is copied to clipboard or saved to the library.
 
 The core idea is to use a whitelist of CSS properties, parse and organize styles, and optionally merge media queries and pseudo-elements so the copied element can be reused in other contexts while retaining its visual appearance.
+
+---
+
+## Evidence Summary
+
+| Section | Source Files |
+|--------|--------------|
+| Architecture | `manifest.json` |
+| Copy modes, pseudo-elements | `_locales/en/messages.json` |
+| Style output formats | `_locales/en/messages.json` |
+| CSS whitelist, media queries, WP mapping | `blockRegistration.bundle.js` |
+| DOM/Output libraries | `devtoolContent.bundle.js`, `contentScript.bundle.js` |
+| Overlay | `inject_css.css` |
+| Output formats | `_locales/en/messages.json` |

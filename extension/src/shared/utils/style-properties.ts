@@ -1,4 +1,8 @@
-export const VISUAL_STYLE_PROPERTIES: string[] = [
+/**
+ * Minimal property set from competitor analysis (DIVMAGIC_SNIPCSS_COMPARISON.md §8).
+ * Used as the default whitelist for style extraction.
+ */
+export const CORE_VISUAL_PROPERTIES: string[] = [
   "display",
   "position",
   "margin",
@@ -19,12 +23,6 @@ export const VISUAL_STYLE_PROPERTIES: string[] = [
   "text-align",
   "text-transform",
   "text-decoration",
-  "text-shadow",
-  "text-overflow",
-  "white-space",
-  "word-wrap",
-  "word-break",
-  "vertical-align",
   "color",
   "background",
   "background-color",
@@ -37,9 +35,9 @@ export const VISUAL_STYLE_PROPERTIES: string[] = [
   "border-right",
   "border-bottom",
   "border-left",
+  "box-sizing",
   "border-radius",
   "box-shadow",
-  "outline",
   "opacity",
   "visibility",
   "width",
@@ -56,7 +54,6 @@ export const VISUAL_STYLE_PROPERTIES: string[] = [
   "overflow",
   "overflow-x",
   "overflow-y",
-  "resize",
   "flex",
   "flex-direction",
   "flex-wrap",
@@ -78,9 +75,30 @@ export const VISUAL_STYLE_PROPERTIES: string[] = [
   "grid-row",
   "grid-template-columns",
   "grid-template-rows",
-  "transform",
+  "transform"
+];
+
+/**
+ * Optional properties for extended/exact copy mode (dom-capture.mdc).
+ * Not included in default extraction.
+ */
+export const EXTENDED_PROPERTIES: string[] = [
+  "font",
+  "vertical-align",
+  "white-space",
+  "word-wrap",
+  "word-break",
+  "text-shadow",
+  "text-overflow",
+  "outline",
+  "resize",
   "filter",
   "clip-path",
   "object-fit",
   "object-position"
 ];
+
+/**
+ * Properties used by the style extractor. Defaults to minimal core set.
+ */
+export const VISUAL_STYLE_PROPERTIES: string[] = CORE_VISUAL_PROPERTIES;

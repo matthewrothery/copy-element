@@ -2,7 +2,8 @@ import { beforeEach, describe, expect, it, vi } from "vitest";
 import {
   buildRenderContextFromElement,
   extractParentLayoutContext,
-  findNearestLayoutParent
+  findNearestLayoutParent,
+  getLayoutDisplayKind
 } from "./parent-layout-extractor";
 
 describe("parent-layout-extractor", () => {
@@ -40,12 +41,12 @@ describe("parent-layout-extractor", () => {
     expect(parent?.getAttribute("data-layout")).toBe("flex");
   });
 
-  it("extractParentLayoutContext extracts layout properties", () => {
+  it("extractParentLayoutContext extracts layout properties and omits defaults", () => {
     document.body.innerHTML = `<div data-layout="flex" id="parent"><span id="child">x</span></div>`;
     const parent = document.getElementById("parent")!;
     const ctx = extractParentLayoutContext(parent);
     expect(ctx.display).toBe("flex");
-    expect(ctx.flexDirection).toBe("row");
+    expect(ctx.flexDirection).toBeUndefined();
     expect(ctx.gap).toBe("8px");
   });
 
@@ -53,6 +54,13 @@ describe("parent-layout-extractor", () => {
     document.body.innerHTML = `<div><span id="child">x</span></div>`;
     const child = document.getElementById("child")!;
     expect(buildRenderContextFromElement(child)).toBeUndefined();
+  });
+
+  it("getLayoutDisplayKind classifies flex and grid", () => {
+    expect(getLayoutDisplayKind("flex")).toBe("flex");
+    expect(getLayoutDisplayKind("inline-flex")).toBe("flex");
+    expect(getLayoutDisplayKind("grid")).toBe("grid");
+    expect(getLayoutDisplayKind("inline-grid")).toBe("grid");
   });
 
   it("buildRenderContextFromElement returns context when layout parent exists", () => {

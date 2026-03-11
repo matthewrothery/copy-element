@@ -6,7 +6,7 @@ import { TOKENS_CSS } from "../shared/tokens-css";
 
 const Z_INDEX = 2147483647;
 
-export type CopyFormat = "html" | "jsx";
+export type CopyFormat = "html" | "html-inline" | "jsx";
 
 export interface CaptureConfirmationCallbacks {
   onSave: () => void;
@@ -98,6 +98,14 @@ export class CaptureConfirmationModal {
         margin: 0 0 var(--space-4);
         font-size: var(--text-md);
         color: var(--color-text-primary);
+      }
+      .shadow-warning {
+        margin: 0 0 var(--space-4);
+        font-size: var(--text-caption);
+        color: var(--color-text-muted);
+        padding: var(--space-2) var(--space-3);
+        background: var(--color-accent-subtle);
+        border-radius: var(--radius-1_5);
       }
       .preview {
         max-height: 240px;
@@ -205,6 +213,15 @@ export class CaptureConfirmationModal {
     heading.textContent = "Element Captured";
     modal.appendChild(heading);
 
+    if (capture.hasShadowDom) {
+      const warning = document.createElement("p");
+      warning.className = "shadow-warning";
+      warning.textContent =
+        "This element uses Shadow DOM. Captured output may not fully match the original.";
+      warning.setAttribute("role", "status");
+      modal.appendChild(warning);
+    }
+
     const preview = document.createElement("div");
     preview.className = "preview";
     if (capture.thumbnail) {
@@ -221,7 +238,8 @@ export class CaptureConfirmationModal {
         styleBlock: capture.styleBlock,
         width: capture.width,
         height: capture.height,
-        sourceUrl: window.location.href
+        sourceUrl: window.location.href,
+        renderContext: capture.renderContext
       });
       preview.appendChild(iframe);
     }
@@ -241,18 +259,26 @@ export class CaptureConfirmationModal {
     formatToggle.className = "format-toggle";
     const htmlBtn = document.createElement("button");
     htmlBtn.textContent = "HTML";
-    htmlBtn.setAttribute("aria-label", "Copy as HTML");
+    htmlBtn.setAttribute("aria-label", "Copy as HTML with style block");
+    const inlineBtn = document.createElement("button");
+    inlineBtn.textContent = "Inline";
+    inlineBtn.setAttribute("aria-label", "Copy as HTML inline only");
     const jsxBtn = document.createElement("button");
     jsxBtn.textContent = "JSX";
     jsxBtn.setAttribute("aria-label", "Copy as JSX");
 
     const updateFormatButtons = (): void => {
       htmlBtn.classList.toggle("active", this.copyFormat === "html");
+      inlineBtn.classList.toggle("active", this.copyFormat === "html-inline");
       jsxBtn.classList.toggle("active", this.copyFormat === "jsx");
     };
 
     htmlBtn.addEventListener("click", () => {
       this.copyFormat = "html";
+      updateFormatButtons();
+    });
+    inlineBtn.addEventListener("click", () => {
+      this.copyFormat = "html-inline";
       updateFormatButtons();
     });
     jsxBtn.addEventListener("click", () => {
@@ -261,6 +287,7 @@ export class CaptureConfirmationModal {
     });
     updateFormatButtons();
     formatToggle.appendChild(htmlBtn);
+    formatToggle.appendChild(inlineBtn);
     formatToggle.appendChild(jsxBtn);
     modal.appendChild(formatToggle);
 

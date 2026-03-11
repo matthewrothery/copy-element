@@ -1,5 +1,9 @@
 import { describe, expect, it } from "vitest";
-import { buildCopyHtml, buildPreviewSrcDoc } from "./preview-srcdoc-builder";
+import {
+  buildCopyHtml,
+  buildPreviewForCapture,
+  buildPreviewSrcDoc
+} from "./preview-srcdoc-builder";
 import type { Snippet } from "../types/snippet";
 
 function baseSnippet(overrides: Partial<Snippet> = {}): Snippet {
@@ -33,7 +37,7 @@ describe("buildPreviewSrcDoc", () => {
     expect(doc).toContain("height:100px");
   });
 
-  it("uses single stage wrapper only (no synthetic parent)", () => {
+  it("uses single stage wrapper only when no layout context", () => {
     const snippet = baseSnippet();
 
     const doc = buildPreviewSrcDoc(snippet);
@@ -41,6 +45,21 @@ describe("buildPreviewSrcDoc", () => {
     expect(doc).toContain("snippet-stage");
     expect(doc).toContain("<div>Hello</div>");
     expect(doc).not.toContain("snippet-stage-parent");
+  });
+
+  it("adds layout wrapper when renderContext has parentLayout", () => {
+    const snippet = baseSnippet({
+      renderContext: {
+        parentLayout: { display: "flex", gap: "8px" }
+      }
+    });
+
+    const doc = buildPreviewSrcDoc(snippet);
+
+    expect(doc).toContain("snippet-stage-parent");
+    expect(doc).toContain("display:flex");
+    expect(doc).toContain("gap:8px");
+    expect(doc).toContain("<div>Hello</div>");
   });
 
   it("injects styleBlock in head when present", () => {
@@ -83,5 +102,54 @@ describe("buildCopyHtml", () => {
   it("prepends style tag when styleBlock is present", () => {
     const snippet = baseSnippet({ styleBlock: "#root{padding:8px}" });
     expect(buildCopyHtml(snippet)).toBe("<style>#root{padding:8px}</style><div>Hello</div>");
+  });
+
+  it("wraps content with layout div when renderContext has parentLayout", () => {
+    const snippet = baseSnippet({
+      renderContext: {
+        parentLayout: { display: "flex", gap: "12px" }
+      }
+    });
+    const result = buildCopyHtml(snippet);
+    expect(result).toContain("snippet-stage-parent");
+    expect(result).toContain("display:flex");
+    expect(result).toContain("gap:12px");
+    expect(result).toContain("<div>Hello</div>");
+  });
+
+  it("omits style block when includeStyleBlock is false", () => {
+    const snippet = baseSnippet({ styleBlock: "#root{padding:8px}" });
+    const result = buildCopyHtml(snippet, { includeStyleBlock: false });
+    expect(result).toBe("<div>Hello</div>");
+    expect(result).not.toContain("<style>");
+  });
+});
+
+describe("buildPreviewForCapture", () => {
+  it("adds layout wrapper when renderContext has parentLayout", () => {
+    const doc = buildPreviewForCapture({
+      html: "<span>X</span>",
+      width: 100,
+      height: 50,
+      sourceUrl: "https://example.com",
+      renderContext: {
+        parentLayout: { display: "grid", gridTemplateColumns: "1fr 1fr" }
+      }
+    });
+    expect(doc).toContain("snippet-stage-parent");
+    expect(doc).toContain("display:grid");
+    expect(doc).toContain("grid-template-columns:1fr 1fr");
+    expect(doc).toContain("<span>X</span>");
+  });
+
+  it("omits layout wrapper when renderContext is absent", () => {
+    const doc = buildPreviewForCapture({
+      html: "<span>X</span>",
+      width: 100,
+      height: 50,
+      sourceUrl: "https://example.com"
+    });
+    expect(doc).not.toContain("snippet-stage-parent");
+    expect(doc).toContain("<span>X</span>");
   });
 });

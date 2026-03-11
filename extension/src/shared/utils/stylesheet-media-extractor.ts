@@ -1,6 +1,9 @@
+import { resolveVarInValue } from "./css-var-resolver";
 import { VISUAL_STYLE_PROPERTIES } from "./style-properties";
+import { absolutizeUrlsInCssValue } from "./url-absolutizer";
 
 const ALLOWED_PROPERTIES = new Set(VISUAL_STYLE_PROPERTIES);
+const URL_PROPERTIES = new Set(["background-image", "list-style-image"]);
 
 /**
  * Extracts @media and @container rules from page stylesheets that match the element.
@@ -8,7 +11,8 @@ const ALLOWED_PROPERTIES = new Set(VISUAL_STYLE_PROPERTIES);
  */
 export function extractMediaAndContainerRules(
   element: Element,
-  rootId: string
+  rootId: string,
+  baseUrl: string
 ): string {
   const mediaBlocks: Map<string, string[]> = new Map();
   const containerBlocks: Map<string, string[]> = new Map();
@@ -20,7 +24,14 @@ export function extractMediaAndContainerRules(
     } catch {
       continue;
     }
-    collectMatchingRules(element, rules, rootId, mediaBlocks, containerBlocks);
+    collectMatchingRules(
+      element,
+      rules,
+      rootId,
+      mediaBlocks,
+      containerBlocks,
+      baseUrl
+    );
   }
 
   const parts: string[] = [];
@@ -43,6 +54,7 @@ function collectMatchingRules(
   rootId: string,
   mediaBlocks: Map<string, string[]>,
   containerBlocks: Map<string, string[]>,
+  baseUrl: string,
   mediaQuery = "",
   containerQuery = ""
 ): void {
@@ -56,6 +68,7 @@ function collectMatchingRules(
           rootId,
           mediaBlocks,
           containerBlocks,
+          baseUrl,
           query,
           containerQuery
         );
@@ -69,6 +82,7 @@ function collectMatchingRules(
           rootId,
           mediaBlocks,
           containerBlocks,
+          baseUrl,
           mediaQuery,
           query
         );
@@ -77,7 +91,7 @@ function collectMatchingRules(
       if (!selectorMatchesElement(rule.selectorText, element)) {
         continue;
       }
-      const decls = extractAllowedDeclarations(rule.style);
+      const decls = extractAllowedDeclarations(rule.style, element, baseUrl);
       if (decls.length === 0) continue;
 
       if (containerQuery) {
@@ -112,14 +126,22 @@ function camelToKebab(str: string): string {
   return str.replace(/([A-Z])/g, "-$1").toLowerCase().replace(/^-/, "");
 }
 
-function extractAllowedDeclarations(style: CSSStyleDeclaration): string[] {
+function extractAllowedDeclarations(
+  style: CSSStyleDeclaration,
+  element: Element,
+  baseUrl: string
+): string[] {
   const result: string[] = [];
   for (let i = 0; i < style.length; i++) {
     const prop = style[i];
     const cssProp = prop.startsWith("--") ? prop : camelToKebab(prop);
     if (ALLOWED_PROPERTIES.has(cssProp)) {
-      const value = style.getPropertyValue(prop).replace(/!important\s*$/gi, "").trim();
+      let value = style.getPropertyValue(prop).replace(/!important\s*$/gi, "").trim();
       if (value) {
+        value = resolveVarInValue(element, cssProp, value);
+        if (URL_PROPERTIES.has(cssProp)) {
+          value = absolutizeUrlsInCssValue(value, baseUrl);
+        }
         result.push(`${cssProp}:${value}`);
       }
     }

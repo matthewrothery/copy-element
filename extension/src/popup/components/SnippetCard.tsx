@@ -26,6 +26,10 @@ export function SnippetCard({ snippet, onOpen, onDelete, onCopy }: SnippetCardPr
           <Copy size={ICON_SIZE} />
           Copy HTML
         </button>
+        <button type="button" className="btn-secondary" onClick={() => onCopy(buildCopyHtml(snippet, { includeStyleBlock: false }), "HTML (inline)")} aria-label="Copy HTML inline only">
+          <Copy size={ICON_SIZE} />
+          Copy Inline
+        </button>
         <button type="button" className="btn-secondary" onClick={() => onCopy(snippet.jsx, "JSX")} aria-label="Copy JSX">
           <Code size={ICON_SIZE} />
           Copy JSX

@@ -1,18 +1,36 @@
-import type { Snippet } from "../types/snippet";
+import type { RenderContext, Snippet } from "../types/snippet";
+import {
+  buildLayoutWrapperStyle,
+  needsLayoutWrapper
+} from "./layout-wrapper-builder";
 
 const RESET_CSS = `
 html, body { margin: 0; padding: 0; box-sizing: border-box; overflow: hidden; }
 * { box-sizing: inherit; }
 `;
 
+export interface BuildCopyHtmlOptions {
+  /** Include style block when present. Default true. Set false for inline-only output. */
+  includeStyleBlock?: boolean;
+}
+
 /**
  * Builds HTML string for copy-to-clipboard (self-contained with style block when present).
  */
-export function buildCopyHtml(snippet: Snippet): string {
-  if (snippet.styleBlock && snippet.styleBlock.length > 0) {
-    return `<style>${snippet.styleBlock}</style>${snippet.html}`;
+export function buildCopyHtml(
+  snippet: Snippet,
+  options: BuildCopyHtmlOptions = {}
+): string {
+  const { includeStyleBlock = true } = options;
+  const content = wrapWithLayoutIfNeeded(snippet.html, snippet.renderContext);
+  if (
+    includeStyleBlock &&
+    snippet.styleBlock &&
+    snippet.styleBlock.length > 0
+  ) {
+    return `<style>${snippet.styleBlock}</style>${content}`;
   }
-  return snippet.html;
+  return content;
 }
 
 function getBaseTag(sourceUrl: string): string {
@@ -33,12 +51,24 @@ function escapeHtml(str: string): string {
     .replace(/"/g, "&quot;");
 }
 
+function wrapWithLayoutIfNeeded(
+  html: string,
+  renderContext: RenderContext | undefined
+): string {
+  if (!needsLayoutWrapper(renderContext) || !renderContext?.parentLayout) {
+    return html;
+  }
+  const style = buildLayoutWrapperStyle(renderContext.parentLayout);
+  return `<div class="snippet-stage-parent" style="${escapeHtml(style)}">${html}</div>`;
+}
+
 export interface CapturePreviewInput {
   html: string;
   styleBlock?: string;
   width: number;
   height: number;
   sourceUrl: string;
+  renderContext?: RenderContext;
 }
 
 /**
@@ -51,7 +81,8 @@ export function buildPreviewForCapture(input: CapturePreviewInput): string {
 
   const baseTag = getBaseTag(input.sourceUrl);
   const styleBlock = input.styleBlock ? `<style>${input.styleBlock}</style>` : "";
-  const bodyContent = `<div class="snippet-stage" style="width:${stageWidth}px;height:${stageHeight}px;overflow:hidden;">${input.html}</div>`;
+  const innerContent = wrapWithLayoutIfNeeded(input.html, input.renderContext);
+  const bodyContent = `<div class="snippet-stage" style="width:${stageWidth}px;height:${stageHeight}px;overflow:hidden;">${innerContent}</div>`;
 
   return `<!doctype html><html><head><meta charset="utf-8">${baseTag}<style>${RESET_CSS}.snippet-stage{min-width:0;min-height:0;}</style>${styleBlock}</head><body>${bodyContent}</body></html>`;
 }
@@ -67,7 +98,8 @@ export function buildPreviewSrcDoc(snippet: Snippet): string {
 
   const baseTag = snippet.sourceUrl ? getBaseTag(snippet.sourceUrl) : "";
   const styleBlock = snippet.styleBlock ? `<style>${snippet.styleBlock}</style>` : "";
-  const bodyContent = `<div class="snippet-stage" style="width:${stageWidth}px;height:${stageHeight}px;overflow:hidden;">${snippet.html}</div>`;
+  const innerContent = wrapWithLayoutIfNeeded(snippet.html, snippet.renderContext);
+  const bodyContent = `<div class="snippet-stage" style="width:${stageWidth}px;height:${stageHeight}px;overflow:hidden;">${innerContent}</div>`;
 
   return `<!doctype html><html><head><meta charset="utf-8">${baseTag}<style>${RESET_CSS}.snippet-stage{min-width:0;min-height:0;}</style>${styleBlock}</head><body>${bodyContent}</body></html>`;
 }

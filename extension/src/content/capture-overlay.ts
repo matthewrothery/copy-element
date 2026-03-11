@@ -36,7 +36,7 @@ export class CaptureOverlay {
     document.body.appendChild(this.tooltipElement);
   }
 
-  public showForElement(element: Element): void {
+  public showForElement(element: Element, options?: { isOverlay?: boolean }): void {
     const rect = element.getBoundingClientRect();
     this.boxElement.style.display = "block";
     this.boxElement.style.left = `${rect.left}px`;
@@ -45,7 +45,11 @@ export class CaptureOverlay {
     this.boxElement.style.height = `${rect.height}px`;
 
     const label = `${element.tagName.toLowerCase()}${element.className ? `.${String(element.className).split(" ").join(".")}` : ""}`;
-    this.tooltipElement.textContent = `${label}  ${Math.round(rect.width)} × ${Math.round(rect.height)}`;
+    let text = `${label}  ${Math.round(rect.width)} × ${Math.round(rect.height)}`;
+    if (options?.isOverlay) {
+      text += " · Alt+Click to select underneath";
+    }
+    this.tooltipElement.textContent = text;
     this.tooltipElement.style.display = "block";
 
     const TOOLTIP_GAP = 8;

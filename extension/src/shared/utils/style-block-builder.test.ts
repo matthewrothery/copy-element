@@ -15,10 +15,24 @@ describe("buildBaseStyleBlock", () => {
   it("builds CSS rule for root with extracted styles", () => {
     document.body.innerHTML = `<div id="target">x</div>`;
     const el = document.getElementById("target")!;
-    const block = buildBaseStyleBlock(el, "snippet-root-abc");
+    const block = buildBaseStyleBlock(el, "snippet-root-abc", "https://example.com/");
 
     expect(block).toContain("#snippet-root-abc");
     expect(block).toContain("padding:16px");
+  });
+
+  it("absolutizes background-image URLs", () => {
+    vi.spyOn(window, "getComputedStyle").mockImplementation(() => ({
+      getPropertyValue: (prop: string) => {
+        if (prop === "background-image") return 'url("/bg.png")';
+        return "";
+      }
+    }) as CSSStyleDeclaration);
+    document.body.innerHTML = `<div id="target">x</div>`;
+    const el = document.getElementById("target")!;
+    const block = buildBaseStyleBlock(el, "root-x", "https://example.com/");
+
+    expect(block).toContain('url("https://example.com/bg.png")');
   });
 
   it("returns empty string when no non-default styles", () => {
@@ -27,7 +41,7 @@ describe("buildBaseStyleBlock", () => {
     );
     document.body.innerHTML = `<span id="empty">x</span>`;
     const el = document.getElementById("empty")!;
-    const block = buildBaseStyleBlock(el, "root-x");
+    const block = buildBaseStyleBlock(el, "root-x", "https://example.com/");
 
     expect(block).toBe("");
   });
