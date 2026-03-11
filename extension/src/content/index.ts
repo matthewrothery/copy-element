@@ -7,6 +7,7 @@ import { inlineSvgSprites } from "../shared/utils/svg-sprite-inliner";
 import { htmlToJsx } from "../shared/utils/jsx-converter";
 import { buildRenderContextFromElement } from "../shared/utils/parent-layout-extractor";
 import { extractMatchingRules } from "../shared/utils/stylesheet-rule-extractor";
+import { extractUsedCssVariableDefinitions } from "../shared/utils/css-var-definition-extractor";
 import { extractUsedFontFaces } from "../shared/utils/font-face-extractor";
 import { extractUsedKeyframes } from "../shared/utils/keyframes-extractor";
 import { extractAllFontLinks } from "../shared/utils/external-font-link-extractor";
@@ -138,12 +139,23 @@ function ensurePicker(): ElementPicker {
           // Extract @keyframes for used animation names
           const keyframesCss = extractUsedKeyframes(usedAnimationNames);
 
+          // Extract :root block for CSS variables used in matched rules
+          const varDefinitionsBlock = extractUsedCssVariableDefinitions(
+            result.element,
+            cssText
+          );
+
           // Extract external font links (Google Fonts, etc.)
           const { stylesheets: externalFontLinks, preloads: fontPreloads } =
             extractAllFontLinks();
 
-          // Combine font-faces, keyframes, and CSS rules
-          const styleBlock = [fontFaces, keyframesCss, cssText]
+          // Combine font-faces, keyframes, variable definitions, and CSS rules
+          const styleBlock = [
+            fontFaces,
+            keyframesCss,
+            varDefinitionsBlock,
+            cssText
+          ]
             .filter(Boolean)
             .join("\n\n");
 
