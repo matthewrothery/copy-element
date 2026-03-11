@@ -9,6 +9,37 @@ html, body { margin: 0; padding: 0; box-sizing: border-box; overflow: hidden; }
 * { box-sizing: inherit; }
 `;
 
+/** Match rel="stylesheet" or rel='stylesheet' (order-agnostic). */
+const REL_STYLESHEET = /rel\s*=\s*["']stylesheet["']/i;
+/** Capture href value from href="..." or href='...'. */
+const HREF_ATTR = /href\s*=\s*["']([^"']+)["']/i;
+
+/**
+ * Converts external font link tags (serialized <link>) to @import lines.
+ * Only includes <link rel="stylesheet" href="...">; skips preconnect/preload.
+ * Skips empty or invalid hrefs.
+ */
+export function externalFontLinksToImportCss(externalFontLinks: string[]): string {
+  const lines: string[] = [];
+  for (const linkHtml of externalFontLinks) {
+    if (!REL_STYLESHEET.test(linkHtml)) {
+      continue;
+    }
+    const match = linkHtml.match(HREF_ATTR);
+    const href = match?.[1]?.trim();
+    if (!href) {
+      continue;
+    }
+    try {
+      new URL(href);
+    } catch {
+      continue;
+    }
+    lines.push(`@import url('${href}');`);
+  }
+  return lines.join("\n");
+}
+
 export interface BuildCopyHtmlOptions {
   /** Include style block when present. Default true. Set false for inline-only output. */
   includeStyleBlock?: boolean;
@@ -16,6 +47,7 @@ export interface BuildCopyHtmlOptions {
 
 /**
  * Builds HTML string for copy-to-clipboard (self-contained with style block when present).
+ * When externalFontLinks exist, prepends @import url('...'); for each stylesheet so fonts load.
  */
 export function buildCopyHtml(
   snippet: Snippet,
@@ -23,12 +55,20 @@ export function buildCopyHtml(
 ): string {
   const { includeStyleBlock = true } = options;
   const content = wrapWithLayoutIfNeeded(snippet.html, snippet.renderContext);
-  if (
-    includeStyleBlock &&
-    snippet.styleBlock &&
-    snippet.styleBlock.length > 0
-  ) {
-    return `<style>${snippet.styleBlock}</style>${content}`;
+  if (!includeStyleBlock) {
+    return content;
+  }
+  const importCss =
+    snippet.externalFontLinks?.length > 0
+      ? externalFontLinksToImportCss(snippet.externalFontLinks)
+      : "";
+  const styleBlock = snippet.styleBlock?.trim() ?? "";
+  const parts: string[] = [];
+  if (importCss) parts.push(importCss);
+  if (styleBlock) parts.push(styleBlock);
+  const styleContent = parts.join("\n\n");
+  if (styleContent.length > 0) {
+    return `<style>${styleContent}</style>${content}`;
   }
   return content;
 }

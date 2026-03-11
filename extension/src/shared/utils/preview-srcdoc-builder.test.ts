@@ -2,7 +2,8 @@ import { describe, expect, it } from "vitest";
 import {
   buildCopyHtml,
   buildPreviewForCapture,
-  buildPreviewSrcDoc
+  buildPreviewSrcDoc,
+  externalFontLinksToImportCss
 } from "./preview-srcdoc-builder";
 import type { Snippet } from "../types/snippet";
 
@@ -165,6 +166,83 @@ describe("buildCopyHtml", () => {
     const result = buildCopyHtml(snippet, { includeStyleBlock: false });
     expect(result).toBe("<div>Hello</div>");
     expect(result).not.toContain("<style>");
+  });
+
+  it("prepends @import for each external font stylesheet link", () => {
+    const snippet = baseSnippet({
+      styleBlock: "#root{color:red}",
+      externalFontLinks: [
+        '<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Inter:400,700&display=swap">',
+        '<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Manrope:wght@400;700">'
+      ]
+    });
+    const result = buildCopyHtml(snippet);
+    expect(result).toContain("@import url('https://fonts.googleapis.com/css?family=Inter:400,700&display=swap');");
+    expect(result).toContain("@import url('https://fonts.googleapis.com/css?family=Manrope:wght@400;700');");
+    expect(result).toContain("#root{color:red}");
+    expect(result).toMatch(/<style>[\s\S]*@import[\s\S]*<\/style><div>Hello<\/div>/);
+  });
+
+  it("includes only @import when externalFontLinks present and no styleBlock", () => {
+    const snippet = baseSnippet({
+      externalFontLinks: [
+        '<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter">'
+      ]
+    });
+    const result = buildCopyHtml(snippet);
+    expect(result).toContain("@import url('https://fonts.googleapis.com/css2?family=Inter');");
+    expect(result).toContain("<style>");
+    expect(result).toContain("</style><div>Hello</div>");
+  });
+
+  it("ignores preconnect/preload links and only uses stylesheet links", () => {
+    const snippet = baseSnippet({
+      styleBlock: "#x{}",
+      externalFontLinks: [
+        '<link rel="preconnect" href="https://fonts.googleapis.com">',
+        '<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Inter">'
+      ]
+    });
+    const result = buildCopyHtml(snippet);
+    expect(result).toContain("@import url('https://fonts.googleapis.com/css?family=Inter');");
+    expect(result).not.toContain("preconnect");
+  });
+});
+
+describe("externalFontLinksToImportCss", () => {
+  it("returns @import line per stylesheet link", () => {
+    const links = [
+      '<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Inter">',
+      '<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Manrope">'
+    ];
+    const css = externalFontLinksToImportCss(links);
+    expect(css).toBe(
+      "@import url('https://fonts.googleapis.com/css?family=Inter');\n@import url('https://fonts.googleapis.com/css?family=Manrope');"
+    );
+  });
+
+  it("skips non-stylesheet links", () => {
+    const links = [
+      '<link rel="preconnect" href="https://fonts.googleapis.com">',
+      '<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Inter">'
+    ];
+    const css = externalFontLinksToImportCss(links);
+    expect(css).toBe("@import url('https://fonts.googleapis.com/css?family=Inter');");
+  });
+
+  it("skips empty or invalid href", () => {
+    const links = [
+      '<link rel="stylesheet" href="">',
+      '<link rel="stylesheet" href="https://valid.com/fonts.css">',
+      '<link rel="stylesheet">'
+    ];
+    const css = externalFontLinksToImportCss(links);
+    expect(css).toBe("@import url('https://valid.com/fonts.css');");
+  });
+
+  it("returns empty string when no stylesheet links", () => {
+    expect(externalFontLinksToImportCss([])).toBe("");
+    expect(externalFontLinksToImportCss(['<link rel="preconnect" href="https://fonts.gstatic.com">'])).toBe("");
   });
 });
 
