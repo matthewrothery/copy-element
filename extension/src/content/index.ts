@@ -8,6 +8,7 @@ import { htmlToJsx } from "../shared/utils/jsx-converter";
 import { buildRenderContextFromElement } from "../shared/utils/parent-layout-extractor";
 import { extractMatchingRules } from "../shared/utils/stylesheet-rule-extractor";
 import { extractUsedFontFaces } from "../shared/utils/font-face-extractor";
+import { extractUsedKeyframes } from "../shared/utils/keyframes-extractor";
 import { extractAllFontLinks } from "../shared/utils/external-font-link-extractor";
 import { cropViewportToThumbnail } from "../shared/utils/viewport-thumbnail-crop";
 import type { CapturedElementData } from "../shared/types/snippet";
@@ -125,16 +126,26 @@ function ensurePicker(): ElementPicker {
           const renderContext = buildRenderContextFromElement(result.element);
 
           // Extract CSS rules from stylesheets
-          const { cssText, usedFontFamilies } = extractMatchingRules(result.element);
-          
+          const {
+            cssText,
+            usedFontFamilies,
+            usedAnimationNames
+          } = extractMatchingRules(result.element);
+
           // Extract @font-face rules for used fonts
           const fontFaces = extractUsedFontFaces(usedFontFamilies, baseUrl);
-          
+
+          // Extract @keyframes for used animation names
+          const keyframesCss = extractUsedKeyframes(usedAnimationNames);
+
           // Extract external font links (Google Fonts, etc.)
-          const { stylesheets: externalFontLinks, preloads: fontPreloads } = extractAllFontLinks();
-          
-          // Combine font-faces and CSS rules
-          const styleBlock = [fontFaces, cssText].filter(Boolean).join("\n\n");
+          const { stylesheets: externalFontLinks, preloads: fontPreloads } =
+            extractAllFontLinks();
+
+          // Combine font-faces, keyframes, and CSS rules
+          const styleBlock = [fontFaces, keyframesCss, cssText]
+            .filter(Boolean)
+            .join("\n\n");
 
           const capture: CapturedElementData = {
             html,

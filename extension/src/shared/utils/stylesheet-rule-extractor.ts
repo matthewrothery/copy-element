@@ -6,6 +6,7 @@
 export interface ExtractedStylesheet {
   cssText: string;
   usedFontFamilies: Set<string>;
+  usedAnimationNames: Set<string>;
 }
 
 /**
@@ -68,33 +69,55 @@ function extractFontFamilies(cssText: string): Set<string> {
 }
 
 /**
+ * Extracts animation names from a CSS style (animation-name or animation shorthand).
+ */
+function extractAnimationNames(style: CSSStyleDeclaration): Set<string> {
+  const names = new Set<string>();
+  const value = style.getPropertyValue("animation-name").trim();
+  if (!value) {
+    return names;
+  }
+  value.split(",").forEach((s) => {
+    const name = s.trim();
+    if (name && name !== "none") {
+      names.add(name);
+    }
+  });
+  return names;
+}
+
+/**
  * Processes a single CSS rule and adds it to the output if it matches.
  */
 function processStyleRule(
   rule: CSSStyleRule,
   elements: Element[],
   collectedRules: string[],
-  fontFamilies: Set<string>
+  fontFamilies: Set<string>,
+  animationNames: Set<string>
 ): void {
   const selector = rule.selectorText;
   if (selectorMatchesAnyElement(selector, elements)) {
     const cssText = rule.cssText;
     collectedRules.push(cssText);
-    
-    // Extract font families from this rule
+
     const ruleFonts = extractFontFamilies(cssText);
     ruleFonts.forEach((font) => fontFamilies.add(font));
+
+    const ruleAnimations = extractAnimationNames(rule.style);
+    ruleAnimations.forEach((name) => animationNames.add(name));
   }
 }
 
 /**
- * Recursively processes CSS rules, including those in @media, @container, and @supports.
+ * Recursively processes CSS rules, including those in @media, @container, @supports, and @layer.
  */
 function processRuleList(
   rules: CSSRuleList,
   elements: Element[],
   collectedRules: string[],
   fontFamilies: Set<string>,
+  animationNames: Set<string>,
   mediaWrapper?: string
 ): void {
   for (let i = 0; i < rules.length; i++) {
@@ -102,54 +125,89 @@ function processRuleList(
 
     if (rule instanceof CSSStyleRule) {
       if (mediaWrapper) {
-        // If we're inside a media query, we need to wrap the rule
         const selector = rule.selectorText;
         if (selectorMatchesAnyElement(selector, elements)) {
-          // We'll collect these separately and wrap them later
           const cssText = rule.cssText;
           collectedRules.push(cssText);
-          
           const ruleFonts = extractFontFamilies(cssText);
           ruleFonts.forEach((font) => fontFamilies.add(font));
+          const ruleAnimations = extractAnimationNames(rule.style);
+          ruleAnimations.forEach((name) => animationNames.add(name));
         }
       } else {
-        processStyleRule(rule, elements, collectedRules, fontFamilies);
+        processStyleRule(rule, elements, collectedRules, fontFamilies, animationNames);
       }
     } else if (rule instanceof CSSMediaRule) {
-      // Process media query rules
       const mediaRules: string[] = [];
       const mediaFonts = new Set<string>();
-      processRuleList(rule.cssRules, elements, mediaRules, mediaFonts);
-      
+      const mediaAnimations = new Set<string>();
+      processRuleList(rule.cssRules, elements, mediaRules, mediaFonts, mediaAnimations);
+
       if (mediaRules.length > 0) {
-        // Wrap matched rules in the media query
         const mediaBlock = `@media ${rule.conditionText} {\n${mediaRules.join("\n")}\n}`;
         collectedRules.push(mediaBlock);
         mediaFonts.forEach((font) => fontFamilies.add(font));
+        mediaAnimations.forEach((name) => animationNames.add(name));
       }
     } else if (rule.constructor.name === "CSSSupportsRule") {
-      // Handle @supports rules (common for feature detection)
-      const supportsRule = rule as any;
+      const supportsRule = rule as { conditionText: string; cssRules: CSSRuleList };
       const supportsRules: string[] = [];
       const supportsFonts = new Set<string>();
-      processRuleList(supportsRule.cssRules, elements, supportsRules, supportsFonts);
-      
+      const supportsAnimations = new Set<string>();
+      processRuleList(
+        supportsRule.cssRules,
+        elements,
+        supportsRules,
+        supportsFonts,
+        supportsAnimations
+      );
+
       if (supportsRules.length > 0) {
         const supportsBlock = `@supports ${supportsRule.conditionText} {\n${supportsRules.join("\n")}\n}`;
         collectedRules.push(supportsBlock);
         supportsFonts.forEach((font) => fontFamilies.add(font));
+        supportsAnimations.forEach((name) => animationNames.add(name));
       }
     } else if (rule.constructor.name === "CSSContainerRule") {
-      // Handle @container rules (similar to media queries)
-      const containerRule = rule as any;
+      const containerRule = rule as { conditionText: string; cssRules: CSSRuleList };
       const containerRules: string[] = [];
       const containerFonts = new Set<string>();
-      processRuleList(containerRule.cssRules, elements, containerRules, containerFonts);
-      
+      const containerAnimations = new Set<string>();
+      processRuleList(
+        containerRule.cssRules,
+        elements,
+        containerRules,
+        containerFonts,
+        containerAnimations
+      );
+
       if (containerRules.length > 0) {
         const containerBlock = `@container ${containerRule.conditionText} {\n${containerRules.join("\n")}\n}`;
         collectedRules.push(containerBlock);
         containerFonts.forEach((font) => fontFamilies.add(font));
+        containerAnimations.forEach((name) => animationNames.add(name));
+      }
+    } else if (rule.constructor.name === "CSSLayerBlockRule") {
+      const layerRule = rule as { name?: string; cssRules: CSSRuleList };
+      const layerRules: string[] = [];
+      const layerFonts = new Set<string>();
+      const layerAnimations = new Set<string>();
+      processRuleList(
+        layerRule.cssRules,
+        elements,
+        layerRules,
+        layerFonts,
+        layerAnimations
+      );
+
+      if (layerRules.length > 0) {
+        const layerName = layerRule.name ?? "";
+        const layerBlock = layerName
+          ? `@layer ${layerName} {\n${layerRules.join("\n")}\n}`
+          : `@layer {\n${layerRules.join("\n")}\n}`;
+        collectedRules.push(layerBlock);
+        layerFonts.forEach((font) => fontFamilies.add(font));
+        layerAnimations.forEach((name) => animationNames.add(name));
       }
     }
   }
@@ -162,53 +220,56 @@ export function extractMatchingRules(rootElement: Element): ExtractedStylesheet 
   const elements = collectAllElements(rootElement);
   const collectedRules: string[] = [];
   const fontFamilies = new Set<string>();
+  const animationNames = new Set<string>();
 
   // Walk through all stylesheets
   for (let i = 0; i < document.styleSheets.length; i++) {
     const sheet = document.styleSheets[i];
 
     try {
-      // Skip cross-origin stylesheets (CORS restriction)
       if (!sheet.cssRules) {
         continue;
       }
 
-      // Check if stylesheet has a media attribute
       const sheetMedia = sheet.media?.mediaText;
       const hasMediaCondition = sheetMedia && sheetMedia !== "" && sheetMedia !== "all";
 
       if (hasMediaCondition) {
-        // Collect rules separately and wrap in @media block
         const mediaRules: string[] = [];
         const mediaFonts = new Set<string>();
-        processRuleList(sheet.cssRules, elements, mediaRules, mediaFonts);
-        
+        const mediaAnimations = new Set<string>();
+        processRuleList(sheet.cssRules, elements, mediaRules, mediaFonts, mediaAnimations);
+
         if (mediaRules.length > 0) {
           const mediaBlock = `@media ${sheetMedia} {\n${mediaRules.join("\n")}\n}`;
           collectedRules.push(mediaBlock);
           mediaFonts.forEach((font) => fontFamilies.add(font));
+          mediaAnimations.forEach((name) => animationNames.add(name));
         }
       } else {
-        // Process normally
-        processRuleList(sheet.cssRules, elements, collectedRules, fontFamilies);
+        processRuleList(sheet.cssRules, elements, collectedRules, fontFamilies, animationNames);
       }
     } catch (e) {
-      // Cross-origin stylesheet or other access error, skip it
       console.warn("Could not access stylesheet:", sheet.href, e);
       continue;
     }
   }
 
-  // Also extract font families from inline styles on captured elements
+  // Extract font families and animation names from inline styles on captured elements
   elements.forEach((el) => {
-    if (el instanceof HTMLElement && el.style.fontFamily) {
-      const inlineFonts = extractFontFamilies(`font-family: ${el.style.fontFamily}`);
-      inlineFonts.forEach((font) => fontFamilies.add(font));
+    if (el instanceof HTMLElement) {
+      if (el.style.fontFamily) {
+        const inlineFonts = extractFontFamilies(`font-family: ${el.style.fontFamily}`);
+        inlineFonts.forEach((font) => fontFamilies.add(font));
+      }
+      const inlineAnimations = extractAnimationNames(el.style);
+      inlineAnimations.forEach((name) => animationNames.add(name));
     }
   });
 
   return {
     cssText: collectedRules.join("\n\n"),
-    usedFontFamilies: fontFamilies
+    usedFontFamilies: fontFamilies,
+    usedAnimationNames: animationNames
   };
 }
