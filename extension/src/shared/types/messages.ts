@@ -56,6 +56,13 @@ export interface DeleteSnippetRequest {
   payload: { id: string };
 }
 
+export interface CaptureVisibleTabRequest {
+  type: "CAPTURE_VISIBLE_TAB";
+  payload?: {
+    tabId?: number;
+  };
+}
+
 export type RuntimeMessage =
   | StartCaptureRequest
   | CancelCaptureRequest
@@ -63,4 +70,5 @@ export type RuntimeMessage =
   | SaveSnippetRequest
   | GetSnippetsRequest
   | GetLatestCaptureRequest
-  | DeleteSnippetRequest;
+  | DeleteSnippetRequest
+  | CaptureVisibleTabRequest;

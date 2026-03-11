@@ -36,6 +36,11 @@ export class ElementPicker {
     document.addEventListener("keydown", this.handleKeyDown, true);
   }
 
+  /** Hides the overlay so a viewport screenshot can capture the page without the highlight. */
+  public hideOverlayForScreenshot(): void {
+    this.overlay.hide();
+  }
+
   public stop(): void {
     if (!this.active) {
       return;

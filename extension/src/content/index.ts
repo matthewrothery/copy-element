@@ -9,8 +9,9 @@ import { buildRenderContextFromElement } from "../shared/utils/parent-layout-ext
 import { extractMatchingRules } from "../shared/utils/stylesheet-rule-extractor";
 import { extractUsedFontFaces } from "../shared/utils/font-face-extractor";
 import { extractAllFontLinks } from "../shared/utils/external-font-link-extractor";
-import { generateThumbnail } from "../shared/utils/thumbnail-generator";
+import { cropViewportToThumbnail } from "../shared/utils/viewport-thumbnail-crop";
 import type { CapturedElementData } from "../shared/types/snippet";
+import type { RuntimeResponse } from "../shared/types/messages";
 import {
   buildSnippetFromCapture,
   CaptureConfirmationModal,
@@ -81,6 +82,36 @@ function ensurePicker(): ElementPicker {
     picker = new ElementPicker((result) => {
       void (async () => {
         try {
+          picker?.hideOverlayForScreenshot();
+          await new Promise<void>((r) =>
+            requestAnimationFrame(() => requestAnimationFrame(() => r()))
+          );
+          const rect = result.element.getBoundingClientRect();
+          const viewportWidth = window.innerWidth;
+          const viewportHeight = window.innerHeight;
+
+          let thumbnail: string | undefined;
+          try {
+            const response = (await chrome.runtime.sendMessage({
+              type: "CAPTURE_VISIBLE_TAB"
+            })) as RuntimeResponse<{ dataUrl: string }>;
+            if (response.ok && response.payload.dataUrl) {
+              thumbnail = await cropViewportToThumbnail(
+                response.payload.dataUrl,
+                {
+                  left: rect.left,
+                  top: rect.top,
+                  width: rect.width,
+                  height: rect.height
+                },
+                viewportWidth,
+                viewportHeight
+              );
+            }
+          } catch (thumbnailError) {
+            console.warn("Thumbnail generation failed, using fallback.", thumbnailError);
+          }
+
           const baseUrl = window.location.href;
           const cloned = cloneElementTreeWithInlineStyles(result.element, baseUrl);
           const rootId = `snippet-root-${nanoid()}`;
@@ -90,13 +121,6 @@ function ensurePicker(): ElementPicker {
           await inlineSvgSprites(cloned, baseUrl);
           const html = serializeElementToHtml(cloned);
           const jsx = htmlToJsx(html);
-
-          let thumbnail: string | undefined;
-          try {
-            thumbnail = await generateThumbnail(result.element);
-          } catch (thumbnailError) {
-            console.warn("Thumbnail generation failed, using fallback.", thumbnailError);
-          }
 
           const renderContext = buildRenderContextFromElement(result.element);
 

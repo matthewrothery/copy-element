@@ -1,12 +1,19 @@
 import { beforeEach, describe, expect, it, vi } from "vitest";
 
+const CAPTURE_DATA_URL = "data:image/png;base64,captured";
+
 describe("background helpers", () => {
   beforeEach(() => {
     vi.stubGlobal("chrome", {
       tabs: {
         query: vi.fn(async () => []),
-        get: vi.fn(async (tabId: number) => ({ id: tabId, url: "https://example.com" })),
-        sendMessage: vi.fn(async () => undefined)
+        get: vi.fn(async (tabId: number) => ({
+          id: tabId,
+          windowId: 100,
+          url: "https://example.com"
+        })),
+        sendMessage: vi.fn(async () => undefined),
+        captureVisibleTab: vi.fn(async () => CAPTURE_DATA_URL)
       },
       runtime: {
         onMessage: {
@@ -33,5 +40,28 @@ describe("background helpers", () => {
     const tab = await mod.resolveTargetTab({ tabId: 99 });
     expect(tab?.id).toBe(99);
     expect(chrome.tabs.get).toHaveBeenCalledWith(99);
+  });
+
+  it("CAPTURE_VISIBLE_TAB returns viewport data URL", async () => {
+    vi.resetModules();
+    (chrome.tabs.query as ReturnType<typeof vi.fn>).mockResolvedValue([
+      { id: 1, windowId: 100, url: "https://example.com" }
+    ]);
+    await import("./index");
+    const addListener = (chrome.runtime.onMessage as { addListener: ReturnType<typeof vi.fn> }).addListener;
+    expect(addListener).toHaveBeenCalled();
+    const listener = addListener.mock.calls[0][0] as (
+      msg: { type: string },
+      _s: unknown,
+      sendResponse: (r: unknown) => void
+    ) => void;
+    const sendResponse = vi.fn();
+    listener({ type: "CAPTURE_VISIBLE_TAB" }, {}, sendResponse);
+    await new Promise((r) => setTimeout(r, 0));
+    expect(sendResponse).toHaveBeenCalledWith({
+      ok: true,
+      payload: { dataUrl: CAPTURE_DATA_URL }
+    });
+    expect(chrome.tabs.captureVisibleTab).toHaveBeenCalledWith(100, { format: "png" });
   });
 });

@@ -87,6 +87,28 @@ chrome.runtime.onMessage.addListener((message: RuntimeMessage, _sender, sendResp
     return true;
   }
 
+  if (message.type === "CAPTURE_VISIBLE_TAB") {
+    void (async () => {
+      const targetTab = await resolveTargetTab(message.payload);
+      if (!targetTab?.id) {
+        sendResponse(failure("No active page tab found.", "NO_ACTIVE_TAB"));
+        return;
+      }
+      if (!isCapturableUrl(targetTab.url)) {
+        sendResponse(failure("Capture is not supported on this page.", "UNSUPPORTED_TAB_URL"));
+        return;
+      }
+      try {
+        const dataUrl = await chrome.tabs.captureVisibleTab(targetTab.windowId!, { format: "png" });
+        sendResponse(success({ dataUrl }));
+      } catch (error: unknown) {
+        const code = getErrorCode(error);
+        sendResponse(failure(String(error), code));
+      }
+    })();
+    return true;
+  }
+
   if (message.type === "ELEMENT_CAPTURED") {
     latestCapture = message.payload;
     chrome.runtime
