@@ -1,7 +1,14 @@
-import React from "react";
+import React, { useLayoutEffect, useRef, useState } from "react";
+import { MessageSquare } from "lucide-react";
 import { TAILWIND_COPY_PLACEHOLDER } from "../../shared/constants";
+import { buildSnippetPrompt, getSnippetPromptTokenEstimate } from "../../shared/utils/prompt-builder";
 import { buildCopyHtml, buildPreviewSrcDoc } from "../../shared/utils/preview-srcdoc-builder";
 import type { Snippet } from "../../shared/types/snippet";
+
+const SCALE_MIN = 0.25;
+const SCALE_MAX = 2;
+const ZOOM_OUT_FACTOR = 0.8;
+const ZOOM_IN_FACTOR = 1.25;
 
 function getHostname(url: string): string {
   try {
@@ -25,22 +32,128 @@ interface SnippetPreviewProps {
   onCopy: (value: string, label: string) => void;
 }
 
+function computeFitScale(
+  frameWidth: number,
+  frameHeight: number,
+  snippetWidth: number,
+  snippetHeight: number
+): number {
+  const w = Math.max(snippetWidth, 1);
+  const h = Math.max(snippetHeight, 1);
+  const scaleW = frameWidth / w;
+  const scaleH = frameHeight / h;
+  return Math.min(scaleW, scaleH, 1);
+}
+
 export function SnippetPreview({ snippet, onClose, onCopy }: SnippetPreviewProps): React.JSX.Element {
+  const frameRef = useRef<HTMLDivElement>(null);
+  const fitScaleRef = useRef<number>(1);
+  const [scale, setScale] = useState(1);
+
+  useLayoutEffect(() => {
+    const frame = frameRef.current;
+    if (!frame) return;
+    const frameW = frame.clientWidth;
+    const frameH = frame.clientHeight;
+    if (frameW <= 0 || frameH <= 0) return;
+    const fitScale = computeFitScale(frameW, frameH, snippet.width, snippet.height);
+    fitScaleRef.current = fitScale;
+    setScale(fitScale);
+  }, [snippet.id, snippet.width, snippet.height]);
+
+  const handleZoomOut = (): void => {
+    setScale((s) => Math.max(SCALE_MIN, s * ZOOM_OUT_FACTOR));
+  };
+  const handleZoomIn = (): void => {
+    setScale((s) => Math.min(SCALE_MAX, s * ZOOM_IN_FACTOR));
+  };
+  const handleFit = (): void => {
+    setScale(fitScaleRef.current);
+  };
+  const handle100 = (): void => {
+    setScale(1);
+  };
+
+  const w = Math.max(snippet.width, 1);
+  const h = Math.max(snippet.height, 1);
+  const wrapperWidth = w * scale;
+  const wrapperHeight = h * scale;
+
   return (
     <div className="modal-backdrop" role="dialog" aria-modal="true" aria-label="Snippet preview">
       <div className="modal snippet-preview-modal">
         <h2 className="snippet-preview-title">{snippet.title}</h2>
-        <div className="snippet-preview-frame">
-          <iframe
-            title={`preview-${snippet.id}`}
-            srcDoc={buildPreviewSrcDoc(snippet)}
-            sandbox=""
+        <div className="snippet-preview-zoom-toolbar">
+          <button
+            type="button"
+            className="btn-secondary snippet-preview-zoom-btn"
+            onClick={handleFit}
+            aria-label="Fit to view"
+          >
+            Fit
+          </button>
+          <button
+            type="button"
+            className="btn-secondary snippet-preview-zoom-btn"
+            onClick={handle100}
+            aria-label="100%"
+          >
+            100%
+          </button>
+          <button
+            type="button"
+            className="btn-secondary snippet-preview-zoom-btn"
+            onClick={handleZoomOut}
+            aria-label="Zoom out"
+          >
+            −
+          </button>
+          <button
+            type="button"
+            className="btn-secondary snippet-preview-zoom-btn"
+            onClick={handleZoomIn}
+            aria-label="Zoom in"
+          >
+            +
+          </button>
+          <span className="snippet-preview-zoom-label" aria-live="polite">
+            {Math.round(scale * 100)}%
+          </span>
+        </div>
+        <div ref={frameRef} className="snippet-preview-frame">
+          <div
+            className="snippet-preview-frame-center"
             style={{
-              width: Math.max(snippet.width, 1),
-              minHeight: Math.max(snippet.height, 1),
-              height: "auto"
+              minWidth: wrapperWidth,
+              minHeight: Math.max(420, wrapperHeight)
             }}
-          />
+          >
+            <div
+              className="snippet-preview-zoom-wrapper"
+              style={{ width: wrapperWidth, height: wrapperHeight }}
+            >
+              <div
+                className="snippet-preview-zoom-inner"
+                style={{
+                  width: w,
+                  height: h,
+                  transform: `scale(${scale})`,
+                  transformOrigin: "0 0"
+                }}
+              >
+                <iframe
+                  title={`preview-${snippet.id}`}
+                  srcDoc={buildPreviewSrcDoc(snippet)}
+                  sandbox=""
+                  style={{
+                    width: w,
+                    minHeight: h,
+                    height: "auto"
+                  }}
+                />
+              </div>
+            </div>
+          </div>
         </div>
         <div className="snippet-preview-meta">
           <p className="meta">
@@ -66,6 +179,10 @@ export function SnippetPreview({ snippet, onClose, onCopy }: SnippetPreviewProps
           </button>
           <button type="button" className="btn-primary" onClick={() => onCopy(snippet.jsx, "JSX")} aria-label="Copy JSX">
             Copy JSX
+          </button>
+          <button type="button" className="btn-secondary" onClick={() => onCopy(buildSnippetPrompt(snippet), "Prompt")} aria-label="Copy prompt for AI tools">
+            <MessageSquare size={16} />
+            Copy Prompt (~{getSnippetPromptTokenEstimate(snippet)} tokens)
           </button>
           <button type="button" className="btn-secondary" onClick={() => onCopy(TAILWIND_COPY_PLACEHOLDER, "Tailwind")} aria-label="Copy Tailwind">
             Copy Tailwind
