@@ -1,9 +1,25 @@
 import type { RenderContext, Snippet } from "../types/snippet";
 
-const STORAGE_KEY = "element-capture-snippets";
+const STORAGE_INDEX_KEY = "element-capture-snippet-ids";
+const STORAGE_ITEM_PREFIX = "element-capture-snippet:";
+const LEGACY_STORAGE_KEY = "element-capture-snippets";
 
-interface SnippetStorageShape {
-  [STORAGE_KEY]?: unknown;
+/**
+ * chrome.storage.local has an 8 KB per-item limit. We use one key per snippet
+ * (SnipCSS-style) plus a small index key so the whole array is never in one
+ * key. A single very large snippet (e.g. huge HTML/thumbnail) can still exceed
+ * 8 KB; saveSnippet surfaces a clear error in that case.
+ */
+function snippetKey(id: string): string {
+  return `${STORAGE_ITEM_PREFIX}${id}`;
+}
+
+interface StorageIndexShape {
+  [key: string]: string[] | undefined;
+}
+
+interface LegacyStorageShape {
+  [key: string]: unknown;
 }
 
 function isRenderContext(value: unknown): value is RenderContext {
@@ -65,24 +81,78 @@ function parseSnippets(raw: unknown): Snippet[] {
   return sortSnippets(valid);
 }
 
+async function migrateFromLegacy(): Promise<Snippet[]> {
+  const result = (await chrome.storage.local.get(LEGACY_STORAGE_KEY)) as LegacyStorageShape;
+  const raw = result[LEGACY_STORAGE_KEY];
+  const snippets = parseSnippets(raw);
+  if (snippets.length === 0) {
+    await chrome.storage.local.set({ [STORAGE_INDEX_KEY]: [] });
+    return [];
+  }
+  const ids = snippets.map((s) => s.id);
+  const updates: Record<string, Snippet | string[]> = { [STORAGE_INDEX_KEY]: ids };
+  for (const s of snippets) {
+    updates[snippetKey(s.id)] = normalizeSnippet(s);
+  }
+  await chrome.storage.local.set(updates);
+  await chrome.storage.local.remove(LEGACY_STORAGE_KEY);
+  return sortSnippets(snippets);
+}
+
 export async function getSnippets(): Promise<Snippet[]> {
-  const result = (await chrome.storage.local.get(STORAGE_KEY)) as SnippetStorageShape;
-  return parseSnippets(result[STORAGE_KEY]);
+  const indexResult = (await chrome.storage.local.get(STORAGE_INDEX_KEY)) as StorageIndexShape;
+  let ids = indexResult[STORAGE_INDEX_KEY];
+
+  if (!ids || ids.length === 0) {
+    const legacy = (await chrome.storage.local.get(LEGACY_STORAGE_KEY)) as LegacyStorageShape;
+    if (legacy[LEGACY_STORAGE_KEY] !== undefined) {
+      return migrateFromLegacy();
+    }
+    return [];
+  }
+
+  const keys = ids.map(snippetKey);
+  const items = await chrome.storage.local.get(keys);
+  const snippets: Snippet[] = [];
+  for (const id of ids) {
+    const raw = items[snippetKey(id)];
+    if (raw && isSnippetRecord(raw)) {
+      snippets.push(normalizeSnippet(raw));
+    }
+  }
+  return sortSnippets(snippets);
 }
 
 export async function saveSnippet(snippet: Snippet): Promise<void> {
-  const snippets = await getSnippets();
-  const updated = sortSnippets([normalizeSnippet(snippet), ...snippets]);
-  await chrome.storage.local.set({ [STORAGE_KEY]: updated });
+  const normalized = normalizeSnippet(snippet);
+  const indexResult = (await chrome.storage.local.get(STORAGE_INDEX_KEY)) as StorageIndexShape;
+  let ids: string[] = indexResult[STORAGE_INDEX_KEY] ?? [];
+  if (!ids.includes(snippet.id)) {
+    ids = [snippet.id, ...ids];
+  }
+  const updates: Record<string, Snippet | string[]> = {
+    [snippetKey(snippet.id)]: normalized,
+    [STORAGE_INDEX_KEY]: ids
+  };
+  await chrome.storage.local.set(updates);
+  if (typeof chrome.runtime?.lastError?.message === "string") {
+    throw new Error("Snippet too large to save. Try a smaller capture or reduce thumbnail size.");
+  }
 }
 
 export async function deleteSnippet(id: string): Promise<void> {
-  const snippets = await getSnippets();
-  const updated = snippets.filter((item) => item.id !== id);
-  await chrome.storage.local.set({ [STORAGE_KEY]: updated });
+  const indexResult = (await chrome.storage.local.get(STORAGE_INDEX_KEY)) as StorageIndexShape;
+  const ids = indexResult[STORAGE_INDEX_KEY] ?? [];
+  const updatedIds = ids.filter((x) => x !== id);
+  await chrome.storage.local.remove(snippetKey(id));
+  await chrome.storage.local.set({ [STORAGE_INDEX_KEY]: updatedIds });
 }
 
 export async function getSnippetById(id: string): Promise<Snippet | null> {
-  const snippets = await getSnippets();
-  return snippets.find((item) => item.id === id) ?? null;
+  const result = await chrome.storage.local.get(snippetKey(id));
+  const raw = result[snippetKey(id)];
+  if (!raw || !isSnippetRecord(raw)) {
+    return null;
+  }
+  return normalizeSnippet(raw);
 }

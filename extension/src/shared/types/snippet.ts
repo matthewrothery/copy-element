@@ -43,6 +43,14 @@ export interface RenderContext {
   visibleBackgroundColor?: string;
 }
 
+/**
+ * Canonical snippet schema for storage. Used as the single source of truth for
+ * persistence in chrome.storage.local.
+ *
+ * Required fields for persistence: id, title, html, jsx, thumbnail, sourceUrl,
+ * createdAt, width, height. Optional fields (renderContext, styleBlock, rootId,
+ * externalFontLinks) are stored when present for backward compatibility.
+ */
 export interface Snippet {
   id: string;
   title: string;

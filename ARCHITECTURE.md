@@ -228,24 +228,20 @@ store base64
 
 # Snippet Storage
 
-Snippets stored locally using:
+Snippets are stored locally using `chrome.storage.local` with a **per-snippet key layout** (SnipCSS-style) to avoid the 8 KB per-item limit: the whole array is never stored under one key.
+
+**Storage layout:**
+
+- **Index key** `element-capture-snippet-ids`: `string[]` — list of snippet ids (order preserved).
+- **Per-snippet keys** `element-capture-snippet:{id}`: full `Snippet` object for that id.
+
+**Migration:** On first read, if the index key is missing and the legacy key `element-capture-snippets` exists, the extension migrates all snippets to the new layout (writes each snippet to its own key, writes the index, removes the legacy key). Subsequent reads use only the new layout.
+
+**Canonical schema** (see `extension/src/shared/types/snippet.ts`):
 
 ```
-chrome.storage.local
-```
-
-Structure:
-
-```
-{
- id,
- title,
- html,
- jsx,
- thumbnail,
- sourceUrl,
- createdAt
-}
+id, title, sourceUrl, html, jsx, thumbnail, createdAt, width, height
++ optional: renderContext, styleBlock, rootId, externalFontLinks
 ```
 
 ---

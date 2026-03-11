@@ -5,6 +5,9 @@
 
 export const SVG_NS = "http://www.w3.org/2000/svg";
 
+/** Placeholder for Copy Tailwind until Phase 8 converter is implemented. */
+export const TAILWIND_COPY_PLACEHOLDER = "<!-- Tailwind conversion coming soon -->";
+
 /**
  * Creates an SVG element with the correct namespace.
  * Use this for any programmatic SVG element creation.

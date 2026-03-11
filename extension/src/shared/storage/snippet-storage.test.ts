@@ -2,22 +2,55 @@ import { beforeEach, describe, expect, it, vi } from "vitest";
 import { deleteSnippet, getSnippetById, getSnippets, saveSnippet } from "./snippet-storage";
 import type { Snippet } from "../types/snippet";
 
+const STORAGE_INDEX_KEY = "element-capture-snippet-ids";
+const STORAGE_ITEM_PREFIX = "element-capture-snippet:";
+const LEGACY_STORAGE_KEY = "element-capture-snippets";
+
+function snippetKey(id: string): string {
+  return `${STORAGE_ITEM_PREFIX}${id}`;
+}
+
 describe("snippet-storage", () => {
-  const memory: { ["element-capture-snippets"]?: Snippet[] } = {};
+  const memory: Record<string, unknown> = {};
 
-  beforeEach(() => {
-    memory["element-capture-snippets"] = [];
-
-    vi.stubGlobal("chrome", {
+  function createMockChrome() {
+    return {
       storage: {
         local: {
-          get: vi.fn(async () => memory),
-          set: vi.fn(async (value: { ["element-capture-snippets"]: Snippet[] }) => {
-            memory["element-capture-snippets"] = value["element-capture-snippets"];
+          get: vi.fn(async (keys: string | string[]): Promise<Record<string, unknown>> => {
+            if (Array.isArray(keys)) {
+              const out: Record<string, unknown> = {};
+              for (const k of keys) {
+                if (memory[k] !== undefined) {
+                  out[k] = memory[k];
+                }
+              }
+              return out;
+            }
+            return memory[keys] !== undefined ? { [keys]: memory[keys] } : {};
+          }),
+          set: vi.fn(async (value: Record<string, unknown>) => {
+            for (const [k, v] of Object.entries(value)) {
+              memory[k] = v;
+            }
+          }),
+          remove: vi.fn(async (keys: string | string[]) => {
+            const arr = typeof keys === "string" ? [keys] : keys;
+            for (const k of arr) {
+              delete memory[k];
+            }
           })
         }
       }
-    });
+    };
+  }
+
+  beforeEach(() => {
+    for (const key of Object.keys(memory)) {
+      delete memory[key];
+    }
+    memory[STORAGE_INDEX_KEY] = [];
+    vi.stubGlobal("chrome", createMockChrome());
   });
 
   it("saves and reads snippets", async () => {
@@ -37,43 +70,45 @@ describe("snippet-storage", () => {
     const snippets = await getSnippets();
     expect(snippets).toHaveLength(1);
     expect(snippets[0].id).toBe("1");
+    expect(memory[STORAGE_INDEX_KEY]).toEqual(["1"]);
+    expect(memory[snippetKey("1")]).toBeDefined();
   });
 
   it("deletes snippet by id", async () => {
-    memory["element-capture-snippets"] = [
-      {
-        id: "1",
-        title: "One",
-        sourceUrl: "https://example.com",
-        html: "<div></div>",
-        jsx: "<div></div>",
-        thumbnail: "",
-        createdAt: 1,
-        width: 10,
-        height: 10
-      }
-    ];
+    memory[STORAGE_INDEX_KEY] = ["1"];
+    memory[snippetKey("1")] = {
+      id: "1",
+      title: "One",
+      sourceUrl: "https://example.com",
+      html: "<div></div>",
+      jsx: "<div></div>",
+      thumbnail: "",
+      createdAt: 1,
+      width: 10,
+      height: 10
+    };
 
     await deleteSnippet("1");
     const snippet = await getSnippetById("1");
     expect(snippet).toBeNull();
+    expect(memory[STORAGE_INDEX_KEY]).toEqual([]);
+    expect(memory[snippetKey("1")]).toBeUndefined();
   });
 
   it("filters malformed records and keeps valid ones", async () => {
-    (memory as unknown as { ["element-capture-snippets"]: unknown[] })["element-capture-snippets"] = [
-      { id: "bad-only" },
-      {
-        id: "2",
-        title: "Two",
-        sourceUrl: "https://example.com",
-        html: "<div></div>",
-        jsx: "<div></div>",
-        thumbnail: "",
-        createdAt: 2,
-        width: 10,
-        height: 10
-      }
-    ];
+    memory[STORAGE_INDEX_KEY] = ["bad", "2"];
+    memory[snippetKey("bad")] = { id: "bad-only" };
+    memory[snippetKey("2")] = {
+      id: "2",
+      title: "Two",
+      sourceUrl: "https://example.com",
+      html: "<div></div>",
+      jsx: "<div></div>",
+      thumbnail: "",
+      createdAt: 2,
+      width: 10,
+      height: 10
+    };
 
     const snippets = await getSnippets();
     expect(snippets).toHaveLength(1);
@@ -148,33 +183,80 @@ describe("snippet-storage", () => {
   });
 
   it("returns snippets sorted by createdAt desc", async () => {
-    (memory as unknown as { ["element-capture-snippets"]: Snippet[] })["element-capture-snippets"] = [
+    memory[STORAGE_INDEX_KEY] = ["older", "newer"];
+    memory[snippetKey("older")] = {
+      id: "older",
+      title: "Older",
+      sourceUrl: "https://example.com",
+      html: "<div></div>",
+      jsx: "<div></div>",
+      thumbnail: "",
+      createdAt: 1,
+      width: 10,
+      height: 10
+    };
+    memory[snippetKey("newer")] = {
+      id: "newer",
+      title: "Newer",
+      sourceUrl: "https://example.com",
+      html: "<div></div>",
+      jsx: "<div></div>",
+      thumbnail: "",
+      createdAt: 3,
+      width: 10,
+      height: 10
+    };
+
+    const snippets = await getSnippets();
+    expect(snippets[0].id).toBe("newer");
+    expect(snippets[1].id).toBe("older");
+  });
+
+  it("migrates from legacy single-key format and returns snippets", async () => {
+    delete memory[STORAGE_INDEX_KEY];
+    memory[LEGACY_STORAGE_KEY] = [
       {
-        id: "older",
-        title: "Older",
+        id: "legacy-1",
+        title: "Legacy",
         sourceUrl: "https://example.com",
         html: "<div></div>",
         jsx: "<div></div>",
         thumbnail: "",
         createdAt: 1,
-        width: 10,
-        height: 10
-      },
-      {
-        id: "newer",
-        title: "Newer",
-        sourceUrl: "https://example.com",
-        html: "<div></div>",
-        jsx: "<div></div>",
-        thumbnail: "",
-        createdAt: 3,
-        width: 10,
-        height: 10
+        width: 100,
+        height: 100
       }
     ];
 
     const snippets = await getSnippets();
-    expect(snippets[0].id).toBe("newer");
-    expect(snippets[1].id).toBe("older");
+    expect(snippets).toHaveLength(1);
+    expect(snippets[0].id).toBe("legacy-1");
+    expect(memory[STORAGE_INDEX_KEY]).toEqual(["legacy-1"]);
+    expect(memory[snippetKey("legacy-1")]).toBeDefined();
+    expect(memory[LEGACY_STORAGE_KEY]).toBeUndefined();
+  });
+
+  it("getSnippetById reads only the snippet key", async () => {
+    memory[STORAGE_INDEX_KEY] = ["1"];
+    memory[snippetKey("1")] = {
+      id: "1",
+      title: "One",
+      sourceUrl: "https://example.com",
+      html: "<div></div>",
+      jsx: "<div></div>",
+      thumbnail: "",
+      createdAt: 1,
+      width: 10,
+      height: 10
+    };
+
+    const getSpy = vi.mocked(chrome.storage.local.get);
+    getSpy.mockClear();
+
+    const snippet = await getSnippetById("1");
+    expect(snippet).not.toBeNull();
+    expect(snippet?.id).toBe("1");
+    expect(getSpy).toHaveBeenCalledTimes(1);
+    expect(getSpy).toHaveBeenCalledWith(snippetKey("1"));
   });
 });

@@ -1,4 +1,5 @@
 import React from "react";
+import { TAILWIND_COPY_PLACEHOLDER } from "../../shared/constants";
 import { buildCopyHtml, buildPreviewSrcDoc } from "../../shared/utils/preview-srcdoc-builder";
 import type { Snippet } from "../../shared/types/snippet";
 
@@ -8,6 +9,14 @@ function getHostname(url: string): string {
   } catch {
     return url;
   }
+}
+
+function formatCapturedDate(createdAt: number): string {
+  return new Date(createdAt).toLocaleDateString(undefined, {
+    month: "short",
+    day: "numeric",
+    year: "numeric"
+  });
 }
 
 interface SnippetPreviewProps {
@@ -40,6 +49,9 @@ export function SnippetPreview({ snippet, onClose, onCopy }: SnippetPreviewProps
           <p className="meta">
             <span className="meta-label">Dimensions:</span> {snippet.width} × {snippet.height}
           </p>
+          <p className="meta">
+            <span className="meta-label">Captured:</span> {formatCapturedDate(snippet.createdAt)}
+          </p>
         </div>
         <div className="modal-actions modal-actions-spaced">
           <button type="button" className="btn-secondary" onClick={onClose} aria-label="Close preview">
@@ -54,6 +66,9 @@ export function SnippetPreview({ snippet, onClose, onCopy }: SnippetPreviewProps
           </button>
           <button type="button" className="btn-primary" onClick={() => onCopy(snippet.jsx, "JSX")} aria-label="Copy JSX">
             Copy JSX
+          </button>
+          <button type="button" className="btn-secondary" onClick={() => onCopy(TAILWIND_COPY_PLACEHOLDER, "Tailwind")} aria-label="Copy Tailwind">
+            Copy Tailwind
           </button>
         </div>
       </div>

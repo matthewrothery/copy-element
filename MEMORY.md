@@ -48,7 +48,7 @@ copy-element/
 - **CSS**: Less or standard CSS (NO Tailwind)
 - **Build**: Vite
 - **Extension**: Chrome Manifest V3
-- **Storage**: chrome.storage.local
+- **Storage**: chrome.storage.local; per-snippet keys + index (avoids 8 KB per-item limit). See ARCHITECTURE.md § Snippet Storage.
 
 ---
 

@@ -1,4 +1,5 @@
-import { Code, Copy, Trash2 } from "lucide-react";
+import { Code, Copy, Trash2, Wind } from "lucide-react";
+import { TAILWIND_COPY_PLACEHOLDER } from "../../shared/constants";
 import { buildCopyHtml } from "../../shared/utils/preview-srcdoc-builder";
 import type { Snippet } from "../../shared/types/snippet";
 
@@ -33,6 +34,10 @@ export function SnippetCard({ snippet, onOpen, onDelete, onCopy }: SnippetCardPr
         <button type="button" className="btn-secondary" onClick={() => onCopy(snippet.jsx, "JSX")} aria-label="Copy JSX">
           <Code size={ICON_SIZE} />
           Copy JSX
+        </button>
+        <button type="button" className="btn-secondary" onClick={() => onCopy(TAILWIND_COPY_PLACEHOLDER, "Tailwind")} aria-label="Copy Tailwind">
+          <Wind size={ICON_SIZE} />
+          Copy Tailwind
         </button>
         <button type="button" className="btn-danger" onClick={() => onDelete(snippet.id)} aria-label="Delete snippet">
           <Trash2 size={ICON_SIZE} />
