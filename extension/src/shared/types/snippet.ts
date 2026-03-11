@@ -23,8 +23,24 @@ export interface ParentLayoutContext {
   maxHeight?: string;
 }
 
+/**
+ * Inherited text styles applied via wrapper to preserve global typography.
+ */
+export interface InheritedTextContext {
+  color?: string;
+  fontFamily?: string;
+  fontSize?: string;
+  fontWeight?: string;
+  lineHeight?: string;
+  letterSpacing?: string;
+  textTransform?: string;
+  direction?: string;
+}
+
 export interface RenderContext {
   parentLayout?: ParentLayoutContext;
+  inheritedText?: InheritedTextContext;
+  visibleBackgroundColor?: string;
 }
 
 export interface Snippet {

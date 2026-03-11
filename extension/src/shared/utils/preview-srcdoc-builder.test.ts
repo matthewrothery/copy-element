@@ -62,6 +62,21 @@ describe("buildPreviewSrcDoc", () => {
     expect(doc).toContain("<div>Hello</div>");
   });
 
+  it("adds wrapper when renderContext has inherited visual context only", () => {
+    const snippet = baseSnippet({
+      renderContext: {
+        inheritedText: { color: "rgb(10, 20, 30)" },
+        visibleBackgroundColor: "rgb(245, 245, 245)"
+      }
+    });
+
+    const doc = buildPreviewSrcDoc(snippet);
+
+    expect(doc).toContain("snippet-stage-parent");
+    expect(doc).toContain("color:rgb(10, 20, 30)");
+    expect(doc).toContain("background-color:rgb(245, 245, 245)");
+  });
+
   it("injects styleBlock in head when present", () => {
     const snippet = baseSnippet({ styleBlock: "#x{color:red}" });
 
@@ -117,6 +132,34 @@ describe("buildCopyHtml", () => {
     expect(result).toContain("<div>Hello</div>");
   });
 
+  it("wraps content with visual context when inherited text/background exist", () => {
+    const snippet = baseSnippet({
+      renderContext: {
+        inheritedText: { color: "rgb(30, 40, 50)" },
+        visibleBackgroundColor: "rgb(250, 250, 250)"
+      }
+    });
+    const result = buildCopyHtml(snippet);
+    expect(result).toContain("snippet-stage-parent");
+    expect(result).toContain("color:rgb(30, 40, 50)");
+    expect(result).toContain("background-color:rgb(250, 250, 250)");
+  });
+
+  it("escapes quoted font-family once in wrapper style attribute", () => {
+    const snippet = baseSnippet({
+      renderContext: {
+        inheritedText: {
+          fontFamily: '"system-ui", "SF Pro Display", sans-serif'
+        }
+      }
+    });
+    const result = buildCopyHtml(snippet);
+    expect(result).toContain(
+      'font-family:&quot;system-ui&quot;, &quot;SF Pro Display&quot;, sans-serif'
+    );
+    expect(result).not.toContain("&amp;quot;");
+  });
+
   it("omits style block when includeStyleBlock is false", () => {
     const snippet = baseSnippet({ styleBlock: "#root{padding:8px}" });
     const result = buildCopyHtml(snippet, { includeStyleBlock: false });
@@ -140,6 +183,22 @@ describe("buildPreviewForCapture", () => {
     expect(doc).toContain("display:grid");
     expect(doc).toContain("grid-template-columns:1fr 1fr");
     expect(doc).toContain("<span>X</span>");
+  });
+
+  it("adds wrapper when renderContext only has visible ancestor context", () => {
+    const doc = buildPreviewForCapture({
+      html: "<span>X</span>",
+      width: 100,
+      height: 50,
+      sourceUrl: "https://example.com",
+      renderContext: {
+        inheritedText: { color: "rgb(11, 22, 33)" },
+        visibleBackgroundColor: "rgb(244, 244, 244)"
+      }
+    });
+    expect(doc).toContain("snippet-stage-parent");
+    expect(doc).toContain("color:rgb(11, 22, 33)");
+    expect(doc).toContain("background-color:rgb(244, 244, 244)");
   });
 
   it("omits layout wrapper when renderContext is absent", () => {

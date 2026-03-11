@@ -55,10 +55,14 @@ function wrapWithLayoutIfNeeded(
   html: string,
   renderContext: RenderContext | undefined
 ): string {
-  if (!needsLayoutWrapper(renderContext) || !renderContext?.parentLayout) {
+  if (!needsLayoutWrapper(renderContext)) {
     return html;
   }
-  const style = buildLayoutWrapperStyle(renderContext.parentLayout);
+  const style = buildLayoutWrapperStyle(
+    renderContext?.parentLayout,
+    renderContext?.inheritedText,
+    renderContext?.visibleBackgroundColor
+  );
   return `<div class="snippet-stage-parent" style="${escapeHtml(style)}">${html}</div>`;
 }
 

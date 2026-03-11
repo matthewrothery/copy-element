@@ -1,4 +1,4 @@
-import type { ParentLayoutContext } from "../types/snippet";
+import type { InheritedTextContext, ParentLayoutContext, RenderContext } from "../types/snippet";
 import { isDefaultValue } from "./style-defaults";
 
 const LAYOUT_DISPLAYS = new Set([
@@ -31,6 +31,23 @@ const CSS_TO_CONTEXT_KEY: Record<string, keyof ParentLayoutContext> = {
   "max-height": "maxHeight"
 };
 
+const TRANSPARENT_COLOR_VALUES = new Set([
+  "transparent",
+  "rgba(0, 0, 0, 0)",
+  "rgba(0,0,0,0)"
+]);
+
+const INHERITED_TEXT_PROP_MAP: Array<[string, keyof InheritedTextContext]> = [
+  ["color", "color"],
+  ["font-family", "fontFamily"],
+  ["font-size", "fontSize"],
+  ["font-weight", "fontWeight"],
+  ["line-height", "lineHeight"],
+  ["letter-spacing", "letterSpacing"],
+  ["text-transform", "textTransform"],
+  ["direction", "direction"]
+];
+
 function getComputedStyleValue(element: Element, property: string): string {
   const computed = window.getComputedStyle(element);
   return computed.getPropertyValue(property).trim();
@@ -53,6 +70,87 @@ export function findNearestLayoutParent(element: Element): Element | null {
     parent = parent.parentElement;
   }
   return null;
+}
+
+function isTransparentColor(value: string): boolean {
+  const normalized = value.trim().toLowerCase().replace(/\s+/g, "");
+  return (
+    normalized.length === 0 ||
+    TRANSPARENT_COLOR_VALUES.has(value.trim().toLowerCase()) ||
+    normalized === "rgba(0,0,0,0)"
+  );
+}
+
+function getAncestorChain(element: Element): Element[] {
+  const chain: Element[] = [];
+  let current: Element | null = element;
+
+  while (current) {
+    chain.push(current);
+    if (current === document.documentElement) {
+      break;
+    }
+    current = current.parentElement;
+  }
+
+  return chain;
+}
+
+function pickInheritedValue(
+  chain: Element[],
+  cssProperty: string,
+  includeDefault: boolean
+): string | undefined {
+  for (const node of chain) {
+    const value = getComputedStyleValue(node, cssProperty);
+    if (value.length === 0) {
+      continue;
+    }
+    if (includeDefault || !isDefaultValue(cssProperty, value)) {
+      return value;
+    }
+  }
+  return undefined;
+}
+
+function extractInheritedTextContext(element: Element): InheritedTextContext | undefined {
+  const chain = getAncestorChain(element);
+  const ctx: InheritedTextContext = {};
+
+  for (const [cssProperty, contextKey] of INHERITED_TEXT_PROP_MAP) {
+    if (cssProperty === "direction") {
+      const direction = pickInheritedValue(chain, cssProperty, true);
+      if (direction && direction !== "ltr") {
+        ctx[contextKey] = direction;
+      }
+      continue;
+    }
+
+    const includeDefault =
+      cssProperty === "color" ||
+      cssProperty === "font-family" ||
+      cssProperty === "font-size";
+    const value = pickInheritedValue(chain, cssProperty, includeDefault);
+    if (value) {
+      ctx[contextKey] = value;
+    }
+  }
+
+  return Object.keys(ctx).length > 0 ? ctx : undefined;
+}
+
+function resolveVisibleBackgroundColor(element: Element): string {
+  const chainStart = element.parentElement ?? element;
+  const chain = getAncestorChain(chainStart);
+
+  for (const node of chain) {
+    const bgColor = getComputedStyleValue(node, "background-color");
+    if (!isTransparentColor(bgColor)) {
+      return bgColor;
+    }
+  }
+
+  return "#ffffff";
 }
 
 /**
@@ -83,12 +181,25 @@ export function extractParentLayoutContext(parent: Element): ParentLayoutContext
 }
 
 /**
- * Builds render context from the selected element if it has a layout parent.
+ * Builds render context from the selected element including layout and ancestor visual context.
  */
-export function buildRenderContextFromElement(element: Element): { parentLayout: ParentLayoutContext } | undefined {
+export function buildRenderContextFromElement(element: Element): RenderContext | undefined {
   const layoutParent = findNearestLayoutParent(element);
-  if (!layoutParent) return undefined;
+  const parentLayout = layoutParent ? extractParentLayoutContext(layoutParent) : undefined;
+  const inheritedText = extractInheritedTextContext(element);
+  const visibleBackgroundColor = resolveVisibleBackgroundColor(element);
 
-  const parentLayout = extractParentLayoutContext(layoutParent);
-  return { parentLayout };
+  if (!parentLayout && !inheritedText && !visibleBackgroundColor) {
+    return undefined;
+  }
+
+  const renderContext: RenderContext = { visibleBackgroundColor };
+  if (parentLayout) {
+    renderContext.parentLayout = parentLayout;
+  }
+  if (inheritedText) {
+    renderContext.inheritedText = inheritedText;
+  }
+
+  return renderContext;
 }

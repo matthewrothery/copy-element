@@ -19,6 +19,20 @@ describe("layout-wrapper-builder", () => {
       expect(needsLayoutWrapper({ parentLayout: { display: "" } })).toBe(false);
     });
 
+    it("returns true when inherited text context exists", () => {
+      const ctx: RenderContext = {
+        inheritedText: { color: "rgb(10, 20, 30)" }
+      };
+      expect(needsLayoutWrapper(ctx)).toBe(true);
+    });
+
+    it("returns true when visible background color exists", () => {
+      const ctx: RenderContext = {
+        visibleBackgroundColor: "rgb(245, 245, 245)"
+      };
+      expect(needsLayoutWrapper(ctx)).toBe(true);
+    });
+
     it("returns true when parentLayout has flex display", () => {
       const ctx: RenderContext = {
         parentLayout: { display: "flex", gap: "8px" }
@@ -73,19 +87,35 @@ describe("layout-wrapper-builder", () => {
       expect(style).toContain("gap:8px");
     });
 
-    it("escapes quotes in values", () => {
+    it("preserves raw quoted values in declarations", () => {
       const ctx: ParentLayoutContext = {
         display: "flex",
         gap: '8px "spaced"'
       };
       const style = buildLayoutWrapperStyle(ctx);
-      expect(style).toContain("&quot;");
+      expect(style).toContain('gap:8px "spaced"');
     });
 
     it("includes only display when no other properties", () => {
       const ctx: ParentLayoutContext = { display: "flex" };
       const style = buildLayoutWrapperStyle(ctx);
       expect(style).toBe("display:flex");
+    });
+
+    it("includes inherited text and visible background styles", () => {
+      const style = buildLayoutWrapperStyle(
+        undefined,
+        {
+          color: "rgb(11, 22, 33)",
+          fontFamily: "Inter, sans-serif",
+          fontSize: "16px"
+        },
+        "rgb(250, 250, 250)"
+      );
+      expect(style).toContain("color:rgb(11, 22, 33)");
+      expect(style).toContain("font-family:Inter, sans-serif");
+      expect(style).toContain("font-size:16px");
+      expect(style).toContain("background-color:rgb(250, 250, 250)");
     });
   });
 });
