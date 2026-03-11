@@ -85,6 +85,13 @@ PHASE 2: Style Extraction (Minimal Output Focus)
 - [x] Handle nested/recursive CSS variables (SnipCSS v1.7.0)
 - [ ] Preserve CSS variables option (advanced feature)
 
+## CSS dependency gaps (future / optional)
+- [x] @keyframes — extract when animation-name is used (keyframes-extractor)
+- [x] @layer — match rules inside @layer (stylesheet-rule-extractor)
+- [x] CSS custom properties — extract :root/definitions for var(--foo) used in matched rules
+- [ ] @counter-style — list styling (rare)
+- [ ] @font-feature-values — font feature overrides (rare)
+
 ================================================================================
 PHASE 3: Pseudo Elements & Special Cases
 ================================================================================
@@ -155,20 +162,20 @@ PHASE 6: Storage & Library
 ================================================================================
 
 ## Snippet Storage
-- [ ] Define snippet data model (id, title, html, jsx, thumbnail, sourceUrl, createdAt)
-- [ ] Implement chrome.storage.local for snippet persistence
-- [ ] Handle storage limits (individual keys per snippet - SnipCSS approach)
+- [x] Define snippet data model (id, title, html, jsx, thumbnail, sourceUrl, createdAt)
+- [x] Implement chrome.storage.local for snippet persistence
+- [x] Handle storage limits (individual keys per snippet - SnipCSS approach)
 
-## Thumbnail Generation
-- [ ] Integrate html2canvas for element capture
-- [ ] Crop to element bounding box
-- [ ] Generate base64 PNG thumbnail (200x120)
-- [ ] Store thumbnail with snippet
+## Snippet Storage (future)
+- [ ] Account creation / sign-in for cross-device sync
+- [ ] Save snippets to cloud (e.g. S3 or backend API)
+- [ ] Optional thumbnail compression or separate key for very large thumbnails if 8 KB per snippet is hit
+- [ ] Export/import library (backup to file)
 
 ## Library UI
 - [ ] Create snippet grid view (2 columns)
 - [ ] Display thumbnail, title, source domain
-- [ ] Implement copy HTML / copy JSX actions
+- [ ] Implement copy HTML / copy JSX actions / copy tailwind
 - [ ] Implement delete action
 - [ ] Implement snippet preview modal
 
@@ -183,7 +190,7 @@ PHASE 7: Testing & Validation
 - [ ] Test external images
 - [ ] Test inline SVGs
 - [ ] Test background images
-- [ ] Test CSS variables
+- [x] Test CSS variables
 - [x] Test pseudo elements (::before, ::after)
 - [ ] Test forms (inputs, checkboxes, selects)
 
