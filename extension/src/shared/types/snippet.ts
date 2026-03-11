@@ -43,6 +43,8 @@ export interface Snippet {
   styleBlock?: string;
   /** Stable ID for snippet root so style block can target it. */
   rootId?: string;
+  /** External font stylesheet links (e.g., Google Fonts) for cross-origin fonts. */
+  externalFontLinks?: string[];
 }
 
 export interface CapturedElementData {
@@ -57,6 +59,8 @@ export interface CapturedElementData {
   rootId?: string;
   /** True when the captured element or its subtree involves Shadow DOM. */
   hasShadowDom?: boolean;
+  /** External font stylesheet links (e.g., Google Fonts) for cross-origin fonts. */
+  externalFontLinks?: string[];
 }
 
 export type CaptureState = "idle" | "active";

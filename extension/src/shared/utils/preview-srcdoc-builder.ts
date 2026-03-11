@@ -69,6 +69,7 @@ export interface CapturePreviewInput {
   height: number;
   sourceUrl: string;
   renderContext?: RenderContext;
+  externalFontLinks?: string[];
 }
 
 /**
@@ -80,11 +81,12 @@ export function buildPreviewForCapture(input: CapturePreviewInput): string {
   const stageHeight = Math.max(1, input.height);
 
   const baseTag = getBaseTag(input.sourceUrl);
+  const externalFontLinks = input.externalFontLinks?.join("\n") || "";
   const styleBlock = input.styleBlock ? `<style>${input.styleBlock}</style>` : "";
   const innerContent = wrapWithLayoutIfNeeded(input.html, input.renderContext);
-  const bodyContent = `<div class="snippet-stage" style="width:${stageWidth}px;height:${stageHeight}px;overflow:hidden;">${innerContent}</div>`;
+  const bodyContent = `<div class="snippet-stage" style="width:${stageWidth}px;min-height:${stageHeight}px;">${innerContent}</div>`;
 
-  return `<!doctype html><html><head><meta charset="utf-8">${baseTag}<style>${RESET_CSS}.snippet-stage{min-width:0;min-height:0;}</style>${styleBlock}</head><body>${bodyContent}</body></html>`;
+  return `<!doctype html><html><head><meta charset="utf-8">${baseTag}${externalFontLinks}<style>${RESET_CSS}.snippet-stage{min-width:0;min-height:0;}</style>${styleBlock}</head><body>${bodyContent}</body></html>`;
 }
 
 /**
@@ -97,9 +99,10 @@ export function buildPreviewSrcDoc(snippet: Snippet): string {
   const stageHeight = Math.max(1, snippet.height);
 
   const baseTag = snippet.sourceUrl ? getBaseTag(snippet.sourceUrl) : "";
+  const externalFontLinks = snippet.externalFontLinks?.join("\n") || "";
   const styleBlock = snippet.styleBlock ? `<style>${snippet.styleBlock}</style>` : "";
   const innerContent = wrapWithLayoutIfNeeded(snippet.html, snippet.renderContext);
-  const bodyContent = `<div class="snippet-stage" style="width:${stageWidth}px;height:${stageHeight}px;overflow:hidden;">${innerContent}</div>`;
+  const bodyContent = `<div class="snippet-stage" style="width:${stageWidth}px;min-height:${stageHeight}px;">${innerContent}</div>`;
 
-  return `<!doctype html><html><head><meta charset="utf-8">${baseTag}<style>${RESET_CSS}.snippet-stage{min-width:0;min-height:0;}</style>${styleBlock}</head><body>${bodyContent}</body></html>`;
+  return `<!doctype html><html><head><meta charset="utf-8">${baseTag}${externalFontLinks}<style>${RESET_CSS}.snippet-stage{min-width:0;min-height:0;}</style>${styleBlock}</head><body>${bodyContent}</body></html>`;
 }

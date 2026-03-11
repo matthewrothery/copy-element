@@ -6,8 +6,9 @@ import { serializeElementToHtml } from "../shared/utils/html-serializer";
 import { inlineSvgSprites } from "../shared/utils/svg-sprite-inliner";
 import { htmlToJsx } from "../shared/utils/jsx-converter";
 import { buildRenderContextFromElement } from "../shared/utils/parent-layout-extractor";
-import { buildBaseStyleBlock } from "../shared/utils/style-block-builder";
-import { extractMediaAndContainerRules } from "../shared/utils/stylesheet-media-extractor";
+import { extractMatchingRules } from "../shared/utils/stylesheet-rule-extractor";
+import { extractUsedFontFaces } from "../shared/utils/font-face-extractor";
+import { extractAllFontLinks } from "../shared/utils/external-font-link-extractor";
 import { generateThumbnail } from "../shared/utils/thumbnail-generator";
 import type { CapturedElementData } from "../shared/types/snippet";
 import {
@@ -99,13 +100,17 @@ function ensurePicker(): ElementPicker {
 
           const renderContext = buildRenderContextFromElement(result.element);
 
-          const baseBlock = buildBaseStyleBlock(result.element, rootId, baseUrl);
-          const mediaBlock = extractMediaAndContainerRules(
-            result.element,
-            rootId,
-            baseUrl
-          );
-          const styleBlock = [baseBlock, mediaBlock].filter(Boolean).join("");
+          // Extract CSS rules from stylesheets
+          const { cssText, usedFontFamilies } = extractMatchingRules(result.element);
+          
+          // Extract @font-face rules for used fonts
+          const fontFaces = extractUsedFontFaces(usedFontFamilies, baseUrl);
+          
+          // Extract external font links (Google Fonts, etc.)
+          const { stylesheets: externalFontLinks, preloads: fontPreloads } = extractAllFontLinks();
+          
+          // Combine font-faces and CSS rules
+          const styleBlock = [fontFaces, cssText].filter(Boolean).join("\n\n");
 
           const capture: CapturedElementData = {
             html,
@@ -117,6 +122,7 @@ function ensurePicker(): ElementPicker {
             renderContext,
             rootId,
             styleBlock: styleBlock || undefined,
+            externalFontLinks: [...fontPreloads, ...externalFontLinks],
             hasShadowDom: hasShadowDomInSubtree(result.element)
           };
 

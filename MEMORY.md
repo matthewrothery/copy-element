@@ -129,7 +129,30 @@ white-space
 
 ## Implementation Status
 
-### Current Phase: 0 - Competitor Analysis & Research
+### Current Phase: CSS Extraction Overhaul (COMPLETED)
+
+### Major Architectural Change (2026-03-11)
+Refactored from inline-style approach to class-based stylesheet extraction (like SnipCSS):
+
+**What Changed:**
+- ❌ Removed: Inline style bloat, pseudo-element spans, computed style extraction
+- ✅ Added: Stylesheet rule extraction, @font-face support, class name preservation
+- 🔄 Simplified: DOM cloner now only sanitizes, no style inlining
+
+**New Files:**
+- `stylesheet-rule-extractor.ts` - Walks stylesheets, matches selectors to captured elements
+- `font-face-extractor.ts` - Extracts @font-face rules with absolute URLs
+
+**Deleted Files:**
+- `pseudo-element-extractor.ts` - No longer needed (CSS handles pseudo-elements)
+- `style-inliner.ts` - No longer needed (no inline styles)
+- `style-minimizer.ts` - No longer needed (no style minimization)
+- `style-block-builder.ts` - Replaced by stylesheet extraction
+- `stylesheet-media-extractor.ts` - Replaced by stylesheet extraction
+
+**Updated Files:**
+- `dom-cloner.ts` - Simplified to clone + sanitize only
+- `content/index.ts` - Uses new extractors, builds stylesheet output
 
 ### Completed
 - [x] Created TASKS.todo with 8 phases
@@ -139,32 +162,32 @@ white-space
 - [x] Identified CSS property whitelist from DivMagic
 - [x] Analyzed SnipCSS element labeling approach
 - [x] Analyzed SnipCSS selector fixing algorithm
-- [x] Full SnipCSS analysis (SNIPCSS_ANALYSIS.md): manifest, labeling, extraction pipeline, selector fixing, inherited rules, CSS variables, media queries, transmogrify, multi-element, subselection, Tailwind
+- [x] Full SnipCSS analysis (SNIPCSS_ANALYSIS.md)
+- [x] Document comparison table (DIVMAGIC_SNIPCSS_COMPARISON.md)
+- [x] Define our minimal CSS property whitelist
+- [x] **CSS Extraction Overhaul** - Complete architectural refactor
 
 ### In Progress
-- (none)
-
-### Recently Completed
-- [x] Document comparison table (DIVMAGIC_SNIPCSS_COMPARISON.md)
-- [x] Define our minimal CSS property whitelist (in DIVMAGIC_SNIPCSS_COMPARISON.md §8)
+- Testing on real websites (Medium.com, etc.)
 
 ### Existing Code
-- `style-inliner.ts` - Basic style map to inline string conversion
-- `dom-cloner.ts` - DOM cloning utilities
+- `dom-cloner.ts` - DOM cloning and sanitization
 - `preview-srcdoc-builder.ts` - Preview HTML generation
 - `parent-layout-extractor.ts` - Parent layout detection
 - `capture-confirmation-modal.ts` - Capture confirmation UI
+- `stylesheet-rule-extractor.ts` - CSS rule extraction from stylesheets
+- `font-face-extractor.ts` - @font-face rule extraction
 
 ---
 
 ## Key Insights for Minimal Output
 
-1. **Remove default values**: position: static, margin: 0, opacity: 1, etc.
-2. **Use shorthand properties**: Combine margin-top/right/bottom/left into margin
-3. **Eliminate inherited redundancy**: Child doesn't need color if parent has same
-4. **CSS variable resolution**: Convert var(--x) to actual values
-5. **Selector simplification**: Don't preserve complex selectors, use inline styles
-6. **Pseudo element conversion**: Convert ::before/::after to real elements
+1. **Preserve class names**: Keep original classes and extract matching CSS rules
+2. **Extract from stylesheets**: Walk document.styleSheets and match selectors
+3. **Include pseudo-elements**: Extract ::before/::after rules from stylesheets
+4. **Support @font-face**: Extract and include font definitions with absolute URLs
+5. **Handle @media queries**: Include responsive styles in extracted CSS
+6. **Skip cross-origin**: CORS prevents access to cross-origin stylesheets
 
 ---
 

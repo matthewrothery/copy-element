@@ -1,13 +1,5 @@
 import { SVG_NS } from "../constants";
 import { replaceAssetsWithPlaceholders } from "./asset-replacer";
-import { buildPseudoElementClone } from "./pseudo-element-extractor";
-import { extractVisualStyles } from "./style-extractor";
-import { applyInlineStyles } from "./style-inliner";
-import {
-  minimizeStyleMap,
-  removeRedundantInheritedStyles
-} from "./style-minimizer";
-import { transformStyleMapForPortability } from "./url-absolutizer";
 
 const SVG_PRESERVE_ATTRS = new Set([
   "viewbox",
@@ -35,12 +27,6 @@ const SVG_PRESERVE_ATTRS = new Set([
 function shouldSkipTag(element: Element): boolean {
   const tagName = element.tagName.toLowerCase();
   return tagName === "script" || tagName === "noscript";
-}
-
-function isAbsoluteOrFixed(element: HTMLElement): boolean {
-  const position =
-    element.style.position || window.getComputedStyle(element).getPropertyValue("position").trim();
-  return position === "absolute" || position === "fixed";
 }
 
 function shouldRemoveAttribute(name: string, element: Element): boolean {
@@ -76,82 +62,43 @@ function sanitizeAttributes(clone: Element): void {
   toRemove.forEach((name) => clone.removeAttribute(name));
 }
 
-function sanitizeAndApplyStyles(
-  original: Element,
-  clone: Element,
-  documentRef: Document,
-  parent: Element | null,
-  baseUrl: string
-): void {
-  if (original.nodeType !== Node.ELEMENT_NODE || clone.nodeType !== Node.ELEMENT_NODE) {
+/**
+ * Recursively sanitizes the cloned tree.
+ * Removes event handlers, framework attributes, and skipped tags.
+ */
+function sanitizeTree(clone: Element): void {
+  if (clone.nodeType !== Node.ELEMENT_NODE) {
     return;
   }
 
-  const originalEl = original as HTMLElement;
-  const cloneEl = clone as HTMLElement;
+  sanitizeAttributes(clone);
 
-  sanitizeAttributes(cloneEl);
-
-  const sourceStyles = extractVisualStyles(originalEl);
-  let portableStyles = transformStyleMapForPortability(sourceStyles, baseUrl);
-  portableStyles = minimizeStyleMap(portableStyles);
-  if (parent) {
-    const parentComputed = window.getComputedStyle(parent);
-    portableStyles = removeRedundantInheritedStyles(portableStyles, parentComputed);
-  }
-  applyInlineStyles(cloneEl, portableStyles);
-
-  const origChildren = Array.from(original.childNodes);
-  const cloneChildren = Array.from(clone.childNodes);
-
-  // Text nodes are preserved in clone but not processed (no getComputedStyle).
-  // They inherit typography and color from their parent element.
-  const beforePseudo = buildPseudoElementClone(originalEl, "::before", documentRef);
-  const afterPseudo = buildPseudoElementClone(originalEl, "::after", documentRef);
-
-  const hasAbsolutePseudo =
-    (beforePseudo && isAbsoluteOrFixed(beforePseudo)) ||
-    (afterPseudo && isAbsoluteOrFixed(afterPseudo));
-  if (hasAbsolutePseudo) {
-    const clonePosition =
-      cloneEl.style.position || window.getComputedStyle(cloneEl).getPropertyValue("position").trim();
-    if (clonePosition === "static" || !clonePosition) {
-      cloneEl.style.position = "relative";
+  // Process children
+  const children = Array.from(clone.children);
+  for (const child of children) {
+    if (shouldSkipTag(child)) {
+      child.remove();
+      continue;
     }
+    sanitizeTree(child);
   }
 
-  if (beforePseudo) {
-    cloneEl.insertBefore(beforePseudo, cloneEl.firstChild);
-  }
-
-  for (let i = 0; i < origChildren.length; i++) {
-    const origChild = origChildren[i];
-    const cloneChild = cloneChildren[i];
-
-    if (origChild.nodeType === Node.ELEMENT_NODE) {
-      const origElement = origChild as Element;
-      if (shouldSkipTag(origElement)) {
-        cloneChild.remove();
-        continue;
-      }
-      sanitizeAndApplyStyles(origElement, cloneChild as Element, documentRef, originalEl, baseUrl);
-    }
-  }
-
-  if (afterPseudo) {
-    cloneEl.appendChild(afterPseudo);
-  }
-
-  if (originalEl instanceof HTMLInputElement || originalEl instanceof HTMLTextAreaElement) {
-    cloneEl.textContent = "";
+  // Clear input/textarea values
+  if (clone instanceof HTMLInputElement || clone instanceof HTMLTextAreaElement) {
+    clone.textContent = "";
   }
 }
 
+/**
+ * Clones an element tree, preserving class names and structure.
+ * Sanitizes the clone by removing event handlers and framework attributes.
+ * Does NOT inline styles - styles are extracted separately via stylesheet extraction.
+ */
 export function cloneElementTreeWithInlineStyles(
   element: HTMLElement,
   baseUrl: string
 ): HTMLElement {
   const clonedRoot = element.cloneNode(true) as HTMLElement;
-  sanitizeAndApplyStyles(element, clonedRoot, document, null, baseUrl);
+  sanitizeTree(clonedRoot);
   return replaceAssetsWithPlaceholders(clonedRoot);
 }

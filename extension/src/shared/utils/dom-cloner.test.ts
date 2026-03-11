@@ -18,15 +18,16 @@ describe("cloneElementTreeWithInlineStyles", () => {
     );
   });
 
-  it("clones tree and inlines styles", () => {
-    document.body.innerHTML = `<section id="target"><span>Hello</span></section>`;
+  it("clones tree and preserves structure", () => {
+    document.body.innerHTML = `<section id="target" class="test"><span>Hello</span></section>`;
     const target = document.getElementById("target") as HTMLElement;
     const clone = cloneElementTreeWithInlineStyles(target, BASE_URL);
 
     expect(clone.tagName).toBe("SECTION");
-    expect(clone.getAttribute("style")).toContain("padding:8px");
-    expect(clone.getAttribute("style")).not.toContain("display:block");
+    expect(clone.className).toBe("test");
     expect(clone.textContent).toContain("Hello");
+    // No inline styles should be added (styles come from stylesheet extraction)
+    expect(clone.getAttribute("style")).toBeNull();
   });
 
   it("removes script and noscript tags from clone", () => {
@@ -87,7 +88,7 @@ describe("cloneElementTreeWithInlineStyles", () => {
     expect(clone.childNodes[2].textContent).toBe("After");
   });
 
-  it("includes ::before pseudo element when it has content", () => {
+  it("does not create pseudo-element spans (handled via CSS)", () => {
     vi.mocked(window.getComputedStyle).mockImplementation(
       (element: Element, pseudo?: string) =>
         ({
@@ -106,12 +107,12 @@ describe("cloneElementTreeWithInlineStyles", () => {
     const target = document.getElementById("target") as HTMLElement;
     const clone = cloneElementTreeWithInlineStyles(target, BASE_URL);
 
+    // Pseudo-elements are now handled via CSS rules, not fake spans
     const beforePseudo = clone.querySelector('[data-pseudo-element="::before"]');
-    expect(beforePseudo).not.toBeNull();
-    expect(beforePseudo?.textContent).toBe("• ");
+    expect(beforePseudo).toBeNull();
   });
 
-  it("includes ::after pseudo element when it has content", () => {
+  it("does not create after pseudo-element spans (handled via CSS)", () => {
     vi.mocked(window.getComputedStyle).mockImplementation(
       (element: Element, pseudo?: string) =>
         ({
@@ -129,9 +130,9 @@ describe("cloneElementTreeWithInlineStyles", () => {
     const target = document.getElementById("target") as HTMLElement;
     const clone = cloneElementTreeWithInlineStyles(target, BASE_URL);
 
+    // Pseudo-elements are now handled via CSS rules, not fake spans
     const afterPseudo = clone.querySelector('[data-pseudo-element="::after"]');
-    expect(afterPseudo).not.toBeNull();
-    expect(afterPseudo?.textContent).toBe(" →");
+    expect(afterPseudo).toBeNull();
   });
 
   it("preserves inline SVG markup and attributes including viewBox", () => {
@@ -177,28 +178,15 @@ describe("cloneElementTreeWithInlineStyles", () => {
     expect(symbol?.querySelector("circle")).not.toBeNull();
   });
 
-  it("combines margin longhand into shorthand", () => {
-    vi.mocked(window.getComputedStyle).mockImplementation(
-      (element: Element, pseudo?: string) =>
-        ({
-          getPropertyValue: (property: string) => {
-            if (pseudo) return "";
-            if (property === "margin-top") return "10px";
-            if (property === "margin-right") return "10px";
-            if (property === "margin-bottom") return "10px";
-            if (property === "margin-left") return "10px";
-            return "";
-          }
-        }) as CSSStyleDeclaration
-    );
-
-    document.body.innerHTML = `<div id="target"><span>x</span></div>`;
+  it("preserves original inline styles if present", () => {
+    document.body.innerHTML = `<div id="target" style="margin: 10px; color: red;"><span>x</span></div>`;
     const target = document.getElementById("target") as HTMLElement;
     const clone = cloneElementTreeWithInlineStyles(target, BASE_URL);
 
+    // Original inline styles should be preserved
     const style = clone.getAttribute("style") ?? "";
-    expect(style).toContain("margin:10px");
-    expect(style).not.toContain("margin-top");
+    expect(style).toContain("margin");
+    expect(style).toContain("color");
   });
 
   it("preserves essential attributes", () => {

@@ -47,7 +47,8 @@ export function buildSnippetFromCapture(capture: CapturedElementData): Snippet {
     height: capture.height,
     renderContext: capture.renderContext,
     styleBlock: capture.styleBlock,
-    rootId: capture.rootId
+    rootId: capture.rootId,
+    externalFontLinks: capture.externalFontLinks
   };
 }
 
@@ -239,7 +240,8 @@ export class CaptureConfirmationModal {
         width: capture.width,
         height: capture.height,
         sourceUrl: window.location.href,
-        renderContext: capture.renderContext
+        renderContext: capture.renderContext,
+        externalFontLinks: capture.externalFontLinks
       });
       preview.appendChild(iframe);
     }

@@ -28,7 +28,8 @@ export function SnippetPreview({ snippet, onClose, onCopy }: SnippetPreviewProps
             sandbox=""
             style={{
               width: Math.max(snippet.width, 1),
-              height: Math.max(snippet.height, 1)
+              minHeight: Math.max(snippet.height, 1),
+              height: "auto"
             }}
           />
         </div>
