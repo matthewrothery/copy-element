@@ -13,8 +13,8 @@ import "@/styles/blog.css";
 export const dynamic = "force-static";
 
 export const metadata = {
-  title: "Blog – Element Capture",
-  description: "Element Capture blog: product updates and tips.",
+  title: "Blog – Element Armory",
+  description: "Element Armory blog: product updates and tips.",
 };
 
 const EXAMPLE_POST = {

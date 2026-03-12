@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import Image from "next/image";
 import { useState, useEffect } from "react";
 import { Menu, ExternalLink } from "lucide-react";
 
@@ -27,8 +28,16 @@ export function Header(): React.ReactElement {
         role="banner"
       >
         <div className="header-logo">
-          <Link href="/" aria-label="Element Capture home">
-            Element Capture
+          <Link href="/" aria-label="Element Armory home" className="header-logo-link">
+            <Image
+              src="/logo.png"
+              alt=""
+              width={32}
+              height={32}
+              className="header-logo-icon"
+              aria-hidden
+            />
+            <span className="header-logo-text">Element Armory</span>
           </Link>
         </div>
 

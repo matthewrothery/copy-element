@@ -3,8 +3,8 @@ import { Header } from "@/components/Header";
 export const dynamic = "force-static";
 
 export const metadata = {
-  title: "Privacy – Element Capture",
-  description: "Element Capture privacy policy.",
+  title: "Privacy – Element Armory",
+  description: "Element Armory privacy policy.",
 };
 
 export default function PrivacyPage(): React.ReactElement {

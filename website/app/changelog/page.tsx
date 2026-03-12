@@ -3,8 +3,8 @@ import { Header } from "@/components/Header";
 export const dynamic = "force-static";
 
 export const metadata = {
-  title: "Changelog – Element Capture",
-  description: "Element Capture extension updates and release notes.",
+  title: "Changelog – Element Armory",
+  description: "Element Armory extension updates and release notes.",
 };
 
 export default function ChangelogPage(): React.ReactElement {

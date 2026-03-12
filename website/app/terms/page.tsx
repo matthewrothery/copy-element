@@ -3,8 +3,8 @@ import { Header } from "@/components/Header";
 export const dynamic = "force-static";
 
 export const metadata = {
-  title: "Terms – Element Capture",
-  description: "Element Capture terms of use.",
+  title: "Terms – Element Armory",
+  description: "Element Armory terms of use.",
 };
 
 export default function TermsPage(): React.ReactElement {

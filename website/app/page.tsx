@@ -26,7 +26,7 @@ export default function Home(): React.ReactElement {
               {
                 title: "One-click capture",
                 description:
-                  "Click any element on the page. Element Capture copies it with minimal, portable styles.",
+                  "Click any element on the page. Element Armory copies it with minimal, portable styles.",
               },
               {
                 title: "HTML and JSX",

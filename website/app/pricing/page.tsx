@@ -5,8 +5,8 @@ import { PricingComparisonSnippet } from "@/components/PricingComparisonSnippet"
 export const dynamic = "force-static";
 
 export const metadata = {
-  title: "Pricing – Element Capture",
-  description: "Element Capture pricing and plans.",
+  title: "Pricing – Element Armory",
+  description: "Element Armory pricing and plans.",
 };
 
 export default function PricingPage(): React.ReactElement {

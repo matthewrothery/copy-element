@@ -1,6 +1,6 @@
-# Element Capture – Marketing Website
+# Element Armory – Marketing Website
 
-Static Next.js site to promote the Element Capture Chrome extension. Screen Studio–inspired design, SEO-optimized, no Tailwind.
+Static Next.js site for Element Armory – Capture UI Elements. Screen Studio–inspired design, SEO-optimized, no Tailwind.
 
 ## Setup
 

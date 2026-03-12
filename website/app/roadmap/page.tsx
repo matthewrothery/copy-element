@@ -3,8 +3,8 @@ import { Header } from "@/components/Header";
 export const dynamic = "force-static";
 
 export const metadata = {
-  title: "Roadmap – Element Capture",
-  description: "Element Capture product roadmap and planned features.",
+  title: "Roadmap – Element Armory",
+  description: "Element Armory product roadmap and planned features.",
 };
 
 export default function RoadmapPage(): React.ReactElement {
