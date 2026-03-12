@@ -59,3 +59,20 @@ button:hover {
 button {
   font-family: inherit;
 }
+
+.page-title {
+  font-size: var(--typo-hero);
+  font-weight: var(--font-weight-bold);
+  line-height: 1.25em;
+  letter-spacing: -0.0186364em;
+  margin: 0;
+}
+
+.page-subtitle {
+  font-size: var(--typo-subtitle);
+  font-weight: var(--font-weight-normal);
+  line-height: 1.33em;
+  color: var(--text-muted);
+  max-width: 60ch;
+  margin: 0;
+}

@@ -1,9 +1,6 @@
 import { ImageIcon } from "lucide-react";
-
-type MediaPlaceholderProps = {
-  aspectRatio?: "video" | "square";
-  label?: string;
-};
+import type { MediaPlaceholderProps } from "./types";
+import "./MediaPlaceholder.css";
 
 export function MediaPlaceholder({
   aspectRatio = "video",

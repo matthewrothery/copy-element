@@ -1,21 +1,19 @@
 "use client";
 
 import { useState } from "react";
-import { MediaPlaceholder } from "./MediaPlaceholder";
-
-type Tab = { title: string; description: string };
-
-type FeatureSectionProps = {
-  title: string;
-  subtitle: string | React.ReactNode;
-  tabs: Tab[];
-};
+import { MediaPlaceholder } from "@/components/MediaPlaceholder";
+import type { FeatureSectionProps, FeatureTab } from "./types";
+import "./FeatureSection.css";
 
 function slugify(s: string): string {
   return s.replace(/\s+/g, "-").toLowerCase();
 }
 
-export function FeatureSection({ title, subtitle, tabs }: FeatureSectionProps): React.ReactElement {
+export function FeatureSection({
+  title,
+  subtitle,
+  tabs,
+}: FeatureSectionProps): React.ReactElement {
   const [activeIndex, setActiveIndex] = useState(0);
   const id = slugify(title);
 
@@ -29,7 +27,7 @@ export function FeatureSection({ title, subtitle, tabs }: FeatureSectionProps): 
       </div>
       <div className="feature-row">
         <div className="feature-tabs">
-          {tabs.map((tab, i) => (
+          {tabs.map((tab: FeatureTab, i: number) => (
             <button
               key={tab.title}
               type="button"

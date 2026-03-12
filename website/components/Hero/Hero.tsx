@@ -1,15 +1,23 @@
 import Link from "next/link";
 import Image from "next/image";
 import { MediaPlaceholder } from "@/components/MediaPlaceholder";
+import type { HeroProps } from "./types";
+import "./Hero.css";
 
-const CHROME_STORE_URL = process.env.NEXT_PUBLIC_CHROME_STORE_URL ?? "#";
-
-export function Hero(): React.ReactElement {
+export function Hero({
+  title = "Capture UI from any site and rebuild it with AI.",
+  subtitle = <span>Clean. Clear. Powerful.</span>,
+  ctaHref = process.env.NEXT_PUBLIC_CHROME_STORE_URL ?? "#",
+  ctaLabel = "Install",
+  ctaSubtext = "Free. No account required.",
+  logoHref = "/",
+  media,
+}: HeroProps): React.ReactElement {
   return (
     <section className="hero" aria-labelledby="hero-title">
       <div className="hero-inner">
         <Link
-          href="/"
+          href={logoHref}
           className="hero-logo"
           aria-label="Element Armory home"
         >
@@ -25,29 +33,29 @@ export function Hero(): React.ReactElement {
         </Link>
         <div className="hero-content">
           <h1 id="hero-title" className="hero-title">
-            Capture UI from any site and rebuild it with AI.
+            {title}
           </h1>
-          <p className="hero-subtitle">
-            <span>Clean. Clear. Powerful.</span>
-          </p>
+          {subtitle != null && <p className="hero-subtitle">{subtitle}</p>}
         </div>
         <div className="hero-cta-block">
           <a
-            href={CHROME_STORE_URL}
+            href={ctaHref}
             target="_blank"
             rel="noopener noreferrer"
-            className="btn-primary hero-cta"
+            className="hero-cta"
           >
-            Install
+            {ctaLabel}
           </a>
-          <span className="hero-cta-label">Free. No account required.</span>
+          <span className="hero-cta-label">{ctaSubtext}</span>
         </div>
       </div>
       <div className="hero-media">
-        <MediaPlaceholder
-          aspectRatio="video"
-          label="Product screenshot"
-        />
+        {media ?? (
+          <MediaPlaceholder
+            aspectRatio="video"
+            label="Product screenshot"
+          />
+        )}
       </div>
     </section>
   );

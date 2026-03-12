@@ -1,7 +1,6 @@
 import type { Metadata } from "next";
 import "@/styles/tokens.css";
 import "@/styles/base.css";
-import "@/styles/components.css";
 import { JsonLd } from "@/components/JsonLd";
 
 const BASE_URL = process.env.NEXT_PUBLIC_SITE_URL ?? "https://elementarmory.example.com";

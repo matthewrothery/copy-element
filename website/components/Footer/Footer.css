@@ -1,0 +1,28 @@
+/* Footer – self-contained */
+.footer {
+  padding: var(--space-5) 20px;
+  border-top: 1px solid var(--border);
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-4);
+  font-size: var(--typo-copy);
+  color: var(--text-muted);
+}
+
+.footer a {
+  text-decoration: none;
+  color: inherit;
+}
+
+.footer a:hover {
+  color: var(--text);
+}
+
+@media (max-width: 480px) {
+  .footer {
+    padding: var(--space-5) 16px;
+  }
+}

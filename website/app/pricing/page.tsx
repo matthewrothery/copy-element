@@ -1,4 +1,5 @@
 import { Header } from "@/components/Header";
+import { Section } from "@/components/Section";
 import { PricingBlock } from "@/components/PricingBlock";
 import { PricingComparisonSnippet } from "@/components/PricingComparisonSnippet";
 
@@ -13,16 +14,18 @@ export default function PricingPage(): React.ReactElement {
   return (
     <>
       <Header />
-      <main className="section pricing-page" style={{ paddingTop: "var(--space-7)" }}>
-        <div className="section-inner">
-          <h1 className="hero-title">Pricing</h1>
-          <p className="hero-subtitle" style={{ textAlign: "left", maxWidth: "60ch" }}>
-            Choose the plan that fits your workflow. Base plan includes core features; add-ons scale
-            with your usage.
-          </p>
-          <PricingComparisonSnippet />
-          <PricingBlock />
-        </div>
+      <main>
+        <Section className="pricing-page" style={{ paddingTop: "var(--space-7)" }}>
+          <Section inner>
+            <h1 className="page-title">Pricing</h1>
+            <p className="page-subtitle">
+              Choose the plan that fits your workflow. Base plan includes core features; add-ons
+              scale with your usage.
+            </p>
+            <PricingComparisonSnippet />
+            <PricingBlock />
+          </Section>
+        </Section>
       </main>
     </>
   );

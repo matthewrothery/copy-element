@@ -1,100 +1,14 @@
 "use client";
 
 import { useState, useCallback, useRef } from "react";
-
-const BASE_PRICE_MONTH = 39;
-const BASE_PRICE_YEAR = 69;
-
-type TierConfig = {
-  heading: string;
-  labelTitle: string;
-  subLabelTitle?: string;
-  labels: string[];
-  buttonLabels: string[];
-  subLabels?: string[];
-};
-
-const TIERS: TierConfig[] = [
-  {
-    heading: "Atlas Pages",
-    labelTitle: "Published Pages",
-    subLabelTitle: "Included AI Photos",
-    labels: [
-      "Up to 5",
-      "Up to 15",
-      "Up to 25",
-      "Up to 50",
-      "Up to 75",
-      "Up to 100",
-      "Unlimited",
-    ],
-    buttonLabels: [
-      "Included in base",
-      "+$10/mo",
-      "+$20/mo",
-      "+$30/mo",
-      "+$40/mo",
-      "+$50/mo",
-      "+$60/mo",
-      "+$70/mo",
-    ],
-    subLabels: [
-      "50/month",
-      "100/month",
-      "200/month",
-      "250/month",
-      "300/month",
-      "350/month",
-      "Unlimited",
-    ],
-  },
-  {
-    heading: "Atlas Bundler",
-    labelTitle: "Additional Revenue Cap",
-    labels: [
-      "Up to $1,000",
-      "Up to $2,500",
-      "Up to $5,000",
-      "Up to $10,000",
-      "Up to $20,000",
-      "Up to $35,000",
-      "Up to $50,000",
-      "$70,000+",
-    ],
-    buttonLabels: [
-      "Included in base",
-      "+$10/mo",
-      "+$20/mo",
-      "+$35/mo",
-      "+$65/mo",
-      "+$110/mo",
-      "+$150/mo",
-      "+$195/mo",
-    ],
-  },
-  {
-    heading: "Atlas Cart",
-    labelTitle: "Total Store Orders",
-    labels: [
-      "Up to 250",
-      "Up to 500",
-      "Up to 1,000",
-      "Up to 2,000",
-      "Up to 3,500",
-      "Up to 5,000",
-      "6,500+",
-    ],
-    buttonLabels: [
-      "Included in base",
-      "+$10/mo",
-      "+$20/mo",
-      "+$30/mo",
-      "+$60/mo",
-      "+$100/mo",
-      "+$150/mo",
-    ],
-  },
-];
+import type { PricingBlockProps, PricingTierConfig } from "./types";
+import {
+  DEFAULT_BASE_PRICE_MONTH,
+  DEFAULT_BASE_PRICE_YEAR,
+  DEFAULT_TIERS,
+  DEFAULT_BASE_FEATURES,
+} from "./constants";
+import "./PricingBlock.css";
 
 function useSlider(
   maxIndex: number,
@@ -178,7 +92,7 @@ function TierCard({
   config,
   initialIndex = 0,
 }: {
-  config: TierConfig;
+  config: PricingTierConfig;
   initialIndex?: number;
 }): React.ReactElement {
   const maxIndex = config.labels.length - 1;
@@ -286,25 +200,38 @@ function TierCard({
   );
 }
 
-export function PricingBlock(): React.ReactElement {
+export function PricingBlock({
+  basePriceMonth = DEFAULT_BASE_PRICE_MONTH,
+  basePriceYear = DEFAULT_BASE_PRICE_YEAR,
+  basePlanTitle = "Atlas Base Plan",
+  basePlanCtaHref = "#",
+  basePlanCtaLabel = "Get started",
+  basePlanDisclaimer = "You'll be charged the base plan fees and given access to features to a limit, any additional uses for those features can be purchased as shown in the per feature pricing.",
+  basePlanFeatures = DEFAULT_BASE_FEATURES,
+  tiers = DEFAULT_TIERS,
+}: PricingBlockProps): React.ReactElement {
   return (
     <div className="pricing-cards-wrap">
       <div className="pricing-card-base">
         <div className="pricing-card-top-info">
           <div className="part-pricing title-size">
-            <h3 className="h6 text-color-white">Atlas Base Plan</h3>
+            <h3 className="h6 text-color-white">{basePlanTitle}</h3>
           </div>
           <div className="part-pricing new">
             <div className="price-wrapper alt">
               <span className="number alt">$</span>
-              <span data-year={BASE_PRICE_YEAR} data-month={BASE_PRICE_MONTH} className="number alt">
-                {BASE_PRICE_MONTH}
+              <span
+                data-year={basePriceYear}
+                data-month={basePriceMonth}
+                className="number alt"
+              >
+                {basePriceMonth}
               </span>
               <span className="checkbox-text padding-bot text-color-white">/month</span>
             </div>
             <div className="button-group full-width-left">
-              <a href="#" className="button is-brand is-icon pricing-cta">
-                <span className="text-block-14">Get started</span>
+              <a href={basePlanCtaHref} className="button is-brand is-icon pricing-cta">
+                <span className="text-block-14">{basePlanCtaLabel}</span>
                 <span className="arrow-wrapper" aria-hidden>
                   <span className="arrow-line" />
                 </span>
@@ -312,26 +239,14 @@ export function PricingBlock(): React.ReactElement {
             </div>
             <div className="pricing-paragraph new">
               <p className="par _12px align-left text-color-gray">
-                You’ll be charged the base plan fees and given access to features to a limit, any
-                additional uses for those features can be purchased as shown in the per feature
-                pricing.
+                {basePlanDisclaimer}
               </p>
             </div>
           </div>
         </div>
         <div className="line is-white is-pricing" />
         <div className="pricing-card-features">
-          {[
-            { name: "Published Pages", value: "Up to 5 pages" },
-            { name: "Al Photos", value: "25/month" },
-            { name: "Bundle Revenue", value: "Up to $1,000" },
-            { name: "Cart Orders", value: "Up to 250" },
-            { name: "Al Store Builder", check: true },
-            { name: "Al Page Builder", check: true },
-            { name: "Al Photo Generator", check: true },
-            { name: "Bundler Upsells", check: true },
-            { name: "Cart Upsells", check: true },
-          ].map((f) => (
+          {basePlanFeatures.map((f) => (
             <div key={f.name} className="pricing-card-feature-item">
               <div>{f.name}</div>
               {"value" in f ? (
@@ -346,7 +261,7 @@ export function PricingBlock(): React.ReactElement {
         </div>
       </div>
       <div className="pricing-cards-vertical">
-        {TIERS.map((tier) => (
+        {tiers.map((tier) => (
           <TierCard key={tier.heading} config={tier} />
         ))}
       </div>

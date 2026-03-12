@@ -4,11 +4,26 @@ import Link from "next/link";
 import Image from "next/image";
 import { useState, useEffect } from "react";
 import { Menu, ExternalLink } from "lucide-react";
+import type { HeaderProps, NavItem } from "./types";
+import "./Header.css";
 
-const CHROME_STORE_URL = process.env.NEXT_PUBLIC_CHROME_STORE_URL ?? "#";
 const SCROLL_THRESHOLD_PX = 24;
 
-export function Header(): React.ReactElement {
+const DEFAULT_NAV: NavItem[] = [
+  { label: "Product", href: "/" },
+  { label: "Help", href: "/help" },
+  { label: "Pricing", href: "/pricing" },
+  { label: "Examples", href: "/examples" },
+];
+
+export function Header({
+  navItems = DEFAULT_NAV,
+  ctaHref = process.env.NEXT_PUBLIC_CHROME_STORE_URL ?? "#",
+  ctaLabel = "Install",
+  logoHref = "/",
+  logoAlt = "",
+  logoText = "Element Armory",
+}: HeaderProps): React.ReactElement {
   const [scrolled, setScrolled] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
@@ -28,32 +43,33 @@ export function Header(): React.ReactElement {
         role="banner"
       >
         <div className="header-logo">
-          <Link href="/" aria-label="Element Armory home" className="header-logo-link">
+          <Link
+            href={logoHref}
+            aria-label={logoText ? `${logoText} home` : "Home"}
+            className="header-logo-link"
+          >
             <Image
               src="/logo.png"
-              alt=""
+              alt={logoAlt}
               width={32}
               height={32}
               className="header-logo-icon"
-              aria-hidden
+              aria-hidden={!!logoAlt}
             />
-            <span className="header-logo-text">Element Armory</span>
+            <span className="header-logo-text">{logoText}</span>
           </Link>
         </div>
 
         <nav className="header-nav" aria-label="Main navigation">
-          <Link href="/" className="header-nav-item">
-            Product
-          </Link>
-          <Link href="/help" className="header-nav-item">
-            Help
-          </Link>
-          <Link href="/pricing" className="header-nav-item">
-            Pricing
-          </Link>
-          <Link href="/examples" className="header-nav-item">
-            Examples
-          </Link>
+          {navItems.map((item) => (
+            <Link
+              key={item.href}
+              href={item.href}
+              className="header-nav-item"
+            >
+              {item.label}
+            </Link>
+          ))}
         </nav>
 
         <div className="header-mobile-toggle">
@@ -70,26 +86,23 @@ export function Header(): React.ReactElement {
 
         {mobileMenuOpen && (
           <div className="header-mobile-menu">
-            <Link href="/" onClick={() => setMobileMenuOpen(false)}>
-              Product
-            </Link>
-            <Link href="/help" onClick={() => setMobileMenuOpen(false)}>
-              Help
-            </Link>
-            <Link href="/pricing" onClick={() => setMobileMenuOpen(false)}>
-              Pricing
-            </Link>
-            <Link href="/examples" onClick={() => setMobileMenuOpen(false)}>
-              Examples
-            </Link>
+            {navItems.map((item) => (
+              <Link
+                key={item.href}
+                href={item.href}
+                onClick={() => setMobileMenuOpen(false)}
+              >
+                {item.label}
+              </Link>
+            ))}
             <a
-              href={CHROME_STORE_URL}
+              href={ctaHref}
               target="_blank"
               rel="noopener noreferrer"
               className="header-mobile-cta"
               onClick={() => setMobileMenuOpen(false)}
             >
-              Install
+              {ctaLabel}
               <ExternalLink size={14} aria-hidden />
             </a>
           </div>
@@ -97,12 +110,11 @@ export function Header(): React.ReactElement {
 
         <div className="header-cta">
           <a
-            href={CHROME_STORE_URL}
+            href={ctaHref}
             target="_blank"
             rel="noopener noreferrer"
-            className="btn-primary"
           >
-            Install
+            {ctaLabel}
             <ExternalLink size={14} aria-hidden />
           </a>
         </div>

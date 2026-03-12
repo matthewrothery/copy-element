@@ -1,0 +1,118 @@
+/* FeatureSection – self-contained */
+.feature-section {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-5);
+}
+
+.feature-heading {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+}
+
+.feature-title {
+  font-size: var(--typo-title);
+  font-weight: var(--font-weight-bold);
+  line-height: 1.25em;
+}
+
+.feature-subtitle {
+  font-size: var(--typo-subtitle);
+  font-weight: var(--font-weight-normal);
+  line-height: 1.33em;
+  color: var(--text-muted);
+  max-width: 50ch;
+}
+
+.feature-subtitle strong {
+  color: var(--text);
+}
+
+.feature-row {
+  display: flex;
+  flex-direction: row;
+  gap: var(--space-6);
+  align-items: flex-start;
+}
+
+.feature-tabs {
+  flex: 2;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+}
+
+.feature-tab {
+  padding: 20px;
+  border-radius: var(--radius);
+  background-color: transparent;
+  color: var(--text);
+  transition: background-color 0.3s;
+  text-align: left;
+  border: none;
+  cursor: pointer;
+}
+
+.feature-tab:hover {
+  background-color: rgba(255, 255, 255, 0.08);
+  transition-duration: 0.075s;
+}
+
+.feature-tab.active {
+  background-color: rgba(255, 255, 255, 0.07);
+}
+
+.feature-tab-title {
+  font-size: var(--typo-copy);
+  font-weight: var(--font-weight-semibold);
+  line-height: 1.5em;
+  margin-bottom: 4px;
+}
+
+.feature-tab-desc {
+  font-size: var(--typo-copy);
+  font-weight: var(--font-weight-normal);
+  line-height: 1.5em;
+  color: var(--text-muted);
+}
+
+.feature-media {
+  flex: 3;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-5);
+  max-width: 100%;
+}
+
+@media (max-width: 884px) {
+  .feature-row {
+    flex-direction: column;
+    gap: var(--space-4);
+  }
+
+  .feature-tabs {
+    flex-direction: row;
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    padding: 0 20px;
+    margin: 0 -20px;
+    width: calc(100% + 40px);
+    max-width: calc(100% + 40px);
+  }
+
+  .feature-tab {
+    min-width: min(75vw, 300px);
+    scroll-snap-align: center;
+    scroll-snap-stop: always;
+  }
+}
+
+@media (max-width: 480px) {
+  .feature-tabs {
+    padding: 0 16px;
+    margin: 0 -16px;
+    width: calc(100% + 32px);
+    max-width: calc(100% + 32px);
+  }
+}

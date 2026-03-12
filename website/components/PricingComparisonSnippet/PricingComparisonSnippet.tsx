@@ -1,4 +1,5 @@
-import "@/styles/pricing-comparison-snippet.css";
+import type { PricingComparisonSnippetProps } from "./types";
+import "./PricingComparisonSnippet.css";
 
 const wrapperStyle: React.CSSProperties = {
   display: "flex",
@@ -155,9 +156,11 @@ function PricingCard({
   );
 }
 
-export function PricingComparisonSnippet(): React.ReactElement {
+export function PricingComparisonSnippet({
+  ariaLabel = "Screen Studio-style pricing comparison",
+}: PricingComparisonSnippetProps = {}): React.ReactElement {
   return (
-    <div className="pricing-comparison-snippet" aria-label="Screen Studio-style pricing comparison">
+    <div className="pricing-comparison-snippet" aria-label={ariaLabel}>
       <div className="snippet-stage-parent" style={wrapperStyle}>
         <div className="diglTO" data-snippet-root>
           <PricingCard

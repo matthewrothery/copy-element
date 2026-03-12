@@ -1,0 +1,29 @@
+/* MediaPlaceholder – self-contained */
+.media-placeholder {
+  width: 100%;
+  aspect-ratio: 1280 / 720;
+  background-color: var(--surface);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--text-muted);
+  font-size: var(--typo-copy);
+  border-radius: var(--radius-lg);
+}
+
+.media-placeholder.square {
+  aspect-ratio: 1 / 1;
+}
+
+.media-placeholder-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-2);
+}
+
+@media (max-width: 884px) {
+  .media-placeholder {
+    border-radius: var(--radius);
+  }
+}

@@ -3,17 +3,18 @@ import { Hero } from "@/components/Hero";
 import { FeatureSection } from "@/components/FeatureSection";
 import { CTABlock } from "@/components/CTABlock";
 import { Footer } from "@/components/Footer";
+import { Section } from "@/components/Section";
 
 export default function Home(): React.ReactElement {
   return (
     <>
       <Header />
       <main>
-        <section className="section">
+        <Section>
           <Hero />
-        </section>
+        </Section>
 
-        <section className="section">
+        <Section>
           <FeatureSection
             title="Capture & export"
             subtitle="Get clean HTML or JSX from any element. No extra markup or inline bloat."
@@ -35,9 +36,9 @@ export default function Home(): React.ReactElement {
               },
             ]}
           />
-        </section>
+        </Section>
 
-        <section className="section">
+        <Section>
           <FeatureSection
             title="Snippet library"
             subtitle={
@@ -60,9 +61,9 @@ export default function Home(): React.ReactElement {
               },
             ]}
           />
-        </section>
+        </Section>
 
-        <section className="section">
+        <Section>
           <FeatureSection
             title="Developer-friendly"
             subtitle="Minimal output. No bloat. Framework-neutral HTML and JSX."
@@ -82,11 +83,11 @@ export default function Home(): React.ReactElement {
               },
             ]}
           />
-        </section>
+        </Section>
 
-        <section className="section" id="pricing">
+        <Section id="pricing">
           <CTABlock />
-        </section>
+        </Section>
 
         <Footer />
       </main>
