@@ -1,7 +1,5 @@
 import { Header } from "@/components/Header";
 import { Hero } from "@/components/Hero";
-import { SocialProofCards } from "@/components/SocialProofCards";
-import { FeatureCarousel } from "@/components/FeatureCarousel";
 import { FeatureSection } from "@/components/FeatureSection";
 import { CTABlock } from "@/components/CTABlock";
 import { Footer } from "@/components/Footer";
@@ -13,44 +11,6 @@ export default function Home(): React.ReactElement {
       <main>
         <section className="section">
           <Hero />
-        </section>
-
-        <section className="section">
-          <SocialProofCards />
-        </section>
-
-        <section className="section">
-          <FeatureCarousel
-            title="Record iPhone or iPad on your Mac"
-            description="Connect your device with a USB cable and start recording. Add zooms and create mobile app demos with no effort."
-            headingAlign="left"
-            items={[
-              {
-                type: "video",
-                title: "iPhone and iPad model detection",
-                description:
-                  "Screen Studio automatically detects the model and color of your device.",
-                posterSrc: "https://picsum.photos/720/720",
-                videoSrc: "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4",
-              },
-              {
-                type: "video",
-                title: "Customize device frame and color",
-                description:
-                  "Screen Studio has a wide range of device frames and colors to choose from.",
-                posterSrc: "https://picsum.photos/720/721",
-                videoSrc: "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ElephantsDream.mp4",
-              },
-              {
-                type: "image",
-                title: "Easy iOS device recording",
-                description:
-                  "Connect your iPhone or iPad with a USB cable and start recording.",
-                src: "https://picsum.photos/720/722",
-                alt: "iPhone or iPad recording picker",
-              },
-            ]}
-          />
         </section>
 
         <section className="section">

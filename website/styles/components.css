@@ -1,6 +1,5 @@
 /* Layout */
 .section {
-  --carousel-gutter: 20px;
   display: flex;
   flex-direction: column;
   gap: var(--section-gap);
@@ -401,7 +400,6 @@
 
 @media (max-width: 480px) {
   .section {
-    --carousel-gutter: 16px;
     padding: 0 16px;
   }
 
@@ -665,91 +663,6 @@
 
 .footer a:hover {
   color: var(--text);
-}
-
-/* Horizontal scroll row (e.g. social proof cards) */
-.scroll-row {
-  display: flex;
-  flex-direction: row;
-  gap: var(--space-6);
-  overflow-x: auto;
-  scroll-snap-type: x mandatory;
-  scroll-behavior: smooth;
-  padding-bottom: var(--space-2);
-}
-
-.scroll-row::-webkit-scrollbar {
-  display: none;
-}
-
-.scroll-row {
-  scrollbar-width: none;
-}
-
-.scroll-item {
-  flex-shrink: 0;
-  scroll-snap-align: start;
-  scroll-snap-stop: always;
-  min-width: 280px;
-}
-
-@media (max-width: 884px) {
-  .scroll-row {
-    -webkit-overflow-scrolling: touch;
-  }
-
-  .scroll-item {
-    min-width: min(75vw, 300px);
-  }
-}
-
-@media (max-width: 480px) {
-  .scroll-item {
-    min-width: 85vw;
-  }
-}
-
-/* Shared carousel: content-width viewport, track overflows right then both sides then left only */
-.carousel-bleed {
-  --gutter: var(--carousel-gutter, 20px);
-  width: calc(100% + (var(--gutter) * 2));
-  margin-inline: calc(var(--gutter) * -1);
-}
-
-.carousel-row {
-  --gutter: var(--carousel-gutter, 20px);
-  display: flex;
-  flex-direction: row;
-  gap: var(--space-6);
-  overflow-x: auto;
-  overflow-y: hidden;
-  scroll-snap-type: x mandatory;
-  scroll-behavior: smooth;
-  padding-inline: var(--gutter);
-  padding-bottom: var(--space-2);
-  scroll-padding-inline: var(--gutter);
-  touch-action: pan-x;
-  overscroll-behavior-x: contain;
-  scrollbar-width: none;
-  cursor: grab;
-}
-
-.carousel-row:active {
-  cursor: grabbing;
-}
-
-.carousel-row.is-dragging {
-  user-select: none;
-}
-
-.carousel-row::-webkit-scrollbar {
-  display: none;
-}
-
-@media (max-width: 884px) {
-  .carousel-row {
-    -webkit-overflow-scrolling: touch;
-  }
 }
 
 /* Block with headline + subtitle (e.g. "Made with Element Armory") */
