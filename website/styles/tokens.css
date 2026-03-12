@@ -1,0 +1,51 @@
+/* Screen Studio–inspired design tokens */
+:root {
+  /* Colors */
+  --bg: #000000;
+  --surface: #13151b;
+  --text: #ffffff;
+  --text-muted: rgba(255, 255, 255, 0.55);
+  --border: rgba(255, 255, 255, 0.1);
+  --border-strong: rgba(255, 255, 255, 0.106);
+  --accent: #4d2ff5;
+  --accent-hover: #6248f6;
+  --accent-active: #6c54f7;
+
+  /* Typography (Screen Studio scale) */
+  --typo-label: 12px;
+  --typo-copy: 13px;
+  --typo-largecopy: 16px;
+  --typo-subtitle: 16px;
+  --typo-title: 20px;
+  --typo-hero: 32px;
+  --font-weight-normal: 449;
+  --font-weight-semibold: 600;
+  --font-weight-bold: 650;
+
+  /* Spacing */
+  --space-1: 4px;
+  --space-2: 8px;
+  --space-3: 16px;
+  --space-4: 24px;
+  --space-5: 32px;
+  --space-6: 48px;
+  --space-7: 128px;
+  --section-gap: 128px;
+  --section-gap-mobile: 90px;
+
+  /* Radius */
+  --radius-sm: 5px;
+  --radius: 6px;
+  --radius-md: 8px;
+  --radius-lg: 10px;
+  --radius-pill: 1000px;
+
+  /* Font stack */
+  --font-sans: system-ui, -apple-system, "SF Pro Display", "SF Pro", Inter, "Inter Fallback", sans-serif;
+}
+
+@media (max-width: 884px) {
+  :root {
+    --section-gap: var(--section-gap-mobile);
+  }
+}
