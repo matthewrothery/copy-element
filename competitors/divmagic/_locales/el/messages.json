@@ -1,0 +1,362 @@
+{
+   "activateToolbox": {
+      "message": "Ενεργοποιήστε την εργαλειοθήκη"
+   },
+   "contextMenuInspect": {
+      "message": "Επιθεωρητής"
+   },
+   "copied": {
+      "message": "Αντιγράφηκε!"
+   },
+   "devtoolsCopyElement": {
+      "message": "Αντιγραφή στοιχείου"
+   },
+   "devtoolsCopyElementCopying": {
+      "message": "Αντιγραφή"
+   },
+   "devtoolsLibrary": {
+      "message": "Βιβλιοθήκη"
+   },
+   "devtoolsLibraryComponentPerPage": {
+      "message": "Εξαρτήματα ανά σελίδα"
+   },
+   "devtoolsLibraryNext": {
+      "message": "Επόμενο"
+   },
+   "devtoolsLibraryNoComponents": {
+      "message": "Η βιβλιοθήκη σας είναι κενή. Αποθηκεύστε ένα στοιχείο για να το δείτε εδώ."
+   },
+   "devtoolsLibraryPrevious": {
+      "message": "Προηγούμενος"
+   },
+   "devtoolsNoElementSelectedText": {
+      "message": "Επιλέξτε ένα στοιχείο από την καρτέλα \"Στοιχεία\" για να δείτε τις λεπτομέρειες του εδώ"
+   },
+   "devtoolsSelectedElementText": {
+      "message": "Επιλεγμένο στοιχείο"
+   },
+   "devtoolsUnsupportedElementSelectedText": {
+      "message": "Το επιλεγμένο στοιχείο δεν επιτρέπεται για λειτουργίες αντιγραφής"
+   },
+   "extCommandChooseElement": {
+      "message": "Επιλέξτε στοιχείο για αντιγραφή ενώ τοποθετείτε το δείκτη του ποντικιού"
+   },
+   "extDescription": {
+      "message": "Αντιγράψτε στοιχεία από οποιαδήποτε ιστοσελίδα ως επαναχρησιμοποιήσιμα στοιχεία ιστού. Λάβετε κώδικα HTML, CSS, React, JSX ή Tailwind CSS."
+   },
+   "extName": {
+      "message": "DivMagic - Στυλ αντιγραφής"
+   },
+   "iframeCantBeAccessedText": {
+      "message": "Το DivMagic δεν έχει πρόσβαση σε αυτό το iframe."
+   },
+   "iframeNeedAccessText": {
+      "message": "Το DivMagic πρέπει να ανοίξει αυτό το iframe για να έχει πρόσβαση."
+   },
+   "iframeOpenText": {
+      "message": "Ανοίξτε το iframe"
+   },
+   "loginPageBody1": {
+      "message": "Για να αποκτήσετε πρόσβαση στο ισχυρό μας εργαλείο ανάπτυξης ιστού, σας προσκαλούμε να δημιουργήσετε έναν λογαριασμό ή να συνδεθείτε."
+   },
+   "loginPageBody2": {
+      "message": "Θα απολαύσετε μια απρόσκοπτη ροή εργασιών ανάπτυξης με μια συνδρομή στο DivMagic."
+   },
+   "loginPageEmailLabel": {
+      "message": "Η διεύθυνση του ηλεκτρονικού σου ταχυδρομείου"
+   },
+   "loginPageError": {
+      "message": "Δεν ήταν δυνατή η σύνδεση. Βεβαιωθείτε ότι χρησιμοποιείτε τη διεύθυνση email με την οποία εγγραφήκατε."
+   },
+   "loginPageLoginButton": {
+      "message": "Σύνδεση"
+   },
+   "loginPageNewHere": {
+      "message": "Νέος στο DivMagic;"
+   },
+   "loginPageSignUp": {
+      "message": "Εγγραφείτε"
+   },
+   "loginPageTitle": {
+      "message": "Καλώς ήρθατε στο DivMagic!"
+   },
+   "loginPageVerificationCode": {
+      "message": "Κωδικός επαλήθευσης"
+   },
+   "loginPageVerificationCodeSent": {
+      "message": "Ένας κωδικός επαλήθευσης έχει σταλεί στο email σας. Εισαγάγετε το παρακάτω."
+   },
+   "loginPageVerifyButton": {
+      "message": "Επαληθεύω"
+   },
+   "loginPageVerifyCancelButton": {
+      "message": "Ακύρωση επαλήθευσης"
+   },
+   "loginPageVerifyEmail": {
+      "message": "Επαληθεύστε το email σας"
+   },
+   "loginPageWrongVerificationCode": {
+      "message": "Λάθος κωδικός επαλήθευσης. Βεβαιωθείτε ότι έχετε εισαγάγει τον σωστό κωδικό."
+   },
+   "modalAddCssAttributeText": {
+      "message": "Χαρακτηριστικό CSS"
+   },
+   "modalAddCssValueText": {
+      "message": "Αξία CSS"
+   },
+   "modalAddStylesText": {
+      "message": "Προσθήκη στυλ"
+   },
+   "modalChildButtonText": {
+      "message": "Παιδικό στοιχείο"
+   },
+   "modalChildButtonTooltip": {
+      "message": "Μετακινήστε την επιλογή στο θυγατρικό στοιχείο"
+   },
+   "modalClassSettingsText": {
+      "message": "Ρυθμίσεις τάξης:"
+   },
+   "modalCloseButtonTooltip": {
+      "message": "Κλείσε"
+   },
+   "modalCopyButtonLoadingText": {
+      "message": "Αντιγραφή..."
+   },
+   "modalCopyButtonText": {
+      "message": "αντίγραφο"
+   },
+   "modalCopyCSSOnlyText": {
+      "message": "Μόνο CSS"
+   },
+   "modalCopyCssWithDivmagicText": {
+      "message": "DivMagic css μαθήματα"
+   },
+   "modalCopyCssWithOriginalText": {
+      "message": "Πρωτότυπα μαθήματα CSS"
+   },
+   "modalCopyHTMLOnlyText": {
+      "message": "Μόνο HTML"
+   },
+   "modalCopyHtmlWithDivmagicText": {
+      "message": "DivMagic html χαρακτηριστικά"
+   },
+   "modalCopyHtmlWithOriginalText": {
+      "message": "Αρχικά χαρακτηριστικά HTML"
+   },
+   "modalCopyIntegrationsText": {
+      "message": "Ενσωματώσεις (WordPress)"
+   },
+   "modalCopyModeSelectionAdaptable": {
+      "message": "Προσαρμόσιμος"
+   },
+   "modalCopyModeSelectionAdaptableTooltip": {
+      "message": "Περιλαμβάνει μόνο τα πιο βασικά στυλ που απαιτούνται για τη διατήρηση της δομής και της βασικής εμφάνισης του στοιχείου. Εύκολο στην προσαρμογή."
+   },
+   "modalCopyModeSelectionBalanced": {
+      "message": "Ισορροπημένο"
+   },
+   "modalCopyModeSelectionBalancedTooltip": {
+      "message": "Ενσωματώνει ψευδο-στοιχεία όπως ::before και ::after, τα οποία μπορούν να επηρεάσουν σημαντικά το οπτικό αποτέλεσμα, αλλά δεν διογκώνουν υπερβολικά τον κώδικα."
+   },
+   "modalCopyModeSelectionExact": {
+      "message": "Ακριβής"
+   },
+   "modalCopyModeSelectionExactTooltip": {
+      "message": "Ένα ακριβές αντίγραφο όλων των στυλ, διασφαλίζοντας ότι το στοιχείο μοιάζει με την πηγή."
+   },
+   "modalCopyModeSelectionText": {
+      "message": "Λειτουργία αντιγραφής"
+   },
+   "modalCopyModeSelectionTooltip": {
+      "message": "Επιλέξτε τη λειτουργία αντιγραφής για την τρέχουσα επιλογή. Συνιστούμε το \"Adaptable\" για τις περισσότερες περιπτώσεις χρήσης."
+   },
+   "modalCopyNotification": {
+      "message": "Αντιγράφηκε το εξάρτημα!"
+   },
+   "modalCopyViewText": {
+      "message": "αντίγραφο"
+   },
+   "modalDragButtonTooltip": {
+      "message": "Σύρετε για μετακίνηση"
+   },
+   "modalEditorViewText": {
+      "message": "Συντάκτης"
+   },
+   "modalElementSettingsText": {
+      "message": "Ρυθμίσεις στοιχείων:"
+   },
+   "modalExportNotification": {
+      "message": "Εξήχθη εξαρτήματα!"
+   },
+   "modalExportToStudioText": {
+      "message": "Εξαγωγή στο στούντιο"
+   },
+   "modalGoToLibraryText": {
+      "message": "Πηγαίνετε στη βιβλιοθήκη μου"
+   },
+   "modalInvalidCssValueText": {
+      "message": "Μη έγκυρη τιμή CSS"
+   },
+   "modalLeftButtonText": {
+      "message": "Αριστερό παιδικό στοιχείο"
+   },
+   "modalLeftButtonTooltip": {
+      "message": "Μετακινήστε την επιλογή στο αριστερό αδελφό στοιχείο"
+   },
+   "modalMediaQuerySelectionTooltip": {
+      "message": "Επιλέξτε εάν θέλετε [[MEDIAQUERYXYZ]] στυλ CSS να περιλαμβάνονται στον αντιγραμμένο κώδικα."
+   },
+   "modalParentButtonText": {
+      "message": "Γονικό στοιχείο"
+   },
+   "modalParentButtonTooltip": {
+      "message": "Επιλέξτε το γονικό στοιχείο της τρέχουσας επιλογής"
+   },
+   "modalRightButtonText": {
+      "message": "Δεξιό παιδικό στοιχείο"
+   },
+   "modalRightButtonTooltip": {
+      "message": "Μετακινήστε την επιλογή στο δεξί αδελφό στοιχείο"
+   },
+   "modalSaveElementText": {
+      "message": "Αποθήκευση στοιχείου"
+   },
+   "modalSaveNotification": {
+      "message": "Εξοικονόμηση εξαρτημάτων!"
+   },
+   "modalSavedElementText": {
+      "message": "Αποθηκεύτηκε!"
+   },
+   "modalSavingElementText": {
+      "message": "Οικονομία..."
+   },
+   "modalStudioExportTooltip": {
+      "message": "Ανοίξτε στο DivMagic Studio"
+   },
+   "offText": {
+      "message": "Μακριά από"
+   },
+   "onText": {
+      "message": "Επί"
+   },
+   "optionsChooseLanguage": {
+      "message": "Επιλέξτε μια γλώσσα"
+   },
+   "optionsFeedback": {
+      "message": "Εάν έχετε οποιαδήποτε σχόλια ή προτάσεις, ενημερώστε μας!"
+   },
+   "optionsShortcuts": {
+      "message": "Συντομεύσεις πληκτρολογίου"
+   },
+   "optionsTitle": {
+      "message": "Επιλογές"
+   },
+   "panelCopyElementCopied": {
+      "message": "Αντιγράφηκε"
+   },
+   "popupCopyInstructions": {
+      "message": "Κάντε κλικ σε οποιοδήποτε στοιχείο ή πατήστε το πλήκτρο:"
+   },
+   "popupFeedback": {
+      "message": "Ανατροφοδότηση"
+   },
+   "popupSettings": {
+      "message": "Ρυθμίσεις"
+   },
+   "popupSettingsAutoHidePopup": {
+      "message": "Αυτόματη απόκρυψη αναδυόμενου παραθύρου"
+   },
+   "popupSettingsComponentFormat": {
+      "message": "Μορφή συστατικού"
+   },
+   "popupSettingsComponentFormatTooltip": {
+      "message": "Επιλέξτε τη μορφή για το αντιγραμμένο στοιχείο"
+   },
+   "popupSettingsShowDevToolsPanel": {
+      "message": "[[DEVTOOLS]] Πίνακας"
+   },
+   "popupSettingsStyleFormat": {
+      "message": "Μορφή στυλ"
+   },
+   "popupSettingsStyleFormatExternalCSS": {
+      "message": "Εξωτερικό CSS"
+   },
+   "popupSettingsStyleFormatInlineCSS": {
+      "message": "Ενσωματωμένο CSS"
+   },
+   "popupSettingsStyleFormatLocalCSS": {
+      "message": "Τοπικό CSS"
+   },
+   "popupSettingsStyleFormatTooltip": {
+      "message": "Επιλέξτε τη μορφή CSS για τα αντιγραμμένα στυλ"
+   },
+   "publishDate": {
+      "message": "31 Μαρτίου έκδοση"
+   },
+   "toolBoxColorPickerDescriptionText": {
+      "message": "Επιλογέας χρώματος"
+   },
+   "toolBoxColorPickerText": {
+      "message": "Επιλογέας χρώματος"
+   },
+   "toolBoxCopyElementDescriptionText": {
+      "message": "Στοιχείο αντιγραφής"
+   },
+   "toolBoxCopyElementText": {
+      "message": "Στοιχείο αντιγραφής"
+   },
+   "toolBoxCopyFontsCopiedText": {
+      "message": "Αντιγραφεί"
+   },
+   "toolBoxCopyFontsCopyToClipboardText": {
+      "message": "Κάντε κλικ για αντιγραφή"
+   },
+   "toolBoxCopyFontsDescriptionText": {
+      "message": "Αντιγραφή γραμματοσειράς"
+   },
+   "toolBoxCopyFontsNotFoundText": {
+      "message": "Αυτός ο ιστότοπος χρησιμοποιεί γραμματοσειρές συστήματος"
+   },
+   "toolBoxCopyFontsText": {
+      "message": "Αντιγραφή γραμματοσειράς"
+   },
+   "toolBoxCopyFontsWindowText": {
+      "message": "Γραμματοσειρές ιστού"
+   },
+   "toolBoxGridsDescriptionText": {
+      "message": "Προσθέτει σύνορα σε κάθε στοιχείο"
+   },
+   "toolBoxGridsText": {
+      "message": "Πλέγματα"
+   },
+   "toolBoxInspectorDescriptionText": {
+      "message": "Δείτε μια λεπτομέρεια στοιχείου"
+   },
+   "toolBoxInspectorText": {
+      "message": "Επιθεωρητής"
+   },
+   "toolBoxShowFontsDescriptionText": {
+      "message": "Γνωρίστε ποια γραμματοσειρά χρησιμοποιεί κάθε ετικέτα"
+   },
+   "toolBoxShowFontsText": {
+      "message": "Γραμματοσειρές"
+   },
+   "toolBoxThrashDescriptionText": {
+      "message": "Απόκρυψη ή αφαιρέστε ένα στοιχείο"
+   },
+   "toolBoxThrashText": {
+      "message": "Σκουπίδια"
+   },
+   "toolBoxThrashWindowHideButton": {
+      "message": "Κρύβω"
+   },
+   "toolBoxThrashWindowRemoveButton": {
+      "message": "Αφαιρώ"
+   },
+   "toolBoxThrashWindowText": {
+      "message": "Απόκρυψη / κατάργηση στοιχείων"
+   },
+   "toolboxText": {
+      "message": "Εργαλειοθήκη"
+   }
+}

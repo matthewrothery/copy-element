@@ -1,0 +1,362 @@
+{
+   "activateToolbox": {
+      "message": "도구 상자를 활성화합니다"
+   },
+   "contextMenuInspect": {
+      "message": "조사관"
+   },
+   "copied": {
+      "message": "복사했습니다!"
+   },
+   "devtoolsCopyElement": {
+      "message": "요소 복사"
+   },
+   "devtoolsCopyElementCopying": {
+      "message": "사자"
+   },
+   "devtoolsLibrary": {
+      "message": "도서관"
+   },
+   "devtoolsLibraryComponentPerPage": {
+      "message": "페이지 당 구성 요소"
+   },
+   "devtoolsLibraryNext": {
+      "message": "다음"
+   },
+   "devtoolsLibraryNoComponents": {
+      "message": "도서관이 비어 있습니다. 여기에서 볼 수 있도록 구성 요소를 저장하십시오."
+   },
+   "devtoolsLibraryPrevious": {
+      "message": "이전의"
+   },
+   "devtoolsNoElementSelectedText": {
+      "message": "여기서 세부정보를 보려면 '요소' 탭에서 요소를 선택하세요."
+   },
+   "devtoolsSelectedElementText": {
+      "message": "선택된 요소"
+   },
+   "devtoolsUnsupportedElementSelectedText": {
+      "message": "선택한 요소는 복사 작업이 허용되지 않습니다."
+   },
+   "extCommandChooseElement": {
+      "message": "마우스를 가져가는 동안 복사할 요소를 선택하세요."
+   },
+   "extDescription": {
+      "message": "모든 웹 페이지의 요소를 재사용 가능한 웹 구성 요소로 복사합니다. HTML, CSS, React, JSX 또는 Tailwind CSS 코드를 받으세요."
+   },
+   "extName": {
+      "message": "DivMagic - 스타일 복사"
+   },
+   "iframeCantBeAccessedText": {
+      "message": "DivMagic이 이 iframe에 액세스할 수 없습니다."
+   },
+   "iframeNeedAccessText": {
+      "message": "DivMagic이 액세스하려면 이 iframe을 열어야 합니다."
+   },
+   "iframeOpenText": {
+      "message": "iframe 열기"
+   },
+   "loginPageBody1": {
+      "message": "강력한 웹 개발 도구에 액세스하려면 계정을 만들거나 로그인하십시오."
+   },
+   "loginPageBody2": {
+      "message": "DivMagic을 구독하면 원활한 개발 워크플로를 즐길 수 있습니다."
+   },
+   "loginPageEmailLabel": {
+      "message": "귀하의 이메일"
+   },
+   "loginPageError": {
+      "message": "로그인할 수 없습니다. 가입한 이메일 주소를 사용하고 있는지 확인하세요."
+   },
+   "loginPageLoginButton": {
+      "message": "로그인"
+   },
+   "loginPageNewHere": {
+      "message": "DivMagic이 처음이신가요?"
+   },
+   "loginPageSignUp": {
+      "message": "가입하기"
+   },
+   "loginPageTitle": {
+      "message": "DivMagic에 오신 것을 환영합니다!"
+   },
+   "loginPageVerificationCode": {
+      "message": "확인 코드"
+   },
+   "loginPageVerificationCodeSent": {
+      "message": "확인 코드가 이메일로 전송되었습니다. 아래에 입력하십시오."
+   },
+   "loginPageVerifyButton": {
+      "message": "확인하다"
+   },
+   "loginPageVerifyCancelButton": {
+      "message": "확인 취소"
+   },
+   "loginPageVerifyEmail": {
+      "message": "이메일을 확인하십시오"
+   },
+   "loginPageWrongVerificationCode": {
+      "message": "잘못된 검증 코드. 올바른 코드를 입력했는지 확인하십시오."
+   },
+   "modalAddCssAttributeText": {
+      "message": "CSS 속성"
+   },
+   "modalAddCssValueText": {
+      "message": "CSS 가치"
+   },
+   "modalAddStylesText": {
+      "message": "스타일을 추가하십시오"
+   },
+   "modalChildButtonText": {
+      "message": "하위 요소"
+   },
+   "modalChildButtonTooltip": {
+      "message": "선택 항목을 하위 요소로 이동"
+   },
+   "modalClassSettingsText": {
+      "message": "수업 설정 :"
+   },
+   "modalCloseButtonTooltip": {
+      "message": "닫다"
+   },
+   "modalCopyButtonLoadingText": {
+      "message": "사자..."
+   },
+   "modalCopyButtonText": {
+      "message": "복사"
+   },
+   "modalCopyCSSOnlyText": {
+      "message": "CSS만"
+   },
+   "modalCopyCssWithDivmagicText": {
+      "message": "Divmagic CSS 클래스"
+   },
+   "modalCopyCssWithOriginalText": {
+      "message": "오리지널 CSS 클래스"
+   },
+   "modalCopyHTMLOnlyText": {
+      "message": "HTML만"
+   },
+   "modalCopyHtmlWithDivmagicText": {
+      "message": "divmagic html 속성"
+   },
+   "modalCopyHtmlWithOriginalText": {
+      "message": "원본 HTML 속성"
+   },
+   "modalCopyIntegrationsText": {
+      "message": "통합(워드프레스)"
+   },
+   "modalCopyModeSelectionAdaptable": {
+      "message": "적응할 수 있는"
+   },
+   "modalCopyModeSelectionAdaptableTooltip": {
+      "message": "요소의 구조와 기본 모양을 유지하는 데 필요한 가장 필수적인 스타일만 포함됩니다. 사용자 정의가 쉽습니다."
+   },
+   "modalCopyModeSelectionBalanced": {
+      "message": "균형이 잡힌"
+   },
+   "modalCopyModeSelectionBalancedTooltip": {
+      "message": "시각적 결과에 큰 영향을 줄 수 있지만 코드를 과도하게 부풀리지 않는 ::before 및 ::after와 같은 의사 요소를 통합합니다."
+   },
+   "modalCopyModeSelectionExact": {
+      "message": "정확한"
+   },
+   "modalCopyModeSelectionExactTooltip": {
+      "message": "모든 스타일의 정확한 사본으로 요소가 소스와 유사하게 보입니다."
+   },
+   "modalCopyModeSelectionText": {
+      "message": "복사 모드"
+   },
+   "modalCopyModeSelectionTooltip": {
+      "message": "현재 선택 항목에 대한 복사 모드를 선택합니다. 대부분의 사용 사례에는 \"적응 가능\"을 권장합니다."
+   },
+   "modalCopyNotification": {
+      "message": "구성 요소 복사!"
+   },
+   "modalCopyViewText": {
+      "message": "복사"
+   },
+   "modalDragButtonTooltip": {
+      "message": "이동하려면 드래그하세요."
+   },
+   "modalEditorViewText": {
+      "message": "편집자"
+   },
+   "modalElementSettingsText": {
+      "message": "요소 설정 :"
+   },
+   "modalExportNotification": {
+      "message": "구성 요소 수출!"
+   },
+   "modalExportToStudioText": {
+      "message": "스튜디오로 내보내기"
+   },
+   "modalGoToLibraryText": {
+      "message": "내 도서관으로 가십시오"
+   },
+   "modalInvalidCssValueText": {
+      "message": "잘못된 CSS 값"
+   },
+   "modalLeftButtonText": {
+      "message": "남은 어린이 요소"
+   },
+   "modalLeftButtonTooltip": {
+      "message": "선택을 왼쪽 형제 요소로 이동하십시오"
+   },
+   "modalMediaQuerySelectionTooltip": {
+      "message": "복사된 코드에 [[MEDIAQUERYXYZ]] CSS 스타일을 포함하려면 선택하세요."
+   },
+   "modalParentButtonText": {
+      "message": "상위 요소"
+   },
+   "modalParentButtonTooltip": {
+      "message": "현재 선택 항목의 상위 요소를 선택합니다."
+   },
+   "modalRightButtonText": {
+      "message": "올바른 어린이 요소"
+   },
+   "modalRightButtonTooltip": {
+      "message": "선택을 오른쪽 형제 요소로 이동하십시오"
+   },
+   "modalSaveElementText": {
+      "message": "요소를 저장하십시오"
+   },
+   "modalSaveNotification": {
+      "message": "구성 요소가 저장되었습니다!"
+   },
+   "modalSavedElementText": {
+      "message": "저장되었습니다!"
+   },
+   "modalSavingElementText": {
+      "message": "절약..."
+   },
+   "modalStudioExportTooltip": {
+      "message": "DivMagic Studio에서 열기"
+   },
+   "offText": {
+      "message": "끄다"
+   },
+   "onText": {
+      "message": "~에"
+   },
+   "optionsChooseLanguage": {
+      "message": "언어를 선택하십시오"
+   },
+   "optionsFeedback": {
+      "message": "피드백이나 제안 사항이 있으면 알려주시기 바랍니다!"
+   },
+   "optionsShortcuts": {
+      "message": "키보드 단축키"
+   },
+   "optionsTitle": {
+      "message": "옵션"
+   },
+   "panelCopyElementCopied": {
+      "message": "복사됨"
+   },
+   "popupCopyInstructions": {
+      "message": "요소를 클릭하거나 다음 키를 누르세요."
+   },
+   "popupFeedback": {
+      "message": "피드백"
+   },
+   "popupSettings": {
+      "message": "설정"
+   },
+   "popupSettingsAutoHidePopup": {
+      "message": "팝업 자동 숨기기"
+   },
+   "popupSettingsComponentFormat": {
+      "message": "구성 요소 형식"
+   },
+   "popupSettingsComponentFormatTooltip": {
+      "message": "복사된 구성요소의 형식을 선택하세요."
+   },
+   "popupSettingsShowDevToolsPanel": {
+      "message": "개발자 패널"
+   },
+   "popupSettingsStyleFormat": {
+      "message": "스타일 형식"
+   },
+   "popupSettingsStyleFormatExternalCSS": {
+      "message": "외부 CSS"
+   },
+   "popupSettingsStyleFormatInlineCSS": {
+      "message": "인라인 CSS"
+   },
+   "popupSettingsStyleFormatLocalCSS": {
+      "message": "로컬 CSS"
+   },
+   "popupSettingsStyleFormatTooltip": {
+      "message": "복사된 스타일의 CSS 형식을 선택하세요."
+   },
+   "publishDate": {
+      "message": "3 월 31 일 버전"
+   },
+   "toolBoxColorPickerDescriptionText": {
+      "message": "색상 선택기"
+   },
+   "toolBoxColorPickerText": {
+      "message": "색상 선택기"
+   },
+   "toolBoxCopyElementDescriptionText": {
+      "message": "복사 요소"
+   },
+   "toolBoxCopyElementText": {
+      "message": "복사 요소"
+   },
+   "toolBoxCopyFontsCopiedText": {
+      "message": "복사됨"
+   },
+   "toolBoxCopyFontsCopyToClipboardText": {
+      "message": "복사하려면 클릭하십시오"
+   },
+   "toolBoxCopyFontsDescriptionText": {
+      "message": "글꼴을 복사하십시오"
+   },
+   "toolBoxCopyFontsNotFoundText": {
+      "message": "이 웹 사이트는 시스템 글꼴을 사용합니다"
+   },
+   "toolBoxCopyFontsText": {
+      "message": "글꼴을 복사하십시오"
+   },
+   "toolBoxCopyFontsWindowText": {
+      "message": "웹 글꼴"
+   },
+   "toolBoxGridsDescriptionText": {
+      "message": "모든 요소에 테두리를 추가합니다"
+   },
+   "toolBoxGridsText": {
+      "message": "그리드"
+   },
+   "toolBoxInspectorDescriptionText": {
+      "message": "요소 세부 사항을 참조하십시오"
+   },
+   "toolBoxInspectorText": {
+      "message": "조사관"
+   },
+   "toolBoxShowFontsDescriptionText": {
+      "message": "각 태그가 사용하는 글꼴을 알고 있습니다"
+   },
+   "toolBoxShowFontsText": {
+      "message": "글꼴"
+   },
+   "toolBoxThrashDescriptionText": {
+      "message": "요소를 숨기거나 제거하십시오"
+   },
+   "toolBoxThrashText": {
+      "message": "쓰레기"
+   },
+   "toolBoxThrashWindowHideButton": {
+      "message": "숨다"
+   },
+   "toolBoxThrashWindowRemoveButton": {
+      "message": "제거하다"
+   },
+   "toolBoxThrashWindowText": {
+      "message": "요소를 숨기거나 제거하십시오"
+   },
+   "toolboxText": {
+      "message": "공구 상자"
+   }
+}

@@ -1,0 +1,362 @@
+{
+   "activateToolbox": {
+      "message": "Kích hoạt Hộp công cụ"
+   },
+   "contextMenuInspect": {
+      "message": "Thanh tra"
+   },
+   "copied": {
+      "message": "Đã sao chép!"
+   },
+   "devtoolsCopyElement": {
+      "message": "Sao chép phần tử"
+   },
+   "devtoolsCopyElementCopying": {
+      "message": "Sao chép"
+   },
+   "devtoolsLibrary": {
+      "message": "Thư viện"
+   },
+   "devtoolsLibraryComponentPerPage": {
+      "message": "Thành phần trên mỗi trang"
+   },
+   "devtoolsLibraryNext": {
+      "message": "Kế tiếp"
+   },
+   "devtoolsLibraryNoComponents": {
+      "message": "Thư viện của bạn trống rỗng. Lưu một thành phần để xem nó ở đây."
+   },
+   "devtoolsLibraryPrevious": {
+      "message": "Trước"
+   },
+   "devtoolsNoElementSelectedText": {
+      "message": "Chọn một phần tử từ tab \"Thành phần\" để xem chi tiết tại đây"
+   },
+   "devtoolsSelectedElementText": {
+      "message": "Phần tử đã chọn"
+   },
+   "devtoolsUnsupportedElementSelectedText": {
+      "message": "Phần tử đã chọn không được phép thực hiện thao tác sao chép"
+   },
+   "extCommandChooseElement": {
+      "message": "Chọn phần tử để sao chép trong khi di chuột"
+   },
+   "extDescription": {
+      "message": "Sao chép các phần tử từ bất kỳ trang web nào dưới dạng các thành phần web có thể tái sử dụng. Nhận mã CSS HTML, CSS, React, JSX hoặc Tailwind."
+   },
+   "extName": {
+      "message": "DivMagic - Sao chép kiểu"
+   },
+   "iframeCantBeAccessedText": {
+      "message": "DivMagic không thể truy cập iframe này."
+   },
+   "iframeNeedAccessText": {
+      "message": "DivMagic cần mở iframe này để truy cập nó."
+   },
+   "iframeOpenText": {
+      "message": "Mở iframe"
+   },
+   "loginPageBody1": {
+      "message": "Để truy cập công cụ phát triển web mạnh mẽ của chúng tôi, chúng tôi mời bạn tạo một tài khoản hoặc đăng nhập."
+   },
+   "loginPageBody2": {
+      "message": "Bạn sẽ tận hưởng quy trình phát triển liền mạch với đăng ký DivMagic."
+   },
+   "loginPageEmailLabel": {
+      "message": "Email của bạn"
+   },
+   "loginPageError": {
+      "message": "Không thể đăng nhập. Đảm bảo rằng bạn đang sử dụng địa chỉ email mà bạn đã đăng ký."
+   },
+   "loginPageLoginButton": {
+      "message": "Đăng nhập"
+   },
+   "loginPageNewHere": {
+      "message": "Bạn mới sử dụng DivMagic?"
+   },
+   "loginPageSignUp": {
+      "message": "Đăng ký"
+   },
+   "loginPageTitle": {
+      "message": "Chào mừng đến với DivMagic!"
+   },
+   "loginPageVerificationCode": {
+      "message": "Mã xác nhận"
+   },
+   "loginPageVerificationCodeSent": {
+      "message": "Một mã xác minh đã được gửi đến email của bạn. Vui lòng nhập nó bên dưới."
+   },
+   "loginPageVerifyButton": {
+      "message": "Xác minh"
+   },
+   "loginPageVerifyCancelButton": {
+      "message": "Hủy xác minh"
+   },
+   "loginPageVerifyEmail": {
+      "message": "xác nhận email của bạn"
+   },
+   "loginPageWrongVerificationCode": {
+      "message": "Mã xác minh sai. Vui lòng đảm bảo bạn đã nhập đúng mã."
+   },
+   "modalAddCssAttributeText": {
+      "message": "Thuộc tính CSS"
+   },
+   "modalAddCssValueText": {
+      "message": "Giá trị CSS"
+   },
+   "modalAddStylesText": {
+      "message": "Thêm kiểu"
+   },
+   "modalChildButtonText": {
+      "message": "Yếu tố con"
+   },
+   "modalChildButtonTooltip": {
+      "message": "Di chuyển vùng chọn tới phần tử con"
+   },
+   "modalClassSettingsText": {
+      "message": "Cài đặt lớp:"
+   },
+   "modalCloseButtonTooltip": {
+      "message": "Đóng"
+   },
+   "modalCopyButtonLoadingText": {
+      "message": "Đang sao chép..."
+   },
+   "modalCopyButtonText": {
+      "message": "Sao chép"
+   },
+   "modalCopyCSSOnlyText": {
+      "message": "Chỉ CSS"
+   },
+   "modalCopyCssWithDivmagicText": {
+      "message": "Các lớp CSS divmagic"
+   },
+   "modalCopyCssWithOriginalText": {
+      "message": "Các lớp CSS gốc"
+   },
+   "modalCopyHTMLOnlyText": {
+      "message": "Chỉ HTML"
+   },
+   "modalCopyHtmlWithDivmagicText": {
+      "message": "Các thuộc tính HTML divmagic"
+   },
+   "modalCopyHtmlWithOriginalText": {
+      "message": "Thuộc tính HTML gốc"
+   },
+   "modalCopyIntegrationsText": {
+      "message": "Tích hợp (WordPress)"
+   },
+   "modalCopyModeSelectionAdaptable": {
+      "message": "Thích nghi"
+   },
+   "modalCopyModeSelectionAdaptableTooltip": {
+      "message": "Chỉ bao gồm các kiểu thiết yếu nhất cần thiết để duy trì cấu trúc và hình thức cơ bản của phần tử. Dễ dàng tùy chỉnh."
+   },
+   "modalCopyModeSelectionBalanced": {
+      "message": "Cân bằng"
+   },
+   "modalCopyModeSelectionBalancedTooltip": {
+      "message": "Kết hợp các phần tử giả như ::before và ::after, có thể ảnh hưởng đáng kể đến kết quả trực quan nhưng không làm cho mã quá cồng kềnh."
+   },
+   "modalCopyModeSelectionExact": {
+      "message": "Chính xác"
+   },
+   "modalCopyModeSelectionExactTooltip": {
+      "message": "Bản sao chính xác của tất cả các kiểu, đảm bảo phần tử trông giống như nguồn."
+   },
+   "modalCopyModeSelectionText": {
+      "message": "Chế độ sao chép"
+   },
+   "modalCopyModeSelectionTooltip": {
+      "message": "Chọn chế độ sao chép cho lựa chọn hiện tại. Chúng tôi khuyên dùng \"Có thể thích ứng\" cho hầu hết các trường hợp sử dụng."
+   },
+   "modalCopyNotification": {
+      "message": "Thành phần sao chép!"
+   },
+   "modalCopyViewText": {
+      "message": "Sao chép"
+   },
+   "modalDragButtonTooltip": {
+      "message": "Kéo để di chuyển"
+   },
+   "modalEditorViewText": {
+      "message": "Biên tập viên"
+   },
+   "modalElementSettingsText": {
+      "message": "Cài đặt phần tử:"
+   },
+   "modalExportNotification": {
+      "message": "Thành phần xuất khẩu!"
+   },
+   "modalExportToStudioText": {
+      "message": "Xuất sang studio"
+   },
+   "modalGoToLibraryText": {
+      "message": "Đi đến thư viện của tôi"
+   },
+   "modalInvalidCssValueText": {
+      "message": "Giá trị CSS không hợp lệ"
+   },
+   "modalLeftButtonText": {
+      "message": "Yếu tố con trái"
+   },
+   "modalLeftButtonTooltip": {
+      "message": "Di chuyển lựa chọn sang phần tử anh chị em bên trái"
+   },
+   "modalMediaQuerySelectionTooltip": {
+      "message": "Chọn nếu bạn muốn đưa các kiểu CSS [[MEDIAQUERYXYZ]] vào mã được sao chép."
+   },
+   "modalParentButtonText": {
+      "message": "Phần tử gốc"
+   },
+   "modalParentButtonTooltip": {
+      "message": "Chọn phần tử cha của lựa chọn hiện tại"
+   },
+   "modalRightButtonText": {
+      "message": "Yếu tố con phải"
+   },
+   "modalRightButtonTooltip": {
+      "message": "Di chuyển lựa chọn sang phần tử anh chị em bên phải"
+   },
+   "modalSaveElementText": {
+      "message": "Lưu phần tử"
+   },
+   "modalSaveNotification": {
+      "message": "Thành phần được lưu!"
+   },
+   "modalSavedElementText": {
+      "message": "Đã lưu!"
+   },
+   "modalSavingElementText": {
+      "message": "Tiết kiệm..."
+   },
+   "modalStudioExportTooltip": {
+      "message": "Mở trong DivMagic Studio"
+   },
+   "offText": {
+      "message": "Tắt"
+   },
+   "onText": {
+      "message": "TRÊN"
+   },
+   "optionsChooseLanguage": {
+      "message": "Chọn một ngôn ngữ"
+   },
+   "optionsFeedback": {
+      "message": "Nếu bạn có bất kỳ phản hồi hoặc đề xuất nào, xin vui lòng cho chúng tôi biết!"
+   },
+   "optionsShortcuts": {
+      "message": "Các phím tắt bàn phím"
+   },
+   "optionsTitle": {
+      "message": "Tùy chọn"
+   },
+   "panelCopyElementCopied": {
+      "message": "Đã sao chép"
+   },
+   "popupCopyInstructions": {
+      "message": "Bấm vào bất kỳ phần tử nào hoặc nhấn phím:"
+   },
+   "popupFeedback": {
+      "message": "Nhận xét"
+   },
+   "popupSettings": {
+      "message": "Cài đặt"
+   },
+   "popupSettingsAutoHidePopup": {
+      "message": "Tự động ẩn cửa sổ bật lên"
+   },
+   "popupSettingsComponentFormat": {
+      "message": "Định dạng thành phần"
+   },
+   "popupSettingsComponentFormatTooltip": {
+      "message": "Chọn định dạng cho thành phần được sao chép"
+   },
+   "popupSettingsShowDevToolsPanel": {
+      "message": "Bảng điều khiển [[DEVTOOLS]]"
+   },
+   "popupSettingsStyleFormat": {
+      "message": "Định dạng kiểu"
+   },
+   "popupSettingsStyleFormatExternalCSS": {
+      "message": "CSS bên ngoài"
+   },
+   "popupSettingsStyleFormatInlineCSS": {
+      "message": "CSS nội tuyến"
+   },
+   "popupSettingsStyleFormatLocalCSS": {
+      "message": "CSS cục bộ"
+   },
+   "popupSettingsStyleFormatTooltip": {
+      "message": "Chọn định dạng CSS cho kiểu đã sao chép"
+   },
+   "publishDate": {
+      "message": "Phiên bản ngày 31 tháng 3"
+   },
+   "toolBoxColorPickerDescriptionText": {
+      "message": "Người chọn màu"
+   },
+   "toolBoxColorPickerText": {
+      "message": "Người chọn màu"
+   },
+   "toolBoxCopyElementDescriptionText": {
+      "message": "Sao chép phần tử"
+   },
+   "toolBoxCopyElementText": {
+      "message": "Sao chép phần tử"
+   },
+   "toolBoxCopyFontsCopiedText": {
+      "message": "Đã sao chép"
+   },
+   "toolBoxCopyFontsCopyToClipboardText": {
+      "message": "Bấm để sao chép"
+   },
+   "toolBoxCopyFontsDescriptionText": {
+      "message": "Sao chép phông chữ"
+   },
+   "toolBoxCopyFontsNotFoundText": {
+      "message": "Trang web này sử dụng phông chữ hệ thống"
+   },
+   "toolBoxCopyFontsText": {
+      "message": "Sao chép phông chữ"
+   },
+   "toolBoxCopyFontsWindowText": {
+      "message": "Phông chữ web"
+   },
+   "toolBoxGridsDescriptionText": {
+      "message": "Thêm biên giới cho mọi yếu tố"
+   },
+   "toolBoxGridsText": {
+      "message": "Lưới"
+   },
+   "toolBoxInspectorDescriptionText": {
+      "message": "Xem chi tiết phần tử"
+   },
+   "toolBoxInspectorText": {
+      "message": "Thanh tra"
+   },
+   "toolBoxShowFontsDescriptionText": {
+      "message": "Biết phông chữ mà mỗi thẻ đang sử dụng"
+   },
+   "toolBoxShowFontsText": {
+      "message": "Phông chữ"
+   },
+   "toolBoxThrashDescriptionText": {
+      "message": "Ẩn hoặc xóa một phần tử"
+   },
+   "toolBoxThrashText": {
+      "message": "Rác"
+   },
+   "toolBoxThrashWindowHideButton": {
+      "message": "Trốn"
+   },
+   "toolBoxThrashWindowRemoveButton": {
+      "message": "Di dời"
+   },
+   "toolBoxThrashWindowText": {
+      "message": "Ẩn / Xóa các phần tử"
+   },
+   "toolboxText": {
+      "message": "Hộp công cụ"
+   }
+}

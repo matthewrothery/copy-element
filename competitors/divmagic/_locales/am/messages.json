@@ -1,0 +1,365 @@
+{
+   "activateToolbox": {
+      "message": "የመሣሪያ ሳጥን ያግብሩ"
+   },
+   "contextMenuInspect": {
+      "message": "መርማሪ"
+   },
+   "copied": {
+      "message": "ተቀድቷል!"
+   },
+   "devtoolsCopyElement": {
+      "message": "ኤለመንት ቅዳ"
+   },
+   "devtoolsCopyElementCopying": {
+      "message": "በመቅዳት ላይ"
+   },
+   "devtoolsLibrary": {
+      "message": "ቤተ መጻሕፍት"
+   },
+   "devtoolsLibraryComponentPerPage": {
+      "message": "በአንድ ገጽ ውስጥ አካላት"
+   },
+   "devtoolsLibraryNext": {
+      "message": "ቀጥሎም"
+   },
+   "devtoolsLibraryNoComponents": {
+      "message": "ቤተ መፃህፍት ባዶ ነው. እዚህ ለማየት አንድ አካል ይቆጥቡ."
+   },
+   "devtoolsLibraryPrevious": {
+      "message": "ቀዳሚ"
+   },
+   "devtoolsNoElementSelectedText": {
+      "message": "ዝርዝሮቹን እዚህ ለማየት ከ\"Elements\" ትር ውስጥ አንድ አካል ይምረጡ"
+   },
+   "devtoolsSelectedElementText": {
+      "message": "የተመረጠው አካል"
+   },
+   "devtoolsUnsupportedElementSelectedText": {
+      "message": "የተመረጠው አካል ለቅጂ ስራዎች አይፈቀድም።"
+   },
+   "extCommandChooseElement": {
+      "message": "በማንዣበብ ጊዜ ለመቅዳት ኤለመንት ይምረጡ"
+   },
+   "extDescription": {
+      "message": "ንጥረ ነገሮችን ከማንኛውም ድረ-ገጽ እንደ ተደጋጋሚ የድር ክፍሎች ይቅዱ። HTML፣ CSS፣ React፣ JSX ወይም Tailwind CSS ኮድ ያግኙ።"
+   },
+   "extName": {
+      "message": "DivMagic - የቅጂ ቅጥ"
+   },
+   "iframeCantBeAccessedText": {
+      "message": "DivMagic ይህን iframe ሊደርስበት አይችልም።"
+   },
+   "iframeNeedAccessText": {
+      "message": "DivMagic እሱን ለማግኘት ይህንን iframe መክፈት አለበት።"
+   },
+   "iframeOpenText": {
+      "message": "Iframe ክፈት"
+   },
+   "loginPageBody1": {
+      "message": "የእኛን ኃይለኛ የድር ልማት መሳሪያ ለመድረስ መለያ እንዲፈጥሩ ወይም እንዲገቡ እንጋብዝዎታለን።"
+   },
+   "loginPageBody2": {
+      "message": "ለDivMagic ደንበኝነት በመመዝገብ እንከን የለሽ የልማት የስራ ፍሰትን ያገኛሉ።"
+   },
+   "loginPageEmailLabel": {
+      "message": "የእርስዎ ኢሜይል"
+   },
+   "loginPageError": {
+      "message": "መግባት አልተቻለም። የተመዘገቡበትን የኢሜይል አድራሻ እየተጠቀሙ መሆንዎን ያረጋግጡ።"
+   },
+   "loginPageLoginButton": {
+      "message": "ግባ"
+   },
+   "loginPageNewHere": {
+      "message": "ለ DivMagic አዲስ ነገር አለ?"
+   },
+   "loginPageSignUp": {
+      "message": "ተመዝገቢ"
+   },
+   "loginPageTitle": {
+      "message": "ወደ DivMagic እንኳን በደህና መጡ!"
+   },
+   "loginPageVerificationCode": {
+      "message": "የማረጋገጫ የሚስጥር ቁጥር"
+   },
+   "loginPageVerificationCodeSent": {
+      "message": "የማረጋገጫ ኮድ ወደ ኢሜልዎ ተልኳል. እባክዎ ከዚህ በታች ያስገቡት."
+   },
+   "loginPageVerifyButton": {
+      "message": "አረጋግጥ"
+   },
+   "loginPageVerifyCancelButton": {
+      "message": "ማረጋገጫ ይቅር"
+   },
+   "loginPageVerifyEmail": {
+      "message": "ኢሜልዎን ያረጋግጡ"
+   },
+   "loginPageWrongVerificationCode": {
+      "message": "የተሳሳተ የማረጋገጫ ኮድ. ትክክለኛውን ኮድ ማስገባትዎን ያረጋግጡ."
+   },
+   "modalAddCssAttributeText": {
+      "message": "CSS SHASS"
+   },
+   "modalAddCssValueText": {
+      "message": "CSS እሴት"
+   },
+   "modalAddStylesText": {
+      "message": "ቅጦች ያክሉ"
+   },
+   "modalChildButtonText": {
+      "message": "የልጅ አካል"
+   },
+   "modalChildButtonTooltip": {
+      "message": "ምርጫውን ወደ የሕፃኑ አካል ያንቀሳቅሱ"
+   },
+   "modalClassSettingsText": {
+      "message": "የክፍል ቅንብሮች"
+   },
+   "modalCloseButtonTooltip": {
+      "message": "ገጠመ"
+   },
+   "modalCopyButtonLoadingText": {
+      "message": "በመቅዳት ላይ..."
+   },
+   "modalCopyButtonText": {
+      "message": "ቅዳ"
+   },
+   "modalCopyCSSOnlyText": {
+      "message": "CSS ብቻ"
+   },
+   "modalCopyCssWithDivmagicText": {
+      "message": "የ DivMagic CSS ክፍሎች"
+   },
+   "modalCopyCssWithOriginalText": {
+      "message": "የመጀመሪያ CSS ትምህርቶች"
+   },
+   "modalCopyHTMLOnlyText": {
+      "message": "HTML ብቻ"
+   },
+   "modalCopyHtmlWithDivmagicText": {
+      "message": "የአልኮልግግ ኤችቲኤምኤል ባህሪዎች"
+   },
+   "modalCopyHtmlWithOriginalText": {
+      "message": "ኦሪጅናል የኤች.ቲ.ኤል. ባህሪዎች"
+   },
+   "modalCopyIntegrationsText": {
+      "message": "ውህደት (WordPress)"
+   },
+   "modalCopyModeSelectionAdaptable": {
+      "message": "የሚለምደዉ"
+   },
+   "modalCopyModeSelectionAdaptableTooltip": {
+      "message": "የንጥሉን መዋቅር እና መሰረታዊ ገጽታ ለመጠበቅ የሚያስፈልጉትን በጣም አስፈላጊ ቅጦች ብቻ ያካትታል. ለማበጀት ቀላል።"
+   },
+   "modalCopyModeSelectionBalanced": {
+      "message": "ሚዛናዊ"
+   },
+   "modalCopyModeSelectionBalancedTooltip": {
+      "message": "እንደ ::before እና ::after ያሉ አስመሳይ ንጥረ ነገሮችን ያካትታል፣ ይህም የእይታ ውጤቱን በእጅጉ ሊጎዳ ይችላል ነገር ግን ኮዱን ከመጠን በላይ አያባብሰውም።"
+   },
+   "modalCopyModeSelectionExact": {
+      "message": "በትክክል"
+   },
+   "modalCopyModeSelectionExactTooltip": {
+      "message": "የሁሉም ቅጦች ትክክለኛ ቅጂ፣ ኤለመንቱ ምንጩን እንደሚመስል ማረጋገጥ።"
+   },
+   "modalCopyModeSelectionText": {
+      "message": "የቅጂ ሁነታ"
+   },
+   "modalCopyModeSelectionTooltip": {
+      "message": "ለአሁኑ ምርጫ የቅጂ ሁነታን ይምረጡ። ለአብዛኛዎቹ የአጠቃቀም ጉዳዮች \"ተስማሚ\" እንመክራለን።"
+   },
+   "modalCopyNotification": {
+      "message": "አካል ተገልጦታል!"
+   },
+   "modalCopyViewText": {
+      "message": "ቅጂ"
+   },
+   "modalDragButtonTooltip": {
+      "message": "ለመንቀሳቀስ ይጎትቱ"
+   },
+   "modalEditorViewText": {
+      "message": "አርታኢ"
+   },
+   "modalElementSettingsText": {
+      "message": "የአምልኮ ቅንብሮች"
+   },
+   "modalExportNotification": {
+      "message": "አካል ወደ ውጭ ተላላፊ!"
+   },
+   "modalExportToStudioText": {
+      "message": "ወደ ስቱዲዮ ወደ ውጭ ይላኩ"
+   },
+   "modalGoToLibraryText": {
+      "message": "ወደ ቤተ-መጽሐፍቴ ሂድ"
+   },
+   "modalInvalidCssValueText": {
+      "message": "ልክ ያልሆነ የ CSS እሴት"
+   },
+   "modalLeftButtonText": {
+      "message": "የግራ የልጆች አባል"
+   },
+   "modalLeftButtonTooltip": {
+      "message": "ምርጫውን ወደ ግራው ወይም እህት አካል ይውሰዱ"
+   },
+   "modalMediaQuerySelectionTooltip": {
+      "message": "Media Query CSS ቅጦች በተገለበጠው ኮድ ውስጥ እንዲካተቱ ከፈለጉ ይምረጡ።"
+   },
+   "modalParentButtonText": {
+      "message": "የወላጅ አካል"
+   },
+   "modalParentButtonTooltip": {
+      "message": "የአሁኑ ምርጫ የወላጅ አካልን ይምረጡ"
+   },
+   "modalRightButtonText": {
+      "message": "የቀኝ የልጆች አካል"
+   },
+   "modalRightButtonTooltip": {
+      "message": "ምርጫውን ወደ ቀኝ ወደ ቀኝ ወንድም ወይም እህት አካል ይውሰዱ"
+   },
+   "modalSaveElementText": {
+      "message": "ንጥረ ነገር አስቀምጥ"
+   },
+   "modalSaveNotification": {
+      "message": "አካል የተቀመጠ!"
+   },
+   "modalSavedElementText": {
+      "message": "አድኗል!"
+   },
+   "modalSavingElementText": {
+      "message": "ቁጠባ ..."
+   },
+   "modalStudioExportTooltip": {
+      "message": "DivMagic Studio ውስጥ ክፈት"
+   },
+   "offText": {
+      "message": "ጠፍቷል"
+   },
+   "onText": {
+      "message": "በርቷል"
+   },
+   "optionsChooseLanguage": {
+      "message": "ቋንቋ ይምረጡ"
+   },
+   "optionsFeedback": {
+      "message": "ማንኛውም አስተያየት ወይም አስተያየት ካለዎት እባክዎ ያሳውቁን!"
+   },
+   "optionsShortcuts": {
+      "message": "የቁልፍ ሰሌዳ አቋራጮች"
+   },
+   "optionsTitle": {
+      "message": "አማራጮች"
+   },
+   "panelCopyElementCopied": {
+      "message": "ተገልብጧል"
+   },
+   "popupCopyInstructions": {
+      "message": "በማንኛውም አካል ላይ ጠቅ ያድርጉ ወይም ቁልፍን ይጫኑ፡-"
+   },
+   "popupFeedback": {
+      "message": "ግብረ መልስ"
+   },
+   "popupSettings": {
+      "message": "ቅንብሮች"
+   },
+   "popupSettingsAutoHidePopup": {
+      "message": "ብቅባይን በራስ-ሰር ደብቅ"
+   },
+   "popupSettingsComponentFormat": {
+      "message": "የክፍሎች ቅርጸት"
+   },
+   "popupSettingsComponentFormatTooltip": {
+      "message": "ለተቀዳው አካል ቅርጸቱን ይምረጡ"
+   },
+   "popupSettingsShowDevToolsPanel": {
+      "message": "DevTools ፓነል"
+   },
+   "popupSettingsStyleFormat": {
+      "message": "የቅጥ ቅርጸት"
+   },
+   "popupSettingsStyleFormatExternalCSS": {
+      "message": "ውጫዊ CSS"
+   },
+   "popupSettingsStyleFormatInlineCSS": {
+      "message": "የመስመር ውስጥ CSS"
+   },
+   "popupSettingsStyleFormatLocalCSS": {
+      "message": "የአካባቢ ሲ.ኤስ.ኤስ"
+   },
+   "popupSettingsStyleFormatTooltip": {
+      "message": "ለተገለበጡ ቅጦች የ CSS ቅርጸትን ይምረጡ"
+   },
+   "publishDate": {
+      "message": "ማርች 31 ስሪት"
+   },
+   "toolBoxColorPickerDescriptionText": {
+      "message": "የቀለም መራጭ"
+   },
+   "toolBoxColorPickerText": {
+      "message": "የቀለም መራጭ"
+   },
+   "toolBoxCopyElementDescriptionText": {
+      "message": "አካል"
+   },
+   "toolBoxCopyElementText": {
+      "message": "አካል"
+   },
+   "toolBoxCopyFontsCopiedText": {
+      "message": "ተቀደደ"
+   },
+   "toolBoxCopyFontsCopyToClipboardText": {
+      "message": "ለመቅዳት ጠቅ ያድርጉ"
+   },
+   "toolBoxCopyFontsDescriptionText": {
+      "message": "ቅርጸ-ቁምፊ ይቅዱ"
+   },
+   "toolBoxCopyFontsNotFoundText": {
+      "message": "ድር ጣቢያ በነባሪነት የስርዓት ቅርጸ-ቁምፊዎችን ብቻ ይጠቀማል"
+   },
+   "toolBoxCopyFontsText": {
+      "message": "ቅርጸ-ቁምፊ ይቅዱ"
+   },
+   "toolBoxCopyFontsWindowText": {
+      "message": "የድር ቅርጸ-ቁምፊዎች"
+   },
+   "toolBoxGridsDescriptionText": {
+      "message": "ወደ እያንዳንዱ ንጥረ ነገር ጠርዞችን ያክላል"
+   },
+   "toolBoxGridsText": {
+      "message": "ፍርግርግ"
+   },
+   "toolBoxInspectorDescriptionText": {
+      "message": "አንድ ነገር ዝርዝር ይመልከቱ"
+   },
+   "toolBoxInspectorText": {
+      "message": "ተቆጣጣሪ"
+   },
+   "toolBoxShowFontsDescriptionText": {
+      "message": "እያንዳንዱ የቅርጸ-ቁምፊ ምን እንደሚጠቀም ይወቁ"
+   },
+   "toolBoxShowFontsText": {
+      "message": "ቅርጸ-ቁምፊዎች"
+   },
+   "toolBoxShowFontsWindowText": {
+      "message": "ቅርጸ-ቁምፊዎች"
+   },
+   "toolBoxThrashDescriptionText": {
+      "message": "አንድ ንጥረ ነገር ደብቅ ወይም ያስወግዱ"
+   },
+   "toolBoxThrashText": {
+      "message": "መጣያ"
+   },
+   "toolBoxThrashWindowHideButton": {
+      "message": "ደብቅ"
+   },
+   "toolBoxThrashWindowRemoveButton": {
+      "message": "ያስወግዱ"
+   },
+   "toolBoxThrashWindowText": {
+      "message": "ክፍሎችን ደብቅ / ያስወግዱ"
+   },
+   "toolboxText": {
+      "message": "መሣሪያ"
+   }
+}

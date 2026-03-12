@@ -1,0 +1,362 @@
+{
+   "activateToolbox": {
+      "message": "Suaktyvinkite įrankių rinkinį"
+   },
+   "contextMenuInspect": {
+      "message": "inspektorius"
+   },
+   "copied": {
+      "message": "Nukopijuota!"
+   },
+   "devtoolsCopyElement": {
+      "message": "Kopijuoti elementą"
+   },
+   "devtoolsCopyElementCopying": {
+      "message": "Kopijuojama"
+   },
+   "devtoolsLibrary": {
+      "message": "Biblioteka"
+   },
+   "devtoolsLibraryComponentPerPage": {
+      "message": "Komponentai kiekviename puslapyje"
+   },
+   "devtoolsLibraryNext": {
+      "message": "Kitas"
+   },
+   "devtoolsLibraryNoComponents": {
+      "message": "Jūsų biblioteka tuščia. Išsaugokite komponentą, kad jį pamatytumėte čia."
+   },
+   "devtoolsLibraryPrevious": {
+      "message": "Ankstesnis"
+   },
+   "devtoolsNoElementSelectedText": {
+      "message": "Pasirinkite elementą iš skirtuko „Elementai“, kad pamatytumėte išsamią jo informaciją"
+   },
+   "devtoolsSelectedElementText": {
+      "message": "Pasirinktas elementas"
+   },
+   "devtoolsUnsupportedElementSelectedText": {
+      "message": "Pasirinktas elementas neleidžiamas kopijavimo operacijoms"
+   },
+   "extCommandChooseElement": {
+      "message": "Užvedę pelės žymeklį pasirinkite elementą, kurį norite kopijuoti"
+   },
+   "extDescription": {
+      "message": "Nukopijuokite elementus iš bet kurio tinklalapio kaip daugkartinio naudojimo žiniatinklio komponentus. Gaukite HTML, CSS, React, JSX arba Tailwind CSS kodą."
+   },
+   "extName": {
+      "message": "DivMagic – kopijavimo stilius"
+   },
+   "iframeCantBeAccessedText": {
+      "message": "„DivMagic“ negali pasiekti šio „iframe“."
+   },
+   "iframeNeedAccessText": {
+      "message": "„DivMagic“ turi atidaryti šį „iframe“, kad jį pasiektų."
+   },
+   "iframeOpenText": {
+      "message": "Atidaryti iframe"
+   },
+   "loginPageBody1": {
+      "message": "Norėdami pasiekti mūsų galingą žiniatinklio kūrimo įrankį, kviečiame susikurti paskyrą arba prisijungti."
+   },
+   "loginPageBody2": {
+      "message": "Užsiprenumeravę „DivMagic“, galėsite mėgautis sklandžia kūrimo darbo eiga."
+   },
+   "loginPageEmailLabel": {
+      "message": "Tavo elektroninis paštas"
+   },
+   "loginPageError": {
+      "message": "Nepavyko prisijungti. Įsitikinkite, kad naudojate el. pašto adresą, kuriuo užsiprenumeravote."
+   },
+   "loginPageLoginButton": {
+      "message": "Prisijungti"
+   },
+   "loginPageNewHere": {
+      "message": "Pirmą kartą naudojate DivMagic?"
+   },
+   "loginPageSignUp": {
+      "message": "Registruotis"
+   },
+   "loginPageTitle": {
+      "message": "Sveiki atvykę į DivMagic!"
+   },
+   "loginPageVerificationCode": {
+      "message": "Patvirtinimo kodas"
+   },
+   "loginPageVerificationCodeSent": {
+      "message": "Į jūsų el. Laišką išsiųstas patvirtinimo kodas. Įveskite jį žemiau."
+   },
+   "loginPageVerifyButton": {
+      "message": "Patikrinkite"
+   },
+   "loginPageVerifyCancelButton": {
+      "message": "Atšaukti patikrinimą"
+   },
+   "loginPageVerifyEmail": {
+      "message": "Patikrinkite savo el. Laišką"
+   },
+   "loginPageWrongVerificationCode": {
+      "message": "Neteisingas patikrinimo kodas. Įsitikinkite, kad įvedėte teisingą kodą."
+   },
+   "modalAddCssAttributeText": {
+      "message": "CSS atributas"
+   },
+   "modalAddCssValueText": {
+      "message": "CSS vertė"
+   },
+   "modalAddStylesText": {
+      "message": "Pridėkite stilių"
+   },
+   "modalChildButtonText": {
+      "message": "Vaiko elementas"
+   },
+   "modalChildButtonTooltip": {
+      "message": "Perkelkite pasirinkimą į antrinį elementą"
+   },
+   "modalClassSettingsText": {
+      "message": "Klasės nustatymai:"
+   },
+   "modalCloseButtonTooltip": {
+      "message": "Uždaryti"
+   },
+   "modalCopyButtonLoadingText": {
+      "message": "Kopijuojama..."
+   },
+   "modalCopyButtonText": {
+      "message": "Kopijuoti"
+   },
+   "modalCopyCSSOnlyText": {
+      "message": "Tik CSS"
+   },
+   "modalCopyCssWithDivmagicText": {
+      "message": "DivMagic CSS klasės"
+   },
+   "modalCopyCssWithOriginalText": {
+      "message": "Originalios CSS klasės"
+   },
+   "modalCopyHTMLOnlyText": {
+      "message": "Tik HTML"
+   },
+   "modalCopyHtmlWithDivmagicText": {
+      "message": "DivMagic HTML atributai"
+   },
+   "modalCopyHtmlWithOriginalText": {
+      "message": "Originalūs HTML atributai"
+   },
+   "modalCopyIntegrationsText": {
+      "message": "Integracijos („WordPress“)"
+   },
+   "modalCopyModeSelectionAdaptable": {
+      "message": "Pritaikomas"
+   },
+   "modalCopyModeSelectionAdaptableTooltip": {
+      "message": "Apima tik būtiniausius stilius, reikalingus elemento struktūrai ir pagrindinei išvaizdai išlaikyti. Lengva pritaikyti."
+   },
+   "modalCopyModeSelectionBalanced": {
+      "message": "Subalansuotas"
+   },
+   "modalCopyModeSelectionBalancedTooltip": {
+      "message": "Jame yra pseudoelementų, pvz., ::before ir ::after, kurie gali labai paveikti vizualinį rezultatą, bet per daug neišpūsti kodo."
+   },
+   "modalCopyModeSelectionExact": {
+      "message": "Tiksliai"
+   },
+   "modalCopyModeSelectionExactTooltip": {
+      "message": "Tiksli visų stilių kopija, užtikrinanti, kad elementas atrodytų kaip šaltinis."
+   },
+   "modalCopyModeSelectionText": {
+      "message": "Kopijavimo režimas"
+   },
+   "modalCopyModeSelectionTooltip": {
+      "message": "Dabartiniam pasirinkimui pasirinkite kopijavimo režimą. Daugeliui naudojimo atvejų rekomenduojame „Pritaikomas“."
+   },
+   "modalCopyNotification": {
+      "message": "Komponentas nukopijuotas!"
+   },
+   "modalCopyViewText": {
+      "message": "Kopijuoti"
+   },
+   "modalDragButtonTooltip": {
+      "message": "Vilkite, kad judėtumėte"
+   },
+   "modalEditorViewText": {
+      "message": "redaktorius"
+   },
+   "modalElementSettingsText": {
+      "message": "Elemento nustatymai:"
+   },
+   "modalExportNotification": {
+      "message": "Komponentas eksportuotas!"
+   },
+   "modalExportToStudioText": {
+      "message": "Eksportas į studiją"
+   },
+   "modalGoToLibraryText": {
+      "message": "Eik į mano biblioteką"
+   },
+   "modalInvalidCssValueText": {
+      "message": "Neteisinga CSS vertė"
+   },
+   "modalLeftButtonText": {
+      "message": "Paliktas vaiko elementas"
+   },
+   "modalLeftButtonTooltip": {
+      "message": "Perkelkite atranką į kairę brolio ir seserų elementą"
+   },
+   "modalMediaQuerySelectionTooltip": {
+      "message": "Pasirinkite, ar norite, kad [[MEDIAQUERYXYZ]] CSS stiliai būtų įtraukti į nukopijuotą kodą."
+   },
+   "modalParentButtonText": {
+      "message": "Tėvų elementas"
+   },
+   "modalParentButtonTooltip": {
+      "message": "Pasirinkite pagrindinį dabartinio pasirinkimo elementą"
+   },
+   "modalRightButtonText": {
+      "message": "Tinkamas vaiko elementas"
+   },
+   "modalRightButtonTooltip": {
+      "message": "Perkelkite atranką į dešinįjį brolio ir seserų elementą"
+   },
+   "modalSaveElementText": {
+      "message": "Išsaugoti elementą"
+   },
+   "modalSaveNotification": {
+      "message": "Komponentas išsaugotas!"
+   },
+   "modalSavedElementText": {
+      "message": "Išsaugota!"
+   },
+   "modalSavingElementText": {
+      "message": "Taupymas ..."
+   },
+   "modalStudioExportTooltip": {
+      "message": "Atidarykite „DivMagic Studio“."
+   },
+   "offText": {
+      "message": "Išjungta"
+   },
+   "onText": {
+      "message": "Įjungta"
+   },
+   "optionsChooseLanguage": {
+      "message": "Pasirinkite kalbą"
+   },
+   "optionsFeedback": {
+      "message": "Jei turite atsiliepimų ar pasiūlymų, praneškite mums!"
+   },
+   "optionsShortcuts": {
+      "message": "Klaviatūros nuorodos"
+   },
+   "optionsTitle": {
+      "message": "Galimybės"
+   },
+   "panelCopyElementCopied": {
+      "message": "Nukopijuota"
+   },
+   "popupCopyInstructions": {
+      "message": "Spustelėkite bet kurį elementą arba paspauskite klavišą:"
+   },
+   "popupFeedback": {
+      "message": "Atsiliepimas"
+   },
+   "popupSettings": {
+      "message": "Nustatymai"
+   },
+   "popupSettingsAutoHidePopup": {
+      "message": "Automatiškai paslėpti iššokantįjį langą"
+   },
+   "popupSettingsComponentFormat": {
+      "message": "Komponento formatas"
+   },
+   "popupSettingsComponentFormatTooltip": {
+      "message": "Pasirinkite nukopijuoto komponento formatą"
+   },
+   "popupSettingsShowDevToolsPanel": {
+      "message": "[[DEVTOOLS]] skydelis"
+   },
+   "popupSettingsStyleFormat": {
+      "message": "Stiliaus formatas"
+   },
+   "popupSettingsStyleFormatExternalCSS": {
+      "message": "Išorinis CSS"
+   },
+   "popupSettingsStyleFormatInlineCSS": {
+      "message": "Inline CSS"
+   },
+   "popupSettingsStyleFormatLocalCSS": {
+      "message": "Vietinis CSS"
+   },
+   "popupSettingsStyleFormatTooltip": {
+      "message": "Pasirinkite nukopijuotų stilių CSS formatą"
+   },
+   "publishDate": {
+      "message": "Kovo 31 d. Versija"
+   },
+   "toolBoxColorPickerDescriptionText": {
+      "message": "Spalvų rinkėjas"
+   },
+   "toolBoxColorPickerText": {
+      "message": "Spalvų rinkėjas"
+   },
+   "toolBoxCopyElementDescriptionText": {
+      "message": "Kopijuoti elementą"
+   },
+   "toolBoxCopyElementText": {
+      "message": "Kopijuoti elementą"
+   },
+   "toolBoxCopyFontsCopiedText": {
+      "message": "Nukopijuota"
+   },
+   "toolBoxCopyFontsCopyToClipboardText": {
+      "message": "Spustelėkite, jei norite nukopijuoti"
+   },
+   "toolBoxCopyFontsDescriptionText": {
+      "message": "Kopijuoti šriftą"
+   },
+   "toolBoxCopyFontsNotFoundText": {
+      "message": "Šioje svetainėje naudojami sistemos šriftai"
+   },
+   "toolBoxCopyFontsText": {
+      "message": "Kopijuoti šriftą"
+   },
+   "toolBoxCopyFontsWindowText": {
+      "message": "Žiniatinklio šriftai"
+   },
+   "toolBoxGridsDescriptionText": {
+      "message": "Prideda kiekvieno elemento ribas"
+   },
+   "toolBoxGridsText": {
+      "message": "Tinkleliai"
+   },
+   "toolBoxInspectorDescriptionText": {
+      "message": "Žr. Elemento detalę"
+   },
+   "toolBoxInspectorText": {
+      "message": "inspektorius"
+   },
+   "toolBoxShowFontsDescriptionText": {
+      "message": "Žinokite, kokią šriftą naudoja kiekviena žyma"
+   },
+   "toolBoxShowFontsText": {
+      "message": "Šriftai"
+   },
+   "toolBoxThrashDescriptionText": {
+      "message": "Paslėpti arba pašalinti elementą"
+   },
+   "toolBoxThrashText": {
+      "message": "Šiukšliadėžė"
+   },
+   "toolBoxThrashWindowHideButton": {
+      "message": "Slėptis"
+   },
+   "toolBoxThrashWindowRemoveButton": {
+      "message": "Pašalinti"
+   },
+   "toolBoxThrashWindowText": {
+      "message": "Slėpti / pašalinti elementus"
+   },
+   "toolboxText": {
+      "message": "Įrankių dėžė"
+   }
+}

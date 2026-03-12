@@ -1,0 +1,362 @@
+{
+   "activateToolbox": {
+      "message": "Aktiválja az Eszköztárat"
+   },
+   "contextMenuInspect": {
+      "message": "Ellenőr"
+   },
+   "copied": {
+      "message": "Másolva!"
+   },
+   "devtoolsCopyElement": {
+      "message": "Elem másolása"
+   },
+   "devtoolsCopyElementCopying": {
+      "message": "Másolás"
+   },
+   "devtoolsLibrary": {
+      "message": "Könyvtár"
+   },
+   "devtoolsLibraryComponentPerPage": {
+      "message": "Alkatrészek oldalonként"
+   },
+   "devtoolsLibraryNext": {
+      "message": "Következő"
+   },
+   "devtoolsLibraryNoComponents": {
+      "message": "A könyvtár üres. Mentse el az összetevőt, hogy itt lássa."
+   },
+   "devtoolsLibraryPrevious": {
+      "message": "Előző"
+   },
+   "devtoolsNoElementSelectedText": {
+      "message": "Válasszon ki egy elemet az \"Elemek\" lapról, hogy itt megtekinthesse a részleteket"
+   },
+   "devtoolsSelectedElementText": {
+      "message": "Kiválasztott elem"
+   },
+   "devtoolsUnsupportedElementSelectedText": {
+      "message": "A kiválasztott elem nem engedélyezett a másolási műveletekhez"
+   },
+   "extCommandChooseElement": {
+      "message": "Válassza ki a másolni kívánt elemet, miközben lebeg"
+   },
+   "extDescription": {
+      "message": "Másoljon elemeket bármely weboldalról újrafelhasználható webkomponensként. Szerezzen be HTML, CSS, React, JSX vagy Tailwind CSS kódot."
+   },
+   "extName": {
+      "message": "DivMagic – Másolási stílus"
+   },
+   "iframeCantBeAccessedText": {
+      "message": "A DivMagic nem fér hozzá ehhez az iframe-hez."
+   },
+   "iframeNeedAccessText": {
+      "message": "A DivMagic-nek meg kell nyitnia ezt az iframe-et, hogy hozzáférjen."
+   },
+   "iframeOpenText": {
+      "message": "Nyissa meg az iframe-et"
+   },
+   "loginPageBody1": {
+      "message": "Hatékony webfejlesztő eszközünk eléréséhez kérjük, hozzon létre egy fiókot vagy jelentkezzen be."
+   },
+   "loginPageBody2": {
+      "message": "A DivMagic előfizetéssel zökkenőmentes fejlesztési munkafolyamatot élvezhet."
+   },
+   "loginPageEmailLabel": {
+      "message": "Az email címed"
+   },
+   "loginPageError": {
+      "message": "Nem sikerült bejelentkezni. Győződjön meg arról, hogy azt az e-mail címet használja, amellyel feliratkozott."
+   },
+   "loginPageLoginButton": {
+      "message": "Belépés"
+   },
+   "loginPageNewHere": {
+      "message": "Új a DivMagic?"
+   },
+   "loginPageSignUp": {
+      "message": "Regisztrálj"
+   },
+   "loginPageTitle": {
+      "message": "Üdvözöljük a DivMagic oldalán!"
+   },
+   "loginPageVerificationCode": {
+      "message": "Ellenőrző kód"
+   },
+   "loginPageVerificationCodeSent": {
+      "message": "Ellenőrzési kódot küldtek az e -mailre. Kérjük, írja be alább."
+   },
+   "loginPageVerifyButton": {
+      "message": "Igazol"
+   },
+   "loginPageVerifyCancelButton": {
+      "message": "Az ellenőrzés törlése"
+   },
+   "loginPageVerifyEmail": {
+      "message": "Erősítsd meg az e-mail címedet"
+   },
+   "loginPageWrongVerificationCode": {
+      "message": "Helytelen ellenőrző kód. Kérjük, feltétlenül írja be a megfelelő kódot."
+   },
+   "modalAddCssAttributeText": {
+      "message": "CSS attribútum"
+   },
+   "modalAddCssValueText": {
+      "message": "CSS -érték"
+   },
+   "modalAddStylesText": {
+      "message": "Adjon hozzá stílusokat"
+   },
+   "modalChildButtonText": {
+      "message": "Gyermek elem"
+   },
+   "modalChildButtonTooltip": {
+      "message": "Helyezze a kijelölést a gyermekelemre"
+   },
+   "modalClassSettingsText": {
+      "message": "Osztálybeállítások:"
+   },
+   "modalCloseButtonTooltip": {
+      "message": "Bezárás"
+   },
+   "modalCopyButtonLoadingText": {
+      "message": "Másolás..."
+   },
+   "modalCopyButtonText": {
+      "message": "Másolat"
+   },
+   "modalCopyCSSOnlyText": {
+      "message": "Csak CSS"
+   },
+   "modalCopyCssWithDivmagicText": {
+      "message": "DivMagic CSS osztályok"
+   },
+   "modalCopyCssWithOriginalText": {
+      "message": "Eredeti CSS osztályok"
+   },
+   "modalCopyHTMLOnlyText": {
+      "message": "Csak HTML"
+   },
+   "modalCopyHtmlWithDivmagicText": {
+      "message": "DivMagic HTML attribútumok"
+   },
+   "modalCopyHtmlWithOriginalText": {
+      "message": "Eredeti HTML attribútumok"
+   },
+   "modalCopyIntegrationsText": {
+      "message": "Integrációk (WordPress)"
+   },
+   "modalCopyModeSelectionAdaptable": {
+      "message": "Alkalmazható"
+   },
+   "modalCopyModeSelectionAdaptableTooltip": {
+      "message": "Csak az elem szerkezetének és alapvető megjelenésének fenntartásához szükséges leglényegesebb stílusokat tartalmazza. Könnyen testreszabható."
+   },
+   "modalCopyModeSelectionBalanced": {
+      "message": "Kiegyensúlyozott"
+   },
+   "modalCopyModeSelectionBalancedTooltip": {
+      "message": "Olyan pszeudoelemeket tartalmaz, mint a ::before és ::after, amelyek jelentősen befolyásolhatják a vizuális eredményt, de nem duzzasztják túlzottan a kódot."
+   },
+   "modalCopyModeSelectionExact": {
+      "message": "Pontos"
+   },
+   "modalCopyModeSelectionExactTooltip": {
+      "message": "Az összes stílus pontos másolata, biztosítva, hogy az elem úgy nézzen ki, mint a forrás."
+   },
+   "modalCopyModeSelectionText": {
+      "message": "Másolás mód"
+   },
+   "modalCopyModeSelectionTooltip": {
+      "message": "Válassza ki a másolási módot az aktuális kijelöléshez. A legtöbb használati esetre az „Adaptable” lehetőséget ajánljuk."
+   },
+   "modalCopyNotification": {
+      "message": "Az alkatrész másolva!"
+   },
+   "modalCopyViewText": {
+      "message": "Másolat"
+   },
+   "modalDragButtonTooltip": {
+      "message": "Ragadja meg a mozgatáshoz"
+   },
+   "modalEditorViewText": {
+      "message": "Szerkesztő"
+   },
+   "modalElementSettingsText": {
+      "message": "Elembeállítások:"
+   },
+   "modalExportNotification": {
+      "message": "Komponens exportált!"
+   },
+   "modalExportToStudioText": {
+      "message": "Export a stúdióba"
+   },
+   "modalGoToLibraryText": {
+      "message": "Menj a könyvtáramba"
+   },
+   "modalInvalidCssValueText": {
+      "message": "Érvénytelen CSS -érték"
+   },
+   "modalLeftButtonText": {
+      "message": "Bal gyermek elem"
+   },
+   "modalLeftButtonTooltip": {
+      "message": "Mozgassa a választást a bal testvér elemre"
+   },
+   "modalMediaQuerySelectionTooltip": {
+      "message": "Válassza ki, ha szeretné, hogy a [[MEDIAQUERYXYZ]] CSS-stílusok szerepeljenek a másolt kódban."
+   },
+   "modalParentButtonText": {
+      "message": "Szülő elem"
+   },
+   "modalParentButtonTooltip": {
+      "message": "Válassza ki az aktuális kijelölés szülőelemét"
+   },
+   "modalRightButtonText": {
+      "message": "Jobb gyermek elem"
+   },
+   "modalRightButtonTooltip": {
+      "message": "Mozgassa a választást a jobb testvér elemre"
+   },
+   "modalSaveElementText": {
+      "message": "Mentse el az elemet"
+   },
+   "modalSaveNotification": {
+      "message": "Mentett alkatrész!"
+   },
+   "modalSavedElementText": {
+      "message": "Mentett!"
+   },
+   "modalSavingElementText": {
+      "message": "Megtakarítás..."
+   },
+   "modalStudioExportTooltip": {
+      "message": "Nyissa meg a DivMagic Stúdióban"
+   },
+   "offText": {
+      "message": "Ki"
+   },
+   "onText": {
+      "message": "Tovább"
+   },
+   "optionsChooseLanguage": {
+      "message": "Válasszon egy nyelvet"
+   },
+   "optionsFeedback": {
+      "message": "Ha bármilyen visszajelzése vagy javaslata van, kérjük, ossza meg velünk!"
+   },
+   "optionsShortcuts": {
+      "message": "Gyorsbillentyűket"
+   },
+   "optionsTitle": {
+      "message": "Lehetőségek"
+   },
+   "panelCopyElementCopied": {
+      "message": "Másolva"
+   },
+   "popupCopyInstructions": {
+      "message": "Kattintson bármelyik elemre, vagy nyomja meg a gombot:"
+   },
+   "popupFeedback": {
+      "message": "Visszacsatolás"
+   },
+   "popupSettings": {
+      "message": "Beállítások"
+   },
+   "popupSettingsAutoHidePopup": {
+      "message": "Előugró ablak automatikus elrejtése"
+   },
+   "popupSettingsComponentFormat": {
+      "message": "Komponens formátum"
+   },
+   "popupSettingsComponentFormatTooltip": {
+      "message": "Válassza ki a másolt összetevő formátumát"
+   },
+   "popupSettingsShowDevToolsPanel": {
+      "message": "[[DEVTOOLS]] Panel"
+   },
+   "popupSettingsStyleFormat": {
+      "message": "Stílus formátum"
+   },
+   "popupSettingsStyleFormatExternalCSS": {
+      "message": "Külső CSS"
+   },
+   "popupSettingsStyleFormatInlineCSS": {
+      "message": "Inline CSS"
+   },
+   "popupSettingsStyleFormatLocalCSS": {
+      "message": "Helyi CSS"
+   },
+   "popupSettingsStyleFormatTooltip": {
+      "message": "Válassza ki a CSS-formátumot a másolt stílusokhoz"
+   },
+   "publishDate": {
+      "message": "Március 31 -i változat"
+   },
+   "toolBoxColorPickerDescriptionText": {
+      "message": "Színválasztó"
+   },
+   "toolBoxColorPickerText": {
+      "message": "Színválasztó"
+   },
+   "toolBoxCopyElementDescriptionText": {
+      "message": "Másolás elem"
+   },
+   "toolBoxCopyElementText": {
+      "message": "Másolás elem"
+   },
+   "toolBoxCopyFontsCopiedText": {
+      "message": "Másolva"
+   },
+   "toolBoxCopyFontsCopyToClipboardText": {
+      "message": "Kattintson a másoláshoz"
+   },
+   "toolBoxCopyFontsDescriptionText": {
+      "message": "Betűtípus másolása"
+   },
+   "toolBoxCopyFontsNotFoundText": {
+      "message": "Ez a weboldal rendszer betűtípusokat használ"
+   },
+   "toolBoxCopyFontsText": {
+      "message": "Betűtípus másolása"
+   },
+   "toolBoxCopyFontsWindowText": {
+      "message": "Web betűkészletek"
+   },
+   "toolBoxGridsDescriptionText": {
+      "message": "Minden elemhez határokat ad hozzá"
+   },
+   "toolBoxGridsText": {
+      "message": "Rács"
+   },
+   "toolBoxInspectorDescriptionText": {
+      "message": "Lásd egy elem részletét"
+   },
+   "toolBoxInspectorText": {
+      "message": "Ellenőr"
+   },
+   "toolBoxShowFontsDescriptionText": {
+      "message": "Tudja meg, hogy az egyes címkék milyen betűtípust használnak"
+   },
+   "toolBoxShowFontsText": {
+      "message": "Betűtípus"
+   },
+   "toolBoxThrashDescriptionText": {
+      "message": "Elrejteni vagy eltávolítani egy elemet"
+   },
+   "toolBoxThrashText": {
+      "message": "Szemét"
+   },
+   "toolBoxThrashWindowHideButton": {
+      "message": "Elrejt"
+   },
+   "toolBoxThrashWindowRemoveButton": {
+      "message": "Eltávolítás"
+   },
+   "toolBoxThrashWindowText": {
+      "message": "Elrejteni / eltávolítani az elemeket"
+   },
+   "toolboxText": {
+      "message": "Eszköztár"
+   }
+}

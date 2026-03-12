@@ -1,0 +1,362 @@
+{
+   "activateToolbox": {
+      "message": "Araç kutusunu etkinleştir"
+   },
+   "contextMenuInspect": {
+      "message": "İncele"
+   },
+   "copied": {
+      "message": "Kopyalandı!"
+   },
+   "devtoolsCopyElement": {
+      "message": "Öğeyi Kopyala"
+   },
+   "devtoolsCopyElementCopying": {
+      "message": "Kopyalanıyor"
+   },
+   "devtoolsLibrary": {
+      "message": "Kütüphane"
+   },
+   "devtoolsLibraryComponentPerPage": {
+      "message": "Sayfa başına bileşenler"
+   },
+   "devtoolsLibraryNext": {
+      "message": "Sonraki"
+   },
+   "devtoolsLibraryNoComponents": {
+      "message": "Kütüphaneniz boş. Burada görmek için bir bileşeni kaydedin."
+   },
+   "devtoolsLibraryPrevious": {
+      "message": "Öncesi"
+   },
+   "devtoolsNoElementSelectedText": {
+      "message": "Ayrıntılarını burada görmek için \"Öğeler\" sekmesinden bir öğe seçin"
+   },
+   "devtoolsSelectedElementText": {
+      "message": "Seçilen Eleman"
+   },
+   "devtoolsUnsupportedElementSelectedText": {
+      "message": "Seçilen öğenin kopyalama işlemlerine izin verilmiyor"
+   },
+   "extCommandChooseElement": {
+      "message": "Fareyle gezinirken kopyalanacak öğeyi seçin"
+   },
+   "extDescription": {
+      "message": "Herhangi bir web sayfasından her elementi yeniden kullanılabilir web bileşenleri olarak kopyalayın. HTML, CSS, React, JSX veya Tailwind CSS kodunu alın."
+   },
+   "extName": {
+      "message": "DivMagic - Her siteden stil ve kod kopyalayın"
+   },
+   "iframeCantBeAccessedText": {
+      "message": "DivMagic bu iframe'e erişemiyor."
+   },
+   "iframeNeedAccessText": {
+      "message": "DivMagic'in erişmek için bu iframe'i açması gerekiyor."
+   },
+   "iframeOpenText": {
+      "message": "iframe'i aç"
+   },
+   "loginPageBody1": {
+      "message": "Güçlü web geliştirme aracımıza erişmek için sizi bir hesap oluşturmaya veya oturum açmaya davet ediyoruz."
+   },
+   "loginPageBody2": {
+      "message": "DivMagic aboneliği ile sorunsuz ve hızlı bir web geliştirme akışının keyfine varacaksınız."
+   },
+   "loginPageEmailLabel": {
+      "message": "E-posta adresiniz"
+   },
+   "loginPageError": {
+      "message": "Giriş yapılamadı. Lütfen üye olurken kullandığınız e-posta adresini yazdığınıza emin olun."
+   },
+   "loginPageLoginButton": {
+      "message": "Giriş Yap"
+   },
+   "loginPageNewHere": {
+      "message": "DivMagic'te yeni misiniz?"
+   },
+   "loginPageSignUp": {
+      "message": "Üye Ol"
+   },
+   "loginPageTitle": {
+      "message": "DivMagic'e hoş geldiniz!"
+   },
+   "loginPageVerificationCode": {
+      "message": "Doğrulama kodu"
+   },
+   "loginPageVerificationCodeSent": {
+      "message": "E -postanıza bir doğrulama kodu gönderildi. Lütfen aşağıya girin."
+   },
+   "loginPageVerifyButton": {
+      "message": "Doğrulamak"
+   },
+   "loginPageVerifyCancelButton": {
+      "message": "Doğrulamayı iptal et"
+   },
+   "loginPageVerifyEmail": {
+      "message": "Eposta adresinizi doğrulayın"
+   },
+   "loginPageWrongVerificationCode": {
+      "message": "Yanlış doğrulama kodu. Lütfen doğru kodu girdiğinizden emin olun."
+   },
+   "modalAddCssAttributeText": {
+      "message": "CSS özniteliği"
+   },
+   "modalAddCssValueText": {
+      "message": "CSS değeri"
+   },
+   "modalAddStylesText": {
+      "message": "Stil ekle"
+   },
+   "modalChildButtonText": {
+      "message": "Alt Öğe"
+   },
+   "modalChildButtonTooltip": {
+      "message": "Seçimi alt öğeye taşı"
+   },
+   "modalClassSettingsText": {
+      "message": "Sınıf Ayarları:"
+   },
+   "modalCloseButtonTooltip": {
+      "message": "Kapat"
+   },
+   "modalCopyButtonLoadingText": {
+      "message": "Kopyalanıyor..."
+   },
+   "modalCopyButtonText": {
+      "message": "Kopyala"
+   },
+   "modalCopyCSSOnlyText": {
+      "message": "Yalnızca CSS"
+   },
+   "modalCopyCssWithDivmagicText": {
+      "message": "DivMagic CSS sınıfları"
+   },
+   "modalCopyCssWithOriginalText": {
+      "message": "Orijinal CSS sınıfları"
+   },
+   "modalCopyHTMLOnlyText": {
+      "message": "Yalnızca HTML"
+   },
+   "modalCopyHtmlWithDivmagicText": {
+      "message": "DivMagic HTML nitelikleri"
+   },
+   "modalCopyHtmlWithOriginalText": {
+      "message": "Orijinal HTML nitelikleri"
+   },
+   "modalCopyIntegrationsText": {
+      "message": "Entegrasyonlar (WordPress)"
+   },
+   "modalCopyModeSelectionAdaptable": {
+      "message": "Uyarlanabilir"
+   },
+   "modalCopyModeSelectionAdaptableTooltip": {
+      "message": "Öğenin yapısını ve temel görünümünü korumak için yalnızca gereken en temel stilleri içerir. Özelleştirilmesi kolaydır."
+   },
+   "modalCopyModeSelectionBalanced": {
+      "message": "Dengeli"
+   },
+   "modalCopyModeSelectionBalancedTooltip": {
+      "message": "::before ve ::after gibi görsel sonucu önemli ölçüde etkileyebilecek ancak kodu aşırı derecede şişirmeyen pseudo öğeleri içerir."
+   },
+   "modalCopyModeSelectionExact": {
+      "message": "Aynı"
+   },
+   "modalCopyModeSelectionExactTooltip": {
+      "message": "Öğenin kaynağa benzemesini sağlayan tüm stillerin tam bir kopyası."
+   },
+   "modalCopyModeSelectionText": {
+      "message": "Kopyalama Modu"
+   },
+   "modalCopyModeSelectionTooltip": {
+      "message": "Geçerli seçim için kopyalama modunu seçin. \"Uyarlanabilir\" seçeneğini çoğu durum için önerilen seçenektir."
+   },
+   "modalCopyNotification": {
+      "message": "Bileşen kopyalandı!"
+   },
+   "modalCopyViewText": {
+      "message": "Kopya"
+   },
+   "modalDragButtonTooltip": {
+      "message": "Taşımak için sürükleyin"
+   },
+   "modalEditorViewText": {
+      "message": "Editör"
+   },
+   "modalElementSettingsText": {
+      "message": "Eleman Ayarları:"
+   },
+   "modalExportNotification": {
+      "message": "Bileşen ihraç edildi!"
+   },
+   "modalExportToStudioText": {
+      "message": "Studio'ya Aktar"
+   },
+   "modalGoToLibraryText": {
+      "message": "Kütüphaneme git"
+   },
+   "modalInvalidCssValueText": {
+      "message": "Geçersiz CSS değeri"
+   },
+   "modalLeftButtonText": {
+      "message": "Sol çocuk elemanı"
+   },
+   "modalLeftButtonTooltip": {
+      "message": "Seçimi sol kardeş elemanına taşıyın"
+   },
+   "modalMediaQuerySelectionTooltip": {
+      "message": "Kopyalanan koda [[MEDIAQUERYXYZ]] CSS stillerinin dahil edilmesini istiyorsanız seçin."
+   },
+   "modalParentButtonText": {
+      "message": "Ana Öğe"
+   },
+   "modalParentButtonTooltip": {
+      "message": "Geçerli seçimin ana öğesini seçin"
+   },
+   "modalRightButtonText": {
+      "message": "Doğru Çocuk Elemanı"
+   },
+   "modalRightButtonTooltip": {
+      "message": "Seçimi sağ kardeş elemanına taşıyın"
+   },
+   "modalSaveElementText": {
+      "message": "Eleman Kaydet"
+   },
+   "modalSaveNotification": {
+      "message": "Bileşen kaydedildi!"
+   },
+   "modalSavedElementText": {
+      "message": "Kaydedildi!"
+   },
+   "modalSavingElementText": {
+      "message": "Tasarruf ..."
+   },
+   "modalStudioExportTooltip": {
+      "message": "DivMagic Studio'da aç"
+   },
+   "offText": {
+      "message": "Kapalı"
+   },
+   "onText": {
+      "message": "Açık"
+   },
+   "optionsChooseLanguage": {
+      "message": "Bir Dil Seçin"
+   },
+   "optionsFeedback": {
+      "message": "Herhangi bir geri bildiriminiz veya öneriniz varsa lütfen bize bildirin!"
+   },
+   "optionsShortcuts": {
+      "message": "Klavye kısayolları"
+   },
+   "optionsTitle": {
+      "message": "Seçenekler"
+   },
+   "panelCopyElementCopied": {
+      "message": "Kopyalandı"
+   },
+   "popupCopyInstructions": {
+      "message": "Herhangi bir öğeye tıklayın veya tuşuna basın:"
+   },
+   "popupFeedback": {
+      "message": "Geri Bildirim"
+   },
+   "popupSettings": {
+      "message": "Ayarlar"
+   },
+   "popupSettingsAutoHidePopup": {
+      "message": "Açılır Pencereyi Otomatik Gizle"
+   },
+   "popupSettingsComponentFormat": {
+      "message": "Bileşen Formatı"
+   },
+   "popupSettingsComponentFormatTooltip": {
+      "message": "Kopyalanan bileşenin formatını seçin"
+   },
+   "popupSettingsShowDevToolsPanel": {
+      "message": "[[DEVTOOLS]] Paneli"
+   },
+   "popupSettingsStyleFormat": {
+      "message": "Stil Formatı"
+   },
+   "popupSettingsStyleFormatExternalCSS": {
+      "message": "Harici CSS"
+   },
+   "popupSettingsStyleFormatInlineCSS": {
+      "message": "Satır İçi CSS"
+   },
+   "popupSettingsStyleFormatLocalCSS": {
+      "message": "Yerel CSS"
+   },
+   "popupSettingsStyleFormatTooltip": {
+      "message": "Kopyalanan stiller için CSS formatını seçin"
+   },
+   "publishDate": {
+      "message": "31 Mart versiyonu"
+   },
+   "toolBoxColorPickerDescriptionText": {
+      "message": "Renk seçici"
+   },
+   "toolBoxColorPickerText": {
+      "message": "Renk seçici"
+   },
+   "toolBoxCopyElementDescriptionText": {
+      "message": "Kopyala Elemanı"
+   },
+   "toolBoxCopyElementText": {
+      "message": "Kopyala Elemanı"
+   },
+   "toolBoxCopyFontsCopiedText": {
+      "message": "Kopyalandı"
+   },
+   "toolBoxCopyFontsCopyToClipboardText": {
+      "message": "Kopyalamak için tıklayın"
+   },
+   "toolBoxCopyFontsDescriptionText": {
+      "message": "Yazı tipini kopyala"
+   },
+   "toolBoxCopyFontsNotFoundText": {
+      "message": "Bu web sitesi sistem yazı tiplerini kullanıyor"
+   },
+   "toolBoxCopyFontsText": {
+      "message": "Yazı tipini kopyala"
+   },
+   "toolBoxCopyFontsWindowText": {
+      "message": "Web yazı tipleri"
+   },
+   "toolBoxGridsDescriptionText": {
+      "message": "Her öğeye sınır ekler"
+   },
+   "toolBoxGridsText": {
+      "message": "Izgara"
+   },
+   "toolBoxInspectorDescriptionText": {
+      "message": "Bir Element Detay görün"
+   },
+   "toolBoxInspectorText": {
+      "message": "Müfettiş"
+   },
+   "toolBoxShowFontsDescriptionText": {
+      "message": "Her etiketin hangi yazı tipini kullandığını bilin"
+   },
+   "toolBoxShowFontsText": {
+      "message": "Yazı tipi"
+   },
+   "toolBoxThrashDescriptionText": {
+      "message": "Bir öğeyi gizle veya kaldır"
+   },
+   "toolBoxThrashText": {
+      "message": "Çöp"
+   },
+   "toolBoxThrashWindowHideButton": {
+      "message": "Sakla"
+   },
+   "toolBoxThrashWindowRemoveButton": {
+      "message": "Kaldır"
+   },
+   "toolBoxThrashWindowText": {
+      "message": "Öğeleri gizle / kaldır"
+   },
+   "toolboxText": {
+      "message": "Araç kutusu"
+   }
+}

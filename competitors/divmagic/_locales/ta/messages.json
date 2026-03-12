@@ -1,0 +1,362 @@
+{
+   "activateToolbox": {
+      "message": "கருவிப்பெட்டியை செயல்படுத்தவும்"
+   },
+   "contextMenuInspect": {
+      "message": "இன்ஸ்பெக்டர்"
+   },
+   "copied": {
+      "message": "நகலெடுக்கப்பட்டது!"
+   },
+   "devtoolsCopyElement": {
+      "message": "உறுப்பு நகலெடு"
+   },
+   "devtoolsCopyElementCopying": {
+      "message": "நகலெடுக்கிறது"
+   },
+   "devtoolsLibrary": {
+      "message": "நூலகம்"
+   },
+   "devtoolsLibraryComponentPerPage": {
+      "message": "ஒரு பக்கத்திற்கு கூறுகள்"
+   },
+   "devtoolsLibraryNext": {
+      "message": "அடுத்தது"
+   },
+   "devtoolsLibraryNoComponents": {
+      "message": "உங்கள் நூலகம் காலியாக உள்ளது. அதை இங்கே காண ஒரு கூறுகளை சேமிக்கவும்."
+   },
+   "devtoolsLibraryPrevious": {
+      "message": "முந்தைய"
+   },
+   "devtoolsNoElementSelectedText": {
+      "message": "\"உறுப்புகள்\" தாவலில் இருந்து ஒரு உறுப்பைத் தேர்ந்தெடுத்து அதன் விவரங்களை இங்கே பார்க்கலாம்"
+   },
+   "devtoolsSelectedElementText": {
+      "message": "தேர்ந்தெடுக்கப்பட்ட உறுப்பு"
+   },
+   "devtoolsUnsupportedElementSelectedText": {
+      "message": "தேர்ந்தெடுக்கப்பட்ட உறுப்பு நகல் செயல்பாடுகளுக்கு அனுமதிக்கப்படவில்லை"
+   },
+   "extCommandChooseElement": {
+      "message": "வட்டமிடும்போது நகலெடுக்க உறுப்பைத் தேர்ந்தெடுக்கவும்"
+   },
+   "extDescription": {
+      "message": "எந்தவொரு வலைப்பக்கத்திலிருந்தும் கூறுகளை மீண்டும் பயன்படுத்தக்கூடிய வலை கூறுகளாக நகலெடுக்கவும். HTML, CSS, React, JSX அல்லது Tailwind CSS குறியீட்டைப் பெறவும்."
+   },
+   "extName": {
+      "message": "DivMagic - நகல் நடை"
+   },
+   "iframeCantBeAccessedText": {
+      "message": "DivMagic ஆல் இந்த iframe ஐ அணுக முடியவில்லை."
+   },
+   "iframeNeedAccessText": {
+      "message": "DivMagic ஐ அணுக இந்த iframe ஐ திறக்க வேண்டும்."
+   },
+   "iframeOpenText": {
+      "message": "iframe ஐ திறக்கவும்"
+   },
+   "loginPageBody1": {
+      "message": "எங்கள் சக்திவாய்ந்த இணைய மேம்பாட்டுக் கருவியை அணுக, ஒரு கணக்கை உருவாக்க அல்லது உள்நுழைய உங்களை அழைக்கிறோம்."
+   },
+   "loginPageBody2": {
+      "message": "DivMagic சந்தாவுடன் தடையற்ற வளர்ச்சிப் பணியை அனுபவிப்பீர்கள்."
+   },
+   "loginPageEmailLabel": {
+      "message": "உங்கள் மின்னஞ்சல்"
+   },
+   "loginPageError": {
+      "message": "உள்நுழைய முடியவில்லை. நீங்கள் குழுசேர்ந்த மின்னஞ்சல் முகவரியைப் பயன்படுத்துகிறீர்கள் என்பதை உறுதிப்படுத்தவும்."
+   },
+   "loginPageLoginButton": {
+      "message": "உள்நுழைய"
+   },
+   "loginPageNewHere": {
+      "message": "DivMagicக்கு புதியவரா?"
+   },
+   "loginPageSignUp": {
+      "message": "பதிவு செய்யவும்"
+   },
+   "loginPageTitle": {
+      "message": "DivMagic க்கு வரவேற்கிறோம்!"
+   },
+   "loginPageVerificationCode": {
+      "message": "சரிபார்ப்பு குறியீடு"
+   },
+   "loginPageVerificationCodeSent": {
+      "message": "சரிபார்ப்புக் குறியீடு உங்கள் மின்னஞ்சலுக்கு அனுப்பப்பட்டுள்ளது. தயவுசெய்து அதை கீழே உள்ளிடவும்."
+   },
+   "loginPageVerifyButton": {
+      "message": "சரிபார்க்கவும்"
+   },
+   "loginPageVerifyCancelButton": {
+      "message": "சரிபார்ப்பை ரத்துசெய்"
+   },
+   "loginPageVerifyEmail": {
+      "message": "உங்கள் மின்னஞ்சலை சரிபார்க்கவும்"
+   },
+   "loginPageWrongVerificationCode": {
+      "message": "தவறான சரிபார்ப்பு குறியீடு. சரியான குறியீட்டை உள்ளிட்டுள்ளீர்கள் என்பதை உறுதிப்படுத்தவும்."
+   },
+   "modalAddCssAttributeText": {
+      "message": "CSS பண்புக்கூறு"
+   },
+   "modalAddCssValueText": {
+      "message": "CSS மதிப்பு"
+   },
+   "modalAddStylesText": {
+      "message": "பாணிகளைச் சேர்க்கவும்"
+   },
+   "modalChildButtonText": {
+      "message": "குழந்தை உறுப்பு"
+   },
+   "modalChildButtonTooltip": {
+      "message": "தேர்வை குழந்தை உறுப்புக்கு நகர்த்தவும்"
+   },
+   "modalClassSettingsText": {
+      "message": "வகுப்பு அமைப்புகள்:"
+   },
+   "modalCloseButtonTooltip": {
+      "message": "நெருக்கமான"
+   },
+   "modalCopyButtonLoadingText": {
+      "message": "நகலெடுக்கிறது..."
+   },
+   "modalCopyButtonText": {
+      "message": "நகலெடுக்கவும்"
+   },
+   "modalCopyCSSOnlyText": {
+      "message": "CSS மட்டுமே"
+   },
+   "modalCopyCssWithDivmagicText": {
+      "message": "டிவ்மாஜிக் சிஎஸ்எஸ் வகுப்புகள்"
+   },
+   "modalCopyCssWithOriginalText": {
+      "message": "அசல் CSS வகுப்புகள்"
+   },
+   "modalCopyHTMLOnlyText": {
+      "message": "HTML மட்டுமே"
+   },
+   "modalCopyHtmlWithDivmagicText": {
+      "message": "DivMagic html பண்புக்கூறுகள்"
+   },
+   "modalCopyHtmlWithOriginalText": {
+      "message": "அசல் HTML பண்புக்கூறுகள்"
+   },
+   "modalCopyIntegrationsText": {
+      "message": "ஒருங்கிணைப்புகள் (வேர்ட்பிரஸ்)"
+   },
+   "modalCopyModeSelectionAdaptable": {
+      "message": "ஏற்புடையது"
+   },
+   "modalCopyModeSelectionAdaptableTooltip": {
+      "message": "உறுப்புகளின் கட்டமைப்பு மற்றும் அடிப்படை தோற்றத்தை பராமரிக்க தேவையான மிக அத்தியாவசியமான பாணிகளை மட்டுமே உள்ளடக்கியது. தனிப்பயனாக்க எளிதானது."
+   },
+   "modalCopyModeSelectionBalanced": {
+      "message": "சமச்சீர்"
+   },
+   "modalCopyModeSelectionBalancedTooltip": {
+      "message": "::before மற்றும் ::after போன்ற போலி கூறுகளை உள்ளடக்கியது, இது காட்சி முடிவை கணிசமாக பாதிக்கும் ஆனால் குறியீட்டை அதிகமாக ஊதி விடாது."
+   },
+   "modalCopyModeSelectionExact": {
+      "message": "சரியான"
+   },
+   "modalCopyModeSelectionExactTooltip": {
+      "message": "அனைத்து பாணிகளின் சரியான நகல், உறுப்பு ஆதாரமாக இருப்பதை உறுதி செய்கிறது."
+   },
+   "modalCopyModeSelectionText": {
+      "message": "நகல் முறை"
+   },
+   "modalCopyModeSelectionTooltip": {
+      "message": "தற்போதைய தேர்வுக்கான நகல் பயன்முறையைத் தேர்ந்தெடுக்கவும். பெரும்பாலான பயன்பாட்டு நிகழ்வுகளுக்கு \"அடாப்டபிள்\" என்று பரிந்துரைக்கிறோம்."
+   },
+   "modalCopyNotification": {
+      "message": "கூறு நகலெடுக்கப்பட்டது!"
+   },
+   "modalCopyViewText": {
+      "message": "நகலெடு"
+   },
+   "modalDragButtonTooltip": {
+      "message": "நகர்த்த இழுக்கவும்"
+   },
+   "modalEditorViewText": {
+      "message": "ஆசிரியர்"
+   },
+   "modalElementSettingsText": {
+      "message": "உறுப்பு அமைப்புகள்:"
+   },
+   "modalExportNotification": {
+      "message": "கூறு ஏற்றுமதி செய்யப்பட்டது!"
+   },
+   "modalExportToStudioText": {
+      "message": "ஸ்டுடியோவுக்கு ஏற்றுமதி"
+   },
+   "modalGoToLibraryText": {
+      "message": "எனது நூலகத்திற்குச் செல்லுங்கள்"
+   },
+   "modalInvalidCssValueText": {
+      "message": "தவறான CSS மதிப்பு"
+   },
+   "modalLeftButtonText": {
+      "message": "இடது குழந்தை உறுப்பு"
+   },
+   "modalLeftButtonTooltip": {
+      "message": "தேர்வை இடது உடன்பிறப்பு உறுப்புக்கு நகர்த்தவும்"
+   },
+   "modalMediaQuerySelectionTooltip": {
+      "message": "நகலெடுக்கப்பட்ட குறியீட்டில் [[MEDIAQUERYXYZ]] CSS நடைகள் சேர்க்கப்பட வேண்டுமெனில் தேர்ந்தெடுக்கவும்."
+   },
+   "modalParentButtonText": {
+      "message": "பெற்றோர் உறுப்பு"
+   },
+   "modalParentButtonTooltip": {
+      "message": "தற்போதைய தேர்வின் மூல உறுப்பைத் தேர்ந்தெடுக்கவும்"
+   },
+   "modalRightButtonText": {
+      "message": "சரியான குழந்தை உறுப்பு"
+   },
+   "modalRightButtonTooltip": {
+      "message": "தேர்வை சரியான உடன்பிறப்பு உறுப்புக்கு நகர்த்தவும்"
+   },
+   "modalSaveElementText": {
+      "message": "உறுப்பைச் சேமிக்கவும்"
+   },
+   "modalSaveNotification": {
+      "message": "கூறு சேமிக்கப்பட்டது!"
+   },
+   "modalSavedElementText": {
+      "message": "சேமிக்கப்பட்டது!"
+   },
+   "modalSavingElementText": {
+      "message": "சேமிப்பு ..."
+   },
+   "modalStudioExportTooltip": {
+      "message": "DivMagic Studioவில் திறக்கவும்"
+   },
+   "offText": {
+      "message": "ஆஃப்"
+   },
+   "onText": {
+      "message": "அன்று"
+   },
+   "optionsChooseLanguage": {
+      "message": "ஒரு மொழியைத் தேர்வுசெய்க"
+   },
+   "optionsFeedback": {
+      "message": "உங்களிடம் ஏதேனும் கருத்து அல்லது பரிந்துரைகள் இருந்தால், எங்களுக்குத் தெரியப்படுத்தவும்!"
+   },
+   "optionsShortcuts": {
+      "message": "விசைப்பலகை குறுக்குவழிகள்"
+   },
+   "optionsTitle": {
+      "message": "விருப்பங்கள்"
+   },
+   "panelCopyElementCopied": {
+      "message": "நகலெடுக்கப்பட்டது"
+   },
+   "popupCopyInstructions": {
+      "message": "ஏதேனும் உறுப்பைக் கிளிக் செய்யவும் அல்லது விசையை அழுத்தவும்:"
+   },
+   "popupFeedback": {
+      "message": "பின்னூட்டம்"
+   },
+   "popupSettings": {
+      "message": "அமைப்புகள்"
+   },
+   "popupSettingsAutoHidePopup": {
+      "message": "தானாக மறை பாப்அப்"
+   },
+   "popupSettingsComponentFormat": {
+      "message": "கூறு வடிவம்"
+   },
+   "popupSettingsComponentFormatTooltip": {
+      "message": "நகலெடுக்கப்பட்ட கூறுக்கான வடிவமைப்பைத் தேர்ந்தெடுக்கவும்"
+   },
+   "popupSettingsShowDevToolsPanel": {
+      "message": "[[DEVTOOLS]] பேனல்"
+   },
+   "popupSettingsStyleFormat": {
+      "message": "உடை வடிவம்"
+   },
+   "popupSettingsStyleFormatExternalCSS": {
+      "message": "வெளிப்புற CSS"
+   },
+   "popupSettingsStyleFormatInlineCSS": {
+      "message": "இன்லைன் CSS"
+   },
+   "popupSettingsStyleFormatLocalCSS": {
+      "message": "உள்ளூர் CSS"
+   },
+   "popupSettingsStyleFormatTooltip": {
+      "message": "நகலெடுக்கப்பட்ட பாணிகளுக்கான CSS வடிவமைப்பைத் தேர்ந்தெடுக்கவும்"
+   },
+   "publishDate": {
+      "message": "மார்ச் 31 பதிப்பு"
+   },
+   "toolBoxColorPickerDescriptionText": {
+      "message": "வண்ண தெரிவு"
+   },
+   "toolBoxColorPickerText": {
+      "message": "வண்ண தெரிவு"
+   },
+   "toolBoxCopyElementDescriptionText": {
+      "message": "உறுப்பு நகலெடுக்கவும்"
+   },
+   "toolBoxCopyElementText": {
+      "message": "உறுப்பு நகலெடுக்கவும்"
+   },
+   "toolBoxCopyFontsCopiedText": {
+      "message": "நகலெடுக்கப்பட்டது"
+   },
+   "toolBoxCopyFontsCopyToClipboardText": {
+      "message": "நகலெடுக்க கிளிக் செய்க"
+   },
+   "toolBoxCopyFontsDescriptionText": {
+      "message": "எழுத்துரு நகல்"
+   },
+   "toolBoxCopyFontsNotFoundText": {
+      "message": "இந்த வலைத்தளம் கணினி எழுத்துருக்களைப் பயன்படுத்துகிறது"
+   },
+   "toolBoxCopyFontsText": {
+      "message": "எழுத்துரு நகல்"
+   },
+   "toolBoxCopyFontsWindowText": {
+      "message": "வலை எழுத்துருக்கள்"
+   },
+   "toolBoxGridsDescriptionText": {
+      "message": "ஒவ்வொரு உறுப்புக்கும் எல்லைகளைச் சேர்க்கிறது"
+   },
+   "toolBoxGridsText": {
+      "message": "கட்டங்கள்"
+   },
+   "toolBoxInspectorDescriptionText": {
+      "message": "ஒரு உறுப்பு விவரத்தைக் காண்க"
+   },
+   "toolBoxInspectorText": {
+      "message": "இன்ஸ்பெக்டர்"
+   },
+   "toolBoxShowFontsDescriptionText": {
+      "message": "ஒவ்வொரு குறிச்சொல்லையும் என்ன எழுத்துரு பயன்படுத்துகிறது என்பதை அறிந்து கொள்ளுங்கள்"
+   },
+   "toolBoxShowFontsText": {
+      "message": "எழுத்துருக்கள்"
+   },
+   "toolBoxThrashDescriptionText": {
+      "message": "ஒரு உறுப்பை மறைக்க அல்லது அகற்றவும்"
+   },
+   "toolBoxThrashText": {
+      "message": "குப்பை"
+   },
+   "toolBoxThrashWindowHideButton": {
+      "message": "மறை"
+   },
+   "toolBoxThrashWindowRemoveButton": {
+      "message": "அகற்று"
+   },
+   "toolBoxThrashWindowText": {
+      "message": "உறுப்புகளை மறைக்க / அகற்றவும்"
+   },
+   "toolboxText": {
+      "message": "கருவிப்பெட்டி"
+   }
+}

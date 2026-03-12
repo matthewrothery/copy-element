@@ -1,0 +1,362 @@
+{
+   "activateToolbox": {
+      "message": "Activați căsuța de instrumente"
+   },
+   "contextMenuInspect": {
+      "message": "Inspector"
+   },
+   "copied": {
+      "message": "Copiat!"
+   },
+   "devtoolsCopyElement": {
+      "message": "Copiere element"
+   },
+   "devtoolsCopyElementCopying": {
+      "message": "Copierea"
+   },
+   "devtoolsLibrary": {
+      "message": "Bibliotecă"
+   },
+   "devtoolsLibraryComponentPerPage": {
+      "message": "Componente pe pagină"
+   },
+   "devtoolsLibraryNext": {
+      "message": "Următorul"
+   },
+   "devtoolsLibraryNoComponents": {
+      "message": "Biblioteca dvs. este goală. Salvați o componentă pentru a o vedea aici."
+   },
+   "devtoolsLibraryPrevious": {
+      "message": "Anterior"
+   },
+   "devtoolsNoElementSelectedText": {
+      "message": "Selectați un element din fila „Elemente” pentru a-i vedea detaliile aici"
+   },
+   "devtoolsSelectedElementText": {
+      "message": "Element selectat"
+   },
+   "devtoolsUnsupportedElementSelectedText": {
+      "message": "Elementul selectat nu este permis pentru operațiuni de copiere"
+   },
+   "extCommandChooseElement": {
+      "message": "Alegeți elementul de copiat în timp ce treceți cu mouse-ul"
+   },
+   "extDescription": {
+      "message": "Copiați elemente din orice pagină web ca componente web reutilizabile. Obțineți codul HTML, CSS, React, JSX sau Tailwind CSS."
+   },
+   "extName": {
+      "message": "DivMagic - Copiere stil"
+   },
+   "iframeCantBeAccessedText": {
+      "message": "DivMagic nu poate accesa acest iframe."
+   },
+   "iframeNeedAccessText": {
+      "message": "DivMagic trebuie să deschidă acest iframe pentru a-l accesa."
+   },
+   "iframeOpenText": {
+      "message": "Deschide iframe"
+   },
+   "loginPageBody1": {
+      "message": "Pentru a accesa instrumentul nostru puternic de dezvoltare web, vă invităm să vă creați un cont sau să vă autentificați."
+   },
+   "loginPageBody2": {
+      "message": "Vă veți bucura de un flux de lucru de dezvoltare fără întreruperi cu un abonament la DivMagic."
+   },
+   "loginPageEmailLabel": {
+      "message": "Email-ul tau"
+   },
+   "loginPageError": {
+      "message": "Nu s-a putut conecta. Asigurați-vă că utilizați adresa de e-mail cu care v-ați abonat."
+   },
+   "loginPageLoginButton": {
+      "message": "Log in"
+   },
+   "loginPageNewHere": {
+      "message": "Nou în DivMagic?"
+   },
+   "loginPageSignUp": {
+      "message": "Inscrie-te"
+   },
+   "loginPageTitle": {
+      "message": "Bun venit la DivMagic!"
+   },
+   "loginPageVerificationCode": {
+      "message": "Cod de verificare"
+   },
+   "loginPageVerificationCodeSent": {
+      "message": "Un cod de verificare a fost trimis la e -mail. Vă rugăm să -l introduceți mai jos."
+   },
+   "loginPageVerifyButton": {
+      "message": "Verifica"
+   },
+   "loginPageVerifyCancelButton": {
+      "message": "Anulați verificarea"
+   },
+   "loginPageVerifyEmail": {
+      "message": "verifica-ți email-ul"
+   },
+   "loginPageWrongVerificationCode": {
+      "message": "Cod de verificare greșit. Vă rugăm să vă asigurați că ați introdus codul corect."
+   },
+   "modalAddCssAttributeText": {
+      "message": "Atributul CSS"
+   },
+   "modalAddCssValueText": {
+      "message": "Valoarea CSS"
+   },
+   "modalAddStylesText": {
+      "message": "Adăugați stiluri"
+   },
+   "modalChildButtonText": {
+      "message": "Element Copil"
+   },
+   "modalChildButtonTooltip": {
+      "message": "Mutați selecția la elementul copil"
+   },
+   "modalClassSettingsText": {
+      "message": "Setări de clasă:"
+   },
+   "modalCloseButtonTooltip": {
+      "message": "Închide"
+   },
+   "modalCopyButtonLoadingText": {
+      "message": "Se copiază..."
+   },
+   "modalCopyButtonText": {
+      "message": "Copie"
+   },
+   "modalCopyCSSOnlyText": {
+      "message": "Doar CSS"
+   },
+   "modalCopyCssWithDivmagicText": {
+      "message": "Clasele CSS divmagice"
+   },
+   "modalCopyCssWithOriginalText": {
+      "message": "Clase originale CSS"
+   },
+   "modalCopyHTMLOnlyText": {
+      "message": "Doar HTML"
+   },
+   "modalCopyHtmlWithDivmagicText": {
+      "message": "Atribute DivMagic HTML"
+   },
+   "modalCopyHtmlWithOriginalText": {
+      "message": "Atribute originale HTML"
+   },
+   "modalCopyIntegrationsText": {
+      "message": "Integrari (WordPress)"
+   },
+   "modalCopyModeSelectionAdaptable": {
+      "message": "Adaptabil"
+   },
+   "modalCopyModeSelectionAdaptableTooltip": {
+      "message": "Include doar cele mai esențiale stiluri necesare pentru a menține structura și aspectul de bază al elementului. Ușor de personalizat."
+   },
+   "modalCopyModeSelectionBalanced": {
+      "message": "Echilibrat"
+   },
+   "modalCopyModeSelectionBalancedTooltip": {
+      "message": "Încorporează pseudo-elemente precum ::before și ::after, care pot afecta în mod semnificativ rezultatul vizual, dar nu umfla excesiv codul."
+   },
+   "modalCopyModeSelectionExact": {
+      "message": "Corect"
+   },
+   "modalCopyModeSelectionExactTooltip": {
+      "message": "O copie exactă a tuturor stilurilor, asigurându-se că elementul arată ca sursa."
+   },
+   "modalCopyModeSelectionText": {
+      "message": "Modul copiere"
+   },
+   "modalCopyModeSelectionTooltip": {
+      "message": "Selectați modul de copiere pentru selecția curentă. Vă recomandăm „Adaptabil” pentru majoritatea cazurilor de utilizare."
+   },
+   "modalCopyNotification": {
+      "message": "Component copiat!"
+   },
+   "modalCopyViewText": {
+      "message": "Copie"
+   },
+   "modalDragButtonTooltip": {
+      "message": "Trage pentru a muta"
+   },
+   "modalEditorViewText": {
+      "message": "Editor"
+   },
+   "modalElementSettingsText": {
+      "message": "Setări elemente:"
+   },
+   "modalExportNotification": {
+      "message": "Componenta exportată!"
+   },
+   "modalExportToStudioText": {
+      "message": "Export în studio"
+   },
+   "modalGoToLibraryText": {
+      "message": "Du -te la biblioteca mea"
+   },
+   "modalInvalidCssValueText": {
+      "message": "Valoare CSS nevalide"
+   },
+   "modalLeftButtonText": {
+      "message": "Elementul copilului stâng"
+   },
+   "modalLeftButtonTooltip": {
+      "message": "Mutați selecția la elementul fratelui stâng"
+   },
+   "modalMediaQuerySelectionTooltip": {
+      "message": "Selectați dacă doriți ca stilurile CSS [[MEDIAQUERYXYZ]] să fie incluse în codul copiat."
+   },
+   "modalParentButtonText": {
+      "message": "Element părinte"
+   },
+   "modalParentButtonTooltip": {
+      "message": "Selectați elementul părinte al selecției curente"
+   },
+   "modalRightButtonText": {
+      "message": "Elementul drept al copilului"
+   },
+   "modalRightButtonTooltip": {
+      "message": "Mutați selecția la elementul de frate din dreapta"
+   },
+   "modalSaveElementText": {
+      "message": "Salvați elementul"
+   },
+   "modalSaveNotification": {
+      "message": "Componenta salvată!"
+   },
+   "modalSavedElementText": {
+      "message": "Salvat!"
+   },
+   "modalSavingElementText": {
+      "message": "Economisire..."
+   },
+   "modalStudioExportTooltip": {
+      "message": "Deschideți în DivMagic Studio"
+   },
+   "offText": {
+      "message": "Oprit"
+   },
+   "onText": {
+      "message": "Pe"
+   },
+   "optionsChooseLanguage": {
+      "message": "Alegeți o limbă"
+   },
+   "optionsFeedback": {
+      "message": "Dacă aveți feedback sau sugestii, vă rugăm să ne anunțați!"
+   },
+   "optionsShortcuts": {
+      "message": "Comenzi rapide de la tastatură"
+   },
+   "optionsTitle": {
+      "message": "Opțiuni"
+   },
+   "panelCopyElementCopied": {
+      "message": "Copiat"
+   },
+   "popupCopyInstructions": {
+      "message": "Faceți clic pe orice element sau apăsați tasta:"
+   },
+   "popupFeedback": {
+      "message": "Părere"
+   },
+   "popupSettings": {
+      "message": "Setări"
+   },
+   "popupSettingsAutoHidePopup": {
+      "message": "Ascundere automată pop-up"
+   },
+   "popupSettingsComponentFormat": {
+      "message": "Formatul componentelor"
+   },
+   "popupSettingsComponentFormatTooltip": {
+      "message": "Selectați formatul pentru componenta copiată"
+   },
+   "popupSettingsShowDevToolsPanel": {
+      "message": "Panoul [[DEVTOOLS]]"
+   },
+   "popupSettingsStyleFormat": {
+      "message": "Format de stil"
+   },
+   "popupSettingsStyleFormatExternalCSS": {
+      "message": "CSS extern"
+   },
+   "popupSettingsStyleFormatInlineCSS": {
+      "message": "CSS inline"
+   },
+   "popupSettingsStyleFormatLocalCSS": {
+      "message": "CSS local"
+   },
+   "popupSettingsStyleFormatTooltip": {
+      "message": "Selectați formatul CSS pentru stilurile copiate"
+   },
+   "publishDate": {
+      "message": "31 martie versiunea"
+   },
+   "toolBoxColorPickerDescriptionText": {
+      "message": "Selector de culoare"
+   },
+   "toolBoxColorPickerText": {
+      "message": "Selector de culoare"
+   },
+   "toolBoxCopyElementDescriptionText": {
+      "message": "Element de copiere"
+   },
+   "toolBoxCopyElementText": {
+      "message": "Element de copiere"
+   },
+   "toolBoxCopyFontsCopiedText": {
+      "message": "Copiat"
+   },
+   "toolBoxCopyFontsCopyToClipboardText": {
+      "message": "Faceți clic pentru a copia"
+   },
+   "toolBoxCopyFontsDescriptionText": {
+      "message": "Copiați fontul"
+   },
+   "toolBoxCopyFontsNotFoundText": {
+      "message": "Acest site web folosește fonturi de sistem"
+   },
+   "toolBoxCopyFontsText": {
+      "message": "Copiați fontul"
+   },
+   "toolBoxCopyFontsWindowText": {
+      "message": "Fonturi web"
+   },
+   "toolBoxGridsDescriptionText": {
+      "message": "Adaugă granițe la fiecare element"
+   },
+   "toolBoxGridsText": {
+      "message": "Grile"
+   },
+   "toolBoxInspectorDescriptionText": {
+      "message": "Vezi un detaliu al elementului"
+   },
+   "toolBoxInspectorText": {
+      "message": "Inspector"
+   },
+   "toolBoxShowFontsDescriptionText": {
+      "message": "Știți ce font folosește fiecare etichetă"
+   },
+   "toolBoxShowFontsText": {
+      "message": "Fonturi"
+   },
+   "toolBoxThrashDescriptionText": {
+      "message": "Ascundeți sau îndepărtați un element"
+   },
+   "toolBoxThrashText": {
+      "message": "Gunoi"
+   },
+   "toolBoxThrashWindowHideButton": {
+      "message": "Ascunde"
+   },
+   "toolBoxThrashWindowRemoveButton": {
+      "message": "Elimina"
+   },
+   "toolBoxThrashWindowText": {
+      "message": "Ascunde / elimină elementele"
+   },
+   "toolboxText": {
+      "message": "Trusa de scule"
+   }
+}

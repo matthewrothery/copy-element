@@ -1,0 +1,362 @@
+{
+   "activateToolbox": {
+      "message": "ಟೂಲ್‌ಬಾಕ್ಸ್ ಅನ್ನು ಸಕ್ರಿಯಗೊಳಿಸಿ"
+   },
+   "contextMenuInspect": {
+      "message": "ಇನ್ಸ್ಪೆಕ್ಟರ್"
+   },
+   "copied": {
+      "message": "ನಕಲು ಮಾಡಲಾಗಿದೆ!"
+   },
+   "devtoolsCopyElement": {
+      "message": "ಅಂಶವನ್ನು ನಕಲಿಸಿ"
+   },
+   "devtoolsCopyElementCopying": {
+      "message": "ನಕಲು ಮಾಡಲಾಗುತ್ತಿದೆ"
+   },
+   "devtoolsLibrary": {
+      "message": "ಗ್ರಂಥಾಲಯ"
+   },
+   "devtoolsLibraryComponentPerPage": {
+      "message": "ಪ್ರತಿ ಪುಟಕ್ಕೆ ಘಟಕಗಳು"
+   },
+   "devtoolsLibraryNext": {
+      "message": "ಮುಂದೆ"
+   },
+   "devtoolsLibraryNoComponents": {
+      "message": "ನಿಮ್ಮ ಲೈಬ್ರರಿ ಖಾಲಿಯಾಗಿದೆ. ಒಂದು ಘಟಕವನ್ನು ಇಲ್ಲಿ ನೋಡಲು ಉಳಿಸಿ."
+   },
+   "devtoolsLibraryPrevious": {
+      "message": "ಹಿಂದಿನ"
+   },
+   "devtoolsNoElementSelectedText": {
+      "message": "ಅದರ ವಿವರಗಳನ್ನು ಇಲ್ಲಿ ನೋಡಲು \"ಎಲಿಮೆಂಟ್ಸ್\" ಟ್ಯಾಬ್‌ನಿಂದ ಒಂದು ಅಂಶವನ್ನು ಆಯ್ಕೆಮಾಡಿ"
+   },
+   "devtoolsSelectedElementText": {
+      "message": "ಆಯ್ದ ಅಂಶ"
+   },
+   "devtoolsUnsupportedElementSelectedText": {
+      "message": "ನಕಲು ಕಾರ್ಯಾಚರಣೆಗಳಿಗೆ ಆಯ್ಕೆಮಾಡಿದ ಅಂಶವನ್ನು ಅನುಮತಿಸಲಾಗುವುದಿಲ್ಲ"
+   },
+   "extCommandChooseElement": {
+      "message": "ತೂಗಾಡುತ್ತಿರುವಾಗ ನಕಲಿಸಲು ಅಂಶವನ್ನು ಆರಿಸಿ"
+   },
+   "extDescription": {
+      "message": "ಯಾವುದೇ ವೆಬ್‌ಪುಟದಿಂದ ಅಂಶಗಳನ್ನು ಮರುಬಳಕೆ ಮಾಡಬಹುದಾದ ವೆಬ್ ಘಟಕಗಳಾಗಿ ನಕಲಿಸಿ. HTML, CSS, React, JSX ಅಥವಾ Tailwind CSS ಕೋಡ್ ಪಡೆಯಿರಿ."
+   },
+   "extName": {
+      "message": "DivMagic - ನಕಲು ಶೈಲಿ"
+   },
+   "iframeCantBeAccessedText": {
+      "message": "DivMagic ಈ iframe ಅನ್ನು ಪ್ರವೇಶಿಸಲು ಸಾಧ್ಯವಿಲ್ಲ."
+   },
+   "iframeNeedAccessText": {
+      "message": "DivMagic ಇದನ್ನು ಪ್ರವೇಶಿಸಲು ಈ iframe ಅನ್ನು ತೆರೆಯುವ ಅಗತ್ಯವಿದೆ."
+   },
+   "iframeOpenText": {
+      "message": "iframe ತೆರೆಯಿರಿ"
+   },
+   "loginPageBody1": {
+      "message": "ನಮ್ಮ ಪ್ರಬಲ ವೆಬ್ ಅಭಿವೃದ್ಧಿ ಸಾಧನವನ್ನು ಪ್ರವೇಶಿಸಲು, ಖಾತೆಯನ್ನು ರಚಿಸಲು ಅಥವಾ ಲಾಗಿನ್ ಮಾಡಲು ನಾವು ನಿಮ್ಮನ್ನು ಆಹ್ವಾನಿಸುತ್ತೇವೆ."
+   },
+   "loginPageBody2": {
+      "message": "DivMagic ಗೆ ಚಂದಾದಾರಿಕೆಯೊಂದಿಗೆ ನೀವು ತಡೆರಹಿತ ಅಭಿವೃದ್ಧಿ ಕೆಲಸದ ಹರಿವನ್ನು ಆನಂದಿಸುವಿರಿ."
+   },
+   "loginPageEmailLabel": {
+      "message": "ನಿಮ್ಮ ಇಮೇಲ್"
+   },
+   "loginPageError": {
+      "message": "ಲಾಗ್ ಇನ್ ಮಾಡಲು ಸಾಧ್ಯವಾಗಲಿಲ್ಲ. ನೀವು ಚಂದಾದಾರರಾಗಿರುವ ಇಮೇಲ್ ವಿಳಾಸವನ್ನು ನೀವು ಬಳಸುತ್ತಿರುವಿರಿ ಎಂಬುದನ್ನು ಖಚಿತಪಡಿಸಿಕೊಳ್ಳಿ."
+   },
+   "loginPageLoginButton": {
+      "message": "ಲಾಗಿನ್ ಮಾಡಿ"
+   },
+   "loginPageNewHere": {
+      "message": "DivMagic ಗೆ ಹೊಸಬರೇ?"
+   },
+   "loginPageSignUp": {
+      "message": "ಸೈನ್ ಅಪ್ ಮಾಡಿ"
+   },
+   "loginPageTitle": {
+      "message": "DivMagic ಗೆ ಸುಸ್ವಾಗತ!"
+   },
+   "loginPageVerificationCode": {
+      "message": "ಪರಿಶೀಲನೆ ಕೋಡ್"
+   },
+   "loginPageVerificationCodeSent": {
+      "message": "ನಿಮ್ಮ ಇಮೇಲ್‌ಗೆ ಪರಿಶೀಲನಾ ಕೋಡ್ ಕಳುಹಿಸಲಾಗಿದೆ. ದಯವಿಟ್ಟು ಅದನ್ನು ಕೆಳಗೆ ನಮೂದಿಸಿ."
+   },
+   "loginPageVerifyButton": {
+      "message": "ಪರಿಶೀಲಿಸು"
+   },
+   "loginPageVerifyCancelButton": {
+      "message": "ಪರಿಶೀಲನೆಯನ್ನು ರದ್ದುಗೊಳಿಸಿ"
+   },
+   "loginPageVerifyEmail": {
+      "message": "ನಿಮ್ಮ ಇಮೇಲ್ ಪರಿಶೀಲಿಸಿ"
+   },
+   "loginPageWrongVerificationCode": {
+      "message": "ತಪ್ಪಾದ ಪರಿಶೀಲನೆ ಕೋಡ್. ದಯವಿಟ್ಟು ನೀವು ಸರಿಯಾದ ಕೋಡ್ ಅನ್ನು ನಮೂದಿಸಿದ್ದೀರಿ ಎಂದು ಖಚಿತಪಡಿಸಿಕೊಳ್ಳಿ."
+   },
+   "modalAddCssAttributeText": {
+      "message": "ಸಿಎಸ್ಎಸ್ ಗುಣಲಕ್ಷಣ"
+   },
+   "modalAddCssValueText": {
+      "message": "ಸಿಎಸ್ಎಸ್ ಮೌಲ್ಯ"
+   },
+   "modalAddStylesText": {
+      "message": "ಶೈಲಿಗಳನ್ನು ಸೇರಿಸಿ"
+   },
+   "modalChildButtonText": {
+      "message": "ಮಕ್ಕಳ ಅಂಶ"
+   },
+   "modalChildButtonTooltip": {
+      "message": "ಆಯ್ಕೆಯನ್ನು ಮಗುವಿನ ಅಂಶಕ್ಕೆ ಸರಿಸಿ"
+   },
+   "modalClassSettingsText": {
+      "message": "ವರ್ಗ ಸೆಟ್ಟಿಂಗ್‌ಗಳು:"
+   },
+   "modalCloseButtonTooltip": {
+      "message": "ಮುಚ್ಚಿ"
+   },
+   "modalCopyButtonLoadingText": {
+      "message": "ನಕಲಿಸಲಾಗುತ್ತಿದೆ..."
+   },
+   "modalCopyButtonText": {
+      "message": "ನಕಲು ಮಾಡಿ"
+   },
+   "modalCopyCSSOnlyText": {
+      "message": "ಸಿಎಸ್ಎಸ್ ಮಾತ್ರ"
+   },
+   "modalCopyCssWithDivmagicText": {
+      "message": "ಡಿವ್ಮ್ಯಾಜಿಕ್ ಸಿಎಸ್ಎಸ್ ತರಗತಿಗಳು"
+   },
+   "modalCopyCssWithOriginalText": {
+      "message": "ಮೂಲ ಸಿಎಸ್ಎಸ್ ತರಗತಿಗಳು"
+   },
+   "modalCopyHTMLOnlyText": {
+      "message": "HTML ಮಾತ್ರ"
+   },
+   "modalCopyHtmlWithDivmagicText": {
+      "message": "ಡಿವ್ಮ್ಯಾಜಿಕ್ ಎಚ್ಟಿಎಮ್ಎಲ್ ಗುಣಲಕ್ಷಣಗಳು"
+   },
+   "modalCopyHtmlWithOriginalText": {
+      "message": "ಮೂಲ HTML ಗುಣಲಕ್ಷಣಗಳು"
+   },
+   "modalCopyIntegrationsText": {
+      "message": "ಏಕೀಕರಣಗಳು (ವರ್ಡ್ಪ್ರೆಸ್)"
+   },
+   "modalCopyModeSelectionAdaptable": {
+      "message": "ಹೊಂದಿಕೊಳ್ಳಬಲ್ಲ"
+   },
+   "modalCopyModeSelectionAdaptableTooltip": {
+      "message": "ಅಂಶದ ರಚನೆ ಮತ್ತು ಮೂಲ ನೋಟವನ್ನು ಕಾಪಾಡಿಕೊಳ್ಳಲು ಅಗತ್ಯವಾದ ಅತ್ಯಂತ ಅಗತ್ಯವಾದ ಶೈಲಿಗಳನ್ನು ಮಾತ್ರ ಒಳಗೊಂಡಿದೆ. ಕಸ್ಟಮೈಸ್ ಮಾಡಲು ಸುಲಭ."
+   },
+   "modalCopyModeSelectionBalanced": {
+      "message": "ಸಮತೋಲಿತ"
+   },
+   "modalCopyModeSelectionBalancedTooltip": {
+      "message": "::before ಮತ್ತು ::after ಹುಸಿ-ಅಂಶಗಳನ್ನು ಸಂಯೋಜಿಸುತ್ತದೆ, ಇದು ದೃಷ್ಟಿಗೋಚರ ಫಲಿತಾಂಶದ ಮೇಲೆ ಗಮನಾರ್ಹವಾಗಿ ಪರಿಣಾಮ ಬೀರಬಹುದು ಆದರೆ ಕೋಡ್ ಅನ್ನು ಅತಿಯಾಗಿ ಉಬ್ಬಿಕೊಳ್ಳಬೇಡಿ."
+   },
+   "modalCopyModeSelectionExact": {
+      "message": "ನಿಖರ"
+   },
+   "modalCopyModeSelectionExactTooltip": {
+      "message": "ಎಲ್ಲಾ ಶೈಲಿಗಳ ನಿಖರವಾದ ನಕಲು, ಅಂಶವು ಮೂಲದಂತೆ ಕಾಣುತ್ತದೆ."
+   },
+   "modalCopyModeSelectionText": {
+      "message": "ನಕಲು ಮೋಡ್"
+   },
+   "modalCopyModeSelectionTooltip": {
+      "message": "ಪ್ರಸ್ತುತ ಆಯ್ಕೆಗಾಗಿ ನಕಲು ಮೋಡ್ ಅನ್ನು ಆಯ್ಕೆಮಾಡಿ. ಹೆಚ್ಚಿನ ಬಳಕೆಯ ಸಂದರ್ಭಗಳಲ್ಲಿ ನಾವು \"ಹೊಂದಿಕೊಳ್ಳಬಹುದಾದ\" ಶಿಫಾರಸು ಮಾಡುತ್ತೇವೆ."
+   },
+   "modalCopyNotification": {
+      "message": "ಘಟಕವನ್ನು ನಕಲಿಸಲಾಗಿದೆ!"
+   },
+   "modalCopyViewText": {
+      "message": "ನಕಲು"
+   },
+   "modalDragButtonTooltip": {
+      "message": "ಸರಿಸಲು ಎಳೆಯಿರಿ"
+   },
+   "modalEditorViewText": {
+      "message": "ಸಂಪಾದಕ"
+   },
+   "modalElementSettingsText": {
+      "message": "ಅಂಶ ಸೆಟ್ಟಿಂಗ್‌ಗಳು:"
+   },
+   "modalExportNotification": {
+      "message": "ಘಟಕ ರಫ್ತು!"
+   },
+   "modalExportToStudioText": {
+      "message": "ಸ್ಟುಡಿಯೊಗೆ ರಫ್ತು ಮಾಡಿ"
+   },
+   "modalGoToLibraryText": {
+      "message": "ನನ್ನ ಗ್ರಂಥಾಲಯಕ್ಕೆ ಹೋಗಿ"
+   },
+   "modalInvalidCssValueText": {
+      "message": "ಅಮಾನ್ಯ ಸಿಎಸ್ಎಸ್ ಮೌಲ್ಯ"
+   },
+   "modalLeftButtonText": {
+      "message": "ಎಡ ಮಕ್ಕಳ ಅಂಶ"
+   },
+   "modalLeftButtonTooltip": {
+      "message": "ಆಯ್ಕೆಯನ್ನು ಎಡ ಒಡಹುಟ್ಟಿದವರ ಅಂಶಕ್ಕೆ ಸರಿಸಿ"
+   },
+   "modalMediaQuerySelectionTooltip": {
+      "message": "ನೀವು [[MEDIAQUERYXYZ]] CSS ಶೈಲಿಗಳನ್ನು ನಕಲಿಸಿದ ಕೋಡ್‌ನಲ್ಲಿ ಸೇರಿಸಲು ಬಯಸಿದರೆ ಆಯ್ಕೆಮಾಡಿ."
+   },
+   "modalParentButtonText": {
+      "message": "ಪೋಷಕ ಅಂಶ"
+   },
+   "modalParentButtonTooltip": {
+      "message": "ಪ್ರಸ್ತುತ ಆಯ್ಕೆಯ ಮೂಲ ಅಂಶವನ್ನು ಆಯ್ಕೆಮಾಡಿ"
+   },
+   "modalRightButtonText": {
+      "message": "ಬಲ ಮಕ್ಕಳ ಅಂಶ"
+   },
+   "modalRightButtonTooltip": {
+      "message": "ಆಯ್ಕೆಯನ್ನು ಬಲ ಒಡಹುಟ್ಟಿದವರ ಅಂಶಕ್ಕೆ ಸರಿಸಿ"
+   },
+   "modalSaveElementText": {
+      "message": "ಅಂಶವನ್ನು ಉಳಿಸಿ"
+   },
+   "modalSaveNotification": {
+      "message": "ಘಟಕವನ್ನು ಉಳಿಸಲಾಗಿದೆ!"
+   },
+   "modalSavedElementText": {
+      "message": "ಉಳಿಸಲಾಗಿದೆ!"
+   },
+   "modalSavingElementText": {
+      "message": "ಉಳಿತಾಯ ..."
+   },
+   "modalStudioExportTooltip": {
+      "message": "DivMagic Studio ದಲ್ಲಿ ತೆರೆಯಿರಿ"
+   },
+   "offText": {
+      "message": "ಆರಿಸಿ"
+   },
+   "onText": {
+      "message": "ಆನ್"
+   },
+   "optionsChooseLanguage": {
+      "message": "ಭಾಷೆಯನ್ನು ಆರಿಸಿ"
+   },
+   "optionsFeedback": {
+      "message": "ನೀವು ಯಾವುದೇ ಪ್ರತಿಕ್ರಿಯೆ ಅಥವಾ ಸಲಹೆಗಳನ್ನು ಹೊಂದಿದ್ದರೆ, ದಯವಿಟ್ಟು ನಮಗೆ ತಿಳಿಸಿ!"
+   },
+   "optionsShortcuts": {
+      "message": "ಕೀಬೋರ್ಡ್ ಶಾರ್ಟ್‌ಕಟ್‌ಗಳು"
+   },
+   "optionsTitle": {
+      "message": "ಆಯ್ಕೆಗಳು"
+   },
+   "panelCopyElementCopied": {
+      "message": "ನಕಲು ಮಾಡಲಾಗಿದೆ"
+   },
+   "popupCopyInstructions": {
+      "message": "ಯಾವುದೇ ಅಂಶದ ಮೇಲೆ ಕ್ಲಿಕ್ ಮಾಡಿ ಅಥವಾ ಕೀಲಿಯನ್ನು ಒತ್ತಿರಿ:"
+   },
+   "popupFeedback": {
+      "message": "ಪ್ರತಿಕ್ರಿಯೆ"
+   },
+   "popupSettings": {
+      "message": "ಸಂಯೋಜನೆಗಳು"
+   },
+   "popupSettingsAutoHidePopup": {
+      "message": "ಸ್ವಯಂ ಮರೆಮಾಡಿ ಪಾಪ್ಅಪ್"
+   },
+   "popupSettingsComponentFormat": {
+      "message": "ಘಟಕ ಸ್ವರೂಪ"
+   },
+   "popupSettingsComponentFormatTooltip": {
+      "message": "ನಕಲಿಸಿದ ಘಟಕಕ್ಕಾಗಿ ಸ್ವರೂಪವನ್ನು ಆಯ್ಕೆಮಾಡಿ"
+   },
+   "popupSettingsShowDevToolsPanel": {
+      "message": "[[DEVTOOLS]] ಫಲಕ"
+   },
+   "popupSettingsStyleFormat": {
+      "message": "ಶೈಲಿಯ ಸ್ವರೂಪ"
+   },
+   "popupSettingsStyleFormatExternalCSS": {
+      "message": "ಬಾಹ್ಯ CSS"
+   },
+   "popupSettingsStyleFormatInlineCSS": {
+      "message": "ಇನ್ಲೈನ್ ​​CSS"
+   },
+   "popupSettingsStyleFormatLocalCSS": {
+      "message": "ಸ್ಥಳೀಯ ಸಿಎಸ್ಎಸ್"
+   },
+   "popupSettingsStyleFormatTooltip": {
+      "message": "ನಕಲು ಮಾಡಿದ ಶೈಲಿಗಳಿಗಾಗಿ CSS ಸ್ವರೂಪವನ್ನು ಆಯ್ಕೆಮಾಡಿ"
+   },
+   "publishDate": {
+      "message": "ಮಾರ್ಚ್ 31 ಆವೃತ್ತಿ"
+   },
+   "toolBoxColorPickerDescriptionText": {
+      "message": "ಬಣ್ಣ ಕೋರುವ ಸಾಧನ"
+   },
+   "toolBoxColorPickerText": {
+      "message": "ಬಣ್ಣ ಕೋರುವ ಸಾಧನ"
+   },
+   "toolBoxCopyElementDescriptionText": {
+      "message": "ಪ್ರತಿ ಅಂಶವನ್ನು ನಕಲಿಸಿ"
+   },
+   "toolBoxCopyElementText": {
+      "message": "ಪ್ರತಿ ಅಂಶವನ್ನು ನಕಲಿಸಿ"
+   },
+   "toolBoxCopyFontsCopiedText": {
+      "message": "ನಕಲು ಮಾಡಲಾಗಿದೆ"
+   },
+   "toolBoxCopyFontsCopyToClipboardText": {
+      "message": "ನಕಲಿಸಲು ಕ್ಲಿಕ್ ಮಾಡಿ"
+   },
+   "toolBoxCopyFontsDescriptionText": {
+      "message": "ನಕಲಿಸಿ ಫಾಂಟ್"
+   },
+   "toolBoxCopyFontsNotFoundText": {
+      "message": "ಈ ವೆಬ್‌ಸೈಟ್ ಸಿಸ್ಟಮ್ ಫಾಂಟ್‌ಗಳನ್ನು ಬಳಸುತ್ತದೆ"
+   },
+   "toolBoxCopyFontsText": {
+      "message": "ನಕಲಿಸಿ ಫಾಂಟ್"
+   },
+   "toolBoxCopyFontsWindowText": {
+      "message": "ವೆಬ್ ಫಾಂಟ್‌ಗಳು"
+   },
+   "toolBoxGridsDescriptionText": {
+      "message": "ಪ್ರತಿಯೊಂದು ಅಂಶಕ್ಕೂ ಗಡಿಗಳನ್ನು ಸೇರಿಸುತ್ತದೆ"
+   },
+   "toolBoxGridsText": {
+      "message": "ಗ್ರಿಡ್‌ಗಳು"
+   },
+   "toolBoxInspectorDescriptionText": {
+      "message": "ಒಂದು ಅಂಶ ವಿವರವನ್ನು ನೋಡಿ"
+   },
+   "toolBoxInspectorText": {
+      "message": "ಇನ್ಸ್ಪೆಕ್ಟರ್"
+   },
+   "toolBoxShowFontsDescriptionText": {
+      "message": "ಪ್ರತಿ ಟ್ಯಾಗ್ ಯಾವ ಫಾಂಟ್ ಬಳಸುತ್ತಿದೆ ಎಂದು ತಿಳಿಯಿರಿ"
+   },
+   "toolBoxShowFontsText": {
+      "message": "ಪಟಗಳು"
+   },
+   "toolBoxThrashDescriptionText": {
+      "message": "ಒಂದು ಅಂಶವನ್ನು ಮರೆಮಾಡಿ ಅಥವಾ ತೆಗೆದುಹಾಕಿ"
+   },
+   "toolBoxThrashText": {
+      "message": "ಕಸ"
+   },
+   "toolBoxThrashWindowHideButton": {
+      "message": "ಆಡು"
+   },
+   "toolBoxThrashWindowRemoveButton": {
+      "message": "ತೆಗೆದುಹಾಕು"
+   },
+   "toolBoxThrashWindowText": {
+      "message": "ಅಂಶಗಳನ್ನು ಮರೆಮಾಡಿ / ತೆಗೆದುಹಾಕಿ"
+   },
+   "toolboxText": {
+      "message": "ಟೂಲ್ ಬಾಕ್ಸ್"
+   }
+}

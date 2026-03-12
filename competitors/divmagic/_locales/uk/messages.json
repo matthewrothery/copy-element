@@ -1,0 +1,362 @@
+{
+   "activateToolbox": {
+      "message": "Активуйте панель інструментів"
+   },
+   "contextMenuInspect": {
+      "message": "Інспектор"
+   },
+   "copied": {
+      "message": "Скопійовано!"
+   },
+   "devtoolsCopyElement": {
+      "message": "Копіювати елемент"
+   },
+   "devtoolsCopyElementCopying": {
+      "message": "Копіювання"
+   },
+   "devtoolsLibrary": {
+      "message": "Бібліотека"
+   },
+   "devtoolsLibraryComponentPerPage": {
+      "message": "Компоненти на сторінку"
+   },
+   "devtoolsLibraryNext": {
+      "message": "Далі"
+   },
+   "devtoolsLibraryNoComponents": {
+      "message": "Ваша бібліотека порожня. Збережіть компонент, щоб побачити його тут."
+   },
+   "devtoolsLibraryPrevious": {
+      "message": "Попередній"
+   },
+   "devtoolsNoElementSelectedText": {
+      "message": "Виберіть елемент на вкладці «Елементи», щоб переглянути його деталі тут"
+   },
+   "devtoolsSelectedElementText": {
+      "message": "Вибраний елемент"
+   },
+   "devtoolsUnsupportedElementSelectedText": {
+      "message": "Вибраний елемент не дозволений для операцій копіювання"
+   },
+   "extCommandChooseElement": {
+      "message": "Виберіть елемент для копіювання під час наведення"
+   },
+   "extDescription": {
+      "message": "Копіюйте елементи з будь-якої веб-сторінки як багаторазові веб-компоненти. Отримайте код CSS HTML, CSS, React, JSX або Tailwind."
+   },
+   "extName": {
+      "message": "DivMagic - Копіювати стиль"
+   },
+   "iframeCantBeAccessedText": {
+      "message": "DivMagic не може отримати доступ до цього iframe."
+   },
+   "iframeNeedAccessText": {
+      "message": "DivMagic має відкрити цей iframe, щоб отримати до нього доступ."
+   },
+   "iframeOpenText": {
+      "message": "Відкрити iframe"
+   },
+   "loginPageBody1": {
+      "message": "Щоб отримати доступ до нашого потужного інструменту веб-розробки, ми пропонуємо вам створити обліковий запис або увійти."
+   },
+   "loginPageBody2": {
+      "message": "Завдяки підписці на DivMagic ви зможете насолоджуватися безперебійним процесом розробки."
+   },
+   "loginPageEmailLabel": {
+      "message": "Ваша електронна адреса"
+   },
+   "loginPageError": {
+      "message": "Не вдалося ввійти. Переконайтеся, що ви використовуєте адресу електронної пошти, яку ви підписали."
+   },
+   "loginPageLoginButton": {
+      "message": "Логін"
+   },
+   "loginPageNewHere": {
+      "message": "Не знайомі з DivMagic?"
+   },
+   "loginPageSignUp": {
+      "message": "Зареєструватися"
+   },
+   "loginPageTitle": {
+      "message": "Ласкаво просимо до DivMagic!"
+   },
+   "loginPageVerificationCode": {
+      "message": "Код підтвердження"
+   },
+   "loginPageVerificationCodeSent": {
+      "message": "Код перевірки надісланий на ваш електронний лист. Введіть його нижче."
+   },
+   "loginPageVerifyButton": {
+      "message": "Перевірити"
+   },
+   "loginPageVerifyCancelButton": {
+      "message": "Скасувати перевірку"
+   },
+   "loginPageVerifyEmail": {
+      "message": "Перевірте свою електронну пошту"
+   },
+   "loginPageWrongVerificationCode": {
+      "message": "Неправильний код перевірки. Будь ласка, переконайтеся, що ви ввели правильний код."
+   },
+   "modalAddCssAttributeText": {
+      "message": "Атрибут CSS"
+   },
+   "modalAddCssValueText": {
+      "message": "Значення CSS"
+   },
+   "modalAddStylesText": {
+      "message": "Додати стилі"
+   },
+   "modalChildButtonText": {
+      "message": "Дочірній елемент"
+   },
+   "modalChildButtonTooltip": {
+      "message": "Перемістіть виділення до дочірнього елемента"
+   },
+   "modalClassSettingsText": {
+      "message": "Налаштування класу:"
+   },
+   "modalCloseButtonTooltip": {
+      "message": "Закрити"
+   },
+   "modalCopyButtonLoadingText": {
+      "message": "Копіювання..."
+   },
+   "modalCopyButtonText": {
+      "message": "Копіювати"
+   },
+   "modalCopyCSSOnlyText": {
+      "message": "Тільки CSS"
+   },
+   "modalCopyCssWithDivmagicText": {
+      "message": "Divmagic CSS -заняття"
+   },
+   "modalCopyCssWithOriginalText": {
+      "message": "Оригінальні заняття CSS"
+   },
+   "modalCopyHTMLOnlyText": {
+      "message": "Тільки HTML"
+   },
+   "modalCopyHtmlWithDivmagicText": {
+      "message": "Дівмагічні атрибути HTML"
+   },
+   "modalCopyHtmlWithOriginalText": {
+      "message": "Оригінальні атрибути HTML"
+   },
+   "modalCopyIntegrationsText": {
+      "message": "Інтеграції (WordPress)"
+   },
+   "modalCopyModeSelectionAdaptable": {
+      "message": "Адаптивний"
+   },
+   "modalCopyModeSelectionAdaptableTooltip": {
+      "message": "Включає лише найважливіші стилі, необхідні для підтримки структури та основного зовнішнього вигляду елемента. Легко налаштувати."
+   },
+   "modalCopyModeSelectionBalanced": {
+      "message": "Збалансований"
+   },
+   "modalCopyModeSelectionBalancedTooltip": {
+      "message": "Включає псевдоелементи, такі як ::before і ::after, які можуть значно вплинути на візуальний результат, але не надто роздувають код."
+   },
+   "modalCopyModeSelectionExact": {
+      "message": "Точний"
+   },
+   "modalCopyModeSelectionExactTooltip": {
+      "message": "Точна копія всіх стилів, гарантуючи, що елемент виглядає як вихідний."
+   },
+   "modalCopyModeSelectionText": {
+      "message": "Режим копіювання"
+   },
+   "modalCopyModeSelectionTooltip": {
+      "message": "Виберіть режим копіювання для поточного виділення. Ми рекомендуємо \"Адаптивний\" для більшості випадків використання."
+   },
+   "modalCopyNotification": {
+      "message": "Компонент скопійований!"
+   },
+   "modalCopyViewText": {
+      "message": "Копіювати"
+   },
+   "modalDragButtonTooltip": {
+      "message": "Перетягніть, щоб переміститися"
+   },
+   "modalEditorViewText": {
+      "message": "редактор"
+   },
+   "modalElementSettingsText": {
+      "message": "Налаштування елемента:"
+   },
+   "modalExportNotification": {
+      "message": "Компонент експортується!"
+   },
+   "modalExportToStudioText": {
+      "message": "Експорт до студії"
+   },
+   "modalGoToLibraryText": {
+      "message": "Ідіть до моєї бібліотеки"
+   },
+   "modalInvalidCssValueText": {
+      "message": "Недійсне значення CSS"
+   },
+   "modalLeftButtonText": {
+      "message": "Залишив дитячий елемент"
+   },
+   "modalLeftButtonTooltip": {
+      "message": "Перемістіть вибір на лівий елемент братів і сестер"
+   },
+   "modalMediaQuerySelectionTooltip": {
+      "message": "Виберіть, якщо ви хочете, щоб стилі [[MEDIAQUERYXYZ]] CSS були включені в скопійований код."
+   },
+   "modalParentButtonText": {
+      "message": "Батьківський елемент"
+   },
+   "modalParentButtonTooltip": {
+      "message": "Виберіть батьківський елемент поточного виділення"
+   },
+   "modalRightButtonText": {
+      "message": "Правий дитячий елемент"
+   },
+   "modalRightButtonTooltip": {
+      "message": "Перемістіть вибір у правий елемент братів і сестер"
+   },
+   "modalSaveElementText": {
+      "message": "Зберегти елемент"
+   },
+   "modalSaveNotification": {
+      "message": "Збережено компонент!"
+   },
+   "modalSavedElementText": {
+      "message": "Збережено!"
+   },
+   "modalSavingElementText": {
+      "message": "Збереження ..."
+   },
+   "modalStudioExportTooltip": {
+      "message": "Відкрити в DivMagic Studio"
+   },
+   "offText": {
+      "message": "Вимкнено"
+   },
+   "onText": {
+      "message": "Увімкнено"
+   },
+   "optionsChooseLanguage": {
+      "message": "Виберіть мову"
+   },
+   "optionsFeedback": {
+      "message": "Якщо у вас є відгуки чи пропозиції, повідомте нас!"
+   },
+   "optionsShortcuts": {
+      "message": "Гарячі клавіши"
+   },
+   "optionsTitle": {
+      "message": "Опції"
+   },
+   "panelCopyElementCopied": {
+      "message": "Скопійовано"
+   },
+   "popupCopyInstructions": {
+      "message": "Натисніть будь-який елемент або натисніть клавішу:"
+   },
+   "popupFeedback": {
+      "message": "Зворотній зв'язок"
+   },
+   "popupSettings": {
+      "message": "Налаштування"
+   },
+   "popupSettingsAutoHidePopup": {
+      "message": "Автоматичне приховування спливаючого вікна"
+   },
+   "popupSettingsComponentFormat": {
+      "message": "Формат компонента"
+   },
+   "popupSettingsComponentFormatTooltip": {
+      "message": "Виберіть формат для скопійованого компонента"
+   },
+   "popupSettingsShowDevToolsPanel": {
+      "message": "Панель [[DEVTOOLS]]."
+   },
+   "popupSettingsStyleFormat": {
+      "message": "Формат стилю"
+   },
+   "popupSettingsStyleFormatExternalCSS": {
+      "message": "Зовнішній CSS"
+   },
+   "popupSettingsStyleFormatInlineCSS": {
+      "message": "Вбудований CSS"
+   },
+   "popupSettingsStyleFormatLocalCSS": {
+      "message": "Локальний CSS"
+   },
+   "popupSettingsStyleFormatTooltip": {
+      "message": "Виберіть формат CSS для скопійованих стилів"
+   },
+   "publishDate": {
+      "message": "31 березня версія"
+   },
+   "toolBoxColorPickerDescriptionText": {
+      "message": "Кольорова підбірка"
+   },
+   "toolBoxColorPickerText": {
+      "message": "Кольорова підбірка"
+   },
+   "toolBoxCopyElementDescriptionText": {
+      "message": "Копіювати елемент"
+   },
+   "toolBoxCopyElementText": {
+      "message": "Копіювати елемент"
+   },
+   "toolBoxCopyFontsCopiedText": {
+      "message": "Скопійовано"
+   },
+   "toolBoxCopyFontsCopyToClipboardText": {
+      "message": "Клацніть, щоб скопіювати"
+   },
+   "toolBoxCopyFontsDescriptionText": {
+      "message": "Скопіюйте шрифт"
+   },
+   "toolBoxCopyFontsNotFoundText": {
+      "message": "Цей веб -сайт використовує системні шрифти"
+   },
+   "toolBoxCopyFontsText": {
+      "message": "Скопіюйте шрифт"
+   },
+   "toolBoxCopyFontsWindowText": {
+      "message": "Веб -шрифти"
+   },
+   "toolBoxGridsDescriptionText": {
+      "message": "Додає кордони до кожного елемента"
+   },
+   "toolBoxGridsText": {
+      "message": "Сітки"
+   },
+   "toolBoxInspectorDescriptionText": {
+      "message": "Дивіться деталі елемента"
+   },
+   "toolBoxInspectorText": {
+      "message": "Інспектор"
+   },
+   "toolBoxShowFontsDescriptionText": {
+      "message": "Знайте, який шрифт використовує кожен тег"
+   },
+   "toolBoxShowFontsText": {
+      "message": "Шрифти"
+   },
+   "toolBoxThrashDescriptionText": {
+      "message": "Приховати або зняти елемент"
+   },
+   "toolBoxThrashText": {
+      "message": "Смітник"
+   },
+   "toolBoxThrashWindowHideButton": {
+      "message": "Сховати"
+   },
+   "toolBoxThrashWindowRemoveButton": {
+      "message": "Видалити"
+   },
+   "toolBoxThrashWindowText": {
+      "message": "Приховати / видалити елементи"
+   },
+   "toolboxText": {
+      "message": "Коробка інструментів"
+   }
+}

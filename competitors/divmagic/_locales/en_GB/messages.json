@@ -1,0 +1,384 @@
+{
+   "activateToolbox": {
+      "message": "Activate Toolbox"
+   },
+   "contextMenuInspect": {
+      "message": "Inspector"
+   },
+   "copied": {
+      "description": "Copied",
+      "message": "Copied!"
+   },
+   "devtoolsCopyElement": {
+      "message": "Copy Element"
+   },
+   "devtoolsCopyElementCopying": {
+      "message": "Copying"
+   },
+   "devtoolsLibrary": {
+      "message": "Library"
+   },
+   "devtoolsLibraryComponentPerPage": {
+      "message": "Components per page"
+   },
+   "devtoolsLibraryNext": {
+      "message": "Next"
+   },
+   "devtoolsLibraryNoComponents": {
+      "message": "Your library is empty. Save a component to see it here."
+   },
+   "devtoolsLibraryPrevious": {
+      "message": "Previous"
+   },
+   "devtoolsNoElementSelectedText": {
+      "message": "Select an element from the \"Elements\" tab to see its details here"
+   },
+   "devtoolsSelectedElementText": {
+      "message": "Selected Element"
+   },
+   "devtoolsUnsupportedElementSelectedText": {
+      "message": "Selected element not allowed for copy operations"
+   },
+   "extCommandChooseElement": {
+      "message": "Pick element to copy while hovering"
+   },
+   "extDescription": {
+      "description": "Copy elements from any webpage as reusable web components. Get HTML, CSS, React, JSX or Tailwind CSS code.",
+      "message": "Copy elements from any webpage as reusable web components. Get HTML, CSS, React, JSX or Tailwind CSS code."
+   },
+   "extName": {
+      "description": "Copy elements from any webpage as reusable web components. Get HTML, CSS, React, JSX or Tailwind CSS code.",
+      "message": "DivMagic - Copy Style from any website"
+   },
+   "iframeCantBeAccessedText": {
+      "description": "Iframe Cant Be Accessed Text",
+      "message": "DivMagic can't access this iframe."
+   },
+   "iframeNeedAccessText": {
+      "description": "Iframe Need Access Text",
+      "message": "DivMagic needs to open this iframe to access it."
+   },
+   "iframeOpenText": {
+      "description": "Iframe Open Text",
+      "message": "Open iframe"
+   },
+   "loginPageBody1": {
+      "description": "Login Page Body 1",
+      "message": "To access our powerful web development tool, we invite you to create an account or login."
+   },
+   "loginPageBody2": {
+      "description": "Login Page Body 2",
+      "message": "You'll enjoy a seamless development workflow with a subscription to DivMagic."
+   },
+   "loginPageEmailLabel": {
+      "description": "Login Page Email Label",
+      "message": "Your email"
+   },
+   "loginPageError": {
+      "description": "Login Page Error",
+      "message": "Could not log in. Make sure you are using the email address you subscribed with."
+   },
+   "loginPageLoginButton": {
+      "description": "Login Page Login Button",
+      "message": "Login"
+   },
+   "loginPageNewHere": {
+      "description": "Login Page New Here",
+      "message": "New to DivMagic?"
+   },
+   "loginPageSignUp": {
+      "description": "Login Page Sign Up",
+      "message": "Sign Up"
+   },
+   "loginPageTitle": {
+      "description": "Login Page Title",
+      "message": "Welcome to DivMagic!"
+   },
+   "loginPageVerificationCode": {
+      "message": "Verification code"
+   },
+   "loginPageVerificationCodeSent": {
+      "message": "A verification code has been sent to your email. Please enter it below."
+   },
+   "loginPageVerifyButton": {
+      "message": "Verify"
+   },
+   "loginPageVerifyCancelButton": {
+      "message": "Cancel verification"
+   },
+   "loginPageVerifyEmail": {
+      "message": "Verify your email"
+   },
+   "loginPageWrongVerificationCode": {
+      "message": "Wrong verification code. Please make sure you entered the correct code."
+   },
+   "modalAddCssAttributeText": {
+      "message": "CSS Attribute"
+   },
+   "modalAddCssValueText": {
+      "message": "CSS Value"
+   },
+   "modalAddStylesText": {
+      "message": "Add styles"
+   },
+   "modalChildButtonText": {
+      "message": "Child Element"
+   },
+   "modalChildButtonTooltip": {
+      "message": "Move the selection to the child element"
+   },
+   "modalClassSettingsText": {
+      "message": "Class Settings:"
+   },
+   "modalCloseButtonTooltip": {
+      "message": "Close"
+   },
+   "modalCopyButtonLoadingText": {
+      "message": "Copying..."
+   },
+   "modalCopyButtonText": {
+      "message": "Copy"
+   },
+   "modalCopyCSSOnlyText": {
+      "message": "Only CSS"
+   },
+   "modalCopyCssWithDivmagicText": {
+      "message": "DivMagic CSS Classes"
+   },
+   "modalCopyCssWithOriginalText": {
+      "message": "Original CSS Classes"
+   },
+   "modalCopyHTMLOnlyText": {
+      "message": "Only HTML"
+   },
+   "modalCopyHtmlWithDivmagicText": {
+      "message": "DivMagic HTML Attributes"
+   },
+   "modalCopyHtmlWithOriginalText": {
+      "message": "Original HTML Attributes"
+   },
+   "modalCopyIntegrationsText": {
+      "message": "Integrations (WordPress)"
+   },
+   "modalCopyModeSelectionAdaptable": {
+      "message": "Adaptable"
+   },
+   "modalCopyModeSelectionAdaptableTooltip": {
+      "message": "Includes only the most essential styles needed to maintain the structure and basic appearance of the element. Easy to customize."
+   },
+   "modalCopyModeSelectionBalanced": {
+      "message": "Balanced"
+   },
+   "modalCopyModeSelectionBalancedTooltip": {
+      "message": "Incorporates pseudo-elements like ::before and ::after, which can affect the visual outcome significantly but don't bloat the code excessively."
+   },
+   "modalCopyModeSelectionExact": {
+      "message": "Exact"
+   },
+   "modalCopyModeSelectionExactTooltip": {
+      "message": "An exact copy of all styles, ensuring the element looks like the source."
+   },
+   "modalCopyModeSelectionText": {
+      "message": "Copy Mode"
+   },
+   "modalCopyModeSelectionTooltip": {
+      "message": "Select the copy mode for the current selection. We recommend \"Adaptable\" for most use cases."
+   },
+   "modalCopyNotification": {
+      "message": "Component Copied!"
+   },
+   "modalCopyViewText": {
+      "message": "Copy"
+   },
+   "modalDragButtonTooltip": {
+      "message": "Drag to move"
+   },
+   "modalEditorViewText": {
+      "message": "Editor"
+   },
+   "modalElementSettingsText": {
+      "message": "Element Settings:"
+   },
+   "modalExportNotification": {
+      "message": "Component Exported!"
+   },
+   "modalExportToStudioText": {
+      "message": "Export to Studio"
+   },
+   "modalGoToLibraryText": {
+      "message": "Go to my library"
+   },
+   "modalInvalidCssValueText": {
+      "message": "Invalid CSS value"
+   },
+   "modalLeftButtonText": {
+      "message": "Left Child Element"
+   },
+   "modalLeftButtonTooltip": {
+      "message": "Move the selection to the left sibling element"
+   },
+   "modalMediaQuerySelectionTooltip": {
+      "message": "Select if you want [[MEDIAQUERYXYZ]] CSS styles to be included in the copied code."
+   },
+   "modalParentButtonText": {
+      "message": "Parent Element"
+   },
+   "modalParentButtonTooltip": {
+      "message": "Select the parent element of the current selection"
+   },
+   "modalRightButtonText": {
+      "message": "Right Child Element"
+   },
+   "modalRightButtonTooltip": {
+      "message": "Move the selection to the right sibling element"
+   },
+   "modalSaveElementText": {
+      "message": "Save Element"
+   },
+   "modalSaveNotification": {
+      "message": "Component Saved!"
+   },
+   "modalSavedElementText": {
+      "message": "Saved!"
+   },
+   "modalSavingElementText": {
+      "message": "Saving..."
+   },
+   "modalStudioExportTooltip": {
+      "message": "Open in DivMagic Studio"
+   },
+   "offText": {
+      "message": "Off"
+   },
+   "onText": {
+      "message": "On"
+   },
+   "optionsChooseLanguage": {
+      "message": "Choose a language"
+   },
+   "optionsFeedback": {
+      "message": "If you have any feedback or suggestions, please let us know!"
+   },
+   "optionsShortcuts": {
+      "message": "Keyboard Shortcuts"
+   },
+   "optionsTitle": {
+      "message": "Options"
+   },
+   "panelCopyElementCopied": {
+      "message": "Copied"
+   },
+   "popupCopyInstructions": {
+      "description": "Popup Copy Instructions",
+      "message": "Click on any element or press key:"
+   },
+   "popupFeedback": {
+      "description": "Popup Feedback",
+      "message": "Feedback"
+   },
+   "popupSettings": {
+      "description": "Popup Settings",
+      "message": "Settings"
+   },
+   "popupSettingsAutoHidePopup": {
+      "message": "Auto Hide Popup"
+   },
+   "popupSettingsComponentFormat": {
+      "description": "Popup Settings Component Format",
+      "message": "Component Format"
+   },
+   "popupSettingsComponentFormatTooltip": {
+      "message": "Select the format for the copied component"
+   },
+   "popupSettingsShowDevToolsPanel": {
+      "message": "[[DEVTOOLS]] Panel"
+   },
+   "popupSettingsStyleFormat": {
+      "description": "Popup Settings Style Format",
+      "message": "Style Format"
+   },
+   "popupSettingsStyleFormatExternalCSS": {
+      "description": "Popup Settings Style Format External CSS",
+      "message": "External CSS"
+   },
+   "popupSettingsStyleFormatInlineCSS": {
+      "description": "Popup Settings Style Format Inline CSS",
+      "message": "Inline CSS"
+   },
+   "popupSettingsStyleFormatLocalCSS": {
+      "description": "Popup Settings Style Format Local CSS",
+      "message": "Local CSS"
+   },
+   "popupSettingsStyleFormatTooltip": {
+      "message": "Select the CSS format for the copied styles"
+   },
+   "publishDate": {
+      "message": "March 31 Version"
+   },
+   "toolBoxColorPickerDescriptionText": {
+      "message": "Color Picker"
+   },
+   "toolBoxColorPickerText": {
+      "message": "Color Picker"
+   },
+   "toolBoxCopyElementDescriptionText": {
+      "message": "Copy Element"
+   },
+   "toolBoxCopyElementText": {
+      "message": "Copy Element"
+   },
+   "toolBoxCopyFontsCopiedText": {
+      "message": "Copied"
+   },
+   "toolBoxCopyFontsCopyToClipboardText": {
+      "message": "Click To Copy"
+   },
+   "toolBoxCopyFontsDescriptionText": {
+      "message": "Copy Font"
+   },
+   "toolBoxCopyFontsNotFoundText": {
+      "message": "This website uses system fonts"
+   },
+   "toolBoxCopyFontsText": {
+      "message": "Copy Font"
+   },
+   "toolBoxCopyFontsWindowText": {
+      "message": "Web Fonts"
+   },
+   "toolBoxGridsDescriptionText": {
+      "message": "Adds borders to every element"
+   },
+   "toolBoxGridsText": {
+      "message": "Grids"
+   },
+   "toolBoxInspectorDescriptionText": {
+      "message": "See an element detail"
+   },
+   "toolBoxInspectorText": {
+      "message": "Inspector"
+   },
+   "toolBoxShowFontsDescriptionText": {
+      "message": "Know what font each tag is using"
+   },
+   "toolBoxShowFontsText": {
+      "message": "Fonts"
+   },
+   "toolBoxThrashDescriptionText": {
+      "message": "Hide or remove an element"
+   },
+   "toolBoxThrashText": {
+      "message": "Trash"
+   },
+   "toolBoxThrashWindowHideButton": {
+      "message": "Hide"
+   },
+   "toolBoxThrashWindowRemoveButton": {
+      "message": "Remove"
+   },
+   "toolBoxThrashWindowText": {
+      "message": "Hide / Remove Elements"
+   },
+   "toolboxText": {
+      "message": "Toolbox"
+   }
+}

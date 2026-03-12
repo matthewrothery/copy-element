@@ -1,0 +1,362 @@
+{
+   "activateToolbox": {
+      "message": "Aktiveeri tööriistakast"
+   },
+   "contextMenuInspect": {
+      "message": "inspektor"
+   },
+   "copied": {
+      "message": "Kopeeritud!"
+   },
+   "devtoolsCopyElement": {
+      "message": "Kopeeri element"
+   },
+   "devtoolsCopyElementCopying": {
+      "message": "Kopeerimine"
+   },
+   "devtoolsLibrary": {
+      "message": "Raamatukogu"
+   },
+   "devtoolsLibraryComponentPerPage": {
+      "message": "Komponendid lehe kohta"
+   },
+   "devtoolsLibraryNext": {
+      "message": "Edasi"
+   },
+   "devtoolsLibraryNoComponents": {
+      "message": "Teie raamatukogu on tühi. Salvestage komponent, et seda siit näha."
+   },
+   "devtoolsLibraryPrevious": {
+      "message": "Eelnev"
+   },
+   "devtoolsNoElementSelectedText": {
+      "message": "Valige element vahekaardilt \"Elements\", et näha selle üksikasju siin"
+   },
+   "devtoolsSelectedElementText": {
+      "message": "Valitud element"
+   },
+   "devtoolsUnsupportedElementSelectedText": {
+      "message": "Valitud element pole kopeerimistoimingute jaoks lubatud"
+   },
+   "extCommandChooseElement": {
+      "message": "Valige kursorit hõljutades kopeeritav element"
+   },
+   "extDescription": {
+      "message": "Kopeerige elemente mis tahes veebilehelt korduvkasutatavate veebikomponentidena. Hankige HTML, CSS, React, JSX või Tailwind CSS kood."
+   },
+   "extName": {
+      "message": "DivMagic – kopeerimisstiil"
+   },
+   "iframeCantBeAccessedText": {
+      "message": "DivMagic ei pääse sellele iframe'ile juurde."
+   },
+   "iframeNeedAccessText": {
+      "message": "DivMagic peab selle iframe'i avama, et sellele juurde pääseda."
+   },
+   "iframeOpenText": {
+      "message": "Ava iframe"
+   },
+   "loginPageBody1": {
+      "message": "Meie võimsa veebiarendustööriista kasutamiseks kutsume teid looma konto või sisse logima."
+   },
+   "loginPageBody2": {
+      "message": "DivMagicu tellimusega saate nautida sujuvat arendustöövoogu."
+   },
+   "loginPageEmailLabel": {
+      "message": "Sinu email"
+   },
+   "loginPageError": {
+      "message": "Sisselogimine ebaõnnestus. Veenduge, et kasutate e-posti aadressi, millega tellisite."
+   },
+   "loginPageLoginButton": {
+      "message": "Logi sisse"
+   },
+   "loginPageNewHere": {
+      "message": "Kas uus DivMagic?"
+   },
+   "loginPageSignUp": {
+      "message": "Registreeri"
+   },
+   "loginPageTitle": {
+      "message": "Tere tulemast DivMagicisse!"
+   },
+   "loginPageVerificationCode": {
+      "message": "Kinnituskood"
+   },
+   "loginPageVerificationCodeSent": {
+      "message": "Teie e -kirjale on saadetud kinnituskood. Sisestage see allpool."
+   },
+   "loginPageVerifyButton": {
+      "message": "Kontrollima"
+   },
+   "loginPageVerifyCancelButton": {
+      "message": "Tühista kinnitamine"
+   },
+   "loginPageVerifyEmail": {
+      "message": "Kontrollige oma e -posti aadressi"
+   },
+   "loginPageWrongVerificationCode": {
+      "message": "Vale kinnituskood. Veenduge, et sisestasite õige koodi."
+   },
+   "modalAddCssAttributeText": {
+      "message": "CSS -i atribuut"
+   },
+   "modalAddCssValueText": {
+      "message": "CSS väärtus"
+   },
+   "modalAddStylesText": {
+      "message": "Lisage stiile"
+   },
+   "modalChildButtonText": {
+      "message": "Lapse element"
+   },
+   "modalChildButtonTooltip": {
+      "message": "Liigutage valik alamelemendile"
+   },
+   "modalClassSettingsText": {
+      "message": "Klassi seaded:"
+   },
+   "modalCloseButtonTooltip": {
+      "message": "Sulge"
+   },
+   "modalCopyButtonLoadingText": {
+      "message": "Kopeerimine..."
+   },
+   "modalCopyButtonText": {
+      "message": "Kopeeri"
+   },
+   "modalCopyCSSOnlyText": {
+      "message": "Ainult CSS"
+   },
+   "modalCopyCssWithDivmagicText": {
+      "message": "DivMagic CSS klassid"
+   },
+   "modalCopyCssWithOriginalText": {
+      "message": "Algsed CSS -klassid"
+   },
+   "modalCopyHTMLOnlyText": {
+      "message": "Ainult HTML"
+   },
+   "modalCopyHtmlWithDivmagicText": {
+      "message": "DivMagic HTML atribuudid"
+   },
+   "modalCopyHtmlWithOriginalText": {
+      "message": "Algsed HTML -i atribuudid"
+   },
+   "modalCopyIntegrationsText": {
+      "message": "Integratsioonid (WordPress)"
+   },
+   "modalCopyModeSelectionAdaptable": {
+      "message": "Kohanduv"
+   },
+   "modalCopyModeSelectionAdaptableTooltip": {
+      "message": "Sisaldab ainult kõige olulisemaid stiile, mis on vajalikud elemendi struktuuri ja põhilise välimuse säilitamiseks. Lihtne kohandada."
+   },
+   "modalCopyModeSelectionBalanced": {
+      "message": "Tasakaalustatud"
+   },
+   "modalCopyModeSelectionBalancedTooltip": {
+      "message": "Sisaldab pseudoelemente, nagu ::before ja ::after, mis võivad visuaalset tulemust oluliselt mõjutada, kuid ei paisuta koodi liigselt."
+   },
+   "modalCopyModeSelectionExact": {
+      "message": "Täpne"
+   },
+   "modalCopyModeSelectionExactTooltip": {
+      "message": "Kõigi stiilide täpne koopia, mis tagab, et element näeb välja nagu allikas."
+   },
+   "modalCopyModeSelectionText": {
+      "message": "Kopeerimisrežiim"
+   },
+   "modalCopyModeSelectionTooltip": {
+      "message": "Valige praeguse valiku jaoks kopeerimisrežiim. Enamiku kasutusjuhtude jaoks soovitame \"Kohandatav\"."
+   },
+   "modalCopyNotification": {
+      "message": "Komponent kopeeritud!"
+   },
+   "modalCopyViewText": {
+      "message": "Koopia"
+   },
+   "modalDragButtonTooltip": {
+      "message": "Liigutamiseks lohistage"
+   },
+   "modalEditorViewText": {
+      "message": "Toimetaja"
+   },
+   "modalElementSettingsText": {
+      "message": "Elemendi sätted:"
+   },
+   "modalExportNotification": {
+      "message": "Komponent eksporditud!"
+   },
+   "modalExportToStudioText": {
+      "message": "Ekspordi stuudiosse"
+   },
+   "modalGoToLibraryText": {
+      "message": "Minge minu raamatukokku"
+   },
+   "modalInvalidCssValueText": {
+      "message": "Vale CSS väärtus"
+   },
+   "modalLeftButtonText": {
+      "message": "Vasak lapse element"
+   },
+   "modalLeftButtonTooltip": {
+      "message": "Liigutage valik vasakule õdede -vendade elemendile"
+   },
+   "modalMediaQuerySelectionTooltip": {
+      "message": "Valige, kas soovite, et kopeeritud koodi kaasataks [[MEDIAQUERYXYZ]] CSS-stiile."
+   },
+   "modalParentButtonText": {
+      "message": "Vanemelement"
+   },
+   "modalParentButtonTooltip": {
+      "message": "Valige praeguse valiku põhielement"
+   },
+   "modalRightButtonText": {
+      "message": "Õige lapse element"
+   },
+   "modalRightButtonTooltip": {
+      "message": "Liigutage valik paremasse õdede -venda elementi"
+   },
+   "modalSaveElementText": {
+      "message": "Salvesta element"
+   },
+   "modalSaveNotification": {
+      "message": "Komponent salvestatud!"
+   },
+   "modalSavedElementText": {
+      "message": "Salvestatud!"
+   },
+   "modalSavingElementText": {
+      "message": "Säästmine ..."
+   },
+   "modalStudioExportTooltip": {
+      "message": "Avage DivMagic Studio"
+   },
+   "offText": {
+      "message": "Väljas"
+   },
+   "onText": {
+      "message": "Peal"
+   },
+   "optionsChooseLanguage": {
+      "message": "Valige keel"
+   },
+   "optionsFeedback": {
+      "message": "Kui teil on tagasisidet või ettepanekuid, andke meile teada!"
+   },
+   "optionsShortcuts": {
+      "message": "Klaviatuuri otseteed"
+   },
+   "optionsTitle": {
+      "message": "Valikud"
+   },
+   "panelCopyElementCopied": {
+      "message": "Kopeeritud"
+   },
+   "popupCopyInstructions": {
+      "message": "Klõpsake mis tahes elemendil või vajutage klahvi:"
+   },
+   "popupFeedback": {
+      "message": "Tagasiside"
+   },
+   "popupSettings": {
+      "message": "Seaded"
+   },
+   "popupSettingsAutoHidePopup": {
+      "message": "Hüpikakna automaatne peitmine"
+   },
+   "popupSettingsComponentFormat": {
+      "message": "Komponendi vorming"
+   },
+   "popupSettingsComponentFormatTooltip": {
+      "message": "Valige kopeeritud komponendi vorming"
+   },
+   "popupSettingsShowDevToolsPanel": {
+      "message": "[[DEVTOOLS]] paneel"
+   },
+   "popupSettingsStyleFormat": {
+      "message": "Stiilivorming"
+   },
+   "popupSettingsStyleFormatExternalCSS": {
+      "message": "Väline CSS"
+   },
+   "popupSettingsStyleFormatInlineCSS": {
+      "message": "Tekstisisene CSS"
+   },
+   "popupSettingsStyleFormatLocalCSS": {
+      "message": "Kohalik CSS"
+   },
+   "popupSettingsStyleFormatTooltip": {
+      "message": "Valige kopeeritud stiilide jaoks CSS-vorming"
+   },
+   "publishDate": {
+      "message": "31. märts versioon"
+   },
+   "toolBoxColorPickerDescriptionText": {
+      "message": "Värvivalija"
+   },
+   "toolBoxColorPickerText": {
+      "message": "Värvivalija"
+   },
+   "toolBoxCopyElementDescriptionText": {
+      "message": "Koopiaelement"
+   },
+   "toolBoxCopyElementText": {
+      "message": "Koopiaelement"
+   },
+   "toolBoxCopyFontsCopiedText": {
+      "message": "Kopeeritud"
+   },
+   "toolBoxCopyFontsCopyToClipboardText": {
+      "message": "Klõpsake kopeerimiseks"
+   },
+   "toolBoxCopyFontsDescriptionText": {
+      "message": "Koopiafond"
+   },
+   "toolBoxCopyFontsNotFoundText": {
+      "message": "See veebisait kasutab süsteemifonte"
+   },
+   "toolBoxCopyFontsText": {
+      "message": "Koopiafond"
+   },
+   "toolBoxCopyFontsWindowText": {
+      "message": "Veebfontid"
+   },
+   "toolBoxGridsDescriptionText": {
+      "message": "Lisab igale elemendile piire"
+   },
+   "toolBoxGridsText": {
+      "message": "Võred"
+   },
+   "toolBoxInspectorDescriptionText": {
+      "message": "Vaadake elemendi detaili"
+   },
+   "toolBoxInspectorText": {
+      "message": "inspektor"
+   },
+   "toolBoxShowFontsDescriptionText": {
+      "message": "Tea, mida iga sildi font kasutab"
+   },
+   "toolBoxShowFontsText": {
+      "message": "Fondid"
+   },
+   "toolBoxThrashDescriptionText": {
+      "message": "Peida või eemaldage element"
+   },
+   "toolBoxThrashText": {
+      "message": "Prügikast"
+   },
+   "toolBoxThrashWindowHideButton": {
+      "message": "Varjama"
+   },
+   "toolBoxThrashWindowRemoveButton": {
+      "message": "Eemaldama"
+   },
+   "toolBoxThrashWindowText": {
+      "message": "Peida / eemaldage elemendid"
+   },
+   "toolboxText": {
+      "message": "Tööriistakast"
+   }
+}

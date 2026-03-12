@@ -1,0 +1,362 @@
+{
+   "activateToolbox": {
+      "message": "Aktiver verktøykasse"
+   },
+   "contextMenuInspect": {
+      "message": "Inspektør"
+   },
+   "copied": {
+      "message": "Kopiert!"
+   },
+   "devtoolsCopyElement": {
+      "message": "Kopier element"
+   },
+   "devtoolsCopyElementCopying": {
+      "message": "Kopierer"
+   },
+   "devtoolsLibrary": {
+      "message": "Bibliotek"
+   },
+   "devtoolsLibraryComponentPerPage": {
+      "message": "Komponenter per side"
+   },
+   "devtoolsLibraryNext": {
+      "message": "Neste"
+   },
+   "devtoolsLibraryNoComponents": {
+      "message": "Biblioteket ditt er tomt. Lagre en komponent for å se den her."
+   },
+   "devtoolsLibraryPrevious": {
+      "message": "Tidligere"
+   },
+   "devtoolsNoElementSelectedText": {
+      "message": "Velg et element fra \"Elementer\"-fanen for å se detaljene her"
+   },
+   "devtoolsSelectedElementText": {
+      "message": "Valgt element"
+   },
+   "devtoolsUnsupportedElementSelectedText": {
+      "message": "Det valgte elementet er ikke tillatt for kopieringsoperasjoner"
+   },
+   "extCommandChooseElement": {
+      "message": "Velg element som skal kopieres mens du holder musepekeren"
+   },
+   "extDescription": {
+      "message": "Kopier elementer fra hvilken som helst nettside som gjenbrukbare webkomponenter. Få HTML-, CSS-, React-, JSX- eller Tailwind CSS-kode."
+   },
+   "extName": {
+      "message": "DivMagic - Kopier stil"
+   },
+   "iframeCantBeAccessedText": {
+      "message": "DivMagic har ikke tilgang til denne iframen."
+   },
+   "iframeNeedAccessText": {
+      "message": "DivMagic må åpne denne iframen for å få tilgang til den."
+   },
+   "iframeOpenText": {
+      "message": "Åpne iframe"
+   },
+   "loginPageBody1": {
+      "message": "For å få tilgang til vårt kraftige nettutviklingsverktøy, inviterer vi deg til å opprette en konto eller logge på."
+   },
+   "loginPageBody2": {
+      "message": "Du vil glede deg over en sømløs utviklingsarbeidsflyt med et abonnement på DivMagic."
+   },
+   "loginPageEmailLabel": {
+      "message": "Din epost"
+   },
+   "loginPageError": {
+      "message": "Kunne ikke logge på. Sørg for at du bruker e-postadressen du abonnerte med."
+   },
+   "loginPageLoginButton": {
+      "message": "Logg Inn"
+   },
+   "loginPageNewHere": {
+      "message": "Ny på DivMagic?"
+   },
+   "loginPageSignUp": {
+      "message": "Melde deg på"
+   },
+   "loginPageTitle": {
+      "message": "Velkommen til DivMagic!"
+   },
+   "loginPageVerificationCode": {
+      "message": "Bekreftelseskode"
+   },
+   "loginPageVerificationCodeSent": {
+      "message": "En bekreftelseskode er sendt til e -posten din. Vennligst skriv den nedenfor."
+   },
+   "loginPageVerifyButton": {
+      "message": "Bekrefte"
+   },
+   "loginPageVerifyCancelButton": {
+      "message": "Avbryt bekreftelse"
+   },
+   "loginPageVerifyEmail": {
+      "message": "Bekreft e -posten din"
+   },
+   "loginPageWrongVerificationCode": {
+      "message": "Feil bekreftelseskode. Forsikre deg om at du skrev inn riktig kode."
+   },
+   "modalAddCssAttributeText": {
+      "message": "CSS -attributt"
+   },
+   "modalAddCssValueText": {
+      "message": "CSS -verdi"
+   },
+   "modalAddStylesText": {
+      "message": "Legg til stiler"
+   },
+   "modalChildButtonText": {
+      "message": "Barneelement"
+   },
+   "modalChildButtonTooltip": {
+      "message": "Flytt markeringen til det underordnede elementet"
+   },
+   "modalClassSettingsText": {
+      "message": "Klasseinnstillinger:"
+   },
+   "modalCloseButtonTooltip": {
+      "message": "Lukk"
+   },
+   "modalCopyButtonLoadingText": {
+      "message": "Kopierer..."
+   },
+   "modalCopyButtonText": {
+      "message": "Kopiere"
+   },
+   "modalCopyCSSOnlyText": {
+      "message": "Kun CSS"
+   },
+   "modalCopyCssWithDivmagicText": {
+      "message": "DivMagic CSS -klasser"
+   },
+   "modalCopyCssWithOriginalText": {
+      "message": "Original CSS -klasser"
+   },
+   "modalCopyHTMLOnlyText": {
+      "message": "Bare HTML"
+   },
+   "modalCopyHtmlWithDivmagicText": {
+      "message": "DivMagic HTML -attributter"
+   },
+   "modalCopyHtmlWithOriginalText": {
+      "message": "Original HTML -attributter"
+   },
+   "modalCopyIntegrationsText": {
+      "message": "Integrasjoner (WordPress)"
+   },
+   "modalCopyModeSelectionAdaptable": {
+      "message": "Tilpasningsdyktig"
+   },
+   "modalCopyModeSelectionAdaptableTooltip": {
+      "message": "Inkluderer bare de mest essensielle stilene som trengs for å opprettholde strukturen og det grunnleggende utseendet til elementet. Enkel å tilpasse."
+   },
+   "modalCopyModeSelectionBalanced": {
+      "message": "Balansert"
+   },
+   "modalCopyModeSelectionBalancedTooltip": {
+      "message": "Inkorporerer pseudo-elementer som ::before og ::after, som kan påvirke det visuelle resultatet betydelig, men ikke blåser koden for mye."
+   },
+   "modalCopyModeSelectionExact": {
+      "message": "Nøyaktig"
+   },
+   "modalCopyModeSelectionExactTooltip": {
+      "message": "En nøyaktig kopi av alle stiler, som sikrer at elementet ser ut som kilden."
+   },
+   "modalCopyModeSelectionText": {
+      "message": "Kopimodus"
+   },
+   "modalCopyModeSelectionTooltip": {
+      "message": "Velg kopieringsmodus for gjeldende valg. Vi anbefaler \"Adaptable\" for de fleste brukstilfeller."
+   },
+   "modalCopyNotification": {
+      "message": "Komponent kopiert!"
+   },
+   "modalCopyViewText": {
+      "message": "Kopiere"
+   },
+   "modalDragButtonTooltip": {
+      "message": "Dra for å flytte"
+   },
+   "modalEditorViewText": {
+      "message": "Redaktør"
+   },
+   "modalElementSettingsText": {
+      "message": "Elementinnstillinger:"
+   },
+   "modalExportNotification": {
+      "message": "Komponent eksportert!"
+   },
+   "modalExportToStudioText": {
+      "message": "Eksport til studio"
+   },
+   "modalGoToLibraryText": {
+      "message": "Gå til biblioteket mitt"
+   },
+   "modalInvalidCssValueText": {
+      "message": "Ugyldig CSS -verdi"
+   },
+   "modalLeftButtonText": {
+      "message": "Venstre barnelement"
+   },
+   "modalLeftButtonTooltip": {
+      "message": "Flytt utvalget til venstre søskenelement"
+   },
+   "modalMediaQuerySelectionTooltip": {
+      "message": "Velg om du vil at [[MEDIAQUERYXYZ]] CSS-stiler skal inkluderes i den kopierte koden."
+   },
+   "modalParentButtonText": {
+      "message": "Overordnet element"
+   },
+   "modalParentButtonTooltip": {
+      "message": "Velg det overordnede elementet for det gjeldende utvalget"
+   },
+   "modalRightButtonText": {
+      "message": "Høyre barnelement"
+   },
+   "modalRightButtonTooltip": {
+      "message": "Flytt utvalget til riktig søskenelement"
+   },
+   "modalSaveElementText": {
+      "message": "Lagre element"
+   },
+   "modalSaveNotification": {
+      "message": "Komponent lagret!"
+   },
+   "modalSavedElementText": {
+      "message": "Lagret!"
+   },
+   "modalSavingElementText": {
+      "message": "Sparer ..."
+   },
+   "modalStudioExportTooltip": {
+      "message": "Åpne i DivMagic Studio"
+   },
+   "offText": {
+      "message": "Av"
+   },
+   "onText": {
+      "message": "På"
+   },
+   "optionsChooseLanguage": {
+      "message": "Velg et språk"
+   },
+   "optionsFeedback": {
+      "message": "Hvis du har tilbakemeldinger eller forslag, vennligst gi oss beskjed!"
+   },
+   "optionsShortcuts": {
+      "message": "Tastatursnarveier"
+   },
+   "optionsTitle": {
+      "message": "Alternativer"
+   },
+   "panelCopyElementCopied": {
+      "message": "Kopiert"
+   },
+   "popupCopyInstructions": {
+      "message": "Klikk på et element eller trykk på tasten:"
+   },
+   "popupFeedback": {
+      "message": "Tilbakemelding"
+   },
+   "popupSettings": {
+      "message": "Innstillinger"
+   },
+   "popupSettingsAutoHidePopup": {
+      "message": "Skjul popup automatisk"
+   },
+   "popupSettingsComponentFormat": {
+      "message": "Komponentformat"
+   },
+   "popupSettingsComponentFormatTooltip": {
+      "message": "Velg formatet for den kopierte komponenten"
+   },
+   "popupSettingsShowDevToolsPanel": {
+      "message": "[[DEVTOOLS]] Panel"
+   },
+   "popupSettingsStyleFormat": {
+      "message": "Stilformat"
+   },
+   "popupSettingsStyleFormatExternalCSS": {
+      "message": "Ekstern CSS"
+   },
+   "popupSettingsStyleFormatInlineCSS": {
+      "message": "Innebygd CSS"
+   },
+   "popupSettingsStyleFormatLocalCSS": {
+      "message": "Lokal CSS"
+   },
+   "popupSettingsStyleFormatTooltip": {
+      "message": "Velg CSS-formatet for de kopierte stilene"
+   },
+   "publishDate": {
+      "message": "31. mars versjon"
+   },
+   "toolBoxColorPickerDescriptionText": {
+      "message": "Fargevelger"
+   },
+   "toolBoxColorPickerText": {
+      "message": "Fargevelger"
+   },
+   "toolBoxCopyElementDescriptionText": {
+      "message": "Kopielement"
+   },
+   "toolBoxCopyElementText": {
+      "message": "Kopielement"
+   },
+   "toolBoxCopyFontsCopiedText": {
+      "message": "Kopiert"
+   },
+   "toolBoxCopyFontsCopyToClipboardText": {
+      "message": "Klikk for å kopiere"
+   },
+   "toolBoxCopyFontsDescriptionText": {
+      "message": "Kopier font"
+   },
+   "toolBoxCopyFontsNotFoundText": {
+      "message": "Dette nettstedet bruker systemfonter"
+   },
+   "toolBoxCopyFontsText": {
+      "message": "Kopier font"
+   },
+   "toolBoxCopyFontsWindowText": {
+      "message": "Nettfonter"
+   },
+   "toolBoxGridsDescriptionText": {
+      "message": "Legger grenser til hvert element"
+   },
+   "toolBoxGridsText": {
+      "message": "Rutenett"
+   },
+   "toolBoxInspectorDescriptionText": {
+      "message": "Se en elementdetalj"
+   },
+   "toolBoxInspectorText": {
+      "message": "Inspektør"
+   },
+   "toolBoxShowFontsDescriptionText": {
+      "message": "Vet hvilken font hver tagg bruker"
+   },
+   "toolBoxShowFontsText": {
+      "message": "Skrifter"
+   },
+   "toolBoxThrashDescriptionText": {
+      "message": "Skjul eller fjern et element"
+   },
+   "toolBoxThrashText": {
+      "message": "Søppel"
+   },
+   "toolBoxThrashWindowHideButton": {
+      "message": "Gjemme seg"
+   },
+   "toolBoxThrashWindowRemoveButton": {
+      "message": "Fjerne"
+   },
+   "toolBoxThrashWindowText": {
+      "message": "Skjul / fjern elementer"
+   },
+   "toolboxText": {
+      "message": "Verktøykasse"
+   }
+}

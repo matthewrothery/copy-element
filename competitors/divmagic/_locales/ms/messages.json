@@ -1,0 +1,362 @@
+{
+   "activateToolbox": {
+      "message": "Aktifkan kotak alat"
+   },
+   "contextMenuInspect": {
+      "message": "Inspektor"
+   },
+   "copied": {
+      "message": "disalin!"
+   },
+   "devtoolsCopyElement": {
+      "message": "Elemen Salin"
+   },
+   "devtoolsCopyElementCopying": {
+      "message": "Menyalin"
+   },
+   "devtoolsLibrary": {
+      "message": "Perpustakaan"
+   },
+   "devtoolsLibraryComponentPerPage": {
+      "message": "Komponen setiap halaman"
+   },
+   "devtoolsLibraryNext": {
+      "message": "Seterusnya"
+   },
+   "devtoolsLibraryNoComponents": {
+      "message": "Perpustakaan anda kosong. Simpan komponen untuk melihatnya di sini."
+   },
+   "devtoolsLibraryPrevious": {
+      "message": "Sebelumnya"
+   },
+   "devtoolsNoElementSelectedText": {
+      "message": "Pilih elemen daripada tab \"Unsur\" untuk melihat butirannya di sini"
+   },
+   "devtoolsSelectedElementText": {
+      "message": "Elemen yang Dipilih"
+   },
+   "devtoolsUnsupportedElementSelectedText": {
+      "message": "Elemen terpilih tidak dibenarkan untuk operasi penyalinan"
+   },
+   "extCommandChooseElement": {
+      "message": "Pilih elemen untuk disalin semasa melayang"
+   },
+   "extDescription": {
+      "message": "Salin elemen daripada mana-mana halaman web sebagai komponen web boleh guna semula. Dapatkan kod HTML, CSS, React, JSX atau Tailwind CSS."
+   },
+   "extName": {
+      "message": "DivMagic - Gaya Salin"
+   },
+   "iframeCantBeAccessedText": {
+      "message": "DivMagic tidak boleh mengakses iframe ini."
+   },
+   "iframeNeedAccessText": {
+      "message": "DivMagic perlu membuka iframe ini untuk mengaksesnya."
+   },
+   "iframeOpenText": {
+      "message": "Buka iframe"
+   },
+   "loginPageBody1": {
+      "message": "Untuk mengakses alat pembangunan web kami yang berkuasa, kami menjemput anda untuk membuat akaun atau log masuk."
+   },
+   "loginPageBody2": {
+      "message": "Anda akan menikmati aliran kerja pembangunan yang lancar dengan langganan DivMagic."
+   },
+   "loginPageEmailLabel": {
+      "message": "Emel anda"
+   },
+   "loginPageError": {
+      "message": "Tidak dapat log masuk. Pastikan anda menggunakan alamat e-mel yang anda langgan."
+   },
+   "loginPageLoginButton": {
+      "message": "Log masuk"
+   },
+   "loginPageNewHere": {
+      "message": "Baru menggunakan DivMagic?"
+   },
+   "loginPageSignUp": {
+      "message": "Daftar"
+   },
+   "loginPageTitle": {
+      "message": "Selamat datang ke DivMagic!"
+   },
+   "loginPageVerificationCode": {
+      "message": "Kod pengesahan"
+   },
+   "loginPageVerificationCodeSent": {
+      "message": "Kod pengesahan telah dihantar ke e -mel anda. Sila masukkannya di bawah."
+   },
+   "loginPageVerifyButton": {
+      "message": "Sahkan"
+   },
+   "loginPageVerifyCancelButton": {
+      "message": "Batalkan pengesahan"
+   },
+   "loginPageVerifyEmail": {
+      "message": "Sahkan e -mel anda"
+   },
+   "loginPageWrongVerificationCode": {
+      "message": "Kod pengesahan yang salah. Sila pastikan anda memasukkan kod yang betul."
+   },
+   "modalAddCssAttributeText": {
+      "message": "Atribut CSS"
+   },
+   "modalAddCssValueText": {
+      "message": "Nilai CSS"
+   },
+   "modalAddStylesText": {
+      "message": "Tambah gaya"
+   },
+   "modalChildButtonText": {
+      "message": "Elemen Kanak-kanak"
+   },
+   "modalChildButtonTooltip": {
+      "message": "Alihkan pilihan ke elemen anak"
+   },
+   "modalClassSettingsText": {
+      "message": "Tetapan Kelas:"
+   },
+   "modalCloseButtonTooltip": {
+      "message": "tutup"
+   },
+   "modalCopyButtonLoadingText": {
+      "message": "Menyalin..."
+   },
+   "modalCopyButtonText": {
+      "message": "Salinan"
+   },
+   "modalCopyCSSOnlyText": {
+      "message": "Hanya CSS"
+   },
+   "modalCopyCssWithDivmagicText": {
+      "message": "Kelas CSS DivMagic"
+   },
+   "modalCopyCssWithOriginalText": {
+      "message": "Kelas CSS asal"
+   },
+   "modalCopyHTMLOnlyText": {
+      "message": "Hanya HTML"
+   },
+   "modalCopyHtmlWithDivmagicText": {
+      "message": "Atribut HTML DivMagic"
+   },
+   "modalCopyHtmlWithOriginalText": {
+      "message": "Atribut HTML asal"
+   },
+   "modalCopyIntegrationsText": {
+      "message": "Integrasi (WordPress)"
+   },
+   "modalCopyModeSelectionAdaptable": {
+      "message": "Boleh disesuaikan"
+   },
+   "modalCopyModeSelectionAdaptableTooltip": {
+      "message": "Termasuk hanya gaya paling penting yang diperlukan untuk mengekalkan struktur dan penampilan asas elemen. Mudah untuk disesuaikan."
+   },
+   "modalCopyModeSelectionBalanced": {
+      "message": "Seimbang"
+   },
+   "modalCopyModeSelectionBalancedTooltip": {
+      "message": "Menggabungkan unsur-unsur pseudo seperti ::before dan ::after, yang boleh menjejaskan hasil visual dengan ketara tetapi jangan mengembang kod secara berlebihan."
+   },
+   "modalCopyModeSelectionExact": {
+      "message": "Tepat"
+   },
+   "modalCopyModeSelectionExactTooltip": {
+      "message": "Salinan tepat semua gaya, memastikan elemen kelihatan seperti sumbernya."
+   },
+   "modalCopyModeSelectionText": {
+      "message": "Mod Salin"
+   },
+   "modalCopyModeSelectionTooltip": {
+      "message": "Pilih mod salin untuk pilihan semasa. Kami mengesyorkan \"Boleh Disesuaikan\" untuk kebanyakan kes penggunaan."
+   },
+   "modalCopyNotification": {
+      "message": "Komponen disalin!"
+   },
+   "modalCopyViewText": {
+      "message": "Salinan"
+   },
+   "modalDragButtonTooltip": {
+      "message": "Seret untuk bergerak"
+   },
+   "modalEditorViewText": {
+      "message": "Editor"
+   },
+   "modalElementSettingsText": {
+      "message": "Tetapan Elemen:"
+   },
+   "modalExportNotification": {
+      "message": "Komponen dieksport!"
+   },
+   "modalExportToStudioText": {
+      "message": "Eksport ke Studio"
+   },
+   "modalGoToLibraryText": {
+      "message": "Pergi ke perpustakaan saya"
+   },
+   "modalInvalidCssValueText": {
+      "message": "Nilai CSS tidak sah"
+   },
+   "modalLeftButtonText": {
+      "message": "Elemen anak kiri"
+   },
+   "modalLeftButtonTooltip": {
+      "message": "Gerakkan pemilihan ke elemen saudara kiri"
+   },
+   "modalMediaQuerySelectionTooltip": {
+      "message": "Pilih jika anda mahu [[MEDIAQUERYXYZ]] gaya CSS disertakan dalam kod yang disalin."
+   },
+   "modalParentButtonText": {
+      "message": "Elemen Induk"
+   },
+   "modalParentButtonTooltip": {
+      "message": "Pilih elemen induk bagi pemilihan semasa"
+   },
+   "modalRightButtonText": {
+      "message": "Elemen anak yang betul"
+   },
+   "modalRightButtonTooltip": {
+      "message": "Gerakkan pemilihan ke elemen saudara yang betul"
+   },
+   "modalSaveElementText": {
+      "message": "Simpan elemen"
+   },
+   "modalSaveNotification": {
+      "message": "Komponen disimpan!"
+   },
+   "modalSavedElementText": {
+      "message": "Disimpan!"
+   },
+   "modalSavingElementText": {
+      "message": "Penjimatan ..."
+   },
+   "modalStudioExportTooltip": {
+      "message": "Buka dalam DivMagic Studio"
+   },
+   "offText": {
+      "message": "Mati"
+   },
+   "onText": {
+      "message": "hidup"
+   },
+   "optionsChooseLanguage": {
+      "message": "Pilih bahasa"
+   },
+   "optionsFeedback": {
+      "message": "Jika anda mempunyai sebarang maklum balas atau cadangan, sila maklumkan kepada kami!"
+   },
+   "optionsShortcuts": {
+      "message": "Pintasan Papan Kekunci"
+   },
+   "optionsTitle": {
+      "message": "Pilihan"
+   },
+   "panelCopyElementCopied": {
+      "message": "disalin"
+   },
+   "popupCopyInstructions": {
+      "message": "Klik pada mana-mana elemen atau tekan kekunci:"
+   },
+   "popupFeedback": {
+      "message": "Maklum balas"
+   },
+   "popupSettings": {
+      "message": "tetapan"
+   },
+   "popupSettingsAutoHidePopup": {
+      "message": "Auto Sembunyikan Pop Timbul"
+   },
+   "popupSettingsComponentFormat": {
+      "message": "Format Komponen"
+   },
+   "popupSettingsComponentFormatTooltip": {
+      "message": "Pilih format untuk komponen yang disalin"
+   },
+   "popupSettingsShowDevToolsPanel": {
+      "message": "[[DEVTOOLS]] Panel"
+   },
+   "popupSettingsStyleFormat": {
+      "message": "Format Gaya"
+   },
+   "popupSettingsStyleFormatExternalCSS": {
+      "message": "CSS luaran"
+   },
+   "popupSettingsStyleFormatInlineCSS": {
+      "message": "CSS sebaris"
+   },
+   "popupSettingsStyleFormatLocalCSS": {
+      "message": "CSS tempatan"
+   },
+   "popupSettingsStyleFormatTooltip": {
+      "message": "Pilih format CSS untuk gaya yang disalin"
+   },
+   "publishDate": {
+      "message": "Versi 31 Mac"
+   },
+   "toolBoxColorPickerDescriptionText": {
+      "message": "Pemetik warna"
+   },
+   "toolBoxColorPickerText": {
+      "message": "Pemetik warna"
+   },
+   "toolBoxCopyElementDescriptionText": {
+      "message": "Elemen salin"
+   },
+   "toolBoxCopyElementText": {
+      "message": "Elemen salin"
+   },
+   "toolBoxCopyFontsCopiedText": {
+      "message": "disalin"
+   },
+   "toolBoxCopyFontsCopyToClipboardText": {
+      "message": "Klik untuk menyalin"
+   },
+   "toolBoxCopyFontsDescriptionText": {
+      "message": "Salin font"
+   },
+   "toolBoxCopyFontsNotFoundText": {
+      "message": "Laman web ini menggunakan fon sistem"
+   },
+   "toolBoxCopyFontsText": {
+      "message": "Salin font"
+   },
+   "toolBoxCopyFontsWindowText": {
+      "message": "Fon Web"
+   },
+   "toolBoxGridsDescriptionText": {
+      "message": "Menambah sempadan ke setiap elemen"
+   },
+   "toolBoxGridsText": {
+      "message": "Grid"
+   },
+   "toolBoxInspectorDescriptionText": {
+      "message": "Lihat Perincian Elemen"
+   },
+   "toolBoxInspectorText": {
+      "message": "Inspektor"
+   },
+   "toolBoxShowFontsDescriptionText": {
+      "message": "Ketahui apa fon setiap tag menggunakan"
+   },
+   "toolBoxShowFontsText": {
+      "message": "Fon"
+   },
+   "toolBoxThrashDescriptionText": {
+      "message": "Sembunyikan atau keluarkan elemen"
+   },
+   "toolBoxThrashText": {
+      "message": "Sampah"
+   },
+   "toolBoxThrashWindowHideButton": {
+      "message": "Sembunyikan"
+   },
+   "toolBoxThrashWindowRemoveButton": {
+      "message": "Keluarkan"
+   },
+   "toolBoxThrashWindowText": {
+      "message": "Menyembunyikan / keluarkan elemen"
+   },
+   "toolboxText": {
+      "message": "Kotak alat"
+   }
+}

@@ -1,0 +1,362 @@
+{
+   "activateToolbox": {
+      "message": "Активируйте набор инструментов"
+   },
+   "contextMenuInspect": {
+      "message": "Инспектор"
+   },
+   "copied": {
+      "message": "Скопировано!"
+   },
+   "devtoolsCopyElement": {
+      "message": "Копировать элемент"
+   },
+   "devtoolsCopyElementCopying": {
+      "message": "Копирование"
+   },
+   "devtoolsLibrary": {
+      "message": "Библиотека"
+   },
+   "devtoolsLibraryComponentPerPage": {
+      "message": "Компоненты на страницу"
+   },
+   "devtoolsLibraryNext": {
+      "message": "Следующий"
+   },
+   "devtoolsLibraryNoComponents": {
+      "message": "Ваша библиотека пуста. Сохраните компонент, чтобы увидеть его здесь."
+   },
+   "devtoolsLibraryPrevious": {
+      "message": "Предыдущий"
+   },
+   "devtoolsNoElementSelectedText": {
+      "message": "Выберите элемент на вкладке «Элементы», чтобы просмотреть сведения о нем здесь."
+   },
+   "devtoolsSelectedElementText": {
+      "message": "Выбранный элемент"
+   },
+   "devtoolsUnsupportedElementSelectedText": {
+      "message": "Выбранный элемент не разрешен для операций копирования"
+   },
+   "extCommandChooseElement": {
+      "message": "Выберите элемент для копирования при наведении курсора мыши"
+   },
+   "extDescription": {
+      "message": "Скопируйте элементы с любой веб-страницы как повторно используемые веб-компоненты. Получите код HTML, CSS, React, JSX или Tailwind CSS."
+   },
+   "extName": {
+      "message": "DivMagic — копировать стиль"
+   },
+   "iframeCantBeAccessedText": {
+      "message": "DivMagic не может получить доступ к этому iframe."
+   },
+   "iframeNeedAccessText": {
+      "message": "DivMagic необходимо открыть этот iframe, чтобы получить к нему доступ."
+   },
+   "iframeOpenText": {
+      "message": "Открыть iframe"
+   },
+   "loginPageBody1": {
+      "message": "Чтобы получить доступ к нашему мощному инструменту веб-разработки, мы предлагаем вам создать учетную запись или войти в систему."
+   },
+   "loginPageBody2": {
+      "message": "Подписавшись на DivMagic, вы получите беспрепятственный рабочий процесс разработки."
+   },
+   "loginPageEmailLabel": {
+      "message": "Ваш адрес электронной почты"
+   },
+   "loginPageError": {
+      "message": "Не удалось войти. Убедитесь, что вы используете адрес электронной почты, на который вы подписались."
+   },
+   "loginPageLoginButton": {
+      "message": "Авторизоваться"
+   },
+   "loginPageNewHere": {
+      "message": "Новичок в DivMagic?"
+   },
+   "loginPageSignUp": {
+      "message": "Зарегистрироваться"
+   },
+   "loginPageTitle": {
+      "message": "Добро пожаловать в DivMagic!"
+   },
+   "loginPageVerificationCode": {
+      "message": "Проверочный код"
+   },
+   "loginPageVerificationCodeSent": {
+      "message": "Код проверки был отправлен на вашу электронную почту. Пожалуйста, введите его ниже."
+   },
+   "loginPageVerifyButton": {
+      "message": "Проверять"
+   },
+   "loginPageVerifyCancelButton": {
+      "message": "Отменить проверку"
+   },
+   "loginPageVerifyEmail": {
+      "message": "Подтвердите Ваш электронный адрес"
+   },
+   "loginPageWrongVerificationCode": {
+      "message": "Неправильный код проверки. Пожалуйста, убедитесь, что вы ввели правильный код."
+   },
+   "modalAddCssAttributeText": {
+      "message": "CSS -атрибут"
+   },
+   "modalAddCssValueText": {
+      "message": "Значение CSS"
+   },
+   "modalAddStylesText": {
+      "message": "Добавить стили"
+   },
+   "modalChildButtonText": {
+      "message": "Дочерний элемент"
+   },
+   "modalChildButtonTooltip": {
+      "message": "Переместить выделение на дочерний элемент"
+   },
+   "modalClassSettingsText": {
+      "message": "Настройки класса:"
+   },
+   "modalCloseButtonTooltip": {
+      "message": "Закрывать"
+   },
+   "modalCopyButtonLoadingText": {
+      "message": "Копирование..."
+   },
+   "modalCopyButtonText": {
+      "message": "Копировать"
+   },
+   "modalCopyCSSOnlyText": {
+      "message": "Только CSS"
+   },
+   "modalCopyCssWithDivmagicText": {
+      "message": "DivMagic CSS -классы"
+   },
+   "modalCopyCssWithOriginalText": {
+      "message": "Оригинальные классы CSS"
+   },
+   "modalCopyHTMLOnlyText": {
+      "message": "Только HTML"
+   },
+   "modalCopyHtmlWithDivmagicText": {
+      "message": "DivMagic HTML -атрибуты"
+   },
+   "modalCopyHtmlWithOriginalText": {
+      "message": "Оригинальные атрибуты HTML"
+   },
+   "modalCopyIntegrationsText": {
+      "message": "Интеграции (WordPress)"
+   },
+   "modalCopyModeSelectionAdaptable": {
+      "message": "Адаптируемый"
+   },
+   "modalCopyModeSelectionAdaptableTooltip": {
+      "message": "Включает только самые необходимые стили, необходимые для сохранения структуры и основного внешнего вида элемента. Легко настроить."
+   },
+   "modalCopyModeSelectionBalanced": {
+      "message": "Сбалансированный"
+   },
+   "modalCopyModeSelectionBalancedTooltip": {
+      "message": "Включает псевдоэлементы, такие как ::before и ::after, которые могут существенно повлиять на визуальный результат, но не чрезмерно раздувают код."
+   },
+   "modalCopyModeSelectionExact": {
+      "message": "Точный"
+   },
+   "modalCopyModeSelectionExactTooltip": {
+      "message": "Точная копия всех стилей, гарантирующая, что элемент будет выглядеть как исходный."
+   },
+   "modalCopyModeSelectionText": {
+      "message": "Режим копирования"
+   },
+   "modalCopyModeSelectionTooltip": {
+      "message": "Выберите режим копирования для текущего выделения. Мы рекомендуем «Адаптируемый» для большинства случаев использования."
+   },
+   "modalCopyNotification": {
+      "message": "Компонент скопирован!"
+   },
+   "modalCopyViewText": {
+      "message": "Копия"
+   },
+   "modalDragButtonTooltip": {
+      "message": "Перетаскивать"
+   },
+   "modalEditorViewText": {
+      "message": "редактор"
+   },
+   "modalElementSettingsText": {
+      "message": "Настройки элемента:"
+   },
+   "modalExportNotification": {
+      "message": "Компонент экспортируется!"
+   },
+   "modalExportToStudioText": {
+      "message": "Экспорт в студию"
+   },
+   "modalGoToLibraryText": {
+      "message": "Перейти в мою библиотеку"
+   },
+   "modalInvalidCssValueText": {
+      "message": "Неверное значение CSS"
+   },
+   "modalLeftButtonText": {
+      "message": "Левый детский элемент"
+   },
+   "modalLeftButtonTooltip": {
+      "message": "Переместите выбор в левый элемент братьев и сестер"
+   },
+   "modalMediaQuerySelectionTooltip": {
+      "message": "Выберите, хотите ли вы, чтобы стили CSS [[MEDIAQUERYXYZ]] были включены в скопированный код."
+   },
+   "modalParentButtonText": {
+      "message": "Родительский элемент"
+   },
+   "modalParentButtonTooltip": {
+      "message": "Выберите родительский элемент текущего выделения"
+   },
+   "modalRightButtonText": {
+      "message": "Правильный детский элемент"
+   },
+   "modalRightButtonTooltip": {
+      "message": "Переместите выбор в правый элемент братьев и сестер"
+   },
+   "modalSaveElementText": {
+      "message": "Сохранить элемент"
+   },
+   "modalSaveNotification": {
+      "message": "Компонент сохранил!"
+   },
+   "modalSavedElementText": {
+      "message": "Спасено!"
+   },
+   "modalSavingElementText": {
+      "message": "Сохранение ..."
+   },
+   "modalStudioExportTooltip": {
+      "message": "Открыть в DivMagic Studio"
+   },
+   "offText": {
+      "message": "Выключенный"
+   },
+   "onText": {
+      "message": "На"
+   },
+   "optionsChooseLanguage": {
+      "message": "Выберите язык"
+   },
+   "optionsFeedback": {
+      "message": "Если у вас есть какие-либо отзывы или предложения, пожалуйста, дайте нам знать!"
+   },
+   "optionsShortcuts": {
+      "message": "Горячие клавиши"
+   },
+   "optionsTitle": {
+      "message": "Параметры"
+   },
+   "panelCopyElementCopied": {
+      "message": "Скопировано"
+   },
+   "popupCopyInstructions": {
+      "message": "Нажмите на любой элемент или нажмите клавишу:"
+   },
+   "popupFeedback": {
+      "message": "Обратная связь"
+   },
+   "popupSettings": {
+      "message": "Настройки"
+   },
+   "popupSettingsAutoHidePopup": {
+      "message": "Автоматическое скрытие всплывающего окна"
+   },
+   "popupSettingsComponentFormat": {
+      "message": "Формат компонента"
+   },
+   "popupSettingsComponentFormatTooltip": {
+      "message": "Выберите формат для скопированного компонента"
+   },
+   "popupSettingsShowDevToolsPanel": {
+      "message": "Панель [[DEVTOOLS]]"
+   },
+   "popupSettingsStyleFormat": {
+      "message": "Формат стиля"
+   },
+   "popupSettingsStyleFormatExternalCSS": {
+      "message": "Внешний CSS"
+   },
+   "popupSettingsStyleFormatInlineCSS": {
+      "message": "Встроенный CSS"
+   },
+   "popupSettingsStyleFormatLocalCSS": {
+      "message": "Локальный CSS"
+   },
+   "popupSettingsStyleFormatTooltip": {
+      "message": "Выберите формат CSS для скопированных стилей."
+   },
+   "publishDate": {
+      "message": "31 марта версия"
+   },
+   "toolBoxColorPickerDescriptionText": {
+      "message": "Цветовой сборщик"
+   },
+   "toolBoxColorPickerText": {
+      "message": "Цветовой сборщик"
+   },
+   "toolBoxCopyElementDescriptionText": {
+      "message": "Копионный элемент"
+   },
+   "toolBoxCopyElementText": {
+      "message": "Копионный элемент"
+   },
+   "toolBoxCopyFontsCopiedText": {
+      "message": "Скопировано"
+   },
+   "toolBoxCopyFontsCopyToClipboardText": {
+      "message": "Нажмите, чтобы скопировать"
+   },
+   "toolBoxCopyFontsDescriptionText": {
+      "message": "Копировать шрифт"
+   },
+   "toolBoxCopyFontsNotFoundText": {
+      "message": "Этот веб -сайт использует системные шрифты"
+   },
+   "toolBoxCopyFontsText": {
+      "message": "Копировать шрифт"
+   },
+   "toolBoxCopyFontsWindowText": {
+      "message": "Веб -шрифты"
+   },
+   "toolBoxGridsDescriptionText": {
+      "message": "Добавляет границы каждому элементу"
+   },
+   "toolBoxGridsText": {
+      "message": "Сетки"
+   },
+   "toolBoxInspectorDescriptionText": {
+      "message": "См. Детали элемента"
+   },
+   "toolBoxInspectorText": {
+      "message": "Инспектор"
+   },
+   "toolBoxShowFontsDescriptionText": {
+      "message": "Знайте, какой шрифт использует каждый тег"
+   },
+   "toolBoxShowFontsText": {
+      "message": "Шрифты"
+   },
+   "toolBoxThrashDescriptionText": {
+      "message": "Скрыть или удалить элемент"
+   },
+   "toolBoxThrashText": {
+      "message": "Мусор"
+   },
+   "toolBoxThrashWindowHideButton": {
+      "message": "Скрывать"
+   },
+   "toolBoxThrashWindowRemoveButton": {
+      "message": "Удалять"
+   },
+   "toolBoxThrashWindowText": {
+      "message": "Скрыть / удалить элементы"
+   },
+   "toolboxText": {
+      "message": "Ящик для инструментов"
+   }
+}
