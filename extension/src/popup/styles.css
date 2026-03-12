@@ -280,6 +280,82 @@
   font-size: var(--text-caption);
 }
 
+.footer button {
+  background: none;
+  border: 0;
+  color: inherit;
+  font-size: inherit;
+  cursor: pointer;
+  padding: 0;
+}
+
+.footer button:hover {
+  color: var(--color-text-secondary);
+}
+
+.settings-panel {
+  padding: var(--space-4);
+}
+
+.settings-back {
+  margin-bottom: var(--space-4);
+}
+
+.settings-title {
+  margin: 0 0 var(--space-4);
+  font-size: var(--text-heading);
+  font-weight: var(--font-weight-semibold);
+  color: var(--color-text-primary);
+}
+
+.settings-section {
+  margin-bottom: var(--space-5);
+}
+
+.settings-section-title {
+  margin: 0 0 var(--space-2);
+  font-size: var(--text-body);
+  font-weight: var(--font-weight-medium);
+  color: var(--color-text-primary);
+}
+
+.settings-description {
+  margin: 0 0 var(--space-3);
+  font-size: var(--text-caption);
+  color: var(--color-text-muted);
+  line-height: 1.4;
+}
+
+.settings-row {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  margin-bottom: var(--space-2);
+}
+
+.settings-toggle-label {
+  font-size: var(--text-body);
+  color: var(--color-text-primary);
+  cursor: pointer;
+}
+
+.settings-toggle {
+  width: 40px;
+  height: 22px;
+  accent-color: var(--color-accent);
+  cursor: pointer;
+}
+
+.settings-meta {
+  margin: 0 0 var(--space-3);
+  font-size: var(--text-caption);
+  color: var(--color-text-muted);
+}
+
+.settings-sync {
+  margin-top: var(--space-2);
+}
+
 .modal-backdrop {
   position: fixed;
   inset: 0;

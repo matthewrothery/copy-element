@@ -5,10 +5,9 @@ import logoUrl from "../../../assets/logo.png";
 interface HeaderProps {
   onCapture: () => void;
   onLibrary: () => void;
-  onMCP?: () => void;
 }
 
-export function Header({ onCapture, onLibrary, onMCP }: HeaderProps): JSX.Element {
+export function Header({ onCapture, onLibrary }: HeaderProps): JSX.Element {
   return (
     <header className="header">
       <div className="header-brand">
@@ -33,16 +32,6 @@ export function Header({ onCapture, onLibrary, onMCP }: HeaderProps): JSX.Elemen
         >
           Library
         </button>
-        {onMCP && (
-          <button
-            className="nav-button"
-            onClick={onMCP}
-            type="button"
-            aria-label="MCP"
-          >
-            MCP
-          </button>
-        )}
       </nav>
     </header>
   );

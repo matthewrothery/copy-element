@@ -117,6 +117,7 @@ export function LibraryApp(): JSX.Element {
           snippet={selectedSnippet}
           onClose={() => setSelectedSnippet(null)}
           onCopy={(value, label) => void handleCopy(value, label)}
+          onToast={setToastMessage}
         />
       )}
       {snippetToDelete && (

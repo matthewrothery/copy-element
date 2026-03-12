@@ -1,7 +1,8 @@
 import React, { useLayoutEffect, useRef, useState } from "react";
 import { MessageSquare } from "lucide-react";
 import { TAILWIND_COPY_PLACEHOLDER } from "../../shared/constants";
-import { buildSnippetPrompt, getSnippetPromptTokenEstimate } from "../../shared/utils/prompt-builder";
+import { captureIframeAsPngBlob } from "../../shared/utils/iframe-screenshot";
+import { buildCopyMcpPrompt, buildSnippetPrompt, getSnippetPromptTokenEstimate } from "../../shared/utils/prompt-builder";
 import { buildCopyHtml, buildPreviewSrcDoc } from "../../shared/utils/preview-srcdoc-builder";
 import type { Snippet } from "../../shared/types/snippet";
 
@@ -30,6 +31,8 @@ interface SnippetPreviewProps {
   snippet: Snippet;
   onClose: () => void;
   onCopy: (value: string, label: string) => void;
+  /** Optional: show toast for screenshot copy success/failure (e.g. setToastMessage). */
+  onToast?: (message: string) => void;
 }
 
 function computeFitScale(
@@ -45,10 +48,12 @@ function computeFitScale(
   return Math.min(scaleW, scaleH, 1);
 }
 
-export function SnippetPreview({ snippet, onClose, onCopy }: SnippetPreviewProps): React.JSX.Element {
+export function SnippetPreview({ snippet, onClose, onCopy, onToast }: SnippetPreviewProps): React.JSX.Element {
   const frameRef = useRef<HTMLDivElement>(null);
+  const iframeRef = useRef<HTMLIFrameElement>(null);
   const fitScaleRef = useRef<number>(1);
   const [scale, setScale] = useState(1);
+  const [screenshotCopying, setScreenshotCopying] = useState(false);
 
   useLayoutEffect(() => {
     const frame = frameRef.current;
@@ -73,6 +78,21 @@ export function SnippetPreview({ snippet, onClose, onCopy }: SnippetPreviewProps
   const handle100 = (): void => {
     setScale(1);
   };
+
+  async function handleCopyScreenshot(): Promise<void> {
+    const iframe = iframeRef.current;
+    if (!iframe || screenshotCopying) return;
+    setScreenshotCopying(true);
+    try {
+      const blob = await captureIframeAsPngBlob(iframe);
+      await navigator.clipboard.write([new ClipboardItem({ "image/png": blob })]);
+      onToast?.("Screenshot copied to clipboard");
+    } catch {
+      onToast?.("Failed to copy screenshot");
+    } finally {
+      setScreenshotCopying(false);
+    }
+  }
 
   const w = Math.max(snippet.width, 1);
   const h = Math.max(snippet.height, 1);
@@ -142,6 +162,7 @@ export function SnippetPreview({ snippet, onClose, onCopy }: SnippetPreviewProps
                 }}
               >
                 <iframe
+                  ref={iframeRef}
                   title={`preview-${snippet.id}`}
                   srcDoc={buildPreviewSrcDoc(snippet)}
                   sandbox=""
@@ -184,8 +205,20 @@ export function SnippetPreview({ snippet, onClose, onCopy }: SnippetPreviewProps
             <MessageSquare size={16} />
             Copy Prompt (~{getSnippetPromptTokenEstimate(snippet)} tokens)
           </button>
+          <button type="button" className="btn-secondary" onClick={() => onCopy(buildCopyMcpPrompt(snippet), "MCP")} aria-label="Copy MCP prompt">
+            Copy MCP
+          </button>
           <button type="button" className="btn-secondary" onClick={() => onCopy(TAILWIND_COPY_PLACEHOLDER, "Tailwind")} aria-label="Copy Tailwind">
             Copy Tailwind
+          </button>
+          <button
+            type="button"
+            className="btn-secondary"
+            onClick={() => void handleCopyScreenshot()}
+            disabled={screenshotCopying}
+            aria-label="Copy screenshot"
+          >
+            {screenshotCopying ? "Copying…" : "Copy screenshot"}
           </button>
         </div>
       </div>

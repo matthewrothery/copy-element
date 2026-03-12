@@ -1,6 +1,6 @@
 import { Code, Copy, MessageSquare, Trash2, Wind } from "lucide-react";
 import { TAILWIND_COPY_PLACEHOLDER } from "../../shared/constants";
-import { buildSnippetPrompt, getSnippetPromptTokenEstimate } from "../../shared/utils/prompt-builder";
+import { buildCopyMcpPrompt, buildSnippetPrompt, getSnippetPromptTokenEstimate } from "../../shared/utils/prompt-builder";
 import { buildCopyHtml } from "../../shared/utils/preview-srcdoc-builder";
 import type { Snippet } from "../../shared/types/snippet";
 
@@ -39,6 +39,10 @@ export function SnippetCard({ snippet, onOpen, onDelete, onCopy }: SnippetCardPr
         <button type="button" className="btn-secondary" onClick={() => onCopy(buildSnippetPrompt(snippet), "Prompt")} aria-label="Copy prompt for AI tools">
           <MessageSquare size={ICON_SIZE} />
           Copy Prompt (~{getSnippetPromptTokenEstimate(snippet)} tokens)
+        </button>
+        <button type="button" className="btn-secondary" onClick={() => onCopy(buildCopyMcpPrompt(snippet), "MCP")} aria-label="Copy MCP prompt">
+          <Copy size={ICON_SIZE} />
+          Copy MCP
         </button>
         <button type="button" className="btn-secondary" onClick={() => onCopy(TAILWIND_COPY_PLACEHOLDER, "Tailwind")} aria-label="Copy Tailwind">
           <Wind size={ICON_SIZE} />

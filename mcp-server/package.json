@@ -1,0 +1,26 @@
+{
+  "name": "snappymcp-host",
+  "version": "0.1.0",
+  "description": "SnappyMCP MCP server for snippet access (local stdio only)",
+  "type": "module",
+  "main": "dist/index.js",
+  "bin": {
+    "snappymcp-host": "./dist/index.js"
+  },
+  "scripts": {
+    "build": "tsc",
+    "prepare": "npm run build",
+    "start": "node dist/index.js"
+  },
+  "dependencies": {
+    "@modelcontextprotocol/sdk": "^1.27.0",
+    "zod": "^3.23.0"
+  },
+  "devDependencies": {
+    "@types/node": "^22.0.0",
+    "typescript": "^5.8.0"
+  },
+  "engines": {
+    "node": ">=18"
+  }
+}

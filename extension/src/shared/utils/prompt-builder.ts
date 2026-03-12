@@ -41,3 +41,34 @@ export function getSnippetPromptTokenEstimate(snippet: Snippet): number {
   const prompt = buildSnippetPrompt(snippet);
   return estimateTokens(prompt);
 }
+
+const MCP_INTRO =
+  "This is a component from SnappyMCP, copied from another website. It is your job to implement this UI component as per the user's instructions. Ideally it would match the existing theme, colors and code practices in the existing project.";
+
+/**
+ * Builds the short "Copy MCP" prompt for pasting into AI tools: intro paragraph,
+ * code (HTML + JSX), and snapshot image link (thumbnail data URL or placeholder).
+ */
+export function buildCopyMcpPrompt(snippet: Snippet): string {
+  const html = buildCopyHtml(snippet);
+  const snapshotUrl =
+    snippet.thumbnail && snippet.thumbnail.trim().length > 0
+      ? snippet.thumbnail
+      : "[No snapshot available]";
+  const lines: string[] = [
+    MCP_INTRO,
+    "",
+    "Here is the code:",
+    "",
+    "```html",
+    html,
+    "```",
+    "",
+    "```jsx",
+    snippet.jsx,
+    "```",
+    "",
+    `And a link to the snapshot image: ${snapshotUrl}`
+  ];
+  return lines.join("\n");
+}
