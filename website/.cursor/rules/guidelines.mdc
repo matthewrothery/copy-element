@@ -1,0 +1,61 @@
+---
+alwaysApply: true
+---
+
+## Continuous Improvement Rule
+
+If you discover a recurring issue, pattern, or correction, add it to this document.
+
+Specifically update this document when:
+- The same mistake occurs more than once.
+- The user corrects an implementation, assumption, or approach.
+- A new project convention or pattern becomes clear.
+- A better architectural or structural approach is discovered.
+- A workaround or fix was required to resolve an issue.
+- A tool, framework, or library behaves in a non-obvious way.
+
+When adding an entry:
+1. Describe the **problem or pattern**.
+2. Explain the **correct approach or rule**.
+3. Include a **short example if relevant**.
+4. Write the rule in a way that prevents the mistake in future generations.
+
+Keep entries concise and actionable.
+Avoid duplicating existing rules — update them instead.
+
+## Lessons Learned
+
+Record important corrections and patterns discovered during development.
+
+Format:
+
+### Rule
+<clear rule>
+
+### Why
+<brief explanation>
+
+### Example
+<code example if applicable>
+
+Only add a rule if:
+- The mistake occurred more than once, OR
+- The user explicitly corrected the approach, OR
+- The fix required significant debugging or investigation.
+Before adding a new rule:
+- Check if an existing rule covers the issue.
+- If so, update or expand the existing rule instead of adding a new one.
+
+Also record important project knowledge in the /docs directory such as:
+- Architecture decisions
+- Naming conventions
+- Folder structure expectations
+- Design system rules
+- Build tool quirks
+- Performance constraints
+
+The docs act as a long term memory of the project.
+
+Rules are below
+
+------------------------------------------

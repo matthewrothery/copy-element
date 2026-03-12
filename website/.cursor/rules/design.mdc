@@ -1,0 +1,267 @@
+---
+alwaysApply: true
+---
+
+This project uses a **CSS-only 3-layer design token system**. All tokens are defined in CSS (no JavaScript theme layer).
+
+**Token files (renderer):**
+- `primitives.css` — raw values (colors, spacing, radius, font)
+- `semantic.css` — UI meaning mapped from primitives
+- `index.css` — imports primitives then semantic
+
+Load order in each entry: `index.css` then `base.css` then component/window CSS.
+
+---
+
+# Design Tokens Architecture
+
+This project uses a **3-layer design token system** for all CSS variables.
+
+The goal is to ensure:
+- consistent theming
+- maintainable components
+- scalable UI architecture
+- safe refactoring
+
+No component should reference raw colors or spacing values directly.
+
+All styling must flow through the token layers defined below.
+
+---
+
+# Layer 1 — Primitive Tokens
+
+Primitive tokens represent **raw design values**.
+
+These should never describe usage or UI meaning.
+
+Examples include:
+
+- raw colors
+- base spacing scale
+- radii
+- typography
+- z-index
+
+Naming format:
+
+--gray-100, --gray-900, --blue-500, etc. (raw color names)
+--space-1 through --space-7
+--radius-1 through --radius-5
+--font-sans
+
+Primitives live in `styles/tokens/primitives.css`. Example:
+
+```css
+--gray-100: #eef2ff;
+--space-2: 6px;
+--radius-2: 8px;
+```
+
+Primitive tokens are defined in `primitives.css` and referenced only in `semantic.css` (and in component tokens for spacing/radius). They should **never be used directly inside component style declarations**.
+
+---
+
+# Layer 2 — Semantic Tokens
+
+Semantic tokens describe **UI meaning**.
+
+These map primitive tokens to real UI concepts.
+
+Examples:
+
+- text colors
+- surfaces
+- accents
+- borders
+- UI states
+
+Naming format:
+
+--color-{semantic-name}
+
+Examples:
+
+```
+
+--color-text-primary
+--color-text-secondary
+--color-surface
+--color-panel
+--color-border
+--color-accent
+--color-danger
+
+```
+
+Semantic tokens are defined in `semantic.css` and must map to primitives, e.g. `--color-text-primary: var(--gray-100);` — **component tokens** reference semantic (or spacing/radius primitives); component style rules reference only **component tokens**.
+
+---
+
+# Layer 3 — Component Tokens
+
+Component tokens define styling for a specific component.
+
+These are **aliases of semantic tokens**.
+
+Naming format:
+
+--{component}-{property}
+
+Examples:
+
+```
+
+--toolbar-bg
+--toolbar-border
+--toolbar-radius
+--toolbar-padding
+
+--panel-bg
+--panel-border
+--panel-radius
+
+```
+
+Component tokens must always reference semantic tokens or spacing tokens.
+
+Example:
+
+```
+
+.floatingToolbar {
+--toolbar-bg: var(--color-panel);
+--toolbar-border: var(--color-border);
+--toolbar-radius: var(--radius-3);
+--toolbar-padding: var(--space-3);
+}
+
+```
+
+Component styles must only reference **component tokens**.
+
+Example:
+
+```
+
+.floatingToolbar {
+background: var(--toolbar-bg);
+border: 1px solid var(--toolbar-border);
+padding: var(--toolbar-padding);
+border-radius: var(--toolbar-radius);
+}
+
+```
+
+---
+
+# No runtime themes
+
+This project does not support runtime theme switching. All tokens are fixed in CSS. To change the look, edit `primitives.css` and/or `semantic.css`.
+
+---
+
+# Spacing System
+
+Spacing tokens must follow a consistent scale.
+
+Example scale:
+
+```
+
+--space-1: 4px
+--space-2: 6px
+--space-3: 8px
+--space-4: 12px
+--space-5: 16px
+--space-6: 20px
+--space-7: 24px
+--space-8: 32px
+
+```
+
+Components must never hardcode spacing.
+
+Always use spacing tokens.
+
+---
+
+# Radius Tokens
+
+Radius tokens should follow the scale:
+
+```
+
+--radius-1
+--radius-2
+--radius-3
+--radius-4
+
+```
+
+Example:
+
+```
+
+--radius-1: 4px
+--radius-2: 8px
+--radius-3: 12px
+--radius-4: 16px
+
+```
+
+---
+
+# Component Styling Rules
+
+Components must follow this pattern:
+
+1. Define component tokens inside the component root
+2. Map them to semantic tokens
+3. Use component tokens internally
+
+Example:
+
+```
+
+.card {
+--card-bg: var(--color-panel);
+--card-border: var(--color-border);
+--card-radius: var(--radius-3);
+--card-padding: var(--space-4);
+
+background: var(--card-bg);
+border: 1px solid var(--card-border);
+padding: var(--card-padding);
+border-radius: var(--card-radius);
+}
+
+```
+
+---
+
+# Hard Rules
+
+Do NOT:
+
+- hardcode colors
+- hardcode spacing
+- reference primitive tokens inside components
+- reference semantic tokens directly inside deeply nested elements
+
+Always create component tokens.
+
+---
+
+# Benefits
+
+This architecture provides:
+
+- theme flexibility
+- safe refactoring
+- scalable component styling
+- consistent UI patterns
+- clear separation of concerns
+
+All new UI code must follow this system.
+

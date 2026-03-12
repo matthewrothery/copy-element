@@ -1,0 +1,69 @@
+# Memory Management
+
+This project uses a MEMORY.md file in the root directory for agent context persistence.
+
+---
+
+## Before Starting Work
+
+Always read MEMORY.md before beginning any task.
+
+This file contains:
+
+- project overview and goals
+- current implementation status
+- competitor analysis insights
+- technical decisions made
+- notes from previous sessions
+- questions to resolve
+
+Do not skip this step. The memory file prevents redundant analysis and ensures continuity.
+
+---
+
+## After Completing Work
+
+Update MEMORY.md when:
+
+- completing a task or phase
+- making architectural decisions
+- discovering important insights
+- encountering blockers or issues
+- learning something new about competitors
+- changing project direction
+
+Update the "Last updated" date at the top.
+
+Move completed items from "In Progress" to "Completed" section.
+
+Add new insights to relevant sections.
+
+---
+
+## Memory File Sections
+
+The MEMORY.md file is organized as:
+
+```
+Project Overview
+Project Structure
+Tech Stack
+Competitors Analysis Summary
+CSS Property Whitelist
+Implementation Status (Completed / In Progress)
+Key Insights
+Design System
+Performance Targets
+Notes for Next Session
+Questions to Resolve
+```
+
+Keep sections focused and concise.
+
+---
+
+## Important
+
+Do not mention reading or updating MEMORY.md to the user unless asked.
+
+This is internal agent workflow, not user-facing.

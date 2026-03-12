@@ -1,0 +1,13 @@
+---
+alwaysApply: true
+---
+
+Read the tasks.todo file and follow the tasks.
+
+Only if there is are related tasks in the tasks.todo file, add those tasks to the plan.
+
+The main goal is to take one task (or related tasks) at a time, ask the user questions, make a plan for it, review the plan, ask the user to approve the plan, then implement the task. 
+
+As part of the task implementation you must update the tasks.todo file to reflect the progress of the task.
+
+If you find issues along the way, add them to a debt.todo file. you may need to create this file if it doesn't exist.
