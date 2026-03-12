@@ -1,7 +1,7 @@
 /* ElementsShowcase – self-contained */
 .elements-showcase {
-  --showcase-title-size: var(--typo-hero);
-  --showcase-subtitle-size: var(--typo-subtitle);
+  --showcase-title-size: 62px;
+  --showcase-subtitle-size: 24px;
   --showcase-card-bg: var(--bg);
   --showcase-card-border: var(--border-strong);
   --showcase-card-radius: 12px;
@@ -117,13 +117,14 @@
 @media (max-width: 884px) {
   .elements-showcase {
     --showcase-title-size: 36px;
-    --showcase-subtitle-size: var(--typo-subtitle);
+    --showcase-subtitle-size: 20px;
   }
 }
 
 @media (max-width: 480px) {
   .elements-showcase {
-    --showcase-title-size: var(--typo-hero);
+    --showcase-title-size: 28px;
+    --showcase-subtitle-size: var(--typo-subtitle);
   }
 
   .elements-showcase-card {
