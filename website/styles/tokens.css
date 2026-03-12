@@ -7,9 +7,9 @@
   --text-muted: rgba(255, 255, 255, 0.55);
   --border: rgba(255, 255, 255, 0.1);
   --border-strong: rgba(255, 255, 255, 0.106);
-  --accent: #4d2ff5;
-  --accent-hover: #6248f6;
-  --accent-active: #6c54f7;
+  --accent: #3A82F6;
+  --accent-hover:rgb(33, 82, 166);
+  --accent-active:rgb(49, 90, 163);
 
   /* Typography (Screen Studio scale) */
   --typo-label: 12px;

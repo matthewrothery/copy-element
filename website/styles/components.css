@@ -206,7 +206,7 @@
   transition-duration: 0.15s;
 }
 
-/* Hero */
+/* Hero (Screen Studio–inspired) */
 @keyframes hero-enter {
   0% {
     transform: translateY(-8px);
@@ -218,17 +218,30 @@
   }
 }
 
-@keyframes hero-logo-spin {
-  from {
-    transform: rotate(0deg);
+@keyframes hero-logo-pulse {
+  0%,
+  100% {
+    transform: scale(1);
   }
-  to {
-    transform: rotate(360deg);
+  14% {
+    transform: scale(1.02);
+  }
+  28% {
+    transform: scale(1);
+  }
+  42% {
+    transform: scale(1.02);
+  }
+  56% {
+    transform: scale(1);
   }
 }
 
+
 .hero {
-  --hero-title-size: 48px;
+  --typo-hero: 62px;
+  --typo-hero-subtitle: 24px;
+  --typo-hero-label: 13px;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -239,14 +252,20 @@
   padding-right: var(--space-3);
 }
 
-.hero-logo {
+.hero-inner {
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: var(--space-2);
+  gap: var(--space-3);
+  animation: hero-enter 2.5s cubic-bezier(0.37, 2, 0.42, 1.02) 0.4s both;
+}
+
+.hero-logo {
+  display: flex;
+  align-items: center;
+  justify-content: center;
   text-decoration: none;
   color: var(--text);
-  animation: hero-enter 0.4s cubic-bezier(0.37, 2, 0.42, 1.02) 0.1s both;
 }
 
 .hero-logo:hover {
@@ -257,58 +276,72 @@
   flex-shrink: 0;
   width: 120px;
   height: 120px;
+  min-width: 120px;
+  min-height: 120px;
+  max-width: 120px;
+  max-height: 120px;
+  animation: hero-logo-pulse 1.2s ease-in-out infinite;
 }
 
-.hero-logo-text {
-  font-size: var(--typo-title);
-  font-weight: var(--font-weight-bold);
-  letter-spacing: -0.02em;
+.hero-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-2);
+  padding-left: var(--space-3);
+  padding-right: var(--space-3);
 }
 
 .hero-title {
-  font-size: var(--hero-title-size);
+  font-size: var(--typo-hero);
   font-weight: var(--font-weight-bold);
   line-height: 1.25em;
+  letter-spacing: -0.0186364em;
   max-width: 960px;
   padding-left: var(--space-3);
   padding-right: var(--space-3);
-  animation: hero-enter 0.4s cubic-bezier(0.37, 2, 0.42, 1.02) 0.2s both;
+  animation: hero-enter 2.5s cubic-bezier(0.37, 2, 0.42, 1.02) 0.6s both;
 }
 
 .hero-subtitle {
-  font-size: var(--typo-subtitle);
+  font-size: var(--typo-hero-subtitle);
   font-weight: var(--font-weight-normal);
   line-height: 1.5em;
-  color: var(--text-muted);
   max-width: 750px;
   padding-left: var(--space-3);
   padding-right: var(--space-3);
-  animation: hero-enter 0.4s cubic-bezier(0.37, 2, 0.42, 1.02) 0.3s both;
+  animation: hero-enter 2.5s cubic-bezier(0.37, 2, 0.42, 1.02) 0.7s both;
 }
 
 .hero-subtitle span {
-  opacity: 0.9;
+  opacity: 0.55;
 }
 
 .hero-cta-block {
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: var(--space-2);
-  animation: hero-enter 0.4s cubic-bezier(0.37, 2, 0.42, 1.02) 0.4s both;
+  justify-content: center;
+  gap: 2px;
+  padding-left: var(--space-3);
+  padding-right: var(--space-3);
+  animation: hero-enter 2.5s cubic-bezier(0.37, 2, 0.42, 1.02) 0.8s both;
 }
 
 .hero-cta {
-  padding-left: var(--space-4);
-  padding-right: var(--space-4);
+  padding-left: 32px;
+  padding-right: 32px;
   height: 54px;
+  border-radius: 9px;
   font-size: 18px;
   font-weight: var(--font-weight-bold);
   line-height: 1.25em;
+  letter-spacing: -0.0186364em;
 }
 
 .hero-cta-label {
-  font-size: var(--typo-label);
+  font-size: var(--typo-hero-label);
   font-weight: var(--font-weight-normal);
   line-height: 1.33em;
   opacity: 0.3;
@@ -319,7 +352,7 @@
   margin-top: var(--space-6);
   width: 100%;
   max-width: 960px;
-  animation: hero-enter 0.4s cubic-bezier(0.37, 2, 0.42, 1.02) 0.5s both;
+  animation: hero-enter 2.5s cubic-bezier(0.37, 2, 0.42, 1.02) 0.9s both;
 }
 
 .hero-media .media-placeholder {
@@ -328,13 +361,17 @@
 }
 
 @media (max-width: 884px) {
-  .hero {
-    gap: var(--space-4);
+  .hero-inner {
+    gap: var(--space-5);
   }
 
   .hero-logo-icon {
     width: 96px;
     height: 96px;
+    min-width: 96px;
+    min-height: 96px;
+    max-width: 96px;
+    max-height: 96px;
   }
 
   .hero-title {
