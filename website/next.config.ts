@@ -7,6 +7,7 @@ const nextConfig: NextConfig = {
     unoptimized: true,
     remotePatterns: [
       { protocol: "https", hostname: "miro.medium.com", pathname: "/**" },
+      { protocol: "https", hostname: "picsum.photos", pathname: "/**" },
     ],
   },
 };

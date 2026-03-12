@@ -59,3 +59,85 @@ The docs act as a long term memory of the project.
 Rules are below
 
 ------------------------------------------
+
+### Rule: Full-Bleed Carousel Pattern
+
+When creating a carousel that needs to bleed to the viewport edges while staying inside a max-width container (like `.section` with `max-width: 1240px`), use the negative margin technique on the **track**, not the wrapper.
+
+### Why
+
+Using `position: relative` with `left: 50%; margin-left: -50vw` on the carousel wrapper breaks centering and causes layout issues. The correct approach is to keep the wrapper simple and use negative margins on the scrollable track to pull it out of the container padding.
+
+### Pattern
+
+**Carousel Wrapper** (`.carousel`):
+- Simple `width: 100%` (inherits from parent)
+- No positioning or margin tricks
+- Contains CSS custom properties only
+
+**Carousel Track** (`.carousel-track`):
+- Use negative margins that match the padding to break out of container
+- Set `width: 100vw` to span full viewport
+- Add symmetric left/right padding for proper content spacing
+- Calculate padding based on viewport and max-width
+
+**Controls** (`.carousel-controls`):
+- Stay centered with `max-width: 1240px` and `margin: 0 auto`
+- Use same padding calculation as track for alignment
+
+### Example
+
+```css
+.carousel {
+  width: 100%;
+  /* NO position, left, right, margin-left, margin-right, or max-width here */
+}
+
+.carousel-track {
+  /* Break out of container with negative margins */
+  margin-left: calc(-1 * max(var(--carousel-padding-inline), calc((100vw - 1240px) / 2 + 20px)));
+  margin-right: calc(-1 * max(var(--carousel-padding-inline), calc((100vw - 1240px) / 2 + 20px)));
+  
+  /* Match the negative margins with padding so content is properly spaced */
+  padding-left: max(var(--carousel-padding-inline), calc((100vw - 1240px) / 2 + 20px));
+  padding-right: max(var(--carousel-padding-inline), calc((100vw - 1240px) / 2 + 20px));
+  
+  /* Full viewport width */
+  width: 100vw;
+  
+  /* Standard scroll container styles */
+  display: flex;
+  overflow-x: auto;
+  scroll-behavior: smooth;
+  scrollbar-width: none;
+}
+
+.carousel-controls {
+  /* Centered within content width */
+  width: 100%;
+  max-width: 1240px;
+  margin: var(--carousel-controls-margin-top) auto 0;
+  padding-inline: max(var(--carousel-padding-inline), calc((100vw - 1240px) / 2 + 20px));
+}
+
+@media (max-width: 1280px) {
+  .carousel-track {
+    /* Simpler calculation for smaller screens */
+    margin-left: calc(-1 * var(--carousel-padding-inline));
+    margin-right: calc(-1 * var(--carousel-padding-inline));
+    padding-left: var(--carousel-padding-inline);
+    padding-right: var(--carousel-padding-inline);
+  }
+}
+```
+
+**Parent Container Requirements:**
+- Ensure parent has `overflow: visible` (like `.elements-showcase`)
+- Section container should have standard padding (e.g., `padding: 0 20px`)
+
+This pattern ensures:
+- Track bleeds to viewport edges
+- Content aligns with page grid
+- Controls stay centered below carousel
+- No horizontal scrollbar on page
+- Works responsively at all screen sizes

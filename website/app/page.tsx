@@ -1,6 +1,7 @@
 import { Header } from "@/components/Header";
 import { Hero } from "@/components/Hero";
 import { FeatureSection } from "@/components/FeatureSection";
+import { ElementsShowcase } from "@/components/ElementsShowcase";
 import { CTABlock } from "@/components/CTABlock";
 import { Footer } from "@/components/Footer";
 import { Section } from "@/components/Section";
@@ -80,6 +81,40 @@ export default function Home(): React.ReactElement {
               {
                 title: "Portable",
                 description: "Output works anywhere. No dependency on the original site or framework.",
+              },
+            ]}
+          />
+        </Section>
+
+        <Section>
+          <ElementsShowcase
+            title="Elements captured with Element Armory"
+            subtitle="UI components captured from real sites and exported as clean HTML or JSX."
+            items={[
+              {
+                src: "https://picsum.photos/seed/element-pricing/1120/630",
+                alt: "Card layout",
+                label: "Pricing card",
+              },
+              {
+                src: "https://picsum.photos/seed/element-header/1120/630",
+                alt: "Navigation bar",
+                label: "Header with nav",
+              },
+              {
+                src: "https://picsum.photos/seed/element-form/1120/630",
+                alt: "Form controls",
+                label: "Form section",
+              },
+              {
+                src: "https://picsum.photos/seed/element-article/1120/630",
+                alt: "Content block",
+                label: "Article preview",
+              },
+              {
+                src: "https://picsum.photos/seed/element-footer/1120/630",
+                alt: "Footer",
+                label: "Site footer",
               },
             ]}
           />
