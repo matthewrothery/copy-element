@@ -1,6 +1,6 @@
-# SnappyMCP MCP Server
+# Element Armory MCP Server
 
-Standalone local MCP server for SnappyMCP snippet access. Runs over stdio for use with Cursor, Claude Code, or other MCP clients. No deployment or hosting—run it locally when you need it.
+Standalone local MCP server for Element Armory snippet access. Runs over stdio for use with Cursor, Claude Code, or other MCP clients. No deployment or hosting—run it locally when you need it.
 
 ## Run locally
 

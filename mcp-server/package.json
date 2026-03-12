@@ -1,7 +1,7 @@
 {
   "name": "snappymcp-host",
   "version": "0.1.0",
-  "description": "SnappyMCP MCP server for snippet access (local stdio only)",
+  "description": "Element Armory MCP server for snippet access (local stdio only)",
   "type": "module",
   "main": "dist/index.js",
   "bin": {

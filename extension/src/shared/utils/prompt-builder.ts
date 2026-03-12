@@ -43,7 +43,7 @@ export function getSnippetPromptTokenEstimate(snippet: Snippet): number {
 }
 
 const MCP_INTRO =
-  "This is a component from SnappyMCP, copied from another website. It is your job to implement this UI component as per the user's instructions. Ideally it would match the existing theme, colors and code practices in the existing project.";
+  "This is a component from Element Armory, copied from another website. It is your job to implement this UI component as per the user's instructions. Ideally it would match the existing theme, colors and code practices in the existing project.";
 
 /**
  * Builds the short "Copy MCP" prompt for pasting into AI tools: intro paragraph,
@@ -68,7 +68,7 @@ export function buildCopyMcpPrompt(snippet: Snippet): string {
     snippet.jsx,
     "```",
     "",
-    `And a link to the snapshot image: ${snapshotUrl}`
+    // `And a link to the snapshot image: ${snapshotUrl}`
   ];
   return lines.join("\n");
 }

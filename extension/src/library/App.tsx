@@ -97,7 +97,7 @@ export function LibraryApp(): JSX.Element {
     <div className="app-shell library-shell">
       <header className="library-header">
         <img src={logoUrl} alt="" width={32} height={32} style={{ objectFit: "contain" }} />
-        <h1 className="library-header-title">SnappyMCP – Library</h1>
+        <h1 className="library-header-title">Element Armory – Library</h1>
       </header>
       <main className="main-content">
         {hasSnippets ? (

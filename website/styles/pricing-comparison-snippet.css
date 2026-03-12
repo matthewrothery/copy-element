@@ -76,6 +76,8 @@
 .pricing-comparison-snippet {
   --typo-copy: 16px;
   --typo-label: 13px;
+  max-width: 100%;
+  overflow: hidden;
 }
 
 .pricing-comparison-snippet .material-symbols-rounded {

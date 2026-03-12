@@ -1,33 +1,31 @@
+import { Carousel } from "./Carousel";
 import { MediaPlaceholder } from "./MediaPlaceholder";
 
 const PLACEHOLDER_CARDS = [
   { title: "Component library", source: "example.com" },
   { title: "Landing section", source: "example.com" },
   { title: "Pricing card", source: "example.com" },
+  { title: "Pricing card", source: "example.com" },
+  { title: "Pricing card", source: "example.com" },
+  { title: "Pricing card", source: "example.com" },
 ];
 
 export function SocialProofCards(): React.ReactElement {
   return (
-    <section className="section-inner" aria-labelledby="social-proof-title">
-      <div className="block-head">
-        <h2 id="social-proof-title" className="block-head-title">
-          Made with Element Armory
-        </h2>
-        <p className="block-head-subtitle">
-          Capture UI from any site and rebuild it with AI.
-        </p>
-      </div>
-      <div className="scroll-row">
-        {PLACEHOLDER_CARDS.map((card) => (
-          <article key={card.title} className="scroll-item card">
-            <div className="card-caption">
-              <h4 className="card-title">{card.title}</h4>
-              <p className="card-desc">{card.source}</p>
-            </div>
-            <MediaPlaceholder label="Snippet" />
-          </article>
-        ))}
-      </div>
-    </section>
+    <Carousel
+      heading="Made with Element Armory"
+      description="Capture UI from any site and rebuild it with AI."
+      aria-labelledby="social-proof-title"
+    >
+      {PLACEHOLDER_CARDS.map((card, index) => (
+        <article key={`card-${index}`} className="scroll-item card">
+          <div className="card-caption">
+            <h4 className="card-title">{card.title}</h4>
+            <p className="card-desc">{card.source}</p>
+          </div>
+          <MediaPlaceholder label="Snippet" />
+        </article>
+      ))}
+    </Carousel>
   );
 }

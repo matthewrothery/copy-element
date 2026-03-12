@@ -30,8 +30,8 @@
   --space-5: 32px;
   --space-6: 48px;
   --space-7: 128px;
-  --section-gap: 128px;
-  --section-gap-mobile: 90px;
+  --section-gap: 256px;
+  --section-gap-mobile: 180px;
 
   /* Radius */
   --radius-sm: 5px;
@@ -47,5 +47,17 @@
 @media (max-width: 884px) {
   :root {
     --section-gap: var(--section-gap-mobile);
+  }
+}
+
+@media (max-width: 480px) {
+  :root {
+    --typo-hero: 28px;
+    --typo-title: 18px;
+    --typo-largecopy: 15px;
+    --typo-subtitle: 15px;
+    --typo-copy: 13px;
+    --typo-label: 11px;
+    --content-padding: 16px;
   }
 }

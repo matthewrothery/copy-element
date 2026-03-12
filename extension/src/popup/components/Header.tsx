@@ -12,7 +12,7 @@ export function Header({ onCapture, onLibrary }: HeaderProps): JSX.Element {
     <header className="header">
       <div className="header-brand">
         <img src={logoUrl} alt="" className="header-logo" width={32} height={32} />
-        <h1 className="header-title">SnappyMCP</h1>
+        <h1 className="header-title">Element Armory</h1>
       </div>
       <hr className="header-separator" />
       <nav className="nav-buttons">
