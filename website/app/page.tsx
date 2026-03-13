@@ -1,6 +1,7 @@
 import { Header } from "@/components/Header";
 import { Hero } from "@/components/Hero";
 import { FeatureSection } from "@/components/FeatureSection";
+import { FeatureGrid } from "@/components/FeatureGrid";
 import { ElementsShowcase } from "@/components/ElementsShowcase";
 import { SnippetHero } from "@/components/SnippetHero";
 import { CTABlock } from "@/components/CTABlock";
@@ -98,6 +99,39 @@ export default function Home(): React.ReactElement {
               {
                 title: "Quick preview",
                 description: "Preview snippets before copying. Delete or organize as you like.",
+              },
+            ]}
+          />
+        </Section>
+
+        <Section>
+          <FeatureGrid
+            title="Copy & reuse"
+            subtitle={
+              <>
+                <strong>Optimal output, baked in.</strong> Copy HTML or JSX from any element and paste into your project or share with your team.
+              </>
+            }
+            cards={[
+              {
+                title: "Copy HTML",
+                description:
+                  "One click copies the element as clean HTML. Minimal markup, no scripts or trackers.",
+              },
+              {
+                title: "Copy JSX",
+                description:
+                  "Export as React JSX. Paste into your codebase or use with AI tools via the MCP server.",
+              },
+              {
+                title: "Save to library",
+                description:
+                  "Store captured elements in your snippet library with a title and source URL for later reuse.",
+              },
+              {
+                title: "Share link",
+                description:
+                  "Share snippets with your team. Anyone with the link can view and copy the captured UI.",
               },
             ]}
           />

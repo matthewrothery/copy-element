@@ -1,0 +1,113 @@
+/* FeatureGrid – self-contained */
+.feature-grid {
+  --feature-grid-title-size: var(--typo-headline);
+  --feature-grid-subtitle-size: var(--typo-headline-subtitle);
+  --feature-grid-card-bg: var(--surface);
+  --feature-grid-card-radius: var(--radius);
+  --feature-grid-card-padding: var(--space-6);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-6);
+  width: 100%;
+}
+
+.feature-grid-heading {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+}
+
+.feature-grid-title {
+  font-size: var(--feature-grid-title-size);
+  font-weight: var(--font-weight-bold);
+  line-height: 1.25em;
+  color: var(--text);
+  margin: 0;
+}
+
+.feature-grid-subtitle {
+  font-size: var(--feature-grid-subtitle-size);
+  font-weight: var(--font-weight-normal);
+  line-height: 1.33em;
+  color: var(--text-muted);
+  max-width: 50ch;
+  margin: 0;
+}
+
+.feature-grid-subtitle strong {
+  color: var(--text);
+}
+
+.feature-grid-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--space-6);
+}
+
+.feature-grid-card {
+  margin: 0;
+  background-color: var(--feature-grid-card-bg);
+  border-radius: var(--feature-grid-card-radius);
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+}
+
+.feature-grid-card-caption {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+  padding: var(--feature-grid-card-padding);
+  flex-grow: 1;
+}
+
+.feature-grid-card-title {
+  font-size: var(--typo-largecopy);
+  font-weight: var(--font-weight-semibold);
+  line-height: 1.33em;
+  color: var(--text);
+  margin: 0;
+}
+
+.feature-grid-card-desc {
+  font-size: var(--typo-copy);
+  font-weight: var(--font-weight-normal);
+  line-height: 1.5em;
+  color: var(--text-muted);
+  text-wrap: balance;
+  margin: 0;
+}
+
+.feature-grid-card-media {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  min-height: 0;
+  display: flex;
+  overflow: hidden;
+}
+
+.feature-grid-card-media .media-placeholder {
+  width: 100%;
+  height: 100%;
+  aspect-ratio: unset;
+  border-radius: 0;
+}
+
+.feature-grid-card-image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+@media (max-width: 884px) {
+  .feature-grid-grid {
+    grid-template-columns: 1fr;
+    gap: var(--space-4);
+  }
+
+  .feature-grid-card-caption {
+    padding: var(--space-4);
+  }
+}
