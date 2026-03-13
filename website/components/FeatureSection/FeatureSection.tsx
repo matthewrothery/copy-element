@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import Image from "next/image";
 import { MediaPlaceholder } from "@/components/MediaPlaceholder";
 import type { FeatureSectionProps, FeatureTab } from "./types";
 import "./FeatureSection.css";
@@ -16,6 +17,7 @@ export function FeatureSection({
 }: FeatureSectionProps): React.ReactElement {
   const [activeIndex, setActiveIndex] = useState(0);
   const id = slugify(title);
+  const activeTab = tabs[activeIndex];
 
   return (
     <section className="feature-section" aria-labelledby={`feature-title-${id}`}>
@@ -40,7 +42,21 @@ export function FeatureSection({
           ))}
         </div>
         <div className="feature-media">
-          <MediaPlaceholder label="Feature demo" />
+          {activeTab.image ? (
+            <div key={activeIndex} className="feature-media-image-wrap">
+              <Image
+                src={activeTab.image}
+                alt=""
+                fill
+                sizes="(max-width: 884px) 75vw, (max-width: 1280px) 45vw, 480px"
+                className="feature-media-image"
+              />
+            </div>
+          ) : (
+            <div key={activeIndex} className="feature-media-placeholder-wrap">
+              <MediaPlaceholder label={activeTab.title} />
+            </div>
+          )}
         </div>
       </div>
     </section>

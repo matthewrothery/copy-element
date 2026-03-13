@@ -81,14 +81,15 @@
   height: 70px;
   display: flex;
   align-items: center;
-  font-size: var(--typo-copy);
-  font-weight: 500;
+  font-size: var(--typo-largecopy);
+  font-weight: 700;
   line-height: 1.5em;
+  transition: color 0.3s;
 }
 
 .header-nav-item:hover {
   opacity: 1;
-  transition-duration: 0.075s;
+  color: var(--accent);
 }
 
 .header-cta {

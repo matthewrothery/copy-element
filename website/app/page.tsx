@@ -12,7 +12,7 @@ export default function Home(): React.ReactElement {
     <>
       <Header />
       <main>
-        <Section>
+        <Section center>
           <Hero />
         </Section>
 

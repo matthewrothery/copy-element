@@ -4,6 +4,7 @@ import "./Section.css";
 export function Section({
   children,
   className,
+  center,
   id,
   style,
   inner,
@@ -21,7 +22,7 @@ export function Section({
   }
   return (
     <section
-      className={className ? `section ${className}` : "section"}
+      className={className ? `section ${className} ${center ? "center" : ""}` : `section ${center ? "center" : ""}`}
       id={id}
       style={style}
     >

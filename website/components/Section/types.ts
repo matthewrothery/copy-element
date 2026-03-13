@@ -7,4 +7,5 @@ export type SectionProps = {
   style?: CSSProperties;
   /** Use section-inner for extra wrapper (e.g. pricing page) */
   inner?: boolean;
+  center?: boolean;
 };
