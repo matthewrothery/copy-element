@@ -13,7 +13,7 @@ describe("extractUsedKeyframes", () => {
 
   it.skipIf(!hasKeyframesRule)(
     "extracts @keyframes when name is in used set",
-    () => {
+    async () => {
       const style = document.createElement("style");
       style.textContent = `
         @keyframes crxZGW {
@@ -27,7 +27,7 @@ describe("extractUsedKeyframes", () => {
       `;
       document.head.appendChild(style);
 
-      const result = extractUsedKeyframes(new Set(["crxZGW"]));
+      const result = await extractUsedKeyframes(new Set(["crxZGW"]));
 
       expect(result).toContain("crxZGW");
       expect(result).toContain("translateY(-8px)");
@@ -36,7 +36,7 @@ describe("extractUsedKeyframes", () => {
     }
   );
 
-  it.skipIf(!hasKeyframesRule)("omits @keyframes when name not in used set", () => {
+  it.skipIf(!hasKeyframesRule)("omits @keyframes when name not in used set", async () => {
     const style = document.createElement("style");
     style.textContent = `
       @keyframes unused {
@@ -46,13 +46,13 @@ describe("extractUsedKeyframes", () => {
     `;
     document.head.appendChild(style);
 
-    const result = extractUsedKeyframes(new Set(["someOtherName"]));
+    const result = await extractUsedKeyframes(new Set(["someOtherName"]));
 
     expect(result).not.toContain("unused");
     expect(result).toBe("");
   });
 
-  it.skipIf(!hasKeyframesRule)("returns empty string when used set is empty", () => {
+  it.skipIf(!hasKeyframesRule)("returns empty string when used set is empty", async () => {
     const style = document.createElement("style");
     style.textContent = `
       @keyframes foo {
@@ -62,12 +62,12 @@ describe("extractUsedKeyframes", () => {
     `;
     document.head.appendChild(style);
 
-    const result = extractUsedKeyframes(new Set());
+    const result = await extractUsedKeyframes(new Set());
 
     expect(result).toBe("");
   });
 
-  it.skipIf(!hasKeyframesRule)("extracts multiple keyframes for multiple names", () => {
+  it.skipIf(!hasKeyframesRule)("extracts multiple keyframes for multiple names", async () => {
     const style = document.createElement("style");
     style.textContent = `
       @keyframes fadeIn {
@@ -81,7 +81,7 @@ describe("extractUsedKeyframes", () => {
     `;
     document.head.appendChild(style);
 
-    const result = extractUsedKeyframes(new Set(["fadeIn", "slideUp"]));
+    const result = await extractUsedKeyframes(new Set(["fadeIn", "slideUp"]));
 
     expect(result).toContain("fadeIn");
     expect(result).toContain("slideUp");

@@ -5,7 +5,7 @@ export default defineManifest({
   name: "Element Armory",
   description: "Capture and save styled page elements as reusable snippets.",
   version: "0.1.0",
-  permissions: ["activeTab", "tabs", "storage", "scripting", "clipboardWrite"],
+  permissions: ["activeTab", "tabs", "storage", "scripting", "clipboardWrite", "debugger"],
   action: {
     default_title: "Element Armory",
     default_popup: "popup.html"

@@ -10,7 +10,7 @@ export function estimateTokens(text: string): number {
 
 /**
  * Builds a formatted prompt string for a snippet, suitable for pasting into
- * Claude Code, Cursor, or other AI tools. Includes HTML and JSX with metadata.
+ * Claude Code, Cursor, or other AI tools. Includes HTML, stylesheet (when present), and JSX with metadata.
  */
 export function buildSnippetPrompt(snippet: Snippet): string {
   const html = buildCopyHtml(snippet);
@@ -19,18 +19,17 @@ export function buildSnippetPrompt(snippet: Snippet): string {
     "",
     `Source: ${snippet.sourceUrl}`,
     `Dimensions: ${snippet.width}x${snippet.height}`,
-    `Estimated tokens: ~${estimateTokens(html + snippet.jsx)}`,
+    `Estimated tokens: ~${estimateTokens(html + (snippet.styleBlock ?? "") + snippet.jsx)}`,
     "",
     "### HTML",
     "```html",
     html,
-    "```",
-    "",
-    "### JSX",
-    "```jsx",
-    snippet.jsx,
     "```"
   ];
+  if (snippet.styleBlock?.trim()) {
+    lines.push("", "### CSS", "```css", snippet.styleBlock.trim(), "```");
+  }
+  lines.push("", "### JSX", "```jsx", snippet.jsx, "```");
   return lines.join("\n");
 }
 
@@ -47,14 +46,10 @@ const MCP_INTRO =
 
 /**
  * Builds the short "Copy MCP" prompt for pasting into AI tools: intro paragraph,
- * code (HTML + JSX), and snapshot image link (thumbnail data URL or placeholder).
+ * code (HTML + optional CSS + JSX), and snapshot image link (thumbnail data URL or placeholder).
  */
 export function buildCopyMcpPrompt(snippet: Snippet): string {
   const html = buildCopyHtml(snippet);
-  const snapshotUrl =
-    snippet.thumbnail && snippet.thumbnail.trim().length > 0
-      ? snippet.thumbnail
-      : "[No snapshot available]";
   const lines: string[] = [
     MCP_INTRO,
     "",
@@ -62,13 +57,11 @@ export function buildCopyMcpPrompt(snippet: Snippet): string {
     "",
     "```html",
     html,
-    "```",
-    "",
-    "```jsx",
-    snippet.jsx,
-    "```",
-    "",
-    // `And a link to the snapshot image: ${snapshotUrl}`
+    "```"
   ];
+  if (snippet.styleBlock?.trim()) {
+    lines.push("", "```css", snippet.styleBlock.trim(), "```");
+  }
+  lines.push("", "```jsx", snippet.jsx, "```", "");
   return lines.join("\n");
 }

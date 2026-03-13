@@ -7,7 +7,7 @@ describe("extractUsedFontFaces", () => {
   });
 
   // Skip font-face tests in jsdom as CSSFontFaceRule is not available
-  it.skipIf(typeof CSSFontFaceRule === "undefined")("extracts @font-face rules for used fonts", () => {
+  it.skipIf(typeof CSSFontFaceRule === "undefined")("extracts @font-face rules for used fonts", async () => {
     const style = document.createElement("style");
     style.textContent = `
       @font-face {
@@ -22,14 +22,14 @@ describe("extractUsedFontFaces", () => {
     document.head.appendChild(style);
 
     const usedFonts = new Set(["CustomFont"]);
-    const result = extractUsedFontFaces(usedFonts, "https://example.com");
+    const result = await extractUsedFontFaces(usedFonts, "https://example.com");
 
     expect(result).toContain("CustomFont");
     expect(result).toContain("https://example.com/fonts/custom.woff2");
     expect(result).not.toContain("UnusedFont");
   });
 
-  it.skipIf(typeof CSSFontFaceRule === "undefined")("converts relative URLs to absolute", () => {
+  it.skipIf(typeof CSSFontFaceRule === "undefined")("converts relative URLs to absolute", async () => {
     const style = document.createElement("style");
     style.textContent = `
       @font-face {
@@ -40,12 +40,12 @@ describe("extractUsedFontFaces", () => {
     document.head.appendChild(style);
 
     const usedFonts = new Set(["TestFont"]);
-    const result = extractUsedFontFaces(usedFonts, "https://example.com/page/");
+    const result = await extractUsedFontFaces(usedFonts, "https://example.com/page/");
 
     expect(result).toContain("https://example.com/page/fonts/test.woff2");
   });
 
-  it.skipIf(typeof CSSFontFaceRule === "undefined")("handles font names with quotes", () => {
+  it.skipIf(typeof CSSFontFaceRule === "undefined")("handles font names with quotes", async () => {
     const style = document.createElement("style");
     style.textContent = `
       @font-face {
@@ -56,12 +56,12 @@ describe("extractUsedFontFaces", () => {
     document.head.appendChild(style);
 
     const usedFonts = new Set(["Quoted Font"]);
-    const result = extractUsedFontFaces(usedFonts, "https://example.com");
+    const result = await extractUsedFontFaces(usedFonts, "https://example.com");
 
     expect(result).toContain("Quoted Font");
   });
 
-  it("returns empty string when no fonts are used", () => {
+  it("returns empty string when no fonts are used", async () => {
     const style = document.createElement("style");
     style.textContent = `
       @font-face {
@@ -72,12 +72,12 @@ describe("extractUsedFontFaces", () => {
     document.head.appendChild(style);
 
     const usedFonts = new Set<string>();
-    const result = extractUsedFontFaces(usedFonts, "https://example.com");
+    const result = await extractUsedFontFaces(usedFonts, "https://example.com");
 
     expect(result).toBe("");
   });
 
-  it.skipIf(typeof CSSFontFaceRule === "undefined")("extracts @font-face from @supports blocks", () => {
+  it.skipIf(typeof CSSFontFaceRule === "undefined")("extracts @font-face from @supports blocks", async () => {
     const style = document.createElement("style");
     style.textContent = `
       @supports (font-variation-settings: normal) {
@@ -90,13 +90,13 @@ describe("extractUsedFontFaces", () => {
     document.head.appendChild(style);
 
     const usedFonts = new Set(["VariableFont"]);
-    const result = extractUsedFontFaces(usedFonts, "https://example.com");
+    const result = await extractUsedFontFaces(usedFonts, "https://example.com");
 
     expect(result).toContain("@supports");
     expect(result).toContain("VariableFont");
   });
 
-  it.skipIf(typeof CSSFontFaceRule === "undefined")("extracts @font-face from @media blocks", () => {
+  it.skipIf(typeof CSSFontFaceRule === "undefined")("extracts @font-face from @media blocks", async () => {
     const style = document.createElement("style");
     style.textContent = `
       @media screen {
@@ -109,7 +109,7 @@ describe("extractUsedFontFaces", () => {
     document.head.appendChild(style);
 
     const usedFonts = new Set(["MediaFont"]);
-    const result = extractUsedFontFaces(usedFonts, "https://example.com");
+    const result = await extractUsedFontFaces(usedFonts, "https://example.com");
 
     expect(result).toContain("@media");
     expect(result).toContain("MediaFont");

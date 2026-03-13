@@ -13,7 +13,10 @@ import { extractUsedKeyframes } from "../shared/utils/keyframes-extractor";
 import { extractAllFontLinks } from "../shared/utils/external-font-link-extractor";
 import { cropViewportToThumbnail } from "../shared/utils/viewport-thumbnail-crop";
 import type { CapturedElementData } from "../shared/types/snippet";
-import type { RuntimeResponse } from "../shared/types/messages";
+import type {
+  ExtractCssViaCdpPayload,
+  RuntimeResponse
+} from "../shared/types/messages";
 import {
   buildSnippetFromCapture,
   CaptureConfirmationModal,
@@ -23,6 +26,38 @@ import { buildCopyHtml } from "../shared/utils/preview-srcdoc-builder";
 import { ElementPicker } from "./element-picker";
 
 const TOAST_Z_INDEX = 2147483648;
+const CAPTURE_ATTR = "data-element-capture-id";
+
+function collectAllElements(root: Element): Element[] {
+  const elements: Element[] = [root];
+  const walker = document.createTreeWalker(root, NodeFilter.SHOW_ELEMENT);
+  let node: Node | null;
+  while ((node = walker.nextNode())) {
+    elements.push(node as Element);
+  }
+  return elements;
+}
+
+function addTempCaptureSelectors(root: Element): { selectors: string[]; cleanup: () => void } {
+  const prefix = nanoid(8);
+  const elements = collectAllElements(root);
+  const selectors: string[] = [];
+
+  for (let i = 0; i < elements.length; i++) {
+    const el = elements[i];
+    const value = `${prefix}-${i}`;
+    el.setAttribute(CAPTURE_ATTR, value);
+    selectors.push(`[${CAPTURE_ATTR}="${value}"]`);
+  }
+
+  const cleanup = () => {
+    for (const el of elements) {
+      el.removeAttribute(CAPTURE_ATTR);
+    }
+  };
+
+  return { selectors, cleanup };
+}
 
 let picker: ElementPicker | null = null;
 let modal: CaptureConfirmationModal | null = null;
@@ -126,18 +161,44 @@ function ensurePicker(): ElementPicker {
 
           const renderContext = buildRenderContextFromElement(result.element);
 
-          // Extract CSS rules from stylesheets
-          const {
-            cssText,
-            usedFontFamilies,
-            usedAnimationNames
-          } = extractMatchingRules(result.element);
+          // Add temporary selectors for CDP; clone was created before so snippet HTML stays clean
+          const { selectors, cleanup } = addTempCaptureSelectors(result.element);
 
-          // Extract @font-face rules for used fonts
-          const fontFaces = extractUsedFontFaces(usedFontFamilies, baseUrl);
+          let cssText: string;
+          let fontFaces: string;
+          let keyframesCss: string;
+          let layerOrder: string[];
 
-          // Extract @keyframes for used animation names
-          const keyframesCss = extractUsedKeyframes(usedAnimationNames);
+          try {
+            const cdpResponse = (await chrome.runtime.sendMessage({
+              type: "EXTRACT_CSS_VIA_CDP",
+              payload: { selectors, baseUrl }
+            })) as RuntimeResponse<ExtractCssViaCdpPayload>;
+
+            if (cdpResponse.ok) {
+              const p = cdpResponse.payload;
+              cssText = p.cssText;
+              fontFaces = p.fontFacesCss;
+              keyframesCss = p.keyframesCss;
+              layerOrder = p.layerOrder;
+            } else {
+              throw new Error(cdpResponse.error);
+            }
+          } catch {
+            // Fallback to in-page extraction when CDP fails (e.g. debugger attached elsewhere)
+            const extracted = await extractMatchingRules(result.element);
+            cssText = extracted.cssText;
+            layerOrder = extracted.layerOrder;
+            fontFaces = await extractUsedFontFaces(
+              extracted.usedFontFamilies,
+              baseUrl
+            );
+            keyframesCss = await extractUsedKeyframes(
+              extracted.usedAnimationNames
+            );
+          } finally {
+            cleanup();
+          }
 
           // Extract :root block for CSS variables used in matched rules
           const varDefinitionsBlock = extractUsedCssVariableDefinitions(
@@ -149,8 +210,12 @@ function ensurePicker(): ElementPicker {
           const { stylesheets: externalFontLinks, preloads: fontPreloads } =
             extractAllFontLinks();
 
+          const layerOrderDeclaration =
+            layerOrder.length > 0 ? `@layer ${layerOrder.join(", ")};` : "";
+
           // Combine font-faces, keyframes, variable definitions, and CSS rules
           const styleBlock = [
+            layerOrderDeclaration,
             fontFaces,
             keyframesCss,
             varDefinitionsBlock,

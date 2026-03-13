@@ -1,3 +1,5 @@
+import { getAccessibleCssRules } from "./stylesheet-access";
+
 /**
  * Extracts CSS rules from page stylesheets that match captured elements.
  * Preserves original class-based styling instead of inlining computed styles.
@@ -7,6 +9,7 @@ export interface ExtractedStylesheet {
   cssText: string;
   usedFontFamilies: Set<string>;
   usedAnimationNames: Set<string>;
+  layerOrder: string[];
 }
 
 /**
@@ -86,27 +89,59 @@ function extractAnimationNames(style: CSSStyleDeclaration): Set<string> {
   return names;
 }
 
-/**
- * Processes a single CSS rule and adds it to the output if it matches.
- */
-function processStyleRule(
-  rule: CSSStyleRule,
-  elements: Element[],
-  collectedRules: string[],
-  fontFamilies: Set<string>,
-  animationNames: Set<string>
-): void {
-  const selector = rule.selectorText;
-  if (selectorMatchesAnyElement(selector, elements)) {
-    const cssText = rule.cssText;
-    collectedRules.push(cssText);
+function normalizeLayerName(name: string): string {
+  return name.trim();
+}
 
-    const ruleFonts = extractFontFamilies(cssText);
-    ruleFonts.forEach((font) => fontFamilies.add(font));
-
-    const ruleAnimations = extractAnimationNames(rule.style);
-    ruleAnimations.forEach((name) => animationNames.add(name));
+function joinLayerName(parentLayer: string | undefined, layerName: string): string {
+  const normalized = normalizeLayerName(layerName);
+  if (!normalized) {
+    return "";
   }
+  if (!parentLayer) {
+    return normalized;
+  }
+  return normalized.includes(".") ? normalized : `${parentLayer}.${normalized}`;
+}
+
+function markUsedLayerWithParents(layerName: string, usedLayerNames: Set<string>): void {
+  const parts = layerName.split(".");
+  for (let i = 1; i <= parts.length; i++) {
+    usedLayerNames.add(parts.slice(0, i).join("."));
+  }
+}
+
+function getLayerStatementNames(
+  rule: CSSRule
+): string[] {
+  const statementRule = rule as { nameList?: ArrayLike<string> | string[] };
+  if (statementRule.nameList && statementRule.nameList.length > 0) {
+    return Array.from(statementRule.nameList).map(normalizeLayerName).filter(Boolean);
+  }
+
+  // Fallback for environments where nameList may be unavailable
+  const match = rule.cssText.match(/^@layer\s+([^;]+);$/);
+  if (!match) {
+    return [];
+  }
+
+  return match[1]
+    .split(",")
+    .map((name) => normalizeLayerName(name))
+    .filter(Boolean);
+}
+
+function getLayerBlockName(rule: { name?: string; cssText: string }): string {
+  if (rule.name && rule.name.trim()) {
+    return normalizeLayerName(rule.name);
+  }
+
+  const match = rule.cssText.match(/^@layer\s+([^{\s]+)\s*\{/);
+  if (!match) {
+    return "";
+  }
+
+  return normalizeLayerName(match[1]);
 }
 
 /**
@@ -118,30 +153,41 @@ function processRuleList(
   collectedRules: string[],
   fontFamilies: Set<string>,
   animationNames: Set<string>,
-  mediaWrapper?: string
+  usedLayerNames: Set<string>,
+  layerOrder: string[],
+  currentLayerName?: string
 ): void {
   for (let i = 0; i < rules.length; i++) {
     const rule = rules[i];
 
     if (rule instanceof CSSStyleRule) {
-      if (mediaWrapper) {
-        const selector = rule.selectorText;
-        if (selectorMatchesAnyElement(selector, elements)) {
-          const cssText = rule.cssText;
-          collectedRules.push(cssText);
-          const ruleFonts = extractFontFamilies(cssText);
-          ruleFonts.forEach((font) => fontFamilies.add(font));
-          const ruleAnimations = extractAnimationNames(rule.style);
-          ruleAnimations.forEach((name) => animationNames.add(name));
+      const selector = rule.selectorText;
+      if (selectorMatchesAnyElement(selector, elements)) {
+        const cssText = rule.cssText;
+        collectedRules.push(cssText);
+        const ruleFonts = extractFontFamilies(cssText);
+        ruleFonts.forEach((font) => fontFamilies.add(font));
+        const ruleAnimations = extractAnimationNames(rule.style);
+        ruleAnimations.forEach((name) => animationNames.add(name));
+
+        if (currentLayerName) {
+          markUsedLayerWithParents(currentLayerName, usedLayerNames);
         }
-      } else {
-        processStyleRule(rule, elements, collectedRules, fontFamilies, animationNames);
       }
     } else if (rule instanceof CSSMediaRule) {
       const mediaRules: string[] = [];
       const mediaFonts = new Set<string>();
       const mediaAnimations = new Set<string>();
-      processRuleList(rule.cssRules, elements, mediaRules, mediaFonts, mediaAnimations);
+      processRuleList(
+        rule.cssRules,
+        elements,
+        mediaRules,
+        mediaFonts,
+        mediaAnimations,
+        usedLayerNames,
+        layerOrder,
+        currentLayerName
+      );
 
       if (mediaRules.length > 0) {
         const mediaBlock = `@media ${rule.conditionText} {\n${mediaRules.join("\n")}\n}`;
@@ -159,7 +205,10 @@ function processRuleList(
         elements,
         supportsRules,
         supportsFonts,
-        supportsAnimations
+        supportsAnimations,
+        usedLayerNames,
+        layerOrder,
+        currentLayerName
       );
 
       if (supportsRules.length > 0) {
@@ -178,7 +227,10 @@ function processRuleList(
         elements,
         containerRules,
         containerFonts,
-        containerAnimations
+        containerAnimations,
+        usedLayerNames,
+        layerOrder,
+        currentLayerName
       );
 
       if (containerRules.length > 0) {
@@ -188,27 +240,36 @@ function processRuleList(
         containerAnimations.forEach((name) => animationNames.add(name));
       }
     } else if (rule.constructor.name === "CSSLayerBlockRule") {
-      const layerRule = rule as { name?: string; cssRules: CSSRuleList };
-      const layerRules: string[] = [];
-      const layerFonts = new Set<string>();
-      const layerAnimations = new Set<string>();
+      const layerRule = rule as { name?: string; cssRules: CSSRuleList; cssText: string };
+      const layerName = getLayerBlockName(layerRule);
+      const effectiveLayerName = layerName
+        ? joinLayerName(currentLayerName, layerName)
+        : currentLayerName;
+
+      if (effectiveLayerName && !layerOrder.includes(effectiveLayerName)) {
+        layerOrder.push(effectiveLayerName);
+      }
+
       processRuleList(
         layerRule.cssRules,
         elements,
-        layerRules,
-        layerFonts,
-        layerAnimations
+        collectedRules,
+        fontFamilies,
+        animationNames,
+        usedLayerNames,
+        layerOrder,
+        effectiveLayerName
       );
+    } else if (rule.constructor.name === "CSSLayerStatementRule") {
+      const statementLayerNames = getLayerStatementNames(rule)
+        .map((name) => joinLayerName(currentLayerName, name))
+        .filter(Boolean);
 
-      if (layerRules.length > 0) {
-        const layerName = layerRule.name ?? "";
-        const layerBlock = layerName
-          ? `@layer ${layerName} {\n${layerRules.join("\n")}\n}`
-          : `@layer {\n${layerRules.join("\n")}\n}`;
-        collectedRules.push(layerBlock);
-        layerFonts.forEach((font) => fontFamilies.add(font));
-        layerAnimations.forEach((name) => animationNames.add(name));
-      }
+      statementLayerNames.forEach((layerName) => {
+        if (!layerOrder.includes(layerName)) {
+          layerOrder.push(layerName);
+        }
+      });
     }
   }
 }
@@ -216,29 +277,57 @@ function processRuleList(
 /**
  * Extracts CSS rules from page stylesheets that match the captured element tree.
  */
-export function extractMatchingRules(rootElement: Element): ExtractedStylesheet {
+export async function extractMatchingRules(rootElement: Element): Promise<ExtractedStylesheet> {
   const elements = collectAllElements(rootElement);
   const collectedRules: string[] = [];
   const fontFamilies = new Set<string>();
   const animationNames = new Set<string>();
+  const usedLayerNames = new Set<string>();
+  const layerOrder: string[] = [];
 
-  // Walk through all stylesheets
-  for (let i = 0; i < document.styleSheets.length; i++) {
-    const sheet = document.styleSheets[i];
+  // Access all stylesheets in parallel
+  const sheets = Array.from(document.styleSheets) as CSSStyleSheet[];
+  const accessResults = await Promise.all(
+    sheets.map(async (sheet) => {
+      try {
+        const accessible = await getAccessibleCssRules(sheet);
+        return { sheet, accessible };
+      } catch (e) {
+        console.warn("Could not access stylesheet:", sheet.href, e);
+        return { sheet, accessible: null };
+      }
+    })
+  );
 
-    try {
-      if (!sheet.cssRules) {
+  const cleanups: Array<() => void> = [];
+
+  try {
+    for (const { sheet, accessible } of accessResults) {
+      if (!accessible) {
         continue;
       }
+      if (accessible.cleanup) {
+        cleanups.push(accessible.cleanup);
+      }
+      const cssRules = accessible.rules;
 
       const sheetMedia = sheet.media?.mediaText;
-      const hasMediaCondition = sheetMedia && sheetMedia !== "" && sheetMedia !== "all";
+      const hasMediaCondition =
+        sheetMedia && sheetMedia !== "" && sheetMedia !== "all";
 
       if (hasMediaCondition) {
         const mediaRules: string[] = [];
         const mediaFonts = new Set<string>();
         const mediaAnimations = new Set<string>();
-        processRuleList(sheet.cssRules, elements, mediaRules, mediaFonts, mediaAnimations);
+        processRuleList(
+          cssRules,
+          elements,
+          mediaRules,
+          mediaFonts,
+          mediaAnimations,
+          usedLayerNames,
+          layerOrder
+        );
 
         if (mediaRules.length > 0) {
           const mediaBlock = `@media ${sheetMedia} {\n${mediaRules.join("\n")}\n}`;
@@ -247,12 +336,19 @@ export function extractMatchingRules(rootElement: Element): ExtractedStylesheet 
           mediaAnimations.forEach((name) => animationNames.add(name));
         }
       } else {
-        processRuleList(sheet.cssRules, elements, collectedRules, fontFamilies, animationNames);
+        processRuleList(
+          cssRules,
+          elements,
+          collectedRules,
+          fontFamilies,
+          animationNames,
+          usedLayerNames,
+          layerOrder
+        );
       }
-    } catch (e) {
-      console.warn("Could not access stylesheet:", sheet.href, e);
-      continue;
     }
+  } finally {
+    cleanups.forEach((fn) => fn());
   }
 
   // Extract font families and animation names from inline styles on captured elements
@@ -270,6 +366,7 @@ export function extractMatchingRules(rootElement: Element): ExtractedStylesheet 
   return {
     cssText: collectedRules.join("\n\n"),
     usedFontFamilies: fontFamilies,
-    usedAnimationNames: animationNames
+    usedAnimationNames: animationNames,
+    layerOrder: layerOrder.filter((layerName) => usedLayerNames.has(layerName))
   };
 }

@@ -63,6 +63,24 @@ export interface CaptureVisibleTabRequest {
   };
 }
 
+export interface ExtractCssViaCdpRequest {
+  type: "EXTRACT_CSS_VIA_CDP";
+  payload: {
+    tabId?: number;
+    selectors: string[];
+    baseUrl: string;
+  };
+}
+
+export interface ExtractCssViaCdpPayload {
+  cssText: string;
+  usedFontFamilies: string[];
+  usedAnimationNames: string[];
+  layerOrder: string[];
+  fontFacesCss: string;
+  keyframesCss: string;
+}
+
 export type RuntimeMessage =
   | StartCaptureRequest
   | CancelCaptureRequest
@@ -71,4 +89,5 @@ export type RuntimeMessage =
   | GetSnippetsRequest
   | GetLatestCaptureRequest
   | DeleteSnippetRequest
-  | CaptureVisibleTabRequest;
+  | CaptureVisibleTabRequest
+  | ExtractCssViaCdpRequest;

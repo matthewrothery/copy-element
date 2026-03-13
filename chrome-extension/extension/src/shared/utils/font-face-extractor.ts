@@ -1,3 +1,5 @@
+import { getAccessibleCssRules } from "./stylesheet-access";
+
 /**
  * Extracts @font-face rules for fonts used in captured elements.
  * Converts relative URLs to absolute URLs for portability.
@@ -119,6 +121,9 @@ function processRulesForFontFaces(
         fontFaceRules,
         layerName ? `@layer ${layerName}` : "@layer"
       );
+    } else if (rule.constructor.name === "CSSLayerStatementRule") {
+      // No-op: @layer statements only declare order, they do not contain @font-face rules.
+      continue;
     }
   }
 }
@@ -128,10 +133,10 @@ function processRulesForFontFaces(
  * Returns CSS text with absolute URLs.
  * Recursively searches nested rules like @supports, @media, @layer.
  */
-export function extractUsedFontFaces(
+export async function extractUsedFontFaces(
   usedFontFamilies: Set<string>,
   baseUrl: string
-): string {
+): Promise<string> {
   if (usedFontFamilies.size === 0) {
     return "";
   }
@@ -140,20 +145,25 @@ export function extractUsedFontFaces(
 
   // Walk through all stylesheets
   for (let i = 0; i < document.styleSheets.length; i++) {
-    const sheet = document.styleSheets[i];
+    const sheet = document.styleSheets[i] as CSSStyleSheet;
+    let cleanup: (() => void) | undefined;
 
     try {
-      // Skip cross-origin stylesheets (CORS restriction)
-      if (!sheet.cssRules) {
+      const accessible = await getAccessibleCssRules(sheet);
+      if (!accessible) {
+        console.warn("Could not access stylesheet for font-face extraction:", sheet.href);
         continue;
       }
+      cleanup = accessible.cleanup;
 
       // Recursively process all rules
-      processRulesForFontFaces(sheet.cssRules, usedFontFamilies, baseUrl, fontFaceRules);
+      processRulesForFontFaces(accessible.rules, usedFontFamilies, baseUrl, fontFaceRules);
     } catch (e) {
       // Cross-origin stylesheet or other access error, skip it
       console.warn("Could not access stylesheet for font-face extraction:", sheet.href, e);
       continue;
+    } finally {
+      cleanup?.();
     }
   }
 

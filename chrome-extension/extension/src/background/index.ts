@@ -1,6 +1,12 @@
 import type { CapturedElementData } from "../shared/types/snippet";
 import { deleteSnippet, getSnippets, saveSnippet } from "../shared/storage/snippet-storage";
-import type { RuntimeErrorCode, RuntimeMessage, RuntimeResponse } from "../shared/types/messages";
+import type {
+  ExtractCssViaCdpPayload,
+  RuntimeErrorCode,
+  RuntimeMessage,
+  RuntimeResponse
+} from "../shared/types/messages";
+import { extractCssViaCdp } from "./cdp-css";
 
 let latestCapture: CapturedElementData | null = null;
 
@@ -72,7 +78,7 @@ export async function sendToTargetTab(
   }
 }
 
-chrome.runtime.onMessage.addListener((message: RuntimeMessage, _sender, sendResponse) => {
+chrome.runtime.onMessage.addListener((message: RuntimeMessage, sender, sendResponse) => {
   if (!message?.type) {
     return false;
   }
@@ -122,6 +128,34 @@ chrome.runtime.onMessage.addListener((message: RuntimeMessage, _sender, sendResp
 
   if (message.type === "GET_LATEST_CAPTURE") {
     sendResponse(success(latestCapture));
+    return true;
+  }
+
+  if (message.type === "EXTRACT_CSS_VIA_CDP") {
+    void (async () => {
+      const { selectors, baseUrl } = message.payload;
+      const tabId = message.payload.tabId ?? sender.tab?.id;
+      if (typeof tabId !== "number") {
+        sendResponse(failure("tabId is required", "UNKNOWN_ERROR"));
+        return;
+      }
+      try {
+        const result = await extractCssViaCdp(tabId, selectors, baseUrl);
+        const payload: ExtractCssViaCdpPayload = {
+          cssText: result.cssText,
+          usedFontFamilies: [...result.usedFontFamilies],
+          usedAnimationNames: [...result.usedAnimationNames],
+          layerOrder: result.layerOrder,
+          fontFacesCss: result.fontFacesCss,
+          keyframesCss: result.keyframesCss
+        };
+        sendResponse(success(payload));
+      } catch (error) {
+        sendResponse(
+          failure(String(error), "UNKNOWN_ERROR")
+        );
+      }
+    })();
     return true;
   }
 

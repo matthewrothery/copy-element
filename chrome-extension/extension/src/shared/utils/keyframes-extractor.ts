@@ -1,3 +1,5 @@
+import { getAccessibleCssRules } from "./stylesheet-access";
+
 /**
  * Extracts @keyframes rules for animation names used in captured elements.
  * Walks all stylesheets and nested at-rules (@media, @supports, @layer).
@@ -30,19 +32,22 @@ function processRulesForKeyframes(
     } else if (rule instanceof CSSMediaRule) {
       processRulesForKeyframes(rule.cssRules, usedAnimationNames, keyframesRules);
     } else if (rule.constructor.name === "CSSSupportsRule") {
-      const supportsRule = rule as { cssRules: CSSRuleList };
+      const supportsRule = rule as unknown as { cssRules: CSSRuleList };
       processRulesForKeyframes(
         supportsRule.cssRules,
         usedAnimationNames,
         keyframesRules
       );
     } else if (rule.constructor.name === "CSSLayerBlockRule") {
-      const layerRule = rule as { cssRules: CSSRuleList };
+      const layerRule = rule as unknown as { cssRules: CSSRuleList };
       processRulesForKeyframes(
         layerRule.cssRules,
         usedAnimationNames,
         keyframesRules
       );
+    } else if (rule.constructor.name === "CSSLayerStatementRule") {
+      // No-op: @layer statements declare order and do not include keyframes.
+      continue;
     }
   }
 }
@@ -51,9 +56,9 @@ function processRulesForKeyframes(
  * Extracts @keyframes rules for animation names used in the captured elements.
  * Returns CSS text with all matching keyframes at top level.
  */
-export function extractUsedKeyframes(
+export async function extractUsedKeyframes(
   usedAnimationNames: Set<string>
-): string {
+): Promise<string> {
   if (usedAnimationNames.size === 0) {
     return "";
   }
@@ -61,13 +66,17 @@ export function extractUsedKeyframes(
   const keyframesRules: string[] = [];
 
   for (let i = 0; i < document.styleSheets.length; i++) {
-    const sheet = document.styleSheets[i];
+    const sheet = document.styleSheets[i] as CSSStyleSheet;
+    let cleanup: (() => void) | undefined;
 
     try {
-      if (!sheet.cssRules) {
+      const accessible = await getAccessibleCssRules(sheet);
+      if (!accessible) {
+        console.warn("Could not access stylesheet for keyframes extraction:", sheet.href);
         continue;
       }
-      processRulesForKeyframes(sheet.cssRules, usedAnimationNames, keyframesRules);
+      cleanup = accessible.cleanup;
+      processRulesForKeyframes(accessible.rules, usedAnimationNames, keyframesRules);
     } catch (e) {
       console.warn(
         "Could not access stylesheet for keyframes extraction:",
@@ -75,6 +84,8 @@ export function extractUsedKeyframes(
         e
       );
       continue;
+    } finally {
+      cleanup?.();
     }
   }
 
