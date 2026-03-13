@@ -20,14 +20,14 @@
   flex-direction: row;
   gap: var(--carousel-gap);
   overflow-x: auto;
-  padding-left: max(var(--carousel-padding-inline), calc((100vw - 1240px) / 2 + 20px));
-  padding-right: max(var(--carousel-padding-inline), calc((100vw - 1240px) / 2 + 20px));
+  padding-left: max(var(--carousel-padding-inline), calc((100vw - var(--content-max-width)) / 2 + 20px));
+  padding-right: max(var(--carousel-padding-inline), calc((100vw - var(--content-max-width)) / 2 + 20px));
   scroll-behavior: smooth;
   -webkit-overflow-scrolling: touch;
   scrollbar-width: none;
   cursor: grab;
-  margin-left: calc(-1 * max(var(--carousel-padding-inline), calc((100vw - 1240px) / 2 + 20px)));
-  margin-right: calc(-1 * max(var(--carousel-padding-inline), calc((100vw - 1240px) / 2 + 20px)));
+  margin-left: calc(-1 * max(var(--carousel-padding-inline), calc((100vw - var(--content-max-width)) / 2 + 20px)));
+  margin-right: calc(-1 * max(var(--carousel-padding-inline), calc((100vw - var(--content-max-width)) / 2 + 20px)));
   width: 100vw;
 }
 
@@ -42,9 +42,9 @@
 
 .carousel-controls {
   width: 100%;
-  max-width: 1240px;
+  max-width: var(--content-max-width);
   margin: var(--carousel-controls-margin-top) auto 0;
-  padding-inline: max(var(--carousel-padding-inline), calc((100vw - 1240px) / 2 + 20px));
+  padding-inline: max(var(--carousel-padding-inline), calc((100vw - var(--content-max-width)) / 2 + 20px));
   display: flex;
   align-items: center;
   justify-content: center;

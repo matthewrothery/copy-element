@@ -1,7 +1,7 @@
 /* ElementsShowcase – self-contained */
 .elements-showcase {
-  --showcase-title-size: 62px;
-  --showcase-subtitle-size: 24px;
+  --showcase-title-size: var(--typo-headline);
+  --showcase-subtitle-size: var(--typo-headline-subtitle);
   --showcase-card-bg: var(--bg);
   --showcase-card-border: var(--border-strong);
   --showcase-card-radius: 12px;
@@ -114,19 +114,7 @@
   color: var(--text-muted);
 }
 
-@media (max-width: 884px) {
-  .elements-showcase {
-    --showcase-title-size: 36px;
-    --showcase-subtitle-size: 20px;
-  }
-}
-
 @media (max-width: 480px) {
-  .elements-showcase {
-    --showcase-title-size: 28px;
-    --showcase-subtitle-size: var(--typo-subtitle);
-  }
-
   .elements-showcase-card {
     min-width: 88vw;
   }

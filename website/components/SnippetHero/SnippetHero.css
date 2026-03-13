@@ -1,13 +1,15 @@
 /* SnippetHero – self-contained */
 .snippet-hero {
-  --snippet-hero-headline-size: 62px;
-  --snippet-hero-subtitle-size: 24px;
+  --snippet-hero-headline-size: var(--typo-headline);
+  --snippet-hero-subtitle-size: var(--typo-headline-subtitle);
   --snippet-hero-gap: var(--space-3);
   --snippet-hero-subtitle-color: var(--text-muted);
   --snippet-hero-subtitle-strong-color: var(--text);
   display: flex;
   flex-direction: column;
   gap: var(--snippet-hero-gap);
+  margin: 0;
+  
 }
 
 .snippet-hero-headline {
@@ -42,16 +44,3 @@
   color: var(--snippet-hero-subtitle-strong-color);
 }
 
-@media (max-width: 884px) {
-  .snippet-hero {
-    --snippet-hero-headline-size: 36px;
-    --snippet-hero-subtitle-size: 20px;
-  }
-}
-
-@media (max-width: 480px) {
-  .snippet-hero {
-    --snippet-hero-headline-size: 28px;
-    --snippet-hero-subtitle-size: var(--typo-subtitle);
-  }
-}

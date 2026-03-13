@@ -18,7 +18,7 @@ export default function Home(): React.ReactElement {
 
         <Section>
           <ElementsShowcase
-            title="Elements captured with Element Armory"
+            title="Captured with Element Armory"
             subtitle="UI components captured from real sites and exported as clean HTML or JSX."
             items={[
               {

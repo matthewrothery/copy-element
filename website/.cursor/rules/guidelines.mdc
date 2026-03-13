@@ -62,7 +62,7 @@ Rules are below
 
 ### Rule: Full-Bleed Carousel Pattern
 
-When creating a carousel that needs to bleed to the viewport edges while staying inside a max-width container (like `.section` with `max-width: 1240px`), use the negative margin technique on the **track**, not the wrapper.
+When creating a carousel that needs to bleed to the viewport edges while staying inside a max-width container (like `.section` with `max-width: var(--content-max-width)`), use the negative margin technique on the **track**, not the wrapper.
 
 ### Why
 
@@ -82,7 +82,7 @@ Using `position: relative` with `left: 50%; margin-left: -50vw` on the carousel 
 - Calculate padding based on viewport and max-width
 
 **Controls** (`.carousel-controls`):
-- Stay centered with `max-width: 1240px` and `margin: 0 auto`
+- Stay centered with `max-width: var(--content-max-width)` and `margin: 0 auto`
 - Use same padding calculation as track for alignment
 
 ### Example
@@ -95,12 +95,12 @@ Using `position: relative` with `left: 50%; margin-left: -50vw` on the carousel 
 
 .carousel-track {
   /* Break out of container with negative margins */
-  margin-left: calc(-1 * max(var(--carousel-padding-inline), calc((100vw - 1240px) / 2 + 20px)));
-  margin-right: calc(-1 * max(var(--carousel-padding-inline), calc((100vw - 1240px) / 2 + 20px)));
+  margin-left: calc(-1 * max(var(--carousel-padding-inline), calc((100vw - var(--content-max-width)) / 2 + 20px)));
+  margin-right: calc(-1 * max(var(--carousel-padding-inline), calc((100vw - var(--content-max-width)) / 2 + 20px)));
   
   /* Match the negative margins with padding so content is properly spaced */
-  padding-left: max(var(--carousel-padding-inline), calc((100vw - 1240px) / 2 + 20px));
-  padding-right: max(var(--carousel-padding-inline), calc((100vw - 1240px) / 2 + 20px));
+  padding-left: max(var(--carousel-padding-inline), calc((100vw - var(--content-max-width)) / 2 + 20px));
+  padding-right: max(var(--carousel-padding-inline), calc((100vw - var(--content-max-width)) / 2 + 20px));
   
   /* Full viewport width */
   width: 100vw;
@@ -115,9 +115,9 @@ Using `position: relative` with `left: 50%; margin-left: -50vw` on the carousel 
 .carousel-controls {
   /* Centered within content width */
   width: 100%;
-  max-width: 1240px;
+  max-width: var(--content-max-width);
   margin: var(--carousel-controls-margin-top) auto 0;
-  padding-inline: max(var(--carousel-padding-inline), calc((100vw - 1240px) / 2 + 20px));
+  padding-inline: max(var(--carousel-padding-inline), calc((100vw - var(--content-max-width)) / 2 + 20px));
 }
 
 @media (max-width: 1280px) {
@@ -141,3 +141,27 @@ This pattern ensures:
 - Controls stay centered below carousel
 - No horizontal scrollbar on page
 - Works responsively at all screen sizes
+
+### Rule: Alias Component Heading Sizes to Global Tokens
+
+For component heading/subtitle size variables (for example `--*-headline-size`, `--*-title-size`, `--*-subtitle-size`), do not hard-code pixel values inside component CSS. Define the component variable as an alias to global typography tokens in `styles/tokens.css`.
+
+### Why
+
+Hard-coded per-component sizes drift over time and create inconsistent responsive behavior. Global typography tokens keep sizing synchronized across sections while preserving component-level encapsulation.
+
+### Example
+
+```css
+/* Good */
+.my-section {
+  --my-section-title-size: var(--typo-headline);
+  --my-section-subtitle-size: var(--typo-headline-subtitle);
+}
+
+/* Avoid */
+.my-section {
+  --my-section-title-size: 62px;
+  --my-section-subtitle-size: 24px;
+}
+```
