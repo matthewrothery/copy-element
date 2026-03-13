@@ -57,4 +57,43 @@ describe("collectVariableDefinitionsFromCssText", () => {
       )
     ).toBe(true);
   });
+
+  it("captures layerPath for layer-scoped variable definitions", () => {
+    const css = `
+      @layer base {
+        :root { --token-a: 8px; }
+        @layer theme {
+          :root { --token-b: var(--token-a); }
+        }
+      }
+      @layer app {
+        :root { --token-c: 16px; }
+      }
+    `;
+    const defs = collectVariableDefinitionsFromCssText(css);
+    expect(
+      defs.some(
+        (def) =>
+          def.name === "--token-a" &&
+          def.value === "8px" &&
+          def.layerPath === "base"
+      )
+    ).toBe(true);
+    expect(
+      defs.some(
+        (def) =>
+          def.name === "--token-b" &&
+          def.value === "var(--token-a)" &&
+          def.layerPath === "base.theme"
+      )
+    ).toBe(true);
+    expect(
+      defs.some(
+        (def) =>
+          def.name === "--token-c" &&
+          def.value === "16px" &&
+          def.layerPath === "app"
+      )
+    ).toBe(true);
+  });
 });

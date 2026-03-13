@@ -115,7 +115,10 @@ describe("extractUsedCssVariableDefinitions", () => {
 
     const root = document.getElementById("root")!;
     const css = ".x { padding-top: var(--hds-space-section-gap-top); }";
-    const result = await extractUsedCssVariableDefinitions(root, css, { definitions: defs });
+    const result = await extractUsedCssVariableDefinitions(root, css, {
+      definitions: defs,
+      usageContexts: [{ cssText: css }]
+    });
     expect(result).toContain("--hds-space-section-gap-top: var(--hds-space-core-1200)");
     expect(result).toContain("--hds-space-core-1200: 96px");
   });
@@ -138,7 +141,10 @@ describe("extractUsedCssVariableDefinitions", () => {
     ];
     const root = document.getElementById("root")!;
     const css = ".x { margin-top: var(--hds-space-core-1200); }";
-    const result = await extractUsedCssVariableDefinitions(root, css, { definitions: defs });
+    const result = await extractUsedCssVariableDefinitions(root, css, {
+      definitions: defs,
+      usageContexts: [{ cssText: css }]
+    });
     expect(result).toContain(":root {");
     expect(result).toContain("--hds-space-core-1200: 72px");
     expect(result).toContain("@media (min-width: 940px)");
@@ -161,5 +167,59 @@ describe("extractUsedCssVariableDefinitions", () => {
     expect(result).toContain("#snippet-root-test {");
     expect(result).toContain("--missing: 20px");
     expect(result).not.toContain(":root {");
+  });
+
+  it("keeps variable definitions in the same layer context as usage", async () => {
+    const defs: CssVariableDefinition[] = [
+      {
+        name: "--section-container-pbs",
+        value: "48px",
+        selector: ":root",
+        layerPath: "base",
+        sourceOrder: 1
+      },
+      {
+        name: "--hds-space-core-1200",
+        value: "96px",
+        selector: ":root",
+        layerPath: "app",
+        sourceOrder: 2
+      }
+    ];
+
+    const root = document.getElementById("root")!;
+    const css = ".x { padding-top: var(--section-container-pbs, var(--hds-space-core-1200)); }";
+    const result = await extractUsedCssVariableDefinitions(root, css, {
+      definitions: defs,
+      usageContexts: [{ cssText: css, layerPath: "app" }],
+      layerOrder: ["base", "app"]
+    });
+
+    expect(result).toContain("@layer app");
+    expect(result).toContain("--hds-space-core-1200: 96px");
+    expect(result).not.toContain("--section-container-pbs: 48px");
+  });
+
+  it("uses layer ancestor definitions when usage is in nested layer", async () => {
+    const defs: CssVariableDefinition[] = [
+      {
+        name: "--token-parent",
+        value: "12px",
+        selector: ":root",
+        layerPath: "base",
+        sourceOrder: 1
+      }
+    ];
+
+    const root = document.getElementById("root")!;
+    const css = ".x { margin: var(--token-parent); }";
+    const result = await extractUsedCssVariableDefinitions(root, css, {
+      definitions: defs,
+      usageContexts: [{ cssText: css, layerPath: "base.theme" }],
+      layerOrder: ["base", "base.theme"]
+    });
+
+    expect(result).toContain("@layer base");
+    expect(result).toContain("--token-parent: 12px");
   });
 });

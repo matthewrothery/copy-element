@@ -51,11 +51,6 @@ export function collectVarNamesFromCss(cssText: string): Set<string> {
   return names;
 }
 
-function isGlobalVarSelector(selector: string): boolean {
-  const normalized = selector.trim().toLowerCase();
-  return normalized === ":root" || normalized === "html" || normalized === "body" || normalized === "*";
-}
-
 function groupDefinitionsByVar(
   definitions: CssVariableDefinition[]
 ): Map<string, CssVariableDefinition[]> {
@@ -66,21 +61,6 @@ function groupDefinitionsByVar(
     map.set(def.name, existing);
   }
   return map;
-}
-
-function pickBestDefinition(
-  defs: CssVariableDefinition[],
-  media?: string
-): CssVariableDefinition | undefined {
-  const mediaMatched = defs.filter((def) => (media ? def.media === media : !def.media));
-  if (mediaMatched.length === 0) {
-    return undefined;
-  }
-  const globalDefs = mediaMatched.filter((def) => isGlobalVarSelector(def.selector));
-  const candidates = globalDefs.length > 0 ? globalDefs : mediaMatched;
-  return candidates.reduce((best, current) =>
-    current.sourceOrder > best.sourceOrder ? current : best
-  );
 }
 
 function collectMediaOrder(definitions: CssVariableDefinition[]): string[] {
@@ -96,43 +76,14 @@ function collectMediaOrder(definitions: CssVariableDefinition[]): string[] {
   return order;
 }
 
-function resolveUsedVarClosure(
-  initialVars: Set<string>,
-  defByName: Map<string, CssVariableDefinition[]>,
-  computed: CSSStyleDeclaration,
-  maxDepth = MAX_VAR_RESOLUTION_DEPTH
-): Set<string> {
-  const usedVars = new Set(initialVars);
-  let frontier = new Set(initialVars);
-
-  for (let depth = 0; depth < maxDepth && frontier.size > 0; depth++) {
-    const next = new Set<string>();
-    for (const varName of frontier) {
-      const defs = defByName.get(varName) ?? [];
-      const values = defs.map((def) => def.value);
-      const computedValue = computed.getPropertyValue(varName).trim();
-      if (computedValue) {
-        values.push(computedValue);
-      }
-
-      for (const value of values) {
-        const refs = collectVarNamesFromCss(value);
-        for (const ref of refs) {
-          if (!usedVars.has(ref)) {
-            usedVars.add(ref);
-            next.add(ref);
-          }
-        }
-      }
-    }
-    frontier = next;
-  }
-
-  return usedVars;
-}
-
 export interface ExtractCssVariableOptions {
   definitions?: CssVariableDefinition[];
+  usageContexts?: Array<{
+    cssText: string;
+    media?: string;
+    layerPath?: string;
+  }>;
+  layerOrder?: string[];
   rootSelector?: string;
 }
 
@@ -142,6 +93,171 @@ function declarationsToBlock(selector: string, declarations: Map<string, string>
     lines.push(`${name}: ${value}`);
   }
   return `${selector} {\n  ${lines.join(";\n  ")};\n}`;
+}
+
+interface VarUsageContext {
+  cssText: string;
+  media?: string;
+  layerPath?: string;
+}
+
+interface SelectedVarDefinition {
+  name: string;
+  value: string;
+  media?: string;
+  layerPath?: string;
+  sourceOrder: number;
+}
+
+function getDefinitionIdentity(def: { name: string; media?: string }): string {
+  return `${def.name}@@${def.media ?? ""}`;
+}
+
+function getLayerCandidates(layerPath?: string): Array<string | undefined> {
+  const candidates: Array<string | undefined> = [];
+  if (layerPath) {
+    const parts = layerPath.split(".");
+    for (let i = parts.length; i >= 1; i--) {
+      candidates.push(parts.slice(0, i).join("."));
+    }
+  }
+  candidates.push(undefined);
+  return candidates;
+}
+
+function getPreferredLayerForUsage(
+  definitions: CssVariableDefinition[],
+  usageLayerPath?: string
+): string | undefined | null {
+  const layerCandidates = getLayerCandidates(usageLayerPath);
+  for (const candidate of layerCandidates) {
+    if (definitions.some((def) => def.layerPath === candidate)) {
+      return candidate;
+    }
+  }
+  return null;
+}
+
+function selectLatestDefinitionPerMedia(definitions: CssVariableDefinition[]): SelectedVarDefinition[] {
+  const selectedByMedia = new Map<string, CssVariableDefinition>();
+  for (const def of definitions) {
+    const mediaKey = def.media ?? "";
+    const existing = selectedByMedia.get(mediaKey);
+    if (!existing || def.sourceOrder > existing.sourceOrder) {
+      selectedByMedia.set(mediaKey, def);
+    }
+  }
+
+  return Array.from(selectedByMedia.values())
+    .sort((a, b) => a.sourceOrder - b.sourceOrder)
+    .map((def) => ({
+      name: def.name,
+      value: def.value,
+      media: def.media,
+      layerPath: def.layerPath,
+      sourceOrder: def.sourceOrder
+    }));
+}
+
+function selectDefinitionsForUsage(
+  definitions: CssVariableDefinition[],
+  usageLayerPath?: string
+): SelectedVarDefinition[] {
+  if (definitions.length === 0) {
+    return [];
+  }
+  const preferredLayer = getPreferredLayerForUsage(definitions, usageLayerPath);
+  if (preferredLayer !== null) {
+    const inLayer = definitions.filter((def) => def.layerPath === preferredLayer);
+    if (inLayer.length > 0) {
+      return selectLatestDefinitionPerMedia(inLayer);
+    }
+  }
+
+  // Fallback to unlayered definitions when no compatible layer match exists.
+  const unlayered = definitions.filter((def) => !def.layerPath);
+  if (unlayered.length > 0) {
+    return selectLatestDefinitionPerMedia(unlayered);
+  }
+
+  return [];
+}
+
+function selectDefinitionsMatchingComputedValue(
+  definitions: CssVariableDefinition[],
+  computedValue: string,
+  usageLayerPath?: string
+): SelectedVarDefinition[] {
+  const normalizedComputed = computedValue.trim();
+  if (!normalizedComputed || definitions.length === 0) {
+    return [];
+  }
+
+  const exactMatches = definitions.filter((def) => def.value.trim() === normalizedComputed);
+  if (exactMatches.length === 0) {
+    return [];
+  }
+
+  const preferredLayer = getPreferredLayerForUsage(exactMatches, usageLayerPath);
+  if (preferredLayer !== null) {
+    const inLayer = exactMatches.filter((def) => def.layerPath === preferredLayer);
+    if (inLayer.length > 0) {
+      return selectLatestDefinitionPerMedia(inLayer);
+    }
+  }
+
+  const unlayered = exactMatches.filter((def) => !def.layerPath);
+  if (unlayered.length > 0) {
+    return selectLatestDefinitionPerMedia(unlayered);
+  }
+
+  return selectLatestDefinitionPerMedia(exactMatches);
+}
+
+function selectorAppliesToRoot(rootElement: Element, selector: string): boolean {
+  const selectors = selector
+    .split(",")
+    .map((part) => part.trim())
+    .filter(Boolean);
+  if (selectors.length === 0) {
+    return false;
+  }
+
+  for (const part of selectors) {
+    try {
+      if (part === ":root" || part === "html") {
+        if (document.documentElement.matches(part)) {
+          return true;
+        }
+        continue;
+      }
+      if (part === "body") {
+        if (document.body?.matches(part)) {
+          return true;
+        }
+        continue;
+      }
+      if (rootElement.closest(part)) {
+        return true;
+      }
+    } catch {
+      // Ignore invalid selectors and continue checking others.
+    }
+  }
+
+  return false;
+}
+
+function getOrderedLayers(
+  declarationsByLayer: Map<string, unknown>,
+  layerOrder: string[]
+): string[] {
+  const declared = Array.from(declarationsByLayer.keys());
+  const ordered = [
+    ...layerOrder.filter((layer) => declarationsByLayer.has(layer)),
+    ...declared.filter((layer) => !layerOrder.includes(layer))
+  ];
+  return ordered;
 }
 
 /**
@@ -154,67 +270,187 @@ export async function extractUsedCssVariableDefinitions(
   cssText: string,
   options: ExtractCssVariableOptions = {}
 ): Promise<string> {
-  const directVars = collectVarNamesFromCss(cssText);
-  if (directVars.size === 0) {
+  const usageContexts: VarUsageContext[] =
+    options.usageContexts && options.usageContexts.length > 0
+      ? options.usageContexts
+      : [{ cssText }];
+
+  const hasVarUsage = usageContexts.some((context) => collectVarNamesFromCss(context.cssText).size > 0);
+  if (!hasVarUsage) {
     return "";
   }
 
   const computed = window.getComputedStyle(rootElement);
   const definitions = options.definitions ?? (await collectVariableDefinitionsFromDocument());
   const defByName = groupDefinitionsByVar(definitions);
-  const usedVars = resolveUsedVarClosure(directVars, defByName, computed);
-  const mediaOrder = collectMediaOrder(definitions);
+  const rootDeclarations = new Map<string, SelectedVarDefinition>();
+  const layerDeclarations = new Map<string, Map<string, SelectedVarDefinition>>();
+  const unresolvedRootFallback = new Map<string, string>();
 
-  const rootDeclarations = new Map<string, string>();
-  const rootSelectorDeclarations = new Map<string, string>();
-  const mediaDeclarations = new Map<string, Map<string, string>>();
-
-  for (const name of usedVars) {
-    const defs = defByName.get(name) ?? [];
-    const bestBase = pickBestDefinition(defs);
-    if (bestBase) {
-      rootDeclarations.set(name, bestBase.value);
-    } else {
-      const value = computed.getPropertyValue(name).trim();
-      if (value.length > 0) {
-        rootSelectorDeclarations.set(name, value);
-      }
+  const maxDepth = MAX_VAR_RESOLUTION_DEPTH;
+  for (const usageContext of usageContexts) {
+    const initialVars = collectVarNamesFromCss(usageContext.cssText);
+    if (initialVars.size === 0) {
+      continue;
     }
 
-    for (const media of mediaOrder) {
-      const bestMedia = pickBestDefinition(defs, media);
-      if (!bestMedia) {
-        continue;
+    const visited = new Set<string>();
+    let frontier = new Set(initialVars);
+    for (let depth = 0; depth < maxDepth && frontier.size > 0; depth++) {
+      const next = new Set<string>();
+      for (const varName of frontier) {
+        if (visited.has(varName)) {
+          continue;
+        }
+        visited.add(varName);
+
+        const defs =
+          (defByName.get(varName) ?? []).filter((def) =>
+            selectorAppliesToRoot(rootElement, def.selector)
+          );
+        let selected = selectDefinitionsForUsage(defs, usageContext.layerPath);
+        if (selected.length === 0) {
+          const computedValue = computed.getPropertyValue(varName).trim();
+          if (computedValue) {
+            selected = selectDefinitionsMatchingComputedValue(
+              defs,
+              computedValue,
+              usageContext.layerPath
+            );
+          }
+          if (selected.length === 0 && computedValue) {
+            unresolvedRootFallback.set(varName, computedValue);
+            for (const ref of collectVarNamesFromCss(computedValue)) {
+              if (!visited.has(ref)) {
+                next.add(ref);
+              }
+            }
+          }
+          if (selected.length === 0) {
+            continue;
+          }
+        }
+
+        for (const selectedDef of selected) {
+          if (selectedDef.layerPath) {
+            const byName = layerDeclarations.get(selectedDef.layerPath) ?? new Map<string, SelectedVarDefinition>();
+            const identity = getDefinitionIdentity(selectedDef);
+            const existing = byName.get(identity);
+            if (!existing || selectedDef.sourceOrder > existing.sourceOrder) {
+              byName.set(identity, selectedDef);
+            }
+            layerDeclarations.set(selectedDef.layerPath, byName);
+          } else {
+            const identity = getDefinitionIdentity(selectedDef);
+            const existing = rootDeclarations.get(identity);
+            if (!existing || selectedDef.sourceOrder > existing.sourceOrder) {
+              rootDeclarations.set(identity, selectedDef);
+            }
+          }
+
+          for (const ref of collectVarNamesFromCss(selectedDef.value)) {
+            if (!visited.has(ref)) {
+              next.add(ref);
+            }
+          }
+        }
       }
-      const existing = mediaDeclarations.get(media) ?? new Map<string, string>();
-      existing.set(name, bestMedia.value);
-      mediaDeclarations.set(media, existing);
+      frontier = next;
     }
   }
 
   const rootSelector = options.rootSelector?.trim();
-  if (!rootSelector) {
-    for (const [name, value] of rootSelectorDeclarations) {
-      if (!rootDeclarations.has(name)) {
-        rootDeclarations.set(name, value);
-      }
-    }
-    rootSelectorDeclarations.clear();
-  }
+  const layerOrder = options.layerOrder ?? [];
 
   const parts: string[] = [];
-  if (rootDeclarations.size > 0) {
-    parts.push(declarationsToBlock(":root", rootDeclarations));
+  const rootBaseBlock = new Map<string, string>();
+  const rootMediaBlocks = new Map<string, Map<string, string>>();
+  for (const def of rootDeclarations.values()) {
+    if (def.media) {
+      const mediaDecls = rootMediaBlocks.get(def.media) ?? new Map<string, string>();
+      mediaDecls.set(def.name, def.value);
+      rootMediaBlocks.set(def.media, mediaDecls);
+    } else {
+      rootBaseBlock.set(def.name, def.value);
+    }
   }
-  for (const media of mediaOrder) {
-    const declarations = mediaDeclarations.get(media);
+  if (rootBaseBlock.size > 0) {
+    parts.push(declarationsToBlock(":root", rootBaseBlock));
+  }
+
+  const rootMediaOrder = collectMediaOrder(
+    Array.from(rootDeclarations.values()).map((def) => ({
+      name: def.name,
+      value: def.value,
+      selector: ":root",
+      media: def.media,
+      layerPath: def.layerPath,
+      sourceOrder: def.sourceOrder
+    }))
+  );
+  for (const media of rootMediaOrder) {
+    const mediaDecls = rootMediaBlocks.get(media);
+    if (!mediaDecls || mediaDecls.size === 0) {
+      continue;
+    }
+    parts.push(`@media ${media} {\n${declarationsToBlock(":root", mediaDecls)}\n}`);
+  }
+
+  const orderedLayers = getOrderedLayers(layerDeclarations, layerOrder);
+  for (const layerPath of orderedLayers) {
+    const declarations = layerDeclarations.get(layerPath);
     if (!declarations || declarations.size === 0) {
       continue;
     }
-    parts.push(`@media ${media} {\n${declarationsToBlock(":root", declarations)}\n}`);
+
+    const layerBaseBlock = new Map<string, string>();
+    const layerMediaBlocks = new Map<string, Map<string, string>>();
+    for (const def of declarations.values()) {
+      if (def.media) {
+        const mediaDecls = layerMediaBlocks.get(def.media) ?? new Map<string, string>();
+        mediaDecls.set(def.name, def.value);
+        layerMediaBlocks.set(def.media, mediaDecls);
+      } else {
+        layerBaseBlock.set(def.name, def.value);
+      }
+    }
+
+    if (layerBaseBlock.size > 0) {
+      parts.push(`@layer ${layerPath} {\n${declarationsToBlock(":root", layerBaseBlock)}\n}`);
+    }
+
+    const layerMediaOrder = collectMediaOrder(
+      Array.from(declarations.values()).map((def) => ({
+        name: def.name,
+        value: def.value,
+        selector: ":root",
+        media: def.media,
+        layerPath: def.layerPath,
+        sourceOrder: def.sourceOrder
+      }))
+    );
+    for (const media of layerMediaOrder) {
+      const mediaDecls = layerMediaBlocks.get(media);
+      if (!mediaDecls || mediaDecls.size === 0) {
+        continue;
+      }
+      parts.push(`@media ${media} {\n@layer ${layerPath} {\n${declarationsToBlock(":root", mediaDecls)}\n}\n}`);
+    }
   }
-  if (rootSelector && rootSelectorDeclarations.size > 0) {
-    parts.push(declarationsToBlock(rootSelector, rootSelectorDeclarations));
+
+  if (rootSelector && unresolvedRootFallback.size > 0) {
+    parts.push(declarationsToBlock(rootSelector, unresolvedRootFallback));
+  } else if (!rootSelector && unresolvedRootFallback.size > 0) {
+    if (rootBaseBlock.size === 0) {
+      parts.unshift(declarationsToBlock(":root", unresolvedRootFallback));
+    } else {
+      for (const [name, value] of unresolvedRootFallback) {
+        if (!rootBaseBlock.has(name)) {
+          rootBaseBlock.set(name, value);
+        }
+      }
+      parts[0] = declarationsToBlock(":root", rootBaseBlock);
+    }
   }
 
   if (parts.length === 0) {

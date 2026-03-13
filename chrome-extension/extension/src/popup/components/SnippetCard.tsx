@@ -24,9 +24,9 @@ export function SnippetCard({ snippet, onOpen, onDelete, onCopy }: SnippetCardPr
         <p>{new URL(snippet.sourceUrl).hostname}</p>
       </div>
       <div className="snippet-actions">
-        <button type="button" className="btn-secondary" onClick={() => onCopy(buildCopyHtml(snippet), "HTML")} aria-label="Copy HTML">
+        <button type="button" className="btn-secondary" onClick={() => onCopy(buildCopyHtml(snippet), "Code")} aria-label="Copy code">
           <Copy size={ICON_SIZE} />
-          Copy HTML
+          Copy code
         </button>
         <button type="button" className="btn-secondary" onClick={() => onCopy(buildCopyHtml(snippet, { includeStyleBlock: false }), "HTML (inline)")} aria-label="Copy HTML inline only">
           <Copy size={ICON_SIZE} />

@@ -59,6 +59,21 @@ function addTempCaptureSelectors(root: Element): { selectors: string[]; cleanup:
   return { selectors, cleanup };
 }
 
+function collectInlineStyleUsageContexts(
+  root: Element
+): Array<{ cssText: string; media?: string; layerPath?: string }> {
+  const contexts: Array<{ cssText: string; media?: string; layerPath?: string }> = [];
+  const elements = collectAllElements(root);
+  for (const element of elements) {
+    const style = element.getAttribute("style")?.trim();
+    if (!style) {
+      continue;
+    }
+    contexts.push({ cssText: `:scope { ${style} }` });
+  }
+  return contexts;
+}
+
 let picker: ElementPicker | null = null;
 let modal: CaptureConfirmationModal | null = null;
 
@@ -169,6 +184,7 @@ function ensurePicker(): ElementPicker {
           let keyframesCss: string;
           let layerOrder: string[];
           let variableDefinitions: ExtractCssViaCdpPayload["variableDefinitions"] | undefined;
+          let variableUsageContexts: ExtractCssViaCdpPayload["variableUsageContexts"] | undefined;
 
           try {
             const cdpResponse = (await chrome.runtime.sendMessage({
@@ -183,6 +199,7 @@ function ensurePicker(): ElementPicker {
               keyframesCss = p.keyframesCss;
               layerOrder = p.layerOrder;
               variableDefinitions = p.variableDefinitions;
+              variableUsageContexts = p.variableUsageContexts;
             } else {
               throw new Error(cdpResponse.error);
             }
@@ -199,16 +216,24 @@ function ensurePicker(): ElementPicker {
               extracted.usedAnimationNames
             );
             variableDefinitions = undefined;
+            variableUsageContexts = undefined;
           } finally {
             cleanup();
           }
 
           // Extract :root block for CSS variables used in matched rules
+          const inlineStyleUsageContexts = collectInlineStyleUsageContexts(result.element);
+          const mergedUsageContexts =
+            variableUsageContexts && variableUsageContexts.length > 0
+              ? [...variableUsageContexts, ...inlineStyleUsageContexts]
+              : [{ cssText }, ...inlineStyleUsageContexts];
           const varDefinitionsBlock = await extractUsedCssVariableDefinitions(
             result.element,
             cssText,
             {
               definitions: variableDefinitions,
+              usageContexts: mergedUsageContexts,
+              layerOrder,
               rootSelector: `#${rootId}`
             }
           );

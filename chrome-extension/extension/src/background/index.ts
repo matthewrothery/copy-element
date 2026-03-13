@@ -148,7 +148,8 @@ chrome.runtime.onMessage.addListener((message: RuntimeMessage, sender, sendRespo
           layerOrder: result.layerOrder,
           fontFacesCss: result.fontFacesCss,
           keyframesCss: result.keyframesCss,
-          variableDefinitions: result.variableDefinitions
+          variableDefinitions: result.variableDefinitions,
+          variableUsageContexts: result.variableUsageContexts
         };
         sendResponse(success(payload));
       } catch (error) {

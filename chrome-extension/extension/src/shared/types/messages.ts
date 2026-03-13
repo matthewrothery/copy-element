@@ -84,7 +84,13 @@ export interface ExtractCssViaCdpPayload {
     value: string;
     selector: string;
     media?: string;
+    layerPath?: string;
     sourceOrder: number;
+  }>;
+  variableUsageContexts: Array<{
+    cssText: string;
+    media?: string;
+    layerPath?: string;
   }>;
 }
 

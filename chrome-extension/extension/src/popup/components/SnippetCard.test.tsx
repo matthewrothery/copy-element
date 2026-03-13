@@ -27,7 +27,7 @@ describe("SnippetCard", () => {
       />
     );
 
-    fireEvent.click(screen.getByRole("button", { name: "Copy HTML" }));
+    fireEvent.click(screen.getByRole("button", { name: "Copy code" }));
     fireEvent.click(screen.getByRole("button", { name: "Delete snippet" }));
 
     expect(onCopy).toHaveBeenCalledTimes(1);

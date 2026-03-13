@@ -5,6 +5,7 @@ export interface CssVariableDefinition {
   value: string;
   selector: string;
   media?: string;
+  layerPath?: string;
   sourceOrder: number;
 }
 
@@ -21,6 +22,21 @@ function combineMedia(parentMedia: string | undefined, media: string): string {
     return trimmed;
   }
   return `(${parentMedia}) and (${trimmed})`;
+}
+
+function normalizeLayerName(layerName: string): string {
+  return layerName.trim();
+}
+
+function joinLayerPath(parentLayerPath: string | undefined, layerName: string): string | undefined {
+  const normalized = normalizeLayerName(layerName);
+  if (!normalized) {
+    return parentLayerPath;
+  }
+  if (!parentLayerPath) {
+    return normalized;
+  }
+  return normalized.includes(".") ? normalized : `${parentLayerPath}.${normalized}`;
 }
 
 function splitDeclarations(blockText: string): string[] {
@@ -76,6 +92,7 @@ function extractVarDeclarations(
   selectorText: string,
   declarationText: string,
   media: string | undefined,
+  layerPath: string | undefined,
   sourceOrderRef: { value: number },
   out: CssVariableDefinition[]
 ): void {
@@ -107,6 +124,7 @@ function extractVarDeclarations(
         value,
         selector,
         media: media || undefined,
+        layerPath,
         sourceOrder: sourceOrderRef.value++
       });
     }
@@ -116,6 +134,7 @@ function extractVarDeclarations(
 function walkCssTextBlocks(
   cssText: string,
   media: string | undefined,
+  layerPath: string | undefined,
   sourceOrderRef: { value: number },
   out: CssVariableDefinition[]
 ): void {
@@ -172,6 +191,20 @@ function walkCssTextBlocks(
       walkCssTextBlocks(
         blockContent,
         combineMedia(media, mediaCondition),
+        layerPath,
+        sourceOrderRef,
+        out
+      );
+      continue;
+    }
+
+    if (prelude.startsWith("@layer")) {
+      const layerName = prelude.replace(/^@layer\s*/i, "").trim();
+      const nextLayerPath = joinLayerPath(layerPath, layerName);
+      walkCssTextBlocks(
+        blockContent,
+        media,
+        nextLayerPath,
         sourceOrderRef,
         out
       );
@@ -180,17 +213,17 @@ function walkCssTextBlocks(
 
     if (prelude.startsWith("@")) {
       // Recurse through other block at-rules (@supports, @layer, etc.) preserving current media.
-      walkCssTextBlocks(blockContent, media, sourceOrderRef, out);
+      walkCssTextBlocks(blockContent, media, layerPath, sourceOrderRef, out);
       continue;
     }
 
-    extractVarDeclarations(prelude, blockContent, media, sourceOrderRef, out);
+    extractVarDeclarations(prelude, blockContent, media, layerPath, sourceOrderRef, out);
   }
 }
 
 export function collectVariableDefinitionsFromCssText(cssText: string): CssVariableDefinition[] {
   const out: CssVariableDefinition[] = [];
-  walkCssTextBlocks(cssText, undefined, { value: 0 }, out);
+  walkCssTextBlocks(cssText, undefined, undefined, { value: 0 }, out);
   return out;
 }
 
@@ -198,7 +231,8 @@ function collectVariableDefinitionsFromRuleList(
   rules: CSSRuleList,
   out: CssVariableDefinition[],
   sourceOrderRef: { value: number },
-  media?: string
+  media?: string,
+  layerPath?: string
 ): void {
   for (let i = 0; i < rules.length; i++) {
     const rule = rules[i];
@@ -222,6 +256,7 @@ function collectVariableDefinitionsFromRuleList(
             value,
             selector,
             media,
+            layerPath,
             sourceOrder: sourceOrderRef.value++
           });
         }
@@ -232,7 +267,8 @@ function collectVariableDefinitionsFromRuleList(
         rule.cssRules,
         out,
         sourceOrderRef,
-        nextMedia || undefined
+        nextMedia || undefined,
+        layerPath
       );
     } else if (rule.constructor.name === "CSSSupportsRule") {
       const supportsRule = rule as unknown as { cssRules: CSSRuleList };
@@ -240,7 +276,8 @@ function collectVariableDefinitionsFromRuleList(
         supportsRule.cssRules,
         out,
         sourceOrderRef,
-        media
+        media,
+        layerPath
       );
     } else if (rule.constructor.name === "CSSContainerRule") {
       const containerRule = rule as unknown as { cssRules: CSSRuleList };
@@ -248,15 +285,18 @@ function collectVariableDefinitionsFromRuleList(
         containerRule.cssRules,
         out,
         sourceOrderRef,
-        media
+        media,
+        layerPath
       );
     } else if (rule.constructor.name === "CSSLayerBlockRule") {
-      const layerRule = rule as unknown as { cssRules: CSSRuleList };
+      const layerRule = rule as unknown as { cssRules: CSSRuleList; name?: string };
+      const nextLayerPath = joinLayerPath(layerPath, layerRule.name ?? "");
       collectVariableDefinitionsFromRuleList(
         layerRule.cssRules,
         out,
         sourceOrderRef,
-        media
+        media,
+        nextLayerPath
       );
     }
   }

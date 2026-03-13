@@ -43,12 +43,17 @@ export interface CdpCssResult {
   fontFacesCss: string;
   keyframesCss: string;
   variableDefinitions: CssVariableDefinition[];
+  variableUsageContexts: Array<{
+    cssText: string;
+    media?: string;
+    layerPath?: string;
+  }>;
 }
 
 interface CdpRule {
   styleSheetId?: string;
   selectorList?: { text?: string };
-  style?: { cssText?: string };
+  style?: { cssText?: string; styleSheetId?: string };
   media?: Array<{ text?: string }>;
   origin?: string;
   layers?: Array<{ name?: string }>;
@@ -62,6 +67,10 @@ interface CdpMatchedStylesResponse {
   matchedCSSRules?: CdpRuleMatch[];
   inherited?: Array<{ matchedCSSRules?: CdpRuleMatch[] }>;
   inlineStyle?: { cssText?: string };
+}
+
+interface CdpStyleSheetHeader {
+  styleSheetId?: string;
 }
 
 export interface CollectedRule {
@@ -286,14 +295,19 @@ function normalizeRule(rule: CollectedRule): CollectedRule | null {
   };
 }
 
+function normalizeCssTextForKey(cssText: string): string {
+  return cssText
+    .trim()
+    .replace(/\s+/g, " ")
+    .replace(/\s*([:;,{}])\s*/g, "$1");
+}
+
 function getRuleKey(rule: CollectedRule): string {
   return [
     rule.selector,
-    rule.cssText,
+    normalizeCssTextForKey(rule.cssText),
     rule.media ?? "",
-    rule.styleSheetId ?? "",
-    rule.layerPath ?? "",
-    rule.inherited ? "1" : "0"
+    rule.layerPath ?? ""
   ].join("||");
 }
 
@@ -490,6 +504,26 @@ export async function extractCssViaCdp(
     throw new Error(`Debugger attach failed: ${(e as Error).message}`);
   });
 
+  const discoveredStyleSheetOrder: string[] = [];
+  const discoveredStyleSheetIds = new Set<string>();
+  const debuggerEventListener = (
+    source: chrome.debugger.Debuggee,
+    method: string,
+    params?: unknown
+  ) => {
+    if (source.tabId !== tabId || method !== "CSS.styleSheetAdded") {
+      return;
+    }
+    const header = (params as { header?: CdpStyleSheetHeader } | undefined)?.header;
+    const styleSheetId = header?.styleSheetId?.trim();
+    if (!styleSheetId || discoveredStyleSheetIds.has(styleSheetId)) {
+      return;
+    }
+    discoveredStyleSheetIds.add(styleSheetId);
+    discoveredStyleSheetOrder.push(styleSheetId);
+  };
+  chrome.debugger.onEvent.addListener(debuggerEventListener);
+
   try {
     await sendCommand(tabId, "DOM.enable");
     await sendCommand(tabId, "CSS.enable");
@@ -526,7 +560,14 @@ export async function extractCssViaCdp(
     const stylesheetTexts = new Map<string, string>();
     const variableDefinitions: CssVariableDefinition[] = [];
     let variableSourceOffset = 0;
+    const styleSheetOrder = [...discoveredStyleSheetOrder];
     for (const styleSheetId of allStyleSheetIds) {
+      if (!styleSheetOrder.includes(styleSheetId)) {
+        styleSheetOrder.push(styleSheetId);
+      }
+    }
+
+    for (const styleSheetId of styleSheetOrder) {
       try {
         const textResult = (await sendCommand(tabId, "CSS.getStyleSheetText", {
           styleSheetId
@@ -600,13 +641,20 @@ export async function extractCssViaCdp(
       layerOrder,
       fontFacesCss: fontFacesBlocks.join("\n\n"),
       keyframesCss: keyframesBlocks.join("\n\n"),
-      variableDefinitions
+      variableDefinitions,
+      variableUsageContexts: dedupedRules.map((rule) => ({
+        cssText: rule.cssText,
+        media: rule.media,
+        layerPath: rule.layerPath
+      }))
     };
   } finally {
     try {
       await chrome.debugger.detach({ tabId });
     } catch {
       // Ignore detach errors
+    } finally {
+      chrome.debugger.onEvent.removeListener(debuggerEventListener);
     }
   }
 }
