@@ -55,7 +55,7 @@ export default function Home(): React.ReactElement {
           <SnippetHero />
         </Section>
 
-        <Section>
+        <Section id="features">
           <FeatureSection
             title="Capture & export"
             subtitle="Get clean HTML or JSX from any element. No extra markup or inline bloat."
