@@ -1,3 +1,5 @@
+import { FAQ } from "@/components/FAQ";
+import { Footer } from "@/components/Footer";
 import { Header } from "@/components/Header";
 import { Section } from "@/components/Section";
 import { PricingBlock } from "@/components/PricingBlock";
@@ -26,6 +28,12 @@ export default function PricingPage(): React.ReactElement {
             <PricingBlock />
           </Section>
         </Section>
+
+        <Section id="faq">
+          <FAQ />
+        </Section>
+
+        <Footer />
       </main>
     </>
   );

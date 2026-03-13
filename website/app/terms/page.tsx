@@ -1,3 +1,5 @@
+import { FAQ } from "@/components/FAQ";
+import { Footer } from "@/components/Footer";
 import { Header } from "@/components/Header";
 import { Section } from "@/components/Section";
 
@@ -19,6 +21,12 @@ export default function TermsPage(): React.ReactElement {
             Terms of use will be published here.
           </p>
         </Section>
+
+        <Section id="faq">
+          <FAQ />
+        </Section>
+
+        <Footer />
       </main>
     </>
   );

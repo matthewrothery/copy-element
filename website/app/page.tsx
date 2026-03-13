@@ -5,6 +5,7 @@ import { FeatureGrid } from "@/components/FeatureGrid";
 import { ElementsShowcase } from "@/components/ElementsShowcase";
 import { SnippetHero } from "@/components/SnippetHero";
 import { CTABlock } from "@/components/CTABlock";
+import { FAQ } from "@/components/FAQ";
 import { Footer } from "@/components/Footer";
 import { Section } from "@/components/Section";
 
@@ -161,6 +162,10 @@ export default function Home(): React.ReactElement {
 
         <Section id="pricing">
           <CTABlock />
+        </Section>
+
+        <Section id="faq">
+          <FAQ />
         </Section>
 
         <Footer />
