@@ -1,39 +1,10 @@
 /* FeatureSection – self-contained */
 .feature-section {
-  --feature-title-size: var(--typo-headline);
-  --feature-subtitle-size: var(--typo-headline-subtitle);
   --feature-tabs-width: clamp(280px, 38vw, 460px);
   display: flex;
   flex-direction: column;
   gap: var(--space-5);
   width: 100%;
-}
-
-.feature-heading {
-  display: flex;
-  flex-direction: column;
-  gap: var(--space-2);
-}
-
-.feature-title {
-  font-size: var(--feature-title-size);
-  font-weight: var(--font-weight-bold);
-  line-height: 1.25em;
-  color: var(--text);
-  margin: 0;
-}
-
-.feature-subtitle {
-  font-size: var(--feature-subtitle-size);
-  font-weight: var(--font-weight-normal);
-  line-height: 1.33em;
-  color: var(--text-muted);
-  max-width: 50ch;
-  margin: 0;
-}
-
-.feature-subtitle strong {
-  color: var(--text);
 }
 
 .feature-row {

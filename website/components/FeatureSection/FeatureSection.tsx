@@ -3,6 +3,7 @@
 import { useState } from "react";
 import Image from "next/image";
 import { MediaPlaceholder } from "@/components/MediaPlaceholder";
+import { SectionHeading } from "@/components/SectionHeading";
 import type { FeatureSectionProps, FeatureTab } from "./types";
 import "./FeatureSection.css";
 
@@ -11,6 +12,7 @@ function slugify(s: string): string {
 }
 
 export function FeatureSection({
+  subheading,
   title,
   subtitle,
   tabs,
@@ -21,12 +23,13 @@ export function FeatureSection({
 
   return (
     <section className="feature-section" aria-labelledby={`feature-title-${id}`}>
-      <div className="feature-heading">
-        <h2 id={`feature-title-${id}`} className="feature-title">
-          {title}
-        </h2>
-        <div className="feature-subtitle">{subtitle}</div>
-      </div>
+      <SectionHeading
+        subheading={subheading}
+        title={title}
+        subtitle={subtitle}
+        titleId={`feature-title-${id}`}
+        align="left"
+      />
       <div className="feature-row">
         <div className="feature-tabs">
           {tabs.map((tab: FeatureTab, i: number) => (

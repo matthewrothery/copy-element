@@ -1,5 +1,6 @@
 import Image from "next/image";
 import { MediaPlaceholder } from "@/components/MediaPlaceholder";
+import { SectionHeading } from "@/components/SectionHeading";
 import type { FeatureGridProps } from "./types";
 import "./FeatureGrid.css";
 
@@ -8,6 +9,7 @@ function slugify(s: string): string {
 }
 
 export function FeatureGrid({
+  subheading,
   title,
   subtitle,
   cards,
@@ -19,12 +21,13 @@ export function FeatureGrid({
       className="feature-grid"
       aria-labelledby={titleId}
     >
-      <div className="feature-grid-heading">
-        <h2 id={titleId} className="feature-grid-title">
-          {title}
-        </h2>
-        <div className="feature-grid-subtitle">{subtitle}</div>
-      </div>
+      <SectionHeading
+        subheading={subheading}
+        title={title}
+        subtitle={subtitle}
+        titleId={titleId}
+        align="left"
+      />
       <div className="feature-grid-grid">
         {cards.map((card) => (
           <figure key={card.title} className="feature-grid-card">

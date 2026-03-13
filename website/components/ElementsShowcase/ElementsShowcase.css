@@ -1,7 +1,5 @@
 /* ElementsShowcase – self-contained */
 .elements-showcase {
-  --showcase-title-size: var(--typo-headline);
-  --showcase-subtitle-size: var(--typo-headline-subtitle);
   --showcase-card-bg: var(--bg);
   --showcase-card-border: var(--border-strong);
   --showcase-card-radius: 12px;
@@ -14,34 +12,9 @@
   overflow: visible;
 }
 
-.elements-showcase-heading {
-  display: flex;
-  flex-direction: column;
-  gap: var(--space-2);
-  text-align: center;
-  align-items: center;
-}
-
-.elements-showcase-title {
-  font-size: var(--showcase-title-size);
-  font-weight: var(--font-weight-bold);
-  line-height: 1.25em;
-  color: var(--text);
-  margin: 0;
-}
-
-.elements-showcase-subtitle {
-  font-size: var(--showcase-subtitle-size);
-  font-weight: var(--font-weight-normal);
-  line-height: 1.33em;
-  color: var(--text-muted);
+.elements-showcase .section-heading-subtitle {
   max-width: 60ch;
-  margin: 0;
   text-wrap: balance;
-}
-
-.elements-showcase-subtitle strong {
-  color: var(--text);
 }
 
 .elements-showcase .carousel {

@@ -1,7 +1,5 @@
 /* FeatureGrid – self-contained */
 .feature-grid {
-  --feature-grid-title-size: var(--typo-headline);
-  --feature-grid-subtitle-size: var(--typo-headline-subtitle);
   --feature-grid-card-bg: var(--surface);
   --feature-grid-card-radius: var(--radius);
   --feature-grid-card-padding: var(--space-6);
@@ -9,33 +7,6 @@
   flex-direction: column;
   gap: var(--space-6);
   width: 100%;
-}
-
-.feature-grid-heading {
-  display: flex;
-  flex-direction: column;
-  gap: var(--space-2);
-}
-
-.feature-grid-title {
-  font-size: var(--feature-grid-title-size);
-  font-weight: var(--font-weight-bold);
-  line-height: 1.25em;
-  color: var(--text);
-  margin: 0;
-}
-
-.feature-grid-subtitle {
-  font-size: var(--feature-grid-subtitle-size);
-  font-weight: var(--font-weight-normal);
-  line-height: 1.33em;
-  color: var(--text-muted);
-  max-width: 50ch;
-  margin: 0;
-}
-
-.feature-grid-subtitle strong {
-  color: var(--text);
 }
 
 .feature-grid-grid {

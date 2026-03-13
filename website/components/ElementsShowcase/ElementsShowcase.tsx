@@ -1,6 +1,7 @@
 import Image from "next/image";
 import { Carousel } from "@/components/Carousel";
 import { MediaPlaceholder } from "@/components/MediaPlaceholder";
+import { SectionHeading } from "@/components/SectionHeading";
 import type { ElementsShowcaseProps } from "./types";
 import "./ElementsShowcase.css";
 
@@ -9,6 +10,7 @@ function slugify(s: string): string {
 }
 
 export function ElementsShowcase({
+  subheading,
   title,
   subtitle,
   items,
@@ -20,17 +22,12 @@ export function ElementsShowcase({
       className="elements-showcase"
       aria-labelledby={`elements-showcase-title-${id}`}
     >
-      <div className="elements-showcase-heading">
-        <h2
-          id={`elements-showcase-title-${id}`}
-          className="elements-showcase-title"
-        >
-          {title}
-        </h2>
-        {subtitle != null && (
-          <p className="elements-showcase-subtitle">{subtitle}</p>
-        )}
-      </div>
+      <SectionHeading
+        subheading={subheading}
+        title={title}
+        subtitle={subtitle}
+        titleId={`elements-showcase-title-${id}`}
+      />
       <Carousel ariaLabel="Elements captured with Element Armory">
         {items.map((item) => (
           <article

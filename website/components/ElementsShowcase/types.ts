@@ -7,7 +7,9 @@ export type ElementsShowcaseItem = {
 };
 
 export type ElementsShowcaseProps = {
+  /** Optional pill label above the title. */
+  subheading?: string;
   title: string;
-  subtitle: string | ReactNode;
+  subtitle?: string | ReactNode;
   items: ElementsShowcaseItem[];
 };

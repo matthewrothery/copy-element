@@ -8,6 +8,8 @@ export type FeatureGridCard = {
 };
 
 export type FeatureGridProps = {
+  /** Optional pill label above the title. */
+  subheading?: string;
   title: string;
   subtitle: string | ReactNode;
   cards: FeatureGridCard[];

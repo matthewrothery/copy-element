@@ -7,6 +7,8 @@ export type FeatureTab = {
 import type { ReactNode } from "react";
 
 export type FeatureSectionProps = {
+  /** Optional pill label above the title. */
+  subheading?: string;
   title: string;
   subtitle: string | ReactNode;
   tabs: FeatureTab[];

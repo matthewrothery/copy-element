@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { SectionHeading } from "@/components/SectionHeading";
 import type { FAQProps } from "./types";
 import { DEFAULT_FAQ_ITEMS } from "./constants";
 import "./FAQ.css";
@@ -50,15 +51,12 @@ export function FAQ({
       aria-label="Frequently asked questions"
     >
       <div className="faq-container">
-        <div className="faq-heading-block">
-          {subheading !== "" && (
-            <span className="faq-subheading">{subheading}</span>
-          )}
-          <h2 id="faq-title" className="faq-title">
-            {title}
-          </h2>
-          {subtitle != null && <p className="faq-subtitle">{subtitle}</p>}
-        </div>
+        <SectionHeading
+          subheading={subheading}
+          title={title}
+          subtitle={subtitle != null ? subtitle : undefined}
+          titleId="faq-title"
+        />
 
         <div className="faq-list-wrapper">
           <ul className="faq-list">

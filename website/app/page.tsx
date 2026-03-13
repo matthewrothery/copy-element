@@ -20,6 +20,7 @@ export default function Home(): React.ReactElement {
 
         <Section>
           <ElementsShowcase
+            subheading="Examples"
             title="Captured with Element Armory"
             subtitle="UI components captured from real sites and exported as clean HTML or JSX."
             items={[
@@ -53,11 +54,12 @@ export default function Home(): React.ReactElement {
         </Section>
 
         <Section>
-          <SnippetHero />
+          <SnippetHero subheading="Snippet library" />
         </Section>
 
         <Section id="features">
           <FeatureSection
+            subheading="Features"
             title="Capture & export"
             subtitle="Get clean HTML or JSX from any element. No extra markup or inline bloat."
             tabs={[
@@ -82,6 +84,7 @@ export default function Home(): React.ReactElement {
 
         <Section>
           <FeatureSection
+            subheading="Features"
             title="Snippet library"
             subtitle={
               <>
@@ -140,6 +143,7 @@ export default function Home(): React.ReactElement {
 
         <Section>
           <FeatureSection
+            subheading="Developer-friendly"
             title="Developer-friendly"
             subtitle="Minimal output. No bloat. Framework-neutral HTML and JSX."
             tabs={[
