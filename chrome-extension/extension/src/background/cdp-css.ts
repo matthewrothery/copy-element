@@ -2,6 +2,10 @@
  * CDP-based CSS extraction for cross-origin stylesheets.
  * Uses Chrome DevTools Protocol to read stylesheet content without CORS.
  */
+import {
+  collectVariableDefinitionsFromCssText,
+  type CssVariableDefinition
+} from "../shared/utils/css-var-definition-index";
 
 const FONT_FAMILY_REGEX = /font-family\s*:\s*([^;]+)/gi;
 const ANIMATION_NAME_REGEX = /animation-name\s*:\s*([^;]+)/gi;
@@ -38,6 +42,7 @@ export interface CdpCssResult {
   layerOrder: string[];
   fontFacesCss: string;
   keyframesCss: string;
+  variableDefinitions: CssVariableDefinition[];
 }
 
 interface CdpRule {
@@ -519,6 +524,8 @@ export async function extractCssViaCdp(
 
     const declaredLayerOrder: string[] = [];
     const stylesheetTexts = new Map<string, string>();
+    const variableDefinitions: CssVariableDefinition[] = [];
+    let variableSourceOffset = 0;
     for (const styleSheetId of allStyleSheetIds) {
       try {
         const textResult = (await sendCommand(tabId, "CSS.getStyleSheetText", {
@@ -529,6 +536,14 @@ export async function extractCssViaCdp(
           continue;
         }
         stylesheetTexts.set(styleSheetId, text);
+
+        const sheetVarDefs = collectVariableDefinitionsFromCssText(text).map((def) => ({
+          ...def,
+          sourceOrder: def.sourceOrder + variableSourceOffset
+        }));
+        variableSourceOffset += sheetVarDefs.length;
+        variableDefinitions.push(...sheetVarDefs);
+
         const sheetLayers = extractLayerOrderFromStylesheetText(text);
         for (const layer of sheetLayers) {
           if (!declaredLayerOrder.includes(layer)) {
@@ -584,7 +599,8 @@ export async function extractCssViaCdp(
       usedAnimationNames: animationNames,
       layerOrder,
       fontFacesCss: fontFacesBlocks.join("\n\n"),
-      keyframesCss: keyframesBlocks.join("\n\n")
+      keyframesCss: keyframesBlocks.join("\n\n"),
+      variableDefinitions
     };
   } finally {
     try {

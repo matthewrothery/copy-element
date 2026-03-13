@@ -79,6 +79,13 @@ export interface ExtractCssViaCdpPayload {
   layerOrder: string[];
   fontFacesCss: string;
   keyframesCss: string;
+  variableDefinitions: Array<{
+    name: string;
+    value: string;
+    selector: string;
+    media?: string;
+    sourceOrder: number;
+  }>;
 }
 
 export type RuntimeMessage =

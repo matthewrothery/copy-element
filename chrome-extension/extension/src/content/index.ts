@@ -168,6 +168,7 @@ function ensurePicker(): ElementPicker {
           let fontFaces: string;
           let keyframesCss: string;
           let layerOrder: string[];
+          let variableDefinitions: ExtractCssViaCdpPayload["variableDefinitions"] | undefined;
 
           try {
             const cdpResponse = (await chrome.runtime.sendMessage({
@@ -181,6 +182,7 @@ function ensurePicker(): ElementPicker {
               fontFaces = p.fontFacesCss;
               keyframesCss = p.keyframesCss;
               layerOrder = p.layerOrder;
+              variableDefinitions = p.variableDefinitions;
             } else {
               throw new Error(cdpResponse.error);
             }
@@ -196,14 +198,19 @@ function ensurePicker(): ElementPicker {
             keyframesCss = await extractUsedKeyframes(
               extracted.usedAnimationNames
             );
+            variableDefinitions = undefined;
           } finally {
             cleanup();
           }
 
           // Extract :root block for CSS variables used in matched rules
-          const varDefinitionsBlock = extractUsedCssVariableDefinitions(
+          const varDefinitionsBlock = await extractUsedCssVariableDefinitions(
             result.element,
-            cssText
+            cssText,
+            {
+              definitions: variableDefinitions,
+              rootSelector: `#${rootId}`
+            }
           );
 
           // Extract external font links (Google Fonts, etc.)

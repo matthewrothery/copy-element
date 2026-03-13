@@ -147,7 +147,8 @@ chrome.runtime.onMessage.addListener((message: RuntimeMessage, sender, sendRespo
           usedAnimationNames: [...result.usedAnimationNames],
           layerOrder: result.layerOrder,
           fontFacesCss: result.fontFacesCss,
-          keyframesCss: result.keyframesCss
+          keyframesCss: result.keyframesCss,
+          variableDefinitions: result.variableDefinitions
         };
         sendResponse(success(payload));
       } catch (error) {
