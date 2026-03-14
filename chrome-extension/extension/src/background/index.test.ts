@@ -15,6 +15,11 @@ describe("background helpers", () => {
         sendMessage: vi.fn(async () => undefined),
         captureVisibleTab: vi.fn(async () => CAPTURE_DATA_URL)
       },
+      webNavigation: {
+        getAllFrames: vi.fn((details: { tabId: number }, cb: (frames?: { frameId: number }[]) => void) => {
+          cb([{ frameId: 0 }]);
+        })
+      },
       runtime: {
         onMessage: {
           addListener: vi.fn()

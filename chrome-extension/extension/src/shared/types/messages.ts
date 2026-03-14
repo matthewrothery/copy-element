@@ -33,6 +33,15 @@ export interface CancelCaptureRequest {
   };
 }
 
+/** Sent by content script when one frame selected an element; background cancels pickers in other frames. */
+export interface StopOtherPickersRequest {
+  type: "STOP_OTHER_PICKERS";
+  payload?: {
+    tabId?: number;
+    frameId?: number;
+  };
+}
+
 export interface ElementCapturedRequest {
   type: "ELEMENT_CAPTURED";
   payload: CapturedElementData;
@@ -97,6 +106,7 @@ export interface ExtractCssViaCdpPayload {
 export type RuntimeMessage =
   | StartCaptureRequest
   | CancelCaptureRequest
+  | StopOtherPickersRequest
   | ElementCapturedRequest
   | SaveSnippetRequest
   | GetSnippetsRequest

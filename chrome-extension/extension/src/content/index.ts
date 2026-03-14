@@ -78,6 +78,20 @@ function collectInlineStyleUsageContexts(
 let picker: ElementPicker | null = null;
 let modal: CaptureConfirmationModal | null = null;
 
+/**
+ * True if this frame's DOM is readable (same-origin or otherwise accessible).
+ * Cross-origin iframes may have restricted access; skip starting the picker there.
+ */
+function isDomUsable(): boolean {
+  try {
+    if (!document.body) return false;
+    void document.body.nodeType;
+    return true;
+  } catch {
+    return false;
+  }
+}
+
 function showPageToast(message: string): void {
   const existing = document.querySelector("[data-element-capture-toast]");
   if (existing) {
@@ -136,13 +150,34 @@ function ensurePicker(): ElementPicker {
     picker = new ElementPicker((result) => {
       void (async () => {
         try {
+          // Stop pickers in other frames so only this capture is active
+          chrome.runtime.sendMessage({ type: "STOP_OTHER_PICKERS" }).catch(() => {});
+
           picker?.hideOverlayForScreenshot();
           await new Promise<void>((r) =>
             requestAnimationFrame(() => requestAnimationFrame(() => r()))
           );
           const rect = result.element.getBoundingClientRect();
-          const viewportWidth = window.innerWidth;
-          const viewportHeight = window.innerHeight;
+          let cropLeft = rect.left;
+          let cropTop = rect.top;
+          let cropWidth = rect.width;
+          let cropHeight = rect.height;
+          let viewportWidth = window.innerWidth;
+          let viewportHeight = window.innerHeight;
+          // Map element rect to top-level viewport when inside a same-origin iframe
+          try {
+            if (window !== window.top && window.frameElement) {
+              const iframeRect = (window.frameElement as Element).getBoundingClientRect();
+              cropLeft = iframeRect.left + rect.left;
+              cropTop = iframeRect.top + rect.top;
+              cropWidth = rect.width;
+              cropHeight = rect.height;
+              viewportWidth = window.top!.innerWidth;
+              viewportHeight = window.top!.innerHeight;
+            }
+          } catch {
+            // Cross-origin or inaccessible; thumbnail will use current frame or be skipped
+          }
 
           let thumbnail: string | undefined;
           try {
@@ -152,12 +187,7 @@ function ensurePicker(): ElementPicker {
             if (response.ok && response.payload.dataUrl) {
               thumbnail = await cropViewportToThumbnail(
                 response.payload.dataUrl,
-                {
-                  left: rect.left,
-                  top: rect.top,
-                  width: rect.width,
-                  height: rect.height
-                },
+                { left: cropLeft, top: cropTop, width: cropWidth, height: cropHeight },
                 viewportWidth,
                 viewportHeight
               );
@@ -206,7 +236,7 @@ function ensurePicker(): ElementPicker {
               throw new Error(cdpResponse.error);
             }
           } catch {
-            // Fallback to in-page extraction when CDP fails (e.g. debugger attached elsewhere)
+            // Fallback to in-page extraction when CDP fails (e.g. debugger attached elsewhere, or iframe capture)
             const extracted = await extractMatchingRules(result.element);
             cssText = extracted.cssText;
             layerOrder = extracted.layerOrder;
@@ -356,7 +386,9 @@ chrome.runtime.onMessage.addListener((message: { type?: string }) => {
   }
 
   if (message.type === "START_CAPTURE") {
-    ensurePicker().start();
+    if (isDomUsable()) {
+      ensurePicker().start();
+    }
     return;
   }
 

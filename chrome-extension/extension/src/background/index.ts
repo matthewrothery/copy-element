@@ -56,6 +56,32 @@ export async function resolveTargetTab(payload?: { tabId?: number }): Promise<ch
   return activeTab ?? null;
 }
 
+function getAllFrameIds(tabId: number): Promise<number[]> {
+  return new Promise((resolve) => {
+    chrome.webNavigation.getAllFrames({ tabId }, (details) => {
+      if (!details) {
+        resolve([]);
+        return;
+      }
+      resolve(details.map((d) => d.frameId));
+    });
+  });
+}
+
+async function sendToAllFrames(
+  tabId: number,
+  message: { type: "START_CAPTURE" | "CANCEL_CAPTURE" }
+): Promise<void> {
+  const frameIds = await getAllFrameIds(tabId);
+  for (const frameId of frameIds) {
+    try {
+      await chrome.tabs.sendMessage(tabId, message, { frameId });
+    } catch {
+      // Ignore failures (e.g. cross-origin frame, script not injected)
+    }
+  }
+}
+
 export async function sendToTargetTab(
   payload: { tabId?: number } | undefined,
   message: { type: "START_CAPTURE" | "CANCEL_CAPTURE" }
@@ -70,7 +96,7 @@ export async function sendToTargetTab(
   }
 
   try {
-    await chrome.tabs.sendMessage(targetTab.id, message);
+    await sendToAllFrames(targetTab.id, message);
     return success(null);
   } catch (error: unknown) {
     const code = getErrorCode(error);
@@ -90,6 +116,28 @@ chrome.runtime.onMessage.addListener((message: RuntimeMessage, sender, sendRespo
 
   if (message.type === "CANCEL_CAPTURE") {
     void sendToTargetTab(message.payload, { type: "CANCEL_CAPTURE" }).then((response) => sendResponse(response));
+    return true;
+  }
+
+  if (message.type === "STOP_OTHER_PICKERS") {
+    void (async () => {
+      const tabId = message.payload?.tabId ?? sender.tab?.id;
+      const keepFrameId = message.payload?.frameId ?? sender.frameId;
+      if (typeof tabId !== "number" || typeof keepFrameId !== "number") {
+        sendResponse(success(null));
+        return;
+      }
+      const frameIds = await getAllFrameIds(tabId);
+      for (const frameId of frameIds) {
+        if (frameId === keepFrameId) continue;
+        try {
+          await chrome.tabs.sendMessage(tabId, { type: "CANCEL_CAPTURE" }, { frameId });
+        } catch {
+          // Ignore per-frame failures
+        }
+      }
+      sendResponse(success(null));
+    })();
     return true;
   }
 
