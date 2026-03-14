@@ -67,12 +67,14 @@ function extractFontFamilyFromRule(rule: CSSFontFaceRule): string | null {
 /**
  * Recursively processes CSS rules to find @font-face declarations.
  * Handles nested rules like @supports, @media, @layer.
+ * Deduplicates by rule string so the same @font-face from multiple sheets is emitted once.
  */
 function processRulesForFontFaces(
   rules: CSSRuleList,
   usedFontFamilies: Set<string>,
   baseUrl: string,
   fontFaceRules: string[],
+  seenFontFaceRules: Set<string>,
   wrapper?: string
 ): void {
   for (let i = 0; i < rules.length; i++) {
@@ -80,38 +82,35 @@ function processRulesForFontFaces(
 
     if (rule instanceof CSSFontFaceRule) {
       const fontFamily = extractFontFamilyFromRule(rule);
-      
+
       if (fontFamily && fontFaceMatchesUsedFonts(fontFamily, usedFontFamilies)) {
         const cssText = absolutizeFontFaceSrc(rule.cssText, baseUrl);
-        
-        if (wrapper) {
-          // If inside a conditional block, we need to wrap it
-          fontFaceRules.push(`${wrapper} {\n${cssText}\n}`);
-        } else {
-          fontFaceRules.push(cssText);
-        }
+        const ruleString = wrapper ? `${wrapper} {\n${cssText}\n}` : cssText;
+
+        if (seenFontFaceRules.has(ruleString)) continue;
+        seenFontFaceRules.add(ruleString);
+        fontFaceRules.push(ruleString);
       }
     } else if (rule instanceof CSSMediaRule) {
-      // Recursively process @media rules
       processRulesForFontFaces(
         rule.cssRules,
         usedFontFamilies,
         baseUrl,
         fontFaceRules,
+        seenFontFaceRules,
         `@media ${rule.conditionText}`
       );
     } else if (rule.constructor.name === "CSSSupportsRule") {
-      // Handle @supports rules (common for variable fonts)
       const supportsRule = rule as any;
       processRulesForFontFaces(
         supportsRule.cssRules,
         usedFontFamilies,
         baseUrl,
         fontFaceRules,
+        seenFontFaceRules,
         `@supports ${supportsRule.conditionText}`
       );
     } else if (rule.constructor.name === "CSSLayerBlockRule") {
-      // Handle @layer rules
       const layerRule = rule as any;
       const layerName = layerRule.name || "";
       processRulesForFontFaces(
@@ -119,10 +118,10 @@ function processRulesForFontFaces(
         usedFontFamilies,
         baseUrl,
         fontFaceRules,
+        seenFontFaceRules,
         layerName ? `@layer ${layerName}` : "@layer"
       );
     } else if (rule.constructor.name === "CSSLayerStatementRule") {
-      // No-op: @layer statements only declare order, they do not contain @font-face rules.
       continue;
     }
   }
@@ -142,6 +141,7 @@ export async function extractUsedFontFaces(
   }
 
   const fontFaceRules: string[] = [];
+  const seenFontFaceRules = new Set<string>();
 
   // Walk through all stylesheets
   for (let i = 0; i < document.styleSheets.length; i++) {
@@ -156,8 +156,14 @@ export async function extractUsedFontFaces(
       }
       cleanup = accessible.cleanup;
 
-      // Recursively process all rules
-      processRulesForFontFaces(accessible.rules, usedFontFamilies, baseUrl, fontFaceRules);
+      // Recursively process all rules (seenFontFaceRules deduplicates across sheets)
+      processRulesForFontFaces(
+        accessible.rules,
+        usedFontFamilies,
+        baseUrl,
+        fontFaceRules,
+        seenFontFaceRules
+      );
     } catch (e) {
       // Cross-origin stylesheet or other access error, skip it
       console.warn("Could not access stylesheet for font-face extraction:", sheet.href, e);

@@ -114,4 +114,31 @@ describe("extractUsedFontFaces", () => {
     expect(result).toContain("@media");
     expect(result).toContain("MediaFont");
   });
+
+  it.skipIf(typeof CSSFontFaceRule === "undefined")(
+    "emits each @font-face only once when same rule appears in multiple stylesheets",
+    async () => {
+      const sameFontFace = `
+        @font-face {
+          font-family: "Inter";
+          src: url("/assets/fonts/Inter-Regular.ttf") format("truetype");
+          font-weight: normal;
+        }
+      `;
+      const style1 = document.createElement("style");
+      style1.textContent = sameFontFace;
+      document.head.appendChild(style1);
+      const style2 = document.createElement("style");
+      style2.textContent = sameFontFace;
+      document.head.appendChild(style2);
+
+      const usedFonts = new Set(["Inter"]);
+      const result = await extractUsedFontFaces(usedFonts, "https://example.com");
+
+      const fontFaceCount = (result.match(/@font-face\s*\{/g) ?? []).length;
+      expect(fontFaceCount).toBe(1);
+      expect(result).toContain("Inter");
+      expect(result).toContain("https://example.com/assets/fonts/Inter-Regular.ttf");
+    }
+  );
 });
