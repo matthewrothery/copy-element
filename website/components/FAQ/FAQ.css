@@ -1,0 +1,194 @@
+/* FAQ – self-contained, layout from reference, theme from tokens */
+.faq {
+  --faq-question-text: var(--text);
+  --faq-answer-text: var(--text-muted);
+  --faq-border: var(--border);
+  --faq-transition-duration: 150ms;
+  --faq-list-max-width: 800px;
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+  position: relative;
+}
+
+.faq-container {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: center;
+  width: 100%;
+  max-width: var(--content-max-width);
+  margin-left: auto;
+  margin-right: auto;
+}
+
+/* List wrapper (tab-pane-wrapper) */
+.faq-list-wrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: flex-start;
+  width: 100%;
+  max-width: var(--faq-list-max-width);
+  margin-left: auto;
+  margin-right: auto;
+  padding-top: var(--space-6);
+}
+
+.faq-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+  width: 100%;
+}
+
+/* Each FAQ item (faq_parent) */
+.faq-item {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  border-bottom: 1px solid var(--faq-border);
+}
+
+.faq-item:last-child {
+  border-bottom: none;
+}
+
+/* Trigger row (faq_trigger) */
+.faq-trigger {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  padding: var(--space-4) var(--space-4);
+  gap: var(--space-4);
+  text-align: left;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  color: inherit;
+  font: inherit;
+  transition: background-color var(--faq-transition-duration);
+  border-radius: var(--radius-2);
+  opacity: 0.8;
+  transition: opacity var(--faq-transition-duration);
+}
+
+.faq-trigger:hover {
+  /* background-color: var(--surface); */
+  opacity: 1;
+  transition: opacity var(--faq-transition-duration);
+}
+
+.faq-trigger:hover .faq-question-text {
+  /* color: var(--accent); */
+}
+
+.faq-trigger:hover .faq-arrow {
+  /* color: var(--accent); */
+}
+
+.faq-trigger:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
+
+.faq-trigger-inner {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--space-3);
+  flex: 1;
+  min-width: 0;
+}
+
+.faq-question-text {
+  font-size: var(--typo-title);
+  font-weight: var(--font-weight-semibold);
+  line-height: 1.5em;
+  color: var(--faq-question-text);
+  margin: 0;
+  letter-spacing: -0.01em;
+  max-width: 680px;
+  transition: color var(--faq-transition-duration);
+}
+
+.faq-arrow {
+  flex: none;
+  width: 20px;
+  height: 20px;
+  margin-top: 2px;
+  color: var(--faq-answer-text);
+  transition: transform var(--faq-transition-duration), color var(--faq-transition-duration);
+}
+
+/* Closed = arrow points right; open = points down */
+.faq-trigger[aria-expanded="false"] .faq-arrow {
+  transform: rotate(-90deg);
+}
+
+.faq-trigger[aria-expanded="true"] .faq-arrow {
+  transform: rotate(0deg);
+}
+
+/* Collapsible answer (faq_answer) – instant open/close, fully hidden when closed */
+.faq-answer-wrap {
+  display: grid;
+  grid-template-rows: 0fr;
+  width: 100%;
+  overflow: hidden;
+  visibility: hidden;
+  opacity: 0;
+  pointer-events: none;
+  transition: grid-template-rows var(--faq-transition-duration), 
+              opacity var(--faq-transition-duration), 
+              visibility 0s var(--faq-transition-duration);
+}
+
+.faq-answer-wrap.faq-answer-wrap--open {
+  grid-template-rows: 1fr;
+  visibility: visible;
+  opacity: 1;
+  pointer-events: auto;
+  transition: grid-template-rows var(--faq-transition-duration), 
+              opacity var(--faq-transition-duration), 
+              visibility 0s 0s;
+}
+
+.faq-answer-inner {
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+}
+
+.faq-answer {
+  font-size: var(--typo-largecopy);
+  font-weight: var(--font-weight-normal);
+  line-height: 1.5em;
+  color: var(--faq-answer-text);
+  margin: 0;
+  letter-spacing: -0.01em;
+  padding: 0 var(--space-4) var(--space-5) var(--space-4);
+}
+
+.faq-answer p {
+  margin: 0;
+}
+
+.faq-answer p + p {
+  margin-top: var(--space-3);
+}
+
+@media (max-width: 480px) {
+  .faq-trigger {
+    padding: var(--space-4) var(--space-3);
+  }
+
+  .faq-answer {
+    padding: 0 var(--space-3) var(--space-4) var(--space-3);
+  }
+}

@@ -1,0 +1,362 @@
+{
+   "activateToolbox": {
+      "message": "Aktivizējiet rīklodziņu"
+   },
+   "contextMenuInspect": {
+      "message": "inspektors"
+   },
+   "copied": {
+      "message": "Kopēts!"
+   },
+   "devtoolsCopyElement": {
+      "message": "Kopēt elementu"
+   },
+   "devtoolsCopyElementCopying": {
+      "message": "Kopēšana"
+   },
+   "devtoolsLibrary": {
+      "message": "Bibliotēka"
+   },
+   "devtoolsLibraryComponentPerPage": {
+      "message": "Komponenti vienā lappusē"
+   },
+   "devtoolsLibraryNext": {
+      "message": "Nākamais"
+   },
+   "devtoolsLibraryNoComponents": {
+      "message": "Jūsu bibliotēka ir tukša. Saglabājiet komponentu, lai to redzētu šeit."
+   },
+   "devtoolsLibraryPrevious": {
+      "message": "Iepriekšējais"
+   },
+   "devtoolsNoElementSelectedText": {
+      "message": "Atlasiet elementu no cilnes \"Elementi\", lai šeit skatītu detalizētu informāciju par to"
+   },
+   "devtoolsSelectedElementText": {
+      "message": "Atlasītais elements"
+   },
+   "devtoolsUnsupportedElementSelectedText": {
+      "message": "Atlasītais elements nav atļauts kopēšanas darbībām"
+   },
+   "extCommandChooseElement": {
+      "message": "Turot kursoru, izvēlieties kopējamo elementu"
+   },
+   "extDescription": {
+      "message": "Kopējiet elementus no jebkuras tīmekļa lapas kā atkārtoti lietojamus tīmekļa komponentus. Iegūstiet HTML, CSS, React, JSX vai Tailwind CSS kodu."
+   },
+   "extName": {
+      "message": "DivMagic — kopēšanas stils"
+   },
+   "iframeCantBeAccessedText": {
+      "message": "DivMagic nevar piekļūt šim iframe."
+   },
+   "iframeNeedAccessText": {
+      "message": "Lai piekļūtu pakalpojumam DivMagic, ir jāatver šis iframe."
+   },
+   "iframeOpenText": {
+      "message": "Atvērt iframe"
+   },
+   "loginPageBody1": {
+      "message": "Lai piekļūtu mūsu jaudīgajam tīmekļa izstrādes rīkam, mēs aicinām jūs izveidot kontu vai pieteikties."
+   },
+   "loginPageBody2": {
+      "message": "Jūs izbaudīsiet nevainojamu izstrādes darbplūsmu, abonējot pakalpojumu DivMagic."
+   },
+   "loginPageEmailLabel": {
+      "message": "Tavs e-pasts"
+   },
+   "loginPageError": {
+      "message": "Nevarēja pieteikties. Pārliecinieties, vai izmantojat e-pasta adresi, kuru abonējāt."
+   },
+   "loginPageLoginButton": {
+      "message": "Pieslēgties"
+   },
+   "loginPageNewHere": {
+      "message": "Vai esat jauns DivMagic lietotājs?"
+   },
+   "loginPageSignUp": {
+      "message": "Pierakstīties"
+   },
+   "loginPageTitle": {
+      "message": "Laipni lūdzam pakalpojumā DivMagic!"
+   },
+   "loginPageVerificationCode": {
+      "message": "Verifikācijas kods"
+   },
+   "loginPageVerificationCodeSent": {
+      "message": "Uz jūsu e -pastu ir nosūtīts verifikācijas kods. Lūdzu, ievadiet to zemāk."
+   },
+   "loginPageVerifyButton": {
+      "message": "Pārbaudīt"
+   },
+   "loginPageVerifyCancelButton": {
+      "message": "Atcelt verifikāciju"
+   },
+   "loginPageVerifyEmail": {
+      "message": "Pārbaudiet savu e -pastu"
+   },
+   "loginPageWrongVerificationCode": {
+      "message": "Nepareizs verifikācijas kods. Lūdzu, pārliecinieties, vai esat ievadījis pareizo kodu."
+   },
+   "modalAddCssAttributeText": {
+      "message": "CSS atribūts"
+   },
+   "modalAddCssValueText": {
+      "message": "CSS vērtība"
+   },
+   "modalAddStylesText": {
+      "message": "Pievienot stilus"
+   },
+   "modalChildButtonText": {
+      "message": "Bērna elements"
+   },
+   "modalChildButtonTooltip": {
+      "message": "Pārvietojiet atlasi uz bērna elementu"
+   },
+   "modalClassSettingsText": {
+      "message": "Klases iestatījumi:"
+   },
+   "modalCloseButtonTooltip": {
+      "message": "Aizvērt"
+   },
+   "modalCopyButtonLoadingText": {
+      "message": "Notiek kopēšana..."
+   },
+   "modalCopyButtonText": {
+      "message": "Kopēt"
+   },
+   "modalCopyCSSOnlyText": {
+      "message": "Tikai CSS"
+   },
+   "modalCopyCssWithDivmagicText": {
+      "message": "DivMagic CSS klases"
+   },
+   "modalCopyCssWithOriginalText": {
+      "message": "Oriģinālās CSS klases"
+   },
+   "modalCopyHTMLOnlyText": {
+      "message": "Tikai HTML"
+   },
+   "modalCopyHtmlWithDivmagicText": {
+      "message": "DivMagic HTML atribūti"
+   },
+   "modalCopyHtmlWithOriginalText": {
+      "message": "Oriģinālie HTML atribūti"
+   },
+   "modalCopyIntegrationsText": {
+      "message": "Integrācijas (WordPress)"
+   },
+   "modalCopyModeSelectionAdaptable": {
+      "message": "Pielāgojams"
+   },
+   "modalCopyModeSelectionAdaptableTooltip": {
+      "message": "Ietver tikai vissvarīgākos stilus, kas nepieciešami elementa struktūras un pamata izskata uzturēšanai. Viegli pielāgot."
+   },
+   "modalCopyModeSelectionBalanced": {
+      "message": "Līdzsvarots"
+   },
+   "modalCopyModeSelectionBalancedTooltip": {
+      "message": "Ietver tādus pseidoelementus kā ::before un ::after, kas var būtiski ietekmēt vizuālo iznākumu, taču pārmērīgi nepalielina kodu."
+   },
+   "modalCopyModeSelectionExact": {
+      "message": "Precīzi"
+   },
+   "modalCopyModeSelectionExactTooltip": {
+      "message": "Precīza visu stilu kopija, nodrošinot, ka elements izskatās kā avots."
+   },
+   "modalCopyModeSelectionText": {
+      "message": "Kopēšanas režīms"
+   },
+   "modalCopyModeSelectionTooltip": {
+      "message": "Atlasiet pašreizējās atlases kopēšanas režīmu. Lielākajai daļai lietošanas gadījumu mēs iesakām “Pielāgojams”."
+   },
+   "modalCopyNotification": {
+      "message": "Komponents kopēts!"
+   },
+   "modalCopyViewText": {
+      "message": "Kopija"
+   },
+   "modalDragButtonTooltip": {
+      "message": "Velciet, lai pārvietotu"
+   },
+   "modalEditorViewText": {
+      "message": "Redaktors"
+   },
+   "modalElementSettingsText": {
+      "message": "Elementa iestatījumi:"
+   },
+   "modalExportNotification": {
+      "message": "Komponents eksportēts!"
+   },
+   "modalExportToStudioText": {
+      "message": "Eksportēt uz studiju"
+   },
+   "modalGoToLibraryText": {
+      "message": "Dodieties uz manu bibliotēku"
+   },
+   "modalInvalidCssValueText": {
+      "message": "Nederīga CSS vērtība"
+   },
+   "modalLeftButtonText": {
+      "message": "Kreisā bērna elements"
+   },
+   "modalLeftButtonTooltip": {
+      "message": "Pārvietojiet atlasi uz kreiso brāļa un māsas elementu"
+   },
+   "modalMediaQuerySelectionTooltip": {
+      "message": "Atlasiet, ja vēlaties, lai kopētajā kodā tiktu iekļauti [[MEDIAQUERYXYZ]] CSS stili."
+   },
+   "modalParentButtonText": {
+      "message": "Vecāku elements"
+   },
+   "modalParentButtonTooltip": {
+      "message": "Atlasiet pašreizējās atlases vecākelementu"
+   },
+   "modalRightButtonText": {
+      "message": "Labais bērna elements"
+   },
+   "modalRightButtonTooltip": {
+      "message": "Pārvietojiet atlasi uz labo brāļa un māsas elementu"
+   },
+   "modalSaveElementText": {
+      "message": "Saglabāt elementu"
+   },
+   "modalSaveNotification": {
+      "message": "Komponents saglabāts!"
+   },
+   "modalSavedElementText": {
+      "message": "Saglabāts!"
+   },
+   "modalSavingElementText": {
+      "message": "Saglabāt ..."
+   },
+   "modalStudioExportTooltip": {
+      "message": "Atveriet programmā DivMagic Studio"
+   },
+   "offText": {
+      "message": "Izslēgts"
+   },
+   "onText": {
+      "message": "Ieslēgts"
+   },
+   "optionsChooseLanguage": {
+      "message": "Izvēlieties valodu"
+   },
+   "optionsFeedback": {
+      "message": "Ja jums ir kādas atsauksmes vai ieteikumi, lūdzu, informējiet mūs!"
+   },
+   "optionsShortcuts": {
+      "message": "Tastatūras īsinājumtaustiņi"
+   },
+   "optionsTitle": {
+      "message": "Iespējas"
+   },
+   "panelCopyElementCopied": {
+      "message": "Kopēts"
+   },
+   "popupCopyInstructions": {
+      "message": "Noklikšķiniet uz jebkura elementa vai nospiediet taustiņu:"
+   },
+   "popupFeedback": {
+      "message": "Atsauksmes"
+   },
+   "popupSettings": {
+      "message": "Iestatījumi"
+   },
+   "popupSettingsAutoHidePopup": {
+      "message": "Automātiski paslēpt uznirstošo logu"
+   },
+   "popupSettingsComponentFormat": {
+      "message": "Komponentu formāts"
+   },
+   "popupSettingsComponentFormatTooltip": {
+      "message": "Atlasiet kopētā komponenta formātu"
+   },
+   "popupSettingsShowDevToolsPanel": {
+      "message": "[[DEVTOOLS]] panelis"
+   },
+   "popupSettingsStyleFormat": {
+      "message": "Stila formāts"
+   },
+   "popupSettingsStyleFormatExternalCSS": {
+      "message": "Ārējais CSS"
+   },
+   "popupSettingsStyleFormatInlineCSS": {
+      "message": "Iekļauts CSS"
+   },
+   "popupSettingsStyleFormatLocalCSS": {
+      "message": "Vietējais CSS"
+   },
+   "popupSettingsStyleFormatTooltip": {
+      "message": "Atlasiet CSS formātu kopētajiem stiliem"
+   },
+   "publishDate": {
+      "message": "31. marta versija"
+   },
+   "toolBoxColorPickerDescriptionText": {
+      "message": "Krāsu atlasītājs"
+   },
+   "toolBoxColorPickerText": {
+      "message": "Krāsu atlasītājs"
+   },
+   "toolBoxCopyElementDescriptionText": {
+      "message": "Kopēt elements"
+   },
+   "toolBoxCopyElementText": {
+      "message": "Kopēt elements"
+   },
+   "toolBoxCopyFontsCopiedText": {
+      "message": "Kopēts"
+   },
+   "toolBoxCopyFontsCopyToClipboardText": {
+      "message": "Noklikšķiniet, lai kopētu"
+   },
+   "toolBoxCopyFontsDescriptionText": {
+      "message": "Kopēt fontu"
+   },
+   "toolBoxCopyFontsNotFoundText": {
+      "message": "Šajā vietnē tiek izmantoti sistēmas fonti"
+   },
+   "toolBoxCopyFontsText": {
+      "message": "Kopēt fontu"
+   },
+   "toolBoxCopyFontsWindowText": {
+      "message": "Web fonti"
+   },
+   "toolBoxGridsDescriptionText": {
+      "message": "Pievieno robežas katram elementam"
+   },
+   "toolBoxGridsText": {
+      "message": "Režģi"
+   },
+   "toolBoxInspectorDescriptionText": {
+      "message": "Skatiet elementa detaļu"
+   },
+   "toolBoxInspectorText": {
+      "message": "Inspektors"
+   },
+   "toolBoxShowFontsDescriptionText": {
+      "message": "Ziniet, kādu fontu katra taga izmanto"
+   },
+   "toolBoxShowFontsText": {
+      "message": "Fonti"
+   },
+   "toolBoxThrashDescriptionText": {
+      "message": "Slēpt vai noņemiet elementu"
+   },
+   "toolBoxThrashText": {
+      "message": "Atkritumi"
+   },
+   "toolBoxThrashWindowHideButton": {
+      "message": "Slēpties"
+   },
+   "toolBoxThrashWindowRemoveButton": {
+      "message": "Noņemt"
+   },
+   "toolBoxThrashWindowText": {
+      "message": "Slēpt / noņemiet elementus"
+   },
+   "toolboxText": {
+      "message": "Instrumentu komplekts"
+   }
+}

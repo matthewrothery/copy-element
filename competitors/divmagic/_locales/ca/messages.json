@@ -1,0 +1,365 @@
+{
+   "activateToolbox": {
+      "message": "Activa la caixa d'eines"
+   },
+   "contextMenuInspect": {
+      "message": "Inspector"
+   },
+   "copied": {
+      "message": "Copiat!"
+   },
+   "devtoolsCopyElement": {
+      "message": "Element de còpia"
+   },
+   "devtoolsCopyElementCopying": {
+      "message": "Còpia"
+   },
+   "devtoolsLibrary": {
+      "message": "Biblioteca"
+   },
+   "devtoolsLibraryComponentPerPage": {
+      "message": "Components per pàgina"
+   },
+   "devtoolsLibraryNext": {
+      "message": "Pròxim"
+   },
+   "devtoolsLibraryNoComponents": {
+      "message": "La vostra biblioteca està buida. Deseu un component per veure -ho aquí."
+   },
+   "devtoolsLibraryPrevious": {
+      "message": "Previ"
+   },
+   "devtoolsNoElementSelectedText": {
+      "message": "Seleccioneu un element de la pestanya \"Elements\" per veure'n els detalls aquí"
+   },
+   "devtoolsSelectedElementText": {
+      "message": "Element seleccionat"
+   },
+   "devtoolsUnsupportedElementSelectedText": {
+      "message": "L'element seleccionat no es permet per a les operacions de còpia"
+   },
+   "extCommandChooseElement": {
+      "message": "Trieu l'element per copiar mentre passeu el cursor"
+   },
+   "extDescription": {
+      "message": "Copieu elements de qualsevol pàgina web com a components web reutilitzables. Obteniu codi HTML, CSS, React, JSX o Tailwind CSS."
+   },
+   "extName": {
+      "message": "DivMagic: estil de còpia"
+   },
+   "iframeCantBeAccessedText": {
+      "message": "DivMagic no pot accedir a aquest iframe."
+   },
+   "iframeNeedAccessText": {
+      "message": "DivMagic ha d'obrir aquest iframe per accedir-hi."
+   },
+   "iframeOpenText": {
+      "message": "Obriu iframe"
+   },
+   "loginPageBody1": {
+      "message": "Per accedir a la nostra potent eina de desenvolupament web, us convidem a crear un compte o iniciar sessió."
+   },
+   "loginPageBody2": {
+      "message": "Gaudireu d'un flux de treball de desenvolupament perfecte amb una subscripció a DivMagic."
+   },
+   "loginPageEmailLabel": {
+      "message": "El teu email"
+   },
+   "loginPageError": {
+      "message": "No s'ha pogut iniciar la sessió. Assegureu-vos que utilitzeu l'adreça electrònica amb la qual us heu subscrit."
+   },
+   "loginPageLoginButton": {
+      "message": "iniciar Sessió"
+   },
+   "loginPageNewHere": {
+      "message": "Nou a DivMagic?"
+   },
+   "loginPageSignUp": {
+      "message": "Registra't"
+   },
+   "loginPageTitle": {
+      "message": "Benvingut a DivMagic!"
+   },
+   "loginPageVerificationCode": {
+      "message": "Codi de verificació"
+   },
+   "loginPageVerificationCodeSent": {
+      "message": "S'ha enviat un codi de verificació al vostre correu electrònic. Introduïu -lo a continuació."
+   },
+   "loginPageVerifyButton": {
+      "message": "Verificar"
+   },
+   "loginPageVerifyCancelButton": {
+      "message": "Cancel·lar la verificació"
+   },
+   "loginPageVerifyEmail": {
+      "message": "Verifiqueu el vostre correu electrònic"
+   },
+   "loginPageWrongVerificationCode": {
+      "message": "Codi de verificació incorrecte. Assegureu -vos que heu introduït el codi correcte."
+   },
+   "modalAddCssAttributeText": {
+      "message": "Atribut CSS"
+   },
+   "modalAddCssValueText": {
+      "message": "Valor CSS"
+   },
+   "modalAddStylesText": {
+      "message": "Afegiu estils"
+   },
+   "modalChildButtonText": {
+      "message": "Element Infantil"
+   },
+   "modalChildButtonTooltip": {
+      "message": "Mou la selecció a l'element secundari"
+   },
+   "modalClassSettingsText": {
+      "message": "Configuració de classe:"
+   },
+   "modalCloseButtonTooltip": {
+      "message": "Tanca"
+   },
+   "modalCopyButtonLoadingText": {
+      "message": "S'està copiant..."
+   },
+   "modalCopyButtonText": {
+      "message": "Còpia"
+   },
+   "modalCopyCSSOnlyText": {
+      "message": "Només CSS"
+   },
+   "modalCopyCssWithDivmagicText": {
+      "message": "Classes CSS DivMagic"
+   },
+   "modalCopyCssWithOriginalText": {
+      "message": "Classes CSS originals"
+   },
+   "modalCopyHTMLOnlyText": {
+      "message": "Només HTML"
+   },
+   "modalCopyHtmlWithDivmagicText": {
+      "message": "Atributs html DivMagic"
+   },
+   "modalCopyHtmlWithOriginalText": {
+      "message": "Atributs HTML originals"
+   },
+   "modalCopyIntegrationsText": {
+      "message": "Integracions (WordPress)"
+   },
+   "modalCopyModeSelectionAdaptable": {
+      "message": "Adaptable"
+   },
+   "modalCopyModeSelectionAdaptableTooltip": {
+      "message": "Inclou només els estils més essencials necessaris per mantenir l'estructura i l'aspecte bàsic de l'element. Fàcil de personalitzar."
+   },
+   "modalCopyModeSelectionBalanced": {
+      "message": "Equilibrat"
+   },
+   "modalCopyModeSelectionBalancedTooltip": {
+      "message": "Incorpora pseudoelements com ::before i ::after, que poden afectar el resultat visual de manera significativa però no inflar el codi excessivament."
+   },
+   "modalCopyModeSelectionExact": {
+      "message": "Exacte"
+   },
+   "modalCopyModeSelectionExactTooltip": {
+      "message": "Una còpia exacta de tots els estils, assegurant que l'element s'assembla a la font."
+   },
+   "modalCopyModeSelectionText": {
+      "message": "Mode de còpia"
+   },
+   "modalCopyModeSelectionTooltip": {
+      "message": "Seleccioneu el mode de còpia per a la selecció actual. Recomanem \"Adaptable\" per a la majoria dels casos d'ús."
+   },
+   "modalCopyNotification": {
+      "message": "Component copiat!"
+   },
+   "modalCopyViewText": {
+      "message": "Còpia"
+   },
+   "modalDragButtonTooltip": {
+      "message": "Arrossegueu per moure's"
+   },
+   "modalEditorViewText": {
+      "message": "Director"
+   },
+   "modalElementSettingsText": {
+      "message": "Configuració de l'element:"
+   },
+   "modalExportNotification": {
+      "message": "Component exportat!"
+   },
+   "modalExportToStudioText": {
+      "message": "Exporta a Studio"
+   },
+   "modalGoToLibraryText": {
+      "message": "Vés a la meva biblioteca"
+   },
+   "modalInvalidCssValueText": {
+      "message": "Valor CSS no vàlid"
+   },
+   "modalLeftButtonText": {
+      "message": "Element infantil esquerre"
+   },
+   "modalLeftButtonTooltip": {
+      "message": "Desplaceu la selecció a l'element de germà esquerre"
+   },
+   "modalMediaQuerySelectionTooltip": {
+      "message": "Seleccioneu si voleu que els estils CSS [[MEDIAQUERYXYZ]] s'incloguin al codi copiat."
+   },
+   "modalParentButtonText": {
+      "message": "Element pare"
+   },
+   "modalParentButtonTooltip": {
+      "message": "Seleccioneu l'element principal de la selecció actual"
+   },
+   "modalRightButtonText": {
+      "message": "Element infantil adequat"
+   },
+   "modalRightButtonTooltip": {
+      "message": "Desplaceu la selecció a l'element de germà dret"
+   },
+   "modalSaveElementText": {
+      "message": "Element de desar"
+   },
+   "modalSaveNotification": {
+      "message": "Component desat!"
+   },
+   "modalSavedElementText": {
+      "message": "Desat!"
+   },
+   "modalSavingElementText": {
+      "message": "Estalvi ..."
+   },
+   "modalStudioExportTooltip": {
+      "message": "Obre a DivMagic Studio"
+   },
+   "offText": {
+      "message": "Apagat"
+   },
+   "onText": {
+      "message": "Encès"
+   },
+   "optionsChooseLanguage": {
+      "message": "Trieu un idioma"
+   },
+   "optionsFeedback": {
+      "message": "Si teniu comentaris o suggeriments, feu-nos-ho saber!"
+   },
+   "optionsShortcuts": {
+      "message": "Dreceres de teclat"
+   },
+   "optionsTitle": {
+      "message": "Opcions"
+   },
+   "panelCopyElementCopied": {
+      "message": "Copiat"
+   },
+   "popupCopyInstructions": {
+      "message": "Feu clic a qualsevol element o premeu la tecla:"
+   },
+   "popupFeedback": {
+      "message": "Feedback"
+   },
+   "popupSettings": {
+      "message": "Configuració"
+   },
+   "popupSettingsAutoHidePopup": {
+      "message": "Oculta automàticament la finestra emergent"
+   },
+   "popupSettingsComponentFormat": {
+      "message": "Format dels components"
+   },
+   "popupSettingsComponentFormatTooltip": {
+      "message": "Seleccioneu el format per al component copiat"
+   },
+   "popupSettingsShowDevToolsPanel": {
+      "message": "Panell DevTools"
+   },
+   "popupSettingsStyleFormat": {
+      "message": "Format d'estil"
+   },
+   "popupSettingsStyleFormatExternalCSS": {
+      "message": "CSS extern"
+   },
+   "popupSettingsStyleFormatInlineCSS": {
+      "message": "CSS en línia"
+   },
+   "popupSettingsStyleFormatLocalCSS": {
+      "message": "CSS local"
+   },
+   "popupSettingsStyleFormatTooltip": {
+      "message": "Seleccioneu el format CSS per als estils copiats"
+   },
+   "publishDate": {
+      "message": "Versió del 31 de març"
+   },
+   "toolBoxColorPickerDescriptionText": {
+      "message": "Picker de colors"
+   },
+   "toolBoxColorPickerText": {
+      "message": "Picker de colors"
+   },
+   "toolBoxCopyElementDescriptionText": {
+      "message": "Copia l'element"
+   },
+   "toolBoxCopyElementText": {
+      "message": "Copia l'element"
+   },
+   "toolBoxCopyFontsCopiedText": {
+      "message": "Copiat"
+   },
+   "toolBoxCopyFontsCopyToClipboardText": {
+      "message": "Feu clic per copiar"
+   },
+   "toolBoxCopyFontsDescriptionText": {
+      "message": "Copia el tipus de lletra"
+   },
+   "toolBoxCopyFontsNotFoundText": {
+      "message": "El lloc web només utilitza els tipus de lletra del sistema per defecte"
+   },
+   "toolBoxCopyFontsText": {
+      "message": "Copia el tipus de lletra"
+   },
+   "toolBoxCopyFontsWindowText": {
+      "message": "Tipus de lletra web"
+   },
+   "toolBoxGridsDescriptionText": {
+      "message": "Afegeix les fronteres a tots els elements"
+   },
+   "toolBoxGridsText": {
+      "message": "Graelles"
+   },
+   "toolBoxInspectorDescriptionText": {
+      "message": "Vegeu un detall de l'element"
+   },
+   "toolBoxInspectorText": {
+      "message": "Inspectora"
+   },
+   "toolBoxShowFontsDescriptionText": {
+      "message": "Sabeu quina font utilitza cada etiqueta"
+   },
+   "toolBoxShowFontsText": {
+      "message": "Tipus de lletra"
+   },
+   "toolBoxShowFontsWindowText": {
+      "message": "Tipus de lletra"
+   },
+   "toolBoxThrashDescriptionText": {
+      "message": "Amaga o elimina un element"
+   },
+   "toolBoxThrashText": {
+      "message": "Escombreries"
+   },
+   "toolBoxThrashWindowHideButton": {
+      "message": "Amagar"
+   },
+   "toolBoxThrashWindowRemoveButton": {
+      "message": "Treure"
+   },
+   "toolBoxThrashWindowText": {
+      "message": "Amaga / elimina els elements"
+   },
+   "toolboxText": {
+      "message": "Caixa d’eines"
+   }
+}

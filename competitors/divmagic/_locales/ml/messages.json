@@ -1,0 +1,362 @@
+{
+   "activateToolbox": {
+      "message": "ടൂൾബോക്സ് സജീവമാക്കുക"
+   },
+   "contextMenuInspect": {
+      "message": "ഇൻസ്പെക്ടർ"
+   },
+   "copied": {
+      "message": "പകർത്തി!"
+   },
+   "devtoolsCopyElement": {
+      "message": "ഘടകം പകർത്തുക"
+   },
+   "devtoolsCopyElementCopying": {
+      "message": "പകർത്തുന്നു"
+   },
+   "devtoolsLibrary": {
+      "message": "പുസ്തകശാല"
+   },
+   "devtoolsLibraryComponentPerPage": {
+      "message": "ഓരോ പേജിലും ഘടകങ്ങൾ"
+   },
+   "devtoolsLibraryNext": {
+      "message": "അടുത്തത്"
+   },
+   "devtoolsLibraryNoComponents": {
+      "message": "നിങ്ങളുടെ ലൈബ്രറി ശൂന്യമാണ്. അത് ഇവിടെ കാണാൻ ഒരു ഘടകം സംരക്ഷിക്കുക."
+   },
+   "devtoolsLibraryPrevious": {
+      "message": "മുമ്പത്തെ"
+   },
+   "devtoolsNoElementSelectedText": {
+      "message": "അതിന്റെ വിശദാംശങ്ങൾ ഇവിടെ കാണുന്നതിന് \"ഘടകങ്ങൾ\" ടാബിൽ നിന്ന് ഒരു ഘടകം തിരഞ്ഞെടുക്കുക"
+   },
+   "devtoolsSelectedElementText": {
+      "message": "തിരഞ്ഞെടുത്ത ഘടകം"
+   },
+   "devtoolsUnsupportedElementSelectedText": {
+      "message": "തിരഞ്ഞെടുത്ത ഘടകം പകർത്തൽ പ്രവർത്തനങ്ങൾക്ക് അനുവദനീയമല്ല"
+   },
+   "extCommandChooseElement": {
+      "message": "ഹോവർ ചെയ്യുമ്പോൾ പകർത്താനുള്ള ഘടകം തിരഞ്ഞെടുക്കുക"
+   },
+   "extDescription": {
+      "message": "പുനരുപയോഗിക്കാവുന്ന വെബ് ഘടകങ്ങളായി ഏതെങ്കിലും വെബ്‌പേജിൽ നിന്നുള്ള ഘടകങ്ങൾ പകർത്തുക. HTML, CSS, React, JSX അല്ലെങ്കിൽ Tailwind CSS കോഡ് നേടുക."
+   },
+   "extName": {
+      "message": "DivMagic - കോപ്പി സ്റ്റൈൽ"
+   },
+   "iframeCantBeAccessedText": {
+      "message": "DivMagic-ന് ഈ iframe ആക്‌സസ് ചെയ്യാൻ കഴിയില്ല."
+   },
+   "iframeNeedAccessText": {
+      "message": "DivMagic ആക്സസ് ചെയ്യുന്നതിന് ഈ iframe തുറക്കേണ്ടതുണ്ട്."
+   },
+   "iframeOpenText": {
+      "message": "iframe തുറക്കുക"
+   },
+   "loginPageBody1": {
+      "message": "ഞങ്ങളുടെ ശക്തമായ വെബ് ഡെവലപ്‌മെന്റ് ടൂൾ ആക്‌സസ് ചെയ്യുന്നതിന്, ഒരു അക്കൗണ്ട് സൃഷ്‌ടിക്കാനോ ലോഗിൻ ചെയ്യാനോ ഞങ്ങൾ നിങ്ങളെ ക്ഷണിക്കുന്നു."
+   },
+   "loginPageBody2": {
+      "message": "DivMagic-ലേക്കുള്ള സബ്‌സ്‌ക്രിപ്‌ഷൻ ഉപയോഗിച്ച് നിങ്ങൾക്ക് തടസ്സമില്ലാത്ത വികസന വർക്ക്ഫ്ലോ ആസ്വദിക്കാം."
+   },
+   "loginPageEmailLabel": {
+      "message": "നിങ്ങളുടെ ഇമെയിൽ"
+   },
+   "loginPageError": {
+      "message": "ലോഗിൻ ചെയ്യാൻ കഴിഞ്ഞില്ല. നിങ്ങൾ സബ്‌സ്‌ക്രൈബുചെയ്‌ത ഇമെയിൽ വിലാസമാണ് ഉപയോഗിക്കുന്നതെന്ന് ഉറപ്പാക്കുക."
+   },
+   "loginPageLoginButton": {
+      "message": "ലോഗിൻ"
+   },
+   "loginPageNewHere": {
+      "message": "DivMagic-ൽ പുതിയ ആളാണോ?"
+   },
+   "loginPageSignUp": {
+      "message": "സൈൻ അപ്പ് ചെയ്യുക"
+   },
+   "loginPageTitle": {
+      "message": "DivMagic-ലേക്ക് സ്വാഗതം!"
+   },
+   "loginPageVerificationCode": {
+      "message": "പരിശോധിച്ചുറപ്പിക്കൽ കോഡ്"
+   },
+   "loginPageVerificationCodeSent": {
+      "message": "നിങ്ങളുടെ ഇമെയിലിലേക്ക് ഒരു സ്ഥിരീകരണ കോഡ് അയച്ചു. ദയവായി ഇത് ചുവടെ നൽകുക."
+   },
+   "loginPageVerifyButton": {
+      "message": "പമാണീകരിക്കുക"
+   },
+   "loginPageVerifyCancelButton": {
+      "message": "സ്ഥിരീകരണം റദ്ദാക്കുക"
+   },
+   "loginPageVerifyEmail": {
+      "message": "നിങ്ങളുടെ ഇമെയിൽ പരിശോധിക്കുക"
+   },
+   "loginPageWrongVerificationCode": {
+      "message": "തെറ്റായ പരിശോധന കോഡ്. നിങ്ങൾ ശരിയായ കോഡ് നൽകിയിട്ടുണ്ടെന്ന് ഉറപ്പാക്കുക."
+   },
+   "modalAddCssAttributeText": {
+      "message": "സിഎസ്എസ് ആട്രിബ്യൂട്ട്"
+   },
+   "modalAddCssValueText": {
+      "message": "സിഎസ്എസ് മൂല്യം"
+   },
+   "modalAddStylesText": {
+      "message": "ശൈലികൾ ചേർക്കുക"
+   },
+   "modalChildButtonText": {
+      "message": "ശിശു ഘടകം"
+   },
+   "modalChildButtonTooltip": {
+      "message": "തിരഞ്ഞെടുക്കൽ ചൈൽഡ് എലമെന്റിലേക്ക് നീക്കുക"
+   },
+   "modalClassSettingsText": {
+      "message": "ക്ലാസ് ക്രമീകരണങ്ങൾ:"
+   },
+   "modalCloseButtonTooltip": {
+      "message": "അടയ്ക്കുക"
+   },
+   "modalCopyButtonLoadingText": {
+      "message": "പകർത്തുന്നു..."
+   },
+   "modalCopyButtonText": {
+      "message": "പകർത്തുക"
+   },
+   "modalCopyCSSOnlyText": {
+      "message": "CSS മാത്രം"
+   },
+   "modalCopyCssWithDivmagicText": {
+      "message": "ഡിവിമജിക് സിഎസ്എസ് ക്ലാസുകൾ"
+   },
+   "modalCopyCssWithOriginalText": {
+      "message": "യഥാർത്ഥ സിഎസ്എസ് ക്ലാസുകൾ"
+   },
+   "modalCopyHTMLOnlyText": {
+      "message": "HTML മാത്രം"
+   },
+   "modalCopyHtmlWithDivmagicText": {
+      "message": "ഡിവിമാജിക് HTML ആട്രിബ്യൂട്ടുകൾ"
+   },
+   "modalCopyHtmlWithOriginalText": {
+      "message": "യഥാർത്ഥ HTML ആട്രിബ്യൂട്ടുകൾ"
+   },
+   "modalCopyIntegrationsText": {
+      "message": "സംയോജനങ്ങൾ (വേർഡ്പ്രസ്സ്)"
+   },
+   "modalCopyModeSelectionAdaptable": {
+      "message": "അഡാപ്റ്റബിൾ"
+   },
+   "modalCopyModeSelectionAdaptableTooltip": {
+      "message": "മൂലകത്തിന്റെ ഘടനയും അടിസ്ഥാന രൂപവും നിലനിർത്താൻ ആവശ്യമായ ഏറ്റവും അത്യാവശ്യമായ ശൈലികൾ മാത്രം ഉൾപ്പെടുന്നു. ഇഷ്ടാനുസൃതമാക്കാൻ എളുപ്പമാണ്."
+   },
+   "modalCopyModeSelectionBalanced": {
+      "message": "സമതുലിതമായ"
+   },
+   "modalCopyModeSelectionBalancedTooltip": {
+      "message": "::before ::after പോലുള്ള കപട ഘടകങ്ങൾ ഉൾക്കൊള്ളുന്നു, ഇത് ദൃശ്യ ഫലത്തെ സാരമായി ബാധിക്കുമെങ്കിലും കോഡ് അമിതമായി വർദ്ധിപ്പിക്കരുത്."
+   },
+   "modalCopyModeSelectionExact": {
+      "message": "കൃത്യം"
+   },
+   "modalCopyModeSelectionExactTooltip": {
+      "message": "എല്ലാ ശൈലികളുടെയും കൃത്യമായ പകർപ്പ്, മൂലകം ഉറവിടം പോലെയാണെന്ന് ഉറപ്പാക്കുന്നു."
+   },
+   "modalCopyModeSelectionText": {
+      "message": "കോപ്പി മോഡ്"
+   },
+   "modalCopyModeSelectionTooltip": {
+      "message": "നിലവിലെ തിരഞ്ഞെടുപ്പിനായി കോപ്പി മോഡ് തിരഞ്ഞെടുക്കുക. മിക്ക ഉപയോഗ കേസുകൾക്കും ഞങ്ങൾ \"അഡാപ്റ്റബിൾ\" ശുപാർശ ചെയ്യുന്നു."
+   },
+   "modalCopyNotification": {
+      "message": "ഘടകം പകർത്തി!"
+   },
+   "modalCopyViewText": {
+      "message": "പകര്ത്തുക"
+   },
+   "modalDragButtonTooltip": {
+      "message": "നീക്കാൻ വലിച്ചിടുക"
+   },
+   "modalEditorViewText": {
+      "message": "എഡിറ്റർ"
+   },
+   "modalElementSettingsText": {
+      "message": "ഘടക ക്രമീകരണങ്ങൾ:"
+   },
+   "modalExportNotification": {
+      "message": "ഘടകം എക്സ്പോർട്ടുചെയ്തു!"
+   },
+   "modalExportToStudioText": {
+      "message": "സ്റ്റുഡിയോയിലേക്ക് കയറ്റുമതി ചെയ്യുക"
+   },
+   "modalGoToLibraryText": {
+      "message": "എന്റെ ലൈബ്രറിയിലേക്ക് പോകുക"
+   },
+   "modalInvalidCssValueText": {
+      "message": "CSS മൂല്യം അസാധുവാണ്"
+   },
+   "modalLeftButtonText": {
+      "message": "ഇടത് ചൈൽഡ് ഘടകം"
+   },
+   "modalLeftButtonTooltip": {
+      "message": "തിരഞ്ഞെടുപ്പിനെ ഇടത് സീബ്ലിംഗ് ഘടകത്തിലേക്ക് നീക്കുക"
+   },
+   "modalMediaQuerySelectionTooltip": {
+      "message": "പകർത്തിയ കോഡിൽ നിങ്ങൾക്ക് [[MEDIAQUERYXYZ]] CSS ശൈലികൾ ഉൾപ്പെടുത്തണമെങ്കിൽ തിരഞ്ഞെടുക്കുക."
+   },
+   "modalParentButtonText": {
+      "message": "രക്ഷാകർതൃ ഘടകം"
+   },
+   "modalParentButtonTooltip": {
+      "message": "നിലവിലെ തിരഞ്ഞെടുപ്പിന്റെ പാരന്റ് എലമെന്റ് തിരഞ്ഞെടുക്കുക"
+   },
+   "modalRightButtonText": {
+      "message": "വലത് ചൈൽഡ് ഘടകം"
+   },
+   "modalRightButtonTooltip": {
+      "message": "തിരഞ്ഞെടുപ്പിനെ ശരിയായ സഹോദരപരമായ മൂലകത്തിലേക്ക് നീക്കുക"
+   },
+   "modalSaveElementText": {
+      "message": "ഘടകം സംരക്ഷിക്കുക"
+   },
+   "modalSaveNotification": {
+      "message": "ഘടകം സംരക്ഷിച്ചു!"
+   },
+   "modalSavedElementText": {
+      "message": "സംരക്ഷിച്ചു!"
+   },
+   "modalSavingElementText": {
+      "message": "സംരക്ഷിക്കുന്നത്..."
+   },
+   "modalStudioExportTooltip": {
+      "message": "DivMagic സ്റ്റുഡിയോയിൽ തുറക്കുക"
+   },
+   "offText": {
+      "message": "ഓഫ്"
+   },
+   "onText": {
+      "message": "ഓൺ"
+   },
+   "optionsChooseLanguage": {
+      "message": "ഒരു ഭാഷ തിരഞ്ഞെടുക്കുക"
+   },
+   "optionsFeedback": {
+      "message": "നിങ്ങൾക്ക് എന്തെങ്കിലും ഫീഡ്‌ബാക്കോ നിർദ്ദേശങ്ങളോ ഉണ്ടെങ്കിൽ, ദയവായി ഞങ്ങളെ അറിയിക്കുക!"
+   },
+   "optionsShortcuts": {
+      "message": "കീബോർഡ് കുറുക്കുവഴികൾ"
+   },
+   "optionsTitle": {
+      "message": "ഓപ്ഷനുകൾ"
+   },
+   "panelCopyElementCopied": {
+      "message": "പകർത്തി"
+   },
+   "popupCopyInstructions": {
+      "message": "ഏതെങ്കിലും ഘടകത്തിൽ ക്ലിക്ക് ചെയ്യുക അല്ലെങ്കിൽ കീ അമർത്തുക:"
+   },
+   "popupFeedback": {
+      "message": "പ്രതികരണം"
+   },
+   "popupSettings": {
+      "message": "ക്രമീകരണങ്ങൾ"
+   },
+   "popupSettingsAutoHidePopup": {
+      "message": "പോപ്പ്അപ്പ് സ്വയമേവ മറയ്ക്കുക"
+   },
+   "popupSettingsComponentFormat": {
+      "message": "ഘടക ഫോർമാറ്റ്"
+   },
+   "popupSettingsComponentFormatTooltip": {
+      "message": "പകർത്തിയ ഘടകത്തിന്റെ ഫോർമാറ്റ് തിരഞ്ഞെടുക്കുക"
+   },
+   "popupSettingsShowDevToolsPanel": {
+      "message": "[[DEVTOOLS]] പാനൽ"
+   },
+   "popupSettingsStyleFormat": {
+      "message": "സ്റ്റൈൽ ഫോർമാറ്റ്"
+   },
+   "popupSettingsStyleFormatExternalCSS": {
+      "message": "ബാഹ്യ CSS"
+   },
+   "popupSettingsStyleFormatInlineCSS": {
+      "message": "ഇൻലൈൻ CSS"
+   },
+   "popupSettingsStyleFormatLocalCSS": {
+      "message": "പ്രാദേശിക സി.എസ്.എസ്"
+   },
+   "popupSettingsStyleFormatTooltip": {
+      "message": "പകർത്തിയ ശൈലികൾക്കായി CSS ഫോർമാറ്റ് തിരഞ്ഞെടുക്കുക"
+   },
+   "publishDate": {
+      "message": "മാർച്ച് 31 പതിപ്പ്"
+   },
+   "toolBoxColorPickerDescriptionText": {
+      "message": "കളർ പിക്കർ"
+   },
+   "toolBoxColorPickerText": {
+      "message": "കളർ പിക്കർ"
+   },
+   "toolBoxCopyElementDescriptionText": {
+      "message": "ഘടകം പകർത്തുക"
+   },
+   "toolBoxCopyElementText": {
+      "message": "ഘടകം പകർത്തുക"
+   },
+   "toolBoxCopyFontsCopiedText": {
+      "message": "പകർത്തി"
+   },
+   "toolBoxCopyFontsCopyToClipboardText": {
+      "message": "പകർത്താൻ ക്ലിക്കുചെയ്യുക"
+   },
+   "toolBoxCopyFontsDescriptionText": {
+      "message": "ഫോണ്ട് പകർത്തുക"
+   },
+   "toolBoxCopyFontsNotFoundText": {
+      "message": "ഈ വെബ്സൈറ്റ് സിസ്റ്റം ഫോണ്ടുകൾ ഉപയോഗിക്കുന്നു"
+   },
+   "toolBoxCopyFontsText": {
+      "message": "ഫോണ്ട് പകർത്തുക"
+   },
+   "toolBoxCopyFontsWindowText": {
+      "message": "വെബ് ഫോണ്ടുകൾ"
+   },
+   "toolBoxGridsDescriptionText": {
+      "message": "എല്ലാ ഘടകത്തിനും അതിർത്തികൾ ചേർക്കുന്നു"
+   },
+   "toolBoxGridsText": {
+      "message": "ഗ്രിഡുകൾ"
+   },
+   "toolBoxInspectorDescriptionText": {
+      "message": "ഒരു ഘടക വിശദാംശങ്ങൾ കാണുക"
+   },
+   "toolBoxInspectorText": {
+      "message": "ഇൻസ്പെക്ടർ"
+   },
+   "toolBoxShowFontsDescriptionText": {
+      "message": "ഓരോ ടാഗും ഏത് ഫോണ്ട് ഉപയോഗിക്കുന്നുവെന്ന് അറിയുക"
+   },
+   "toolBoxShowFontsText": {
+      "message": "ഫോണ്ടുകൾ"
+   },
+   "toolBoxThrashDescriptionText": {
+      "message": "ഒരു ഘടകം മറയ്ക്കുക അല്ലെങ്കിൽ നീക്കംചെയ്യുക"
+   },
+   "toolBoxThrashText": {
+      "message": "നിസ്സാരവസ്തു"
+   },
+   "toolBoxThrashWindowHideButton": {
+      "message": "ഒളിക്കുക"
+   },
+   "toolBoxThrashWindowRemoveButton": {
+      "message": "മാറ്റുക"
+   },
+   "toolBoxThrashWindowText": {
+      "message": "ഘടകങ്ങൾ മറയ്ക്കുക / നീക്കംചെയ്യുക"
+   },
+   "toolboxText": {
+      "message": "ടൂൾബോക്സ്"
+   }
+}

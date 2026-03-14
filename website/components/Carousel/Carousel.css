@@ -1,0 +1,149 @@
+/* Carousel – bleed + horizontal scroll primitive */
+.carousel {
+  --carousel-gap: var(--space-3);
+  --carousel-padding-inline: 20px;
+  --carousel-controls-margin-top: var(--space-4);
+  --carousel-nav-size: 44px;
+  --carousel-nav-bg: transparent;
+  --carousel-nav-border: var(--border);
+  --carousel-nav-icon: var(--text);
+  --carousel-nav-bg-hover: var(--surface);
+  --carousel-nav-bg-disabled: transparent;
+  --carousel-nav-icon-disabled: var(--text-muted);
+  --carousel-progress-track: var(--border);
+  --carousel-progress-thumb: var(--accent);
+  width: 100%;
+}
+
+.carousel-track {
+  display: flex;
+  flex-direction: row;
+  gap: var(--carousel-gap);
+  overflow-x: auto;
+  padding-left: max(var(--carousel-padding-inline), calc((100vw - var(--content-max-width)) / 2 + 20px));
+  padding-right: max(var(--carousel-padding-inline), calc((100vw - var(--content-max-width)) / 2 + 20px));
+  scroll-behavior: smooth;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: none;
+  cursor: grab;
+  margin-left: calc(-1 * max(var(--carousel-padding-inline), calc((100vw - var(--content-max-width)) / 2 + 20px)));
+  margin-right: calc(-1 * max(var(--carousel-padding-inline), calc((100vw - var(--content-max-width)) / 2 + 20px)));
+  width: 100vw;
+}
+
+.carousel-track::-webkit-scrollbar {
+  display: none;
+}
+
+.carousel-track.is-dragging {
+  cursor: grabbing;
+  user-select: none;
+}
+
+.carousel-controls {
+  width: 100%;
+  max-width: var(--content-max-width);
+  margin: var(--carousel-controls-margin-top) auto 0;
+  padding-inline: max(var(--carousel-padding-inline), calc((100vw - var(--content-max-width)) / 2 + 20px));
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-4);
+}
+
+.carousel-navigation {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-2);
+}
+
+.carousel-nav-button {
+  width: var(--carousel-nav-size);
+  height: var(--carousel-nav-size);
+  border-radius: 50%;
+  border: 1px solid var(--carousel-nav-border);
+  background: var(--carousel-nav-bg);
+  color: var(--carousel-nav-icon);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: background-color 160ms ease, border-color 160ms ease, color 160ms ease;
+}
+
+.carousel-nav-button svg {
+  width: 22px;
+  height: 22px;
+  fill: none;
+  stroke: currentcolor;
+  stroke-width: 2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.carousel-nav-button:hover:not(:disabled) {
+  background: var(--carousel-nav-bg-hover);
+}
+
+.carousel-nav-button:disabled {
+  cursor: not-allowed;
+  background: var(--carousel-nav-bg-disabled);
+  color: var(--carousel-nav-icon-disabled);
+}
+
+.carousel-progress {
+  flex: 1;
+  max-width: 420px;
+}
+
+.carousel-progress-track {
+  height: 2px;
+  width: 100%;
+  background: var(--carousel-progress-track);
+  position: relative;
+}
+
+.carousel-progress-thumb {
+  position: absolute;
+  inset: 0 auto 0 0;
+  height: 100%;
+  width: 0%;
+  background: var(--carousel-progress-thumb);
+}
+
+.carousel.snap .carousel-track {
+  scroll-snap-type: x mandatory;
+}
+
+.carousel.snap .carousel-track > * {
+  scroll-snap-align: start;
+  scroll-snap-stop: always;
+}
+
+@media (max-width: 1280px) {
+  .carousel-track {
+    padding-left: var(--carousel-padding-inline);
+    padding-right: var(--carousel-padding-inline);
+    margin-left: calc(-1 * var(--carousel-padding-inline));
+    margin-right: calc(-1 * var(--carousel-padding-inline));
+  }
+
+  .carousel-controls {
+    padding-inline: var(--carousel-padding-inline);
+  }
+}
+
+@media (max-width: 480px) {
+  .carousel {
+    --carousel-padding-inline: 16px;
+  }
+
+  .carousel-controls {
+    justify-content: center;
+  }
+
+  .carousel-progress {
+    display: none;
+  }
+}

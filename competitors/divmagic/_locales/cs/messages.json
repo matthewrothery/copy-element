@@ -1,0 +1,365 @@
+{
+   "activateToolbox": {
+      "message": "Aktivujte sadu nástrojů"
+   },
+   "contextMenuInspect": {
+      "message": "Inspektor"
+   },
+   "copied": {
+      "message": "Zkopírováno!"
+   },
+   "devtoolsCopyElement": {
+      "message": "Kopírovat prvek"
+   },
+   "devtoolsCopyElementCopying": {
+      "message": "Kopírování"
+   },
+   "devtoolsLibrary": {
+      "message": "Knihovna"
+   },
+   "devtoolsLibraryComponentPerPage": {
+      "message": "Komponenty na stránku"
+   },
+   "devtoolsLibraryNext": {
+      "message": "další"
+   },
+   "devtoolsLibraryNoComponents": {
+      "message": "Vaše knihovna je prázdná. Uložte komponentu a uvidíte ji zde."
+   },
+   "devtoolsLibraryPrevious": {
+      "message": "Předchozí"
+   },
+   "devtoolsNoElementSelectedText": {
+      "message": "Chcete-li zde zobrazit podrobnosti, vyberte prvek na kartě „Prvky“."
+   },
+   "devtoolsSelectedElementText": {
+      "message": "Vybraný prvek"
+   },
+   "devtoolsUnsupportedElementSelectedText": {
+      "message": "Vybraný prvek není povolen pro operace kopírování"
+   },
+   "extCommandChooseElement": {
+      "message": "Při umístění kurzoru vyberte prvek, který chcete zkopírovat"
+   },
+   "extDescription": {
+      "message": "Zkopírujte prvky z libovolné webové stránky jako opakovaně použitelné webové komponenty. Získejte HTML, CSS, React, JSX nebo Tailwind CSS kód."
+   },
+   "extName": {
+      "message": "DivMagic – styl kopírování"
+   },
+   "iframeCantBeAccessedText": {
+      "message": "DivMagic nemá přístup k tomuto prvku iframe."
+   },
+   "iframeNeedAccessText": {
+      "message": "DivMagic potřebuje otevřít tento iframe, aby k němu měl přístup."
+   },
+   "iframeOpenText": {
+      "message": "Otevřete prvek iframe"
+   },
+   "loginPageBody1": {
+      "message": "Chcete-li získat přístup k našemu výkonnému nástroji pro vývoj webu, zveme vás k vytvoření účtu nebo přihlášení."
+   },
+   "loginPageBody2": {
+      "message": "S předplatným DivMagic si užijete bezproblémový vývojový pracovní postup."
+   },
+   "loginPageEmailLabel": {
+      "message": "Tvůj e-mail"
+   },
+   "loginPageError": {
+      "message": "Nelze se přihlásit. Ujistěte se, že používáte e-mailovou adresu, se kterou jste se přihlásili k odběru."
+   },
+   "loginPageLoginButton": {
+      "message": "Přihlásit se"
+   },
+   "loginPageNewHere": {
+      "message": "Jste v DivMagic noví?"
+   },
+   "loginPageSignUp": {
+      "message": "Přihlásit se"
+   },
+   "loginPageTitle": {
+      "message": "Vítejte v DivMagic!"
+   },
+   "loginPageVerificationCode": {
+      "message": "Ověřovací kód"
+   },
+   "loginPageVerificationCodeSent": {
+      "message": "Na váš e -mail byl odeslán ověřovací kód. Zadejte ji níže."
+   },
+   "loginPageVerifyButton": {
+      "message": "Ověřit"
+   },
+   "loginPageVerifyCancelButton": {
+      "message": "Zrušit ověření"
+   },
+   "loginPageVerifyEmail": {
+      "message": "Ověřte svůj email"
+   },
+   "loginPageWrongVerificationCode": {
+      "message": "Špatný ověřovací kód. Ujistěte se, že jste zadali správný kód."
+   },
+   "modalAddCssAttributeText": {
+      "message": "Atribut CSS"
+   },
+   "modalAddCssValueText": {
+      "message": "Hodnota CSS"
+   },
+   "modalAddStylesText": {
+      "message": "Přidejte styly"
+   },
+   "modalChildButtonText": {
+      "message": "Podřízený prvek"
+   },
+   "modalChildButtonTooltip": {
+      "message": "Přesuňte výběr na podřízený prvek"
+   },
+   "modalClassSettingsText": {
+      "message": "Nastavení třídy:"
+   },
+   "modalCloseButtonTooltip": {
+      "message": "Zavřít"
+   },
+   "modalCopyButtonLoadingText": {
+      "message": "Kopírování..."
+   },
+   "modalCopyButtonText": {
+      "message": "kopírovat"
+   },
+   "modalCopyCSSOnlyText": {
+      "message": "Pouze CSS"
+   },
+   "modalCopyCssWithDivmagicText": {
+      "message": "DivMagic třídy CSS"
+   },
+   "modalCopyCssWithOriginalText": {
+      "message": "Originální třídy CSS"
+   },
+   "modalCopyHTMLOnlyText": {
+      "message": "Pouze HTML"
+   },
+   "modalCopyHtmlWithDivmagicText": {
+      "message": "DivMagic atributy HTML"
+   },
+   "modalCopyHtmlWithOriginalText": {
+      "message": "Originální atributy HTML"
+   },
+   "modalCopyIntegrationsText": {
+      "message": "Integrace (WordPress)"
+   },
+   "modalCopyModeSelectionAdaptable": {
+      "message": "Adaptabilní"
+   },
+   "modalCopyModeSelectionAdaptableTooltip": {
+      "message": "Zahrnuje pouze nejnutnější styly potřebné k zachování struktury a základního vzhledu prvku. Snadné přizpůsobení."
+   },
+   "modalCopyModeSelectionBalanced": {
+      "message": "Vyrovnaný"
+   },
+   "modalCopyModeSelectionBalancedTooltip": {
+      "message": "Zahrnuje pseudoprvky jako ::before a ::after, které mohou výrazně ovlivnit vizuální výsledek, ale nenadýmají kód nadměrně."
+   },
+   "modalCopyModeSelectionExact": {
+      "message": "Přesný"
+   },
+   "modalCopyModeSelectionExactTooltip": {
+      "message": "Přesná kopie všech stylů, která zajišťuje, že prvek vypadá jako zdroj."
+   },
+   "modalCopyModeSelectionText": {
+      "message": "Režim kopírování"
+   },
+   "modalCopyModeSelectionTooltip": {
+      "message": "Vyberte režim kopírování pro aktuální výběr. Pro většinu případů použití doporučujeme \"Adaptable\"."
+   },
+   "modalCopyNotification": {
+      "message": "Komponenta zkopírována!"
+   },
+   "modalCopyViewText": {
+      "message": "kopírovat"
+   },
+   "modalDragButtonTooltip": {
+      "message": "Tažením přesunout"
+   },
+   "modalEditorViewText": {
+      "message": "Editor"
+   },
+   "modalElementSettingsText": {
+      "message": "Nastavení prvků:"
+   },
+   "modalExportNotification": {
+      "message": "Exportováno komponenty!"
+   },
+   "modalExportToStudioText": {
+      "message": "Export do studia"
+   },
+   "modalGoToLibraryText": {
+      "message": "Přejít do mé knihovny"
+   },
+   "modalInvalidCssValueText": {
+      "message": "Neplatná hodnota CSS"
+   },
+   "modalLeftButtonText": {
+      "message": "Levý dětský prvek"
+   },
+   "modalLeftButtonTooltip": {
+      "message": "Přesuňte výběr do levého sourozeneckého prvku"
+   },
+   "modalMediaQuerySelectionTooltip": {
+      "message": "Vyberte, zda chcete, aby do zkopírovaného kódu byly zahrnuty styly CSS [[MEDIAQUERYXYZ]]."
+   },
+   "modalParentButtonText": {
+      "message": "Nadřazený prvek"
+   },
+   "modalParentButtonTooltip": {
+      "message": "Vyberte nadřazený prvek aktuálního výběru"
+   },
+   "modalRightButtonText": {
+      "message": "Pravý dětský prvek"
+   },
+   "modalRightButtonTooltip": {
+      "message": "Přesuňte výběr do pravého sourozeneckého prvku"
+   },
+   "modalSaveElementText": {
+      "message": "Uložit prvek"
+   },
+   "modalSaveNotification": {
+      "message": "Komponenta uložená!"
+   },
+   "modalSavedElementText": {
+      "message": "Uložené!"
+   },
+   "modalSavingElementText": {
+      "message": "Úspora ..."
+   },
+   "modalStudioExportTooltip": {
+      "message": "Otevřete v DivMagic Studio"
+   },
+   "offText": {
+      "message": "Vypnuto"
+   },
+   "onText": {
+      "message": "Na"
+   },
+   "optionsChooseLanguage": {
+      "message": "Vyberte jazyk"
+   },
+   "optionsFeedback": {
+      "message": "Pokud máte nějaké připomínky nebo návrhy, dejte nám vědět!"
+   },
+   "optionsShortcuts": {
+      "message": "Klávesové zkratky"
+   },
+   "optionsTitle": {
+      "message": "Možnosti"
+   },
+   "panelCopyElementCopied": {
+      "message": "Zkopírováno"
+   },
+   "popupCopyInstructions": {
+      "message": "Klikněte na libovolný prvek nebo stiskněte klávesu:"
+   },
+   "popupFeedback": {
+      "message": "Zpětná vazba"
+   },
+   "popupSettings": {
+      "message": "Nastavení"
+   },
+   "popupSettingsAutoHidePopup": {
+      "message": "Automaticky skrýt vyskakovací okno"
+   },
+   "popupSettingsComponentFormat": {
+      "message": "Formát součásti"
+   },
+   "popupSettingsComponentFormatTooltip": {
+      "message": "Vyberte formát pro kopírovanou komponentu"
+   },
+   "popupSettingsShowDevToolsPanel": {
+      "message": "[[DEVTOOLS]] Panel"
+   },
+   "popupSettingsStyleFormat": {
+      "message": "Formát stylu"
+   },
+   "popupSettingsStyleFormatExternalCSS": {
+      "message": "Externí CSS"
+   },
+   "popupSettingsStyleFormatInlineCSS": {
+      "message": "Inline CSS"
+   },
+   "popupSettingsStyleFormatLocalCSS": {
+      "message": "Místní CSS"
+   },
+   "popupSettingsStyleFormatTooltip": {
+      "message": "Vyberte formát CSS pro zkopírované styly"
+   },
+   "publishDate": {
+      "message": "31. března verze"
+   },
+   "toolBoxColorPickerDescriptionText": {
+      "message": "Sběrač barev"
+   },
+   "toolBoxColorPickerText": {
+      "message": "Sběrač barev"
+   },
+   "toolBoxCopyElementDescriptionText": {
+      "message": "Kopírovat prvek"
+   },
+   "toolBoxCopyElementText": {
+      "message": "Kopírovat prvek"
+   },
+   "toolBoxCopyFontsCopiedText": {
+      "message": "Zkopírováno"
+   },
+   "toolBoxCopyFontsCopyToClipboardText": {
+      "message": "Kliknutím zkopírujte"
+   },
+   "toolBoxCopyFontsDescriptionText": {
+      "message": "Kopírovat písmo"
+   },
+   "toolBoxCopyFontsNotFoundText": {
+      "message": "Web ve výchozím nastavení používá pouze systémová písma"
+   },
+   "toolBoxCopyFontsText": {
+      "message": "Kopírovat písmo"
+   },
+   "toolBoxCopyFontsWindowText": {
+      "message": "Web Fonts"
+   },
+   "toolBoxGridsDescriptionText": {
+      "message": "Přidává hranice ke každému prvku"
+   },
+   "toolBoxGridsText": {
+      "message": "Mřížky"
+   },
+   "toolBoxInspectorDescriptionText": {
+      "message": "Podívejte se na detail prvku"
+   },
+   "toolBoxInspectorText": {
+      "message": "Inspektor"
+   },
+   "toolBoxShowFontsDescriptionText": {
+      "message": "Vědět, jaké písmo každá značka používá"
+   },
+   "toolBoxShowFontsText": {
+      "message": "Písem"
+   },
+   "toolBoxShowFontsWindowText": {
+      "message": "Písem"
+   },
+   "toolBoxThrashDescriptionText": {
+      "message": "Skrýt nebo odstranit prvek"
+   },
+   "toolBoxThrashText": {
+      "message": "Odpadky"
+   },
+   "toolBoxThrashWindowHideButton": {
+      "message": "Skrýt"
+   },
+   "toolBoxThrashWindowRemoveButton": {
+      "message": "Odstranit"
+   },
+   "toolBoxThrashWindowText": {
+      "message": "Skrýt / odstranit prvky"
+   },
+   "toolboxText": {
+      "message": "Toolbox"
+   }
+}

@@ -1,0 +1,432 @@
+---
+description: Product identity, naming, messaging, and brand rules for Element Armory
+---
+
+# Product Identity Rules
+
+This document defines the **single source of truth for the Element Armory product identity**.
+
+All developers, designers, and AI agents must follow these rules when generating:
+
+- UI text
+- documentation
+- marketing pages
+- extension UI copy
+- metadata
+- store listings
+- onboarding content
+- prompts
+
+Do not invent alternate branding, product names, taglines, or positioning.
+
+---
+
+# Product Name
+
+## Official Product Name
+
+```
+Element Armory – Capture UI Elements
+```
+
+This exact format must be used when referring to the application in:
+
+- Chrome Web Store listing
+- website header
+- marketing pages
+- documentation headers
+- onboarding
+- extension UI
+
+---
+
+## Short Product Name
+
+Allowed shortened form:
+
+```
+Element Armory
+```
+
+Use this in places where the full name would be too long, such as:
+
+- UI labels
+- navigation
+- documentation references
+- CLI or developer references
+
+Never abbreviate further.
+
+Do not use:
+
+```
+EA
+ElementArmory
+Armory
+```
+
+---
+
+# Product Concept
+
+Element Armory is a **developer tool for capturing UI elements from websites and turning them into reusable code snippets or AI-ready components.**
+
+The core concept:
+
+```
+Capture UI from any site and rebuild it with AI.
+```
+
+The product combines:
+
+- UI element capture
+- style extraction
+- HTML reconstruction
+- snippet libraries
+- AI development workflows
+
+It should feel like a **developer utility + design extraction tool**.
+
+---
+
+# Core Messaging
+
+## Main Tagline
+
+Always use this exact line:
+
+```
+Capture UI from any site and rebuild it with AI.
+```
+
+Do not modify wording. Do not create alternate versions.
+
+---
+
+## Supporting Line
+
+```
+Clean. Clear. Powerful.
+```
+
+This line supports the hero message and should appear near the main tagline.
+
+---
+
+# Messaging Style
+
+Messaging must feel:
+
+```
+developer-focused
+technical but clear
+minimal
+confident
+```
+
+Avoid marketing fluff, buzzwords, and long explanations. Prefer short statements.
+
+Example style:
+
+**Good:**
+
+```
+Capture UI from any site and reuse it instantly.
+```
+
+**Bad:**
+
+```
+Our revolutionary platform transforms how developers interact with the modern web.
+```
+
+---
+
+# Product Positioning
+
+Element Armory is positioned as:
+
+```
+A developer tool for capturing and reusing UI elements from real websites.
+```
+
+Key concepts:
+
+```
+UI capture
+HTML extraction
+style reconstruction
+component reuse
+AI-assisted development
+```
+
+---
+
+# Core Product Features (Messaging)
+
+When describing the product, focus on these features:
+
+### Element Capture
+
+Developers can click any element on a webpage and capture it.
+
+### Style Extraction
+
+The tool reconstructs the visual appearance using:
+
+- computed styles
+- resolved CSS variables
+- inline layout
+
+### Asset Handling
+
+Captured elements preserve:
+
+- images
+- SVG
+- background images
+- layout context
+
+### Snippet Library
+
+Captured UI components can be stored in a reusable library.
+
+### AI Integration
+
+Snippets can be referenced by AI tools using an MCP server. This allows developers to reuse captured UI in tools like Cursor.
+
+---
+
+# Hero Section Rules
+
+All marketing pages must follow this structure.
+
+## Hero Headline
+
+```
+Capture UI from any site and rebuild it with AI.
+```
+
+## Supporting Line
+
+```
+Clean. Clear. Powerful.
+```
+
+## Primary CTA
+
+Examples allowed:
+
+```
+Install the Extension
+Start Capturing UI
+Add to Chrome
+```
+
+Avoid generic CTAs like:
+
+```
+Learn More
+Get Started Today
+```
+
+---
+
+# Chrome Web Store Listing
+
+The Chrome Web Store title must include keywords for discoverability.
+
+Format:
+
+```
+Element Armory – Capture UI Elements
+```
+
+Optional extended title:
+
+```
+Element Armory – Capture HTML & CSS UI Elements from Any Website
+```
+
+---
+
+# Chrome Store Description Keywords
+
+Descriptions should include relevant developer keywords:
+
+```
+copy html
+copy css
+capture ui
+extract element
+html snippet
+css snippet
+developer tools
+```
+
+These improve Chrome Store SEO.
+
+---
+
+# Tone of Voice
+
+The tone must be:
+
+```
+clear
+precise
+developer-friendly
+```
+
+Avoid:
+
+```
+salesy language
+excessive adjectives
+hype
+```
+
+Write as if speaking to experienced developers.
+
+---
+
+# UI Copy Rules
+
+UI text should be concise.
+
+Preferred style:
+
+```
+Capture Element
+Save Snippet
+Copy HTML
+Copy JSX
+```
+
+Avoid long UI labels.
+
+**Bad example:**
+
+```
+Click here to capture the currently selected element
+```
+
+**Good example:**
+
+```
+Capture Element
+```
+
+---
+
+# Documentation Naming
+
+Documentation should refer to the product as:
+
+```
+Element Armory
+```
+
+Example headings:
+
+```
+Using Element Armory
+Element Armory Capture Workflow
+Element Armory MCP Integration
+```
+
+---
+
+# AI Prompt Context
+
+When AI agents generate documentation or explanations about the product, they must reference:
+
+```
+Element Armory – Capture UI Elements
+```
+
+Agents should explain the tool as:
+
+```
+a Chrome extension that captures UI elements and reconstructs them as reusable HTML snippets.
+```
+
+---
+
+# Avoid Conflicting Branding
+
+Never reference competitor tools when describing Element Armory.
+
+Do not say:
+
+```
+similar to X
+like Y
+```
+
+The product should stand on its own identity.
+
+---
+
+# Product Philosophy
+
+Element Armory should feel like a **precision developer tool**.
+
+The experience should emphasize:
+
+```
+speed
+accuracy
+clarity
+control
+```
+
+The product must avoid complexity and unnecessary features.
+
+---
+
+# Visual Design Alignment
+
+UI should reflect the tagline:
+
+```
+Clean. Clear. Powerful.
+```
+
+Design guidelines:
+
+```
+minimal UI
+clear layout
+fast interactions
+developer-focused workflow
+```
+
+Avoid clutter and excessive settings.
+
+---
+
+# Future Messaging Direction
+
+As the product evolves, messaging should expand around:
+
+```
+AI development workflows
+component reuse
+design system extraction
+UI prototyping
+```
+
+However the core promise should remain:
+
+```
+Capture UI from any site and rebuild it with AI.
+```
+
+---
+
+# Final Rule
+
+This document is the **authoritative source for Element Armory branding**.
+
+If any content conflicts with this file, **this file takes precedence**.

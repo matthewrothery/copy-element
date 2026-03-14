@@ -1,0 +1,362 @@
+{
+   "activateToolbox": {
+      "message": "激活工具箱"
+   },
+   "contextMenuInspect": {
+      "message": "督察"
+   },
+   "copied": {
+      "message": "复制了！"
+   },
+   "devtoolsCopyElement": {
+      "message": "复制元素"
+   },
+   "devtoolsCopyElementCopying": {
+      "message": "复印"
+   },
+   "devtoolsLibrary": {
+      "message": "图书馆"
+   },
+   "devtoolsLibraryComponentPerPage": {
+      "message": "每个页面组件"
+   },
+   "devtoolsLibraryNext": {
+      "message": "下一个"
+   },
+   "devtoolsLibraryNoComponents": {
+      "message": "您的库是空的。 保存一个组件以在此处查看。"
+   },
+   "devtoolsLibraryPrevious": {
+      "message": "以前的"
+   },
+   "devtoolsNoElementSelectedText": {
+      "message": "从“元素”选项卡中选择一个元素以在此处查看其详细信息"
+   },
+   "devtoolsSelectedElementText": {
+      "message": "选定的元素"
+   },
+   "devtoolsUnsupportedElementSelectedText": {
+      "message": "所选元素不允许进行复制操作"
+   },
+   "extCommandChooseElement": {
+      "message": "悬停时选择要复制的元素"
+   },
+   "extDescription": {
+      "message": "将任何网页中的元素复制为可重用的 Web 组件。获取 HTML、CSS、React、JSX 或 Tailwind CSS 代码。"
+   },
+   "extName": {
+      "message": "DivMagic - 复制样式"
+   },
+   "iframeCantBeAccessedText": {
+      "message": "DivMagic 无法访问此 iframe。"
+   },
+   "iframeNeedAccessText": {
+      "message": "DivMagic 需要打开此 iframe 才能访问它。"
+   },
+   "iframeOpenText": {
+      "message": "打开 iframe"
+   },
+   "loginPageBody1": {
+      "message": "要访问我们强大的网络开发工具，我们邀请您创建帐户或登录。"
+   },
+   "loginPageBody2": {
+      "message": "通过订阅 DivMagic，您将享受无缝的开发工作流程。"
+   },
+   "loginPageEmailLabel": {
+      "message": "你的邮件"
+   },
+   "loginPageError": {
+      "message": "无法登录。请确保您使用的是订阅时使用的电子邮件地址。"
+   },
+   "loginPageLoginButton": {
+      "message": "登录"
+   },
+   "loginPageNewHere": {
+      "message": "DivMagic 新手？"
+   },
+   "loginPageSignUp": {
+      "message": "报名"
+   },
+   "loginPageTitle": {
+      "message": "欢迎来到 DivMagic！"
+   },
+   "loginPageVerificationCode": {
+      "message": "验证码"
+   },
+   "loginPageVerificationCodeSent": {
+      "message": "验证代码已发送到您的电子邮件中。 请在下面输入。"
+   },
+   "loginPageVerifyButton": {
+      "message": "核实"
+   },
+   "loginPageVerifyCancelButton": {
+      "message": "取消验证"
+   },
+   "loginPageVerifyEmail": {
+      "message": "验证您的电子邮件"
+   },
+   "loginPageWrongVerificationCode": {
+      "message": "错误的验证代码。 请确保您输入正确的代码。"
+   },
+   "modalAddCssAttributeText": {
+      "message": "CSS属性"
+   },
+   "modalAddCssValueText": {
+      "message": "CSS值"
+   },
+   "modalAddStylesText": {
+      "message": "添加样式"
+   },
+   "modalChildButtonText": {
+      "message": "子元素"
+   },
+   "modalChildButtonTooltip": {
+      "message": "将选择移动到子元素"
+   },
+   "modalClassSettingsText": {
+      "message": "课程设置："
+   },
+   "modalCloseButtonTooltip": {
+      "message": "关闭"
+   },
+   "modalCopyButtonLoadingText": {
+      "message": "复制..."
+   },
+   "modalCopyButtonText": {
+      "message": "复制"
+   },
+   "modalCopyCSSOnlyText": {
+      "message": "仅CSS"
+   },
+   "modalCopyCssWithDivmagicText": {
+      "message": "DivMagic CSS课程"
+   },
+   "modalCopyCssWithOriginalText": {
+      "message": "原始CSS课程"
+   },
+   "modalCopyHTMLOnlyText": {
+      "message": "仅 HTML"
+   },
+   "modalCopyHtmlWithDivmagicText": {
+      "message": "DivMagic HTML属性"
+   },
+   "modalCopyHtmlWithOriginalText": {
+      "message": "原始HTML属性"
+   },
+   "modalCopyIntegrationsText": {
+      "message": "集成（WordPress）"
+   },
+   "modalCopyModeSelectionAdaptable": {
+      "message": "适应性强"
+   },
+   "modalCopyModeSelectionAdaptableTooltip": {
+      "message": "仅包括维持元素的结构和基本外观所需的最基本的样式。易于定制。"
+   },
+   "modalCopyModeSelectionBalanced": {
+      "message": "均衡"
+   },
+   "modalCopyModeSelectionBalancedTooltip": {
+      "message": "合并诸如 ::before 和 ::after 之类的伪元素，这可以显着影响视觉结果，但不会使代码过度膨胀。"
+   },
+   "modalCopyModeSelectionExact": {
+      "message": "精确的"
+   },
+   "modalCopyModeSelectionExactTooltip": {
+      "message": "所有样式的精确副本，确保元素看起来像源。"
+   },
+   "modalCopyModeSelectionText": {
+      "message": "复印模式"
+   },
+   "modalCopyModeSelectionTooltip": {
+      "message": "选择当前选择的复制模式。对于大多数用例，我们建议“适应性强”。"
+   },
+   "modalCopyNotification": {
+      "message": "复制组件！"
+   },
+   "modalCopyViewText": {
+      "message": "复制"
+   },
+   "modalDragButtonTooltip": {
+      "message": "拖动以移动"
+   },
+   "modalEditorViewText": {
+      "message": "编辑"
+   },
+   "modalElementSettingsText": {
+      "message": "元素设置："
+   },
+   "modalExportNotification": {
+      "message": "组件导出！"
+   },
+   "modalExportToStudioText": {
+      "message": "导出到工作室"
+   },
+   "modalGoToLibraryText": {
+      "message": "去我的图书馆"
+   },
+   "modalInvalidCssValueText": {
+      "message": "无效的CSS值"
+   },
+   "modalLeftButtonText": {
+      "message": "左子元素"
+   },
+   "modalLeftButtonTooltip": {
+      "message": "将选择移至左兄弟姐妹元素"
+   },
+   "modalMediaQuerySelectionTooltip": {
+      "message": "选择是否希望 [[MEDIAQUERYXYZ]] CSS 样式包含在复制的代码中。"
+   },
+   "modalParentButtonText": {
+      "message": "父元素"
+   },
+   "modalParentButtonTooltip": {
+      "message": "选择当前选择的父元素"
+   },
+   "modalRightButtonText": {
+      "message": "正确的子元素"
+   },
+   "modalRightButtonTooltip": {
+      "message": "将选择移至正确的兄弟姐妹"
+   },
+   "modalSaveElementText": {
+      "message": "保存元素"
+   },
+   "modalSaveNotification": {
+      "message": "保存的组件！"
+   },
+   "modalSavedElementText": {
+      "message": "得救了！"
+   },
+   "modalSavingElementText": {
+      "message": "保存..."
+   },
+   "modalStudioExportTooltip": {
+      "message": "在 DivMagic Studio 中打开"
+   },
+   "offText": {
+      "message": "离开"
+   },
+   "onText": {
+      "message": "在"
+   },
+   "optionsChooseLanguage": {
+      "message": "选择一种语言"
+   },
+   "optionsFeedback": {
+      "message": "如果您有任何反馈或建议，请告诉我们！"
+   },
+   "optionsShortcuts": {
+      "message": "键盘快捷键"
+   },
+   "optionsTitle": {
+      "message": "选项"
+   },
+   "panelCopyElementCopied": {
+      "message": "已复制"
+   },
+   "popupCopyInstructions": {
+      "message": "单击任意元素或按 键："
+   },
+   "popupFeedback": {
+      "message": "反馈"
+   },
+   "popupSettings": {
+      "message": "设置"
+   },
+   "popupSettingsAutoHidePopup": {
+      "message": "自动隐藏弹出窗口"
+   },
+   "popupSettingsComponentFormat": {
+      "message": "组件格式"
+   },
+   "popupSettingsComponentFormatTooltip": {
+      "message": "选择复制组件的格式"
+   },
+   "popupSettingsShowDevToolsPanel": {
+      "message": "[[DEVTOOLS]] 面板"
+   },
+   "popupSettingsStyleFormat": {
+      "message": "风格格式"
+   },
+   "popupSettingsStyleFormatExternalCSS": {
+      "message": "外部CSS"
+   },
+   "popupSettingsStyleFormatInlineCSS": {
+      "message": "内联CSS"
+   },
+   "popupSettingsStyleFormatLocalCSS": {
+      "message": "本地CSS"
+   },
+   "popupSettingsStyleFormatTooltip": {
+      "message": "选择复制样式的 CSS 格式"
+   },
+   "publishDate": {
+      "message": "3月31日版本"
+   },
+   "toolBoxColorPickerDescriptionText": {
+      "message": "选色器"
+   },
+   "toolBoxColorPickerText": {
+      "message": "选色器"
+   },
+   "toolBoxCopyElementDescriptionText": {
+      "message": "复制元素"
+   },
+   "toolBoxCopyElementText": {
+      "message": "复制元素"
+   },
+   "toolBoxCopyFontsCopiedText": {
+      "message": "已复制"
+   },
+   "toolBoxCopyFontsCopyToClipboardText": {
+      "message": "单击复制"
+   },
+   "toolBoxCopyFontsDescriptionText": {
+      "message": "复制字体"
+   },
+   "toolBoxCopyFontsNotFoundText": {
+      "message": "本网站使用系统字体"
+   },
+   "toolBoxCopyFontsText": {
+      "message": "复制字体"
+   },
+   "toolBoxCopyFontsWindowText": {
+      "message": "网络字体"
+   },
+   "toolBoxGridsDescriptionText": {
+      "message": "将边界添加到每个元素"
+   },
+   "toolBoxGridsText": {
+      "message": "网格"
+   },
+   "toolBoxInspectorDescriptionText": {
+      "message": "查看元素详细信息"
+   },
+   "toolBoxInspectorText": {
+      "message": "督察"
+   },
+   "toolBoxShowFontsDescriptionText": {
+      "message": "知道每个标签正在使用什么字体"
+   },
+   "toolBoxShowFontsText": {
+      "message": "字体"
+   },
+   "toolBoxThrashDescriptionText": {
+      "message": "隐藏或删除元素"
+   },
+   "toolBoxThrashText": {
+      "message": "垃圾"
+   },
+   "toolBoxThrashWindowHideButton": {
+      "message": "隐藏"
+   },
+   "toolBoxThrashWindowRemoveButton": {
+      "message": "消除"
+   },
+   "toolBoxThrashWindowText": {
+      "message": "隐藏 /删除元素"
+   },
+   "toolboxText": {
+      "message": "工具箱"
+   }
+}

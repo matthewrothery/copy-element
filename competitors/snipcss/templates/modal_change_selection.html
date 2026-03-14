@@ -1,0 +1,64 @@
+<div class="snipcss-modal__overlay" tabindex="-1">
+  <div class="snipcss-modal__container" role="dialog" aria-modal="true" aria-labelledby="modal-1-title">
+    <div class="snipcss-modal__header">
+      <h2 class="snipcss-modal__title snipcss-popup-title" id="modal-editfulltask-title">       
+          Change Selection
+      </h2>
+      <button class="snipcss-modal__close" aria-label="Close modal" data-micromodal-close></button>
+    </div>
+    <div class="snipcss-modal__content" id="snipcss-modal-content">
+        <div class="snipcss-change-header">
+            Parent / Children
+        </div>
+        <div class="snipcss-flex-buttons">
+            <div class="snipcss-button-container">
+                <a href='javascript:void(0);' class="snipcss-button snipcss-btn-badge" id='snipcss_use_parent'>Parent Element</a>        
+            </div>        
+            <div class="snipcss-button-container">
+                <a href='javascript:void(0);' class="snipcss-button snipcss-btn-badge" id='snipcss_use_first'>First Child</a>        
+            </div>        
+            <div class="snipcss-button-container">
+                <a href='javascript:void(0);' class="snipcss-button snipcss-btn-badge" id='snipcss_use_last'>Last Child</a>        
+            </div>        
+        </div>
+        <span class="snipcss-change-selector-description">
+            Tip: The parent element can also be selected by clicking the little red icon at the top-left of the highlighted element. 
+        </span>
+        
+        <div class="snipcss-change-header snipcss-change-header2">
+            Select Specific Children <span class="snipcss-probadge snipcss-probadge-primary proversion snipcss-probadge-specific">Pro Version</span>
+        </div>        
+        <span class="snipcss-change-selector-description">
+            {{children_text}} 
+        </span>
+        <div id="snipcss_children_change_selection" class="snipcss-flex-buttons">         
+            <div class="snipcss-flex-buttons-text">
+                Indices: 
+            </div>
+            <div class="snipcss-button-container">
+                <input id="snipcss_children_indices" type="text" value="{{children_value}}"/>
+            </div>
+            <div class="snipcss-button-container">
+                <a href='javascript:void(0);' class="snipcss-button snipcss-btn-badge" id='snipcss_set_children'>Set to these Elements</a>        
+            </div>        
+        </div>   
+        <div class="snipcss-change-header snipcss-change-header2">
+            Custom Selection <span class="snipcss-probadge snipcss-probadge-primary proversion snipcss-probadge-specific">Pro Version</span>
+        </div>         
+        <div id="snipcss_custom_change_selection" class="snipcss-flex-buttons">         
+            <div class="snipcss-flex-buttons-text">
+                Custom CSS Selector: 
+            </div>
+            <div class="snipcss-button-container">
+                <input id="snipcss_custom_selector" type="text" value=""/>
+            </div>
+            <div class="snipcss-button-container">
+                <a href='javascript:void(0);' class="snipcss-button snipcss-btn-badge" id='snipcss_set_customselect'>Set Custom</a>        
+            </div>        
+        </div>           
+        
+        <br><br><br>
+    </div>
+  </div>                
+</div>
+ 

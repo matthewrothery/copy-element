@@ -1,0 +1,84 @@
+/* FeatureGrid – self-contained */
+.feature-grid {
+  --feature-grid-card-bg: var(--surface);
+  --feature-grid-card-radius: var(--radius);
+  --feature-grid-card-padding: var(--space-6);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-6);
+  width: 100%;
+}
+
+.feature-grid-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--space-6);
+}
+
+.feature-grid-card {
+  margin: 0;
+  background-color: var(--feature-grid-card-bg);
+  border-radius: var(--feature-grid-card-radius);
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+}
+
+.feature-grid-card-caption {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+  padding: var(--feature-grid-card-padding);
+  flex-grow: 1;
+}
+
+.feature-grid-card-title {
+  font-size: var(--typo-largecopy);
+  font-weight: var(--font-weight-semibold);
+  line-height: 1.33em;
+  color: var(--text);
+  margin: 0;
+}
+
+.feature-grid-card-desc {
+  font-size: var(--typo-copy);
+  font-weight: var(--font-weight-normal);
+  line-height: 1.5em;
+  color: var(--text-muted);
+  text-wrap: balance;
+  margin: 0;
+}
+
+.feature-grid-card-media {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  min-height: 0;
+  display: flex;
+  overflow: hidden;
+}
+
+.feature-grid-card-media .media-placeholder {
+  width: 100%;
+  height: 100%;
+  aspect-ratio: unset;
+  border-radius: 0;
+}
+
+.feature-grid-card-image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+@media (max-width: 884px) {
+  .feature-grid-grid {
+    grid-template-columns: 1fr;
+    gap: var(--space-4);
+  }
+
+  .feature-grid-card-caption {
+    padding: var(--space-4);
+  }
+}

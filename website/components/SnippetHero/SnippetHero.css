@@ -1,0 +1,46 @@
+/* SnippetHero – self-contained */
+.snippet-hero {
+  --snippet-hero-headline-size: var(--typo-headline);
+  --snippet-hero-subtitle-size: var(--typo-headline-subtitle);
+  --snippet-hero-gap: var(--space-3);
+  --snippet-hero-subtitle-color: var(--text-muted);
+  --snippet-hero-subtitle-strong-color: var(--text);
+  display: flex;
+  flex-direction: column;
+  gap: var(--snippet-hero-gap);
+  margin: 0;
+  align-items: flex-start;
+}
+
+.snippet-hero-headline {
+  font-size: var(--snippet-hero-headline-size);
+  font-weight: var(--font-weight-bold);
+  line-height: 1.25em;
+  color: var(--text);
+  margin: 0;
+}
+
+.snippet-hero-headline p {
+  margin: 0;
+}
+
+.snippet-hero-subtitle {
+  font-size: var(--snippet-hero-subtitle-size);
+  font-weight: var(--font-weight-normal);
+  line-height: 1.33em;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+  max-width: 50ch;
+  color: var(--snippet-hero-subtitle-color);
+  margin: 0;
+}
+
+.snippet-hero-subtitle p {
+  margin: 0;
+}
+
+.snippet-hero-subtitle strong {
+  color: var(--snippet-hero-subtitle-strong-color);
+}
+

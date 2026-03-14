@@ -1,0 +1,362 @@
+{
+   "activateToolbox": {
+      "message": "టూల్‌బాక్స్‌ను సక్రియం చేయండి"
+   },
+   "contextMenuInspect": {
+      "message": "ఇన్స్పెక్టర్"
+   },
+   "copied": {
+      "message": "కాపీ చేయబడింది!"
+   },
+   "devtoolsCopyElement": {
+      "message": "మూలకాన్ని కాపీ చేయండి"
+   },
+   "devtoolsCopyElementCopying": {
+      "message": "కాపీ చేస్తోంది"
+   },
+   "devtoolsLibrary": {
+      "message": "గ్రంధాలయం"
+   },
+   "devtoolsLibraryComponentPerPage": {
+      "message": "పేజీకి భాగాలు"
+   },
+   "devtoolsLibraryNext": {
+      "message": "తరువాత"
+   },
+   "devtoolsLibraryNoComponents": {
+      "message": "మీ లైబ్రరీ ఖాళీగా ఉంది. ఒక భాగాన్ని ఇక్కడ చూడటానికి సేవ్ చేయండి."
+   },
+   "devtoolsLibraryPrevious": {
+      "message": "మునుపటి"
+   },
+   "devtoolsNoElementSelectedText": {
+      "message": "దాని వివరాలను ఇక్కడ చూడడానికి \"మూలకాలు\" ట్యాబ్ నుండి ఒక మూలకాన్ని ఎంచుకోండి"
+   },
+   "devtoolsSelectedElementText": {
+      "message": "ఎంచుకున్న మూలకం"
+   },
+   "devtoolsUnsupportedElementSelectedText": {
+      "message": "ఎంచుకున్న మూలకం కాపీ కార్యకలాపాలకు అనుమతించబడదు"
+   },
+   "extCommandChooseElement": {
+      "message": "హోవర్ చేస్తున్నప్పుడు కాపీ చేయడానికి మూలకాన్ని ఎంచుకోండి"
+   },
+   "extDescription": {
+      "message": "ఏదైనా వెబ్‌పేజీ నుండి మూలకాలను పునర్వినియోగ వెబ్ భాగాలుగా కాపీ చేయండి. HTML, CSS, React, JSX లేదా Tailwind CSS కోడ్‌ని పొందండి."
+   },
+   "extName": {
+      "message": "DivMagic - కాపీ శైలి"
+   },
+   "iframeCantBeAccessedText": {
+      "message": "DivMagic ఈ iframeని యాక్సెస్ చేయలేదు."
+   },
+   "iframeNeedAccessText": {
+      "message": "దీన్ని యాక్సెస్ చేయడానికి DivMagic ఈ iframeని తెరవాలి."
+   },
+   "iframeOpenText": {
+      "message": "iframeని తెరవండి"
+   },
+   "loginPageBody1": {
+      "message": "మా శక్తివంతమైన వెబ్ డెవలప్‌మెంట్ సాధనాన్ని యాక్సెస్ చేయడానికి, ఖాతాను సృష్టించడానికి లేదా లాగిన్ చేయడానికి మేము మిమ్మల్ని ఆహ్వానిస్తున్నాము."
+   },
+   "loginPageBody2": {
+      "message": "మీరు DivMagic సబ్‌స్క్రిప్షన్‌తో అతుకులు లేని డెవలప్‌మెంట్ వర్క్‌ఫ్లో ఆనందిస్తారు."
+   },
+   "loginPageEmailLabel": {
+      "message": "మీ ఇమెయిల్"
+   },
+   "loginPageError": {
+      "message": "లాగిన్ చేయడం సాధ్యపడలేదు. మీరు చందా చేసిన ఇమెయిల్ చిరునామాను ఉపయోగిస్తున్నారని నిర్ధారించుకోండి."
+   },
+   "loginPageLoginButton": {
+      "message": "ప్రవేశించండి"
+   },
+   "loginPageNewHere": {
+      "message": "DivMagicకి కొత్త?"
+   },
+   "loginPageSignUp": {
+      "message": "చేరడం"
+   },
+   "loginPageTitle": {
+      "message": "DivMagicకి స్వాగతం!"
+   },
+   "loginPageVerificationCode": {
+      "message": "ధృవీకరణ కోడ్"
+   },
+   "loginPageVerificationCodeSent": {
+      "message": "ధృవీకరణ కోడ్ మీ ఇమెయిల్‌కు పంపబడింది. దయచేసి దీన్ని క్రింద నమోదు చేయండి."
+   },
+   "loginPageVerifyButton": {
+      "message": "ధృవీకరించండి"
+   },
+   "loginPageVerifyCancelButton": {
+      "message": "ధృవీకరణను రద్దు చేయండి"
+   },
+   "loginPageVerifyEmail": {
+      "message": "మీ ఇమెయిల్‌ను ధృవీకరించండి"
+   },
+   "loginPageWrongVerificationCode": {
+      "message": "తప్పు ధృవీకరణ కోడ్. దయచేసి మీరు సరైన కోడ్‌ను నమోదు చేశారని నిర్ధారించుకోండి."
+   },
+   "modalAddCssAttributeText": {
+      "message": "CSS లక్షణం"
+   },
+   "modalAddCssValueText": {
+      "message": "CSS విలువ"
+   },
+   "modalAddStylesText": {
+      "message": "శైలులను జోడించండి"
+   },
+   "modalChildButtonText": {
+      "message": "చైల్డ్ ఎలిమెంట్"
+   },
+   "modalChildButtonTooltip": {
+      "message": "ఎంపికను చైల్డ్ ఎలిమెంట్‌కి తరలించండి"
+   },
+   "modalClassSettingsText": {
+      "message": "తరగతి సెట్టింగులు:"
+   },
+   "modalCloseButtonTooltip": {
+      "message": "దగ్గరగా"
+   },
+   "modalCopyButtonLoadingText": {
+      "message": "కాపీ చేస్తోంది..."
+   },
+   "modalCopyButtonText": {
+      "message": "కాపీ చేయండి"
+   },
+   "modalCopyCSSOnlyText": {
+      "message": "CSS మాత్రమే"
+   },
+   "modalCopyCssWithDivmagicText": {
+      "message": "డివ్మాజిక్ CSS తరగతులు"
+   },
+   "modalCopyCssWithOriginalText": {
+      "message": "అసలు CSS తరగతులు"
+   },
+   "modalCopyHTMLOnlyText": {
+      "message": "HTML మాత్రమే"
+   },
+   "modalCopyHtmlWithDivmagicText": {
+      "message": "డివ్మాజిక్ HTML గుణాలు"
+   },
+   "modalCopyHtmlWithOriginalText": {
+      "message": "అసలు HTML గుణాలు"
+   },
+   "modalCopyIntegrationsText": {
+      "message": "ఇంటిగ్రేషన్లు (WordPress)"
+   },
+   "modalCopyModeSelectionAdaptable": {
+      "message": "అనుకూలించదగినది"
+   },
+   "modalCopyModeSelectionAdaptableTooltip": {
+      "message": "మూలకం యొక్క నిర్మాణం మరియు ప్రాథమిక రూపాన్ని నిర్వహించడానికి అవసరమైన అత్యంత అవసరమైన శైలులను మాత్రమే కలిగి ఉంటుంది. అనుకూలీకరించడం సులభం."
+   },
+   "modalCopyModeSelectionBalanced": {
+      "message": "సమతుల్య"
+   },
+   "modalCopyModeSelectionBalancedTooltip": {
+      "message": "::before మరియు ::after వంటి సూడో-ఎలిమెంట్‌లను కలిగి ఉంటుంది, ఇది దృశ్యమాన ఫలితాన్ని గణనీయంగా ప్రభావితం చేస్తుంది కానీ కోడ్‌ను అతిగా పెంచవద్దు."
+   },
+   "modalCopyModeSelectionExact": {
+      "message": "ఖచ్చితమైన"
+   },
+   "modalCopyModeSelectionExactTooltip": {
+      "message": "అన్ని శైలుల యొక్క ఖచ్చితమైన కాపీ, మూలకం మూలం వలె కనిపించేలా చేస్తుంది."
+   },
+   "modalCopyModeSelectionText": {
+      "message": "కాపీ మోడ్"
+   },
+   "modalCopyModeSelectionTooltip": {
+      "message": "ప్రస్తుత ఎంపిక కోసం కాపీ మోడ్‌ను ఎంచుకోండి. మేము చాలా సందర్భాలలో \"అడాప్టబుల్\"ని సిఫార్సు చేస్తున్నాము."
+   },
+   "modalCopyNotification": {
+      "message": "కాంపోనెంట్ కాపీ!"
+   },
+   "modalCopyViewText": {
+      "message": "కాపీ"
+   },
+   "modalDragButtonTooltip": {
+      "message": "తరలించడానికి లాగండి"
+   },
+   "modalEditorViewText": {
+      "message": "ఎడిటర్"
+   },
+   "modalElementSettingsText": {
+      "message": "ఎలిమెంట్ సెట్టింగులు:"
+   },
+   "modalExportNotification": {
+      "message": "కాంపోనెంట్ ఎగుమతి!"
+   },
+   "modalExportToStudioText": {
+      "message": "స్టూడియోకి ఎగుమతి"
+   },
+   "modalGoToLibraryText": {
+      "message": "నా లైబ్రరీకి వెళ్ళండి"
+   },
+   "modalInvalidCssValueText": {
+      "message": "చెల్లని CSS విలువ"
+   },
+   "modalLeftButtonText": {
+      "message": "ఎడమ పిల్లల మూలకం"
+   },
+   "modalLeftButtonTooltip": {
+      "message": "ఎంపికను ఎడమ తోబుట్టువు మూలకానికి తరలించండి"
+   },
+   "modalMediaQuerySelectionTooltip": {
+      "message": "మీరు కాపీ చేసిన కోడ్‌లో [[MEDIAQUERYXYZ]] CSS శైలులను చేర్చాలనుకుంటే ఎంచుకోండి."
+   },
+   "modalParentButtonText": {
+      "message": "పేరెంట్ ఎలిమెంట్"
+   },
+   "modalParentButtonTooltip": {
+      "message": "ప్రస్తుత ఎంపిక యొక్క పేరెంట్ ఎలిమెంట్‌ను ఎంచుకోండి"
+   },
+   "modalRightButtonText": {
+      "message": "సరైన పిల్లల మూలకం"
+   },
+   "modalRightButtonTooltip": {
+      "message": "ఎంపికను కుడి తోబుట్టువు మూలకానికి తరలించండి"
+   },
+   "modalSaveElementText": {
+      "message": "మూలకాన్ని సేవ్ చేయండి"
+   },
+   "modalSaveNotification": {
+      "message": "కాంపోనెంట్ సేవ్ చేయబడింది!"
+   },
+   "modalSavedElementText": {
+      "message": "సేవ్ చేయబడింది!"
+   },
+   "modalSavingElementText": {
+      "message": "సేవ్ ..."
+   },
+   "modalStudioExportTooltip": {
+      "message": "DivMagic స్టూడియోలో తెరవండి"
+   },
+   "offText": {
+      "message": "ఆఫ్"
+   },
+   "onText": {
+      "message": "పై"
+   },
+   "optionsChooseLanguage": {
+      "message": "భాషను ఎంచుకోండి"
+   },
+   "optionsFeedback": {
+      "message": "మీకు ఏవైనా అభిప్రాయం లేదా సూచనలు ఉంటే, దయచేసి మాకు తెలియజేయండి!"
+   },
+   "optionsShortcuts": {
+      "message": "కీబోర్డ్ సత్వరమార్గాలు"
+   },
+   "optionsTitle": {
+      "message": "ఎంపికలు"
+   },
+   "panelCopyElementCopied": {
+      "message": "కాపీ చేయబడింది"
+   },
+   "popupCopyInstructions": {
+      "message": "ఏదైనా మూలకంపై క్లిక్ చేయండి లేదా కీని నొక్కండి:"
+   },
+   "popupFeedback": {
+      "message": "అభిప్రాయం"
+   },
+   "popupSettings": {
+      "message": "సెట్టింగ్‌లు"
+   },
+   "popupSettingsAutoHidePopup": {
+      "message": "పాప్‌అప్‌ని స్వయంచాలకంగా దాచు"
+   },
+   "popupSettingsComponentFormat": {
+      "message": "కాంపోనెంట్ ఫార్మాట్"
+   },
+   "popupSettingsComponentFormatTooltip": {
+      "message": "కాపీ చేయబడిన భాగం కోసం ఆకృతిని ఎంచుకోండి"
+   },
+   "popupSettingsShowDevToolsPanel": {
+      "message": "[[DEVTOOLS]] ప్యానెల్"
+   },
+   "popupSettingsStyleFormat": {
+      "message": "శైలి ఆకృతి"
+   },
+   "popupSettingsStyleFormatExternalCSS": {
+      "message": "బాహ్య CSS"
+   },
+   "popupSettingsStyleFormatInlineCSS": {
+      "message": "ఇన్లైన్ CSS"
+   },
+   "popupSettingsStyleFormatLocalCSS": {
+      "message": "స్థానిక CSS"
+   },
+   "popupSettingsStyleFormatTooltip": {
+      "message": "కాపీ చేసిన శైలుల కోసం CSS ఆకృతిని ఎంచుకోండి"
+   },
+   "publishDate": {
+      "message": "మార్చి 31 వెర్షన్"
+   },
+   "toolBoxColorPickerDescriptionText": {
+      "message": "కలర్ పికర్"
+   },
+   "toolBoxColorPickerText": {
+      "message": "కలర్ పికర్"
+   },
+   "toolBoxCopyElementDescriptionText": {
+      "message": "కాపీ ఎలిమెంట్"
+   },
+   "toolBoxCopyElementText": {
+      "message": "కాపీ ఎలిమెంట్"
+   },
+   "toolBoxCopyFontsCopiedText": {
+      "message": "కాపీ చేయబడింది"
+   },
+   "toolBoxCopyFontsCopyToClipboardText": {
+      "message": "కాపీ చేయడానికి క్లిక్ చేయండి"
+   },
+   "toolBoxCopyFontsDescriptionText": {
+      "message": "ఫాంట్ కాపీ"
+   },
+   "toolBoxCopyFontsNotFoundText": {
+      "message": "ఈ వెబ్‌సైట్ సిస్టమ్ ఫాంట్లను ఉపయోగిస్తుంది"
+   },
+   "toolBoxCopyFontsText": {
+      "message": "ఫాంట్ కాపీ"
+   },
+   "toolBoxCopyFontsWindowText": {
+      "message": "వెబ్ ఫాంట్స్"
+   },
+   "toolBoxGridsDescriptionText": {
+      "message": "ప్రతి మూలకానికి సరిహద్దులను జోడిస్తుంది"
+   },
+   "toolBoxGridsText": {
+      "message": "గ్రిడ్లు"
+   },
+   "toolBoxInspectorDescriptionText": {
+      "message": "మూలకం వివరాలు చూడండి"
+   },
+   "toolBoxInspectorText": {
+      "message": "ఇన్స్పెక్టర్"
+   },
+   "toolBoxShowFontsDescriptionText": {
+      "message": "ప్రతి ట్యాగ్ ఏ ఫాంట్ ఉపయోగిస్తుందో తెలుసుకోండి"
+   },
+   "toolBoxShowFontsText": {
+      "message": "ఫాంట్స్"
+   },
+   "toolBoxThrashDescriptionText": {
+      "message": "ఒక మూలకాన్ని దాచండి లేదా తొలగించండి"
+   },
+   "toolBoxThrashText": {
+      "message": "చెత్త"
+   },
+   "toolBoxThrashWindowHideButton": {
+      "message": "దాచు"
+   },
+   "toolBoxThrashWindowRemoveButton": {
+      "message": "తొలగించండి"
+   },
+   "toolBoxThrashWindowText": {
+      "message": "అంశాలను దాచండి / తొలగించండి"
+   },
+   "toolboxText": {
+      "message": "టూల్‌బాక్స్"
+   }
+}

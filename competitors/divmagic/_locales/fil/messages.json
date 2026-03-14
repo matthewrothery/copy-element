@@ -1,0 +1,362 @@
+{
+   "activateToolbox": {
+      "message": "Isaaktibo ang Toolbox"
+   },
+   "contextMenuInspect": {
+      "message": "Inspektor"
+   },
+   "copied": {
+      "message": "Kinopya!"
+   },
+   "devtoolsCopyElement": {
+      "message": "Kopyahin ang Elemento"
+   },
+   "devtoolsCopyElementCopying": {
+      "message": "Nangongopya"
+   },
+   "devtoolsLibrary": {
+      "message": "Library"
+   },
+   "devtoolsLibraryComponentPerPage": {
+      "message": "Mga sangkap bawat pahina"
+   },
+   "devtoolsLibraryNext": {
+      "message": "Susunod"
+   },
+   "devtoolsLibraryNoComponents": {
+      "message": "Walang laman ang iyong library. I -save ang isang sangkap upang makita ito dito."
+   },
+   "devtoolsLibraryPrevious": {
+      "message": "Nakaraan"
+   },
+   "devtoolsNoElementSelectedText": {
+      "message": "Pumili ng elemento mula sa tab na \"Mga Elemento\" upang makita ang mga detalye nito dito"
+   },
+   "devtoolsSelectedElementText": {
+      "message": "Napiling Elemento"
+   },
+   "devtoolsUnsupportedElementSelectedText": {
+      "message": "Hindi pinapayagan ang napiling elemento para sa mga operasyon ng pagkopya"
+   },
+   "extCommandChooseElement": {
+      "message": "Pumili ng elementong kokopyahin habang nagho-hover"
+   },
+   "extDescription": {
+      "message": "Kopyahin ang mga elemento mula sa anumang webpage bilang magagamit muli na mga bahagi ng web. Kumuha ng HTML, CSS, React, JSX o Tailwind CSS code."
+   },
+   "extName": {
+      "message": "DivMagic - Estilo ng Kopyahin"
+   },
+   "iframeCantBeAccessedText": {
+      "message": "Hindi ma-access ng DivMagic ang iframe na ito."
+   },
+   "iframeNeedAccessText": {
+      "message": "Kailangang buksan ng DivMagic ang iframe na ito para ma-access ito."
+   },
+   "iframeOpenText": {
+      "message": "Buksan ang iframe"
+   },
+   "loginPageBody1": {
+      "message": "Upang ma-access ang aming mahusay na tool sa web development, inaanyayahan ka naming lumikha ng isang account o mag-login."
+   },
+   "loginPageBody2": {
+      "message": "Masisiyahan ka sa tuluy-tuloy na workflow ng development na may subscription sa DivMagic."
+   },
+   "loginPageEmailLabel": {
+      "message": "Ang email mo"
+   },
+   "loginPageError": {
+      "message": "Hindi makapag-log in. Tiyaking ginagamit mo ang email address kung saan ka naka-subscribe."
+   },
+   "loginPageLoginButton": {
+      "message": "Mag log in"
+   },
+   "loginPageNewHere": {
+      "message": "Bago sa DivMagic?"
+   },
+   "loginPageSignUp": {
+      "message": "Mag-sign Up"
+   },
+   "loginPageTitle": {
+      "message": "Maligayang pagdating sa DivMagic!"
+   },
+   "loginPageVerificationCode": {
+      "message": "Verification Code"
+   },
+   "loginPageVerificationCodeSent": {
+      "message": "Ang isang verification code ay ipinadala sa iyong email. Mangyaring ipasok ito sa ibaba."
+   },
+   "loginPageVerifyButton": {
+      "message": "I -verify"
+   },
+   "loginPageVerifyCancelButton": {
+      "message": "Kanselahin ang pag -verify"
+   },
+   "loginPageVerifyEmail": {
+      "message": "Patunayan ang iyong email"
+   },
+   "loginPageWrongVerificationCode": {
+      "message": "Maling Verification Code. Mangyaring tiyaking ipinasok mo ang tamang code."
+   },
+   "modalAddCssAttributeText": {
+      "message": "Katangian ng CSS"
+   },
+   "modalAddCssValueText": {
+      "message": "Halaga ng CSS"
+   },
+   "modalAddStylesText": {
+      "message": "Magdagdag ng mga estilo"
+   },
+   "modalChildButtonText": {
+      "message": "Elemento ng Bata"
+   },
+   "modalChildButtonTooltip": {
+      "message": "Ilipat ang pagpili sa child element"
+   },
+   "modalClassSettingsText": {
+      "message": "Mga Setting ng Klase:"
+   },
+   "modalCloseButtonTooltip": {
+      "message": "Isara"
+   },
+   "modalCopyButtonLoadingText": {
+      "message": "Kinokopya..."
+   },
+   "modalCopyButtonText": {
+      "message": "Kopya"
+   },
+   "modalCopyCSSOnlyText": {
+      "message": "CSS lang"
+   },
+   "modalCopyCssWithDivmagicText": {
+      "message": "Mga klase ng DivMagic CSS"
+   },
+   "modalCopyCssWithOriginalText": {
+      "message": "Orihinal na mga klase sa CSS"
+   },
+   "modalCopyHTMLOnlyText": {
+      "message": "HTML lang"
+   },
+   "modalCopyHtmlWithDivmagicText": {
+      "message": "DivMagic HTML Mga Katangian"
+   },
+   "modalCopyHtmlWithOriginalText": {
+      "message": "Orihinal na mga katangian ng HTML"
+   },
+   "modalCopyIntegrationsText": {
+      "message": "Mga Pagsasama (WordPress)"
+   },
+   "modalCopyModeSelectionAdaptable": {
+      "message": "Nakikibagay"
+   },
+   "modalCopyModeSelectionAdaptableTooltip": {
+      "message": "Kasama lang ang pinakamahalagang istilo na kailangan para mapanatili ang istraktura at pangunahing hitsura ng elemento. Madaling i-customize."
+   },
+   "modalCopyModeSelectionBalanced": {
+      "message": "Balanseng"
+   },
+   "modalCopyModeSelectionBalancedTooltip": {
+      "message": "Isinasama ang mga pseudo-element tulad ng ::before at ::after, na maaaring makaapekto nang malaki sa visual na kinalabasan ngunit hindi nagpapalaki ng code nang labis."
+   },
+   "modalCopyModeSelectionExact": {
+      "message": "Eksakto"
+   },
+   "modalCopyModeSelectionExactTooltip": {
+      "message": "Isang eksaktong kopya ng lahat ng mga estilo, na tinitiyak na ang elemento ay mukhang ang pinagmulan."
+   },
+   "modalCopyModeSelectionText": {
+      "message": "Copy Mode"
+   },
+   "modalCopyModeSelectionTooltip": {
+      "message": "Piliin ang copy mode para sa kasalukuyang pagpili. Inirerekomenda namin ang \"Naaangkop\" para sa karamihan ng mga kaso ng paggamit."
+   },
+   "modalCopyNotification": {
+      "message": "Component na kinopya!"
+   },
+   "modalCopyViewText": {
+      "message": "Kopya"
+   },
+   "modalDragButtonTooltip": {
+      "message": "I-drag upang ilipat"
+   },
+   "modalEditorViewText": {
+      "message": "Editor"
+   },
+   "modalElementSettingsText": {
+      "message": "Mga Setting ng Elemento:"
+   },
+   "modalExportNotification": {
+      "message": "Component Export!"
+   },
+   "modalExportToStudioText": {
+      "message": "I -export sa studio"
+   },
+   "modalGoToLibraryText": {
+      "message": "Pumunta sa aking silid -aklatan"
+   },
+   "modalInvalidCssValueText": {
+      "message": "Hindi wastong halaga ng CSS"
+   },
+   "modalLeftButtonText": {
+      "message": "Kaliwang elemento ng bata"
+   },
+   "modalLeftButtonTooltip": {
+      "message": "Ilipat ang pagpili sa kaliwang elemento ng kapatid"
+   },
+   "modalMediaQuerySelectionTooltip": {
+      "message": "Piliin kung gusto mong maisama ang [[MEDIAQUERYXYZ]] CSS style sa kinopyang code."
+   },
+   "modalParentButtonText": {
+      "message": "Elemento ng Magulang"
+   },
+   "modalParentButtonTooltip": {
+      "message": "Piliin ang pangunahing elemento ng kasalukuyang pagpili"
+   },
+   "modalRightButtonText": {
+      "message": "Tamang elemento ng bata"
+   },
+   "modalRightButtonTooltip": {
+      "message": "Ilipat ang pagpili sa kanang elemento ng kapatid"
+   },
+   "modalSaveElementText": {
+      "message": "I -save ang elemento"
+   },
+   "modalSaveNotification": {
+      "message": "Nai -save ang sangkap!"
+   },
+   "modalSavedElementText": {
+      "message": "Nai -save!"
+   },
+   "modalSavingElementText": {
+      "message": "Saving ..."
+   },
+   "modalStudioExportTooltip": {
+      "message": "Buksan sa DivMagic Studio"
+   },
+   "offText": {
+      "message": "Naka-off"
+   },
+   "onText": {
+      "message": "Naka-on"
+   },
+   "optionsChooseLanguage": {
+      "message": "Pumili ng isang wika"
+   },
+   "optionsFeedback": {
+      "message": "Kung mayroon kang anumang feedback o mungkahi, mangyaring ipaalam sa amin!"
+   },
+   "optionsShortcuts": {
+      "message": "Mga Keyboard Shortcut"
+   },
+   "optionsTitle": {
+      "message": "Mga pagpipilian"
+   },
+   "panelCopyElementCopied": {
+      "message": "Kinopya"
+   },
+   "popupCopyInstructions": {
+      "message": "Mag-click sa anumang elemento o pindutin ang key:"
+   },
+   "popupFeedback": {
+      "message": "Feedback"
+   },
+   "popupSettings": {
+      "message": "Mga setting"
+   },
+   "popupSettingsAutoHidePopup": {
+      "message": "Awtomatikong Itago ang Popup"
+   },
+   "popupSettingsComponentFormat": {
+      "message": "Component Format"
+   },
+   "popupSettingsComponentFormatTooltip": {
+      "message": "Piliin ang format para sa kinopyang bahagi"
+   },
+   "popupSettingsShowDevToolsPanel": {
+      "message": "[[DEVTOOLS]] Panel"
+   },
+   "popupSettingsStyleFormat": {
+      "message": "Format ng Estilo"
+   },
+   "popupSettingsStyleFormatExternalCSS": {
+      "message": "Panlabas na CSS"
+   },
+   "popupSettingsStyleFormatInlineCSS": {
+      "message": "Inline na CSS"
+   },
+   "popupSettingsStyleFormatLocalCSS": {
+      "message": "Lokal na CSS"
+   },
+   "popupSettingsStyleFormatTooltip": {
+      "message": "Piliin ang format ng CSS para sa mga kinopyang istilo"
+   },
+   "publishDate": {
+      "message": "Marso 31 bersyon"
+   },
+   "toolBoxColorPickerDescriptionText": {
+      "message": "Kulay ng picker"
+   },
+   "toolBoxColorPickerText": {
+      "message": "Kulay ng picker"
+   },
+   "toolBoxCopyElementDescriptionText": {
+      "message": "Kopyahin ang elemento"
+   },
+   "toolBoxCopyElementText": {
+      "message": "Kopyahin ang elemento"
+   },
+   "toolBoxCopyFontsCopiedText": {
+      "message": "Kinopya"
+   },
+   "toolBoxCopyFontsCopyToClipboardText": {
+      "message": "Mag -click upang kopyahin"
+   },
+   "toolBoxCopyFontsDescriptionText": {
+      "message": "Kopyahin ang font"
+   },
+   "toolBoxCopyFontsNotFoundText": {
+      "message": "Ang website na ito ay gumagamit ng mga font ng system"
+   },
+   "toolBoxCopyFontsText": {
+      "message": "Kopyahin ang font"
+   },
+   "toolBoxCopyFontsWindowText": {
+      "message": "Mga Font ng Web"
+   },
+   "toolBoxGridsDescriptionText": {
+      "message": "Nagdaragdag ng mga hangganan sa bawat elemento"
+   },
+   "toolBoxGridsText": {
+      "message": "Grids"
+   },
+   "toolBoxInspectorDescriptionText": {
+      "message": "Tingnan ang isang detalye ng elemento"
+   },
+   "toolBoxInspectorText": {
+      "message": "Inspektor"
+   },
+   "toolBoxShowFontsDescriptionText": {
+      "message": "Alamin kung anong font ang ginagamit ng bawat tag"
+   },
+   "toolBoxShowFontsText": {
+      "message": "Mga font"
+   },
+   "toolBoxThrashDescriptionText": {
+      "message": "Itago o alisin ang isang elemento"
+   },
+   "toolBoxThrashText": {
+      "message": "Basurahan"
+   },
+   "toolBoxThrashWindowHideButton": {
+      "message": "Tago"
+   },
+   "toolBoxThrashWindowRemoveButton": {
+      "message": "Alisin"
+   },
+   "toolBoxThrashWindowText": {
+      "message": "Itago / alisin ang mga elemento"
+   },
+   "toolboxText": {
+      "message": "Toolbox"
+   }
+}

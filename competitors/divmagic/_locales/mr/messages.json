@@ -1,0 +1,362 @@
+{
+   "activateToolbox": {
+      "message": "टूलबॉक्स सक्रिय करा"
+   },
+   "contextMenuInspect": {
+      "message": "इन्स्पेक्टर"
+   },
+   "copied": {
+      "message": "कॉपी केले!"
+   },
+   "devtoolsCopyElement": {
+      "message": "घटक कॉपी करा"
+   },
+   "devtoolsCopyElementCopying": {
+      "message": "कॉपी करत आहे"
+   },
+   "devtoolsLibrary": {
+      "message": "लायब्ररी"
+   },
+   "devtoolsLibraryComponentPerPage": {
+      "message": "प्रति पृष्ठ घटक"
+   },
+   "devtoolsLibraryNext": {
+      "message": "पुढे"
+   },
+   "devtoolsLibraryNoComponents": {
+      "message": "आपली लायब्ररी रिक्त आहे. तो येथे पाहण्यासाठी एक घटक जतन करा."
+   },
+   "devtoolsLibraryPrevious": {
+      "message": "मागील"
+   },
+   "devtoolsNoElementSelectedText": {
+      "message": "येथे तपशील पाहण्यासाठी \"एलिमेंट्स\" टॅबमधून एक घटक निवडा"
+   },
+   "devtoolsSelectedElementText": {
+      "message": "निवडलेला घटक"
+   },
+   "devtoolsUnsupportedElementSelectedText": {
+      "message": "कॉपी ऑपरेशन्ससाठी निवडलेल्या घटकाला अनुमती नाही"
+   },
+   "extCommandChooseElement": {
+      "message": "फिरवत असताना कॉपी करण्यासाठी घटक निवडा"
+   },
+   "extDescription": {
+      "message": "कोणत्याही वेबपृष्ठावरील घटक पुन्हा वापरण्यायोग्य वेब घटक म्हणून कॉपी करा. HTML, CSS, React, JSX किंवा Tailwind CSS कोड मिळवा."
+   },
+   "extName": {
+      "message": "DivMagic - कॉपी शैली"
+   },
+   "iframeCantBeAccessedText": {
+      "message": "DivMagic या iframe मध्ये प्रवेश करू शकत नाही."
+   },
+   "iframeNeedAccessText": {
+      "message": "DivMagic ला हे iframe ऍक्सेस करण्यासाठी उघडण्याची आवश्यकता आहे."
+   },
+   "iframeOpenText": {
+      "message": "iframe उघडा"
+   },
+   "loginPageBody1": {
+      "message": "आमच्या शक्तिशाली वेब डेव्हलपमेंट टूलमध्ये प्रवेश करण्यासाठी, आम्ही तुम्हाला खाते तयार करण्यासाठी किंवा लॉग इन करण्यासाठी आमंत्रित करतो."
+   },
+   "loginPageBody2": {
+      "message": "तुम्ही DivMagic च्या सदस्यत्वासह अखंड विकास कार्यप्रवाहाचा आनंद घ्याल."
+   },
+   "loginPageEmailLabel": {
+      "message": "आपला ई - मेल"
+   },
+   "loginPageError": {
+      "message": "लॉग इन करू शकलो नाही. तुम्ही सदस्यत्व घेतलेला ईमेल पत्ता वापरत आहात याची खात्री करा."
+   },
+   "loginPageLoginButton": {
+      "message": "लॉगिन करा"
+   },
+   "loginPageNewHere": {
+      "message": "DivMagic वर नवीन?"
+   },
+   "loginPageSignUp": {
+      "message": "साइन अप करा"
+   },
+   "loginPageTitle": {
+      "message": "DivMagic मध्ये आपले स्वागत आहे!"
+   },
+   "loginPageVerificationCode": {
+      "message": "सत्यापन कोड"
+   },
+   "loginPageVerificationCodeSent": {
+      "message": "आपल्या ईमेलवर सत्यापन कोड पाठविला गेला आहे. कृपया खाली प्रविष्ट करा."
+   },
+   "loginPageVerifyButton": {
+      "message": "सत्यापित करा"
+   },
+   "loginPageVerifyCancelButton": {
+      "message": "सत्यापन रद्द करा"
+   },
+   "loginPageVerifyEmail": {
+      "message": "आपले ईमेल सत्यापित करा"
+   },
+   "loginPageWrongVerificationCode": {
+      "message": "चुकीचे सत्यापन कोड. कृपया आपण योग्य कोड प्रविष्ट केला असल्याचे सुनिश्चित करा."
+   },
+   "modalAddCssAttributeText": {
+      "message": "सीएसएस विशेषता"
+   },
+   "modalAddCssValueText": {
+      "message": "सीएसएस मूल्य"
+   },
+   "modalAddStylesText": {
+      "message": "शैली जोडा"
+   },
+   "modalChildButtonText": {
+      "message": "बाल घटक"
+   },
+   "modalChildButtonTooltip": {
+      "message": "निवड मूल घटकावर हलवा"
+   },
+   "modalClassSettingsText": {
+      "message": "वर्ग सेटिंग्ज:"
+   },
+   "modalCloseButtonTooltip": {
+      "message": "बंद"
+   },
+   "modalCopyButtonLoadingText": {
+      "message": "कॉपी करत आहे..."
+   },
+   "modalCopyButtonText": {
+      "message": "कॉपी करा"
+   },
+   "modalCopyCSSOnlyText": {
+      "message": "फक्त CSS"
+   },
+   "modalCopyCssWithDivmagicText": {
+      "message": "DivMagic css वर्ग"
+   },
+   "modalCopyCssWithOriginalText": {
+      "message": "मूळ सीएसएस वर्ग"
+   },
+   "modalCopyHTMLOnlyText": {
+      "message": "फक्त HTML"
+   },
+   "modalCopyHtmlWithDivmagicText": {
+      "message": "DivMagic html विशेषता"
+   },
+   "modalCopyHtmlWithOriginalText": {
+      "message": "मूळ HTML विशेषता"
+   },
+   "modalCopyIntegrationsText": {
+      "message": "एकत्रीकरण (वर्डप्रेस)"
+   },
+   "modalCopyModeSelectionAdaptable": {
+      "message": "जुळवून घेणारा"
+   },
+   "modalCopyModeSelectionAdaptableTooltip": {
+      "message": "घटकाची रचना आणि मूळ स्वरूप राखण्यासाठी आवश्यक असलेल्या अत्यंत आवश्यक शैलींचा समावेश आहे. सानुकूलित करणे सोपे."
+   },
+   "modalCopyModeSelectionBalanced": {
+      "message": "समतोल"
+   },
+   "modalCopyModeSelectionBalancedTooltip": {
+      "message": "::before आणि ::after सारखे छद्म-घटक अंतर्भूत करतात, जे दृश्य परिणामांवर लक्षणीय परिणाम करू शकतात परंतु कोडला जास्त प्रमाणात फुगवू नका."
+   },
+   "modalCopyModeSelectionExact": {
+      "message": "अचूक"
+   },
+   "modalCopyModeSelectionExactTooltip": {
+      "message": "घटक स्त्रोतासारखा दिसत असल्याची खात्री करून सर्व शैलींची अचूक प्रत."
+   },
+   "modalCopyModeSelectionText": {
+      "message": "कॉपी मोड"
+   },
+   "modalCopyModeSelectionTooltip": {
+      "message": "सध्याच्या निवडीसाठी कॉपी मोड निवडा. आम्ही बर्‍याच वापराच्या प्रकरणांसाठी \"अनुकूलन करण्यायोग्य\" ची शिफारस करतो."
+   },
+   "modalCopyNotification": {
+      "message": "घटक कॉपी!"
+   },
+   "modalCopyViewText": {
+      "message": "कॉपी"
+   },
+   "modalDragButtonTooltip": {
+      "message": "हलविण्यासाठी ड्रॅग करा"
+   },
+   "modalEditorViewText": {
+      "message": "संपादक"
+   },
+   "modalElementSettingsText": {
+      "message": "घटक सेटिंग्ज:"
+   },
+   "modalExportNotification": {
+      "message": "घटक निर्यात!"
+   },
+   "modalExportToStudioText": {
+      "message": "स्टुडिओला निर्यात करा"
+   },
+   "modalGoToLibraryText": {
+      "message": "माझ्या लायब्ररीत जा"
+   },
+   "modalInvalidCssValueText": {
+      "message": "अवैध सीएसएस मूल्य"
+   },
+   "modalLeftButtonText": {
+      "message": "डावा मूल घटक"
+   },
+   "modalLeftButtonTooltip": {
+      "message": "निवड डाव्या भावंडांच्या घटकावर हलवा"
+   },
+   "modalMediaQuerySelectionTooltip": {
+      "message": "तुम्हाला कॉपी केलेल्या कोडमध्ये [[MEDIAQUERYXYZ]] CSS शैली समाविष्ट करायची असल्यास निवडा."
+   },
+   "modalParentButtonText": {
+      "message": "पालक घटक"
+   },
+   "modalParentButtonTooltip": {
+      "message": "वर्तमान निवडीचा मूळ घटक निवडा"
+   },
+   "modalRightButtonText": {
+      "message": "योग्य मुलाचे घटक"
+   },
+   "modalRightButtonTooltip": {
+      "message": "निवड उजव्या भावंड घटकावर हलवा"
+   },
+   "modalSaveElementText": {
+      "message": "घटक जतन करा"
+   },
+   "modalSaveNotification": {
+      "message": "घटक जतन केले!"
+   },
+   "modalSavedElementText": {
+      "message": "जतन केले!"
+   },
+   "modalSavingElementText": {
+      "message": "बचत..."
+   },
+   "modalStudioExportTooltip": {
+      "message": "DivMagic Studio मध्ये उघडा"
+   },
+   "offText": {
+      "message": "बंद"
+   },
+   "onText": {
+      "message": "चालू"
+   },
+   "optionsChooseLanguage": {
+      "message": "एक भाषा निवडा"
+   },
+   "optionsFeedback": {
+      "message": "आपल्याकडे काही प्रतिक्रिया किंवा सूचना असल्यास, कृपया आम्हाला कळवा!"
+   },
+   "optionsShortcuts": {
+      "message": "कीबोर्ड शॉर्टकट"
+   },
+   "optionsTitle": {
+      "message": "पर्याय"
+   },
+   "panelCopyElementCopied": {
+      "message": "कॉपी केले"
+   },
+   "popupCopyInstructions": {
+      "message": "कोणत्याही घटकावर क्लिक करा किंवा की दाबा:"
+   },
+   "popupFeedback": {
+      "message": "अभिप्राय"
+   },
+   "popupSettings": {
+      "message": "सेटिंग्ज"
+   },
+   "popupSettingsAutoHidePopup": {
+      "message": "स्वयं लपवा पॉपअप"
+   },
+   "popupSettingsComponentFormat": {
+      "message": "घटक स्वरूप"
+   },
+   "popupSettingsComponentFormatTooltip": {
+      "message": "कॉपी केलेल्या घटकासाठी स्वरूप निवडा"
+   },
+   "popupSettingsShowDevToolsPanel": {
+      "message": "[[DEVTOOLS]] पॅनेल"
+   },
+   "popupSettingsStyleFormat": {
+      "message": "शैली स्वरूप"
+   },
+   "popupSettingsStyleFormatExternalCSS": {
+      "message": "बाह्य CSS"
+   },
+   "popupSettingsStyleFormatInlineCSS": {
+      "message": "इनलाइन CSS"
+   },
+   "popupSettingsStyleFormatLocalCSS": {
+      "message": "स्थानिक CSS"
+   },
+   "popupSettingsStyleFormatTooltip": {
+      "message": "कॉपी केलेल्या शैलींसाठी CSS फॉरमॅट निवडा"
+   },
+   "publishDate": {
+      "message": "31 मार्च आवृत्ती"
+   },
+   "toolBoxColorPickerDescriptionText": {
+      "message": "रंग पिकर"
+   },
+   "toolBoxColorPickerText": {
+      "message": "रंग पिकर"
+   },
+   "toolBoxCopyElementDescriptionText": {
+      "message": "कॉपी घटक"
+   },
+   "toolBoxCopyElementText": {
+      "message": "कॉपी घटक"
+   },
+   "toolBoxCopyFontsCopiedText": {
+      "message": "कॉपी केले"
+   },
+   "toolBoxCopyFontsCopyToClipboardText": {
+      "message": "कॉपी करण्यासाठी क्लिक करा"
+   },
+   "toolBoxCopyFontsDescriptionText": {
+      "message": "कॉपी फॉन्ट"
+   },
+   "toolBoxCopyFontsNotFoundText": {
+      "message": "ही वेबसाइट सिस्टम फॉन्ट वापरते"
+   },
+   "toolBoxCopyFontsText": {
+      "message": "कॉपी फॉन्ट"
+   },
+   "toolBoxCopyFontsWindowText": {
+      "message": "वेब फॉन्ट"
+   },
+   "toolBoxGridsDescriptionText": {
+      "message": "प्रत्येक घटकामध्ये सीमा जोडते"
+   },
+   "toolBoxGridsText": {
+      "message": "ग्रीड्स"
+   },
+   "toolBoxInspectorDescriptionText": {
+      "message": "एक घटक तपशील पहा"
+   },
+   "toolBoxInspectorText": {
+      "message": "इन्स्पेक्टर"
+   },
+   "toolBoxShowFontsDescriptionText": {
+      "message": "प्रत्येक टॅग कोणता फॉन्ट वापरत आहे ते जाणून घ्या"
+   },
+   "toolBoxShowFontsText": {
+      "message": "फॉन्ट"
+   },
+   "toolBoxThrashDescriptionText": {
+      "message": "घटक लपवा किंवा काढा"
+   },
+   "toolBoxThrashText": {
+      "message": "कचरा"
+   },
+   "toolBoxThrashWindowHideButton": {
+      "message": "लपवा"
+   },
+   "toolBoxThrashWindowRemoveButton": {
+      "message": "काढा"
+   },
+   "toolBoxThrashWindowText": {
+      "message": "घटक लपवा / काढा"
+   },
+   "toolboxText": {
+      "message": "टूलबॉक्स"
+   }
+}

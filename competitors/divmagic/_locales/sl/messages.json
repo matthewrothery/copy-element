@@ -1,0 +1,362 @@
+{
+   "activateToolbox": {
+      "message": "Aktivirajte orodje"
+   },
+   "contextMenuInspect": {
+      "message": "Inšpektor"
+   },
+   "copied": {
+      "message": "Kopirano!"
+   },
+   "devtoolsCopyElement": {
+      "message": "Kopiraj element"
+   },
+   "devtoolsCopyElementCopying": {
+      "message": "Kopiranje"
+   },
+   "devtoolsLibrary": {
+      "message": "Knjižnica"
+   },
+   "devtoolsLibraryComponentPerPage": {
+      "message": "Komponente na stran"
+   },
+   "devtoolsLibraryNext": {
+      "message": "Naslednji"
+   },
+   "devtoolsLibraryNoComponents": {
+      "message": "Vaša knjižnica je prazna. Shranite komponento, da si jo ogledate tukaj."
+   },
+   "devtoolsLibraryPrevious": {
+      "message": "Prejšnja"
+   },
+   "devtoolsNoElementSelectedText": {
+      "message": "Izberite element na zavihku \"Elementi\", da si tukaj ogledate njegove podrobnosti"
+   },
+   "devtoolsSelectedElementText": {
+      "message": "Izbrani element"
+   },
+   "devtoolsUnsupportedElementSelectedText": {
+      "message": "Izbrani element ni dovoljen za kopiranje"
+   },
+   "extCommandChooseElement": {
+      "message": "Med premikanjem miške izberite element za kopiranje"
+   },
+   "extDescription": {
+      "message": "Kopirajte elemente s katere koli spletne strani kot spletne komponente za večkratno uporabo. Pridobite kodo CSS HTML, CSS, React, JSX ali Tailwind."
+   },
+   "extName": {
+      "message": "DivMagic - Kopiraj slog"
+   },
+   "iframeCantBeAccessedText": {
+      "message": "DivMagic ne more dostopati do tega okvirja iframe."
+   },
+   "iframeNeedAccessText": {
+      "message": "DivMagic mora odpreti ta iframe za dostop do njega."
+   },
+   "iframeOpenText": {
+      "message": "Odpri iframe"
+   },
+   "loginPageBody1": {
+      "message": "Za dostop do našega zmogljivega orodja za spletni razvoj vas vabimo, da ustvarite račun ali se prijavite."
+   },
+   "loginPageBody2": {
+      "message": "Z naročnino na DivMagic boste uživali v brezhibnem delovnem toku razvoja."
+   },
+   "loginPageEmailLabel": {
+      "message": "Vaš e-poštni naslov"
+   },
+   "loginPageError": {
+      "message": "Ni bilo mogoče prijaviti. Preverite, ali uporabljate e-poštni naslov, s katerim ste se naročili."
+   },
+   "loginPageLoginButton": {
+      "message": "Vpiši se"
+   },
+   "loginPageNewHere": {
+      "message": "Ste novi pri DivMagicu?"
+   },
+   "loginPageSignUp": {
+      "message": "Prijavite se"
+   },
+   "loginPageTitle": {
+      "message": "Dobrodošli v DivMagic!"
+   },
+   "loginPageVerificationCode": {
+      "message": "Koda za preverjanje"
+   },
+   "loginPageVerificationCodeSent": {
+      "message": "Na vaš e -poštni naslov je bila poslana koda za preverjanje. Prosimo, vnesite spodaj."
+   },
+   "loginPageVerifyButton": {
+      "message": "Preveri"
+   },
+   "loginPageVerifyCancelButton": {
+      "message": "Prekliči preverjanje"
+   },
+   "loginPageVerifyEmail": {
+      "message": "Preverite svoj e -poštni naslov"
+   },
+   "loginPageWrongVerificationCode": {
+      "message": "Napačna koda za preverjanje. Prepričajte se, da ste vnesli pravilno kodo."
+   },
+   "modalAddCssAttributeText": {
+      "message": "Atribut CSS"
+   },
+   "modalAddCssValueText": {
+      "message": "Vrednost CSS"
+   },
+   "modalAddStylesText": {
+      "message": "Dodajte sloge"
+   },
+   "modalChildButtonText": {
+      "message": "Podrejeni element"
+   },
+   "modalChildButtonTooltip": {
+      "message": "Premakni izbor na podrejeni element"
+   },
+   "modalClassSettingsText": {
+      "message": "Nastavitve razreda:"
+   },
+   "modalCloseButtonTooltip": {
+      "message": "Zapri"
+   },
+   "modalCopyButtonLoadingText": {
+      "message": "Kopiranje ..."
+   },
+   "modalCopyButtonText": {
+      "message": "Kopirati"
+   },
+   "modalCopyCSSOnlyText": {
+      "message": "Samo CSS"
+   },
+   "modalCopyCssWithDivmagicText": {
+      "message": "Divmagični razredi CSS"
+   },
+   "modalCopyCssWithOriginalText": {
+      "message": "Originalni razredi CSS"
+   },
+   "modalCopyHTMLOnlyText": {
+      "message": "Samo HTML"
+   },
+   "modalCopyHtmlWithDivmagicText": {
+      "message": "Divmagični atributi HTML"
+   },
+   "modalCopyHtmlWithOriginalText": {
+      "message": "Originalni atributi HTML"
+   },
+   "modalCopyIntegrationsText": {
+      "message": "Integracije (WordPress)"
+   },
+   "modalCopyModeSelectionAdaptable": {
+      "message": "Prilagodljiv"
+   },
+   "modalCopyModeSelectionAdaptableTooltip": {
+      "message": "Vključuje samo najbolj bistvene sloge, potrebne za ohranitev strukture in osnovnega videza elementa. Enostaven za prilagajanje."
+   },
+   "modalCopyModeSelectionBalanced": {
+      "message": "Uravnotežen"
+   },
+   "modalCopyModeSelectionBalancedTooltip": {
+      "message": "Vključuje psevdoelemente, kot sta ::before in ::after, ki lahko znatno vplivajo na vizualni rezultat, vendar kode ne napihnejo pretirano."
+   },
+   "modalCopyModeSelectionExact": {
+      "message": "Točno"
+   },
+   "modalCopyModeSelectionExactTooltip": {
+      "message": "Natančna kopija vseh slogov, ki zagotavlja, da je element videti kot izvor."
+   },
+   "modalCopyModeSelectionText": {
+      "message": "Način kopiranja"
+   },
+   "modalCopyModeSelectionTooltip": {
+      "message": "Izberite način kopiranja za trenutno izbiro. Za večino primerov uporabe priporočamo \"Prilagodljivo\"."
+   },
+   "modalCopyNotification": {
+      "message": "Komponenta kopirana!"
+   },
+   "modalCopyViewText": {
+      "message": "Kopirati"
+   },
+   "modalDragButtonTooltip": {
+      "message": "Povlecite za premikanje"
+   },
+   "modalEditorViewText": {
+      "message": "Urednik"
+   },
+   "modalElementSettingsText": {
+      "message": "Nastavitve elementov:"
+   },
+   "modalExportNotification": {
+      "message": "Komponenta izvožena!"
+   },
+   "modalExportToStudioText": {
+      "message": "Izvoz v studio"
+   },
+   "modalGoToLibraryText": {
+      "message": "Pojdi v mojo knjižnico"
+   },
+   "modalInvalidCssValueText": {
+      "message": "Neveljavna vrednost CSS"
+   },
+   "modalLeftButtonText": {
+      "message": "Levi otroški element"
+   },
+   "modalLeftButtonTooltip": {
+      "message": "Premaknite izbor na levi sorodni element"
+   },
+   "modalMediaQuerySelectionTooltip": {
+      "message": "Izberite, če želite, da so slogi CSS [[MEDIAQUERYXYZ]] vključeni v kopirano kodo."
+   },
+   "modalParentButtonText": {
+      "message": "Nadrejeni element"
+   },
+   "modalParentButtonTooltip": {
+      "message": "Izberite nadrejeni element trenutnega izbora"
+   },
+   "modalRightButtonText": {
+      "message": "Desni otroški element"
+   },
+   "modalRightButtonTooltip": {
+      "message": "Premaknite izbor na desni sorojenci"
+   },
+   "modalSaveElementText": {
+      "message": "Shrani element"
+   },
+   "modalSaveNotification": {
+      "message": "Komponenta shranjena!"
+   },
+   "modalSavedElementText": {
+      "message": "Shranjeno!"
+   },
+   "modalSavingElementText": {
+      "message": "Shranjevanje ..."
+   },
+   "modalStudioExportTooltip": {
+      "message": "Odprite v DivMagic Studio"
+   },
+   "offText": {
+      "message": "Izključeno"
+   },
+   "onText": {
+      "message": "Vklopljeno"
+   },
+   "optionsChooseLanguage": {
+      "message": "Izberite jezik"
+   },
+   "optionsFeedback": {
+      "message": "Če imate kakršne koli povratne informacije ali predloge, nam to sporočite!"
+   },
+   "optionsShortcuts": {
+      "message": "Bližnjice na tipkovnici"
+   },
+   "optionsTitle": {
+      "message": "Opcije"
+   },
+   "panelCopyElementCopied": {
+      "message": "Kopirano"
+   },
+   "popupCopyInstructions": {
+      "message": "Kliknite kateri koli element ali pritisnite tipko:"
+   },
+   "popupFeedback": {
+      "message": "Povratne informacije"
+   },
+   "popupSettings": {
+      "message": "nastavitve"
+   },
+   "popupSettingsAutoHidePopup": {
+      "message": "Samodejno skrij pojavno okno"
+   },
+   "popupSettingsComponentFormat": {
+      "message": "Format komponente"
+   },
+   "popupSettingsComponentFormatTooltip": {
+      "message": "Izberite format za kopirano komponento"
+   },
+   "popupSettingsShowDevToolsPanel": {
+      "message": "[[DEVTOOLS]] Plošča"
+   },
+   "popupSettingsStyleFormat": {
+      "message": "Format sloga"
+   },
+   "popupSettingsStyleFormatExternalCSS": {
+      "message": "Zunanji CSS"
+   },
+   "popupSettingsStyleFormatInlineCSS": {
+      "message": "Vgrajeni CSS"
+   },
+   "popupSettingsStyleFormatLocalCSS": {
+      "message": "Lokalni CSS"
+   },
+   "popupSettingsStyleFormatTooltip": {
+      "message": "Izberite obliko CSS za kopirane sloge"
+   },
+   "publishDate": {
+      "message": "31. marec različica"
+   },
+   "toolBoxColorPickerDescriptionText": {
+      "message": "Nabiral barvo"
+   },
+   "toolBoxColorPickerText": {
+      "message": "Nabiral barvo"
+   },
+   "toolBoxCopyElementDescriptionText": {
+      "message": "Kopiraj element"
+   },
+   "toolBoxCopyElementText": {
+      "message": "Kopiraj element"
+   },
+   "toolBoxCopyFontsCopiedText": {
+      "message": "Kopirano"
+   },
+   "toolBoxCopyFontsCopyToClipboardText": {
+      "message": "Kliknite za kopiranje"
+   },
+   "toolBoxCopyFontsDescriptionText": {
+      "message": "Kopiraj pisava"
+   },
+   "toolBoxCopyFontsNotFoundText": {
+      "message": "To spletno mesto uporablja sistemske pisave"
+   },
+   "toolBoxCopyFontsText": {
+      "message": "Kopiraj pisava"
+   },
+   "toolBoxCopyFontsWindowText": {
+      "message": "Spletne pisave"
+   },
+   "toolBoxGridsDescriptionText": {
+      "message": "Doda meje vsakemu elementu"
+   },
+   "toolBoxGridsText": {
+      "message": "Omrežja"
+   },
+   "toolBoxInspectorDescriptionText": {
+      "message": "Glej podrobnost o elementu"
+   },
+   "toolBoxInspectorText": {
+      "message": "Inšpektor"
+   },
+   "toolBoxShowFontsDescriptionText": {
+      "message": "Vedite, kakšno pisavo uporablja vsaka oznaka"
+   },
+   "toolBoxShowFontsText": {
+      "message": "Pisave"
+   },
+   "toolBoxThrashDescriptionText": {
+      "message": "Skrij ali odstrani element"
+   },
+   "toolBoxThrashText": {
+      "message": "Smeti"
+   },
+   "toolBoxThrashWindowHideButton": {
+      "message": "Skrij"
+   },
+   "toolBoxThrashWindowRemoveButton": {
+      "message": "Odstrani"
+   },
+   "toolBoxThrashWindowText": {
+      "message": "Skrij / odstrani elemente"
+   },
+   "toolboxText": {
+      "message": "Orodja"
+   }
+}

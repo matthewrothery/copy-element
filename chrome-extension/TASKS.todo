@@ -1,0 +1,247 @@
+# Element Capture Extension - Implementation Tasks
+
+Goal: Create the best "copy element" Chrome extension with minimal CSS/HTML output.
+
+================================================================================
+PHASE 0: Competitor Analysis & Research
+================================================================================
+
+## DivMagic Analysis
+- [x] Review DivMagic manifest.json and extension architecture (manifest.json; DIVMAGIC_EXTRACT_COPY_ELEMENT_PROCESS.md)
+- [x] Extract CSS property whitelist from blockRegistration.bundle.js (documented in DIVMAGIC_EXTRACT_COPY_ELEMENT_PROCESS.md)
+- [x] Document DivMagic's 3 copy modes: Adaptable, Balanced, Exact (_locales/en/messages.json)
+- [x] Analyze how DivMagic handles pseudo-elements in Balanced/Exact modes (Balanced tooltip: ::before/::after)
+- [x] Document DivMagic's style output formats: Inline CSS, External CSS, Local CSS (popupSettingsStyleFormat*)
+- [x] Extract DivMagic's media query handling approach (blockRegistration.bundle.js: @media regex, matchMedia)
+- [x] Document DivMagic's WordPress block mapping strategy (blockRegistration.bundle.js: element→block mapping)
+- [x] Note DivMagic's htmlparser2 and html-to-react usage for output formatting (Prettier confirmed; htmlparser2/html-to-react per prior analysis)
+
+## SnipCSS Analysis
+- [x] Review SnipCSS manifest.json and extension architecture
+- [x] Analyze contentscript_kiwi.js for element labeling strategy (snipcss classes)
+- [x] Document snipbackground.js CSS extraction pipeline
+- [x] Extract SnipCSS's selector fixing algorithm (snipcssFixSelector)
+- [x] Document inherited rule handling approach
+- [x] Analyze CSS variable resolution logic
+- [x] Document media query parsing and grouping approach
+- [x] Review "transmogrify" feature for class renaming/scoping
+- [x] Document multi-element selection workflow
+- [x] Analyze subselection (include/exclude) feature
+- [x] Review Tailwind conversion approach (v1.9.0+)
+
+## Comparison & Best Practices Document
+- [x] Create comparison table: DivMagic vs SnipCSS feature parity
+- [x] Identify CSS properties both tools extract (common whitelist)
+- [x] Document properties SnipCSS extracts that DivMagic doesn't (and vice versa)
+- [x] Identify style minimization techniques from both tools
+- [x] Document selector specificity handling differences
+- [x] List edge cases each tool handles (or fails on)
+- [x] Define our target CSS property whitelist for minimal output
+
+================================================================================
+PHASE 1: Element Selection & DOM Capture
+================================================================================
+
+## Element Selection UI
+- [x] Implement element picker activation from popup
+- [x] Create hover highlight overlay (2px solid #3b82f6 border, rgba(59,130,246,0.08) bg)
+- [x] Implement tooltip showing tag name + dimensions
+- [x] Add click handler for element selection
+- [x] Implement parent traversal controls (expand selection)
+- [x] Handle overlay/fixed elements blocking selection (SnipCSS workaround)
+- [x] Prevent selection of SnipCSS/extension UI elements
+
+## DOM Cloning
+- [x] Implement cloneNode(true) for subtree
+- [x] Remove script tags from clone
+- [x] Remove inline event handlers (onclick, onmouseover, onload)
+- [x] Remove tracking/analytics attributes (data-testid, data-reactroot, ng-*)
+- [x] Preserve essential attributes (src, href, alt, title, aria-*)
+- [x] Handle Shadow DOM detection and warning
+
+================================================================================
+PHASE 2: Style Extraction (Minimal Output Focus)
+================================================================================
+
+## Computed Style Extraction
+- [x] Implement getComputedStyle extraction for all nodes
+- [x] Create element traversal with parent-child tracking
+- [x] Handle text nodes separately from element nodes
+
+## CSS Property Filtering (Core - Minimal Set)
+- [x] Define minimal property whitelist from competitor analysis
+- [x] Implement default value detection and omission
+- [x] Filter layout properties: display, position, top/right/bottom/left
+- [x] Filter box model: width, height, margin, padding, border, box-sizing
+- [x] Filter flex/grid: flex-*, justify-content, align-items, gap, grid-*
+- [x] Filter typography: font-*, line-height, letter-spacing, text-*
+- [x] Filter colors: color, background, background-color, background-image
+- [x] Filter visual: opacity, border-radius, box-shadow
+- [x] Omit inherited defaults (position: static, margin: 0, opacity: 1)
+
+## CSS Variable Resolution
+- [x] Detect var(--*) in computed values
+- [x] Resolve variables to computed RGB/hex values
+- [x] Handle nested/recursive CSS variables (SnipCSS v1.7.0)
+- [ ] Preserve CSS variables option (advanced feature)
+
+## CSS dependency gaps (future / optional)
+- [x] @keyframes — extract when animation-name is used (keyframes-extractor)
+- [x] @layer — match rules inside @layer (stylesheet-rule-extractor)
+- [x] CSS custom properties — extract :root/definitions for var(--foo) used in matched rules
+- [ ] @counter-style — list styling (rare)
+- [ ] @font-feature-values — font feature overrides (rare)
+
+================================================================================
+PHASE 3: Pseudo Elements & Special Cases
+================================================================================
+
+## Pseudo Element Handling
+- [x] Detect ::before content via getComputedStyle(el, "::before")
+- [x] Detect ::after content via getComputedStyle(el, "::after")
+- [x] Convert pseudo elements to real elements with inline styles
+- [x] Handle pseudo element positioning (absolute, etc.)
+
+## Image Handling
+- [x] Detect <img> tags and preserve src/alt
+- [x] Convert relative URLs to absolute URLs
+- [x] Preserve srcset or simplify to single src (SnipCSS approach)
+- [x] Option: Replace images with placeholder divs
+
+## Background Image Handling
+- [x] Detect background-image in computed styles
+- [x] Extract and absolutize URLs
+- [x] Handle gradient backgrounds
+
+## SVG Handling
+- [x] Preserve inline SVG markup and attributes
+- [x] Preserve viewBox attribute
+- [x] Use createElementNS for SVG cloning
+- [x] Handle SVG sprite references (<use href="...">)
+
+================================================================================
+PHASE 4: Parent Layout Context
+================================================================================
+
+## Layout Detection
+- [x] Detect parent display property (flex, grid, block)
+- [x] Extract relevant flex properties from parent
+- [x] Extract relevant grid properties from parent
+- [x] Determine if wrapper is needed for layout preservation
+
+## Wrapper Generation
+- [x] Generate minimal wrapper div with layout styles
+- [x] Only include necessary layout properties
+- [x] Avoid over-wrapping (single elements don't need flex wrapper)
+
+================================================================================
+PHASE 5: Output Generation & Style Minimization
+================================================================================
+
+## HTML Output
+- [x] Generate clean HTML with inline styles
+- [x] Format output for readability
+- [x] Remove unnecessary whitespace in style strings
+- [x] Ensure output is valid HTML5
+
+## JSX Output
+- [x] Convert style attribute to JSX object syntax
+- [x] Convert CSS properties to camelCase
+- [x] Handle className vs class conversion
+- [x] Preserve self-closing tags correctly
+
+## Style Minimization (Key Differentiator)
+- [x] Implement shorthand property detection (margin, padding, border)
+- [x] Combine individual properties into shorthand where possible
+- [x] Remove redundant styles (child inherits from parent)
+- [x] Detect and remove browser-default styles
+- [x] Option: Extract styles to <style> block vs inline
+
+================================================================================
+PHASE 6: Storage & Library
+================================================================================
+
+## Snippet Storage
+- [x] Define snippet data model (id, title, html, jsx, thumbnail, sourceUrl, createdAt)
+- [x] Implement chrome.storage.local for snippet persistence
+- [x] Handle storage limits (individual keys per snippet - SnipCSS approach)
+
+## Snippet Storage (future)
+- [ ] Account creation / sign-in for cross-device sync
+- [ ] Save snippets to cloud (e.g. S3 or backend API)
+- [ ] Optional thumbnail compression or separate key for very large thumbnails if 8 KB per snippet is hit
+- [ ] Export/import library (backup to file)
+
+## Library UI
+- [ ] Create snippet grid view (2 columns)
+- [ ] Display thumbnail, title, source domain
+- [ ] Implement copy HTML / copy JSX actions / copy tailwind
+- [ ] Implement delete action
+- [ ] Implement snippet preview modal
+
+================================================================================
+PHASE 7: Testing & Validation
+================================================================================
+
+## Test Scenarios
+- [ ] Test flex layouts (row, column, wrapping)
+- [ ] Test grid layouts (explicit, auto)
+- [ ] Test absolute/fixed positioning
+- [ ] Test external images
+- [ ] Test inline SVGs
+- [ ] Test background images
+- [x] Test CSS variables
+- [x] Test pseudo elements (::before, ::after)
+- [ ] Test forms (inputs, checkboxes, selects)
+
+## Performance Benchmarks
+- [ ] Measure extraction time (target: <500ms)
+- [ ] Measure output size vs competitors
+- [ ] Profile memory usage during extraction
+
+## Visual Validation
+- [ ] Render extracted HTML in sandboxed iframe
+- [ ] Compare with original element screenshot
+- [ ] Document visual fidelity score
+
+================================================================================
+PHASE 8: Polish & Differentiation
+================================================================================
+
+## MCP Server Integration
+- [ ] Create Node.js MCP server
+- [ ] Implement GET /snippets endpoint
+- [ ] Implement GET /snippets/:id endpoint
+- [ ] Create Cursor tool configuration
+
+## Advanced Features (Post-MVP)
+- [ ] Tailwind CSS conversion
+- [ ] React component generation
+- [ ] Multiple element selection
+- [ ] Responsive style capture (media queries)
+- [ ] Font detection and linking
+
+================================================================================
+NOTES
+================================================================================
+
+Key insights from competitor analysis:
+- DivMagic uses a CSS property whitelist for cleaner output
+- SnipCSS uses Chrome debugger for advanced CSS rule extraction
+- Both struggle with inherited styles and selector specificity
+- CSS variable resolution is critical for modern sites
+- Minimal output = remove defaults + use shorthands + remove inherited
+
+Our differentiation:
+- Minimal CSS output (smallest possible while preserving appearance)
+- Clean, readable code (no framework artifacts)
+- MCP integration for AI workflows (this is a major differentiator and our primary focus)
+- Snippet library for reuse
+
+We want to have various output formats:
+- **HTML only** — Raw HTML with attributes
+- **HTML + Copy Element IDs** — Original attributes replaced with Copy Element IDs
+- **HTML + Original attributes** — Original attributes preserved
+- **CSS only** — Copy Element classes or original classes
+- **React / JSX** — React-compatible code
+- **Tailwind CSS** — Tailwind utility classes

@@ -1,0 +1,34 @@
+{
+   "action": {
+      "default_icon": "img/snip_kiwi_small_css3.png",
+      "default_popup": "popup.html",
+      "default_title": "SnipCSS"
+   },
+   "background": {
+      "service_worker": "background-wrapper.js"
+   },
+   "content_security_policy": {
+      "extension_pages": "script-src 'self'; object-src 'self'"
+   },
+   "description": "Extract the CSS/HTML for any element on any page, only take the styles you want",
+   "externally_connectable": {
+      "matches": [ "*://*.snipcss.com/*" ]
+   },
+   "host_permissions": [ "*://*/*" ],
+   "icons": {
+      "128": "img/snipcss-128x128.png",
+      "16": "img/snipcss-16x16.png",
+      "48": "img/snipcss-48x48.png"
+   },
+   "key": "MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAi8Z88mOlZ7YqUj8iFC2OlV/Kh/sQhDpsk5fSt2909z/xRbD5N2Vb12hZc+6BcOX/KOyDLCeih02uHQaBRnkqUiDyPMIjclRYoXXmlXZknFRd/oK3e3GlUP2zqTzaEaSIr20MZ6mb/wwrfzyL4XbP60WeyP0Xft1LazSsj6qFLwxA3w7A1R9uKuLQ1dyUuomUIXOOvWB7B9mDTHHHyveOmJ/b7DrNul5S8ToKXAeaQUI8FTJLMMd4+vY1TzMGaxG5UKwBnaSuqkSCHPQ2ZocPaK3pGi6jGpOJJN9QkCAk6VCYKvxlsN/+AMF61hC+Z9qy9IpZeDU5ZlZbmm4qcXu2bQIDAQAB",
+   "manifest_version": 3,
+   "name": "SnipCSS",
+   "options_page": "options.html",
+   "permissions": [ "debugger", "storage", "activeTab", "scripting", "tabs", "unlimitedStorage" ],
+   "update_url": "https://clients2.google.com/service/update2/crx",
+   "version": "2.0.3",
+   "web_accessible_resources": [ {
+      "matches": [ "\u003Call_urls>" ],
+      "resources": [ "templates/*", "css/*", "img/*", "fonts/*.ttf", "sound/*", "js/*" ]
+   } ]
+}
