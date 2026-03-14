@@ -1,17 +1,25 @@
-.library-shell {
+/* Override popup dimensions so library page fills the tab */
+.app-shell.library-shell {
   width: 100%;
+  min-width: 0;
   min-height: 100vh;
   max-height: none;
 }
 
 .library-shell .main-content {
+  width: 100%;
   max-width: 1200px;
   margin: 0 auto;
   padding: var(--space-6);
+  box-sizing: border-box;
 }
 
+/* Uniform grid: fill parent width, consistent card heights */
 .library-shell .snippet-grid {
+  display: grid;
+  width: 100%;
   grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  gap: var(--space-4);
 }
 
 .library-header {
