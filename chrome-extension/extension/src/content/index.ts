@@ -24,6 +24,7 @@ import {
   type CopyFormat
 } from "./capture-confirmation-modal";
 import { buildCopyHtml } from "../shared/utils/preview-srcdoc-builder";
+import { buildCopyMcpPrompt, buildSnippetPrompt } from "../shared/utils/prompt-builder";
 import { ElementPicker } from "./element-picker";
 import { TOKEN_VALUES } from "../shared/token-values";
 import { showConfetti } from "./confetti";
@@ -325,6 +326,9 @@ function ensurePicker(): ElementPicker {
             hasShadowDom: hasShadowDomInSubtree(result.element)
           };
 
+          const snippet = buildSnippetFromCapture(capture);
+          await autoSaveSnippet(snippet);
+
           picker?.stop();
 
           if (modal) {
@@ -332,14 +336,20 @@ function ensurePicker(): ElementPicker {
           }
 
           modal = new CaptureConfirmationModal({
-            onSave: () => {
-              handleSave(capture);
+            onCopyCode: (format: CopyFormat) => {
+              handleCopyCode(snippet, format);
             },
-            onSaveAndCaptureAnother: () => {
-              handleSaveAndCaptureAnother(capture);
+            onCopyPrompt: () => {
+              handleCopyPrompt(snippet);
             },
-            onCopy: (format: CopyFormat) => {
-              handleCopy(capture, format);
+            onCopyMcp: () => {
+              handleCopyMcp(snippet);
+            },
+            onCaptureAnother: () => {
+              handleCaptureAnother();
+            },
+            onGoToLibrary: () => {
+              handleGoToLibrary();
             },
             onCancel: () => {
               modal?.destroy();
@@ -366,9 +376,8 @@ function ensurePicker(): ElementPicker {
   return picker;
 }
 
-async function handleSave(capture: CapturedElementData): Promise<void> {
+async function autoSaveSnippet(snippet: ReturnType<typeof buildSnippetFromCapture>): Promise<void> {
   try {
-    const snippet = buildSnippetFromCapture(capture);
     const saveResponse = (await chrome.runtime.sendMessage({
       type: "SAVE_SNIPPET",
       payload: snippet
@@ -384,49 +393,51 @@ async function handleSave(capture: CapturedElementData): Promise<void> {
   } catch (err) {
     console.error("Failed to save snippet", err);
     showPageToast("Failed to save snippet");
-  } finally {
-    modal?.destroy();
-    modal = null;
   }
 }
 
-async function handleSaveAndCaptureAnother(capture: CapturedElementData): Promise<void> {
-  try {
-    const snippet = buildSnippetFromCapture(capture);
-    const saveResponse = (await chrome.runtime.sendMessage({
-      type: "SAVE_SNIPPET",
-      payload: snippet
-    })) as RuntimeResponse<null>;
-    if (saveResponse.ok) {
-      if (await recordSaveAndShouldShowConfetti()) {
-        showConfetti(TOAST_Z_INDEX);
-      }
-      showPageToast("Snippet saved");
-    } else {
-      showPageToast("Failed to save snippet");
-    }
-  } catch (err) {
-    console.error("Failed to save snippet", err);
-    showPageToast("Failed to save snippet");
-  } finally {
-    modal?.destroy();
-    modal = null;
-    picker?.start();
-  }
+function handleCaptureAnother(): void {
+  modal?.destroy();
+  modal = null;
+  picker?.start();
 }
 
-async function handleCopy(capture: CapturedElementData, format: CopyFormat): Promise<void> {
+function handleGoToLibrary(): void {
+  void chrome.runtime.sendMessage({ type: "OPEN_LIBRARY_TAB" }).catch(() => {});
+  modal?.destroy();
+  modal = null;
+}
+
+async function handleCopyCode(snippet: ReturnType<typeof buildSnippetFromCapture>, format: CopyFormat): Promise<void> {
   const value =
     format === "html" || format === "html-inline"
-      ? buildCopyHtml(buildSnippetFromCapture(capture), {
+      ? buildCopyHtml(snippet, {
           includeStyleBlock: format !== "html-inline"
         })
-      : capture.jsx;
+      : snippet.jsx;
   const ok = await copyToClipboard(value);
   if (ok && modal) {
-    modal.showToast("Copied to clipboard");
+    modal.showToast("Copied code");
   } else if (!ok) {
-    showPageToast("Failed to copy");
+    showPageToast("Failed to copy code");
+  }
+}
+
+async function handleCopyPrompt(snippet: ReturnType<typeof buildSnippetFromCapture>): Promise<void> {
+  const ok = await copyToClipboard(buildSnippetPrompt(snippet));
+  if (ok && modal) {
+    modal.showToast("Copied prompt");
+  } else if (!ok) {
+    showPageToast("Failed to copy prompt");
+  }
+}
+
+async function handleCopyMcp(snippet: ReturnType<typeof buildSnippetFromCapture>): Promise<void> {
+  const ok = await copyToClipboard(buildCopyMcpPrompt(snippet));
+  if (ok && modal) {
+    modal.showToast("Copied MCP");
+  } else if (!ok) {
+    showPageToast("Failed to copy MCP");
   }
 }
 

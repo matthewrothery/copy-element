@@ -267,6 +267,14 @@ chrome.runtime.onMessage.addListener((message: RuntimeMessage, sender, sendRespo
     return true;
   }
 
+  if (message.type === "OPEN_LIBRARY_TAB") {
+    void chrome.tabs
+      .create({ url: chrome.runtime.getURL("app.html#/library") })
+      .then(() => sendResponse(success(null)))
+      .catch((error: unknown) => sendResponse(failure(String(error), "UNKNOWN_ERROR")));
+    return true;
+  }
+
   if (message.type === "GET_SNIPPETS") {
     void getSnippets()
       .then((snippets) => sendResponse(success(snippets)))

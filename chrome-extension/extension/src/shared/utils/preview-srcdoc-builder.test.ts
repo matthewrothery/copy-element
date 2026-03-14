@@ -36,6 +36,8 @@ describe("buildPreviewSrcDoc", () => {
     expect(doc).toContain("<div>Hello</div>");
     expect(doc).toContain("width:200px");
     expect(doc).toContain("height:100px");
+    expect(doc).toContain("html, body { width: 200px; height: 100px; }");
+    expect(doc).toContain(".snippet-stage{width:200px;height:100px;min-width:200px;min-height:100px;overflow:hidden;}");
   });
 
   it("uses single stage wrapper only when no layout context", () => {
@@ -247,6 +249,17 @@ describe("externalFontLinksToImportCss", () => {
 });
 
 describe("buildPreviewForCapture", () => {
+  it("uses deterministic stage sizing for width and height", () => {
+    const doc = buildPreviewForCapture({
+      html: "<span>X</span>",
+      width: 240,
+      height: 80,
+      sourceUrl: "https://example.com"
+    });
+    expect(doc).toContain("html, body { width: 240px; height: 80px; }");
+    expect(doc).toContain(".snippet-stage{width:240px;height:80px;min-width:240px;min-height:80px;overflow:hidden;}");
+  });
+
   it("adds layout wrapper when renderContext has parentLayout", () => {
     const doc = buildPreviewForCapture({
       html: "<span>X</span>",

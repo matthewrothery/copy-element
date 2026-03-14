@@ -80,6 +80,10 @@ export interface DeleteSnippetRequest {
   payload: { id: string };
 }
 
+export interface OpenLibraryTabRequest {
+  type: "OPEN_LIBRARY_TAB";
+}
+
 export interface CaptureVisibleTabRequest {
   type: "CAPTURE_VISIBLE_TAB";
   payload?: {
@@ -131,5 +135,6 @@ export type RuntimeMessage =
   | GetSnippetsRequest
   | GetLatestCaptureRequest
   | DeleteSnippetRequest
+  | OpenLibraryTabRequest
   | CaptureVisibleTabRequest
   | ExtractCssViaCdpRequest;

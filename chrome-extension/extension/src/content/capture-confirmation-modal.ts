@@ -3,15 +3,27 @@ import type { CapturedElementData, Snippet } from "../shared/types/snippet";
 import { buildPreviewForCapture } from "../shared/utils/preview-srcdoc-builder";
 import { generateSnippetName } from "../shared/utils/snippet-name";
 import { TOKENS_CSS } from "../shared/tokens-css";
+import {
+  clamp,
+  computeFitScale,
+  getDistance,
+  getMidpoint,
+  SCALE_MAX,
+  SCALE_MIN,
+  ZOOM_IN_FACTOR,
+  ZOOM_OUT_FACTOR
+} from "../shared/utils/preview-zoom-pan";
 
 const Z_INDEX = 2147483647;
 
 export type CopyFormat = "html" | "html-inline" | "jsx";
 
 export interface CaptureConfirmationCallbacks {
-  onSave: () => void;
-  onSaveAndCaptureAnother: () => void;
-  onCopy: (format: CopyFormat) => void;
+  onCopyCode: (format: CopyFormat) => void;
+  onCopyPrompt: () => void;
+  onCopyMcp: () => void;
+  onCaptureAnother: () => void;
+  onGoToLibrary: () => void;
   onCancel: () => void;
 }
 
@@ -88,8 +100,8 @@ export class CaptureConfirmationModal {
         padding: var(--space-4);
       }
       .modal {
-        width: 320px;
-        max-height: 90vh;
+        width: min(900px, calc(100vw - 48px));
+        max-height: min(88vh, 820px);
         overflow-y: auto;
         background: var(--color-surface);
         border-radius: var(--radius-2);
@@ -108,14 +120,6 @@ export class CaptureConfirmationModal {
         color: var(--color-text-secondary);
         font-size: var(--text-caption);
       }
-      .shadow-warning {
-        margin: var(--space-3) 0 0;
-        font-size: var(--text-caption);
-        color: var(--color-text-muted);
-        padding: var(--space-2) var(--space-3);
-        background: var(--color-accent-subtle);
-        border-radius: var(--radius-1_5);
-      }
       .preview-shell {
         margin-top: var(--space-4);
         border: 1px solid var(--color-border);
@@ -123,34 +127,109 @@ export class CaptureConfirmationModal {
         background: var(--color-surface-alt);
         overflow: hidden;
       }
-      .preview {
-        max-height: 220px;
-        overflow: auto;
-        padding: var(--space-3);
+      .preview-toolbar {
+        display: flex;
+        align-items: center;
+        gap: var(--space-2);
+        border-bottom: 1px solid var(--color-border);
+        padding: var(--space-2);
       }
-      .preview img {
-        max-width: 100%;
-        height: auto;
+      .preview-toolbar button {
+        min-height: 32px;
+        border: 1px solid var(--color-border);
+        border-radius: var(--radius-1_5);
+        background: var(--color-surface);
+        color: var(--color-text-primary);
+        cursor: pointer;
+        font-size: var(--text-caption);
+        padding: 0 var(--space-3);
+      }
+      .preview-toolbar button:focus-visible {
+        outline: 2px solid var(--color-accent);
+        outline-offset: 2px;
+      }
+      .zoom-label {
+        margin-left: auto;
+        color: var(--color-text-muted);
+        font-size: var(--text-caption);
+      }
+      .preview-viewport {
+        position: relative;
+        height: 520px;
+        overflow: hidden;
+        touch-action: none;
+      }
+      .preview-content {
+        position: absolute;
+        top: 0;
+        left: 0;
+        transform-origin: 0 0;
+        user-select: none;
+      }
+      .preview-content iframe {
+        width: 100%;
+        height: 100%;
         display: block;
-        border-radius: var(--radius-1);
+        border: 0;
+        pointer-events: none;
       }
       .meta-grid {
-        display: grid;
-        grid-template-columns: repeat(2, minmax(0, 1fr));
-        gap: var(--space-2) var(--space-3);
-        border-top: 1px solid var(--color-border);
-        padding: var(--space-3);
+        margin-top: var(--space-4);
+        display: flex;
+        flex-wrap: wrap;
+        gap: var(--space-4);
       }
       .meta {
         margin: 0;
         font-size: var(--text-caption);
         color: var(--color-text-muted);
       }
-      .meta strong {
-        display: block;
-        margin-bottom: 2px;
+      .meta-label {
         color: var(--color-text-primary);
         font-weight: var(--font-weight-medium);
+      }
+      .capture-status {
+        margin-top: var(--space-3);
+        display: grid;
+        gap: var(--space-2);
+      }
+      .capture-status-item {
+        display: flex;
+        align-items: center;
+        gap: var(--space-2);
+        border: 1px solid var(--color-border);
+        border-radius: var(--radius-1_5);
+        padding: var(--space-2) var(--space-3);
+        font-size: var(--text-caption);
+      }
+      .capture-status-mark {
+        width: 18px;
+        height: 18px;
+        border-radius: var(--radius-full);
+        border: 1px solid var(--color-border);
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 12px;
+      }
+      .capture-status-mark.checked {
+        border-color: var(--color-accent);
+        background: var(--color-accent);
+        color: var(--color-text-inverse);
+      }
+      .capture-status-label {
+        color: var(--color-text-primary);
+      }
+      .capture-status-help {
+        margin-left: auto;
+        min-height: 24px;
+        min-width: 24px;
+        border: 1px solid var(--color-border);
+        border-radius: var(--radius-full);
+        background: var(--color-surface);
+        color: var(--color-text-muted);
+        cursor: help;
+        font-size: var(--text-caption);
       }
       .format-toggle {
         display: flex;
@@ -177,39 +256,42 @@ export class CaptureConfirmationModal {
         background: var(--color-accent);
         color: var(--color-text-inverse);
       }
-      .actions {
-        margin-top: var(--space-4);
+      .copy-actions,
+      .primary-actions {
+        margin-top: var(--space-3);
         display: flex;
         gap: var(--space-2);
         flex-wrap: wrap;
       }
-      .actions button {
+      .copy-actions button,
+      .primary-actions button {
         min-height: 32px;
         border: 1px solid var(--color-border);
         border-radius: var(--radius-1_5);
         background: var(--color-surface);
+        color: var(--color-text-primary);
         cursor: pointer;
         font-size: var(--text-caption);
         padding: 0 var(--space-4);
         font-family: var(--font-sans);
       }
-      .actions button:focus-visible {
+      .copy-actions button:focus-visible,
+      .primary-actions button:focus-visible {
         outline: 2px solid var(--color-accent);
         outline-offset: 2px;
       }
-      .actions button.primary {
+      .primary-actions button.primary {
         background: var(--color-accent);
         color: var(--color-text-inverse);
         border-color: var(--color-accent);
       }
-      .actions button.primary:hover {
+      .primary-actions button.primary:hover {
         background: var(--color-accent-hover);
         border-color: var(--color-accent-hover);
       }
-      .actions .close {
-        color: var(--color-text-secondary);
+      .primary-actions .spacer {
+        flex: 1;
       }
-      .actions .spacer { flex: 1; }
       .toast {
         position: fixed;
         bottom: var(--space-4);
@@ -252,74 +334,158 @@ export class CaptureConfirmationModal {
     subhead.textContent = "Review the capture, choose a copy format, then save or continue capturing.";
     modal.appendChild(subhead);
 
-    if (capture.hasShadowDom) {
-      const warning = document.createElement("p");
-      warning.className = "shadow-warning";
-      warning.textContent =
-        "This element uses Shadow DOM. Captured output may not fully match the original.";
-      warning.setAttribute("role", "status");
-      modal.appendChild(warning);
-    }
-
     const previewShell = document.createElement("div");
     previewShell.className = "preview-shell";
-    const preview = document.createElement("div");
-    preview.className = "preview";
-    if (capture.thumbnail) {
-      const img = document.createElement("img");
-      img.src = capture.thumbnail;
-      img.alt = "Preview";
-      preview.appendChild(img);
-    } else {
-      const iframe = document.createElement("iframe");
-      iframe.sandbox.add("allow-same-origin");
-      iframe.style.cssText = "width:100%;height:120px;border:0;";
-      iframe.srcdoc = buildPreviewForCapture({
-        html: capture.html,
-        styleBlock: capture.styleBlock,
-        width: capture.width,
-        height: capture.height,
-        sourceUrl: window.location.href,
-        renderContext: capture.renderContext,
-        externalFontLinks: capture.externalFontLinks
-      });
-      preview.appendChild(iframe);
-    }
-    previewShell.appendChild(preview);
+
+    const previewToolbar = document.createElement("div");
+    previewToolbar.className = "preview-toolbar";
+
+    const fitBtn = document.createElement("button");
+    fitBtn.type = "button";
+    fitBtn.textContent = "Fit";
+
+    const hundredBtn = document.createElement("button");
+    hundredBtn.type = "button";
+    hundredBtn.textContent = "100%";
+
+    const zoomOutBtn = document.createElement("button");
+    zoomOutBtn.type = "button";
+    zoomOutBtn.textContent = "−";
+
+    const zoomInBtn = document.createElement("button");
+    zoomInBtn.type = "button";
+    zoomInBtn.textContent = "+";
+
+    const zoomLabel = document.createElement("span");
+    zoomLabel.className = "zoom-label";
+    zoomLabel.setAttribute("aria-live", "polite");
+
+    previewToolbar.appendChild(fitBtn);
+    previewToolbar.appendChild(hundredBtn);
+    previewToolbar.appendChild(zoomOutBtn);
+    previewToolbar.appendChild(zoomInBtn);
+    previewToolbar.appendChild(zoomLabel);
+    previewShell.appendChild(previewToolbar);
+
+    const previewViewport = document.createElement("div");
+    previewViewport.className = "preview-viewport";
+    previewShell.appendChild(previewViewport);
+
+    const contentWidth = Math.max(capture.width, 1);
+    const contentHeight = Math.max(capture.height, 1);
+
+    const previewContent = document.createElement("div");
+    previewContent.className = "preview-content";
+    previewContent.style.width = `${contentWidth}px`;
+    previewContent.style.height = `${contentHeight}px`;
+
+    const iframe = document.createElement("iframe");
+    iframe.sandbox.add("allow-same-origin");
+    iframe.title = "Captured element preview";
+    iframe.srcdoc = buildPreviewForCapture({
+      html: capture.html,
+      styleBlock: capture.styleBlock,
+      width: capture.width,
+      height: capture.height,
+      sourceUrl: window.location.href,
+      renderContext: capture.renderContext,
+      externalFontLinks: capture.externalFontLinks
+    });
+    previewContent.appendChild(iframe);
+
+    previewViewport.appendChild(previewContent);
 
     const metaGrid = document.createElement("div");
     metaGrid.className = "meta-grid";
 
     const metaLabel = document.createElement("p");
     metaLabel.className = "meta";
-    const metaLabelTitle = document.createElement("strong");
+    const metaLabelTitle = document.createElement("span");
+    metaLabelTitle.className = "meta-label";
     metaLabelTitle.textContent = "Element";
     metaLabel.appendChild(metaLabelTitle);
-    metaLabel.append(document.createTextNode(capture.elementLabel));
+    metaLabel.append(document.createTextNode(` ${capture.elementLabel}`));
     metaGrid.appendChild(metaLabel);
 
     const metaSize = document.createElement("p");
     metaSize.className = "meta";
-    const metaSizeTitle = document.createElement("strong");
+    const metaSizeTitle = document.createElement("span");
+    metaSizeTitle.className = "meta-label";
     metaSizeTitle.textContent = "Size";
     metaSize.appendChild(metaSizeTitle);
-    metaSize.append(document.createTextNode(`${capture.width} × ${capture.height}`));
+    metaSize.append(document.createTextNode(` ${capture.width} × ${capture.height}`));
     metaGrid.appendChild(metaSize);
 
-    previewShell.appendChild(metaGrid);
     modal.appendChild(previewShell);
+    modal.appendChild(metaGrid);
+
+    const statusList = document.createElement("div");
+    statusList.className = "capture-status";
+
+    const hasMediaQueries = /@media|@container/.test(capture.styleBlock ?? "");
+    const hasStyles = Boolean(capture.styleBlock && capture.styleBlock.trim().length > 0);
+    const hasShadowDom = Boolean(capture.hasShadowDom);
+
+    const addStatus = (label: string, checked: boolean, tooltip: string): void => {
+      const item = document.createElement("div");
+      item.className = "capture-status-item";
+
+      const mark = document.createElement("span");
+      mark.className = `capture-status-mark${checked ? " checked" : ""}`;
+      mark.textContent = checked ? "✓" : "○";
+
+      const text = document.createElement("span");
+      text.className = "capture-status-label";
+      text.textContent = label;
+
+      const help = document.createElement("button");
+      help.type = "button";
+      help.className = "capture-status-help";
+      help.textContent = "?";
+      help.title = tooltip;
+      help.setAttribute("aria-label", `${label} info`);
+
+      item.appendChild(mark);
+      item.appendChild(text);
+      item.appendChild(help);
+      statusList.appendChild(item);
+    };
+
+    addStatus(
+      "Media queries",
+      hasMediaQueries,
+      "Includes responsive @media or @container rules so the element can adapt at different sizes."
+    );
+    addStatus(
+      "Styles",
+      hasStyles,
+      "Includes extracted CSS rules, fonts, variables, and other style dependencies used by this element."
+    );
+    addStatus(
+      "Shadow DOM",
+      hasShadowDom,
+      "Indicates whether Shadow DOM was detected for this element or within its subtree."
+    );
+
+    modal.appendChild(statusList);
 
     const formatToggle = document.createElement("div");
     formatToggle.className = "format-toggle";
+
     const htmlBtn = document.createElement("button");
+    htmlBtn.type = "button";
     htmlBtn.textContent = "HTML";
-    htmlBtn.setAttribute("aria-label", "Copy as HTML with style block");
+    htmlBtn.setAttribute("aria-label", "Copy code as HTML with style block");
+
     const inlineBtn = document.createElement("button");
+    inlineBtn.type = "button";
     inlineBtn.textContent = "Inline";
-    inlineBtn.setAttribute("aria-label", "Copy as HTML inline only");
+    inlineBtn.setAttribute("aria-label", "Copy code as inline HTML");
+
     const jsxBtn = document.createElement("button");
+    jsxBtn.type = "button";
     jsxBtn.textContent = "JSX";
-    jsxBtn.setAttribute("aria-label", "Copy as JSX");
+    jsxBtn.setAttribute("aria-label", "Copy code as JSX");
 
     const updateFormatButtons = (): void => {
       htmlBtn.classList.toggle("active", this.copyFormat === "html");
@@ -340,15 +506,49 @@ export class CaptureConfirmationModal {
       updateFormatButtons();
     });
     updateFormatButtons();
+
     formatToggle.appendChild(htmlBtn);
     formatToggle.appendChild(inlineBtn);
     formatToggle.appendChild(jsxBtn);
     modal.appendChild(formatToggle);
 
-    const actions = document.createElement("div");
-    actions.className = "actions";
+    const copyActions = document.createElement("div");
+    copyActions.className = "copy-actions";
+
+    const copyCodeBtn = document.createElement("button");
+    copyCodeBtn.type = "button";
+    copyCodeBtn.textContent = "Copy code";
+    copyCodeBtn.addEventListener("click", () => {
+      this.callbacks.onCopyCode(this.copyFormat);
+    });
+
+    const copyPromptBtn = document.createElement("button");
+    copyPromptBtn.type = "button";
+    copyPromptBtn.textContent = "Copy prompt";
+    copyPromptBtn.addEventListener("click", () => {
+      this.callbacks.onCopyPrompt();
+    });
+
+    const copyMcpBtn = document.createElement("button");
+    copyMcpBtn.type = "button";
+    copyMcpBtn.textContent = "Copy MCP";
+    copyMcpBtn.addEventListener("click", () => {
+      this.callbacks.onCopyMcp();
+    });
+
+    copyActions.appendChild(copyCodeBtn);
+    copyActions.appendChild(copyPromptBtn);
+    copyActions.appendChild(copyMcpBtn);
+    modal.appendChild(copyActions);
+
+    const primaryActions = document.createElement("div");
+    primaryActions.className = "primary-actions";
+
+    let cleanupPreviewEvents: (() => void) | null = null;
 
     const close = (): void => {
+      cleanupPreviewEvents?.();
+      cleanupPreviewEvents = null;
       document.removeEventListener("keydown", handleKeyDown);
       this.host.remove();
     };
@@ -370,51 +570,188 @@ export class CaptureConfirmationModal {
     document.addEventListener("keydown", handleKeyDown);
 
     const cancelBtn = document.createElement("button");
-    cancelBtn.className = "close";
-    cancelBtn.textContent = "Cancel";
-    cancelBtn.setAttribute("aria-label", "Cancel");
+    cancelBtn.type = "button";
+    cancelBtn.textContent = "Close";
     cancelBtn.addEventListener("click", () => {
       close();
       this.callbacks.onCancel();
     });
 
-    const copyBtn = document.createElement("button");
-    copyBtn.textContent = "Copy";
-    copyBtn.setAttribute("aria-label", "Copy to clipboard");
-    copyBtn.addEventListener("click", () => {
-      this.callbacks.onCopy(this.copyFormat);
+    const captureAnotherBtn = document.createElement("button");
+    captureAnotherBtn.type = "button";
+    captureAnotherBtn.className = "primary";
+    captureAnotherBtn.textContent = "Capture another";
+    captureAnotherBtn.addEventListener("click", () => {
+      close();
+      this.callbacks.onCaptureAnother();
     });
 
-    const saveAndCaptureBtn = document.createElement("button");
-    saveAndCaptureBtn.textContent = "Save & Capture another";
-    saveAndCaptureBtn.setAttribute("aria-label", "Save and capture another element");
-    saveAndCaptureBtn.addEventListener("click", () => {
+    const goToLibraryBtn = document.createElement("button");
+    goToLibraryBtn.type = "button";
+    goToLibraryBtn.textContent = "Go to library";
+    goToLibraryBtn.addEventListener("click", () => {
       close();
-      this.callbacks.onSaveAndCaptureAnother();
-    });
-
-    const saveBtn = document.createElement("button");
-    saveBtn.className = "primary";
-    saveBtn.textContent = "Save";
-    saveBtn.setAttribute("aria-label", "Save to library");
-    saveBtn.addEventListener("click", () => {
-      close();
-      this.callbacks.onSave();
+      this.callbacks.onGoToLibrary();
     });
 
     const spacer = document.createElement("span");
     spacer.className = "spacer";
 
-    actions.appendChild(cancelBtn);
-    actions.appendChild(copyBtn);
-    actions.appendChild(saveAndCaptureBtn);
-    actions.appendChild(spacer);
-    actions.appendChild(saveBtn);
-    modal.appendChild(actions);
+    primaryActions.appendChild(cancelBtn);
+    primaryActions.appendChild(spacer);
+    primaryActions.appendChild(captureAnotherBtn);
+    primaryActions.appendChild(goToLibraryBtn);
+    modal.appendChild(primaryActions);
 
     backdrop.appendChild(modal);
     this.shadow.appendChild(backdrop);
     document.body.appendChild(this.host);
+
+    let scale = 1;
+    let panX = 0;
+    let panY = 0;
+    let isDragging = false;
+    let dragStartX = 0;
+    let dragStartY = 0;
+    let startPanX = 0;
+    let startPanY = 0;
+    let pinchStartDistance = 0;
+    let pinchStartScale = 1;
+
+    const updateTransform = (): void => {
+      previewContent.style.transform = `translate(${panX}px, ${panY}px) scale(${scale})`;
+      zoomLabel.textContent = `${Math.round(scale * 100)}%`;
+    };
+
+    const fitToView = (): void => {
+      const viewportW = previewViewport.clientWidth;
+      const viewportH = previewViewport.clientHeight;
+      if (viewportW <= 0 || viewportH <= 0) {
+        return;
+      }
+      scale = computeFitScale(viewportW, viewportH, contentWidth, contentHeight);
+      panX = (viewportW - contentWidth * scale) / 2;
+      panY = (viewportH - contentHeight * scale) / 2;
+      updateTransform();
+    };
+
+    const zoomAtPoint = (newScale: number, clientX: number, clientY: number): void => {
+      const rect = previewViewport.getBoundingClientRect();
+      const x = clientX - rect.left;
+      const y = clientY - rect.top;
+      const worldX = (x - panX) / scale;
+      const worldY = (y - panY) / scale;
+      scale = clamp(newScale, SCALE_MIN, SCALE_MAX);
+      panX = x - worldX * scale;
+      panY = y - worldY * scale;
+      updateTransform();
+    };
+
+    fitBtn.addEventListener("click", fitToView);
+    hundredBtn.addEventListener("click", () => {
+      const rect = previewViewport.getBoundingClientRect();
+      zoomAtPoint(1, rect.left + rect.width / 2, rect.top + rect.height / 2);
+    });
+    zoomOutBtn.addEventListener("click", () => {
+      const rect = previewViewport.getBoundingClientRect();
+      zoomAtPoint(scale * ZOOM_OUT_FACTOR, rect.left + rect.width / 2, rect.top + rect.height / 2);
+    });
+    zoomInBtn.addEventListener("click", () => {
+      const rect = previewViewport.getBoundingClientRect();
+      zoomAtPoint(scale * ZOOM_IN_FACTOR, rect.left + rect.width / 2, rect.top + rect.height / 2);
+    });
+
+    const handleWheel = (e: WheelEvent): void => {
+      e.preventDefault();
+      const factor = e.deltaY > 0 ? ZOOM_OUT_FACTOR : ZOOM_IN_FACTOR;
+      zoomAtPoint(scale * factor, e.clientX, e.clientY);
+    };
+
+    const handleMouseDown = (e: MouseEvent): void => {
+      if (e.button !== 0) return;
+      isDragging = true;
+      dragStartX = e.clientX;
+      dragStartY = e.clientY;
+      startPanX = panX;
+      startPanY = panY;
+    };
+
+    const handleMouseMove = (e: MouseEvent): void => {
+      if (!isDragging) return;
+      panX = startPanX + (e.clientX - dragStartX);
+      panY = startPanY + (e.clientY - dragStartY);
+      updateTransform();
+    };
+
+    const stopDrag = (): void => {
+      isDragging = false;
+    };
+
+    const handleTouchStart = (e: TouchEvent): void => {
+      if (e.touches.length === 2) {
+        pinchStartDistance = getDistance(e.touches[0], e.touches[1]);
+        pinchStartScale = scale;
+      } else if (e.touches.length === 1) {
+        const t = e.touches[0];
+        isDragging = true;
+        dragStartX = t.clientX;
+        dragStartY = t.clientY;
+        startPanX = panX;
+        startPanY = panY;
+      }
+    };
+
+    const handleTouchMove = (e: TouchEvent): void => {
+      e.preventDefault();
+      if (e.touches.length === 2 && pinchStartDistance > 0) {
+        const distance = getDistance(e.touches[0], e.touches[1]);
+        const midpoint = getMidpoint(e.touches[0], e.touches[1]);
+        const nextScale = pinchStartScale * (distance / pinchStartDistance);
+        zoomAtPoint(nextScale, midpoint.x, midpoint.y);
+        return;
+      }
+      if (e.touches.length === 1 && isDragging) {
+        const t = e.touches[0];
+        panX = startPanX + (t.clientX - dragStartX);
+        panY = startPanY + (t.clientY - dragStartY);
+        updateTransform();
+      }
+    };
+
+    const handleTouchEnd = (): void => {
+      if (isDragging) {
+        isDragging = false;
+      }
+      if (pinchStartDistance > 0) {
+        pinchStartDistance = 0;
+      }
+    };
+
+    previewViewport.addEventListener("wheel", handleWheel, { passive: false });
+    previewViewport.addEventListener("mousedown", handleMouseDown);
+    window.addEventListener("mousemove", handleMouseMove);
+    window.addEventListener("mouseup", stopDrag);
+    previewViewport.addEventListener("touchstart", handleTouchStart, { passive: true });
+    previewViewport.addEventListener("touchmove", handleTouchMove, { passive: false });
+    previewViewport.addEventListener("touchend", handleTouchEnd);
+    previewViewport.addEventListener("touchcancel", handleTouchEnd);
+
+    cleanupPreviewEvents = () => {
+      previewViewport.removeEventListener("wheel", handleWheel);
+      previewViewport.removeEventListener("mousedown", handleMouseDown);
+      window.removeEventListener("mousemove", handleMouseMove);
+      window.removeEventListener("mouseup", stopDrag);
+      previewViewport.removeEventListener("touchstart", handleTouchStart);
+      previewViewport.removeEventListener("touchmove", handleTouchMove);
+      previewViewport.removeEventListener("touchend", handleTouchEnd);
+      previewViewport.removeEventListener("touchcancel", handleTouchEnd);
+    };
+
+    requestAnimationFrame(() => {
+      requestAnimationFrame(() => {
+        fitToView();
+      });
+    });
   }
 
   private clearToast(): void {
