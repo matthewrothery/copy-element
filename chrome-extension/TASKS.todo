@@ -247,6 +247,17 @@ We want to have various output formats:
 - **Tailwind CSS** — Tailwind utility classes
 
 ================================================================================
+UI REDESIGN: WEBSITE-ALIGNED EXTENSION EXPERIENCE
+================================================================================
+
+- [x] Finalize redesign spec for popup, library, settings, overlay, tooltip, and confirmation modal
+- [x] Normalize shared token usage in CSS and JS-rendered overlay/toast contexts
+- [x] Redesign popup shell and interactions, including settings surface and workflow guidance
+- [x] Redesign library header, search UX, card interactions, and modal consistency
+- [x] Redesign capture overlay and confirmation modal while preserving capture behavior
+- [x] Validate with test suite and lint checks
+
+================================================================================
 RULE GOVERNANCE ALIGNMENT (Website <-> Extension)
 ================================================================================
 

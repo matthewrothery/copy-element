@@ -85,6 +85,7 @@ export class CaptureConfirmationModal {
         align-items: center;
         justify-content: center;
         font-family: var(--font-sans);
+        padding: var(--space-4);
       }
       .modal {
         width: 320px;
@@ -94,37 +95,62 @@ export class CaptureConfirmationModal {
         border-radius: var(--radius-2);
         border: 1px solid var(--color-border);
         padding: var(--space-4);
+        box-shadow: var(--shadow-lg);
       }
       .modal h2 {
-        margin: 0 0 var(--space-4);
-        font-size: var(--text-md);
+        margin: 0;
+        font-size: var(--text-heading);
+        font-weight: var(--font-weight-semibold);
         color: var(--color-text-primary);
       }
+      .subhead {
+        margin: var(--space-2) 0 0;
+        color: var(--color-text-secondary);
+        font-size: var(--text-caption);
+      }
       .shadow-warning {
-        margin: 0 0 var(--space-4);
+        margin: var(--space-3) 0 0;
         font-size: var(--text-caption);
         color: var(--color-text-muted);
         padding: var(--space-2) var(--space-3);
         background: var(--color-accent-subtle);
         border-radius: var(--radius-1_5);
       }
-      .preview {
-        max-height: 240px;
-        overflow: auto;
+      .preview-shell {
+        margin-top: var(--space-4);
         border: 1px solid var(--color-border);
         border-radius: var(--radius-2);
-        padding: var(--space-3);
         background: var(--color-surface-alt);
+        overflow: hidden;
+      }
+      .preview {
+        max-height: 220px;
+        overflow: auto;
+        padding: var(--space-3);
       }
       .preview img {
         max-width: 100%;
         height: auto;
         display: block;
+        border-radius: var(--radius-1);
+      }
+      .meta-grid {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: var(--space-2) var(--space-3);
+        border-top: 1px solid var(--color-border);
+        padding: var(--space-3);
       }
       .meta {
-        margin: var(--space-3) 0 0;
+        margin: 0;
         font-size: var(--text-caption);
         color: var(--color-text-muted);
+      }
+      .meta strong {
+        display: block;
+        margin-bottom: 2px;
+        color: var(--color-text-primary);
+        font-weight: var(--font-weight-medium);
       }
       .format-toggle {
         display: flex;
@@ -154,7 +180,7 @@ export class CaptureConfirmationModal {
       .actions {
         margin-top: var(--space-4);
         display: flex;
-        gap: var(--space-3);
+        gap: var(--space-2);
         flex-wrap: wrap;
       }
       .actions button {
@@ -175,6 +201,13 @@ export class CaptureConfirmationModal {
         background: var(--color-accent);
         color: var(--color-text-inverse);
         border-color: var(--color-accent);
+      }
+      .actions button.primary:hover {
+        background: var(--color-accent-hover);
+        border-color: var(--color-accent-hover);
+      }
+      .actions .close {
+        color: var(--color-text-secondary);
       }
       .actions .spacer { flex: 1; }
       .toast {
@@ -214,6 +247,11 @@ export class CaptureConfirmationModal {
     heading.textContent = "Element Captured";
     modal.appendChild(heading);
 
+    const subhead = document.createElement("p");
+    subhead.className = "subhead";
+    subhead.textContent = "Review the capture, choose a copy format, then save or continue capturing.";
+    modal.appendChild(subhead);
+
     if (capture.hasShadowDom) {
       const warning = document.createElement("p");
       warning.className = "shadow-warning";
@@ -223,6 +261,8 @@ export class CaptureConfirmationModal {
       modal.appendChild(warning);
     }
 
+    const previewShell = document.createElement("div");
+    previewShell.className = "preview-shell";
     const preview = document.createElement("div");
     preview.className = "preview";
     if (capture.thumbnail) {
@@ -245,17 +285,29 @@ export class CaptureConfirmationModal {
       });
       preview.appendChild(iframe);
     }
-    modal.appendChild(preview);
+    previewShell.appendChild(preview);
+
+    const metaGrid = document.createElement("div");
+    metaGrid.className = "meta-grid";
 
     const metaLabel = document.createElement("p");
     metaLabel.className = "meta";
-    metaLabel.textContent = capture.elementLabel;
-    modal.appendChild(metaLabel);
+    const metaLabelTitle = document.createElement("strong");
+    metaLabelTitle.textContent = "Element";
+    metaLabel.appendChild(metaLabelTitle);
+    metaLabel.append(document.createTextNode(capture.elementLabel));
+    metaGrid.appendChild(metaLabel);
 
     const metaSize = document.createElement("p");
     metaSize.className = "meta";
-    metaSize.textContent = `${capture.width} × ${capture.height}`;
-    modal.appendChild(metaSize);
+    const metaSizeTitle = document.createElement("strong");
+    metaSizeTitle.textContent = "Size";
+    metaSize.appendChild(metaSizeTitle);
+    metaSize.append(document.createTextNode(`${capture.width} × ${capture.height}`));
+    metaGrid.appendChild(metaSize);
+
+    previewShell.appendChild(metaGrid);
+    modal.appendChild(previewShell);
 
     const formatToggle = document.createElement("div");
     formatToggle.className = "format-toggle";
@@ -318,6 +370,7 @@ export class CaptureConfirmationModal {
     document.addEventListener("keydown", handleKeyDown);
 
     const cancelBtn = document.createElement("button");
+    cancelBtn.className = "close";
     cancelBtn.textContent = "Cancel";
     cancelBtn.setAttribute("aria-label", "Cancel");
     cancelBtn.addEventListener("click", () => {

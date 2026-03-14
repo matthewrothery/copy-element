@@ -26,7 +26,7 @@ export function DeleteConfirmationModal({
         <p id="delete-confirmation-desc" className="delete-confirmation-desc">
           &quot;{snippetTitle}&quot; will be permanently removed from your library.
         </p>
-        <div className="modal-actions modal-actions-spaced modal-actions.right">
+        <div className="modal-actions modal-actions-spaced modal-actions-right">
           <button type="button" className="btn-secondary" onClick={onCancel} aria-label="Cancel">
             Cancel
           </button>

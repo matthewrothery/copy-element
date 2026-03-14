@@ -40,8 +40,28 @@ export function LibraryApp(): JSX.Element {
   const [selectedSnippet, setSelectedSnippet] = useState<Snippet | null>(null);
   const [snippetToDelete, setSnippetToDelete] = useState<Snippet | null>(null);
   const [toastMessage, setToastMessage] = useState("");
+  const [query, setQuery] = useState("");
 
-  const hasSnippets = useMemo(() => snippets.length > 0, [snippets.length]);
+  const filteredSnippets = useMemo(() => {
+    const trimmed = query.trim().toLowerCase();
+    if (!trimmed) {
+      return snippets;
+    }
+    return snippets.filter((snippet) => {
+      const domain = (() => {
+        try {
+          return new URL(snippet.sourceUrl).hostname;
+        } catch {
+          return snippet.sourceUrl;
+        }
+      })();
+      return (
+        snippet.title.toLowerCase().includes(trimmed) ||
+        domain.toLowerCase().includes(trimmed)
+      );
+    });
+  }, [query, snippets]);
+  const hasSnippets = useMemo(() => filteredSnippets.length > 0, [filteredSnippets.length]);
 
   useEffect(() => {
     void loadSnippets();
@@ -97,16 +117,32 @@ export function LibraryApp(): JSX.Element {
     <div className="app-shell library-shell">
       <header className="library-header">
         <img src={logoUrl} alt="" width={32} height={32} style={{ objectFit: "contain" }} />
-        <h1 className="library-header-title">Element Armory – Library</h1>
+        <div className="library-header-copy">
+          <h1 className="library-header-title">Element Armory - Library</h1>
+          <p className="library-header-subtitle">{snippets.length} saved snippets</p>
+        </div>
+        <input
+          type="search"
+          className="library-search"
+          value={query}
+          onChange={(event) => setQuery(event.target.value)}
+          placeholder="Search title or domain"
+          aria-label="Search snippets"
+        />
       </header>
       <main className="main-content">
         {hasSnippets ? (
           <SnippetLibrary
-            snippets={snippets}
+            snippets={filteredSnippets}
             onOpen={setSelectedSnippet}
             onDelete={handleDeleteClick}
             onCopy={(value, label) => void handleCopy(value, label)}
           />
+        ) : snippets.length > 0 ? (
+          <div className="empty-state">
+            <h2>No matching snippets</h2>
+            <p>Try a different search term.</p>
+          </div>
         ) : (
           <EmptyState onCapture={() => {}} showCaptureButton={false} />
         )}

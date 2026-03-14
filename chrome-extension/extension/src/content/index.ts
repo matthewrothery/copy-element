@@ -24,6 +24,7 @@ import {
 } from "./capture-confirmation-modal";
 import { buildCopyHtml } from "../shared/utils/preview-srcdoc-builder";
 import { ElementPicker } from "./element-picker";
+import { TOKEN_VALUES } from "../shared/token-values";
 
 const TOAST_Z_INDEX = 2147483648;
 const CAPTURE_ATTR = "data-element-capture-id";
@@ -87,15 +88,16 @@ function showPageToast(message: string): void {
   toast.setAttribute("data-element-capture-toast", "true");
   toast.style.cssText = `
     position: fixed;
-    bottom: 12px;
+    bottom: ${TOKEN_VALUES.space3};
     left: 50%;
     transform: translateX(-50%);
-    background: #111827;
-    color: #ffffff;
-    font-size: 12px;
-    font-family: -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, sans-serif;
-    border-radius: 999px;
-    padding: 6px 12px;
+    background: ${TOKEN_VALUES.toastBg};
+    color: ${TOKEN_VALUES.toastText};
+    font-size: ${TOKEN_VALUES.textXs};
+    font-family: ${TOKEN_VALUES.fontSans};
+    border-radius: ${TOKEN_VALUES.radiusFull};
+    padding: ${TOKEN_VALUES.space1} ${TOKEN_VALUES.space3};
+    box-shadow: 0 12px 20px -12px rgba(24, 29, 39, 0.7);
     z-index: ${TOAST_Z_INDEX};
   `;
   toast.textContent = message;
