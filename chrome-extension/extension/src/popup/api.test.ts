@@ -46,11 +46,11 @@ describe("popup api", () => {
     expect(formatted).toBe("Capture is not supported on this page.");
   });
 
-  it("opens library in new tab", () => {
+  it("opens app in new tab", () => {
     openLibraryInNewTab();
-    expect(chrome.runtime.getURL).toHaveBeenCalledWith("library.html");
+    expect(chrome.runtime.getURL).toHaveBeenCalledWith("app.html");
     expect(chrome.tabs.create).toHaveBeenCalledWith({
-      url: "chrome-extension://mock-id/library.html"
+      url: "chrome-extension://mock-id/app.html"
     });
   });
 });

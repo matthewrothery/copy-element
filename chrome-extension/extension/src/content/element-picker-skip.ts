@@ -6,7 +6,7 @@
 const SNIPCSS_CLASS_PATTERN = /snipcss\d+-\d+-\d+-\d+/;
 
 const EXTENSION_SELECTORS =
-  "[data-element-capture-overlay], [data-element-capture-modal], [data-element-capture-toast]";
+  "[data-element-capture-overlay], [data-element-capture-modal], [data-element-capture-toast], [data-element-capture-confetti]";
 
 /**
  * Returns true if the element or any of its ancestors should be skipped

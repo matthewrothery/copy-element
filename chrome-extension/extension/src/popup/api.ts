@@ -87,5 +87,5 @@ export async function deleteSnippetFromBackground(id: string): Promise<void> {
 }
 
 export function openLibraryInNewTab(): void {
-  chrome.tabs.create({ url: chrome.runtime.getURL("library.html") });
+  chrome.tabs.create({ url: chrome.runtime.getURL("app.html") });
 }

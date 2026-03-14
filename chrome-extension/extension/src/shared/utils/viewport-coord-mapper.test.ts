@@ -85,6 +85,85 @@ describe("getElementRectInTopViewport", () => {
     expect(result.viewportHeight).toBe(600);
   });
 
+  it("adds iframe content-area offset (border + padding) when inside iframe", () => {
+    document.body.innerHTML = "<div id='el'></div>";
+    const el = document.getElementById("el")!;
+    el.getBoundingClientRect = () => ({
+      left: 5,
+      top: 5,
+      width: 10,
+      height: 10,
+      right: 15,
+      bottom: 15,
+      x: 5,
+      y: 5,
+      toJSON: () => {}
+    });
+
+    const frameEl = document.createElement("div");
+    frameEl.getBoundingClientRect = () => ({
+      left: 100,
+      top: 50,
+      width: 200,
+      height: 150,
+      right: 300,
+      bottom: 200,
+      x: 100,
+      y: 50,
+      toJSON: () => {}
+    });
+    const mockGetComputedStyle = vi.fn((target: Element) => {
+      if (target !== frameEl) return window.getComputedStyle(target);
+      return {
+        getPropertyValue: (prop: string) => {
+          switch (prop) {
+            case "border-left-width":
+              return "5px";
+            case "padding-left":
+              return "3px";
+            case "border-top-width":
+              return "2px";
+            case "padding-top":
+              return "4px";
+            default:
+              return "0px";
+          }
+        }
+      } as CSSStyleDeclaration;
+    });
+    const topWin = {
+      innerWidth: 800,
+      innerHeight: 600,
+      parent: null as Window | null,
+      frameElement: undefined as Element | undefined,
+      document: { getElementsByTagName: () => [] }
+    };
+    topWin.parent = topWin as unknown as Window;
+    const iframeWin = {
+      innerWidth: 200,
+      innerHeight: 150,
+      parent: topWin as unknown as Window,
+      frameElement: frameEl,
+      document: { getElementsByTagName: () => [] }
+    };
+    // frameEl.ownerDocument.defaultView is the pre-stub window, so stub getComputedStyle there
+    const doc = frameEl.ownerDocument;
+    const win = doc.defaultView as Window & { getComputedStyle: typeof getComputedStyle };
+    if (win) win.getComputedStyle = mockGetComputedStyle;
+    vi.stubGlobal("window", iframeWin);
+
+    const result = getElementRectInTopViewport(el);
+
+    expect(result.ok).toBe(true);
+    // Element in iframe: (5, 5). Frame border box: (100, 50). Content offset: left 5+3=8, top 2+4=6.
+    expect(result.cropLeft).toBe(5 + 100 + 8);
+    expect(result.cropTop).toBe(5 + 50 + 6);
+    expect(result.cropWidth).toBe(10);
+    expect(result.cropHeight).toBe(10);
+    expect(result.viewportWidth).toBe(800);
+    expect(result.viewportHeight).toBe(600);
+  });
+
   it("returns ok: false when parent access throws (cross-origin)", () => {
     document.body.innerHTML = "<div id='el'></div>";
     const el = document.getElementById("el")!;

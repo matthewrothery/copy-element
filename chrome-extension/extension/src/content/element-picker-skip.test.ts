@@ -32,6 +32,13 @@ describe("element-picker-skip", () => {
       expect(shouldSkipElement(el)).toBe(true);
     });
 
+    it("returns true for extension confetti container", () => {
+      const el = document.createElement("div");
+      el.setAttribute("data-element-capture-confetti", "true");
+      document.body.appendChild(el);
+      expect(shouldSkipElement(el)).toBe(true);
+    });
+
     it("returns true for element inside extension UI", () => {
       const parent = document.createElement("div");
       parent.setAttribute("data-element-capture-overlay", "box");

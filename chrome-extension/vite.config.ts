@@ -10,7 +10,7 @@ export default defineConfig({
     sourcemap: true,
     rollupOptions: {
       input: {
-        library: "library.html"
+        app: "app.html"
       }
     }
   }

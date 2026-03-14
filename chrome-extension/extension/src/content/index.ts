@@ -26,9 +26,38 @@ import {
 import { buildCopyHtml } from "../shared/utils/preview-srcdoc-builder";
 import { ElementPicker } from "./element-picker";
 import { TOKEN_VALUES } from "../shared/token-values";
+import { showConfetti } from "./confetti";
 
 const TOAST_Z_INDEX = 2147483648;
 const CAPTURE_ATTR = "data-element-capture-id";
+const SAVES_THIS_MONTH_KEY = "element-armory-saves-this-month";
+
+interface SavesThisMonth {
+  monthKey: string;
+  count: number;
+}
+
+function getCurrentMonthKey(): string {
+  const now = new Date();
+  const y = now.getFullYear();
+  const m = String(now.getMonth() + 1).padStart(2, "0");
+  return `${y}-${m}`;
+}
+
+/**
+ * Records this save in storage and returns whether to show confetti (first 5 saves of the month).
+ */
+async function recordSaveAndShouldShowConfetti(): Promise<boolean> {
+  const monthKey = getCurrentMonthKey();
+  const result = await chrome.storage.local.get(SAVES_THIS_MONTH_KEY);
+  const stored = result[SAVES_THIS_MONTH_KEY] as SavesThisMonth | undefined;
+  const count =
+    stored?.monthKey === monthKey ? stored.count + 1 : 1;
+  await chrome.storage.local.set({
+    [SAVES_THIS_MONTH_KEY]: { monthKey, count }
+  });
+  return count <= 5;
+}
 
 function collectAllElements(root: Element): Element[] {
   const elements: Element[] = [root];
@@ -340,8 +369,18 @@ function ensurePicker(): ElementPicker {
 async function handleSave(capture: CapturedElementData): Promise<void> {
   try {
     const snippet = buildSnippetFromCapture(capture);
-    await chrome.runtime.sendMessage({ type: "SAVE_SNIPPET", payload: snippet });
-    showPageToast("Snippet saved");
+    const saveResponse = (await chrome.runtime.sendMessage({
+      type: "SAVE_SNIPPET",
+      payload: snippet
+    })) as RuntimeResponse<null>;
+    if (saveResponse.ok) {
+      if (await recordSaveAndShouldShowConfetti()) {
+        showConfetti(TOAST_Z_INDEX);
+      }
+      showPageToast("Snippet saved");
+    } else {
+      showPageToast("Failed to save snippet");
+    }
   } catch (err) {
     console.error("Failed to save snippet", err);
     showPageToast("Failed to save snippet");
@@ -354,8 +393,18 @@ async function handleSave(capture: CapturedElementData): Promise<void> {
 async function handleSaveAndCaptureAnother(capture: CapturedElementData): Promise<void> {
   try {
     const snippet = buildSnippetFromCapture(capture);
-    await chrome.runtime.sendMessage({ type: "SAVE_SNIPPET", payload: snippet });
-    showPageToast("Snippet saved");
+    const saveResponse = (await chrome.runtime.sendMessage({
+      type: "SAVE_SNIPPET",
+      payload: snippet
+    })) as RuntimeResponse<null>;
+    if (saveResponse.ok) {
+      if (await recordSaveAndShouldShowConfetti()) {
+        showConfetti(TOAST_Z_INDEX);
+      }
+      showPageToast("Snippet saved");
+    } else {
+      showPageToast("Failed to save snippet");
+    }
   } catch (err) {
     console.error("Failed to save snippet", err);
     showPageToast("Failed to save snippet");
