@@ -1,6 +1,8 @@
 import { BookMarked, CreditCard, Plug, Settings } from "lucide-react";
 import type { JSX } from "react";
 
+import logoUrl from "../../../assets/logo.png";
+
 export type AppRoute = "library" | "mcp" | "plans" | "settings";
 
 const NAV_ITEMS: { route: AppRoute; label: string; icon: typeof BookMarked }[] = [
@@ -22,6 +24,7 @@ export function Sidebar({ currentRoute }: SidebarProps): JSX.Element {
   return (
     <aside className="app-sidebar" aria-label="App navigation">
       <div className="app-sidebar-brand">
+        <img src={logoUrl} alt="" className="app-sidebar-logo" width={32} height={32} />
         <span className="app-sidebar-title">Element Armory</span>
       </div>
       <nav className="app-sidebar-nav">
