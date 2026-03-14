@@ -245,3 +245,13 @@ We want to have various output formats:
 - **CSS only** — Copy Element classes or original classes
 - **React / JSX** — React-compatible code
 - **Tailwind CSS** — Tailwind utility classes
+
+================================================================================
+RULE GOVERNANCE ALIGNMENT (Website <-> Extension)
+================================================================================
+
+- [x] Audit website and extension rule overlap/conflicts and identify extension-only constraints
+- [x] Create shared top-level Cursor design rule authority in repo root
+- [x] Refactor extension UI rules to inherit shared authority and keep only ExtensionConstraint sections
+- [x] Refactor website design rules to inherit shared authority and keep website-only guidance
+- [x] Add parity checklist for future AI-generated UI changes

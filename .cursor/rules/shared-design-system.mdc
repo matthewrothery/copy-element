@@ -1,0 +1,148 @@
+---
+alwaysApply: true
+description: Shared UI design authority for website and chrome extension
+---
+
+# Shared UI Design Authority
+
+This is the default source of truth for shared UI style and interaction decisions across:
+
+- `website`
+- `chrome-extension`
+
+Use this file to keep both products visually and behaviorally aligned.
+
+---
+
+# Precedence and Overrides
+
+Precedence order:
+
+1. This shared rule (default)
+2. Local product rules (`website/.cursor/rules/*`, `chrome-extension/.cursor/rules/*`)
+
+Local rules may override shared guidance only when:
+
+- the difference is required by platform constraints, and
+- the rule section is explicitly marked as `ExtensionConstraint` or `WebsiteConstraint`, and
+- the reason is written in one line.
+
+If there is no explicit constraint marker, shared guidance applies.
+
+---
+
+# Guided Parity Model
+
+Use guided parity between website and extension.
+
+Must match across both:
+
+- visual language (clean, neutral, developer-focused)
+- design token architecture (primitive -> semantic -> component tokens)
+- core color identity and typography
+- spacing and radius scales
+- interaction quality (fast, clear feedback, low friction)
+- accessibility baseline
+
+May differ with documented constraints:
+
+- extension popup dimensions and density
+- content script overlay mechanics
+- MV3 and browser runtime limitations
+- page-context style injection limits
+
+---
+
+# Shared Design Contract
+
+## 1) Core Principles
+
+- Simplicity first
+- Minimal cognitive load
+- Immediate visual feedback
+- Fast perceived performance
+
+## 2) Token Architecture
+
+All styling must use a 3-layer token model:
+
+- Layer 1: primitives (raw values)
+- Layer 2: semantics (UI meaning)
+- Layer 3: component tokens (component-local aliases)
+
+Hard rules:
+
+- do not hardcode colors or spacing in component declarations
+- do not consume primitive tokens directly in component style declarations
+- use component tokens inside component internals
+
+## 3) Shared Visual Baseline
+
+- Primary accent: `#3b82f6`
+- Surface neutrals: `#ffffff`, `#f8fafc`
+- Borders: `#e5e7eb`
+- Primary text: `#111827`
+- Muted text: `#6b7280`
+- Typography: system sans stack
+- Spacing scale: `4, 8, 12, 16, 24, 32`
+- Radius scale: `4, 8, 12, 16`
+- Motion: `120ms-200ms`, never above `300ms`
+
+## 4) Interaction and UX Quality
+
+- show explicit feedback for user actions
+- avoid blocking UI; show loaders for actions over `200ms`
+- keep controls clearly labeled and developer-oriented
+- prioritize high signal, low clutter layouts
+
+## 5) Accessibility Baseline
+
+- contrast ratio target above `4.5`
+- interactive hit target above `32px`
+- keyboard support for interactive elements
+- explicit accessible labeling on icon-only buttons
+
+---
+
+# Copy and Labeling Alignment
+
+Shared UI copy style:
+
+- concise
+- technical but clear
+- developer-friendly
+- avoid hype and generic marketing phrases
+
+Button labels should be specific, for example:
+
+- `Capture Element`
+- `Copy HTML`
+- `Copy JSX`
+
+Avoid vague labels like `Action`.
+
+---
+
+# Parity Checklist (Required Before Finalizing UI Work)
+
+Before finalizing any UI task in either project, confirm:
+
+- Shared token architecture is followed (primitive -> semantic -> component)
+- No hardcoded style values were introduced in component internals
+- Core color, typography, spacing, and radius scales remain aligned
+- Interaction timing and feedback match shared standards
+- Accessibility baseline is preserved
+- Any divergence is marked with `ExtensionConstraint` or `WebsiteConstraint` plus rationale
+
+If checklist items fail, fix before completion.
+
+---
+
+# Maintenance Protocol
+
+When a shared style convention changes:
+
+1. update this file first
+2. update local rule files only for product-specific constraints
+3. remove duplicate statements from local rules when they are now covered here
+4. keep one canonical source per rule topic to prevent drift
