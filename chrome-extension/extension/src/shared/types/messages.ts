@@ -42,6 +42,21 @@ export interface StopOtherPickersRequest {
   };
 }
 
+/** Sent by content script when user presses Escape in picker; background broadcasts CANCEL_CAPTURE to all frames. */
+export interface BroadcastCancelCaptureRequest {
+  type: "BROADCAST_CANCEL_CAPTURE";
+}
+
+/** Sent by content script when this frame has active hover in picker; background tells other frames to clear their overlay. */
+export interface FrameHoverActiveRequest {
+  type: "FRAME_HOVER_ACTIVE";
+}
+
+/** Sent by background to content; clear hover/selection overlay only (picker stays active). */
+export interface ClearFrameHoverRequest {
+  type: "CLEAR_FRAME_HOVER";
+}
+
 export interface ElementCapturedRequest {
   type: "ELEMENT_CAPTURED";
   payload: CapturedElementData;
@@ -76,6 +91,7 @@ export interface ExtractCssViaCdpRequest {
   type: "EXTRACT_CSS_VIA_CDP";
   payload: {
     tabId?: number;
+    frameId?: number;
     selectors: string[];
     baseUrl: string;
   };
@@ -107,6 +123,9 @@ export type RuntimeMessage =
   | StartCaptureRequest
   | CancelCaptureRequest
   | StopOtherPickersRequest
+  | BroadcastCancelCaptureRequest
+  | FrameHoverActiveRequest
+  | ClearFrameHoverRequest
   | ElementCapturedRequest
   | SaveSnippetRequest
   | GetSnippetsRequest

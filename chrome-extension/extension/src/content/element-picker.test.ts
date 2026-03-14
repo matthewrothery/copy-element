@@ -174,6 +174,37 @@ describe("ElementPicker", () => {
     );
   });
 
+  it("calls onFrameHoverActive when showing hover overlay", () => {
+    const onFrameHoverActive = vi.fn();
+    picker = new ElementPicker({ onSelected, onFrameHoverActive });
+    picker.start();
+    const child = document.getElementById("child")!;
+    child.dispatchEvent(
+      new MouseEvent("mousemove", { bubbles: true, cancelable: true })
+    );
+    expect(onFrameHoverActive).toHaveBeenCalledTimes(1);
+    picker.stop();
+  });
+
+  it("clearHoverOnly hides overlay without stopping picker", () => {
+    picker.start();
+    const child = document.getElementById("child")!;
+    child.dispatchEvent(
+      new MouseEvent("mousemove", { bubbles: true, cancelable: true })
+    );
+    let box = document.querySelector("[data-element-capture-overlay=box]") as HTMLElement;
+    expect(box.style.display).toBe("block");
+    picker.clearHoverOnly();
+    box = document.querySelector("[data-element-capture-overlay=box]") as HTMLElement;
+    expect(box.style.display).toBe("none");
+    child.dispatchEvent(
+      new MouseEvent("mousemove", { bubbles: true, cancelable: true })
+    );
+    box = document.querySelector("[data-element-capture-overlay=box]") as HTMLElement;
+    expect(box.style.display).toBe("block");
+    picker.stop();
+  });
+
   it("does not select extension overlay elements", () => {
     const modalEl = document.createElement("div");
     modalEl.setAttribute("data-element-capture-modal", "true");

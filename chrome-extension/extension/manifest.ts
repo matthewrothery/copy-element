@@ -19,7 +19,8 @@ export default defineManifest({
       matches: ["<all_urls>"],
       js: ["extension/src/content/index.ts"],
       run_at: "document_idle",
-      all_frames: true
+      all_frames: true,
+      match_about_blank: true
     }
   ],
   host_permissions: ["<all_urls>"]

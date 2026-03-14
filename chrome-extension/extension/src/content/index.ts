@@ -12,6 +12,7 @@ import { extractUsedFontFaces } from "../shared/utils/font-face-extractor";
 import { extractUsedKeyframes } from "../shared/utils/keyframes-extractor";
 import { extractAllFontLinks } from "../shared/utils/external-font-link-extractor";
 import { cropViewportToThumbnail } from "../shared/utils/viewport-thumbnail-crop";
+import { getElementRectInTopViewport } from "../shared/utils/viewport-coord-mapper";
 import type { CapturedElementData } from "../shared/types/snippet";
 import type {
   ExtractCssViaCdpPayload,
@@ -147,7 +148,8 @@ async function copyToClipboard(value: string): Promise<boolean> {
 
 function ensurePicker(): ElementPicker {
   if (!picker) {
-    picker = new ElementPicker((result) => {
+    picker = new ElementPicker({
+      onSelected: (result) => {
       void (async () => {
         try {
           // Stop pickers in other frames so only this capture is active
@@ -157,44 +159,32 @@ function ensurePicker(): ElementPicker {
           await new Promise<void>((r) =>
             requestAnimationFrame(() => requestAnimationFrame(() => r()))
           );
-          const rect = result.element.getBoundingClientRect();
-          let cropLeft = rect.left;
-          let cropTop = rect.top;
-          let cropWidth = rect.width;
-          let cropHeight = rect.height;
-          let viewportWidth = window.innerWidth;
-          let viewportHeight = window.innerHeight;
-          // Map element rect to top-level viewport when inside a same-origin iframe
-          try {
-            if (window !== window.top && window.frameElement) {
-              const iframeRect = (window.frameElement as Element).getBoundingClientRect();
-              cropLeft = iframeRect.left + rect.left;
-              cropTop = iframeRect.top + rect.top;
-              cropWidth = rect.width;
-              cropHeight = rect.height;
-              viewportWidth = window.top!.innerWidth;
-              viewportHeight = window.top!.innerHeight;
-            }
-          } catch {
-            // Cross-origin or inaccessible; thumbnail will use current frame or be skipped
-          }
+          const viewportRect = getElementRectInTopViewport(result.element);
 
           let thumbnail: string | undefined;
-          try {
-            const response = (await chrome.runtime.sendMessage({
-              type: "CAPTURE_VISIBLE_TAB"
-            })) as RuntimeResponse<{ dataUrl: string }>;
-            if (response.ok && response.payload.dataUrl) {
-              thumbnail = await cropViewportToThumbnail(
-                response.payload.dataUrl,
-                { left: cropLeft, top: cropTop, width: cropWidth, height: cropHeight },
-                viewportWidth,
-                viewportHeight
-              );
+          if (viewportRect.ok) {
+            try {
+              const response = (await chrome.runtime.sendMessage({
+                type: "CAPTURE_VISIBLE_TAB"
+              })) as RuntimeResponse<{ dataUrl: string }>;
+              if (response.ok && response.payload.dataUrl) {
+                thumbnail = await cropViewportToThumbnail(
+                  response.payload.dataUrl,
+                  {
+                    left: viewportRect.cropLeft,
+                    top: viewportRect.cropTop,
+                    width: viewportRect.cropWidth,
+                    height: viewportRect.cropHeight
+                  },
+                  viewportRect.viewportWidth,
+                  viewportRect.viewportHeight
+                );
+              }
+            } catch (thumbnailError) {
+              console.warn("Thumbnail generation failed, using fallback.", thumbnailError);
             }
-          } catch (thumbnailError) {
-            console.warn("Thumbnail generation failed, using fallback.", thumbnailError);
           }
+          // When viewportRect.ok is false (e.g. cross-origin iframe), skip thumbnail to avoid wrong crop
 
           const baseUrl = window.location.href;
           const cloned = cloneElementTreeWithInlineStyles(result.element, baseUrl);
@@ -226,6 +216,10 @@ function ensurePicker(): ElementPicker {
 
             if (cdpResponse.ok) {
               const p = cdpResponse.payload;
+              const isEmpty = !p.cssText || !p.cssText.trim();
+              if (isEmpty) {
+                throw new Error("CDP returned empty CSS (e.g. iframe or no match); using in-page fallback");
+              }
               cssText = p.cssText;
               fontFaces = p.fontFacesCss;
               keyframesCss = p.keyframesCss;
@@ -330,7 +324,14 @@ function ensurePicker(): ElementPicker {
           picker?.stop();
         }
       })();
-    });
+    },
+    onEscape: () => {
+      chrome.runtime.sendMessage({ type: "BROADCAST_CANCEL_CAPTURE" }).catch(() => {});
+    },
+    onFrameHoverActive: () => {
+      chrome.runtime.sendMessage({ type: "FRAME_HOVER_ACTIVE" }).catch(() => {});
+    }
+  });
   }
 
   return picker;
@@ -396,5 +397,10 @@ chrome.runtime.onMessage.addListener((message: { type?: string }) => {
     picker?.stop();
     modal?.destroy();
     modal = null;
+    return;
+  }
+
+  if (message.type === "CLEAR_FRAME_HOVER") {
+    picker?.clearHoverOnly();
   }
 });
