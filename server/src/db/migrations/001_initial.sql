@@ -1,0 +1,3 @@
+-- Initial migration: placeholder for schema version.
+-- Use portable SQL (INTEGER, TEXT) for future Postgres compatibility.
+-- No schema_migrations table here; the runner creates it.
