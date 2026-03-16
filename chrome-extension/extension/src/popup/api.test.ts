@@ -53,4 +53,12 @@ describe("popup api", () => {
       url: "chrome-extension://mock-id/app.html"
     });
   });
+
+  it("opens app with snippet id in query when provided", () => {
+    openLibraryInNewTab("snippet-123");
+    expect(chrome.runtime.getURL).toHaveBeenCalledWith("app.html");
+    expect(chrome.tabs.create).toHaveBeenCalledWith({
+      url: "chrome-extension://mock-id/app.html?snippet=snippet-123"
+    });
+  });
 });

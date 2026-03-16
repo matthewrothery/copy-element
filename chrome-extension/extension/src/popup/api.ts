@@ -86,6 +86,8 @@ export async function deleteSnippetFromBackground(id: string): Promise<void> {
   await sendRuntimeMessage<null>({ type: "DELETE_SNIPPET", payload: { id } });
 }
 
-export function openLibraryInNewTab(): void {
-  chrome.tabs.create({ url: chrome.runtime.getURL("app.html") });
+export function openLibraryInNewTab(snippetId?: string): void {
+  const base = chrome.runtime.getURL("app.html");
+  const url = snippetId ? `${base}?snippet=${encodeURIComponent(snippetId)}` : base;
+  chrome.tabs.create({ url });
 }

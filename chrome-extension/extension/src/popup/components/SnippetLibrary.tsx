@@ -9,7 +9,7 @@ interface SnippetLibraryProps {
   onCopy: (value: string, label: string) => void;
 }
 
-export function SnippetLibrary({ snippets, onOpen, onDelete, onCopy }: SnippetLibraryProps): JSX.Element {
+export function SnippetLibrary({ snippets, onOpen, onDelete, onCopy }: SnippetLibraryProps): React.ReactElement {
   return (
     <section className="snippet-grid" aria-label="Snippet library">
       {snippets.map((snippet) => (

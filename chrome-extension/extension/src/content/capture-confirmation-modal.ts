@@ -190,7 +190,8 @@ export class CaptureConfirmationModal {
       }
       .capture-status {
         margin-top: var(--space-3);
-        display: grid;
+        display: flex;
+        flex-direction: row;
         gap: var(--space-2);
       }
       .capture-status-item {

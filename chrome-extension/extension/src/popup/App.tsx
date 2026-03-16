@@ -1,13 +1,17 @@
-import { useEffect, useState, type JSX } from "react";
+import { useEffect, useMemo, useState, type JSX } from "react";
 import {
   formatCaptureStartError,
   getSnippetsFromBackground,
   openLibraryInNewTab,
   startCapture
 } from "./api";
+import { Settings } from "lucide-react";
 import { Header } from "./components/Header";
+import { MainPanel } from "./components/MainPanel";
 import { SettingsPanel, type UiPreferences } from "./components/SettingsPanel";
 import { Toast } from "./components/Toast";
+import type { Snippet } from "../shared/types/snippet";
+import { buildSnippetPrompt } from "../shared/utils/prompt-builder";
 
 type PopupView = "home" | "settings";
 const PREFERENCES_KEY = "element-armory-ui-preferences";
@@ -16,6 +20,29 @@ const DEFAULT_PREFERENCES: UiPreferences = {
   assetReplacementMode: "smart",
   exportFormat: "html"
 };
+
+function copyToClipboard(value: string): Promise<void> {
+  return new Promise((resolve, reject) => {
+    const textarea = document.createElement("textarea");
+    textarea.value = value;
+    textarea.style.cssText = "position:fixed;top:0;left:0;opacity:0;pointer-events:none";
+    document.body.appendChild(textarea);
+    textarea.focus();
+    textarea.select();
+    try {
+      const ok = document.execCommand("copy");
+      document.body.removeChild(textarea);
+      if (ok) {
+        resolve();
+      } else {
+        reject(new Error("Copy failed"));
+      }
+    } catch (err) {
+      document.body.removeChild(textarea);
+      reject(err);
+    }
+  });
+}
 
 export function App(): JSX.Element {
   const extensionVersion =
@@ -28,9 +55,12 @@ export function App(): JSX.Element {
     typeof chrome.storage?.local?.set === "function";
   const [view, setView] = useState<PopupView>("home");
   const [toastMessage, setToastMessage] = useState("");
-  const [snippetCount, setSnippetCount] = useState(0);
+  const [snippets, setSnippets] = useState<Snippet[]>([]);
   const [preferences, setPreferences] = useState<UiPreferences>(DEFAULT_PREFERENCES);
   const [loadingState, setLoadingState] = useState(false);
+
+  const snippetCount = snippets.length;
+  const recentSnippets = useMemo(() => snippets.slice(0, 2), [snippets]);
 
   useEffect(() => {
     if (!hasStorageLocal) {
@@ -59,10 +89,10 @@ export function App(): JSX.Element {
   useEffect(() => {
     void (async () => {
       try {
-        const snippets = await getSnippetsFromBackground();
-        setSnippetCount(snippets.length);
+        const data = await getSnippetsFromBackground();
+        setSnippets(Array.isArray(data) ? data : []);
       } catch {
-        setSnippetCount(0);
+        setSnippets([]);
       }
     })();
   }, []);
@@ -92,6 +122,19 @@ export function App(): JSX.Element {
     openLibraryInNewTab();
   }
 
+  function handleOpenLibrary(snippetId?: string): void {
+    openLibraryInNewTab(snippetId);
+  }
+
+  async function handleCopyPrompt(snippet: Snippet): Promise<void> {
+    try {
+      await copyToClipboard(buildSnippetPrompt(snippet));
+      setToastMessage("Ready paste into your AI tool of choice!");
+    } catch {
+      setToastMessage("Failed to copy prompt");
+    }
+  }
+
   return (
     <div className="app-shell">
       <Header
@@ -99,19 +142,8 @@ export function App(): JSX.Element {
         onLibrary={handleLibrary}
         onToggleSettings={() => setView((current) => (current === "home" ? "settings" : "home"))}
         isSettingsView={view === "settings"}
-      />
-      <main className="main-content">
-        {view === "settings" ? (
-          <SettingsPanel preferences={preferences} onChange={setPreferences} />
-        ) : (
-          <section className="popup-home" aria-label="Capture workflow overview">
-            <div className="popup-stat-card">
-              <p className="popup-stat-label">Saved snippets</p>
-              <p className="popup-stat-value">{snippetCount}</p>
-              <p className="popup-stat-meta">Open Library to browse, copy, or delete snippets.</p>
-            </div>
-
-            <div className="popup-flow">
+      >
+                    <div className="popup-flow">
               <h2 className="popup-flow-title">Capture flow</h2>
               <ol className="popup-flow-list">
                 <li>Click <strong>Capture Element</strong>.</li>
@@ -119,33 +151,32 @@ export function App(): JSX.Element {
                 <li>Save to library or copy as HTML/JSX.</li>
               </ol>
             </div>
-
-            <button
-              type="button"
-              className="btn-primary popup-capture-button"
-              onClick={() => void handleCapture()}
-              disabled={loadingState}
-              aria-label="Start capture flow"
-            >
-              {loadingState ? "Starting…" : "Start Capture"}
-            </button>
-          </section>
+            </Header>
+      
+      <main className="main-content">
+        {view === "settings" ? (
+          <SettingsPanel
+            preferences={preferences}
+            onChange={setPreferences}
+            onBack={() => setView("home")}
+          />
+        ) : (
+          <MainPanel
+            snippetCount={snippetCount}
+            recentSnippets={recentSnippets}
+            onOpenLibrary={handleOpenLibrary}
+            onCopyPrompt={handleCopyPrompt}
+          />
         )}
       </main>
       <footer className="footer">
         <button
           type="button"
+          className="footer-settings-button"
           onClick={() => setView("settings")}
           aria-label="Open settings"
         >
-          Settings
-        </button>
-        <button
-          type="button"
-          onClick={handleLibrary}
-          aria-label="Open library"
-        >
-          Library
+          <Settings size={18} aria-hidden />
         </button>
         <span>v{extensionVersion}</span>
       </footer>

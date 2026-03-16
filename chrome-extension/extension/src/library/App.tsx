@@ -80,6 +80,13 @@ export function LibraryApp(): JSX.Element {
     try {
       const data = await getSnippetsFromBackground();
       setSnippets(data);
+      const snippetId = new URL(window.location.href).searchParams.get("snippet");
+      if (snippetId) {
+        const snippet = data.find((s) => s.id === snippetId);
+        if (snippet) {
+          setSelectedSnippet(snippet);
+        }
+      }
     } catch {
       setToastMessage("Failed to load snippets");
     }

@@ -1,3 +1,4 @@
+import { ChevronLeft } from "lucide-react";
 import type { JSX } from "react";
 
 export interface UiPreferences {
@@ -9,12 +10,27 @@ export interface UiPreferences {
 interface SettingsPanelProps {
   preferences: UiPreferences;
   onChange: (next: UiPreferences) => void;
+  onBack?: () => void;
 }
 
-export function SettingsPanel({ preferences, onChange }: SettingsPanelProps): JSX.Element {
+const BACK_ICON_SIZE = 20;
+
+export function SettingsPanel({ preferences, onChange, onBack }: SettingsPanelProps): JSX.Element {
   return (
     <section className="settings-panel" aria-label="Extension settings">
-      <h2 className="settings-title">Settings</h2>
+      <div className="settings-header">
+        {onBack && (
+          <button
+            type="button"
+            className="settings-back-button"
+            onClick={onBack}
+            aria-label="Back to main"
+          >
+            <ChevronLeft size={BACK_ICON_SIZE} aria-hidden />
+          </button>
+        )}
+        <h2 className="settings-title">Settings</h2>
+      </div>
       <p className="settings-description">These preferences tune capture and export defaults for your workflow.</p>
 
       <div className="settings-section">

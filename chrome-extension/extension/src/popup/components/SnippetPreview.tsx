@@ -289,15 +289,15 @@ export function SnippetPreview({ snippet, onClose, onCopy, onToast }: SnippetPre
             Close
           </button>
           <span className="modal-actions-spacer" aria-hidden="true" />
-          <button type="button" className="btn-primary" onClick={() => onCopy(buildCopyHtml(snippet), "HTML")} aria-label="Copy HTML">
-            Copy HTML
+          <button type="button" className="btn-primary" onClick={() => onCopy(buildCopyHtml(snippet), "HTML")} aria-label="Copy Code">
+            Copy Code 
           </button>
-          <button type="button" className="btn-secondary" onClick={() => onCopy(buildCopyHtml(snippet, { includeStyleBlock: false }), "HTML (inline)")} aria-label="Copy HTML inline only">
+          {/* <button type="button" className="btn-secondary" onClick={() => onCopy(buildCopyHtml(snippet, { includeStyleBlock: false }), "HTML (inline)")} aria-label="Copy HTML inline only">
             Copy Inline
           </button>
           <button type="button" className="btn-primary" onClick={() => onCopy(snippet.jsx, "JSX")} aria-label="Copy JSX">
             Copy JSX
-          </button>
+          </button> */}
           <button type="button" className="btn-secondary" onClick={() => onCopy(buildSnippetPrompt(snippet), "Prompt")} aria-label="Copy prompt for AI tools">
             <MessageSquare size={16} />
             Copy Prompt (~{getSnippetPromptTokenEstimate(snippet)} tokens)
