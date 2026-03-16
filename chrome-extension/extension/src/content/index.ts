@@ -18,13 +18,9 @@ import type {
   ExtractCssViaCdpPayload,
   RuntimeResponse
 } from "../shared/types/messages";
-import {
-  buildSnippetFromCapture,
-  CaptureConfirmationModal,
-  type CopyFormat
-} from "./capture-confirmation-modal";
-import { buildCopyHtml } from "../shared/utils/preview-srcdoc-builder";
-import { buildCopyMcpPrompt, buildSnippetPrompt } from "../shared/utils/prompt-builder";
+import { buildSnippetFromCapture } from "../shared/utils/snippet-from-capture";
+import { PostCaptureBar } from "./post-capture-bar";
+import { buildSnippetPrompt } from "../shared/utils/prompt-builder";
 import { ElementPicker } from "./element-picker";
 import {
   getCurrentMonthKey,
@@ -99,7 +95,7 @@ function collectInlineStyleUsageContexts(
 }
 
 let picker: ElementPicker | null = null;
-let modal: CaptureConfirmationModal | null = null;
+let bar: PostCaptureBar | null = null;
 
 /**
  * True if this frame's DOM is readable (same-origin or otherwise accessible).
@@ -323,33 +319,30 @@ function ensurePicker(): ElementPicker {
 
           picker?.stop();
 
-          if (modal) {
-            modal.destroy();
+          if (bar) {
+            bar.destroy();
           }
 
-          modal = new CaptureConfirmationModal({
-            onCopyCode: (format: CopyFormat) => {
-              handleCopyCode(snippet, format);
-            },
+          bar = new PostCaptureBar({
             onCopyPrompt: () => {
               handleCopyPrompt(snippet);
             },
-            onCopyMcp: () => {
-              handleCopyMcp(snippet);
+            onOpenLibrary: () => {
+              handleGoToLibrary();
             },
             onCaptureAnother: () => {
               handleCaptureAnother();
             },
-            onGoToLibrary: () => {
-              handleGoToLibrary();
+            onDelete: (snippetId: string) => {
+              handleDeleteSnippet(snippetId);
             },
-            onCancel: () => {
-              modal?.destroy();
-              modal = null;
+            onClose: () => {
+              bar?.destroy();
+              bar = null;
             }
           });
 
-          modal.show(capture);
+          bar.show(snippet);
         } catch (error) {
           console.error("Failed to capture element", error);
           picker?.stop();
@@ -389,47 +382,40 @@ async function autoSaveSnippet(snippet: ReturnType<typeof buildSnippetFromCaptur
 }
 
 function handleCaptureAnother(): void {
-  modal?.destroy();
-  modal = null;
+  bar?.destroy();
+  bar = null;
   picker?.start();
 }
 
 function handleGoToLibrary(): void {
   void chrome.runtime.sendMessage({ type: "OPEN_LIBRARY_TAB" }).catch(() => {});
-  modal?.destroy();
-  modal = null;
-}
-
-async function handleCopyCode(snippet: ReturnType<typeof buildSnippetFromCapture>, format: CopyFormat): Promise<void> {
-  const value =
-    format === "html" || format === "html-inline"
-      ? buildCopyHtml(snippet, {
-          includeStyleBlock: format !== "html-inline"
-        })
-      : snippet.jsx;
-  const ok = await copyToClipboard(value);
-  if (ok && modal) {
-    modal.showToast("Copied code");
-  } else if (!ok) {
-    showPageToast("Failed to copy code");
-  }
+  bar?.destroy();
+  bar = null;
 }
 
 async function handleCopyPrompt(snippet: ReturnType<typeof buildSnippetFromCapture>): Promise<void> {
   const ok = await copyToClipboard(buildSnippetPrompt(snippet));
-  if (ok && modal) {
-    modal.showToast("Copied prompt");
+  if (ok && bar) {
+    bar.showToast("Copied prompt");
   } else if (!ok) {
     showPageToast("Failed to copy prompt");
   }
 }
 
-async function handleCopyMcp(snippet: ReturnType<typeof buildSnippetFromCapture>): Promise<void> {
-  const ok = await copyToClipboard(buildCopyMcpPrompt(snippet));
-  if (ok && modal) {
-    modal.showToast("Copied MCP");
-  } else if (!ok) {
-    showPageToast("Failed to copy MCP");
+async function handleDeleteSnippet(snippetId: string): Promise<void> {
+  try {
+    const response = (await chrome.runtime.sendMessage({
+      type: "DELETE_SNIPPET",
+      payload: { id: snippetId }
+    })) as RuntimeResponse<null>;
+    bar?.destroy();
+    bar = null;
+    if (response?.ok !== false) {
+      showPageToast("Snippet removed");
+    }
+  } catch (err) {
+    console.error("Failed to delete snippet", err);
+    showPageToast("Failed to remove snippet");
   }
 }
 
@@ -447,8 +433,8 @@ chrome.runtime.onMessage.addListener((message: { type?: string }) => {
 
   if (message.type === "CANCEL_CAPTURE") {
     picker?.stop();
-    modal?.destroy();
-    modal = null;
+    bar?.destroy();
+    bar = null;
     return;
   }
 
