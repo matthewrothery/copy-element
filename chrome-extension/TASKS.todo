@@ -245,3 +245,24 @@ We want to have various output formats:
 - **CSS only** — Copy Element classes or original classes
 - **React / JSX** — React-compatible code
 - **Tailwind CSS** — Tailwind utility classes
+
+================================================================================
+UI REDESIGN: WEBSITE-ALIGNED EXTENSION EXPERIENCE
+================================================================================
+
+- [x] Finalize redesign spec for popup, library, settings, overlay, tooltip, and confirmation modal
+- [x] Normalize shared token usage in CSS and JS-rendered overlay/toast contexts
+- [x] Redesign popup shell and interactions, including settings surface and workflow guidance
+- [x] Redesign library header, search UX, card interactions, and modal consistency
+- [x] Redesign capture overlay and confirmation modal while preserving capture behavior
+- [x] Validate with test suite and lint checks
+
+================================================================================
+RULE GOVERNANCE ALIGNMENT (Website <-> Extension)
+================================================================================
+
+- [x] Audit website and extension rule overlap/conflicts and identify extension-only constraints
+- [x] Create shared top-level Cursor design rule authority in repo root
+- [x] Refactor extension UI rules to inherit shared authority and keep only ExtensionConstraint sections
+- [x] Refactor website design rules to inherit shared authority and keep website-only guidance
+- [x] Add parity checklist for future AI-generated UI changes

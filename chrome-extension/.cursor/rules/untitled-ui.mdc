@@ -1,114 +1,61 @@
 ---
 alwaysApply: true
-description: Untitled UI-inspired design system and 3-layer token architecture
+description: Extension token implementation details aligned to shared design authority
 ---
 
-# Untitled UI-Inspired Design System
+# Extension Token Implementation Notes
 
-This project uses [Untitled UI](https://www.untitledui.com/react/) as **design inspiration**—similar aesthetic (clean, modern, neutral) but not a pixel-perfect copy. Implementation is **CSS-only** with a 3-layer design token system. No Tailwind.
+Visual inspiration remains Untitled-UI-like (clean, modern, neutral), but implementation must follow shared project authority:
 
----
+- `.cursor/rules/shared-design-system.mdc`
 
-# Design Inspiration
-
-Untitled UI informs our visual language:
-
-- Neutral gray palette with blue accent
-- Consistent spacing scale (4px base)
-- Subtle shadows and borders
-- Clean typography (system font stack)
-
-We aim for a similar feel without using Untitled UI components or Tailwind.
+This file exists to capture extension implementation specifics, not separate design authority.
 
 ---
 
-# Token Architecture
+# ExtensionConstraint: Token File Layout
 
-All styling flows through a **3-layer token system**. No component should reference raw colors or spacing directly.
+Keep extension token layers in:
 
-**Layer 1 — Primitives** (`extension/src/styles/tokens/primitives.css`)
+- `extension/src/styles/tokens/primitives.css`
+- `extension/src/styles/tokens/semantic.css`
 
-Raw design values. No UI meaning.
+Component tokens remain local to each component root.
 
-- Colors: `--gray-100`, `--gray-900`, `--blue-500`, etc.
-- Spacing: `--space-1` through `--space-8`
-- Radius: `--radius-1` through `--radius-4`
-- Typography: `--font-sans`, `--font-mono`
-- Shadows: `--shadow-sm`, `--shadow-md`, `--shadow-lg`
-
-**Layer 2 — Semantic** (`extension/src/styles/tokens/semantic.css`)
-
-UI meaning mapped from primitives.
-
-- `--color-text-primary`, `--color-text-secondary`, `--color-text-muted`
-- `--color-surface`, `--color-surface-alt`, `--color-panel`
-- `--color-border`, `--color-border-strong`
-- `--color-accent`, `--color-accent-hover`, `--color-accent-subtle`
-- `--color-overlay`, `--color-danger`
-
-**Layer 3 — Component tokens**
-
-Defined in each component root. Map to semantic or spacing tokens.
-
-Example:
-
-```css
-.snippet-card {
-  --card-bg: var(--color-panel);
-  --card-border: var(--color-border);
-  --card-radius: var(--radius-2);
-  --card-padding: var(--space-3);
-  --card-shadow-hover: var(--shadow-md);
-
-  background: var(--card-bg);
-  border: 1px solid var(--card-border);
-  border-radius: var(--card-radius);
-  padding: var(--card-padding);
-}
-```
-
----
-
-# Load Order
-
-In each entry (popup, library):
+Load order in UI entries:
 
 1. `styles/tokens/index.css`
 2. `styles/base.css`
-3. Component CSS (popup/styles.css, library/styles.css)
+3. entry/component styles
 
 ---
 
-# Content Script Overlay
+# ExtensionConstraint: Page-Context UI (Shadow DOM)
 
-The capture confirmation modal ([`extension/src/content/capture-confirmation-modal.ts`](extension/src/content/capture-confirmation-modal.ts)) runs in page context with Shadow DOM. It cannot import extension CSS.
+Some extension UI (for example content-script confirmation UI) runs in page context and cannot import extension bundle CSS directly.
 
-It must inject a `<style>` block that defines the same primitive and semantic variables (via `tokens-css.ts` or raw import) so the modal matches the extension UI visually.
+For those surfaces:
+
+- inject a style block with equivalent primitive + semantic variables
+- keep token names aligned with shared token contract
+- avoid ad-hoc color/spacing constants
 
 ---
 
 # Icons
 
-Use Lucide or Feather icons (per ui-design.mdc). Do not use `@untitledui/icons`.
+Use icon sets consistent with shared/local rules:
+
+- Lucide
+- Feather
+
+Do not introduce alternate icon systems unless explicitly documented.
 
 ---
 
 # Hard Rules
 
-Do NOT:
-
-- hardcode colors, spacing, or radius in components
-- reference primitive tokens inside component style rules (use semantic or component tokens)
-- reference semantic tokens directly in deeply nested elements (create component tokens)
-
-Always:
-
-- create component tokens for each component
-- map component tokens to semantic or spacing tokens
-- follow the 3-layer architecture for all new UI
-
----
-
-# No Runtime Themes
-
-This project does not support runtime theme switching. All tokens are fixed in CSS. To change the look, edit `primitives.css` and/or `semantic.css`.
+- no hardcoded colors/spacing/radius in component internals
+- no primitive token usage directly in component declarations
+- map component tokens to semantic (and spacing/radius) tokens
+- keep divergence from shared design standards explicitly documented as `ExtensionConstraint`

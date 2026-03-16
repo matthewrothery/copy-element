@@ -55,12 +55,13 @@ export function buildCopyHtml(
 ): string {
   const { includeStyleBlock = true } = options;
   const content = wrapWithLayoutIfNeeded(snippet.html, snippet.renderContext);
+  const externalFontLinks = snippet.externalFontLinks ?? [];
   if (!includeStyleBlock) {
     return content;
   }
   const importCss =
-    snippet.externalFontLinks?.length > 0
-      ? externalFontLinksToImportCss(snippet.externalFontLinks)
+    externalFontLinks.length > 0
+      ? externalFontLinksToImportCss(externalFontLinks)
       : "";
   const styleBlock = snippet.styleBlock?.trim() ?? "";
   const parts: string[] = [];
@@ -116,6 +117,20 @@ export interface CapturePreviewInput {
   externalFontLinks?: string[];
 }
 
+function buildPreviewHeadAndBody(
+  stageWidth: number,
+  stageHeight: number,
+  baseTag: string,
+  externalFontLinks: string,
+  styleBlock: string,
+  innerContent: string
+): string {
+  const previewStageCss = `.snippet-stage{width:${stageWidth}px;height:${stageHeight}px;min-width:${stageWidth}px;min-height:${stageHeight}px;overflow:hidden;}`;
+  const bodyContent = `<div class="snippet-stage">${innerContent}</div>`;
+
+  return `<!doctype html><html><head><meta charset="utf-8">${baseTag}${externalFontLinks}<style>${RESET_CSS}html, body { width: ${stageWidth}px; height: ${stageHeight}px; }${previewStageCss}</style>${styleBlock}</head><body>${bodyContent}</body></html>`;
+}
+
 /**
  * Builds srcDoc for capture modal fallback preview (when no thumbnail).
  * Includes style block and base tag for correct layout and relative URL resolution.
@@ -128,9 +143,14 @@ export function buildPreviewForCapture(input: CapturePreviewInput): string {
   const externalFontLinks = input.externalFontLinks?.join("\n") || "";
   const styleBlock = input.styleBlock ? `<style>${input.styleBlock}</style>` : "";
   const innerContent = wrapWithLayoutIfNeeded(input.html, input.renderContext);
-  const bodyContent = `<div class="snippet-stage" style="width:${stageWidth}px;min-height:${stageHeight}px;">${innerContent}</div>`;
-
-  return `<!doctype html><html><head><meta charset="utf-8">${baseTag}${externalFontLinks}<style>${RESET_CSS}.snippet-stage{min-width:0;min-height:0;}</style>${styleBlock}</head><body>${bodyContent}</body></html>`;
+  return buildPreviewHeadAndBody(
+    stageWidth,
+    stageHeight,
+    baseTag,
+    externalFontLinks,
+    styleBlock,
+    innerContent
+  );
 }
 
 /**
@@ -146,7 +166,12 @@ export function buildPreviewSrcDoc(snippet: Snippet): string {
   const externalFontLinks = snippet.externalFontLinks?.join("\n") || "";
   const styleBlock = snippet.styleBlock ? `<style>${snippet.styleBlock}</style>` : "";
   const innerContent = wrapWithLayoutIfNeeded(snippet.html, snippet.renderContext);
-  const bodyContent = `<div class="snippet-stage" style="width:${stageWidth}px;min-height:${stageHeight}px;">${innerContent}</div>`;
-
-  return `<!doctype html><html><head><meta charset="utf-8">${baseTag}${externalFontLinks}<style>${RESET_CSS}.snippet-stage{min-width:0;min-height:0;}</style>${styleBlock}</head><body>${bodyContent}</body></html>`;
+  return buildPreviewHeadAndBody(
+    stageWidth,
+    stageHeight,
+    baseTag,
+    externalFontLinks,
+    styleBlock,
+    innerContent
+  );
 }

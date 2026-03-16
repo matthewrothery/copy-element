@@ -12,6 +12,7 @@ import { extractUsedFontFaces } from "../shared/utils/font-face-extractor";
 import { extractUsedKeyframes } from "../shared/utils/keyframes-extractor";
 import { extractAllFontLinks } from "../shared/utils/external-font-link-extractor";
 import { cropViewportToThumbnail } from "../shared/utils/viewport-thumbnail-crop";
+import { getElementRectInTopViewport } from "../shared/utils/viewport-coord-mapper";
 import type { CapturedElementData } from "../shared/types/snippet";
 import type {
   ExtractCssViaCdpPayload,
@@ -23,10 +24,33 @@ import {
   type CopyFormat
 } from "./capture-confirmation-modal";
 import { buildCopyHtml } from "../shared/utils/preview-srcdoc-builder";
+import { buildCopyMcpPrompt, buildSnippetPrompt } from "../shared/utils/prompt-builder";
 import { ElementPicker } from "./element-picker";
+import {
+  getCurrentMonthKey,
+  SAVES_THIS_MONTH_KEY,
+  type SavesThisMonth
+} from "../shared/usage";
+import { TOKEN_VALUES } from "../shared/token-values";
+import { showConfetti } from "./confetti";
 
 const TOAST_Z_INDEX = 2147483648;
 const CAPTURE_ATTR = "data-element-capture-id";
+
+/**
+ * Records this save in storage and returns whether to show confetti (first 5 saves of the month).
+ */
+async function recordSaveAndShouldShowConfetti(): Promise<boolean> {
+  const monthKey = getCurrentMonthKey();
+  const result = await chrome.storage.local.get(SAVES_THIS_MONTH_KEY);
+  const stored = result[SAVES_THIS_MONTH_KEY] as SavesThisMonth | undefined;
+  const count =
+    stored?.monthKey === monthKey ? stored.count + 1 : 1;
+  await chrome.storage.local.set({
+    [SAVES_THIS_MONTH_KEY]: { monthKey, count }
+  });
+  return count <= 5;
+}
 
 function collectAllElements(root: Element): Element[] {
   const elements: Element[] = [root];
@@ -77,6 +101,20 @@ function collectInlineStyleUsageContexts(
 let picker: ElementPicker | null = null;
 let modal: CaptureConfirmationModal | null = null;
 
+/**
+ * True if this frame's DOM is readable (same-origin or otherwise accessible).
+ * Cross-origin iframes may have restricted access; skip starting the picker there.
+ */
+function isDomUsable(): boolean {
+  try {
+    if (!document.body) return false;
+    void document.body.nodeType;
+    return true;
+  } catch {
+    return false;
+  }
+}
+
 function showPageToast(message: string): void {
   const existing = document.querySelector("[data-element-capture-toast]");
   if (existing) {
@@ -87,15 +125,16 @@ function showPageToast(message: string): void {
   toast.setAttribute("data-element-capture-toast", "true");
   toast.style.cssText = `
     position: fixed;
-    bottom: 12px;
+    bottom: ${TOKEN_VALUES.space3};
     left: 50%;
     transform: translateX(-50%);
-    background: #111827;
-    color: #ffffff;
-    font-size: 12px;
-    font-family: -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, sans-serif;
-    border-radius: 999px;
-    padding: 6px 12px;
+    background: ${TOKEN_VALUES.toastBg};
+    color: ${TOKEN_VALUES.toastText};
+    font-size: ${TOKEN_VALUES.textXs};
+    font-family: ${TOKEN_VALUES.fontSans};
+    border-radius: ${TOKEN_VALUES.radiusFull};
+    padding: ${TOKEN_VALUES.space1} ${TOKEN_VALUES.space3};
+    box-shadow: 0 12px 20px -12px rgba(24, 29, 39, 0.7);
     z-index: ${TOAST_Z_INDEX};
   `;
   toast.textContent = message;
@@ -131,38 +170,43 @@ async function copyToClipboard(value: string): Promise<boolean> {
 
 function ensurePicker(): ElementPicker {
   if (!picker) {
-    picker = new ElementPicker((result) => {
+    picker = new ElementPicker({
+      onSelected: (result) => {
       void (async () => {
         try {
+          // Stop pickers in other frames so only this capture is active
+          chrome.runtime.sendMessage({ type: "STOP_OTHER_PICKERS" }).catch(() => {});
+
           picker?.hideOverlayForScreenshot();
           await new Promise<void>((r) =>
             requestAnimationFrame(() => requestAnimationFrame(() => r()))
           );
-          const rect = result.element.getBoundingClientRect();
-          const viewportWidth = window.innerWidth;
-          const viewportHeight = window.innerHeight;
+          const viewportRect = getElementRectInTopViewport(result.element);
 
           let thumbnail: string | undefined;
-          try {
-            const response = (await chrome.runtime.sendMessage({
-              type: "CAPTURE_VISIBLE_TAB"
-            })) as RuntimeResponse<{ dataUrl: string }>;
-            if (response.ok && response.payload.dataUrl) {
-              thumbnail = await cropViewportToThumbnail(
-                response.payload.dataUrl,
-                {
-                  left: rect.left,
-                  top: rect.top,
-                  width: rect.width,
-                  height: rect.height
-                },
-                viewportWidth,
-                viewportHeight
-              );
+          if (viewportRect.ok) {
+            try {
+              const response = (await chrome.runtime.sendMessage({
+                type: "CAPTURE_VISIBLE_TAB"
+              })) as RuntimeResponse<{ dataUrl: string }>;
+              if (response.ok && response.payload.dataUrl) {
+                thumbnail = await cropViewportToThumbnail(
+                  response.payload.dataUrl,
+                  {
+                    left: viewportRect.cropLeft,
+                    top: viewportRect.cropTop,
+                    width: viewportRect.cropWidth,
+                    height: viewportRect.cropHeight
+                  },
+                  viewportRect.viewportWidth,
+                  viewportRect.viewportHeight
+                );
+              }
+            } catch (thumbnailError) {
+              console.warn("Thumbnail generation failed, using fallback.", thumbnailError);
             }
-          } catch (thumbnailError) {
-            console.warn("Thumbnail generation failed, using fallback.", thumbnailError);
           }
+          // When viewportRect.ok is false (e.g. cross-origin iframe), skip thumbnail to avoid wrong crop
 
           const baseUrl = window.location.href;
           const cloned = cloneElementTreeWithInlineStyles(result.element, baseUrl);
@@ -194,6 +238,10 @@ function ensurePicker(): ElementPicker {
 
             if (cdpResponse.ok) {
               const p = cdpResponse.payload;
+              const isEmpty = !p.cssText || !p.cssText.trim();
+              if (isEmpty) {
+                throw new Error("CDP returned empty CSS (e.g. iframe or no match); using in-page fallback");
+              }
               cssText = p.cssText;
               fontFaces = p.fontFacesCss;
               keyframesCss = p.keyframesCss;
@@ -204,7 +252,7 @@ function ensurePicker(): ElementPicker {
               throw new Error(cdpResponse.error);
             }
           } catch {
-            // Fallback to in-page extraction when CDP fails (e.g. debugger attached elsewhere)
+            // Fallback to in-page extraction when CDP fails (e.g. debugger attached elsewhere, or iframe capture)
             const extracted = await extractMatchingRules(result.element);
             cssText = extracted.cssText;
             layerOrder = extracted.layerOrder;
@@ -270,6 +318,9 @@ function ensurePicker(): ElementPicker {
             hasShadowDom: hasShadowDomInSubtree(result.element)
           };
 
+          const snippet = buildSnippetFromCapture(capture);
+          await autoSaveSnippet(snippet);
+
           picker?.stop();
 
           if (modal) {
@@ -277,14 +328,20 @@ function ensurePicker(): ElementPicker {
           }
 
           modal = new CaptureConfirmationModal({
-            onSave: () => {
-              handleSave(capture);
+            onCopyCode: (format: CopyFormat) => {
+              handleCopyCode(snippet, format);
             },
-            onSaveAndCaptureAnother: () => {
-              handleSaveAndCaptureAnother(capture);
+            onCopyPrompt: () => {
+              handleCopyPrompt(snippet);
             },
-            onCopy: (format: CopyFormat) => {
-              handleCopy(capture, format);
+            onCopyMcp: () => {
+              handleCopyMcp(snippet);
+            },
+            onCaptureAnother: () => {
+              handleCaptureAnother();
+            },
+            onGoToLibrary: () => {
+              handleGoToLibrary();
             },
             onCancel: () => {
               modal?.destroy();
@@ -298,53 +355,81 @@ function ensurePicker(): ElementPicker {
           picker?.stop();
         }
       })();
-    });
+    },
+    onEscape: () => {
+      chrome.runtime.sendMessage({ type: "BROADCAST_CANCEL_CAPTURE" }).catch(() => {});
+    },
+    onFrameHoverActive: () => {
+      chrome.runtime.sendMessage({ type: "FRAME_HOVER_ACTIVE" }).catch(() => {});
+    }
+  });
   }
 
   return picker;
 }
 
-async function handleSave(capture: CapturedElementData): Promise<void> {
+async function autoSaveSnippet(snippet: ReturnType<typeof buildSnippetFromCapture>): Promise<void> {
   try {
-    const snippet = buildSnippetFromCapture(capture);
-    await chrome.runtime.sendMessage({ type: "SAVE_SNIPPET", payload: snippet });
-    showPageToast("Snippet saved");
+    const saveResponse = (await chrome.runtime.sendMessage({
+      type: "SAVE_SNIPPET",
+      payload: snippet
+    })) as RuntimeResponse<null>;
+    if (saveResponse.ok) {
+      if (await recordSaveAndShouldShowConfetti()) {
+        showConfetti(TOAST_Z_INDEX);
+      }
+      showPageToast("Snippet saved");
+    } else {
+      showPageToast("Failed to save snippet");
+    }
   } catch (err) {
     console.error("Failed to save snippet", err);
     showPageToast("Failed to save snippet");
-  } finally {
-    modal?.destroy();
-    modal = null;
   }
 }
 
-async function handleSaveAndCaptureAnother(capture: CapturedElementData): Promise<void> {
-  try {
-    const snippet = buildSnippetFromCapture(capture);
-    await chrome.runtime.sendMessage({ type: "SAVE_SNIPPET", payload: snippet });
-    showPageToast("Snippet saved");
-  } catch (err) {
-    console.error("Failed to save snippet", err);
-    showPageToast("Failed to save snippet");
-  } finally {
-    modal?.destroy();
-    modal = null;
-    picker?.start();
-  }
+function handleCaptureAnother(): void {
+  modal?.destroy();
+  modal = null;
+  picker?.start();
 }
 
-async function handleCopy(capture: CapturedElementData, format: CopyFormat): Promise<void> {
+function handleGoToLibrary(): void {
+  void chrome.runtime.sendMessage({ type: "OPEN_LIBRARY_TAB" }).catch(() => {});
+  modal?.destroy();
+  modal = null;
+}
+
+async function handleCopyCode(snippet: ReturnType<typeof buildSnippetFromCapture>, format: CopyFormat): Promise<void> {
   const value =
     format === "html" || format === "html-inline"
-      ? buildCopyHtml(buildSnippetFromCapture(capture), {
+      ? buildCopyHtml(snippet, {
           includeStyleBlock: format !== "html-inline"
         })
-      : capture.jsx;
+      : snippet.jsx;
   const ok = await copyToClipboard(value);
   if (ok && modal) {
-    modal.showToast("Copied to clipboard");
+    modal.showToast("Copied code");
   } else if (!ok) {
-    showPageToast("Failed to copy");
+    showPageToast("Failed to copy code");
+  }
+}
+
+async function handleCopyPrompt(snippet: ReturnType<typeof buildSnippetFromCapture>): Promise<void> {
+  const ok = await copyToClipboard(buildSnippetPrompt(snippet));
+  if (ok && modal) {
+    modal.showToast("Copied prompt");
+  } else if (!ok) {
+    showPageToast("Failed to copy prompt");
+  }
+}
+
+async function handleCopyMcp(snippet: ReturnType<typeof buildSnippetFromCapture>): Promise<void> {
+  const ok = await copyToClipboard(buildCopyMcpPrompt(snippet));
+  if (ok && modal) {
+    modal.showToast("Copied MCP");
+  } else if (!ok) {
+    showPageToast("Failed to copy MCP");
   }
 }
 
@@ -354,7 +439,9 @@ chrome.runtime.onMessage.addListener((message: { type?: string }) => {
   }
 
   if (message.type === "START_CAPTURE") {
-    ensurePicker().start();
+    if (isDomUsable()) {
+      ensurePicker().start();
+    }
     return;
   }
 
@@ -362,5 +449,10 @@ chrome.runtime.onMessage.addListener((message: { type?: string }) => {
     picker?.stop();
     modal?.destroy();
     modal = null;
+    return;
+  }
+
+  if (message.type === "CLEAR_FRAME_HOVER") {
+    picker?.clearHoverOnly();
   }
 });

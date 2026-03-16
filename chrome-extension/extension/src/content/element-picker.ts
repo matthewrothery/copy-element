@@ -1,3 +1,4 @@
+import { extractElementName } from "../shared/utils/element-name-extractor";
 import { CaptureOverlay } from "./capture-overlay";
 import { isOverlayPosition, shouldSkipElement } from "./element-picker-skip";
 
@@ -10,20 +11,34 @@ export interface ElementSelectionResult {
 
 export type ElementSelectedHandler = (result: ElementSelectionResult) => void;
 
+export interface ElementPickerOptions {
+  onSelected: ElementSelectedHandler;
+  /** Called when user presses Escape so the host can broadcast cancel to all frames. */
+  onEscape?: () => void;
+  /** Called when this frame shows a hover overlay so the host can tell other frames to clear. */
+  onFrameHoverActive?: () => void;
+}
+
 export class ElementPicker {
   private readonly overlay: CaptureOverlay;
   private readonly onSelected: ElementSelectedHandler;
+  private readonly onEscape: (() => void) | undefined;
+  private readonly onFrameHoverActive: (() => void) | undefined;
   private active = false;
   private currentHover: HTMLElement | null = null;
   /** When set, overrides currentHover for display and capture (parent traversal). */
   private currentSelected: HTMLElement | null = null;
 
-  public constructor(onSelected: ElementSelectedHandler) {
+  public constructor(options: ElementPickerOptions | ElementSelectedHandler) {
+    const opts = typeof options === "function" ? { onSelected: options } : options;
     this.overlay = new CaptureOverlay();
-    this.onSelected = onSelected;
+    this.onSelected = opts.onSelected;
+    this.onEscape = opts.onEscape;
+    this.onFrameHoverActive = opts.onFrameHoverActive;
     this.handleMouseMove = this.handleMouseMove.bind(this);
     this.handleClick = this.handleClick.bind(this);
     this.handleKeyDown = this.handleKeyDown.bind(this);
+    this.handleMouseLeave = this.handleMouseLeave.bind(this);
   }
 
   public start(): void {
@@ -34,10 +49,18 @@ export class ElementPicker {
     document.addEventListener("mousemove", this.handleMouseMove, true);
     document.addEventListener("click", this.handleClick, true);
     document.addEventListener("keydown", this.handleKeyDown, true);
+    document.documentElement.addEventListener("mouseleave", this.handleMouseLeave, true);
   }
 
   /** Hides the overlay so a viewport screenshot can capture the page without the highlight. */
   public hideOverlayForScreenshot(): void {
+    this.overlay.hide();
+  }
+
+  /** Clear hover/selection overlay only; picker stays active. Used when another frame takes hover ownership. */
+  public clearHoverOnly(): void {
+    this.currentHover = null;
+    this.currentSelected = null;
     this.overlay.hide();
   }
 
@@ -51,6 +74,7 @@ export class ElementPicker {
     document.removeEventListener("mousemove", this.handleMouseMove, true);
     document.removeEventListener("click", this.handleClick, true);
     document.removeEventListener("keydown", this.handleKeyDown, true);
+    document.documentElement.removeEventListener("mouseleave", this.handleMouseLeave, true);
     this.overlay.hide();
   }
 
@@ -72,6 +96,24 @@ export class ElementPicker {
     this.currentHover = target;
     this.currentSelected = null;
     this.overlay.showForElement(target, { isOverlay: isOverlayPosition(target) });
+    this.onFrameHoverActive?.();
+  }
+
+  /** Clear overlay when pointer leaves this frame (e.g. moved into iframe or out of window). */
+  private handleMouseLeave(event: MouseEvent): void {
+    if (!this.active) {
+      return;
+    }
+    const related = event.relatedTarget as Node | null;
+    if (related != null && document.contains(related)) {
+      const el = related as HTMLElement;
+      if (el.tagName !== "IFRAME" && el.tagName !== "FRAME") {
+        return;
+      }
+    }
+    this.currentHover = null;
+    this.currentSelected = null;
+    this.overlay.hide();
   }
 
   private handleClick(event: MouseEvent): void {
@@ -90,9 +132,18 @@ export class ElementPicker {
     }
 
     const rect = target.getBoundingClientRect();
+    let label: string;
+    try {
+      const extracted = extractElementName(target);
+      label =
+        extracted.displayName?.trim() ||
+        `${target.tagName.toLowerCase()}${target.className ? `.${target.className.split(" ").join(".")}` : ""}`;
+    } catch {
+      label = `${target.tagName.toLowerCase()}${target.className ? `.${target.className.split(" ").join(".")}` : ""}`;
+    }
     this.onSelected({
       element: target,
-      label: `${target.tagName.toLowerCase()}${target.className ? `.${target.className.split(" ").join(".")}` : ""}`,
+      label,
       width: Math.round(rect.width),
       height: Math.round(rect.height)
     });
@@ -130,6 +181,7 @@ export class ElementPicker {
 
   private handleKeyDown(event: KeyboardEvent): void {
     if (event.key === "Escape") {
+      this.onEscape?.();
       this.stop();
       return;
     }
@@ -148,6 +200,7 @@ export class ElementPicker {
       if (candidate && candidate !== document.body) {
         this.currentSelected = candidate;
         this.overlay.showForElement(candidate, { isOverlay: isOverlayPosition(candidate) });
+        this.onFrameHoverActive?.();
       }
       return;
     }
