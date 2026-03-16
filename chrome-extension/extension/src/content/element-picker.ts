@@ -1,3 +1,4 @@
+import { extractElementName } from "../shared/utils/element-name-extractor";
 import { CaptureOverlay } from "./capture-overlay";
 import { isOverlayPosition, shouldSkipElement } from "./element-picker-skip";
 
@@ -131,9 +132,18 @@ export class ElementPicker {
     }
 
     const rect = target.getBoundingClientRect();
+    let label: string;
+    try {
+      const extracted = extractElementName(target);
+      label =
+        extracted.displayName?.trim() ||
+        `${target.tagName.toLowerCase()}${target.className ? `.${target.className.split(" ").join(".")}` : ""}`;
+    } catch {
+      label = `${target.tagName.toLowerCase()}${target.className ? `.${target.className.split(" ").join(".")}` : ""}`;
+    }
     this.onSelected({
       element: target,
-      label: `${target.tagName.toLowerCase()}${target.className ? `.${target.className.split(" ").join(".")}` : ""}`,
+      label,
       width: Math.round(rect.width),
       height: Math.round(rect.height)
     });

@@ -46,7 +46,9 @@ function getThumbnail(capture: CapturedElementData): string {
 export function buildSnippetFromCapture(capture: CapturedElementData): Snippet {
   const sourceUrl = window.location.href;
   const domain = getDomain(sourceUrl);
-  const title = `${generateSnippetName()} - ${domain}`;
+  const title = capture.elementLabel?.trim()
+    ? `${capture.elementLabel.trim()} - ${domain}`
+    : `${generateSnippetName()} - ${domain}`;
   return {
     id: nanoid(),
     title,

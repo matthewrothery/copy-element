@@ -50,7 +50,7 @@ describe("ElementPicker", () => {
     expect(onSelected).toHaveBeenCalledWith(
       expect.objectContaining({
         element: child,
-        label: "div.card",
+        label: "Child Container",
         width: expect.any(Number),
         height: expect.any(Number)
       })
@@ -86,7 +86,7 @@ describe("ElementPicker", () => {
     expect(onSelected).toHaveBeenCalledWith(
       expect.objectContaining({
         element: parent,
-        label: "div"
+        label: "Parent Container"
       })
     );
   });
@@ -108,7 +108,7 @@ describe("ElementPicker", () => {
     expect(onSelected).toHaveBeenCalledWith(
       expect.objectContaining({
         element: child,
-        label: "div.card"
+        label: "Child Container"
       })
     );
   });
@@ -130,7 +130,7 @@ describe("ElementPicker", () => {
     expect(onSelected).toHaveBeenCalledWith(
       expect.objectContaining({
         element: child,
-        label: "div.card"
+        label: "Child Container"
       })
     );
   });
@@ -169,7 +169,7 @@ describe("ElementPicker", () => {
     expect(onSelected).toHaveBeenCalledWith(
       expect.objectContaining({
         element: underneath,
-        label: "div.content"
+        label: "Underneath Container"
       })
     );
   });
