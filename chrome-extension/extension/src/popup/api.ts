@@ -1,4 +1,5 @@
 import { nanoid } from "nanoid";
+import type { Folder } from "../shared/types/folder";
 import type { CapturedElementData, Snippet } from "../shared/types/snippet";
 import type { RuntimeErrorCode, RuntimeMessage, RuntimeResponse } from "../shared/types/messages";
 
@@ -84,6 +85,18 @@ export async function saveSnippetFromCapture(
 
 export async function deleteSnippetFromBackground(id: string): Promise<void> {
   await sendRuntimeMessage<null>({ type: "DELETE_SNIPPET", payload: { id } });
+}
+
+export async function getFoldersFromBackground(): Promise<Folder[]> {
+  return sendRuntimeMessage<Folder[]>({ type: "GET_FOLDERS" });
+}
+
+export async function saveFolderToBackground(folder: Folder): Promise<void> {
+  return sendRuntimeMessage<null>({ type: "SAVE_FOLDER", payload: folder });
+}
+
+export async function deleteFolderFromBackground(id: string): Promise<void> {
+  return sendRuntimeMessage<null>({ type: "DELETE_FOLDER", payload: { id } });
 }
 
 export function openLibraryInNewTab(snippetId?: string): void {

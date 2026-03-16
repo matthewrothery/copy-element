@@ -1,4 +1,5 @@
 import type { CapturedElementData } from "../shared/types/snippet";
+import { deleteFolder, getFolders, saveFolder } from "../shared/storage/folder-storage";
 import { deleteSnippet, getSnippets, saveSnippet } from "../shared/storage/snippet-storage";
 import type {
   ExtractCssViaCdpPayload,
@@ -286,6 +287,38 @@ chrome.runtime.onMessage.addListener((message: RuntimeMessage, sender, sendRespo
     void deleteSnippet(message.payload.id)
       .then(() => sendResponse(success(null)))
       .catch((error: unknown) => sendResponse(failure(String(error), "UNKNOWN_ERROR")));
+    return true;
+  }
+
+  if (message.type === "GET_FOLDERS") {
+    void getFolders()
+      .then((folders) => sendResponse(success(folders)))
+      .catch((error: unknown) => sendResponse(failure(String(error), "UNKNOWN_ERROR")));
+    return true;
+  }
+
+  if (message.type === "SAVE_FOLDER") {
+    void saveFolder(message.payload)
+      .then(() => sendResponse(success(null)))
+      .catch((error: unknown) => sendResponse(failure(String(error), "UNKNOWN_ERROR")));
+    return true;
+  }
+
+  if (message.type === "DELETE_FOLDER") {
+    const folderId = message.payload.id;
+    void (async () => {
+      try {
+        const snippets = await getSnippets();
+        const inFolder = snippets.filter((s) => s.folderId === folderId);
+        for (const s of inFolder) {
+          await saveSnippet({ ...s, folderId: null });
+        }
+        await deleteFolder(folderId);
+        sendResponse(success(null));
+      } catch (error: unknown) {
+        sendResponse(failure(String(error), "UNKNOWN_ERROR"));
+      }
+    })();
     return true;
   }
 

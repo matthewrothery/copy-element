@@ -1,13 +1,23 @@
-import { useEffect, useMemo, useState, type JSX } from "react";
+import { useCallback, useEffect, useMemo, useState, type JSX } from "react";
+import { nanoid } from "nanoid";
 import {
+  deleteFolderFromBackground,
   deleteSnippetFromBackground,
-  getSnippetsFromBackground
+  getFoldersFromBackground,
+  getSnippetsFromBackground,
+  saveFolderToBackground
 } from "../popup/api";
 import { DeleteConfirmationModal } from "../popup/components/DeleteConfirmationModal";
 import { EmptyState } from "../popup/components/EmptyState";
+import { FolderCard } from "../popup/components/FolderCard";
+import { FolderDeleteConfirmationModal } from "../popup/components/FolderDeleteConfirmationModal";
+import { LibraryBreadcrumb } from "../popup/components/LibraryBreadcrumb";
+import { NewFolderModal } from "../popup/components/NewFolderModal";
+import { RenameFolderModal } from "../popup/components/RenameFolderModal";
 import { SnippetLibrary } from "../popup/components/SnippetLibrary";
 import { SnippetPreview } from "../popup/components/SnippetPreview";
 import { Toast } from "../popup/components/Toast";
+import type { Folder } from "../shared/types/folder";
 import type { Snippet } from "../shared/types/snippet";
 
 import logoUrl from "../../assets/logo.png";
@@ -37,17 +47,41 @@ function copyToClipboard(value: string): Promise<void> {
 
 export function LibraryApp(): JSX.Element {
   const [snippets, setSnippets] = useState<Snippet[]>([]);
+  const [folders, setFolders] = useState<Folder[]>([]);
+  const [currentFolderId, setCurrentFolderId] = useState<string | null>(null);
   const [selectedSnippet, setSelectedSnippet] = useState<Snippet | null>(null);
   const [snippetToDelete, setSnippetToDelete] = useState<Snippet | null>(null);
+  const [folderToDelete, setFolderToDelete] = useState<Folder | null>(null);
+  const [folderToRename, setFolderToRename] = useState<Folder | null>(null);
+  const [showNewFolder, setShowNewFolder] = useState(false);
   const [toastMessage, setToastMessage] = useState("");
   const [query, setQuery] = useState("");
+
+  const foldersById = useMemo(() => {
+    const map = new Map<string, Folder>();
+    for (const f of folders) {
+      map.set(f.id, f);
+    }
+    return map;
+  }, [folders]);
+
+  const currentFolder = currentFolderId ? foldersById.get(currentFolderId) ?? null : null;
+
+  const childFolders = useMemo(
+    () => folders.filter((f) => f.parentId === currentFolderId),
+    [folders, currentFolderId]
+  );
+
+  const snippetsInCurrentFolder = useMemo(() => {
+    return snippets.filter((s) => (s.folderId ?? null) === currentFolderId);
+  }, [snippets, currentFolderId]);
 
   const filteredSnippets = useMemo(() => {
     const trimmed = query.trim().toLowerCase();
     if (!trimmed) {
-      return snippets;
+      return snippetsInCurrentFolder;
     }
-    return snippets.filter((snippet) => {
+    return snippetsInCurrentFolder.filter((snippet) => {
       const domain = (() => {
         try {
           return new URL(snippet.sourceUrl).hostname;
@@ -60,42 +94,49 @@ export function LibraryApp(): JSX.Element {
         domain.toLowerCase().includes(trimmed)
       );
     });
-  }, [query, snippets]);
-  const hasSnippets = useMemo(() => filteredSnippets.length > 0, [filteredSnippets.length]);
+  }, [query, snippetsInCurrentFolder]);
 
-  useEffect(() => {
-    void loadSnippets();
+  const hasSnippets = filteredSnippets.length > 0;
+  const hasFolders = childFolders.length > 0;
+  const isEmpty = !hasSnippets && !hasFolders;
+
+  const loadData = useCallback(async () => {
+    try {
+      const [snippetData, folderData] = await Promise.all([
+        getSnippetsFromBackground(),
+        getFoldersFromBackground()
+      ]);
+      setSnippets(snippetData);
+      setFolders(folderData);
+      const snippetId = new URL(window.location.href).searchParams.get("snippet");
+      if (snippetId) {
+        const snippet = snippetData.find((s) => s.id === snippetId);
+        if (snippet) {
+          setSelectedSnippet(snippet);
+          if (snippet.folderId) {
+            setCurrentFolderId(snippet.folderId);
+          }
+        }
+      }
+    } catch {
+      setToastMessage("Failed to load library");
+    }
   }, []);
 
   useEffect(() => {
-    if (!toastMessage) {
-      return;
-    }
+    void loadData();
+  }, [loadData]);
 
+  useEffect(() => {
+    if (!toastMessage) return;
     const timeoutId = window.setTimeout(() => setToastMessage(""), 2000);
     return () => window.clearTimeout(timeoutId);
   }, [toastMessage]);
 
-  async function loadSnippets(): Promise<void> {
-    try {
-      const data = await getSnippetsFromBackground();
-      setSnippets(data);
-      const snippetId = new URL(window.location.href).searchParams.get("snippet");
-      if (snippetId) {
-        const snippet = data.find((s) => s.id === snippetId);
-        if (snippet) {
-          setSelectedSnippet(snippet);
-        }
-      }
-    } catch {
-      setToastMessage("Failed to load snippets");
-    }
-  }
-
   async function handleDeleteSnippet(id: string): Promise<void> {
     try {
       await deleteSnippetFromBackground(id);
-      setSnippets((prev) => prev.filter((snippet) => snippet.id !== id));
+      setSnippets((prev) => prev.filter((s) => s.id !== id));
       setSelectedSnippet((prev) => (prev?.id === id ? null : prev));
       setSnippetToDelete(null);
       setToastMessage("Snippet deleted");
@@ -104,11 +145,51 @@ export function LibraryApp(): JSX.Element {
     }
   }
 
-  function handleDeleteClick(id: string): void {
-    const snippet = snippets.find((s) => s.id === id);
-    if (snippet) {
-      setSnippetToDelete(snippet);
+  async function handleDeleteFolder(folder: Folder): Promise<void> {
+    try {
+      await deleteFolderFromBackground(folder.id);
+      setFolderToDelete(null);
+      void loadData();
+      setToastMessage("Folder deleted");
+    } catch {
+      setToastMessage("Failed to delete folder");
     }
+  }
+
+  async function handleRenameFolder(folder: Folder, name: string): Promise<void> {
+    try {
+      await saveFolderToBackground({ ...folder, name });
+      setFolderToRename(null);
+      setFolders((prev) => prev.map((f) => (f.id === folder.id ? { ...f, name } : f)));
+      setToastMessage("Folder renamed");
+    } catch {
+      setToastMessage("Failed to rename folder");
+    }
+  }
+
+  async function handleCreateFolder(name: string): Promise<void> {
+    try {
+      const folder: Folder = {
+        id: nanoid(),
+        name,
+        parentId: currentFolderId,
+        createdAt: Date.now()
+      };
+      await saveFolderToBackground(folder);
+      setShowNewFolder(false);
+      setFolders((prev) => [...prev, folder]);
+      setToastMessage("Folder created");
+    } catch {
+      setToastMessage("Failed to create folder");
+    }
+  }
+
+  function snippetCountForFolder(folderId: string): number {
+    return snippets.filter((s) => (s.folderId ?? null) === folderId).length;
+  }
+
+  function subfolderCountForFolder(folderId: string): number {
+    return folders.filter((f) => f.parentId === folderId).length;
   }
 
   async function handleCopy(value: string, label: string): Promise<void> {
@@ -120,39 +201,80 @@ export function LibraryApp(): JSX.Element {
     }
   }
 
+  const subtitle =
+    currentFolderId === null
+      ? `${snippets.length} saved snippets`
+      : `${snippetsInCurrentFolder.length} snippet${snippetsInCurrentFolder.length === 1 ? "" : "s"} in this folder`;
+
   return (
     <div className="app-shell library-shell">
       <header className="library-header">
         <img src={logoUrl} alt="" width={32} height={32} style={{ objectFit: "contain" }} />
         <div className="library-header-copy">
-          <h1 className="library-header-title">Element Armory - Library</h1>
-          <p className="library-header-subtitle">{snippets.length} saved snippets</p>
+          <h1 className="library-header-title">Library</h1>
+          <p className="library-header-subtitle">{subtitle}</p>
         </div>
         <input
           type="search"
           className="library-search"
           value={query}
-          onChange={(event) => setQuery(event.target.value)}
+          onChange={(e) => setQuery(e.target.value)}
           placeholder="Search title or domain"
           aria-label="Search snippets"
         />
+        <button
+          type="button"
+          className="btn-primary library-new-folder-btn"
+          onClick={() => setShowNewFolder(true)}
+        >
+          New folder
+        </button>
       </header>
       <main className="main-content">
+        <LibraryBreadcrumb
+          currentFolder={currentFolder}
+          foldersById={foldersById}
+          onNavigate={setCurrentFolderId}
+        />
+        {hasFolders && (
+          <section className="library-folders-section" aria-label="Folders">
+            <h2 className="library-folders-title">Folders</h2>
+            <div className="library-folders-grid">
+              {childFolders.map((folder) => (
+                <FolderCard
+                  key={folder.id}
+                  folder={folder}
+                  snippetCount={snippetCountForFolder(folder.id)}
+                  subfolderCount={subfolderCountForFolder(folder.id)}
+                  onOpen={(f) => setCurrentFolderId(f.id)}
+                  onRename={setFolderToRename}
+                  onDelete={setFolderToDelete}
+                />
+              ))}
+            </div>
+          </section>
+        )}
         {hasSnippets ? (
-          <SnippetLibrary
-            snippets={filteredSnippets}
-            onOpen={setSelectedSnippet}
-            onDelete={handleDeleteClick}
-            onCopy={(value, label) => void handleCopy(value, label)}
-          />
+          <section className="library-snippets-section" aria-label="Snippets">
+            {hasFolders && <h2 className="library-folders-title">Snippets</h2>}
+            <SnippetLibrary
+              snippets={filteredSnippets}
+              onOpen={setSelectedSnippet}
+              onDelete={(id) => {
+                const s = snippets.find((x) => x.id === id);
+                if (s) setSnippetToDelete(s);
+              }}
+              onCopy={(value, label) => void handleCopy(value, label)}
+            />
+          </section>
         ) : snippets.length > 0 ? (
           <div className="empty-state">
             <h2>No matching snippets</h2>
             <p>Try a different search term.</p>
           </div>
-        ) : (
+        ) : isEmpty ? (
           <EmptyState onCapture={() => {}} showCaptureButton={false} />
-        )}
+        ) : null}
       </main>
 
       {selectedSnippet && (
@@ -168,6 +290,27 @@ export function LibraryApp(): JSX.Element {
           snippetTitle={snippetToDelete.title}
           onConfirm={() => void handleDeleteSnippet(snippetToDelete.id)}
           onCancel={() => setSnippetToDelete(null)}
+        />
+      )}
+      {folderToDelete && (
+        <FolderDeleteConfirmationModal
+          folder={folderToDelete}
+          onConfirm={() => void handleDeleteFolder(folderToDelete)}
+          onCancel={() => setFolderToDelete(null)}
+        />
+      )}
+      {folderToRename && (
+        <RenameFolderModal
+          folder={folderToRename}
+          onSave={(name) => void handleRenameFolder(folderToRename, name)}
+          onCancel={() => setFolderToRename(null)}
+        />
+      )}
+      {showNewFolder && (
+        <NewFolderModal
+          parentFolderId={currentFolderId}
+          onCreate={(name) => void handleCreateFolder(name)}
+          onCancel={() => setShowNewFolder(false)}
         />
       )}
       {toastMessage && <Toast message={toastMessage} />}

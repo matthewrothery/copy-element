@@ -1,3 +1,4 @@
+import type { Folder } from "./folder";
 import type { CapturedElementData, Snippet } from "./snippet";
 
 export type RuntimeErrorCode =
@@ -80,6 +81,20 @@ export interface DeleteSnippetRequest {
   payload: { id: string };
 }
 
+export interface GetFoldersRequest {
+  type: "GET_FOLDERS";
+}
+
+export interface SaveFolderRequest {
+  type: "SAVE_FOLDER";
+  payload: Folder;
+}
+
+export interface DeleteFolderRequest {
+  type: "DELETE_FOLDER";
+  payload: { id: string };
+}
+
 export interface OpenLibraryTabRequest {
   type: "OPEN_LIBRARY_TAB";
 }
@@ -135,6 +150,9 @@ export type RuntimeMessage =
   | GetSnippetsRequest
   | GetLatestCaptureRequest
   | DeleteSnippetRequest
+  | GetFoldersRequest
+  | SaveFolderRequest
+  | DeleteFolderRequest
   | OpenLibraryTabRequest
   | CaptureVisibleTabRequest
   | ExtractCssViaCdpRequest;

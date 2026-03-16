@@ -69,6 +69,8 @@ export interface Snippet {
   rootId?: string;
   /** External font stylesheet links (e.g., Google Fonts) for cross-origin fonts. */
   externalFontLinks?: string[];
+  /** Optional folder id. undefined/null = Library root. */
+  folderId?: string | null;
 }
 
 export interface CapturedElementData {

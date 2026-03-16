@@ -65,6 +65,9 @@ function normalizeSnippet(value: Snippet): Snippet {
   if (typeof value.rootId === "string") {
     normalized.rootId = value.rootId;
   }
+  if (value.folderId === null || typeof value.folderId === "string") {
+    normalized.folderId = value.folderId;
+  }
   return normalized;
 }
 
