@@ -510,7 +510,7 @@
   display: flex;
   align-items: center;
   gap: var(--space-2);
-  margin: calc(-1 * var(--space-1)) 0 0;
+  margin: 0 0 var(--space-2);
 }
 
 .settings-back-button {
@@ -538,6 +538,12 @@
   margin: 0;
   color: var(--color-text-primary);
   font-size: var(--text-md);
+  font-weight: var(--font-weight-semibold);
+  line-height: 1.2;
+}
+
+.settings-header + .settings-description {
+  margin-bottom: var(--space-4);
 }
 
 .settings-section {
