@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Sign in — Element Armory</title>
+  <style>
+    body { font-family: system-ui, sans-serif; max-width: 400px; margin: 2rem auto; padding: 0 1rem; }
+    h1 { font-size: 1.25rem; }
+    a.button { display: inline-block; margin: 0.5rem 0; padding: 0.5rem 1rem; background: #3b82f6; color: #fff; text-decoration: none; border-radius: 8px; }
+    form { margin-top: 1rem; }
+    input { display: block; width: 100%; margin: 0.5rem 0; padding: 0.5rem; box-sizing: border-box; }
+    button { padding: 0.5rem 1rem; background: #3b82f6; color: #fff; border: none; border-radius: 8px; cursor: pointer; }
+    .error { color: #dc2626; font-size: 0.875rem; }
+  </style>
+</head>
+<body>
+  <h1>Sign in to Element Armory</h1>
+  <p><a class="button" href="/api/auth/signin/google?callbackURL=/account.html">Sign in with Google</a></p>
+  <p>Or sign in with a magic link (email):</p>
+  <form id="magic-form">
+    <input type="email" name="email" placeholder="you@example.com" required />
+    <input type="hidden" name="callbackURL" value="/account.html" />
+    <button type="submit">Send magic link</button>
+  </form>
+  <p class="error" id="magic-error" hidden></p>
+  <script>
+    document.getElementById('magic-form').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const form = e.target;
+      const email = form.email.value.trim();
+      const callbackURL = form.callbackURL.value;
+      const errEl = document.getElementById('magic-error');
+      errEl.hidden = true;
+      try {
+        const res = await fetch('/api/auth/sign-in/magic-link', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ email, callbackURL }),
+          credentials: 'include'
+        });
+        const data = await res.json().catch(() => ({}));
+        if (!res.ok) {
+          errEl.textContent = data.message || data.error || 'Failed to send magic link';
+          errEl.hidden = false;
+          return;
+        }
+        errEl.textContent = 'Check your email for the sign-in link.';
+        errEl.style.color = '#16a34a';
+        errEl.hidden = false;
+      } catch (err) {
+        errEl.textContent = 'Network error. Try again.';
+        errEl.hidden = false;
+      }
+    });
+  </script>
+</body>
+</html>

@@ -6,32 +6,32 @@ Phased todo derived from server-setup.md. Complete phases in order; later phases
 
 ## Phase 1: Setup — project init, structure, DB, Express API
 
-- [ ] Initialize Node.js project in `./server` (package.json, TypeScript, tsconfig).
-- [ ] Install and wire core packages: express, typescript, ts-node-dev (or similar), dotenv.
-- [ ] Create folder structure: `/src/api`, `/src/api/middleware`, `/src/api/routes`, `/src/config`, `/src/db`, `/src/db/migrations`, `/src/db/schema`, `/src/loaders`, `/src/models`, `/src/services`, `/src/jobs`, `/src/public`, `/src/types`, `/src/utils`, `/src/constants`.
-- [ ] Add DB layer: SQLite connection (`/src/db/connection.ts`), config for DB path/env.
-- [ ] Add migration runner and first migration (schema version or placeholder). Design for future Postgres (e.g. avoid SQLite-specific types where possible).
-- [ ] Bootstrap Express in `/src/loaders/express.ts`: JSON body, CORS, health route.
-- [ ] Add `/src/api/index.ts` to mount routes and wire Express app.
-- [ ] Add minimal health/readiness endpoints (e.g. `GET /health`, `GET /ready`).
-- [ ] Add `/src/constants` and `/src/types` with shared types (e.g. env vars, app constants).
-- [ ] Document run commands (e.g. `npm run dev`, `npm run migrate`) in README.
+- [x] Initialize Node.js project in `./server` (package.json, TypeScript, tsconfig).
+- [x] Install and wire core packages: express, typescript, ts-node-dev (or similar), dotenv.
+- [x] Create folder structure: `/src/api`, `/src/api/middleware`, `/src/api/routes`, `/src/config`, `/src/db`, `/src/db/migrations`, `/src/db/schema`, `/src/loaders`, `/src/models`, `/src/services`, `/src/jobs`, `/src/public`, `/src/types`, `/src/utils`, `/src/constants`.
+- [x] Add DB layer: SQLite connection (`/src/db/connection.ts`), config for DB path/env.
+- [x] Add migration runner and first migration (schema version or placeholder). Design for future Postgres (e.g. avoid SQLite-specific types where possible).
+- [x] Bootstrap Express in `/src/loaders/express.ts`: JSON body, CORS, health route.
+- [x] Add `/src/api/index.ts` to mount routes and wire Express app.
+- [x] Add minimal health/readiness endpoints (e.g. `GET /health`, `GET /ready`).
+- [x] Add `/src/constants` and `/src/types` with shared types (e.g. env vars, app constants).
+- [x] Document run commands (e.g. `npm run dev`, `npm run migrate`) in README.
 
 ---
 
 ## Phase 2: Identity, account creation, auth, and hosted app
 
-- [ ] Define install identity model: `install_id` (UUID/ULID), `install_secret` (backend-issued). No machine fingerprinting as identity.
-- [ ] Add `installs` table (and migrations): install_id, install_secret, user_id (nullable), created_at, last_seen_at; optional telemetry columns (extension_version, chrome_version, os_family, etc.).
-- [ ] Implement install registration API: extension sends install_id (and optional telemetry); backend issues and stores install_secret, returns it to extension.
-- [ ] Add Better Auth: install and configure in `/src/loaders/auth.ts`. Primary: Google OAuth. Secondary: magic link via email.
-- [ ] Configure email sending with **AWS SES**. Add SES client and env vars (region, credentials).
-- [ ] Add **react-email** (or compatible) email templates; wire SES to send magic-link and any verification emails.
-- [ ] Create core auth tables (or let Better Auth own them); ensure `users` and `sessions` (or equivalent) exist. Keep app tables (installs, captures) separate.
-- [ ] Implement “link install to user” on sign-in: when user signs in on hosted app, associate current install with user_id (one install ↔ one account at a time).
-- [ ] Hosted app (e.g. Next.js or static + API): minimal pages for sign-in callback, account page, and links to billing. Base URL e.g. `https://app.elementarmory.com`.
-- [ ] **Chrome extension auth**: design and implement long-lived extension-safe session (app-issued token for user + install). Extension opens hosted sign-in; after auth, exchange for token; implement silent refresh and sign-out that revokes extension session.
-- [ ] API routes: install registration, auth callback, session exchange for extension, link/unlink install from account (from account page).
+- [x] Define install identity model: `install_id` (UUID/ULID), `install_secret` (backend-issued). No machine fingerprinting as identity.
+- [x] Add `installs` table (and migrations): install_id, install_secret, user_id (nullable), created_at, last_seen_at; optional telemetry columns (extension_version, chrome_version, os_family, etc.).
+- [x] Implement install registration API: extension sends install_id (and optional telemetry); backend issues and stores install_secret, returns it to extension.
+- [x] Add Better Auth: install and configure in `/src/loaders/auth.ts`. Primary: Google OAuth. Secondary: magic link via email.
+- [x] Configure email sending with **AWS SES**. Add SES client and env vars (region, credentials).
+- [x] Add **react-email** (or compatible) email templates; wire SES to send magic-link and any verification emails.
+- [x] Create core auth tables (or let Better Auth own them); ensure `users` and `sessions` (or equivalent) exist. Keep app tables (installs, captures) separate.
+- [x] Implement “link install to user” on sign-in: when user signs in on hosted app, associate current install with user_id (one install ↔ one account at a time).
+- [x] Hosted app (e.g. Next.js or static + API): minimal pages for sign-in callback, account page, and links to billing. Base URL e.g. `https://app.elementarmory.com`.
+- [x] **Chrome extension auth**: design and implement long-lived extension-safe session (app-issued token for user + install). Extension opens hosted sign-in; after auth, exchange for token; implement silent refresh and sign-out that revokes extension session.
+- [x] API routes: install registration, auth callback, session exchange for extension, link/unlink install from account (from account page).
 
 ---
 
@@ -54,7 +54,7 @@ Phased todo derived from server-setup.md. Complete phases in order; later phases
 - [ ] Add S3 (or compatible) client and config; bucket(s) for screenshots and optional large HTML/CSS blobs.
 - [ ] Implement upload flow: extension uploads screenshot (and optionally HTML/CSS) to presigned URL or via API; API creates capture record and capture_assets records with object keys.
 - [ ] Enforce payload size limits and screenshot upload limits in API.
-- [ ] Implement capture and capture_assets services (create, list by install, list by user after link). Ensure anonymous captures (install-only) stay intact and become visible when install is linked to user.
+- [x] Implement capture and capture_assets services (create, list by install, list by user after link). Ensure anonymous captures (install-only) stay intact and become visible when install is linked to user.
 - [ ] Add `/src/jobs` structure: placeholders or minimal jobs for asset verification, S3 backup, or future MCP enrichment. Nightly DB backup to S3 (optional in this phase).
 - [ ] API routes: submit capture (install-authenticated), list captures (by install or by user when linked).
 
@@ -76,7 +76,7 @@ Phased todo derived from server-setup.md. Complete phases in order; later phases
 
 - [ ] Add MCP server package and run it on a **different port** from the Express API. Keep it a thin layer: MCP tools call the same `/src/services` (and models) the API uses.
 - [ ] Design MCP auth: only authenticated users (and optionally install) can use MCP. Issue or accept app-issued tokens; validate on each MCP request.
-- [ ] Implement MCP tools that delegate to existing services (e.g. list captures, get capture details, search). No duplicate business logic.
+- [x] Implement MCP tools that delegate to existing services (e.g. list captures, get capture details, search). No duplicate business logic.
 - [ ] Structure so MCP can be moved to a separate microservice later (no tight coupling to Express app).
 - [ ] **Chrome extension**: add “Copy MCP” (or “MCP connection”) entry point: generate link or code snippet (e.g. URL + token or config) that users can paste into their MCP client (Cursor, etc.). Ensure token is scoped and revocable.
 - [ ] Document in app or extension how to add Element Armory MCP to an MCP client.

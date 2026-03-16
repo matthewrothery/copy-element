@@ -49,3 +49,20 @@ Example:
 curl http://localhost:3000/health
 curl http://localhost:3000/ready
 ```
+
+## Environment (Phase 2+)
+
+See `.env.example` for all keys. Required for auth and magic link:
+
+- **BETTER_AUTH_SECRET** — Min 32 characters (e.g. `openssl rand -base64 32`).
+- **BETTER_AUTH_URL** — Base URL of the app (e.g. `http://localhost:3000`).
+- **GOOGLE_CLIENT_ID** / **GOOGLE_CLIENT_SECRET** — From Google Cloud Console (OAuth 2.0). Redirect URI: `{BETTER_AUTH_URL}/api/auth/callback/google`.
+- **AWS_SES_REGION**, **AWS_ACCESS_KEY_ID**, **AWS_SECRET_ACCESS_KEY**, **FROM_EMAIL** — For sending magic-link emails. If unset, magic links are logged to the console only.
+
+## Auth and hosted app
+
+- **Better Auth** handles sign-in at `/api/auth/*` (Google OAuth and magic link).
+- **Hosted app** (static): open `/`, `/sign-in.html`, `/account.html`, `/billing.html`. Sign-in and account pages use cookies; CORS is configured with credentials.
+- **Install identity**: `POST /api/installs/register` with `{ install_id }` (and optional telemetry) returns `install_secret`. No auth required.
+- **Link install to user**: After sign-in, use account page or `POST /api/installs/link` with session cookie and `{ install_id }`. `GET /api/installs` lists linked installs; `POST /api/installs/unlink` with `{ install_id }` unlinks.
+- **Extension session**: From the account page, get a one-time code via `POST /api/auth/extension-session/code` (session required). Exchange it with `POST /api/auth/extension-session` with `{ install_id, install_secret, code }` to receive a long-lived token. Use `POST /api/auth/extension-session/refresh` and `POST /api/auth/extension-session/revoke` for refresh and sign-out.

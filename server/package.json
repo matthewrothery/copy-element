@@ -16,16 +16,24 @@
     "node": ">=18"
   },
   "dependencies": {
-    "better-sqlite3": "^11.6.0",
+    "@aws-sdk/client-ses": "^3.1009.0",
+    "@react-email/components": "^1.0.9",
+    "@react-email/render": "^2.0.4",
+    "better-auth": "^1.5.5",
+    "better-sqlite3": "^12.0.0",
     "cors": "^2.8.5",
     "dotenv": "^16.4.5",
-    "express": "^4.21.1"
+    "express": "^4.21.1",
+    "nanoid": "^5.0.9",
+    "react": "^19.2.4",
+    "react-email": "^5.2.9"
   },
   "devDependencies": {
     "@types/better-sqlite3": "^7.6.11",
     "@types/cors": "^2.8.17",
     "@types/express": "^5.0.0",
     "@types/node": "^22.10.0",
+    "@types/react": "^19.2.14",
     "tsx": "^4.19.2",
     "typescript": "^5.7.2"
   }
