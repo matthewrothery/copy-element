@@ -11,7 +11,13 @@ import { MainPanel } from "./components/MainPanel";
 import { SettingsPanel, type UiPreferences } from "./components/SettingsPanel";
 import { Toast } from "./components/Toast";
 import type { Snippet } from "../shared/types/snippet";
+import {
+  FREE_TIER_MONTHLY_CAPTURE_LIMIT,
+  getUsageThisMonth,
+  SAVES_THIS_MONTH_KEY
+} from "../shared/usage";
 import { buildSnippetPrompt } from "../shared/utils/prompt-builder";
+import { UsageMeter } from "./components/UsageMeter";
 
 type PopupView = "home" | "settings";
 const PREFERENCES_KEY = "element-armory-ui-preferences";
@@ -58,6 +64,7 @@ export function App(): JSX.Element {
   const [snippets, setSnippets] = useState<Snippet[]>([]);
   const [preferences, setPreferences] = useState<UiPreferences>(DEFAULT_PREFERENCES);
   const [loadingState, setLoadingState] = useState(false);
+  const [usage, setUsage] = useState<{ used: number; limit: number } | null>(null);
 
   const snippetCount = snippets.length;
   const recentSnippets = useMemo(() => snippets.slice(0, 2), [snippets]);
@@ -95,6 +102,25 @@ export function App(): JSX.Element {
         setSnippets([]);
       }
     })();
+  }, []);
+
+  useEffect(() => {
+    const loadUsage = (): void => {
+      void getUsageThisMonth().then(setUsage);
+    };
+    loadUsage();
+    if (typeof chrome !== "undefined" && chrome.storage?.onChanged?.addListener) {
+      const listener = (
+        changes: { [key: string]: chrome.storage.StorageChange },
+        areaName: string
+      ): void => {
+        if (areaName === "local" && changes[SAVES_THIS_MONTH_KEY] !== undefined) {
+          loadUsage();
+        }
+      };
+      chrome.storage.onChanged.addListener(listener);
+      return () => chrome.storage.onChanged.removeListener(listener);
+    }
   }, []);
 
   useEffect(() => {
@@ -169,6 +195,12 @@ export function App(): JSX.Element {
           />
         )}
       </main>
+      {view === "home" && (
+        <UsageMeter
+          used={usage?.used ?? 0}
+          limit={usage?.limit ?? FREE_TIER_MONTHLY_CAPTURE_LIMIT}
+        />
+      )}
       <footer className="footer">
         <button
           type="button"

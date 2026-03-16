@@ -26,24 +26,16 @@ import {
 import { buildCopyHtml } from "../shared/utils/preview-srcdoc-builder";
 import { buildCopyMcpPrompt, buildSnippetPrompt } from "../shared/utils/prompt-builder";
 import { ElementPicker } from "./element-picker";
+import {
+  getCurrentMonthKey,
+  SAVES_THIS_MONTH_KEY,
+  type SavesThisMonth
+} from "../shared/usage";
 import { TOKEN_VALUES } from "../shared/token-values";
 import { showConfetti } from "./confetti";
 
 const TOAST_Z_INDEX = 2147483648;
 const CAPTURE_ATTR = "data-element-capture-id";
-const SAVES_THIS_MONTH_KEY = "element-armory-saves-this-month";
-
-interface SavesThisMonth {
-  monthKey: string;
-  count: number;
-}
-
-function getCurrentMonthKey(): string {
-  const now = new Date();
-  const y = now.getFullYear();
-  const m = String(now.getMonth() + 1).padStart(2, "0");
-  return `${y}-${m}`;
-}
 
 /**
  * Records this save in storage and returns whether to show confetti (first 5 saves of the month).
