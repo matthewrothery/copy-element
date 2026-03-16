@@ -357,9 +357,7 @@ export class PostCaptureBar {
     barEl.setAttribute("aria-hidden", "true");
     void barEl.offsetHeight;
     requestAnimationFrame(() => {
-      requestAnimationFrame(() => {
-        barEl.setAttribute("aria-hidden", "false");
-      });
+      barEl.setAttribute("aria-hidden", "false");
     });
   }
 

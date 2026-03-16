@@ -20,6 +20,7 @@ import type {
 } from "../shared/types/messages";
 import { buildSnippetFromCapture } from "../shared/utils/snippet-from-capture";
 import { PostCaptureBar } from "./post-capture-bar";
+import { ProcessingOverlay } from "./processing-overlay";
 import { buildSnippetPrompt } from "../shared/utils/prompt-builder";
 import { ElementPicker } from "./element-picker";
 import {
@@ -32,6 +33,8 @@ import { showConfetti } from "./confetti";
 
 const TOAST_Z_INDEX = 2147483648;
 const CAPTURE_ATTR = "data-element-capture-id";
+/** Minimum time the processing overlay is shown so it doesn't flash on quick captures. */
+const MIN_PROCESSING_OVERLAY_MS = 500;
 
 /**
  * Records this save in storage and returns whether to show confetti (first 5 saves of the month).
@@ -96,6 +99,8 @@ function collectInlineStyleUsageContexts(
 
 let picker: ElementPicker | null = null;
 let bar: PostCaptureBar | null = null;
+let processingOverlay: ProcessingOverlay | null = null;
+let processingOverlayShownAt: number | null = null;
 
 /**
  * True if this frame's DOM is readable (same-origin or otherwise accessible).
@@ -203,6 +208,12 @@ function ensurePicker(): ElementPicker {
             }
           }
           // When viewportRect.ok is false (e.g. cross-origin iframe), skip thumbnail to avoid wrong crop
+
+          if (!processingOverlay) {
+            processingOverlay = new ProcessingOverlay();
+          }
+          processingOverlayShownAt = Date.now();
+          processingOverlay.show();
 
           const baseUrl = window.location.href;
           const cloned = cloneElementTreeWithInlineStyles(result.element, baseUrl);
@@ -317,6 +328,16 @@ function ensurePicker(): ElementPicker {
           const snippet = buildSnippetFromCapture(capture);
           await autoSaveSnippet(snippet);
 
+          // Keep overlay visible at least MIN_PROCESSING_OVERLAY_MS so it doesn't flash on quick captures
+          if (processingOverlayShownAt !== null) {
+            const elapsed = Date.now() - processingOverlayShownAt;
+            const remaining = Math.max(0, MIN_PROCESSING_OVERLAY_MS - elapsed);
+            if (remaining > 0) {
+              await new Promise((r) => setTimeout(r, remaining));
+            }
+            processingOverlayShownAt = null;
+          }
+          processingOverlay?.hide();
           picker?.stop();
 
           if (bar) {
@@ -345,6 +366,8 @@ function ensurePicker(): ElementPicker {
           bar.show(snippet);
         } catch (error) {
           console.error("Failed to capture element", error);
+          processingOverlayShownAt = null;
+          processingOverlay?.hide();
           picker?.stop();
         }
       })();
