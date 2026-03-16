@@ -1,0 +1,41 @@
+name: copy-element-prod
+
+services:
+  nginx:
+    image: nginx:alpine
+    container_name: copy-element-nginx
+    ports:
+      - "80:80"
+    volumes:
+      - /home/ec2-user/copy-element/nginx.conf:/etc/nginx/nginx.conf:ro
+      - copy-element-nginx-cache:/var/cache/nginx
+    restart: unless-stopped
+    networks:
+      - copy-element-network
+
+  app:
+    image: ${ECR_REGISTRY}/${ECR_SERVER_REPO}:latest
+    container_name: copy-element-app
+    environment:
+      NODE_ENV: production
+      PORT: 80
+      DATABASE_URL: ${DATABASE_URL}
+      APP_URL: ${APP_URL}
+      SESSION_SECRET: ${SESSION_SECRET}
+      COOKIE_SECRET: ${COOKIE_SECRET}
+      S3_ASSETS_BUCKET: ${S3_ASSETS_BUCKET}
+      AWS_REGION: ${AWS_REGION}
+    ports:
+      - "3000:80"
+    depends_on:
+      - nginx
+    restart: unless-stopped
+    networks:
+      - copy-element-network
+
+volumes:
+  copy-element-nginx-cache:
+
+networks:
+  copy-element-network:
+    driver: bridge
