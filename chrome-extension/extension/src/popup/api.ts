@@ -87,6 +87,10 @@ export async function deleteSnippetFromBackground(id: string): Promise<void> {
   await sendRuntimeMessage<null>({ type: "DELETE_SNIPPET", payload: { id } });
 }
 
+export async function saveSnippetToBackground(snippet: Snippet): Promise<void> {
+  await sendRuntimeMessage<null>({ type: "SAVE_SNIPPET", payload: snippet });
+}
+
 export async function getFoldersFromBackground(): Promise<Folder[]> {
   return sendRuntimeMessage<Folder[]>({ type: "GET_FOLDERS" });
 }

@@ -1,6 +1,6 @@
 import { useRef, useState, useEffect } from "react";
 import { Code, Copy, Eye, MoreVertical, Trash2 } from "lucide-react";
-import { TAILWIND_COPY_PLACEHOLDER } from "../../shared/constants";
+import { DRAG_TYPE_SNIPPET, TAILWIND_COPY_PLACEHOLDER } from "../../shared/constants";
 import { buildCopyHtml } from "../../shared/utils/preview-srcdoc-builder";
 import type { Snippet } from "../../shared/types/snippet";
 import { buildCopyMcpPrompt, buildSnippetPrompt } from "../../shared/utils/prompt-builder";
@@ -31,7 +31,18 @@ interface SnippetCardProps {
 
 export function SnippetCard({ snippet, onOpen, onDelete, onCopy }: SnippetCardProps) {
   const [menuOpen, setMenuOpen] = useState(false);
+  const [isDragging, setIsDragging] = useState(false);
   const menuRef = useRef<HTMLDivElement>(null);
+
+  function handleDragStart(e: React.DragEvent): void {
+    e.dataTransfer.setData(DRAG_TYPE_SNIPPET, snippet.id);
+    e.dataTransfer.effectAllowed = "move";
+    setIsDragging(true);
+  }
+
+  function handleDragEnd(): void {
+    setIsDragging(false);
+  }
 
   useEffect(() => {
     if (!menuOpen) return;
@@ -47,7 +58,12 @@ export function SnippetCard({ snippet, onOpen, onDelete, onCopy }: SnippetCardPr
   const meta = `${getHostname(snippet.sourceUrl)} · ${formatSnippetDate(snippet.createdAt)}`;
 
   return (
-    <article className="snippet-card">
+    <article
+      className={`snippet-card${isDragging ? " is-dragging" : ""}`}
+      draggable
+      onDragStart={handleDragStart}
+      onDragEnd={handleDragEnd}
+    >
       <button
         className="thumbnail-button"
         onClick={() => onOpen(snippet)}

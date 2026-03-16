@@ -5,7 +5,8 @@ import {
   deleteSnippetFromBackground,
   getFoldersFromBackground,
   getSnippetsFromBackground,
-  saveFolderToBackground
+  saveFolderToBackground,
+  saveSnippetToBackground
 } from "../popup/api";
 import { DeleteConfirmationModal } from "../popup/components/DeleteConfirmationModal";
 import { EmptyState } from "../popup/components/EmptyState";
@@ -201,6 +202,49 @@ export function LibraryApp(): JSX.Element {
     }
   }
 
+  async function handleMoveSnippet(snippetId: string, targetFolderId: string | null): Promise<void> {
+    const snippet = snippets.find((s) => s.id === snippetId);
+    if (!snippet) return;
+    try {
+      await saveSnippetToBackground({ ...snippet, folderId: targetFolderId });
+      setSnippets((prev) =>
+        prev.map((s) => (s.id === snippetId ? { ...s, folderId: targetFolderId } : s))
+      );
+      setToastMessage("Snippet moved");
+    } catch {
+      setToastMessage("Failed to move snippet");
+    }
+  }
+
+  function isDescendant(
+    foldersById: Map<string, Folder>,
+    folderId: string,
+    potentialAncestorId: string
+  ): boolean {
+    let current: Folder | undefined = foldersById.get(folderId);
+    while (current?.parentId) {
+      if (current.parentId === potentialAncestorId) return true;
+      current = foldersById.get(current.parentId);
+    }
+    return false;
+  }
+
+  async function handleMoveFolder(folderId: string, targetParentId: string | null): Promise<void> {
+    if (targetParentId === folderId) return;
+    if (targetParentId !== null && isDescendant(foldersById, targetParentId, folderId)) return;
+    const folder = folders.find((f) => f.id === folderId);
+    if (!folder) return;
+    try {
+      await saveFolderToBackground({ ...folder, parentId: targetParentId });
+      setFolders((prev) =>
+        prev.map((f) => (f.id === folderId ? { ...f, parentId: targetParentId } : f))
+      );
+      setToastMessage("Folder moved");
+    } catch {
+      setToastMessage("Failed to move folder");
+    }
+  }
+
   const subtitle =
     currentFolderId === null
       ? `${snippets.length} saved snippets`
@@ -235,6 +279,8 @@ export function LibraryApp(): JSX.Element {
           currentFolder={currentFolder}
           foldersById={foldersById}
           onNavigate={setCurrentFolderId}
+          onDropSnippet={(id) => void handleMoveSnippet(id, null)}
+          onDropFolder={(id) => void handleMoveFolder(id, null)}
         />
         {hasFolders && (
           <section className="library-folders-section" aria-label="Folders">
@@ -249,6 +295,8 @@ export function LibraryApp(): JSX.Element {
                   onOpen={(f) => setCurrentFolderId(f.id)}
                   onRename={setFolderToRename}
                   onDelete={setFolderToDelete}
+                  onDropSnippet={(id) => void handleMoveSnippet(id, folder.id)}
+                  onDropFolder={(id) => void handleMoveFolder(id, folder.id)}
                 />
               ))}
             </div>
