@@ -132,4 +132,23 @@ describe("extractElementName", () => {
     expect(result.displayName).toBe("Main Nav");
     expect(result.source).toBe("class");
   });
+
+  it("strips minified/hash-like tokens from id so name is not '301fdad4 Eaoqfr Container'", () => {
+    const result = extractElementName(
+      el('<div id="301fdad4 Eaoqfr Container">Content</div>')
+    );
+    expect(result.displayName).not.toMatch(/301fdad4|Eaoqfr/i);
+    expect(result.machineName).not.toMatch(/301fdad4|eaoqfr/);
+    expect(result.source).toBe("text");
+    expect(result.machineName).toBe("content-container");
+  });
+
+  it("falls back to tag suffix when id is only minified tokens", () => {
+    const result = extractElementName(
+      el('<div id="301fdad4-eaoqfr-container"></div>')
+    );
+    expect(result.machineName).toBe("container");
+    expect(result.displayName).toBe("Container");
+    expect(result.source).toBe("fallback");
+  });
 });

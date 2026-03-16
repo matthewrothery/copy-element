@@ -36,6 +36,14 @@ const NOISY_CLASS_PATTERNS = [
   /^(mt|mb|ml|mr|mx|my|pt|pb|pl|pr|px|py|gap|grid|flex|block|inline|hidden|relative|absolute|text|bg|border|rounded|w|h|min|max)-/
 ];
 
+/** Common English digraphs; tokens containing these are treated as words, not minified. */
+const WORD_LIKE_SUBSTRINGS = new Set([
+  "th", "er", "on", "in", "ed", "re", "en", "an", "es", "or", "te", "ou", "ar", "al",
+  "le", "ly", "ic", "ti", "at", "st", "it", "is", "as", "to", "nt", "io", "co", "ca",
+  "ro", "ce", "ta", "la", "el", "se", "ne", "me", "us", "ur", "om", "ow", "so", "no",
+  "ho", "lo", "il", "li", "ri", "de", "ge", "ng", "ch", "sh"
+]);
+
 const GENERIC_WORDS = new Set([
   "container",
   "wrapper",
@@ -113,6 +121,30 @@ function isNoisyClass(token: string): boolean {
   return NOISY_CLASS_PATTERNS.some((pattern) => pattern.test(token));
 }
 
+/** True if the token looks like a minified/hash string (hex, long alphanumeric, or short random). */
+function isMinifiedOrHashToken(part: string): boolean {
+  const lower = part.toLowerCase();
+  if (/^[a-f0-9]{5,}$/i.test(part)) return true;
+  if (/^[a-z0-9]{8,}$/i.test(part)) return true;
+  if (part.length >= 5 && part.length <= 7) {
+    const hasWordLike = Array.from(WORD_LIKE_SUBSTRINGS).some((sub) =>
+      lower.includes(sub)
+    );
+    if (!hasWordLike) return true;
+  }
+  return false;
+}
+
+/** Removes minified/hash-like parts from a slug; returns empty if nothing meaningful remains. */
+function filterMinifiedFromSlug(slug: string, suffix: string): string {
+  const parts = slug.split("-").filter(Boolean);
+  const filtered = parts.filter(
+    (p) => p !== suffix && !isMinifiedOrHashToken(p)
+  );
+  const result = filtered.join("-").replace(/-{2,}/g, "-").replace(/^-|-$/g, "");
+  return result.length >= 2 ? result : "";
+}
+
 function getUsefulClassTokens(el: Element): string[] {
   const classList = Array.from(el.classList);
 
@@ -123,7 +155,8 @@ function getUsefulClassTokens(el: Element): string[] {
     .flatMap((c) => c.split(/[-_]/g))
     .map((t) => t.toLowerCase())
     .filter((t) => t.length > 2)
-    .filter((t) => !GENERIC_WORDS.has(t));
+    .filter((t) => !GENERIC_WORDS.has(t))
+    .filter((t) => !isMinifiedOrHashToken(t));
 }
 
 function getShortVisibleText(el: Element): string | null {
@@ -202,20 +235,30 @@ export function extractElementName(el: Element): ExtractedNameResult {
     if (!value) continue;
 
     const slug = slugify(value);
-    if (slug && slug.length >= 3) {
-      const name =
-        slug.endsWith(`-${suffix}`) || slug === suffix ? slug : `${slug}-${suffix}`;
-      return buildResult(name, 0.95, `attribute:${attr}`);
-    }
+    if (!slug || slug.length < 3) continue;
+
+    const cleaned = filterMinifiedFromSlug(slug, suffix);
+    if (!cleaned) continue;
+
+    const name =
+      cleaned.endsWith(`-${suffix}`) || cleaned === suffix
+        ? cleaned
+        : `${cleaned}-${suffix}`;
+    return buildResult(name, 0.95, `attribute:${attr}`);
   }
 
   const text = getShortVisibleText(el);
   if (text) {
     const slug = slugify(text);
     if (slug) {
-      const name =
-        slug.endsWith(`-${suffix}`) || slug === suffix ? slug : `${slug}-${suffix}`;
-      return buildResult(name, 0.88, "text");
+      const cleaned = filterMinifiedFromSlug(slug, suffix);
+      if (cleaned) {
+        const name =
+          cleaned.endsWith(`-${suffix}`) || cleaned === suffix
+            ? cleaned
+            : `${cleaned}-${suffix}`;
+        return buildResult(name, 0.88, "text");
+      }
     }
   }
 
@@ -223,8 +266,11 @@ export function extractElementName(el: Element): ExtractedNameResult {
   if (id) {
     const slug = slugify(id);
     if (slug) {
-      const name = slug.endsWith(`-${suffix}`) ? slug : `${slug}-${suffix}`;
-      return buildResult(name, 0.82, "id");
+      const cleaned = filterMinifiedFromSlug(slug, suffix);
+      if (cleaned) {
+        const name = cleaned.endsWith(`-${suffix}`) ? cleaned : `${cleaned}-${suffix}`;
+        return buildResult(name, 0.82, "id");
+      }
     }
   }
 
