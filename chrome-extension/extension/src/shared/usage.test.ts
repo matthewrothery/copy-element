@@ -3,6 +3,7 @@ import {
   FREE_TIER_MONTHLY_CAPTURE_LIMIT,
   getCurrentMonthKey,
   getUsageThisMonth,
+  getUsageTier,
   SAVES_THIS_MONTH_KEY
 } from "./usage";
 
@@ -53,6 +54,28 @@ describe("usage", () => {
       vi.stubGlobal("chrome", undefined);
       const result = await getUsageThisMonth();
       expect(result).toEqual({ used: 0, limit: FREE_TIER_MONTHLY_CAPTURE_LIMIT });
+    });
+  });
+
+  describe("getUsageTier", () => {
+    it("returns quiet for 0-39%", () => {
+      expect(getUsageTier(0)).toBe("quiet");
+      expect(getUsageTier(0.39)).toBe("quiet");
+    });
+
+    it("returns default for 40-69%", () => {
+      expect(getUsageTier(0.4)).toBe("default");
+      expect(getUsageTier(0.69)).toBe("default");
+    });
+
+    it("returns noticeable for 70-89%", () => {
+      expect(getUsageTier(0.7)).toBe("noticeable");
+      expect(getUsageTier(0.89)).toBe("noticeable");
+    });
+
+    it("returns urgent for 90%+", () => {
+      expect(getUsageTier(0.9)).toBe("urgent");
+      expect(getUsageTier(1)).toBe("urgent");
     });
   });
 });

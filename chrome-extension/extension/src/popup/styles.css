@@ -447,6 +447,23 @@
   line-height: 1.4;
 }
 
+/* Quiet tier: low emphasis, present but not shouty */
+.usage-meter--quiet .usage-meter-label,
+.usage-meter--quiet .usage-meter-count {
+  color: var(--color-text-muted);
+  font-weight: 400;
+}
+
+.usage-meter--quiet .usage-meter-bar {
+  height: 4px;
+}
+
+/* Urgent tier: hint more prominent */
+.usage-meter--urgent .usage-meter-hint {
+  color: var(--color-text-primary);
+  font-weight: var(--font-weight-semibold);
+}
+
 .footer {
   border-top: 1px solid var(--color-border);
   background: var(--color-surface);

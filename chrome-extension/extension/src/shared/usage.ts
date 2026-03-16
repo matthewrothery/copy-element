@@ -10,6 +10,23 @@ export const FREE_TIER_MONTHLY_CAPTURE_LIMIT = 20;
 /** Threshold (0–1) above which to show upgrade hint. */
 export const USAGE_HINT_THRESHOLD = 0.7;
 
+/** Tier boundaries (0–1). Quiet 0–39%, default 40–69%, noticeable 70–89%, urgent 90%+. */
+export const USAGE_TIER_QUIET_MAX = 0.4;
+export const USAGE_TIER_NOTICEABLE_MAX = 0.69;
+export const USAGE_TIER_URGENT_MIN = 0.9;
+
+export type UsageTier = "quiet" | "default" | "noticeable" | "urgent";
+
+/**
+ * Returns the emphasis tier for a given usage ratio (0–1).
+ */
+export function getUsageTier(ratio: number): UsageTier {
+  if (ratio < USAGE_TIER_QUIET_MAX) return "quiet";
+  if (ratio <= USAGE_TIER_NOTICEABLE_MAX) return "default";
+  if (ratio < USAGE_TIER_URGENT_MIN) return "noticeable";
+  return "urgent";
+}
+
 export interface SavesThisMonth {
   monthKey: string;
   count: number;
