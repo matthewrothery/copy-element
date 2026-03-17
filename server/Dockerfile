@@ -1,5 +1,5 @@
 # ----------- BUILD STAGE -----------
-FROM node:20-alpine AS builder
+FROM node:24-alpine3.23 AS builder
 
 WORKDIR /app
 
@@ -10,7 +10,7 @@ COPY server/. .
 RUN npm run build && mkdir -p dist/db && cp -r src/db/migrations dist/db/
 
 # ----------- RUNTIME STAGE -----------
-FROM node:20-alpine AS runner
+FROM node:24-alpine3.23 AS runner
 
 WORKDIR /app
 

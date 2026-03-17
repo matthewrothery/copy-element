@@ -11,10 +11,34 @@ import { mountApi } from '../api/index.js';
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const publicDir = join(__dirname, '../../public');
 
+function addAuthRouteDiagnostics(app: Express): void {
+  if (process.env.NODE_ENV === 'production') {
+    return;
+  }
+
+  app.use('/api/auth', (req, res, next) => {
+    if (req.path === '/extension-session' || req.path.startsWith('/extension-session/')) {
+      next();
+      return;
+    }
+
+    const requestLabel = `${req.method} ${req.originalUrl}`;
+    res.on('finish', () => {
+      if (res.statusCode === 404) {
+        console.warn(
+          `[auth] 404 for ${requestLabel}. Verify Better Auth route names (for Google: POST /api/auth/sign-in/social with { provider, callbackURL }).`
+        );
+      }
+    });
+    next();
+  });
+}
+
 export function createApp(): Express {
   const app = express();
   app.use(express.json());
   app.use(cors({ origin: true, credentials: true }));
+  addAuthRouteDiagnostics(app);
   app.use('/api/auth/extension-session', extensionSessionRouter);
   app.all('/api/auth/*', toNodeHandler(auth));
   mountApi(app);

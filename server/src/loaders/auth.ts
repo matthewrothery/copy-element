@@ -14,10 +14,31 @@ async function sendMagicLinkPlaceholder(args: { email: string; url: string; toke
   }
 }
 
+function getTrustedOrigins(): string[] {
+  const origins: string[] = [];
+  try {
+    origins.push(new URL(config.BETTER_AUTH_URL).origin);
+  } catch {
+    // ignore invalid BETTER_AUTH_URL
+  }
+  if (config.FRONTEND_URL) {
+    try {
+      const frontOrigin = new URL(config.FRONTEND_URL).origin;
+      if (!origins.includes(frontOrigin)) {
+        origins.push(frontOrigin);
+      }
+    } catch {
+      // ignore invalid FRONTEND_URL
+    }
+  }
+  return origins;
+}
+
 export const auth = betterAuth({
   database: getDb() as any,
   baseURL: config.BETTER_AUTH_URL,
   secret: config.BETTER_AUTH_SECRET,
+  trustedOrigins: getTrustedOrigins(),
   socialProviders: {
     google: {
       clientId: config.GOOGLE_CLIENT_ID,

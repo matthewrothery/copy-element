@@ -14,6 +14,7 @@ export interface AppConfig {
   AWS_ACCESS_KEY_ID: string;
   AWS_SECRET_ACCESS_KEY: string;
   FROM_EMAIL: string;
+  FRONTEND_URL: string;
 }
 
 export interface HealthResponse {

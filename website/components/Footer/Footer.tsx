@@ -59,6 +59,14 @@ const DEFAULT_LINK_GROUPS: FooterLinkGroup[] = [
       { label: "Press", href: "/press" },
     ],
   },
+  {
+    title: "Account",
+    links: [
+      { label: "Sign in", href: "/sign-in" },
+      { label: "Account", href: "/account" },
+      { label: "Billing", href: "/billing" },
+    ],
+  },
 ];
 
 const DEFAULT_LEGAL_LINKS: FooterLink[] = [

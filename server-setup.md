@@ -8,6 +8,24 @@ Users capture elements in their browser extension. Those captures sync to our ba
 
 ---
 
+## Running with Docker
+
+From the repo root you can run the website and server together:
+
+1. Copy `.env.example` to `.env` and set `BETTER_AUTH_SECRET` (min 32 chars) if you need auth.
+2. Run `./start.sh`.
+
+Then open:
+
+- **Website:** http://localhost:8888  
+- **API:** http://localhost:3001  
+
+Login and API calls use the server at that API URL. Ports are configurable via `WEBSITE_PORT` and `SERVER_PORT` in `.env`.
+
+To include the MCP server in the stack (optional): `docker compose --profile full up -d`. For Cursor MCP integration, run the mcp-server from the host (same repo) so stdio is attached to the IDE.
+
+---
+
 ## Identity: Install ID + Install Secret (not fingerprinting)
 
 **Do not** use machine fingerprinting as identity. Use a generated install identity and treat machine details as telemetry only.

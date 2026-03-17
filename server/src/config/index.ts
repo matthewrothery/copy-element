@@ -17,6 +17,7 @@ function getConfig(): AppConfig {
     AWS_ACCESS_KEY_ID: process.env[ENV_KEYS.AWS_ACCESS_KEY_ID] ?? '',
     AWS_SECRET_ACCESS_KEY: process.env[ENV_KEYS.AWS_SECRET_ACCESS_KEY] ?? '',
     FROM_EMAIL: process.env[ENV_KEYS.FROM_EMAIL] ?? '',
+    FRONTEND_URL: process.env[ENV_KEYS.FRONTEND_URL] ?? '',
   };
 }
 

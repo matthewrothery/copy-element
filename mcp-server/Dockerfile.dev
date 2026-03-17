@@ -1,0 +1,10 @@
+# Dev image: deps only, no source copy, no app CMD.
+# Compose mounts ./mcp-server and overrides command if needed.
+FROM node:24-alpine3.23
+
+WORKDIR /app
+
+COPY package.json package-lock.json* ./
+RUN npm ci
+
+# No COPY of source; no app CMD. Compose mounts ./mcp-server:/app and supplies command.
