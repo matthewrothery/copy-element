@@ -25,14 +25,30 @@ Summary of what’s built, how it works, and what’s next. Use this when contin
 - **Hosted app**: Static HTML in [public/](public/) — sign-in, account (linked installs, connect extension), billing placeholder; served by Express with CORS credentials. [public/auth/extension-callback.html](public/auth/extension-callback.html) passes one-time code to extension.
 - **README**: Env (auth, SES), auth flow, install identity, and extension-session usage documented.
 
+### Phase 3: Stripe integration and entitlements (complete)
+
+- **Stripe loader**: [src/loaders/stripe.ts](src/loaders/stripe.ts) — singleton client; fails fast if `STRIPE_SECRET_KEY` missing when used.
+- **Billing schema**: Migration 005 — `stripe_customers`, `subscriptions`, `subscription_events` (audit + idempotency).
+- **Services**: [src/services/billing-customer.ts](src/services/billing-customer.ts) (getOrCreateStripeCustomerForUser), [src/services/subscription-sync.ts](src/services/subscription-sync.ts) (syncFromStripeEvent for checkout.session.completed, customer.subscription.*, invoice.paid/payment_failed), [src/services/entitlements.ts](src/services/entitlements.ts) (getUserEntitlement, hasActivePaidPlan), [src/services/billing-plan-map.ts](src/services/billing-plan-map.ts) (priceIdToPlanCode).
+- **Routes**: [src/api/routes/billing.ts](src/api/routes/billing.ts) — `POST /api/billing/checkout-session`, `POST /api/billing/portal-session`, `GET /api/billing/entitlement` (session); webhook mounted in express.ts with `express.raw()` before `express.json()`.
+- **Hosted app**: [public/billing.html](public/billing.html) (Upgrade → Checkout, Manage billing → Portal), [public/account.html](public/account.html) (entitlement display, link to billing).
+- **Middleware**: `requirePaidEntitlement` in session.ts for future protected APIs.
+
+### Phase 4: Element sync and storage (complete)
+
+- **Capture schema**: Migration 006 — `captures` (install_id, user_id nullable, source_url, captured_at, status, metadata_json), `capture_assets` (capture_id, asset_kind, object_key, storage_provider, checksum, content_type, byte_size).
+- **S3**: [src/services/s3.ts](src/services/s3.ts) — presigned PUT URL (content-type/size enforced), `buildCaptureObjectKey`; env `S3_REGION`, `S3_BUCKET_CAPTURES`, optional `S3_ENDPOINT`, `S3_FORCE_PATH_STYLE`.
+- **Capture service**: [src/services/capture.ts](src/services/capture.ts) — createCaptureWithAssets, listCapturesByInstall, listCapturesByUser; backfill user_id on link (called from install.linkInstallToUser).
+- **Install auth**: [src/api/middleware/install-auth.ts](src/api/middleware/install-auth.ts) — Bearer token (extension session) or install_id + install_secret (body/query).
+- **Routes**: [src/api/routes/captures.ts](src/api/routes/captures.ts) — `POST /api/captures/upload-url`, `POST /api/captures`, `GET /api/captures/install/:installId`, `GET /api/captures` (session). Limits: 256kb JSON body, screenshot/asset MIME and size, max 10 assets per capture, metadata 4kb.
+- **Jobs**: [src/jobs/](src/jobs/) — placeholders for verify-capture-assets, cleanup-orphan-uploads, nightly-db-backup; see [src/jobs/README.md](src/jobs/README.md).
+
 ---
 
 ## Next (from server.todo)
 
 | Phase | Focus |
 |-------|--------|
-| **3** | Stripe: SDK, webhooks, Hosted Checkout, Customer Portal, subscription sync and entitlement tables. |
-| **4** | Element sync: capture/capture_assets models, S3, upload flow, payload limits, API for submit/list captures. |
 | **5** | Rate limits and abuse: per-install throttling, install_secret checks, UA validation, middleware. |
 | **6** | MCP server on a different port, thin over shared services; extension “Copy MCP” and docs. |
 | **7** | Optional: library view, sign-out behavior, DB backup to S3, monitoring. |
@@ -45,12 +61,13 @@ Summary of what’s built, how it works, and what’s next. Use this when contin
 
 In `src/loaders/express.ts` the order is:
 
-1. `express.json()` — so all routes below can read JSON body.
-2. `cors({ origin: true, credentials: true })` — allow credentials (cookies) for hosted app.
-3. `app.use('/api/auth/extension-session', extensionSessionRouter)` — **must be before** the Better Auth catch-all so our extension-session routes handle `/api/auth/extension-session/*` instead of Better Auth.
-4. `app.all('/api/auth/*', toNodeHandler(auth))` — Better Auth handles everything else under `/api/auth/` (sign-in, callback, magic-link, sign-out). Do **not** put `express.json()` before this in a way that breaks Better Auth; our current order is correct.
-5. `mountApi(app)` — health, `/api/me`, `/api/installs`.
-6. `express.static(publicDir)` — `server/public/` (index, sign-in, account, billing, auth/extension-callback.html). Resolved as `join(__dirname, '../../public')` so from `dist/loaders`, public is `server/public/`.
+1. `cors({ origin: true, credentials: true })` — allow credentials (cookies) for hosted app.
+2. `app.post('/api/billing/webhook', express.raw({ type: 'application/json' }), handleStripeWebhook)` — **before** `express.json()` so Stripe signature verification gets raw body.
+3. `express.json({ limit: '256kb' })` — so all routes below can read JSON body.
+4. `app.use('/api/auth/extension-session', extensionSessionRouter)` — **must be before** the Better Auth catch-all so our extension-session routes handle `/api/auth/extension-session/*` instead of Better Auth.
+5. `app.all('/api/auth/*', toNodeHandler(auth))` — Better Auth handles everything else under `/api/auth/` (sign-in, callback, magic-link, sign-out). Do **not** put `express.json()` before this in a way that breaks Better Auth; our current order is correct.
+6. `mountApi(app)` — health, `/api/me`, `/api/installs`, `/api/billing`, `/api/captures`.
+7. `express.static(publicDir)` — `server/public/` (index, sign-in, account, billing, auth/extension-callback.html). Resolved as `join(__dirname, '../../public')` so from `dist/loaders`, public is `server/public/`.
 
 ### Session and auth
 
@@ -87,8 +104,16 @@ In `src/loaders/express.ts` the order is:
 | POST | `/api/auth/extension-session/refresh` | Bearer or body `token` | `{ token? }` | 200 `{ token, expires_at }` or 401 |
 | POST | `/api/auth/extension-session/revoke` | Bearer or body `token` | `{ token? }` | 200 `{ ok }` |
 | (all other `/api/auth/*`) | — | — | — | Handled by Better Auth (sign-in, callback, magic-link, sign-out, etc.) |
+| GET | `/api/billing/entitlement` | session | — | 200 `{ plan_code, status, active, current_period_end?, cancel_at_period_end }` |
+| POST | `/api/billing/checkout-session` | session | `{ plan? }` | 200 `{ url }` (redirect to Stripe Checkout) |
+| POST | `/api/billing/portal-session` | session | — | 200 `{ url }` (redirect to Stripe Portal) |
+| POST | `/api/billing/webhook` | none (Stripe signature) | raw JSON | 200 `{ received: true }` (Stripe CLI: `stripe listen --forward-to localhost:PORT/api/billing/webhook`) |
+| POST | `/api/captures/upload-url` | install (Bearer or install_id+install_secret) | `{ asset_kind, content_type, byte_size, checksum_sha256? }` | 200 `{ url, object_key, expires_at }` |
+| POST | `/api/captures` | install | `{ source_url, captured_at?, metadata?, assets: [{ asset_kind, object_key, ... }] }` | 201 capture row |
+| GET | `/api/captures/install/:installId` | install (own install only) | — | 200 `{ captures }` |
+| GET | `/api/captures` | session | query: limit?, cursor? | 200 `{ captures }` (user’s captures across linked installs) |
 
-Health router is mounted at root (no prefix); installs at `/api/installs`; me at `/api/me`. Session-required routes use `requireSession` from `src/api/middleware/session.ts`; they call `auth.api.getSession({ headers: fromNodeHeaders(req.headers) })` and attach `req.session`; 401 if no session.
+Health router is mounted at root (no prefix); installs at `/api/installs`; me at `/api/me`. Session-required routes use `requireSession` from `src/api/middleware/session.ts`; they call `auth.api.getSession({ headers: fromNodeHeaders(req.headers) })` and attach `req.session`; 401 if no session. Capture routes use `requireInstallAuth` (extension token or install_id + install_secret).
 
 ---
 
@@ -102,6 +127,11 @@ Health router is mounted at root (no prefix); installs at `/api/installs`; me at
 - **verification** (Better Auth) — `id`, `identifier`, `value`, `expiresAt`, `createdAt`, `updatedAt`.
 - **extension_codes** — `code` (TEXT PK), `user_id`, `install_id`, `expires_at`, `created_at`. One-time codes for extension token exchange; deleted after use.
 - **extension_sessions** — `id` (TEXT PK), `user_id`, `install_id`, `token_hash` (SHA-256 of token), `created_at`, `expires_at`. Long-lived extension tokens; refresh updates `token_hash` and `expires_at`.
+- **stripe_customers** (005) — `user_id` (UNIQUE), `stripe_customer_id` (UNIQUE), `created_at`, `updated_at`.
+- **subscriptions** (005) — `user_id`, `stripe_customer_id`, `stripe_subscription_id` (UNIQUE), `plan_code`, `status`, `current_period_start/end`, `cancel_at_period_end`, `created_at`, `updated_at`.
+- **subscription_events** (005) — `stripe_event_id` (UNIQUE), `stripe_event_type`, `payload_json`, `processed_at`, `processing_status`, `error_message`; idempotency and audit.
+- **captures** (006) — `install_id`, `user_id` (nullable, denormalized), `source_url`, `captured_at`, `created_by_install_id`, `status`, `metadata_json`, `created_at`, `updated_at`.
+- **capture_assets** (006) — `capture_id`, `asset_kind`, `storage_provider`, `object_key`, `public_url`, `checksum_sha256`, `content_type`, `byte_size`, `created_at`.
 
 All timestamps stored as ISO strings (TEXT) for portability.
 
@@ -126,6 +156,10 @@ Defined in `src/constants/index.ts` and read in `src/config/index.ts`. Single `c
 | FROM_EMAIL | no | `''` | Sender for magic-link. If unset, magic-link logs URL to console. |
 
 Add new keys in `ENV_KEYS`, `AppConfig` in types, and in `getConfig()`. Update `.env.example` and README.
+
+**Phase 3 (Stripe)**: `STRIPE_SECRET_KEY`, `STRIPE_WEBHOOK_SECRET`, `STRIPE_PRICE_PRO_MONTHLY`, `STRIPE_SUCCESS_URL`, `STRIPE_CANCEL_URL`, `STRIPE_PORTAL_RETURN_URL`.
+
+**Phase 4 (S3)**: `S3_REGION`, `S3_BUCKET_CAPTURES`, `S3_ENDPOINT` (optional), `S3_FORCE_PATH_STYLE` (optional boolean). S3 client uses default AWS credential chain (e.g. `AWS_ACCESS_KEY_ID`, `AWS_SECRET_ACCESS_KEY`).
 
 ---
 
@@ -206,7 +240,9 @@ Add new keys in `ENV_KEYS`, `AppConfig` in types, and in `getConfig()`. Update `
 
 - **Runtime**: Node 18+, ESM, TypeScript. Build: `tsc` → `dist/`; dev: `tsx watch src/index.ts`.
 - **API**: Express 4, cors, Better Auth (Google OAuth + magic-link plugin).
-- **DB**: SQLite via better-sqlite3; custom migration runner; migrations 001–004.
+- **DB**: SQLite via better-sqlite3; custom migration runner; migrations 001–006.
+- **Stripe**: stripe (SDK); billing sync via webhooks; entitlements from DB.
+- **Storage**: @aws-sdk/client-s3, @aws-sdk/s3-request-presigner for presigned capture uploads.
 - **Email**: @aws-sdk/client-ses, @react-email/components, @react-email/render, react-email; template in src/emails/magic-link.tsx.
 - **Static app**: Plain HTML/JS in server/public/; no separate SPA build.
 - **IDs/secrets**: nanoid (install_secret, extension codes and tokens); install_id format validated with UUID/ULID regex.
@@ -224,5 +260,8 @@ Add new keys in `ENV_KEYS`, `AppConfig` in types, and in `getConfig()`. Update `
 | Install | `src/services/install.ts`, `src/api/routes/installs.ts` |
 | Auth / session | `src/api/middleware/session.ts`, `src/api/routes/me.ts` |
 | Extension session | `src/services/extension-session.ts`, `src/api/routes/extension-session.ts` |
+| Billing | `src/loaders/stripe.ts`, `src/services/billing-customer.ts`, `src/services/subscription-sync.ts`, `src/services/entitlements.ts`, `src/api/routes/billing.ts` |
+| Captures / S3 | `src/services/s3.ts`, `src/services/capture.ts`, `src/api/middleware/install-auth.ts`, `src/api/routes/captures.ts` |
 | Email | `src/services/email.ts`, `src/services/email-ses.ts`, `src/emails/magic-link.tsx` |
 | Hosted app | `public/*.html` |
+| Jobs | `src/jobs/*.ts`, `src/jobs/README.md` (placeholders) |

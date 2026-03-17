@@ -6,6 +6,7 @@ import cors from 'cors';
 import { toNodeHandler } from 'better-auth/node';
 import { auth } from './auth.js';
 import { extensionSessionRouter } from '../api/routes/extension-session.js';
+import { handleStripeWebhook } from '../api/routes/billing.js';
 import { mountApi } from '../api/index.js';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
@@ -36,8 +37,10 @@ function addAuthRouteDiagnostics(app: Express): void {
 
 export function createApp(): Express {
   const app = express();
-  app.use(express.json());
   app.use(cors({ origin: true, credentials: true }));
+  // Stripe webhook must receive raw body for signature verification; mount before express.json().
+  app.post('/api/billing/webhook', express.raw({ type: 'application/json' }), handleStripeWebhook);
+  app.use(express.json({ limit: '256kb' }));
   addAuthRouteDiagnostics(app);
   app.use('/api/auth/extension-session', extensionSessionRouter);
   app.all('/api/auth/*', toNodeHandler(auth));

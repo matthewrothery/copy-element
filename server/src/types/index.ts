@@ -15,6 +15,16 @@ export interface AppConfig {
   AWS_SECRET_ACCESS_KEY: string;
   FROM_EMAIL: string;
   FRONTEND_URL: string;
+  STRIPE_SECRET_KEY: string;
+  STRIPE_WEBHOOK_SECRET: string;
+  STRIPE_PRICE_PRO_MONTHLY: string;
+  STRIPE_SUCCESS_URL: string;
+  STRIPE_CANCEL_URL: string;
+  STRIPE_PORTAL_RETURN_URL: string;
+  S3_REGION: string;
+  S3_BUCKET_CAPTURES: string;
+  S3_ENDPOINT: string;
+  S3_FORCE_PATH_STYLE: boolean;
 }
 
 export interface HealthResponse {

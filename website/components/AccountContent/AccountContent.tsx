@@ -8,11 +8,13 @@ import "./AccountContent.css";
 
 type User = { id: string; name?: string | null; email?: string | null; image?: string | null };
 type Install = { install_id: string; created_at?: string; last_seen_at?: string; extension_version?: string };
+type Entitlement = { plan_code: string; active: boolean } | null;
 
 export function AccountContent(): React.ReactElement | null {
   const router = useRouter();
   const [user, setUser] = useState<User | null>(null);
   const [installs, setInstalls] = useState<Install[]>([]);
+  const [entitlement, setEntitlement] = useState<Entitlement>(null);
   const [loading, setLoading] = useState(true);
   const [loadError, setLoadError] = useState<string | null>(null);
   const [installIdInput, setInstallIdInput] = useState("");
@@ -43,6 +45,17 @@ export function AccountContent(): React.ReactElement | null {
       }
       const data = (await instRes.json()) as { installs?: Install[] };
       setInstalls(data.installs ?? []);
+
+      const entRes = await apiFetch("/api/billing/entitlement");
+      if (entRes.ok) {
+        const ent = (await entRes.json()) as { plan_code?: string; active?: boolean };
+        setEntitlement({
+          plan_code: ent.plan_code ?? "free",
+          active: Boolean(ent.active),
+        });
+      } else {
+        setEntitlement(null);
+      }
     } catch {
       setLoadError("Network error.");
     } finally {
@@ -113,8 +126,14 @@ export function AccountContent(): React.ReactElement | null {
       <p>
         <Link href="/billing" className="account-content-link">
           Billing
-        </Link>{" "}
-        (coming in Phase 3)
+        </Link>
+        {entitlement !== null && (
+          <span className="account-content-muted">
+            {" "}
+            — Plan: {entitlement.plan_code}
+            {entitlement.active ? " (active)" : ""}
+          </span>
+        )}
       </p>
 
       <section aria-labelledby="account-connect-heading">

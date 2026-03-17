@@ -36,7 +36,7 @@ services:
     build:
       context: ./server
       dockerfile: Dockerfile.dev
-    command: /bin/sh -c "cd /app && npm install && npm run dev"
+    command: /bin/sh -c "cd /app && npm install && npm run migrate && npm run dev"
     ports:
       - "${SERVER_PORT:-8840}:80"
     env_file:

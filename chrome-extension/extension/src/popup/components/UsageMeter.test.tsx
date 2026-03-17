@@ -28,10 +28,15 @@ describe("UsageMeter", () => {
     expect(screen.getByText("Getting close to your monthly limit.")).toBeInTheDocument();
   });
 
-  it("applies urgent tier (90%+): shows captures left hint when remaining > 0", () => {
+  it("applies urgent tier (90%+): shows capture/captures left hint when remaining > 0", () => {
     const { container } = render(<UsageMeter used={18} limit={20} />);
     expect(container.querySelector(".usage-meter--urgent")).toBeInTheDocument();
     expect(screen.getByText(/2 captures left this month\. Upgrade for unlimited access\./)).toBeInTheDocument();
+  });
+
+  it("applies urgent tier: uses singular '1 capture left' when remaining is 1", () => {
+    render(<UsageMeter used={19} limit={20} />);
+    expect(screen.getByText(/1 capture left this month\. Upgrade for unlimited access\./)).toBeInTheDocument();
   });
 
   it("applies urgent tier at 100%: shows reached limit hint", () => {

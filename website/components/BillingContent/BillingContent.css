@@ -1,0 +1,86 @@
+/* Billing page content – aligned with account-content tokens */
+.billing-content {
+  --billing-content-max-width: 560px;
+  --billing-content-error: #dc2626;
+
+  max-width: var(--billing-content-max-width);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-5);
+}
+
+.billing-content-plan {
+  font-size: var(--typo-copy);
+  color: var(--text-muted);
+  margin: 0;
+}
+
+.billing-content-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2);
+}
+
+.billing-content-btn {
+  padding: var(--space-2) var(--space-3);
+  font-size: var(--typo-copy);
+  font-weight: var(--font-weight-semibold);
+  font-family: var(--font-sans);
+  border: none;
+  border-radius: var(--radius-md);
+  cursor: pointer;
+  transition: background-color 120ms, border-color 120ms;
+  min-height: 44px;
+}
+
+.billing-content-btn:disabled {
+  opacity: 0.7;
+  cursor: not-allowed;
+}
+
+.billing-content-btn-primary {
+  color: var(--text);
+  background-color: var(--accent);
+}
+
+.billing-content-btn-primary:hover:not(:disabled) {
+  background-color: var(--accent-hover);
+}
+
+.billing-content-btn-primary:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
+
+.billing-content-btn-secondary {
+  color: var(--text);
+  background-color: transparent;
+  border: 1px solid var(--border);
+}
+
+.billing-content-btn-secondary:hover:not(:disabled) {
+  border-color: var(--accent);
+  background-color: var(--surface);
+}
+
+.billing-content-btn-secondary:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
+
+.billing-content-action-error {
+  font-size: var(--typo-copy);
+  color: var(--billing-content-error);
+  margin: 0;
+}
+
+.billing-content-loading,
+.billing-content-error {
+  font-size: var(--typo-copy);
+  color: var(--text-muted);
+  margin: 0;
+}
+
+.billing-content-error {
+  color: var(--billing-content-error);
+}

@@ -37,26 +37,26 @@ Phased todo derived from server-setup.md. Complete phases in order; later phases
 
 ## Phase 3: Stripe integration and entitlements
 
-- [ ] Add Stripe SDK and `/src/loaders/stripe.ts`; env for Stripe keys and webhook secret.
-- [ ] Define internal **plans** (e.g. free, pro, team) and **states** (active, inactive, trialing, past_due, canceled). Add `subscriptions` (or entitlement cache) and `stripe_customers` tables; add `subscription_events` for audit.
-- [ ] Implement **subscription sync service**: map Stripe webhook events (and optional API polling) into app entitlements. Rest of app checks entitlements, not raw Stripe.
-- [ ] **Stripe Hosted Checkout**: “Upgrade” flow — create Checkout Session, redirect user to Stripe; on success redirect to hosted app success URL. Require account before purchase.
-- [ ] **Stripe Customer Portal**: “Manage billing” — generate Portal session URL, redirect user. No custom invoice/subscription UIs.
-- [ ] Webhooks (from day one): endpoint for Stripe events; verify signature; handle at least: checkout.session.completed, customer.subscription.created/updated/deleted, invoice.paid, invoice.payment_failed. Provision or revoke access via subscription sync service.
-- [ ] API routes: create checkout session, create portal session, webhook handler. Hosted app pages: Upgrade button → Checkout; Manage billing → Portal.
+- [x] Add Stripe SDK and `/src/loaders/stripe.ts`; env for Stripe keys and webhook secret.
+- [x] Define internal **plans** (e.g. free, pro, team) and **states** (active, inactive, trialing, past_due, canceled). Add `subscriptions` (or entitlement cache) and `stripe_customers` tables; add `subscription_events` for audit.
+- [x] Implement **subscription sync service**: map Stripe webhook events (and optional API polling) into app entitlements. Rest of app checks entitlements, not raw Stripe.
+- [x] **Stripe Hosted Checkout**: “Upgrade” flow — create Checkout Session, redirect user to Stripe; on success redirect to hosted app success URL. Require account before purchase.
+- [x] **Stripe Customer Portal**: “Manage billing” — generate Portal session URL, redirect user. No custom invoice/subscription UIs.
+- [x] Webhooks (from day one): endpoint for Stripe events; verify signature; handle at least: checkout.session.completed, customer.subscription.created/updated/deleted, invoice.paid, invoice.payment_failed. Provision or revoke access via subscription sync service.
+- [x] API routes: create checkout session, create portal session, webhook handler. Hosted app pages: Upgrade button → Checkout; Manage billing → Portal.
 
 ---
 
 ## Phase 4: Element sync and storage
 
-- [ ] Define **capture** model (metadata only in DB): install_id, user_id (nullable), source_url, captured_at (UTC), created_by_install_id, status, metadata. No raw screenshots in DB.
-- [ ] Define **capture_assets**: references to object storage (screenshot key, HTML ref, stylesheet ref, checksums). Table links capture_id to asset keys/URLs.
-- [ ] Add S3 (or compatible) client and config; bucket(s) for screenshots and optional large HTML/CSS blobs.
-- [ ] Implement upload flow: extension uploads screenshot (and optionally HTML/CSS) to presigned URL or via API; API creates capture record and capture_assets records with object keys.
-- [ ] Enforce payload size limits and screenshot upload limits in API.
+- [x] Define **capture** model (metadata only in DB): install_id, user_id (nullable), source_url, captured_at (UTC), created_by_install_id, status, metadata. No raw screenshots in DB.
+- [x] Define **capture_assets**: references to object storage (screenshot key, HTML ref, stylesheet ref, checksums). Table links capture_id to asset keys/URLs.
+- [x] Add S3 (or compatible) client and config; bucket(s) for screenshots and optional large HTML/CSS blobs.
+- [x] Implement upload flow: extension uploads screenshot (and optionally HTML/CSS) to presigned URL or via API; API creates capture record and capture_assets records with object keys.
+- [x] Enforce payload size limits and screenshot upload limits in API.
 - [x] Implement capture and capture_assets services (create, list by install, list by user after link). Ensure anonymous captures (install-only) stay intact and become visible when install is linked to user.
-- [ ] Add `/src/jobs` structure: placeholders or minimal jobs for asset verification, S3 backup, or future MCP enrichment. Nightly DB backup to S3 (optional in this phase).
-- [ ] API routes: submit capture (install-authenticated), list captures (by install or by user when linked).
+- [x] Add `/src/jobs` structure: placeholders or minimal jobs for asset verification, S3 backup, or future MCP enrichment. Nightly DB backup to S3 (optional in this phase).
+- [x] API routes: submit capture (install-authenticated), list captures (by install or by user when linked).
 
 ---
 

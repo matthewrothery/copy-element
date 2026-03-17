@@ -1,6 +1,7 @@
 import { nanoid } from 'nanoid';
 import { getDb } from '../db/connection.js';
 import type { RegisterInstallBody } from '../types/index.js';
+import { backfillUserIdForInstall } from './capture.js';
 
 const UUID_ULID_REGEX = /^([0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}|[0-9a-zA-Z]{26})$/i;
 
@@ -62,6 +63,9 @@ export function getInstallByInstallId(install_id: string): { install_id: string;
 export function linkInstallToUser(install_id: string, user_id: string): boolean {
   const db = getDb();
   const result = db.prepare('UPDATE installs SET user_id = ? WHERE install_id = ?').run(user_id, install_id);
+  if (result.changes > 0) {
+    backfillUserIdForInstall(install_id, user_id);
+  }
   return result.changes > 0;
 }
 

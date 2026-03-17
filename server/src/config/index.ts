@@ -18,6 +18,16 @@ function getConfig(): AppConfig {
     AWS_SECRET_ACCESS_KEY: process.env[ENV_KEYS.AWS_SECRET_ACCESS_KEY] ?? '',
     FROM_EMAIL: process.env[ENV_KEYS.FROM_EMAIL] ?? '',
     FRONTEND_URL: process.env[ENV_KEYS.FRONTEND_URL] ?? '',
+    STRIPE_SECRET_KEY: process.env[ENV_KEYS.STRIPE_SECRET_KEY] ?? '',
+    STRIPE_WEBHOOK_SECRET: process.env[ENV_KEYS.STRIPE_WEBHOOK_SECRET] ?? '',
+    STRIPE_PRICE_PRO_MONTHLY: process.env[ENV_KEYS.STRIPE_PRICE_PRO_MONTHLY] ?? '',
+    STRIPE_SUCCESS_URL: process.env[ENV_KEYS.STRIPE_SUCCESS_URL] ?? '',
+    STRIPE_CANCEL_URL: process.env[ENV_KEYS.STRIPE_CANCEL_URL] ?? '',
+    STRIPE_PORTAL_RETURN_URL: process.env[ENV_KEYS.STRIPE_PORTAL_RETURN_URL] ?? '',
+    S3_REGION: process.env[ENV_KEYS.S3_REGION] ?? '',
+    S3_BUCKET_CAPTURES: process.env[ENV_KEYS.S3_BUCKET_CAPTURES] ?? '',
+    S3_ENDPOINT: process.env[ENV_KEYS.S3_ENDPOINT] ?? '',
+    S3_FORCE_PATH_STYLE: process.env[ENV_KEYS.S3_FORCE_PATH_STYLE] === 'true' || process.env[ENV_KEYS.S3_FORCE_PATH_STYLE] === '1',
   };
 }
 

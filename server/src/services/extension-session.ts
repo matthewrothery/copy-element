@@ -80,3 +80,18 @@ export function revokeExtensionToken(token: string): boolean {
   const result = db.prepare('DELETE FROM extension_sessions WHERE token_hash = ?').run(hash);
   return result.changes > 0;
 }
+
+export interface InstallFromToken {
+  install_id: string;
+  user_id: string;
+}
+
+/** Returns install_id and user_id for a valid extension token, or null if invalid/expired. */
+export function getInstallFromToken(token: string): InstallFromToken | null {
+  const db = getDb();
+  const hash = hashToken(token);
+  const row = db
+    .prepare('SELECT install_id, user_id FROM extension_sessions WHERE token_hash = ? AND expires_at > ?')
+    .get(hash, new Date().toISOString()) as { install_id: string; user_id: string } | undefined;
+  return row ?? null;
+}

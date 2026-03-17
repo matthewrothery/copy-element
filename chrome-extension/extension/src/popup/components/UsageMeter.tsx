@@ -11,7 +11,8 @@ function getHintText(tier: "quiet" | "default" | "noticeable" | "urgent", used: 
   if (tier === "noticeable") return "Getting close to your monthly limit.";
   const remaining = Math.max(0, limit - used);
   if (remaining === 0) return "You've reached your limit. Upgrade for unlimited access.";
-  return `${remaining} captures left this month. Upgrade for unlimited access.`;
+  const noun = remaining === 1 ? "capture" : "captures";
+  return `${remaining} ${noun} left this month. Upgrade for unlimited access.`;
 }
 
 export function UsageMeter({ used, limit }: UsageMeterProps): JSX.Element {

@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Billing — Element Armory</title>
+  <style>
+    body { font-family: system-ui, sans-serif; max-width: 480px; margin: 2rem auto; padding: 0 1rem; }
+    h1 { font-size: 1.25rem; }
+    .btn { display: inline-block; padding: 0.5rem 1rem; margin: 0.25rem 0.25rem 0 0; background: #3b82f6; color: #fff; border: none; border-radius: 4px; cursor: pointer; text-decoration: none; font-size: 0.875rem; }
+    .btn:disabled { opacity: 0.6; cursor: not-allowed; }
+    .btn.secondary { background: #6b7280; }
+    .error { color: #b91c1c; margin-top: 0.5rem; font-size: 0.875rem; }
+    .loading { opacity: 0.7; }
+  </style>
+</head>
+<body>
+  <h1>Billing</h1>
+  <p>Manage your subscription.</p>
+  <div>
+    <button type="button" class="btn" id="upgrade" data-action="checkout">Upgrade</button>
+    <button type="button" class="btn secondary" id="manage" data-action="portal">Manage billing</button>
+  </div>
+  <p id="error" class="error" aria-live="polite" hidden></p>
+  <p><a href="/account.html">Back to account</a></p>
+
+  <script>
+    (function () {
+      const base = window.location.origin;
+      const upgradeBtn = document.getElementById('upgrade');
+      const manageBtn = document.getElementById('manage');
+      const errorEl = document.getElementById('error');
+
+      function setError(msg) {
+        errorEl.textContent = msg || '';
+        errorEl.hidden = !msg;
+      }
+
+      function setLoading(loading) {
+        upgradeBtn.disabled = loading;
+        manageBtn.disabled = loading;
+        document.body.classList.toggle('loading', loading);
+      }
+
+      async function doAction(action) {
+        setError('');
+        setLoading(true);
+        try {
+          const res = await fetch(base + '/api/billing/' + (action === 'checkout' ? 'checkout-session' : 'portal-session'), {
+            method: 'POST',
+            credentials: 'include',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(action === 'checkout' ? { plan: 'pro' } : {}),
+          });
+          const data = await res.json().catch(() => ({}));
+          if (!res.ok) {
+            setError(data.error || 'Request failed');
+            return;
+          }
+          if (data.url) {
+            window.location.href = data.url;
+            return;
+          }
+          setError('No redirect URL');
+        } catch (e) {
+          setError('Network error');
+        } finally {
+          setLoading(false);
+        }
+      }
+
+      upgradeBtn.addEventListener('click', () => doAction('checkout'));
+      manageBtn.addEventListener('click', () => doAction('portal'));
+    })();
+  </script>
+</body>
+</html>
