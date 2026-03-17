@@ -16,16 +16,18 @@ export default function BillingPage(): React.ReactElement {
     <>
       <Header />
       <main>
-        <Section style={{ paddingTop: "var(--space-7)" }}>
-          <h1 className="page-title">Billing</h1>
-          <p className="page-subtitle">
-            Coming in Phase 3. Stripe Checkout and Customer Portal will be available here.
-          </p>
-          <p>
-            <Link href="/account" className={styles["back-link"]}>
-              Back to account
-            </Link>
-          </p>
+        <Section className="account-page" style={{ paddingTop: "var(--space-7)" }}>
+          <Section inner>
+            <h1 className="page-title">Billing</h1>
+            <p className="page-subtitle">
+              Coming in Phase 3. Stripe Checkout and Customer Portal will be available here.
+            </p>
+            <p>
+              <Link href="/account" className={styles["back-link"]}>
+                Back to account
+              </Link>
+            </p>
+          </Section>
         </Section>
         <Footer />
       </main>

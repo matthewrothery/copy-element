@@ -28,6 +28,11 @@
   gap: var(--space-6);
 }
 
+.section.account-page .section-inner {
+  gap: var(--space-6);
+  padding-bottom: var(--space-6);
+}
+
 @media (max-width: 480px) {
   .section {
     padding: 0 16px;

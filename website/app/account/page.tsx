@@ -15,9 +15,11 @@ export default function AccountPage(): React.ReactElement {
     <>
       <Header />
       <main>
-        <Section style={{ paddingTop: "var(--space-7)" }}>
-          <h1 className="page-title">Account</h1>
-          <AccountContent />
+        <Section className="account-page" style={{ paddingTop: "var(--space-7)" }}>
+          <Section inner>
+            <h1 className="page-title">Account</h1>
+            <AccountContent />
+          </Section>
         </Section>
         <Footer />
       </main>
