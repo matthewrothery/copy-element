@@ -30,17 +30,17 @@
 ---
 
 ## Email Templates — Retention / Lifecycle
-- [ ] Weekly capture summary — "You captured N elements this week"
-- [ ] Inactive reactivation — 14d or 30d no captures; "still there?"
-- [ ] Feature updates / changelog — announce new capture types, AI rebuild improvements, etc.
+- [x] Weekly capture summary — `weekly-summary.tsx`; props: captureCount, weekOf, libraryUrl
+- [x] Inactive reactivation — `reactivation.tsx`; props: daysSinceLastCapture (14 or 30)
+- [x] Feature updates / changelog — `feature-update.tsx`; props: releaseTitle, intro, features[]
 
 ---
 
 ## Email Infrastructure
 - [x] Email send logging + open & click tracking — `email_sends` + `email_clicks` tables; tracking pixel + redirect endpoints at `/api/email/track/`
-- [ ] Unsubscribe / suppression list — honour opt-outs; store suppressed emails in DB; check before every send
-- [ ] Email send deduplication / idempotency — prevent duplicate sends on retry or hook re-fire
-- [ ] Preview server — `react-email dev` script in `server/package.json`; document usage in README
+- [x] Unsubscribe / suppression list — `email_suppressions` table; `GET /api/email/track/unsubscribe?id=<sendId>`; checked before every send
+- [x] Email send deduplication / idempotency — welcome: one per address ever; magic link: 1-minute window; checked in both `email.ts` and `email-ses.ts`
+- [x] Preview server — `npm run email:preview` in `server/package.json` (react-email dev on port 3001)
 
 ---
 

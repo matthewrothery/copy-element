@@ -33,19 +33,6 @@ resource "aws_route53_record" "www_a" {
   }
 }
 
-# App subdomain A record
-resource "aws_route53_record" "app_a" {
-  zone_id = data.aws_route53_zone.main.zone_id
-  name    = var.app_domain
-  type    = "A"
-
-  alias {
-    name                   = aws_cloudfront_distribution.app.domain_name
-    zone_id                = aws_cloudfront_distribution.app.hosted_zone_id
-    evaluate_target_health = false
-  }
-}
-
 # Apex TXT record for domain verification
 resource "aws_route53_record" "apex_txt" {
   count   = length(local.apex_txt_values) > 0 ? 1 : 0

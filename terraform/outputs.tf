@@ -33,20 +33,11 @@ output "website_url" {
   value       = "https://${var.website_domain}"
 }
 
-output "app_url" {
-  description = "App URL"
-  value       = "https://${var.app_domain}"
-}
-
 output "cloudfront_website_distribution_id" {
   description = "CloudFront distribution ID for website"
   value       = aws_cloudfront_distribution.website.id
 }
 
-output "cloudfront_app_distribution_id" {
-  description = "CloudFront distribution ID for app"
-  value       = aws_cloudfront_distribution.app.id
-}
 
 output "s3_website_bucket" {
   description = "S3 bucket name for website"

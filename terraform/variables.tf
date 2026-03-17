@@ -30,11 +30,6 @@ variable "website_price_class" {
   default     = "PriceClass_100"
 }
 
-variable "app_domain" {
-  description = "The app subdomain (e.g., app.elementarmory.com)"
-  type        = string
-}
-
 variable "main_vpc_cidr" {
   description = "CIDR block for the main VPC"
   type        = string

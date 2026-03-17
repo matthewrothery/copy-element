@@ -26,7 +26,7 @@ locals {
     ECR_SERVER_REPO="${var.ecr_server_repo}"
 
     # App URL (for Better Auth, callbacks, etc.)
-    APP_URL="https://${var.app_domain}"
+    APP_URL="https://${var.website_domain}"
 
     # Application Secrets
     SESSION_SECRET="${var.session_secret}"
@@ -41,7 +41,7 @@ locals {
   EOT
 
   docker_compose_prod = file("${path.module}/templates/docker-compose.prod.yml")
-  nginx_conf          = templatefile("${path.module}/templates/nginx.conf", { app_domain = var.app_domain })
+  nginx_conf          = file("${path.module}/templates/nginx.conf")
   start_script        = file("${path.module}/scripts/start.sh")
 }
 

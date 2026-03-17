@@ -166,8 +166,7 @@ resource "aws_iam_policy" "github_actions_deployment" {
           "cloudfront:GetDistribution"
         ]
         Resource = [
-          aws_cloudfront_distribution.website.arn,
-          aws_cloudfront_distribution.app.arn
+          aws_cloudfront_distribution.website.arn
         ]
       },
       {
