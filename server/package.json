@@ -10,7 +10,8 @@
     "start": "node dist/index.js",
     "migrate": "tsx src/db/migrate.ts",
     "migrate:prod": "node dist/db/migrate.js",
-    "migrate:create": "tsx src/db/migrate-create.ts"
+    "migrate:create": "tsx src/db/migrate-create.ts",
+    "email:preview": "react-email dev --dir src/emails --port 3001"
   },
   "engines": {
     "node": ">=18"

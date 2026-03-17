@@ -54,6 +54,43 @@ interface RecordClickParams {
   userAgent?: string;
 }
 
+/**
+ * Returns true if a non-failed send for this email+template exists within the given time window.
+ * Pass `since` as epoch ms. Omit `since` to check all time (useful for one-time emails like welcome).
+ */
+export function wasSentRecently(email: string, template: string, since?: number): boolean {
+  try {
+    const db = getDb();
+    const row = since !== undefined
+      ? db.prepare(`
+          SELECT 1 FROM email_sends
+          WHERE email = ? AND template = ? AND status != 'failed' AND sent_at >= ?
+          LIMIT 1
+        `).get(email, template, since)
+      : db.prepare(`
+          SELECT 1 FROM email_sends
+          WHERE email = ? AND template = ? AND status != 'failed'
+          LIMIT 1
+        `).get(email, template);
+    return !!row;
+  } catch {
+    return false; // fail open — don't block sends on DB errors
+  }
+}
+
+/**
+ * Returns the email address associated with a sendId, or null if not found.
+ */
+export function getEmailBySendId(sendId: string): string | null {
+  try {
+    const db = getDb();
+    const row = db.prepare('SELECT email FROM email_sends WHERE id = ?').get(sendId) as { email: string } | undefined;
+    return row?.email ?? null;
+  } catch {
+    return null;
+  }
+}
+
 export function recordClick(params: RecordClickParams): void {
   try {
     const db = getDb();

@@ -6,9 +6,10 @@ export interface MagicLinkEmailProps {
   url: string;
   email: string;
   pixelUrl?: string;
+  unsubUrl?: string;
 }
 
-export function MagicLinkEmail({ url, pixelUrl }: MagicLinkEmailProps) {
+export function MagicLinkEmail({ url, pixelUrl, unsubUrl }: MagicLinkEmailProps) {
   return (
     <Html>
       <Head />
@@ -24,6 +25,11 @@ export function MagicLinkEmail({ url, pixelUrl }: MagicLinkEmailProps) {
           </Section>
           <Hr style={styles.hr} />
           <Text style={styles.footer}>If you didn&apos;t request this email, you can ignore it.</Text>
+          {unsubUrl && (
+            <Text style={styles.footer}>
+              <Link href={unsubUrl} style={styles.footerLink}>Unsubscribe</Link>
+            </Text>
+          )}
           {pixelUrl && <Img src={pixelUrl} width="1" height="1" alt="" />}
         </Container>
       </Body>

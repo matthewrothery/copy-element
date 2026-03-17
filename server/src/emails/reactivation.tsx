@@ -2,31 +2,46 @@ import { Body, Container, Head, Heading, Hr, Html, Img, Link, Preview, Section, 
 import * as React from 'react';
 import * as styles from './styles.js';
 
-export interface WelcomeEmailProps {
+export interface ReactivationEmailProps {
   name?: string;
   email: string;
+  daysSinceLastCapture: number;   // 14 or 30
+  libraryUrl?: string;
   pixelUrl?: string;
-  ctaUrl?: string;
   unsubUrl?: string;
 }
 
-const frontendUrl = process.env.FRONTEND_URL ?? 'https://elementarmory.com';
+const defaultLibraryUrl = process.env.FRONTEND_URL ?? 'https://elementarmory.com';
 
-export function WelcomeEmail({ name, pixelUrl, ctaUrl, unsubUrl }: WelcomeEmailProps) {
-  const href = ctaUrl ?? frontendUrl;
+export function ReactivationEmail({
+  name,
+  email,
+  daysSinceLastCapture,
+  libraryUrl,
+  pixelUrl,
+  unsubUrl,
+}: ReactivationEmailProps) {
+  const href = libraryUrl ?? defaultLibraryUrl;
+  const greeting = name ? `Hey ${name}` : 'Hey';
+  const window = daysSinceLastCapture >= 30 ? 'a month' : 'a couple of weeks';
+
   return (
     <Html>
       <Head />
-      <Preview>Welcome to Element Armory — let&apos;s capture your first element.</Preview>
+      <Preview>Still there? You haven&apos;t captured anything in {window}.</Preview>
       <Body style={styles.main}>
         <Container style={styles.container}>
-          <Heading style={styles.h1}>Welcome to Element Armory</Heading>
-          <Text style={styles.text}>Hey{name ? ` ${name}` : ''}!</Text>
+          <Heading style={styles.h1}>Still there?</Heading>
           <Text style={styles.text}>
-            Element Armory lets you capture UI from any site and rebuild it with AI — clean HTML, JSX, styles, and full context.
+            {greeting} — it&apos;s been {window} since your last capture. Just checking in.
           </Text>
           <Text style={styles.text}>
-            Install the extension, click any element, and you&apos;re done. Your captures are saved to your library and ready for your AI tools.
+            The extension is still installed and waiting. If you&apos;ve hit any friction —
+            a site that didn&apos;t capture cleanly, or something confusing in the output —
+            hit reply and let me know. I fix these fast.
+          </Text>
+          <Text style={styles.text}>
+            Otherwise, whenever you&apos;re ready:
           </Text>
           <Section style={styles.buttonContainer}>
             <Link href={href} style={styles.button}>
@@ -34,13 +49,7 @@ export function WelcomeEmail({ name, pixelUrl, ctaUrl, unsubUrl }: WelcomeEmailP
             </Link>
           </Section>
           <Text style={styles.text}>
-            What brought you here? Hit reply — I read every response and it genuinely helps shape where this goes.
-          </Text>
-          <Text style={styles.text}>
             Matt – Element Armory
-          </Text>
-          <Text style={{ ...styles.text, fontSize: '14px', color: '#9ca3af' }}>
-            P.S. Keep an eye on your inbox — I&apos;ll share tips on getting the most out of your captures.
           </Text>
           <Hr style={styles.hr} />
           <Text style={styles.footerLinks}>
@@ -63,9 +72,10 @@ export function WelcomeEmail({ name, pixelUrl, ctaUrl, unsubUrl }: WelcomeEmailP
   );
 }
 
-WelcomeEmail.PreviewProps = {
+ReactivationEmail.PreviewProps = {
   name: 'David',
   email: 'david@example.com',
-} as WelcomeEmailProps;
+  daysSinceLastCapture: 14,
+} as ReactivationEmailProps;
 
-export default WelcomeEmail;
+export default ReactivationEmail;
