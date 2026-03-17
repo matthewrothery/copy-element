@@ -1,6 +1,6 @@
 # Element Armory Terraform Infrastructure
 
-This directory contains Terraform configuration for deploying Element Armory (copy-element) to AWS.
+This directory contains Terraform configuration for deploying Element Armory (element-armory) to AWS.
 
 ## Architecture
 
@@ -36,7 +36,7 @@ cp variables/prod.tfvars.example variables/prod.tfvars
 3. **Initialise the environment** (backend key is set from `TF_VAR_environment`, default `prod`):
 
 ```bash
-AWS_REGION=us-east-2 TF_VAR_environment=prod aws-vault exec <profile> --no-session -- docker-compose run --rm terraform init --backend-config "region=$AWS_REGION" -reconfigure -lock-timeout=360s -backend-config "key=state/${TF_VAR_environment:-prod}"
+AWS_REGION=us-east-2 TF_VAR_environment=prod aws-vault exec demoly --no-session -- docker-compose run --rm terraform init --backend-config "region=$AWS_REGION" -reconfigure -lock-timeout=360s -backend-config "key=state/${TF_VAR_environment:-prod}"
 ```
 
 4. **Plan and apply**:
@@ -72,7 +72,7 @@ Optional: re-run the deploy script on EC2 via SSM without re-applying Terraform:
 aws ssm send-command \
   --instance-ids $(terraform output -raw ec2_instance_id) \
   --document-name "AWS-RunShellScript" \
-  --parameters 'commands=["sudo -u ec2-user /home/ec2-user/copy-element/start.sh"]'
+  --parameters 'commands=["sudo -u ec2-user /home/ec2-user/element-armory/start.sh"]'
 ```
 
 ### Website (optional)

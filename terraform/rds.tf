@@ -1,3 +1,7 @@
+/*
+  RDS disabled — using SQLite on EC2 instead.
+  Re-enable when migrating to PostgreSQL.
+
 resource "random_string" "rds_password" {
   length  = 24
   special = false
@@ -7,7 +11,8 @@ resource "aws_db_instance" "database" {
   identifier = "${var.project}-${var.environment}-db"
 
   lifecycle {
-    create_before_destroy = true
+    # NOTE: do not use create_before_destroy with deletion_protection=true —
+    # Terraform cannot destroy the old instance and will get stuck.
   }
 
   allocated_storage     = 20
@@ -27,7 +32,7 @@ resource "aws_db_instance" "database" {
   vpc_security_group_ids = [aws_security_group.allow_postgres.id]
   publicly_accessible    = false
 
-  backup_retention_period = 1
+  backup_retention_period = 7
   backup_window           = "03:00-04:00"
   maintenance_window      = "sun:04:00-sun:05:00"
 
@@ -45,3 +50,4 @@ resource "aws_db_instance" "database" {
     Component   = var.project
   }
 }
+*/

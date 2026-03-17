@@ -1,6 +1,6 @@
 terraform {
   backend "s3" {
-    bucket        = "copy-element-terraform-state"
+    bucket        = "element-armory-terraform-state"
     region        = "us-east-2"
     encrypt       = true
     use_lockfile  = true

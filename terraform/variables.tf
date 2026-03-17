@@ -41,7 +41,9 @@ variable "main_vpc_cidr" {
   default     = "10.0.0.0/22"
 }
 
-# Database configuration
+/*
+  Database variables disabled — re-enable with RDS.
+
 variable "db_user" {
   description = "Database username"
   type        = string
@@ -79,6 +81,7 @@ variable "db_password" {
   sensitive   = true
   default     = ""
 }
+*/
 
 # EC2 configuration
 variable "ec2_instance_type" {
@@ -115,7 +118,7 @@ variable "cookie_secret" {
 variable "ecr_server_repo" {
   description = "ECR repository name for the API/server"
   type        = string
-  default     = "copy-element-server"
+  default     = "element-armory-server"
 }
 
 # S3 bucket names
@@ -125,9 +128,9 @@ variable "s3_website_bucket" {
 }
 
 variable "s3_assets_bucket_base" {
-  description = "Base name for assets bucket; actual bucket is {base}-{environment} (e.g. copy-element-assets-prod)"
+  description = "Base name for assets bucket; actual bucket is {base}-{environment} (e.g. element-armory-assets-prod)"
   type        = string
-  default     = "copy-element-assets"
+  default     = "element-armory-assets"
 }
 
 # Local IP for database access (optional)

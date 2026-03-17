@@ -40,7 +40,9 @@ resource "aws_subnet" "public" {
   }
 }
 
-# Private subnets (for RDS - 2 AZs required for DB subnet group)
+/*
+  Private subnets disabled — only needed for RDS. Re-enable with RDS.
+
 resource "aws_subnet" "private" {
   count = 2
 
@@ -54,6 +56,7 @@ resource "aws_subnet" "private" {
     Type        = "private"
   }
 }
+*/
 
 # Public route table
 resource "aws_route_table" "public" {
@@ -70,7 +73,17 @@ resource "aws_route_table" "public" {
   }
 }
 
-# Private route table (no NAT gateway - truly private)
+# Public route table associations
+resource "aws_route_table_association" "public" {
+  count = 2
+
+  subnet_id      = aws_subnet.public[count.index].id
+  route_table_id = aws_route_table.public.id
+}
+
+/*
+  Private route table, associations, and DB subnet group disabled — only needed for RDS.
+
 resource "aws_route_table" "private" {
   vpc_id = aws_vpc.main.id
 
@@ -80,15 +93,6 @@ resource "aws_route_table" "private" {
   }
 }
 
-# Public route table associations
-resource "aws_route_table_association" "public" {
-  count = 2
-
-  subnet_id      = aws_subnet.public[count.index].id
-  route_table_id = aws_route_table.public.id
-}
-
-# Private route table associations
 resource "aws_route_table_association" "private" {
   count = 2
 
@@ -96,7 +100,6 @@ resource "aws_route_table_association" "private" {
   route_table_id = aws_route_table.private.id
 }
 
-# DB subnet group
 resource "aws_db_subnet_group" "main" {
   name       = "${var.project}-${var.environment}"
   subnet_ids = aws_subnet.private[*].id
@@ -106,3 +109,4 @@ resource "aws_db_subnet_group" "main" {
     Environment = var.environment
   }
 }
+*/

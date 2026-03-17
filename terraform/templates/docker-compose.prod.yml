@@ -1,21 +1,21 @@
-name: copy-element-prod
+name: element-armory-prod
 
 services:
   nginx:
     image: nginx:alpine
-    container_name: copy-element-nginx
+    container_name: element-armory-nginx
     ports:
       - "80:80"
     volumes:
-      - /home/ec2-user/copy-element/nginx.conf:/etc/nginx/nginx.conf:ro
-      - copy-element-nginx-cache:/var/cache/nginx
+      - /home/ec2-user/element-armory/nginx.conf:/etc/nginx/nginx.conf:ro
+      - element-armory-nginx-cache:/var/cache/nginx
     restart: unless-stopped
     networks:
-      - copy-element-network
+      - element-armory-network
 
   app:
     image: ${ECR_REGISTRY}/${ECR_SERVER_REPO}:latest
-    container_name: copy-element-app
+    container_name: element-armory-app
     environment:
       NODE_ENV: production
       PORT: 80
@@ -31,11 +31,11 @@ services:
       - nginx
     restart: unless-stopped
     networks:
-      - copy-element-network
+      - element-armory-network
 
 volumes:
-  copy-element-nginx-cache:
+  element-armory-nginx-cache:
 
 networks:
-  copy-element-network:
+  element-armory-network:
     driver: bridge

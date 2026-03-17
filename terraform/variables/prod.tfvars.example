@@ -1,8 +1,8 @@
-# Element Armory / copy-element Production Terraform Variables
+# Element Armory / element-armory Production Terraform Variables
 # Copy this file to prod.tfvars and fill in your values
 # DO NOT commit prod.tfvars to git!
 
-project     = "copy-element"
+project     = "element-armory"
 environment = "prod"
 aws_region  = "us-east-2"
 
@@ -15,8 +15,8 @@ app_domain     = "app.elementarmory.com"
 main_vpc_cidr = "10.0.0.0/22"
 
 # Database configuration
-db_user           = "copy_element_user"
-db_name           = "copy_element"
+db_user           = "element_armory_user"
+db_name           = "element_armory"
 db_instance_class = "db.t4g.micro"
 db_engine_type    = "postgres"
 db_engine_version = "17.6"
@@ -28,11 +28,11 @@ ec2_instance_type = "t3.small"
 ec2_key_pair_name = ""
 
 # ECR repository name
-ecr_server_repo = "copy-element-server"
+ecr_server_repo = "element-armory-server"
 
 # S3 bucket names
 s3_website_bucket = "elementarmory.com"
-# s3_assets_bucket_base is optional; default "copy-element-assets" → bucket copy-element-assets-prod
+# s3_assets_bucket_base is optional; default "element-armory-assets" → bucket element-armory-assets-prod
 
 # Application secrets (fill these in!)
 session_secret = "your-session-secret-here"

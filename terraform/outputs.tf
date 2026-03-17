@@ -13,6 +13,9 @@ output "ec2_ssh_command" {
   value       = var.ec2_key_pair_name != "" ? "ssh -i ~/.ssh/${var.ec2_key_pair_name}.pem ec2-user@${aws_eip.ec2.public_ip}" : "SSH key not configured"
 }
 
+/*
+  RDS outputs disabled — re-enable with RDS.
+
 output "database_endpoint" {
   description = "RDS database endpoint"
   value       = aws_db_instance.database.address
@@ -23,6 +26,7 @@ output "database_port" {
   description = "RDS database port"
   value       = aws_db_instance.database.port
 }
+*/
 
 output "website_url" {
   description = "Website URL"
@@ -78,7 +82,7 @@ output "deployment_instructions" {
        - terraform apply -var-file=./variables/prod.tfvars
     
     Optional: manually re-run deploy on EC2 via SSM:
-       - aws ssm send-command --instance-ids ${aws_instance.app.id} --document-name "AWS-RunShellScript" --parameters 'commands=["sudo -u ec2-user /home/ec2-user/copy-element/start.sh"]'
+       - aws ssm send-command --instance-ids ${aws_instance.app.id} --document-name "AWS-RunShellScript" --parameters 'commands=["sudo -u ec2-user /home/ec2-user/element-armory/start.sh"]'
     
     3. Deploy website to S3 (if using static export):
        - aws s3 sync ./website/out s3://${aws_s3_bucket.website.bucket} --delete

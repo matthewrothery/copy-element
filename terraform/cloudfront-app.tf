@@ -1,7 +1,7 @@
 # EC2 origin for app subdomain (e.g. app.elementarmory.com)
 resource "aws_cloudfront_distribution" "app" {
   origin {
-    domain_name = aws_instance.app.public_dns
+    domain_name = aws_eip.ec2.public_dns
     origin_id   = "${var.project}-app-origin"
 
     custom_origin_config {

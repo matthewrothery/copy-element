@@ -15,4 +15,4 @@ systemctl start docker
 systemctl enable docker
 usermod -a -G docker ec2-user
 
-echo "copy-element machine setup completed at $(date)" >> /var/log/copy-element-setup.log
+echo "element-armory machine setup completed at $(date)" >> /var/log/element-armory-setup.log

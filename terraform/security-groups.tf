@@ -45,6 +45,9 @@ resource "aws_security_group" "allow_web_traffic" {
   }
 }
 
+/*
+  Postgres security group disabled — only needed for RDS. Re-enable with RDS.
+
 resource "aws_security_group" "allow_postgres" {
   name_prefix = "allow-${var.environment}-postgres-"
   description = "Allow Postgres connections from EC2"
@@ -83,6 +86,7 @@ resource "aws_security_group" "allow_postgres" {
     create_before_destroy = true
   }
 }
+*/
 
 resource "aws_security_group" "allow_ssh_access" {
   name        = "${var.project}-${var.environment}-ssh"

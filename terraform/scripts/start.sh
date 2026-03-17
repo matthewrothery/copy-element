@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-APP_DIR="/home/ec2-user/copy-element"
+APP_DIR="/home/ec2-user/element-armory"
 ENV_FILE="${APP_DIR}/.env"
 COMPOSE_FILE="${APP_DIR}/docker-compose.yml"
 RENDERED_COMPOSE_FILE="${APP_DIR}/docker-compose.rendered.yml"

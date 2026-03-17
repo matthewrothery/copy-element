@@ -6,7 +6,7 @@ set -euo pipefail
 # (from the terraform/ directory)
 
 AWS_REGION="${AWS_REGION:-us-east-2}"
-STATE_BUCKET="${STATE_BUCKET:-copy-element-terraform-state}"
+STATE_BUCKET="${STATE_BUCKET:-element-armory-terraform-state}"
 
 echo "Creating Terraform backend bucket (region=$AWS_REGION, bucket=$STATE_BUCKET)..."
 

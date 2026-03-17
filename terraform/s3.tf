@@ -61,7 +61,7 @@ resource "aws_s3_bucket_policy" "website_bucket_policy" {
   policy = data.aws_iam_policy_document.website_s3_policy.json
 }
 
-# Assets bucket (name: {base}-{environment}, e.g. copy-element-assets-prod) for capture screenshots and large assets
+# Assets bucket (name: {base}-{environment}, e.g. element-armory-assets-prod) for capture screenshots and large assets
 resource "aws_s3_bucket" "assets" {
   bucket = local.s3_assets_bucket_name
 

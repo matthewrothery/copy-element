@@ -1,7 +1,7 @@
-# Get latest Amazon Linux 2023 AMI (x86_64)
+# Pinned to a specific Amazon Linux 2023 AMI (x86_64, us-east-2).
+# Update image-id intentionally when you want to upgrade the base OS.
 data "aws_ami" "amazon_linux_2023" {
-  most_recent = true
-  owners      = ["amazon"]
+  owners = ["amazon"]
 
   filter {
     name   = "image-id"
@@ -15,11 +15,11 @@ data "aws_ami" "amazon_linux_2023" {
 }
 
 locals {
-  ec2_app_path = "/home/ec2-user/copy-element"
+  ec2_app_path = "/home/ec2-user/element-armory"
 
   runtime_env_file = <<-EOT
-    # Database
-    DATABASE_URL="postgresql://${var.db_user}:${var.db_password != "" ? var.db_password : random_string.rds_password.result}@${aws_db_instance.database.address}:${var.db_port}/${var.db_name}?ssl=true&sslmode=verify-full"
+    # Database (SQLite — file persisted via Docker volume)
+    DATABASE_URL="file:${local.ec2_app_path}/data/database.db"
 
     # ECR Configuration
     ECR_REGISTRY="${data.aws_caller_identity.current.account_id}.dkr.ecr.${var.aws_region}.amazonaws.com"
@@ -60,7 +60,11 @@ resource "aws_instance" "app" {
   instance_type = var.ec2_instance_type
 
   subnet_id                   = aws_subnet.public[0].id
-  vpc_security_group_ids      = [aws_security_group.allow_web_traffic.id, aws_security_group.allow_ssh_access.id]
+  # SSH security group only attached when local_ip is set — prevents open SSH to 0.0.0.0/0
+  vpc_security_group_ids = var.local_ip != "" ? [
+    aws_security_group.allow_web_traffic.id,
+    aws_security_group.allow_ssh_access.id,
+  ] : [aws_security_group.allow_web_traffic.id]
   associate_public_ip_address = true
 
   iam_instance_profile = aws_iam_instance_profile.ec2_profile.name
