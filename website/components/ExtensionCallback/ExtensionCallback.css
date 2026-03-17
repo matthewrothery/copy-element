@@ -14,5 +14,16 @@
 .extension-callback-status {
   font-size: var(--typo-copy);
   color: var(--text-muted);
-  margin: 0;
+  margin: 0 0 var(--space-3);
+}
+
+.extension-callback-retry {
+  display: inline-block;
+  padding: var(--space-2) var(--space-3);
+  font-size: var(--typo-copy);
+  border: 1px solid var(--border-default);
+  border-radius: var(--radius-2);
+  background: var(--surface-default);
+  color: var(--text-default);
+  cursor: pointer;
 }

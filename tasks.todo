@@ -1,0 +1,114 @@
+# Element Armory – Task Roadmap
+
+---
+
+## Email Templates — Immediate
+- [x] Welcome email (`server/src/emails/welcome.tsx`) — fires on account creation via databaseHooks
+- [x] Magic link email polish (`server/src/emails/magic-link.tsx`) — Hr separator, shared styles
+- [x] Shared email styles (`server/src/emails/styles.ts`) — Element Armory tokens
+
+---
+
+## Email Templates — Onboarding Series
+- [ ] 24h reminder — "You signed up yesterday, have you tried capturing your first element?"
+- [ ] Day 3–5 value email — show a compelling use-case; link to docs or example captures
+
+---
+
+## Email Templates — Event-Based
+- [ ] First capture — "You captured your first element. Here's what to do with it."
+- [ ] 3rd–5th capture — soft nudge toward creating an account (anonymous → account conversion)
+- [ ] 10th capture milestone — celebrate; introduce AI rebuild / Pro features
+- [ ] Limit reached — explain quota; offer path to free account or Pro upgrade
+- [ ] Post-limit follow-up (48h) — re-engage users who hit their limit but haven't upgraded
+
+---
+
+## Email Templates — Anonymous → Account Conversion
+- [ ] "Save your work" email — triggered when anonymous install approaches limit; explain account benefits (sync, library, higher quota)
+
+---
+
+## Email Templates — Retention / Lifecycle
+- [ ] Weekly capture summary — "You captured N elements this week"
+- [ ] Inactive reactivation — 14d or 30d no captures; "still there?"
+- [ ] Feature updates / changelog — announce new capture types, AI rebuild improvements, etc.
+
+---
+
+## Email Infrastructure
+- [x] Email send logging + open & click tracking — `email_sends` + `email_clicks` tables; tracking pixel + redirect endpoints at `/api/email/track/`
+- [ ] Unsubscribe / suppression list — honour opt-outs; store suppressed emails in DB; check before every send
+- [ ] Email send deduplication / idempotency — prevent duplicate sends on retry or hook re-fire
+- [ ] Preview server — `react-email dev` script in `server/package.json`; document usage in README
+
+---
+
+## Chrome Extension — Entitlement Tiers
+
+### Anonymous (no account)
+- 10 captures / month
+- Local storage only — no cloud sync
+- No library view
+- No AI rebuild
+
+### Free account
+- 20 captures / month
+- Cloud sync
+- Library view
+- No AI rebuild
+
+### Pro account
+- Unlimited captures
+- Cloud sync
+- Library view
+- AI rebuild (MCP)
+- Export formats (HTML, JSX, CSS, JSON)
+
+---
+
+## Extension In-Product Prompts
+- [ ] Capture count meter in popup — show `used / limit` with visual progress
+- [ ] Paywall prompt at limit — clear message, direct link to upgrade
+- [ ] "Create account" nudge for anonymous users after 5 captures — explain sync and higher quota
+
+---
+
+## Capture Counting + Quota Enforcement
+- [ ] Server-side capture count per install and per user per billing period
+- [ ] Return `quota_used` and `quota_limit` in entitlements endpoint (`GET /api/billing/entitlement`)
+- [ ] Enforce at capture creation:
+  - Anonymous over limit → 402 with `quota_reached` error code
+  - Free account over limit → 402 with upgrade URL
+  - Pro → pass through
+
+---
+
+## Event Tracking
+- [ ] `user.created` event — stored in DB or emitted to event bus; used to trigger welcome email
+- [ ] `capture.created` event — include running count; used for milestone emails
+- [ ] `quota.reached` event — fire once per billing period; triggers limit email
+
+---
+
+## Background Job Queue
+- [ ] Email scheduling infrastructure — queue and deliver time-based emails (24h reminder, day 3–5)
+- [ ] Job runner options: simple DB-backed queue (SQLite), or BullMQ / pg-boss if moving to Postgres
+- [ ] Dead-letter handling and retry policy
+
+---
+
+## MCP Server — Phase 6
+- [ ] Run on separate port from Express API
+- [ ] MCP tools call existing `src/services/` — no duplicate business logic
+- [ ] Auth: accept app-issued tokens; validate per-request; map to user / install
+- [ ] Chrome extension: "Copy MCP config" flow — generate connection config for Cursor, Claude Desktop, etc.
+- [ ] Tokens: scoped, revocable
+
+---
+
+## Hosted App Polish — Phase 7
+- [ ] Library / history view for captures (paginated, filterable)
+- [ ] Sign-out: remove account link from install; captures remain
+- [ ] Nightly DB backup to S3 with retention policy
+- [ ] Monitoring, request logging, error tracking

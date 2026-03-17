@@ -6,13 +6,35 @@ import { getUserEntitlement } from '../../services/entitlements.js';
 import { syncFromStripeEvent } from '../../services/subscription-sync.js';
 import { getStripe } from '../../loaders/stripe.js';
 import { requireSession, type RequestWithSession } from '../middleware/session.js';
+import { getInstallFromToken } from '../../services/extension-session.js';
+import { fromNodeHeaders } from 'better-auth/node';
+import { auth } from '../../loaders/auth.js';
 
 export const billingRouter = Router();
 
-/** GET /api/billing/entitlement — session required. Returns current user entitlement for UI. */
-billingRouter.get('/entitlement', requireSession, (req: RequestWithSession, res: Response) => {
-  const userId = req.session!.user.id;
-  const entitlement = getUserEntitlement(userId);
+/** GET /api/billing/entitlement — session or extension Bearer token required. Returns current user entitlement. */
+billingRouter.get('/entitlement', async (req: Request, res: Response) => {
+  // Support extension Bearer token
+  const authHeader = req.headers.authorization;
+  if (authHeader?.startsWith('Bearer ')) {
+    const token = authHeader.slice(7).trim();
+    const install = getInstallFromToken(token);
+    if (install?.user_id) {
+      const entitlement = getUserEntitlement(install.user_id);
+      res.status(200).json(entitlement);
+      return;
+    }
+    res.status(401).json({ error: 'Unauthorized' });
+    return;
+  }
+
+  // Fall back to cookie-based session
+  const session = await auth.api.getSession({ headers: fromNodeHeaders(req.headers) });
+  if (!session) {
+    res.status(401).json({ error: 'Unauthorized' });
+    return;
+  }
+  const entitlement = getUserEntitlement(session.user.id);
   res.status(200).json(entitlement);
 });
 

@@ -10,7 +10,8 @@ export default defineConfig({
     sourcemap: true,
     rollupOptions: {
       input: {
-        app: "app.html"
+        app: "app.html",
+        authCallback: "auth-callback.html"
       }
     }
   }

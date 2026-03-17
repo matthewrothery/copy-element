@@ -57,13 +57,20 @@ public/               # static HTML served by Express
 
 In `src/loaders/express.ts`, order is load-bearing — do not change without understanding the reason:
 
-1. `cors({ origin: true, credentials: true })` — must be first; enables cookies for hosted app
-2. `app.post('/api/billing/webhook', express.raw(...), handleStripeWebhook)` — **before** `express.json()` so Stripe signature verification gets raw body
-3. `express.json({ limit: '256kb' })` — all routes below can parse JSON
-4. `app.use('/api/auth/extension-session', extensionSessionRouter)` — **before Better Auth catch-all** so our routes win for `/api/auth/extension-session/*`
-5. `app.all('/api/auth/*', toNodeHandler(auth))` — Better Auth handles all remaining `/api/auth/` (sign-in, callback, magic-link, sign-out)
-6. `mountApi(app)` — health, `/api/me`, `/api/installs`, `/api/billing`, `/api/captures`
-7. `express.static(publicDir)` — static files last so API routes always win
+1. Trust proxy — `app.set('trust proxy', 1)` in production; `app.enable('trust proxy')` for reverse proxy
+2. `cors({ origin: true, credentials: true })` — enables cookies for hosted app
+3. Request-time middleware — `req.requestTime = Date.now()` for diagnostics
+4. Morgan — HTTP request logging (method, url, status, response-time)
+5. `cookieParser()` — parse `Cookie` header into `req.cookies`
+6. `app.post('/api/billing/webhook', express.raw(...), handleStripeWebhook)` — **before** `express.json()` so Stripe signature verification gets raw body
+7. `express.json({ limit: '256kb' })` — all routes below can parse JSON
+8. Auth route diagnostics — dev-only 404 warnings for auth routes
+9. `app.use('/api/auth/extension-session', extensionSessionRouter)` — **before Better Auth catch-all** so our routes win for `/api/auth/extension-session/*`
+10. `app.all('/api/auth/*', toNodeHandler(auth))` — Better Auth handles all remaining `/api/auth/` (sign-in, callback, magic-link, sign-out)
+11. `mountApi(app)` — health, `/api/me`, `/api/installs`, `/api/billing`, `/api/captures`
+12. `express.static(publicDir)` — static files last so API routes always win
+13. 404 catch-all — forward to error handler with status 404
+14. Error handlers — UnauthorizedError (if any), then final JSON error response
 
 ---
 
@@ -208,6 +215,7 @@ All env access goes through `src/config/index.ts`. Add new keys to `ENV_KEYS`, `
 | Path | Responsibility |
 |------|----------------|
 | `src/index.ts` | Entry: load config, create app, `getDb()`, `listen(PORT)` |
+| `src/logger.ts` | Minimal logger wrapper for startup and request logging |
 | `src/loaders/express.ts` | App wiring and middleware order |
 | `src/loaders/auth.ts` | Better Auth: DB, baseURL, Google, magicLink |
 | `src/loaders/stripe.ts` | Stripe singleton; fails fast if key missing |

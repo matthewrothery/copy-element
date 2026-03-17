@@ -43,6 +43,7 @@ export interface InstallIdentity {
 
 export interface RegisterInstallBody {
   install_id: string;
+  install_secret?: string;
   extension_version?: string;
   chrome_version?: string;
   os_family?: string;

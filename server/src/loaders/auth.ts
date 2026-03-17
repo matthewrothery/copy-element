@@ -50,4 +50,18 @@ export const auth = betterAuth({
       sendMagicLink: sendMagicLinkPlaceholder,
     }),
   ],
+  databaseHooks: {
+    user: {
+      create: {
+        after: async (user) => {
+          try {
+            const { sendWelcomeEmail } = await import('../services/email.js');
+            await sendWelcomeEmail(user.email, user.name ?? undefined);
+          } catch (err) {
+            console.warn('[auth] Welcome email failed:', err);
+          }
+        },
+      },
+    },
+  },
 });

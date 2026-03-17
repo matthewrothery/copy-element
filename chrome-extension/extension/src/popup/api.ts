@@ -1,7 +1,8 @@
 import { nanoid } from "nanoid";
 import type { Folder } from "../shared/types/folder";
 import type { CapturedElementData, Snippet } from "../shared/types/snippet";
-import type { RuntimeErrorCode, RuntimeMessage, RuntimeResponse } from "../shared/types/messages";
+import type { AuthStatePayload, RuntimeErrorCode, RuntimeMessage, RuntimeResponse } from "../shared/types/messages";
+import { SERVER_URL } from "../shared/server-url";
 
 export class RuntimeRequestError extends Error {
   public readonly code: RuntimeErrorCode;
@@ -107,4 +108,26 @@ export function openLibraryInNewTab(snippetId?: string): void {
   const base = chrome.runtime.getURL("app.html");
   const url = snippetId ? `${base}?snippet=${encodeURIComponent(snippetId)}` : base;
   chrome.tabs.create({ url });
+}
+
+export async function getAuthStateFromBackground(): Promise<AuthStatePayload> {
+  return sendRuntimeMessage<AuthStatePayload>({ type: "GET_AUTH_STATE" });
+}
+
+export async function signOutFromBackground(): Promise<void> {
+  await sendRuntimeMessage<null>({ type: "SIGN_OUT" });
+}
+
+export async function getInstallIdFromBackground(): Promise<string> {
+  const result = await sendRuntimeMessage<{ install_id: string }>({ type: "GET_INSTALL_ID" });
+  return result.install_id;
+}
+
+export function openSignInPage(installId: string): void {
+  const signInUrl =
+    `${SERVER_URL}/sign-in` +
+    `?source=extension` +
+    `&install_id=${encodeURIComponent(installId)}` +
+    `&extension_id=${encodeURIComponent(chrome.runtime.id)}`;
+  chrome.tabs.create({ url: signInUrl });
 }

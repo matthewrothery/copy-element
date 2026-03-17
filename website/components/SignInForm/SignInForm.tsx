@@ -10,6 +10,17 @@ const CALLBACK_PATH = "/account";
 
 function getCallbackUrl(): string {
   if (typeof window !== "undefined") {
+    const params = new URLSearchParams(window.location.search);
+    const installId = params.get("install_id");
+    const extensionId = params.get("extension_id");
+    if (installId && extensionId) {
+      return (
+        window.location.origin +
+        "/auth/extension-callback" +
+        "?install_id=" + encodeURIComponent(installId) +
+        "&extension_id=" + encodeURIComponent(extensionId)
+      );
+    }
     return window.location.origin + CALLBACK_PATH;
   }
   const base = process.env.NEXT_PUBLIC_SITE_URL ?? "";

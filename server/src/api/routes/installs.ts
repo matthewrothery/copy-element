@@ -25,6 +25,7 @@ installsRouter.post('/register', (req: Request, res: Response<RegisterInstallRes
   }
   const result = registerInstall({
     install_id: install_id.trim(),
+    install_secret: typeof body?.install_secret === 'string' ? body.install_secret : undefined,
     extension_version: body?.extension_version,
     chrome_version: body?.chrome_version,
     os_family: body?.os_family,

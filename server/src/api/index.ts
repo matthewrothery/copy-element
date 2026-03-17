@@ -4,6 +4,7 @@ import { installsRouter } from './routes/installs.js';
 import { meRouter } from './routes/me.js';
 import { billingRouter } from './routes/billing.js';
 import { capturesRouter } from './routes/captures.js';
+import { emailTrackingRouter } from './routes/email-tracking.js';
 
 export function mountApi(app: Express): void {
   app.use(healthRouter);
@@ -11,4 +12,5 @@ export function mountApi(app: Express): void {
   app.use('/api/installs', installsRouter);
   app.use('/api/billing', billingRouter);
   app.use('/api/captures', capturesRouter);
+  app.use('/api/email/track', emailTrackingRouter);
 }

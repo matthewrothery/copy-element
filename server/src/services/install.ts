@@ -16,11 +16,13 @@ export function registerInstall(body: RegisterInstallBody): { install_id: string
   const existing = db.prepare('SELECT install_id, install_secret FROM installs WHERE install_id = ?').get(body.install_id) as { install_id: string; install_secret: string } | undefined;
 
   if (existing) {
+    const install_secret = body.install_secret ?? existing.install_secret;
     db.prepare(
-      `UPDATE installs SET last_seen_at = ?, extension_version = ?, chrome_version = ?, os_family = ?,
+      `UPDATE installs SET last_seen_at = ?, install_secret = ?, extension_version = ?, chrome_version = ?, os_family = ?,
        screen_width = ?, screen_height = ?, locale = ?, timezone = ? WHERE install_id = ?`
     ).run(
       now,
+      install_secret,
       body.extension_version ?? null,
       body.chrome_version ?? null,
       body.os_family ?? null,
@@ -30,10 +32,10 @@ export function registerInstall(body: RegisterInstallBody): { install_id: string
       body.timezone ?? null,
       body.install_id
     );
-    return { install_id: existing.install_id, install_secret: existing.install_secret };
+    return { install_id: existing.install_id, install_secret };
   }
 
-  const install_secret = nanoid(32);
+  const install_secret = body.install_secret ?? nanoid(32);
   db.prepare(
     `INSERT INTO installs (install_id, install_secret, user_id, created_at, last_seen_at,
      extension_version, chrome_version, os_family, screen_width, screen_height, locale, timezone)

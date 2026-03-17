@@ -138,6 +138,29 @@ export interface ExtractCssViaCdpPayload {
   }>;
 }
 
+export interface ExchangeAuthCodeRequest {
+  type: "EXCHANGE_AUTH_CODE";
+  payload: { code: string; install_id: string };
+}
+
+export interface GetAuthStateRequest {
+  type: "GET_AUTH_STATE";
+}
+
+export interface SignOutRequest {
+  type: "SIGN_OUT";
+}
+
+export interface GetInstallIdRequest {
+  type: "GET_INSTALL_ID";
+}
+
+export interface AuthStatePayload {
+  signed_in: boolean;
+  user_email: string | null;
+  user_plan: string | null;
+}
+
 export type RuntimeMessage =
   | StartCaptureRequest
   | CancelCaptureRequest
@@ -155,4 +178,8 @@ export type RuntimeMessage =
   | DeleteFolderRequest
   | OpenLibraryTabRequest
   | CaptureVisibleTabRequest
-  | ExtractCssViaCdpRequest;
+  | ExtractCssViaCdpRequest
+  | ExchangeAuthCodeRequest
+  | GetAuthStateRequest
+  | SignOutRequest
+  | GetInstallIdRequest;

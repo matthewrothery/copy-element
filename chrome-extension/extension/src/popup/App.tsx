@@ -1,14 +1,18 @@
 import { useEffect, useMemo, useState, type JSX } from "react";
 import {
   formatCaptureStartError,
+  getAuthStateFromBackground,
+  getInstallIdFromBackground,
   getSnippetsFromBackground,
   openLibraryInNewTab,
+  openSignInPage,
   startCapture
 } from "./api";
-import { Settings } from "lucide-react";
+import { Settings, User } from "lucide-react";
 import { Header } from "./components/Header";
 import { MainPanel } from "./components/MainPanel";
 import { SettingsPanel, type UiPreferences } from "./components/SettingsPanel";
+import { AccountPanel } from "./components/AccountPanel";
 import { Toast } from "./components/Toast";
 import type { Snippet } from "../shared/types/snippet";
 import {
@@ -19,7 +23,7 @@ import {
 import { buildSnippetPrompt } from "../shared/utils/prompt-builder";
 import { UsageMeter } from "./components/UsageMeter";
 
-type PopupView = "home" | "settings";
+type PopupView = "home" | "settings" | "account";
 const PREFERENCES_KEY = "element-armory-ui-preferences";
 const DEFAULT_PREFERENCES: UiPreferences = {
   thumbnailSize: "balanced",
@@ -65,6 +69,7 @@ export function App(): JSX.Element {
   const [preferences, setPreferences] = useState<UiPreferences>(DEFAULT_PREFERENCES);
   const [loadingState, setLoadingState] = useState(false);
   const [usage, setUsage] = useState<{ used: number; limit: number } | null>(null);
+  const [isSignedIn, setIsSignedIn] = useState(false);
 
   const snippetCount = snippets.length;
   const recentSnippets = useMemo(() => snippets.slice(0, 2), [snippets]);
@@ -116,6 +121,30 @@ export function App(): JSX.Element {
       ): void => {
         if (areaName === "local" && changes[SAVES_THIS_MONTH_KEY] !== undefined) {
           loadUsage();
+        }
+      };
+      chrome.storage.onChanged.addListener(listener);
+      return () => chrome.storage.onChanged.removeListener(listener);
+    }
+  }, []);
+
+  useEffect(() => {
+    void (async () => {
+      try {
+        const state = await getAuthStateFromBackground();
+        setIsSignedIn(state.signed_in);
+      } catch {
+        // ignore
+      }
+    })();
+
+    if (typeof chrome !== "undefined" && chrome.storage?.onChanged?.addListener) {
+      const listener = (
+        changes: { [key: string]: chrome.storage.StorageChange },
+        areaName: string
+      ): void => {
+        if (areaName === "local" && "element-armory-auth-token" in changes) {
+          setIsSignedIn(!!changes["element-armory-auth-token"].newValue);
         }
       };
       chrome.storage.onChanged.addListener(listener);
@@ -186,6 +215,11 @@ export function App(): JSX.Element {
             onChange={setPreferences}
             onBack={() => setView("home")}
           />
+        ) : view === "account" ? (
+          <AccountPanel
+            onBack={() => setView("home")}
+            onSignedInChange={setIsSignedIn}
+          />
         ) : (
           <MainPanel
             snippetCount={snippetCount}
@@ -211,6 +245,20 @@ export function App(): JSX.Element {
           <Settings size={18} aria-hidden />
         </button>
         <span>v{extensionVersion}</span>
+        <button
+          type="button"
+          className={`footer-account-button${isSignedIn ? " footer-account-button--signed-in" : ""}`}
+          onClick={() => {
+            if (!isSignedIn) {
+              void getInstallIdFromBackground().then(openSignInPage).catch(() => {});
+            } else {
+              setView((v) => (v === "account" ? "home" : "account"));
+            }
+          }}
+          aria-label="Open account"
+        >
+          <User size={18} aria-hidden />
+        </button>
       </footer>
 
       {toastMessage && <Toast message={toastMessage} />}

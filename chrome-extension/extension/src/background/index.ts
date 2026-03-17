@@ -1,13 +1,80 @@
 import type { CapturedElementData } from "../shared/types/snippet";
 import { deleteFolder, getFolders, saveFolder } from "../shared/storage/folder-storage";
 import { deleteSnippet, getSnippets, saveSnippet } from "../shared/storage/snippet-storage";
+import {
+  clearAuthToken,
+  getAuthExpiresAt,
+  getAuthState,
+  getAuthToken,
+  getOrCreateInstallCredentials,
+  saveToken,
+  saveUserProfile,
+} from "../shared/storage/auth-storage";
+import { SERVER_URL } from "../shared/server-url";
 import type {
+  AuthStatePayload,
   ExtractCssViaCdpPayload,
   RuntimeErrorCode,
   RuntimeMessage,
   RuntimeResponse
 } from "../shared/types/messages";
 import { extractCssViaCdp } from "./cdp-css";
+
+const REFRESH_ALARM_NAME = "element-armory-auth-refresh";
+
+async function scheduleRefreshAlarm(): Promise<void> {
+  const expiresAt = await getAuthExpiresAt();
+  await chrome.alarms.clear(REFRESH_ALARM_NAME);
+  if (!expiresAt) return;
+  const expiryMs = new Date(expiresAt).getTime();
+  const now = Date.now();
+  const refreshMs = expiryMs - 12 * 60 * 60 * 1000; // 12 hours before expiry
+  const delayMs = Math.max(refreshMs - now, 60 * 1000); // minimum 1 minute
+  const delayMinutes = delayMs / 60000;
+  await chrome.alarms.create(REFRESH_ALARM_NAME, { delayInMinutes: delayMinutes });
+}
+
+chrome.runtime.onInstalled.addListener(() => {
+  void registerInstall();
+  void scheduleRefreshAlarm();
+});
+
+async function registerInstall(): Promise<void> {
+  const creds = await getOrCreateInstallCredentials();
+  await fetch(`${SERVER_URL}/api/installs/register`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ install_id: creds.install_id, install_secret: creds.install_secret }),
+  }).catch(() => {});
+}
+
+chrome.runtime.onStartup.addListener(() => {
+  void registerInstall();
+  void scheduleRefreshAlarm();
+});
+
+chrome.alarms.onAlarm.addListener((alarm) => {
+  if (alarm.name !== REFRESH_ALARM_NAME) return;
+  void (async () => {
+    const token = await getAuthToken();
+    if (!token) return;
+    try {
+      const res = await fetch(`${SERVER_URL}/api/auth/extension-session/refresh`, {
+        method: "POST",
+        headers: { Authorization: `Bearer ${token}` },
+      });
+      if (res.ok) {
+        const data = (await res.json()) as { token?: string; expires_at?: string };
+        if (data.token && data.expires_at) {
+          await saveToken(data.token, data.expires_at);
+          await scheduleRefreshAlarm();
+        }
+      }
+    } catch {
+      // Silently fail — will retry on next startup
+    }
+  })();
+});
 
 let latestCapture: CapturedElementData | null = null;
 
@@ -319,6 +386,103 @@ chrome.runtime.onMessage.addListener((message: RuntimeMessage, sender, sendRespo
         sendResponse(failure(String(error), "UNKNOWN_ERROR"));
       }
     })();
+    return true;
+  }
+
+  if (message.type === "EXCHANGE_AUTH_CODE") {
+    void (async () => {
+      try {
+        const { code, install_id } = message.payload;
+        const creds = await getOrCreateInstallCredentials();
+        const res = await fetch(`${SERVER_URL}/api/auth/extension-session`, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            code,
+            install_id: install_id || creds.install_id,
+            install_secret: creds.install_secret,
+          }),
+        });
+        if (!res.ok) {
+          console.error("[Element Armory] EXCHANGE_AUTH_CODE failed", res.status);
+          sendResponse(failure("Failed to exchange auth code", "UNKNOWN_ERROR"));
+          return;
+        }
+        const data = (await res.json()) as { token?: string; expires_at?: string };
+        if (data.token && data.expires_at) {
+          await saveToken(data.token, data.expires_at);
+          await scheduleRefreshAlarm();
+          // Best-effort: fetch user info and save profile
+          void (async () => {
+            try {
+              const [meRes, entitlementRes] = await Promise.all([
+                fetch(`${SERVER_URL}/api/me`, {
+                  headers: { Authorization: `Bearer ${data.token}` },
+                }),
+                fetch(`${SERVER_URL}/api/billing/entitlement`, {
+                  headers: { Authorization: `Bearer ${data.token}` },
+                }),
+              ]);
+              const meData = meRes.ok
+                ? ((await meRes.json()) as { user?: { email?: string } })
+                : null;
+              const entData = entitlementRes.ok
+                ? ((await entitlementRes.json()) as { plan_code?: string })
+                : null;
+              const email = meData?.user?.email ?? null;
+              const planCode = entData?.plan_code ?? "free";
+              if (email) {
+                await saveUserProfile(email, planCode);
+              }
+            } catch {
+              // Silently fail — user info is non-critical
+            }
+          })();
+        }
+        // Close the auth-callback tab
+        if (sender.tab?.id !== undefined) {
+          chrome.tabs.remove(sender.tab.id).catch(() => {});
+        }
+        sendResponse(success(null));
+      } catch (error: unknown) {
+        console.error("[Element Armory] EXCHANGE_AUTH_CODE error", error);
+        sendResponse(failure(String(error), "UNKNOWN_ERROR"));
+      }
+    })();
+    return true;
+  }
+
+  if (message.type === "GET_AUTH_STATE") {
+    void getAuthState()
+      .then((state) => sendResponse(success(state as AuthStatePayload)))
+      .catch((error: unknown) => sendResponse(failure(String(error), "UNKNOWN_ERROR")));
+    return true;
+  }
+
+  if (message.type === "SIGN_OUT") {
+    void (async () => {
+      try {
+        const token = await getAuthToken();
+        if (token) {
+          await fetch(`${SERVER_URL}/api/auth/extension-session/revoke`, {
+            method: "POST",
+            headers: { Authorization: `Bearer ${token}` },
+          }).catch(() => {});
+        }
+        await clearAuthToken();
+        await chrome.alarms.clear(REFRESH_ALARM_NAME);
+        sendResponse(success(null));
+      } catch (error: unknown) {
+        sendResponse(failure(String(error), "UNKNOWN_ERROR"));
+      }
+    })();
+    return true;
+  }
+
+  if (message.type === "GET_INSTALL_ID") {
+    void getOrCreateInstallCredentials()
+      .then((creds) => sendResponse(success({ install_id: creds.install_id })))
+      .catch((error: unknown) => sendResponse(failure(String(error), "UNKNOWN_ERROR")));
     return true;
   }
 

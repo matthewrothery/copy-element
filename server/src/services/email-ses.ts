@@ -1,8 +1,11 @@
 import { SendEmailCommand, SESClient } from '@aws-sdk/client-ses';
 import { render } from '@react-email/render';
 import { createElement } from 'react';
+import { nanoid } from 'nanoid';
 import { MagicLinkEmail } from '../emails/magic-link.js';
+import { WelcomeEmail } from '../emails/welcome.js';
 import { config } from '../config/index.js';
+import { logEmailSend } from './email-tracking.js';
 
 const sesClient = new SESClient({
   region: config.AWS_SES_REGION,
@@ -16,18 +19,70 @@ const sesClient = new SESClient({
     : {}),
 });
 
-export async function sendMagicLinkViaSes(email: string, url: string): Promise<void> {
-  const html = await render(createElement(MagicLinkEmail, { url, email }));
-  await sesClient.send(
-    new SendEmailCommand({
-      Source: config.FROM_EMAIL,
-      Destination: { ToAddresses: [email] },
-      Message: {
-        Subject: { Data: 'Sign in to Element Armory' },
-        Body: {
-          Html: { Data: html },
+function buildPixelUrl(sendId: string): string {
+  return `${config.BETTER_AUTH_URL}/api/email/track/open/${sendId}.gif`;
+}
+
+function buildWrappedLink(sendId: string, dest: string): string {
+  return `${config.BETTER_AUTH_URL}/api/email/track/click?id=${sendId}&url=${encodeURIComponent(dest)}`;
+}
+
+export async function sendWelcomeViaSes(email: string, name?: string): Promise<void> {
+  const sendId = nanoid();
+  const subject = 'Welcome to Element Armory';
+  const pixelUrl = buildPixelUrl(sendId);
+  const ctaUrl = buildWrappedLink(sendId, config.FRONTEND_URL || 'https://elementarmory.com');
+
+  const html = await render(createElement(WelcomeEmail, { email, name, pixelUrl, ctaUrl }));
+
+  let sesMsgId: string | undefined;
+  try {
+    const response = await sesClient.send(
+      new SendEmailCommand({
+        Source: config.FROM_EMAIL,
+        Destination: { ToAddresses: [email] },
+        Message: {
+          Subject: { Data: subject },
+          Body: {
+            Html: { Data: html },
+          },
         },
-      },
-    })
-  );
+      })
+    );
+    sesMsgId = response.MessageId;
+    logEmailSend({ id: sendId, email, template: 'welcome', subject, sesMsgId, status: 'sent' });
+  } catch (err) {
+    logEmailSend({ id: sendId, email, template: 'welcome', subject, status: 'failed', error: (err as Error).message });
+    throw err;
+  }
+}
+
+export async function sendMagicLinkViaSes(email: string, url: string): Promise<void> {
+  const sendId = nanoid();
+  const subject = 'Sign in to Element Armory';
+  const pixelUrl = buildPixelUrl(sendId);
+  const wrappedUrl = buildWrappedLink(sendId, url);
+
+  const html = await render(createElement(MagicLinkEmail, { url: wrappedUrl, email, pixelUrl }));
+
+  let sesMsgId: string | undefined;
+  try {
+    const response = await sesClient.send(
+      new SendEmailCommand({
+        Source: config.FROM_EMAIL,
+        Destination: { ToAddresses: [email] },
+        Message: {
+          Subject: { Data: subject },
+          Body: {
+            Html: { Data: html },
+          },
+        },
+      })
+    );
+    sesMsgId = response.MessageId;
+    logEmailSend({ id: sendId, email, template: 'magic_link', subject, sesMsgId, status: 'sent' });
+  } catch (err) {
+    logEmailSend({ id: sendId, email, template: 'magic_link', subject, status: 'failed', error: (err as Error).message });
+    throw err;
+  }
 }

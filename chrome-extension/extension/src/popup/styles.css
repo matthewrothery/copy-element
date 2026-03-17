@@ -952,3 +952,79 @@
     transform: translateX(-50%) translateY(0);
   }
 }
+
+/* Account panel */
+.account-signin-btn {
+  --account-signin-btn-bg: var(--color-accent);
+  --account-signin-btn-text: #fff;
+  --account-signin-btn-radius: var(--radius-2);
+  --account-signin-btn-padding: var(--space-2) var(--space-4);
+  display: block;
+  width: 100%;
+  padding: var(--account-signin-btn-padding);
+  background: var(--account-signin-btn-bg);
+  color: var(--account-signin-btn-text);
+  border: none;
+  border-radius: var(--account-signin-btn-radius);
+  font-size: var(--typo-label);
+  font-weight: var(--font-weight-medium);
+  cursor: pointer;
+  text-align: center;
+}
+
+.account-signin-btn:hover {
+  opacity: 0.88;
+}
+
+.account-signout-btn {
+  --account-signout-btn-border: var(--color-border);
+  --account-signout-btn-radius: var(--radius-2);
+  --account-signout-btn-padding: var(--space-2) var(--space-4);
+  display: block;
+  width: 100%;
+  padding: var(--account-signout-btn-padding);
+  background: transparent;
+  color: var(--color-text-secondary);
+  border: 1px solid var(--account-signout-btn-border);
+  border-radius: var(--account-signout-btn-radius);
+  font-size: var(--typo-label);
+  cursor: pointer;
+  text-align: center;
+}
+
+.account-signout-btn:hover {
+  background: var(--color-surface-alt);
+  color: var(--color-text-primary);
+}
+
+.account-email-display {
+  font-size: var(--typo-label);
+  color: var(--color-text-primary);
+  margin: 0 0 var(--space-2);
+  word-break: break-all;
+}
+
+.account-plan-badge {
+  display: inline-block;
+  padding: 2px var(--space-2);
+  border-radius: var(--radius-1);
+  font-size: 11px;
+  font-weight: var(--font-weight-medium);
+  margin-bottom: var(--space-3);
+}
+
+.account-plan-free {
+  background: var(--color-surface-alt);
+  color: var(--color-text-secondary);
+}
+
+.account-plan-pro {
+  background: var(--color-accent-subtle);
+  color: var(--color-accent);
+}
+
+.account-error {
+  font-size: var(--typo-label);
+  color: var(--color-danger, #ef4444);
+  margin: var(--space-2) 0 0;
+}
