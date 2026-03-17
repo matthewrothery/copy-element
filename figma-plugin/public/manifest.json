@@ -1,0 +1,12 @@
+{
+  "name": "Element Armory",
+  "id": "element-armory",
+  "api": "1.0.0",
+  "main": "main.js",
+  "ui": "ui.html",
+  "editorType": ["figma"],
+  "networkAccess": {
+    "allowedDomains": ["https://api.elementarmory.com"],
+    "reasoning": "Fetch captured components from Element Armory backend"
+  }
+}

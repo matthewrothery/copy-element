@@ -9,8 +9,9 @@ This is the default source of truth for shared UI style and interaction decision
 
 - `website`
 - `chrome-extension`
+- `figma-plugin`
 
-Use this file to keep both products visually and behaviorally aligned.
+Use this file to keep all products visually and behaviorally aligned.
 
 ---
 
@@ -19,12 +20,12 @@ Use this file to keep both products visually and behaviorally aligned.
 Precedence order:
 
 1. This shared rule (default)
-2. Local product rules (`website/.cursor/rules/*`, `chrome-extension/.cursor/rules/*`)
+2. Local product rules (`website/.cursor/rules/*`, `chrome-extension/.cursor/rules/*`, `figma-plugin/.cursor/rules/*`)
 
 Local rules may override shared guidance only when:
 
 - the difference is required by platform constraints, and
-- the rule section is explicitly marked as `ExtensionConstraint` or `WebsiteConstraint`, and
+- the rule section is explicitly marked as `ExtensionConstraint`, `WebsiteConstraint`, or `FigmaConstraint`, and
 - the reason is written in one line.
 
 If there is no explicit constraint marker, shared guidance applies.
@@ -50,6 +51,7 @@ May differ with documented constraints:
 - content script overlay mechanics
 - MV3 and browser runtime limitations
 - page-context style injection limits
+- figma plugin iframe dimensions and Figma plugin API constraints
 
 ---
 
@@ -125,14 +127,14 @@ Avoid vague labels like `Action`.
 
 # Parity Checklist (Required Before Finalizing UI Work)
 
-Before finalizing any UI task in either project, confirm:
+Before finalizing any UI task in website, extension, or figma-plugin, confirm:
 
 - Shared token architecture is followed (primitive -> semantic -> component)
 - No hardcoded style values were introduced in component internals
 - Core color, typography, spacing, and radius scales remain aligned
 - Interaction timing and feedback match shared standards
 - Accessibility baseline is preserved
-- Any divergence is marked with `ExtensionConstraint` or `WebsiteConstraint` plus rationale
+- Any divergence is marked with `ExtensionConstraint`, `WebsiteConstraint`, or `FigmaConstraint` plus rationale
 
 If checklist items fail, fix before completion.
 

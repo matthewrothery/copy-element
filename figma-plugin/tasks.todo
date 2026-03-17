@@ -1,0 +1,65 @@
+# Element Armory Figma Plugin — Phased Tasks
+
+## Phase 1 — Plugin Foundation (1–2 days)
+- [ ] Initialize plugin with Vite + React + TypeScript
+- [ ] Add manifest.json (name, id, main, ui)
+- [ ] Implement main.ts: showUI, onmessage stub
+- [ ] Create src/ui/App.tsx shell
+- [ ] Wire UI to dist/ui.html and main to dist/main.js
+- [ ] Verify plugin loads in Figma
+
+## Phase 2 — API Integration (Mocked First)
+- [ ] Define ElementItem type (id, name, html, css, preview, createdAt)
+- [ ] Add api.ts with fetchElements() mock
+- [ ] Add placeholder for GET /api/elements and GET /api/elements/:id
+- [ ] Optional: add Zod schemas for validation
+
+## Phase 3 — Fast UI List (Performance Critical)
+- [ ] Add search input (filter by name/source)
+- [ ] Build ElementCard: thumbnail, title, meta, Insert + Preview
+- [ ] Build ElementList using react-virtual (virtualized list)
+- [ ] Add useElements hook (data + filter state)
+- [ ] Lazy load preview images when visible
+- [ ] Match extension library layout: card grid, spacing, tokens
+
+## Phase 4 — Insert Element into Figma
+- [ ] Define postMessage types (INSERT_ELEMENT, etc.)
+- [ ] UI: send INSERT_ELEMENT on Insert click
+- [ ] Main: handle INSERT_ELEMENT → createFrame, resize, name, append, scrollIntoView
+- [ ] Initially: HTML → frame placeholder only
+
+## Phase 5 — HTML → Figma Rendering (Core Feature)
+- [ ] Decide strategy: Option A (SVG snapshot) vs Option B (DOM → nodes)
+- [ ] MVP: implement SVG snapshot path (HTML → render → SVG → Figma image)
+- [ ] Optional later: DOM → Figma node mapping (div→frame, img→rectangle, text→text)
+
+## Phase 6 — Component System
+- [ ] Create Figma component instead of raw frame on insert
+- [ ] Insert instance on canvas
+- [ ] Name and structure for designer reuse
+
+## Phase 7 — Auth + Sync
+- [ ] Add login UI (placeholder or OAuth flow)
+- [ ] Store token via figma.clientStorage.setAsync("token", token)
+- [ ] Replace mock API with real GET /api/elements + Authorization header
+- [ ] Handle token refresh / logout
+
+## Phase 8 — Developer-Focused Features
+- [ ] Code panel: show HTML, CSS, React, Tailwind (optional)
+- [ ] Copy to clipboard for code snippets
+- [ ] “Open in Element Armory” deep link to web app
+
+## Phase 9 — Future: Figma → HTML
+- [ ] Select component → export node tree → convert to HTML → send to API
+- [ ] Extract layout, styles, text, images
+
+## Phase 10 — Performance Optimizations
+- [ ] Lazy previews (load images when in viewport)
+- [ ] TanStack Query for caching elements
+- [ ] Batch node creation where possible
+- [ ] Keep heavy logic in UI thread, not main
+
+## Phase 11 — Plugin Listing
+- [ ] Finalize name: "Element Armory – UI to Code Components"
+- [ ] Keywords: html, css, ui components, developer, frontend
+- [ ] Target audience: frontend devs, AI coding users
