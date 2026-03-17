@@ -45,6 +45,11 @@ services:
       - NODE_ENV=development
       # So Better Auth trusts redirects/callbacks from the website (different port in dev).
       - FRONTEND_URL=http://localhost:${WEBSITE_PORT:-8888}
+      # AWS credentials — injected from the host shell by aws-vault exec in start.sh.
+      # These override the empty values in server/.env.
+      - AWS_ACCESS_KEY_ID
+      - AWS_SECRET_ACCESS_KEY
+      - AWS_SESSION_TOKEN
     volumes:
       - ./server/:/app
     networks:
