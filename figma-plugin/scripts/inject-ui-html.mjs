@@ -25,18 +25,42 @@ if (linkMatch) {
   const cssHref = linkMatch[1].replace(/^\//, "");
   const cssPath = path.join(dist, cssHref);
   if (fs.existsSync(cssPath)) {
-    const cssContent = fs.readFileSync(cssPath, "utf8");
+    let cssContent = fs.readFileSync(cssPath, "utf8");
+    cssContent = cssContent.replace(/<\/style>/gi, "<\\/style>");
     html = html.replace(linkMatch[0], `<style>${cssContent}</style>`);
     console.log("inject-ui-html: inlined CSS into ui.html");
   }
 }
 
-// Replace external script with inlined script
-const scriptTag = `<script type="module">\n${scriptContent}\n</script>`;
-html = html.replace(/<script[^>]*src="[^"]*ui\.js[^"]*"[^>]*><\/script>/i, scriptTag);
+// Replace external script with inlined script so HTML parser doesn't close the tag early:
+// - </script> (and variants with whitespace / different case) -> <\/script>
+// - --> can end an HTML comment in some parsers -> --\>
+let safeScriptContent = scriptContent
+  .replace(/<\s*\/\s*script\s*>/gi, "<\\/script>")
+  .replace(/-->/g, "--\\>");
+const scriptTag = `<script type="module">\n${safeScriptContent}\n</script>`;
+
+// Use a function-based replace so bundled JS `$` sequences are not treated
+// as special replacement patterns by String.prototype.replace.
+html = html.replace(
+  /<script[^>]*src="[^"]*ui\.js[^"]*"[^>]*><\/script>/i,
+  () => scriptTag
+);
 
 fs.writeFileSync(uiHtmlPath, html, "utf8");
 console.log("inject-ui-html: inlined ui.js into ui.html");
 try {
   fs.unlinkSync(uiJsPath);
 } catch (_) {}
+
+// Minimal regression guard: ensure final HTML contains a single inline module
+// script tag and no remaining ui.js script src. This keeps the build from
+// silently succeeding with a broken inlined UI.
+const hasModuleScript = html.includes('<script type="module">');
+const stillReferencesUiJs = /src="[^"]*ui\.js[^"]*"/i.test(html);
+if (!hasModuleScript || stillReferencesUiJs) {
+  console.error(
+    "inject-ui-html: post-write sanity check failed (module script missing or ui.js src still present)"
+  );
+  process.exit(1);
+}
