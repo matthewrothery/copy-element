@@ -17,7 +17,7 @@ From the repo root you can run the website and server together:
 
 Then open:
 
-- **Website:** http://localhost:8888  
+- **Website:** http://localhost:9900  
 - **API:** http://localhost:3001  
 
 Login and API calls use the server at that API URL. Ports are configurable via `WEBSITE_PORT` and `SERVER_PORT` in `.env`.

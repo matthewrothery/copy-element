@@ -85,6 +85,12 @@ When a shared style convention changes: update this file first, then update loca
 
 ---
 
+## Database Conventions
+
+**Timestamps:** All date-time fields in the database must use epoch milliseconds (`INTEGER` column type, `Date.now()` in code). Never use ISO 8601 strings or `new Date().toISOString()` for database timestamp values.
+
+---
+
 ## Global Coding Standards
 
 **Language:** TypeScript only.

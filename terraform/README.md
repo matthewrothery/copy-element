@@ -42,8 +42,8 @@ AWS_REGION=us-east-2 TF_VAR_environment=prod aws-vault exec demoly --no-session 
 4. **Plan and apply**:
 
 ```bash
-AWS_REGION=us-east-2 aws-vault exec <profile> -- docker-compose run --rm terraform plan -var-file=./variables/prod.tfvars
-AWS_REGION=us-east-2 aws-vault exec <profile> -- docker-compose run --rm terraform apply -var-file=./variables/prod.tfvars
+AWS_REGION=us-east-2 aws-vault exec demoly -- docker-compose run --rm terraform plan -var-file=./variables/prod.tfvars
+AWS_REGION=us-east-2 aws-vault exec demoly -- docker-compose run --rm terraform apply -var-file=./variables/prod.tfvars
 ```
 
 Replace `<profile>` with your aws-vault profile name. Terraform runs in Docker so the version is consistent; AWS credentials are passed through from `aws-vault exec`.

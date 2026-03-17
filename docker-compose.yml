@@ -44,7 +44,7 @@ services:
     environment:
       - NODE_ENV=development
       # So Better Auth trusts redirects/callbacks from the website (different port in dev).
-      - FRONTEND_URL=http://localhost:${WEBSITE_PORT:-8888}
+      - FRONTEND_URL=http://localhost:${WEBSITE_PORT:-9900}
       # AWS credentials — injected from the host shell by aws-vault exec in start.sh.
       # These override the empty values in server/.env.
       - AWS_ACCESS_KEY_ID
@@ -67,7 +67,7 @@ services:
       # Browser hits the server directly for auth and API (avoids 404 on Sign in with Google when rewrites don't apply).
       NEXT_PUBLIC_API_URL: http://localhost:${SERVER_PORT:-8840}
     ports:
-      - "${WEBSITE_PORT:-8888}:3000"
+      - "${WEBSITE_PORT:-9900}:3000"
     volumes:
       - ./website:/app
     command: /bin/sh -c "npm install && npm run dev"
