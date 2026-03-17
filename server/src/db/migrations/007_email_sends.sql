@@ -7,12 +7,12 @@ CREATE TABLE email_sends (
   template TEXT NOT NULL,                  -- 'welcome' | 'magic_link'
   subject TEXT NOT NULL,
   ses_message_id TEXT,
-  sent_at TEXT NOT NULL,
+  sent_at INTEGER NOT NULL,
   status TEXT NOT NULL DEFAULT 'sent',     -- 'sent' | 'failed' | 'skipped'
   error_message TEXT,
-  opened_at TEXT,
+  opened_at INTEGER,
   open_count INTEGER NOT NULL DEFAULT 0,
-  clicked_at TEXT,
+  clicked_at INTEGER,
   click_count INTEGER NOT NULL DEFAULT 0
 );
 
@@ -24,7 +24,7 @@ CREATE TABLE email_clicks (
   id INTEGER PRIMARY KEY AUTOINCREMENT,
   email_send_id TEXT NOT NULL,
   destination_url TEXT NOT NULL,
-  clicked_at TEXT NOT NULL,
+  clicked_at INTEGER NOT NULL,
   user_agent TEXT,
   FOREIGN KEY (email_send_id) REFERENCES email_sends(id)
 );

@@ -15,7 +15,7 @@ export interface CaptureAssetInput {
 export interface CreateCaptureInput {
   install_id: string;
   source_url: string;
-  captured_at: string;
+  captured_at: number;
   created_by_install_id: string;
   status?: string;
   metadata_json?: string | null;
@@ -27,12 +27,12 @@ export interface CaptureRow {
   install_id: string;
   user_id: string | null;
   source_url: string | null;
-  captured_at: string;
+  captured_at: number;
   created_by_install_id: string;
   status: string;
   metadata_json: string | null;
-  created_at: string;
-  updated_at: string;
+  created_at: number;
+  updated_at: number;
 }
 
 export interface CaptureWithAssets extends CaptureRow {
@@ -52,7 +52,7 @@ const DEFAULT_STATUS = 'ok';
  */
 export function createCaptureWithAssets(input: CreateCaptureInput): CaptureRow {
   const db = getDb();
-  const now = new Date().toISOString();
+  const now = Date.now();
   const status = input.status ?? DEFAULT_STATUS;
   const install = db
     .prepare('SELECT user_id FROM installs WHERE install_id = ?')
@@ -110,7 +110,7 @@ function getCaptureById(id: number): CaptureRow {
 
 export interface ListCapturesOptions {
   limit?: number;
-  cursor?: string; // captured_at ISO string for cursor-based pagination
+  cursor?: number; // captured_at epoch ms for cursor-based pagination
 }
 
 /**
@@ -162,7 +162,7 @@ export function listCapturesByUser(
  */
 export function backfillUserIdForInstall(installId: string, userId: string): number {
   const db = getDb();
-  const result = db.prepare('UPDATE captures SET user_id = ?, updated_at = ? WHERE install_id = ? AND user_id IS NULL').run(userId, new Date().toISOString(), installId);
+  const result = db.prepare('UPDATE captures SET user_id = ?, updated_at = ? WHERE install_id = ? AND user_id IS NULL').run(userId, Date.now(), installId);
   return result.changes;
 }
 

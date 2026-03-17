@@ -13,17 +13,17 @@ function hashToken(token: string): string {
 export function createExtensionCode(user_id: string, install_id: string): string {
   const db = getDb();
   const code = nanoid(32);
-  const now = new Date();
-  const expires_at = new Date(now.getTime() + CODE_TTL_MS).toISOString();
+  const now = Date.now();
+  const expires_at = now + CODE_TTL_MS;
   db.prepare(
     'INSERT INTO extension_codes (code, user_id, install_id, expires_at, created_at) VALUES (?, ?, ?, ?, ?)'
-  ).run(code, user_id, install_id, expires_at, now.toISOString());
+  ).run(code, user_id, install_id, expires_at, now);
   return code;
 }
 
 export interface ExchangeResult {
   token: string;
-  expires_at: string;
+  expires_at: number;
 }
 
 export function exchangeCodeForToken(
@@ -34,7 +34,7 @@ export function exchangeCodeForToken(
   const db = getDb();
   const row = db.prepare(
     'SELECT user_id, install_id FROM extension_codes WHERE code = ? AND expires_at > ?'
-  ).get(code, new Date().toISOString()) as { user_id: string; install_id: string } | undefined;
+  ).get(code, Date.now()) as { user_id: string; install_id: string } | undefined;
   if (!row) return null;
   if (row.install_id !== install_id) return null;
 
@@ -49,11 +49,11 @@ export function exchangeCodeForToken(
   const token = nanoid(32);
   const token_hash = hashToken(token);
   const id = nanoid();
-  const now = new Date();
-  const expires_at = new Date(now.getTime() + SESSION_TTL_MS).toISOString();
+  const now = Date.now();
+  const expires_at = now + SESSION_TTL_MS;
   db.prepare(
     'INSERT INTO extension_sessions (id, user_id, install_id, token_hash, created_at, expires_at) VALUES (?, ?, ?, ?, ?, ?)'
-  ).run(id, row.user_id, install_id, token_hash, now.toISOString(), expires_at);
+  ).run(id, row.user_id, install_id, token_hash, now, expires_at);
 
   return { token, expires_at };
 }
@@ -63,13 +63,12 @@ export function refreshExtensionToken(currentToken: string): ExchangeResult | nu
   const hash = hashToken(currentToken);
   const row = db.prepare(
     'SELECT id, user_id, install_id FROM extension_sessions WHERE token_hash = ? AND expires_at > ?'
-  ).get(hash, new Date().toISOString()) as { id: string; user_id: string; install_id: string } | undefined;
+  ).get(hash, Date.now()) as { id: string; user_id: string; install_id: string } | undefined;
   if (!row) return null;
 
   const newToken = nanoid(32);
   const newHash = hashToken(newToken);
-  const now = new Date();
-  const expires_at = new Date(now.getTime() + SESSION_TTL_MS).toISOString();
+  const expires_at = Date.now() + SESSION_TTL_MS;
   db.prepare('UPDATE extension_sessions SET token_hash = ?, expires_at = ? WHERE id = ?').run(newHash, expires_at, row.id);
   return { token: newToken, expires_at };
 }
@@ -92,6 +91,6 @@ export function getInstallFromToken(token: string): InstallFromToken | null {
   const hash = hashToken(token);
   const row = db
     .prepare('SELECT install_id, user_id FROM extension_sessions WHERE token_hash = ? AND expires_at > ?')
-    .get(hash, new Date().toISOString()) as { install_id: string; user_id: string } | undefined;
+    .get(hash, Date.now()) as { install_id: string; user_id: string } | undefined;
   return row ?? null;
 }

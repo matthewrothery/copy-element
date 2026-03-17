@@ -178,9 +178,9 @@ Token is hashed (SHA-256) in DB; TTL 90 days. Extension never sends cookies to A
 
 ## Database Schema
 
-All timestamps stored as ISO strings (TEXT). Tables by migration:
+All timestamps stored as epoch milliseconds (`INTEGER`). Use `Date.now()` — never `new Date().toISOString()`. Tables by migration:
 
-- **001** — `schema_migrations` (`version` TEXT PK, `applied_at` TEXT)
+- **001** — `schema_migrations` (`version` TEXT PK, `applied_at` INTEGER)
 - **002** — `installs` (`install_id`, `install_secret`, `user_id` NULL, `created_at`, `last_seen_at`, `extension_version`, `chrome_version`, `os_family`, `screen_width`, `screen_height`, `locale`, `timezone`)
 - **003** — Better Auth tables: `user`, `session`, `account`, `verification` (camelCase columns; quoted `"user"` for SQLite)
 - **004** — `extension_codes` (one-time codes, deleted after use), `extension_sessions` (`token_hash` SHA-256, 90d TTL)

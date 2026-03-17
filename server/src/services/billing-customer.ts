@@ -5,8 +5,8 @@ export interface StripeCustomerRow {
   id: number;
   user_id: string;
   stripe_customer_id: string;
-  created_at: string;
-  updated_at: string;
+  created_at: number;
+  updated_at: number;
 }
 
 /**
@@ -32,7 +32,7 @@ export async function getOrCreateStripeCustomerForUser(
     metadata: { user_id: userId },
   });
 
-  const now = new Date().toISOString();
+  const now = Date.now();
   db.prepare(
     'INSERT INTO stripe_customers (user_id, stripe_customer_id, created_at, updated_at) VALUES (?, ?, ?, ?)'
   ).run(userId, customer.id, now, now);

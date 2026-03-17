@@ -24,7 +24,7 @@ export function logEmailSend(params: LogEmailSendParams): void {
       params.template,
       params.subject,
       params.sesMsgId ?? null,
-      new Date().toISOString(),
+      Date.now(),
       params.status,
       params.error ?? null,
     );
@@ -42,7 +42,7 @@ export function recordOpen(emailSendId: string): void {
         opened_at = CASE WHEN opened_at IS NULL THEN ? ELSE opened_at END,
         open_count = open_count + 1
       WHERE id = ?
-    `).run(new Date().toISOString(), emailSendId);
+    `).run(Date.now(), emailSendId);
   } catch {
     // fire-and-forget
   }
@@ -57,7 +57,7 @@ interface RecordClickParams {
 export function recordClick(params: RecordClickParams): void {
   try {
     const db = getDb();
-    const now = new Date().toISOString();
+    const now = Date.now();
     db.prepare(`
       UPDATE email_sends
       SET

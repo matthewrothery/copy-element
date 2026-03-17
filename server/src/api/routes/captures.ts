@@ -85,7 +85,7 @@ capturesRouter.post(
     const installId = req.installId!;
     const body = req.body as {
       source_url?: string;
-      captured_at?: string;
+      captured_at?: number;
       metadata?: Record<string, unknown>;
       assets?: Array<{
         asset_kind?: string;
@@ -97,7 +97,7 @@ capturesRouter.post(
     };
 
     const source_url = typeof body?.source_url === 'string' ? body.source_url : '';
-    const captured_at = typeof body?.captured_at === 'string' ? body.captured_at : new Date().toISOString();
+    const captured_at = typeof body?.captured_at === 'number' ? body.captured_at : Date.now();
     const metadata_json =
       body?.metadata != null
         ? (JSON.stringify(body.metadata).length <= MAX_METADATA_JSON_LENGTH
@@ -161,7 +161,8 @@ capturesRouter.get(
       return;
     }
     const limit = typeof req.query.limit === 'string' ? parseInt(req.query.limit, 10) : undefined;
-    const cursor = typeof req.query.cursor === 'string' ? req.query.cursor : undefined;
+    const cursorRaw = typeof req.query.cursor === 'string' ? parseInt(req.query.cursor, 10) : undefined;
+    const cursor = cursorRaw !== undefined && !Number.isNaN(cursorRaw) ? cursorRaw : undefined;
     const list = listCapturesByInstall(installId, { limit: Number.isNaN(limit) ? undefined : limit, cursor });
     res.status(200).json({ captures: list });
   }
@@ -174,7 +175,8 @@ capturesRouter.get(
   (req: RequestWithSession, res: Response) => {
     const userId = req.session!.user.id;
     const limit = typeof req.query.limit === 'string' ? parseInt(req.query.limit, 10) : undefined;
-    const cursor = typeof req.query.cursor === 'string' ? req.query.cursor : undefined;
+    const cursorRaw = typeof req.query.cursor === 'string' ? parseInt(req.query.cursor, 10) : undefined;
+    const cursor = cursorRaw !== undefined && !Number.isNaN(cursorRaw) ? cursorRaw : undefined;
     const list = listCapturesByUser(userId, { limit: Number.isNaN(limit) ? undefined : limit, cursor });
     res.status(200).json({ captures: list });
   }

@@ -5,12 +5,12 @@ CREATE TABLE captures (
   install_id TEXT NOT NULL,
   user_id TEXT,
   source_url TEXT,
-  captured_at TEXT NOT NULL,
+  captured_at INTEGER NOT NULL,
   created_by_install_id TEXT NOT NULL,
   status TEXT NOT NULL DEFAULT 'ok',
   metadata_json TEXT,
-  created_at TEXT NOT NULL,
-  updated_at TEXT NOT NULL
+  created_at INTEGER NOT NULL,
+  updated_at INTEGER NOT NULL
 );
 
 CREATE INDEX idx_captures_install_captured ON captures(install_id, captured_at DESC);
@@ -26,7 +26,7 @@ CREATE TABLE capture_assets (
   checksum_sha256 TEXT,
   content_type TEXT,
   byte_size INTEGER,
-  created_at TEXT NOT NULL,
+  created_at INTEGER NOT NULL,
   FOREIGN KEY (capture_id) REFERENCES captures(id)
 );
 

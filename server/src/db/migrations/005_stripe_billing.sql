@@ -5,8 +5,8 @@ CREATE TABLE stripe_customers (
   id INTEGER PRIMARY KEY AUTOINCREMENT,
   user_id TEXT NOT NULL UNIQUE,
   stripe_customer_id TEXT NOT NULL UNIQUE,
-  created_at TEXT NOT NULL,
-  updated_at TEXT NOT NULL
+  created_at INTEGER NOT NULL,
+  updated_at INTEGER NOT NULL
 );
 
 CREATE TABLE subscriptions (
@@ -16,11 +16,11 @@ CREATE TABLE subscriptions (
   stripe_subscription_id TEXT NOT NULL UNIQUE,
   plan_code TEXT NOT NULL,
   status TEXT NOT NULL,
-  current_period_start TEXT,
-  current_period_end TEXT,
+  current_period_start INTEGER,
+  current_period_end INTEGER,
   cancel_at_period_end INTEGER NOT NULL DEFAULT 0,
-  created_at TEXT NOT NULL,
-  updated_at TEXT NOT NULL
+  created_at INTEGER NOT NULL,
+  updated_at INTEGER NOT NULL
 );
 
 CREATE INDEX idx_subscriptions_user_id ON subscriptions(user_id);
@@ -31,7 +31,7 @@ CREATE TABLE subscription_events (
   stripe_event_id TEXT NOT NULL UNIQUE,
   stripe_event_type TEXT NOT NULL,
   payload_json TEXT,
-  processed_at TEXT NOT NULL,
+  processed_at INTEGER NOT NULL,
   processing_status TEXT NOT NULL,
   error_message TEXT
 );

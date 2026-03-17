@@ -2,7 +2,7 @@ import type Stripe from 'stripe';
 import { getDb } from '../db/connection.js';
 import { priceIdToPlanCode, type SubscriptionStatus } from './billing-plan-map.js';
 
-const now = (): string => new Date().toISOString();
+const now = (): number => Date.now();
 
 function normalizeStatus(stripeStatus: string): SubscriptionStatus {
   const s = stripeStatus?.toLowerCase();
@@ -21,10 +21,10 @@ function upsertSubscription(
   const planCode = priceIdToPlanCode(priceId);
   const status = normalizeStatus(stripeSubscription.status);
   const periodStart = stripeSubscription.current_period_start
-    ? new Date(stripeSubscription.current_period_start * 1000).toISOString()
+    ? stripeSubscription.current_period_start * 1000
     : null;
   const periodEnd = stripeSubscription.current_period_end
-    ? new Date(stripeSubscription.current_period_end * 1000).toISOString()
+    ? stripeSubscription.current_period_end * 1000
     : null;
   const cancelAtPeriodEnd = stripeSubscription.cancel_at_period_end ? 1 : 0;
 

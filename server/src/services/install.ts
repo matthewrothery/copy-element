@@ -11,7 +11,7 @@ export function isValidInstallId(install_id: string): boolean {
 
 export function registerInstall(body: RegisterInstallBody): { install_id: string; install_secret: string } {
   const db = getDb();
-  const now = new Date().toISOString();
+  const now = Date.now();
 
   const existing = db.prepare('SELECT install_id, install_secret FROM installs WHERE install_id = ?').get(body.install_id) as { install_id: string; install_secret: string } | undefined;
 
@@ -77,10 +77,10 @@ export function unlinkInstall(install_id: string, user_id: string): boolean {
   return result.changes > 0;
 }
 
-export function listInstallsByUserId(user_id: string): Array<{ install_id: string; created_at: string; last_seen_at: string; extension_version: string | null }> {
+export function listInstallsByUserId(user_id: string): Array<{ install_id: string; created_at: number; last_seen_at: number; extension_version: string | null }> {
   const db = getDb();
   const rows = db.prepare(
     'SELECT install_id, created_at, last_seen_at, extension_version FROM installs WHERE user_id = ? ORDER BY last_seen_at DESC'
-  ).all(user_id) as Array<{ install_id: string; created_at: string; last_seen_at: string; extension_version: string | null }>;
+  ).all(user_id) as Array<{ install_id: string; created_at: number; last_seen_at: number; extension_version: string | null }>;
   return rows;
 }

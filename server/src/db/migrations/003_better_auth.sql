@@ -5,19 +5,19 @@ CREATE TABLE IF NOT EXISTS "user" (
   email TEXT NOT NULL,
   "emailVerified" INTEGER NOT NULL DEFAULT 0,
   image TEXT,
-  "createdAt" TEXT NOT NULL,
-  "updatedAt" TEXT NOT NULL
+  "createdAt" INTEGER NOT NULL,
+  "updatedAt" INTEGER NOT NULL
 );
 
 CREATE TABLE IF NOT EXISTS session (
   id TEXT PRIMARY KEY,
   "userId" TEXT NOT NULL,
   token TEXT NOT NULL,
-  "expiresAt" TEXT NOT NULL,
+  "expiresAt" INTEGER NOT NULL,
   "ipAddress" TEXT,
   "userAgent" TEXT,
-  "createdAt" TEXT NOT NULL,
-  "updatedAt" TEXT NOT NULL,
+  "createdAt" INTEGER NOT NULL,
+  "updatedAt" INTEGER NOT NULL,
   FOREIGN KEY ("userId") REFERENCES "user"(id)
 );
 
@@ -29,12 +29,12 @@ CREATE TABLE IF NOT EXISTS account (
   "accessToken" TEXT,
   "refreshToken" TEXT,
   "idToken" TEXT,
-  "accessTokenExpiresAt" TEXT,
-  "refreshTokenExpiresAt" TEXT,
+  "accessTokenExpiresAt" INTEGER,
+  "refreshTokenExpiresAt" INTEGER,
   scope TEXT,
   password TEXT,
-  "createdAt" TEXT NOT NULL,
-  "updatedAt" TEXT NOT NULL,
+  "createdAt" INTEGER NOT NULL,
+  "updatedAt" INTEGER NOT NULL,
   FOREIGN KEY ("userId") REFERENCES "user"(id)
 );
 
@@ -42,7 +42,7 @@ CREATE TABLE IF NOT EXISTS verification (
   id TEXT PRIMARY KEY,
   identifier TEXT NOT NULL,
   value TEXT NOT NULL,
-  "expiresAt" TEXT NOT NULL,
-  "createdAt" TEXT NOT NULL,
-  "updatedAt" TEXT NOT NULL
+  "expiresAt" INTEGER NOT NULL,
+  "createdAt" INTEGER NOT NULL,
+  "updatedAt" INTEGER NOT NULL
 );

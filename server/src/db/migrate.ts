@@ -11,7 +11,7 @@ const MIGRATIONS_DIR = join(__dirname, 'migrations');
 const SCHEMA_MIGRATIONS_TABLE = `
 CREATE TABLE IF NOT EXISTS schema_migrations (
   version TEXT PRIMARY KEY,
-  applied_at TEXT NOT NULL
+  applied_at INTEGER NOT NULL
 );
 `;
 
@@ -38,7 +38,7 @@ function run(): void {
     if (!sql) {
       db.prepare('INSERT INTO schema_migrations (version, applied_at) VALUES (?, ?)').run(
         version,
-        new Date().toISOString()
+        Date.now()
       );
       console.log('Applied (no-op):', version);
       continue;
@@ -48,7 +48,7 @@ function run(): void {
       db.exec(sql);
       db.prepare('INSERT INTO schema_migrations (version, applied_at) VALUES (?, ?)').run(
         version,
-        new Date().toISOString()
+        Date.now()
       );
     });
     transaction();
