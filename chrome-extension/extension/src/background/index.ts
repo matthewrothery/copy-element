@@ -295,7 +295,7 @@ chrome.runtime.onMessage.addListener((message: RuntimeMessage, sender, sendRespo
 
   if (message.type === "EXTRACT_CSS_VIA_CDP") {
     void (async () => {
-      const { selectors, baseUrl, frameId: payloadFrameId } = message.payload;
+      const { selectors, baseUrl, frameId: payloadFrameId, theme, viewport } = message.payload;
       const tabId = message.payload.tabId ?? sender.tab?.id;
       const frameId = payloadFrameId ?? sender.frameId;
       if (typeof tabId !== "number") {
@@ -308,7 +308,7 @@ chrome.runtime.onMessage.addListener((message: RuntimeMessage, sender, sendRespo
         return true;
       }
       try {
-        const result = await extractCssViaCdp(tabId, selectors, baseUrl);
+        const result = await extractCssViaCdp(tabId, selectors, baseUrl, { theme, viewport });
         const payload: ExtractCssViaCdpPayload = {
           cssText: result.cssText,
           usedFontFamilies: [...result.usedFontFamilies],

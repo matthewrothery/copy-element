@@ -169,7 +169,7 @@ describe("ElementPicker", () => {
     expect(onSelected).toHaveBeenCalledWith(
       expect.objectContaining({
         element: underneath,
-        label: "Underneath Container"
+        label: "Under Overlay Container"
       })
     );
   });

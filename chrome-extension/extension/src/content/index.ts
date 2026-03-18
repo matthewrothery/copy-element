@@ -13,6 +13,8 @@ import { extractUsedKeyframes } from "../shared/utils/keyframes-extractor";
 import { extractAllFontLinks } from "../shared/utils/external-font-link-extractor";
 import { cropViewportToThumbnail } from "../shared/utils/viewport-thumbnail-crop";
 import { getElementRectInTopViewport } from "../shared/utils/viewport-coord-mapper";
+import { freezeAnimations } from "../shared/utils/animation-freeze";
+import { stampPseudoIds, extractPseudoElementRules } from "../shared/utils/pseudo-element-extractor";
 import type { CapturedElementData } from "../shared/types/snippet";
 import type {
   ExtractCssViaCdpPayload,
@@ -215,13 +217,24 @@ function ensurePicker(): ElementPicker {
           processingOverlayShownAt = Date.now();
           processingOverlay.show();
 
+          const captureStart = Date.now();
+          const elapsed = () => `${Date.now() - captureStart}ms`;
+
           const baseUrl = window.location.href;
+
+          // Stamp pseudo IDs before cloning so the clone carries them in HTML
+          const unstampPseudoIds = stampPseudoIds(result.element);
+          const unfreezeAnimations = freezeAnimations();
           const cloned = cloneElementTreeWithInlineStyles(result.element, baseUrl);
+          unfreezeAnimations();
+          console.debug(`[EA] clone done (${elapsed()})`);
+
           const rootId = `snippet-root-${nanoid()}`;
           cloned.setAttribute("id", rootId);
           cloned.setAttribute("data-snippet-root", "true");
           processImageUrls(cloned, baseUrl);
           await inlineSvgSprites(cloned, baseUrl);
+          console.debug(`[EA] svg sprites done (${elapsed()})`);
           const html = serializeElementToHtml(cloned);
           const jsx = htmlToJsx(html);
 
@@ -229,6 +242,23 @@ function ensurePicker(): ElementPicker {
 
           // Add temporary selectors for CDP; clone was created before so snippet HTML stays clean
           const { selectors, cleanup } = addTempCaptureSelectors(result.element);
+          console.debug(`[EA] selector count: ${selectors.length}, stamping done (${elapsed()})`);
+
+          // Extract pseudo-element rules while live element still has data-ea-id stamps
+          const pseudoRules = extractPseudoElementRules(result.element);
+          unstampPseudoIds();
+
+          const pseudoCss = pseudoRules
+            .map(({ selector, declarations }) => `${selector} {\n${declarations}\n}`)
+            .join("\n\n");
+
+          // Read capture preferences from storage
+          const prefsResult = await chrome.storage.local.get("element-armory-ui-preferences");
+          const prefs = prefsResult["element-armory-ui-preferences"] as
+            | Partial<{ captureTheme: string; captureViewport: string }>
+            | undefined;
+          const captureTheme = prefs?.captureTheme ?? "default";
+          const captureViewport = prefs?.captureViewport ?? "default";
 
           let cssText: string;
           let fontFaces: string;
@@ -238,10 +268,17 @@ function ensurePicker(): ElementPicker {
           let variableUsageContexts: ExtractCssViaCdpPayload["variableUsageContexts"] | undefined;
 
           try {
+            console.debug(`[EA] starting CDP extraction (${elapsed()})`);
             const cdpResponse = (await chrome.runtime.sendMessage({
               type: "EXTRACT_CSS_VIA_CDP",
-              payload: { selectors, baseUrl }
+              payload: {
+                selectors,
+                baseUrl,
+                theme: captureTheme !== "default" ? (captureTheme as "light" | "dark") : undefined,
+                viewport: captureViewport !== "default" ? captureViewport : undefined,
+              }
             })) as RuntimeResponse<ExtractCssViaCdpPayload>;
+            console.debug(`[EA] CDP extraction done (${elapsed()})`);
 
             if (cdpResponse.ok) {
               const p = cdpResponse.payload;
@@ -258,9 +295,11 @@ function ensurePicker(): ElementPicker {
             } else {
               throw new Error(cdpResponse.error);
             }
-          } catch {
+          } catch (cdpErr) {
+            console.warn(`[EA] CDP failed, falling back to in-page extraction (${elapsed()})`, cdpErr);
             // Fallback to in-page extraction when CDP fails (e.g. debugger attached elsewhere, or iframe capture)
             const extracted = await extractMatchingRules(result.element);
+            console.debug(`[EA] in-page extraction done (${elapsed()})`);
             cssText = extracted.cssText;
             layerOrder = extracted.layerOrder;
             fontFaces = await extractUsedFontFaces(
@@ -277,6 +316,7 @@ function ensurePicker(): ElementPicker {
           }
 
           // Extract :root block for CSS variables used in matched rules
+          console.debug(`[EA] starting CSS variable extraction (${elapsed()})`);
           const inlineStyleUsageContexts = collectInlineStyleUsageContexts(result.element);
           const mergedUsageContexts =
             variableUsageContexts && variableUsageContexts.length > 0
@@ -292,6 +332,11 @@ function ensurePicker(): ElementPicker {
               rootSelector: `#${rootId}`
             }
           );
+          console.debug(`[EA] CSS variable extraction done (${elapsed()})`);
+
+          if (Date.now() - captureStart > 3000) {
+            console.warn(`[EA] capture took ${elapsed()} — slow capture detected. Check the steps above for bottlenecks.`);
+          }
 
           // Extract external font links (Google Fonts, etc.)
           const { stylesheets: externalFontLinks, preloads: fontPreloads } =
@@ -300,13 +345,14 @@ function ensurePicker(): ElementPicker {
           const layerOrderDeclaration =
             layerOrder.length > 0 ? `@layer ${layerOrder.join(", ")};` : "";
 
-          // Combine font-faces, keyframes, variable definitions, and CSS rules
+          // Combine font-faces, keyframes, variable definitions, CSS rules, and pseudo-element rules
           const styleBlock = [
             layerOrderDeclaration,
             fontFaces,
             keyframesCss,
             varDefinitionsBlock,
-            cssText
+            cssText,
+            pseudoCss
           ]
             .filter(Boolean)
             .join("\n\n");

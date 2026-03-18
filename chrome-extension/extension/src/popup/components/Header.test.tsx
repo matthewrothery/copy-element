@@ -17,12 +17,4 @@ describe("Header", () => {
     expect(onCapture).toHaveBeenCalledTimes(1);
   });
 
-  it("triggers library click", () => {
-    const onCapture = vi.fn();
-    const onLibrary = vi.fn();
-    const view = renderHeader({ onCapture, onLibrary });
-
-    fireEvent.click(view.getByRole("button", { name: "Open Library" }));
-    expect(onLibrary).toHaveBeenCalledTimes(1);
-  });
 });

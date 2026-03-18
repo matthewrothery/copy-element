@@ -106,6 +106,8 @@ export interface CaptureVisibleTabRequest {
   };
 }
 
+export type ViewportPresetId = "desktop" | "laptop" | "tablet" | "phablet" | "phone";
+
 export interface ExtractCssViaCdpRequest {
   type: "EXTRACT_CSS_VIA_CDP";
   payload: {
@@ -113,6 +115,8 @@ export interface ExtractCssViaCdpRequest {
     frameId?: number;
     selectors: string[];
     baseUrl: string;
+    theme?: "light" | "dark";
+    viewport?: ViewportPresetId;
   };
 }
 

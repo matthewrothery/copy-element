@@ -5,6 +5,8 @@ export interface UiPreferences {
   thumbnailSize: 'compact' | 'balanced' | 'detailed'
   assetReplacementMode: 'smart' | 'preserve' | 'placeholder'
   exportFormat: 'html' | 'html-inline' | 'jsx'
+  captureTheme: 'default' | 'light' | 'dark'
+  captureViewport: 'default' | 'desktop' | 'laptop' | 'tablet' | 'phablet' | 'phone'
 }
 
 interface SettingsPanelProps {
@@ -185,6 +187,113 @@ export function SettingsPanel ({
               aria-label='Default to JSX export'
             >
               JSX
+            </button>
+          </div>
+        </div>
+        <div className='settings-section'>
+          <h3 className='settings-section-title'>Capture theme</h3>
+          <p className='settings-description'>
+            Override the color scheme used during capture.
+          </p>
+          <div className='settings-controls'>
+            <button
+              type='button'
+              className={`settings-chip ${
+                preferences.captureTheme === 'default' ? 'settings-chip-active' : ''
+              }`}
+              onClick={() => onChange({ ...preferences, captureTheme: 'default' })}
+              aria-label='Use browser default theme'
+            >
+              Browser
+            </button>
+            <button
+              type='button'
+              className={`settings-chip ${
+                preferences.captureTheme === 'light' ? 'settings-chip-active' : ''
+              }`}
+              onClick={() => onChange({ ...preferences, captureTheme: 'light' })}
+              aria-label='Force light theme during capture'
+            >
+              Light
+            </button>
+            <button
+              type='button'
+              className={`settings-chip ${
+                preferences.captureTheme === 'dark' ? 'settings-chip-active' : ''
+              }`}
+              onClick={() => onChange({ ...preferences, captureTheme: 'dark' })}
+              aria-label='Force dark theme during capture'
+            >
+              Dark
+            </button>
+          </div>
+        </div>
+
+        <div className='settings-section'>
+          <h3 className='settings-section-title'>Capture viewport</h3>
+          <p className='settings-description'>
+            Emulate a viewport size during capture to capture responsive styles.
+          </p>
+          <div className='settings-controls'>
+            <button
+              type='button'
+              className={`settings-chip ${
+                preferences.captureViewport === 'default' ? 'settings-chip-active' : ''
+              }`}
+              onClick={() => onChange({ ...preferences, captureViewport: 'default' })}
+              aria-label='Use browser default viewport'
+            >
+              Browser
+            </button>
+            <button
+              type='button'
+              className={`settings-chip ${
+                preferences.captureViewport === 'desktop' ? 'settings-chip-active' : ''
+              }`}
+              onClick={() => onChange({ ...preferences, captureViewport: 'desktop' })}
+              aria-label='Emulate desktop viewport'
+            >
+              Desktop
+            </button>
+            <button
+              type='button'
+              className={`settings-chip ${
+                preferences.captureViewport === 'laptop' ? 'settings-chip-active' : ''
+              }`}
+              onClick={() => onChange({ ...preferences, captureViewport: 'laptop' })}
+              aria-label='Emulate laptop viewport'
+            >
+              Laptop
+            </button>
+            <button
+              type='button'
+              className={`settings-chip ${
+                preferences.captureViewport === 'tablet' ? 'settings-chip-active' : ''
+              }`}
+              onClick={() => onChange({ ...preferences, captureViewport: 'tablet' })}
+              aria-label='Emulate tablet viewport'
+            >
+              Tablet
+            </button>
+            <button
+              type='button'
+              className={`settings-chip ${
+                preferences.captureViewport === 'phablet' ? 'settings-chip-active' : ''
+              }`}
+              onClick={() => onChange({ ...preferences, captureViewport: 'phablet' })}
+              aria-label='Emulate phablet viewport'
+            >
+              Phablet
+            </button>
+            <button
+              type='button'
+              className={`settings-chip ${
+                preferences.captureViewport === 'phone' ? 'settings-chip-active' : ''
+              }`}
+              onClick={() => onChange({ ...preferences, captureViewport: 'phone' })}
+              aria-label='Emulate phone viewport'
+            >
+              Phone
             </button>
           </div>
         </div>

@@ -6,6 +6,20 @@ import {
   collectVariableDefinitionsFromCssText,
   type CssVariableDefinition
 } from "../shared/utils/css-var-definition-index";
+import type { ViewportPresetId } from "../shared/types/messages";
+
+export interface CdpCaptureOptions {
+  theme?: "light" | "dark";
+  viewport?: ViewportPresetId;
+}
+
+const VIEWPORT_PRESETS: Record<ViewportPresetId, { width: number; height: number }> = {
+  desktop: { width: 1920, height: 1200 },
+  laptop:  { width: 1440, height: 900 },
+  tablet:  { width: 1024, height: 640 },
+  phablet: { width: 768,  height: 1536 },
+  phone:   { width: 390,  height: 780 },
+};
 
 const FONT_FAMILY_REGEX = /font-family\s*:\s*([^;]+)/gi;
 const ANIMATION_NAME_REGEX = /animation-name\s*:\s*([^;]+)/gi;
@@ -82,9 +96,15 @@ export interface CollectedRule {
   inherited: boolean;
 }
 
+const CDP_COMMAND_TIMEOUT_MS = 10_000;
+
 function sendCommand(tabId: number, method: string, params?: object): Promise<unknown> {
   return new Promise((resolve, reject) => {
+    const timer = setTimeout(() => {
+      reject(new Error(`CDP command timed out: ${method}`));
+    }, CDP_COMMAND_TIMEOUT_MS);
     chrome.debugger.sendCommand({ tabId }, method, params ?? {}, (result) => {
+      clearTimeout(timer);
       if (chrome.runtime.lastError) {
         reject(new Error(chrome.runtime.lastError.message));
       } else {
@@ -93,6 +113,27 @@ function sendCommand(tabId: number, method: string, params?: object): Promise<un
     });
   });
 }
+
+/** Process items with at most `limit` concurrent async operations. */
+async function mapWithConcurrency<T, R>(
+  items: T[],
+  limit: number,
+  fn: (item: T) => Promise<R>
+): Promise<R[]> {
+  const results: R[] = new Array(items.length);
+  let nextIndex = 0;
+  async function worker(): Promise<void> {
+    while (nextIndex < items.length) {
+      const i = nextIndex++;
+      results[i] = await fn(items[i]);
+    }
+  }
+  await Promise.all(Array.from({ length: Math.min(limit, items.length) }, worker));
+  return results;
+}
+
+const CDP_SELECTOR_CONCURRENCY = 20;
+const CDP_STYLESHEET_CONCURRENCY = 10;
 
 function extractFontFamiliesFromCssText(cssText: string): Set<string> {
   const fontFamilies = new Set<string>();
@@ -498,7 +539,8 @@ function collectRulesFromMatchedStyles(response: CdpMatchedStylesResponse): {
 export async function extractCssViaCdp(
   tabId: number,
   selectors: string[],
-  baseUrl: string
+  baseUrl: string,
+  options: CdpCaptureOptions = {}
 ): Promise<CdpCssResult> {
   await chrome.debugger.attach({ tabId }, "1.3").catch((e) => {
     throw new Error(`Debugger attach failed: ${(e as Error).message}`);
@@ -525,57 +567,98 @@ export async function extractCssViaCdp(
   chrome.debugger.onEvent.addListener(debuggerEventListener);
 
   try {
-    await sendCommand(tabId, "DOM.enable");
-    await sendCommand(tabId, "CSS.enable");
+    await Promise.all([
+      sendCommand(tabId, "DOM.enable"),
+      sendCommand(tabId, "CSS.enable"),
+    ]);
 
-    const doc = (await sendCommand(tabId, "DOM.getDocument")) as { root: { nodeId: number } };
-    const rootNodeId = doc.root.nodeId;
-
-    const allRules: CollectedRule[] = [];
-    const allStyleSheetIds = new Set<string>();
-
-    for (const selector of selectors) {
-      const queryResult = (await sendCommand(tabId, "DOM.querySelector", {
-        nodeId: rootNodeId,
-        selector
-      })) as { nodeId?: number } | null;
-
-      if (!queryResult?.nodeId) continue;
-
-      const matched = (await sendCommand(tabId, "CSS.getMatchedStylesForNode", {
-        nodeId: queryResult.nodeId
-      })) as CdpMatchedStylesResponse;
-
-      const { rules, styleSheetIds } = collectRulesFromMatchedStyles(matched);
-      allRules.push(...rules);
-      styleSheetIds.forEach((id) => allStyleSheetIds.add(id));
-    }
-
-    const dedupedRules = normalizeAndDedupeRules(allRules);
-    const usedStyleSheetIds = new Set(
-      dedupedRules.map((rule) => rule.styleSheetId).filter(Boolean) as string[]
-    );
-
-    const declaredLayerOrder: string[] = [];
-    const stylesheetTexts = new Map<string, string>();
-    const variableDefinitions: CssVariableDefinition[] = [];
-    let variableSourceOffset = 0;
-    const styleSheetOrder = [...discoveredStyleSheetOrder];
-    for (const styleSheetId of allStyleSheetIds) {
-      if (!styleSheetOrder.includes(styleSheetId)) {
-        styleSheetOrder.push(styleSheetId);
+    let teardownTheme = false;
+    let teardownViewport = false;
+    try {
+      if (options.theme) {
+        await sendCommand(tabId, "Emulation.setEmulatedMedia", {
+          features: [{ name: "prefers-color-scheme", value: options.theme }]
+        });
+        teardownTheme = true;
       }
-    }
+      if (options.viewport) {
+        const layoutMetrics = (await sendCommand(tabId, "Page.getLayoutMetrics")) as {
+          cssVisualViewport?: { zoom?: number };
+        };
+        const zoom = layoutMetrics?.cssVisualViewport?.zoom ?? 1;
+        const preset = VIEWPORT_PRESETS[options.viewport];
+        await sendCommand(tabId, "Emulation.setDeviceMetricsOverride", {
+          width:             Math.round(preset.width  * zoom),
+          height:            Math.round(preset.height * zoom),
+          deviceScaleFactor: 0,
+          mobile:            false,
+        });
+        teardownViewport = true;
+      }
 
-    for (const styleSheetId of styleSheetOrder) {
-      try {
-        const textResult = (await sendCommand(tabId, "CSS.getStyleSheetText", {
-          styleSheetId
-        })) as { text?: string };
-        const text = textResult?.text ?? "";
-        if (!text) {
-          continue;
+      const doc = (await sendCommand(tabId, "DOM.getDocument")) as { root: { nodeId: number } };
+      const rootNodeId = doc.root.nodeId;
+
+      const allRules: CollectedRule[] = [];
+      const allStyleSheetIds = new Set<string>();
+
+      const matchedResults = await mapWithConcurrency(
+        selectors,
+        CDP_SELECTOR_CONCURRENCY,
+        async (selector) => {
+          const queryResult = (await sendCommand(tabId, "DOM.querySelector", {
+            nodeId: rootNodeId,
+            selector,
+          })) as { nodeId?: number } | null;
+          if (!queryResult?.nodeId) return null;
+          return sendCommand(tabId, "CSS.getMatchedStylesForNode", {
+            nodeId: queryResult.nodeId,
+          }) as Promise<CdpMatchedStylesResponse>;
         }
+      );
+
+      for (const matched of matchedResults) {
+        if (!matched) continue;
+        const { rules, styleSheetIds } = collectRulesFromMatchedStyles(matched as CdpMatchedStylesResponse);
+        allRules.push(...rules);
+        styleSheetIds.forEach((id) => allStyleSheetIds.add(id));
+      }
+
+      const dedupedRules = normalizeAndDedupeRules(allRules);
+      const usedStyleSheetIds = new Set(
+        dedupedRules.map((rule) => rule.styleSheetId).filter(Boolean) as string[]
+      );
+
+      const declaredLayerOrder: string[] = [];
+      const stylesheetTexts = new Map<string, string>();
+      const variableDefinitions: CssVariableDefinition[] = [];
+      const styleSheetOrder = [...discoveredStyleSheetOrder];
+      for (const styleSheetId of allStyleSheetIds) {
+        if (!styleSheetOrder.includes(styleSheetId)) {
+          styleSheetOrder.push(styleSheetId);
+        }
+      }
+
+      const sheetResults = await mapWithConcurrency(
+        styleSheetOrder,
+        CDP_STYLESHEET_CONCURRENCY,
+        async (styleSheetId) => {
+          try {
+            const textResult = (await sendCommand(tabId, "CSS.getStyleSheetText", {
+              styleSheetId
+            })) as { text?: string };
+            const text = textResult?.text ?? "";
+            return text ? { styleSheetId, text } : null;
+          } catch {
+            return null;
+          }
+        }
+      );
+
+      let variableSourceOffset = 0;
+      for (const entry of sheetResults) {
+        if (!entry) continue;
+        const { styleSheetId, text } = entry;
         stylesheetTexts.set(styleSheetId, text);
 
         const sheetVarDefs = collectVariableDefinitionsFromCssText(text).map((def) => ({
@@ -591,63 +674,68 @@ export async function extractCssViaCdp(
             declaredLayerOrder.push(layer);
           }
         }
-      } catch {
-        // Skip stylesheets we can't read
-      }
-    }
-
-    const layerOrder = buildUsedLayerOrder(dedupedRules, declaredLayerOrder);
-    const cssText = buildCssFromRules(dedupedRules, layerOrder);
-
-    const fontFamilies = new Set<string>();
-    const animationNames = new Set<string>();
-    for (const rule of dedupedRules) {
-      extractFontFamiliesFromCssText(rule.cssText).forEach((fontFamily) => fontFamilies.add(fontFamily));
-      extractAnimationNamesFromCssText(rule.cssText).forEach((animationName) => animationNames.add(animationName));
-    }
-
-    const fontFacesBlocks: string[] = [];
-    const keyframesBlocks: string[] = [];
-    const seenFontFaceBlocks = new Set<string>();
-    const seenKeyframesBlocks = new Set<string>();
-
-    for (const styleSheetId of usedStyleSheetIds) {
-      const text = stylesheetTexts.get(styleSheetId);
-      if (!text) {
-        continue;
       }
 
-      const extractedFontFaces = extractFontFacesFromStylesheetText(text, fontFamilies, baseUrl);
-      for (const block of extractedFontFaces) {
-        if (!seenFontFaceBlocks.has(block)) {
-          seenFontFaceBlocks.add(block);
-          fontFacesBlocks.push(block);
+      const layerOrder = buildUsedLayerOrder(dedupedRules, declaredLayerOrder);
+      const cssText = buildCssFromRules(dedupedRules, layerOrder);
+
+      const fontFamilies = new Set<string>();
+      const animationNames = new Set<string>();
+      for (const rule of dedupedRules) {
+        extractFontFamiliesFromCssText(rule.cssText).forEach((fontFamily) => fontFamilies.add(fontFamily));
+        extractAnimationNamesFromCssText(rule.cssText).forEach((animationName) => animationNames.add(animationName));
+      }
+
+      const fontFacesBlocks: string[] = [];
+      const keyframesBlocks: string[] = [];
+      const seenFontFaceBlocks = new Set<string>();
+      const seenKeyframesBlocks = new Set<string>();
+
+      for (const styleSheetId of usedStyleSheetIds) {
+        const text = stylesheetTexts.get(styleSheetId);
+        if (!text) {
+          continue;
+        }
+
+        const extractedFontFaces = extractFontFacesFromStylesheetText(text, fontFamilies, baseUrl);
+        for (const block of extractedFontFaces) {
+          if (!seenFontFaceBlocks.has(block)) {
+            seenFontFaceBlocks.add(block);
+            fontFacesBlocks.push(block);
+          }
+        }
+
+        const extractedKeyframes = extractKeyframesFromStylesheetText(text, animationNames);
+        for (const block of extractedKeyframes) {
+          if (!seenKeyframesBlocks.has(block)) {
+            seenKeyframesBlocks.add(block);
+            keyframesBlocks.push(block);
+          }
         }
       }
 
-      const extractedKeyframes = extractKeyframesFromStylesheetText(text, animationNames);
-      for (const block of extractedKeyframes) {
-        if (!seenKeyframesBlocks.has(block)) {
-          seenKeyframesBlocks.add(block);
-          keyframesBlocks.push(block);
-        }
+      return {
+        cssText,
+        usedFontFamilies: fontFamilies,
+        usedAnimationNames: animationNames,
+        layerOrder,
+        fontFacesCss: fontFacesBlocks.join("\n\n"),
+        keyframesCss: keyframesBlocks.join("\n\n"),
+        variableDefinitions,
+        variableUsageContexts: dedupedRules.map((rule) => ({
+          cssText: rule.cssText,
+          media: rule.media,
+          layerPath: rule.layerPath
+        }))
+      };
+    } finally {
+      if (teardownViewport) {
+        await sendCommand(tabId, "Emulation.clearDeviceMetricsOverride").catch(() => {});
+      }
+      if (teardownTheme) {
+        await sendCommand(tabId, "Emulation.setEmulatedMedia", { features: [] }).catch(() => {});
       }
     }
-
-    return {
-      cssText,
-      usedFontFamilies: fontFamilies,
-      usedAnimationNames: animationNames,
-      layerOrder,
-      fontFacesCss: fontFacesBlocks.join("\n\n"),
-      keyframesCss: keyframesBlocks.join("\n\n"),
-      variableDefinitions,
-      variableUsageContexts: dedupedRules.map((rule) => ({
-        cssText: rule.cssText,
-        media: rule.media,
-        layerPath: rule.layerPath
-      }))
-    };
   } finally {
     try {
       await chrome.debugger.detach({ tabId });

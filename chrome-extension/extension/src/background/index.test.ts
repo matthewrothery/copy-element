@@ -21,10 +21,22 @@ describe("background helpers", () => {
         })
       },
       runtime: {
-        onMessage: {
-          addListener: vi.fn()
-        },
-        sendMessage: vi.fn(async () => undefined)
+        onInstalled: { addListener: vi.fn() },
+        onStartup: { addListener: vi.fn() },
+        onMessage: { addListener: vi.fn() },
+        sendMessage: vi.fn(async () => undefined),
+        getURL: vi.fn((path: string) => `chrome-extension://fake/${path}`)
+      },
+      alarms: {
+        onAlarm: { addListener: vi.fn() },
+        create: vi.fn(async () => undefined),
+        clear: vi.fn(async () => undefined)
+      },
+      storage: {
+        local: {
+          get: vi.fn(async () => ({})),
+          set: vi.fn(async () => undefined)
+        }
       }
     });
   });
