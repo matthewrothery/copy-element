@@ -293,6 +293,32 @@ chrome.runtime.onMessage.addListener((message: RuntimeMessage, sender, sendRespo
     return true;
   }
 
+  if (message.type === "FETCH_STYLESHEET_TEXT") {
+    void (async () => {
+      const { url } = message.payload;
+      try {
+        const controller = new AbortController();
+        const timeout = setTimeout(() => controller.abort(), 5000);
+        const res = await fetch(url, { signal: controller.signal });
+        clearTimeout(timeout);
+        if (!res.ok) {
+          sendResponse(success({ text: null }));
+          return;
+        }
+        const contentLength = res.headers.get("content-length");
+        if (contentLength && parseInt(contentLength, 10) > 2 * 1024 * 1024) {
+          sendResponse(success({ text: null }));
+          return;
+        }
+        const text = await res.text();
+        sendResponse(success({ text }));
+      } catch {
+        sendResponse(success({ text: null }));
+      }
+    })();
+    return true;
+  }
+
   if (message.type === "EXTRACT_CSS_VIA_CDP") {
     void (async () => {
       const { selectors, baseUrl, frameId: payloadFrameId, theme, viewport } = message.payload;
