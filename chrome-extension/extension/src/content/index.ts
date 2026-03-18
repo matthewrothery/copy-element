@@ -14,6 +14,7 @@ import { extractAllFontLinks } from "../shared/utils/external-font-link-extracto
 import { cropViewportToThumbnail } from "../shared/utils/viewport-thumbnail-crop";
 import { getElementRectInTopViewport } from "../shared/utils/viewport-coord-mapper";
 import { freezeAnimations } from "../shared/utils/animation-freeze";
+import { scrollToRevealElement, scrollPageToTriggerContent } from "../shared/utils/scroll-reveal";
 import { stampPseudoIds, extractPseudoElementRules } from "../shared/utils/pseudo-element-extractor";
 import type { CapturedElementData } from "../shared/types/snippet";
 import type {
@@ -181,10 +182,12 @@ interface PerformCaptureOptions {
   viewportOverride?: string;
   /** Skip taking a viewport screenshot for thumbnail generation. */
   skipThumbnail?: boolean;
+  /** Skip the scroll-to-reveal step (e.g. full-page captures that handle scrolling themselves). */
+  skipScrollReveal?: boolean;
 }
 
 async function performCapture(opts: PerformCaptureOptions): Promise<void> {
-  const { element, width, height, label, viewportOverride, skipThumbnail } = opts;
+  const { element, width, height, label, viewportOverride, skipThumbnail, skipScrollReveal } = opts;
 
   let thumbnail: string | undefined;
   if (!skipThumbnail) {
@@ -223,6 +226,13 @@ async function performCapture(opts: PerformCaptureOptions): Promise<void> {
   const elapsed = () => `${Date.now() - captureStart}ms`;
 
   const baseUrl = window.location.href;
+
+  // Scroll the element into view (if not already visible) so IntersectionObserver-
+  // driven animations and lazy images have a chance to initialize before freeze+clone.
+  if (!skipScrollReveal) {
+    await scrollToRevealElement(element);
+    console.debug(`[EA] scroll reveal done (${elapsed()})`);
+  }
 
   const unstampPseudoIds = stampPseudoIds(element);
   const unfreezeAnimations = freezeAnimations();
@@ -403,6 +413,9 @@ async function captureFullPage(mode: "page" | "mobile-page" | "desktop-page"): P
     "Page";
   const element = document.body;
   try {
+    // Scroll through the page to trigger lazy images and scroll-activated content
+    // before freezing and cloning.
+    await scrollPageToTriggerContent();
     await performCapture({
       element,
       width: document.documentElement.scrollWidth,
@@ -410,6 +423,7 @@ async function captureFullPage(mode: "page" | "mobile-page" | "desktop-page"): P
       label,
       viewportOverride,
       skipThumbnail: true,
+      skipScrollReveal: true,
     });
   } catch (error) {
     console.error("Failed to capture page", error);
