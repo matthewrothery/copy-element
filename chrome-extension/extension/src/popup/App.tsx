@@ -8,6 +8,7 @@ import {
   openSignInPage,
   startCapture
 } from "./api";
+import type { CaptureMode } from "../shared/types/messages";
 import { Settings, User } from "lucide-react";
 import { Header } from "./components/Header";
 import { MainPanel } from "./components/MainPanel";
@@ -31,6 +32,7 @@ const DEFAULT_PREFERENCES: UiPreferences = {
   exportFormat: "html",
   captureTheme: "default",
   captureViewport: "default",
+  defaultCaptureMode: "element",
 };
 
 function copyToClipboard(value: string): Promise<void> {
@@ -163,10 +165,10 @@ export function App(): JSX.Element {
     return () => window.clearTimeout(timeoutId);
   }, [toastMessage]);
 
-  async function handleCapture(): Promise<void> {
+  async function handleCapture(mode: CaptureMode): Promise<void> {
     setLoadingState(true);
     try {
-      await startCapture();
+      await startCapture(mode);
       window.close();
     } catch (error: unknown) {
       setToastMessage(formatCaptureStartError(error));
@@ -195,7 +197,9 @@ export function App(): JSX.Element {
   return (
     <div className="app-shell">
       <Header
-        onCapture={() => void handleCapture()}
+        onCapture={(mode) => void handleCapture(mode)}
+        defaultCaptureMode={preferences.defaultCaptureMode}
+        captureDisabled={loadingState}
         onLibrary={handleLibrary}
         onToggleSettings={() => setView((current) => (current === "home" ? "settings" : "home"))}
         isSettingsView={view === "settings"}

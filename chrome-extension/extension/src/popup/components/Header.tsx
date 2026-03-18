@@ -1,15 +1,19 @@
 import logoUrl from "../../../assets/logo.png";
 import type React from "react";
+import type { CaptureMode } from "../../shared/types/messages";
+import { CaptureButton } from "./CaptureButton";
 
 interface HeaderProps {
-  onCapture: () => void;
+  onCapture: (mode: CaptureMode) => void;
+  defaultCaptureMode: CaptureMode;
+  captureDisabled?: boolean;
   onLibrary: () => void;
   onToggleSettings: () => void;
   isSettingsView: boolean;
   children: React.ReactNode;
 }
 
-export function Header({ onCapture, onLibrary, onToggleSettings, isSettingsView, children }: HeaderProps): React.ReactElement {
+export function Header({ onCapture, defaultCaptureMode, captureDisabled, isSettingsView, children }: HeaderProps): React.ReactElement {
   return (
     <header className="header">
       <div className="header-brand">
@@ -23,30 +27,11 @@ export function Header({ onCapture, onLibrary, onToggleSettings, isSettingsView,
         <>
           {children}
           <nav className="nav-buttons">
-            <button
-              className="nav-button nav-button-primary"
-              onClick={onCapture}
-              type="button"
-              aria-label="Capture Element"
-            >
-              Capture Element
-            </button>
-            {/* <button
-              className="nav-button"
-              onClick={onLibrary}
-              type="button"
-              aria-label="Open Library"
-            >
-              Open Library
-            </button>
-            <button
-              className="nav-button nav-button-ghost"
-              onClick={onToggleSettings}
-              type="button"
-              aria-label={isSettingsView ? "Close settings" : "Open settings"}
-            >
-              {isSettingsView ? "Close Settings" : "Settings"}
-            </button> */}
+            <CaptureButton
+              defaultMode={defaultCaptureMode}
+              onCapture={onCapture}
+              disabled={captureDisabled}
+            />
           </nav>
         </>
       )}

@@ -17,6 +17,7 @@ import { freezeAnimations } from "../shared/utils/animation-freeze";
 import { stampPseudoIds, extractPseudoElementRules } from "../shared/utils/pseudo-element-extractor";
 import type { CapturedElementData } from "../shared/types/snippet";
 import type {
+  CaptureMode,
   ExtractCssViaCdpPayload,
   RuntimeResponse
 } from "../shared/types/messages";
@@ -171,260 +172,284 @@ async function copyToClipboard(value: string): Promise<boolean> {
   }
 }
 
+interface PerformCaptureOptions {
+  element: HTMLElement;
+  width: number;
+  height: number;
+  label: string;
+  /** Overrides the captureViewport preference for this capture. */
+  viewportOverride?: string;
+  /** Skip taking a viewport screenshot for thumbnail generation. */
+  skipThumbnail?: boolean;
+}
+
+async function performCapture(opts: PerformCaptureOptions): Promise<void> {
+  const { element, width, height, label, viewportOverride, skipThumbnail } = opts;
+
+  let thumbnail: string | undefined;
+  if (!skipThumbnail) {
+    const viewportRect = getElementRectInTopViewport(element);
+    if (viewportRect.ok) {
+      try {
+        const response = (await chrome.runtime.sendMessage({
+          type: "CAPTURE_VISIBLE_TAB"
+        })) as RuntimeResponse<{ dataUrl: string }>;
+        if (response.ok && response.payload.dataUrl) {
+          thumbnail = await cropViewportToThumbnail(
+            response.payload.dataUrl,
+            {
+              left: viewportRect.cropLeft,
+              top: viewportRect.cropTop,
+              width: viewportRect.cropWidth,
+              height: viewportRect.cropHeight
+            },
+            viewportRect.viewportWidth,
+            viewportRect.viewportHeight
+          );
+        }
+      } catch (thumbnailError) {
+        console.warn("Thumbnail generation failed, using fallback.", thumbnailError);
+      }
+    }
+  }
+
+  if (!processingOverlay) {
+    processingOverlay = new ProcessingOverlay();
+  }
+  processingOverlayShownAt = Date.now();
+  processingOverlay.show();
+
+  const captureStart = Date.now();
+  const elapsed = () => `${Date.now() - captureStart}ms`;
+
+  const baseUrl = window.location.href;
+
+  const unstampPseudoIds = stampPseudoIds(element);
+  const unfreezeAnimations = freezeAnimations();
+  const cloned = cloneElementTreeWithInlineStyles(element, baseUrl);
+  unfreezeAnimations();
+  console.debug(`[EA] clone done (${elapsed()})`);
+
+  const rootId = `snippet-root-${nanoid()}`;
+  cloned.setAttribute("id", rootId);
+  cloned.setAttribute("data-snippet-root", "true");
+  processImageUrls(cloned, baseUrl);
+  await inlineSvgSprites(cloned, baseUrl);
+  console.debug(`[EA] svg sprites done (${elapsed()})`);
+  const html = serializeElementToHtml(cloned);
+  const jsx = htmlToJsx(html);
+
+  const renderContext = buildRenderContextFromElement(element);
+
+  const pseudoRules = extractPseudoElementRules(element);
+  unstampPseudoIds();
+
+  const pseudoCss = pseudoRules
+    .map(({ selector, declarations }) => `${selector} {\n${declarations}\n}`)
+    .join("\n\n");
+
+  const prefsResult = await chrome.storage.local.get("element-armory-ui-preferences");
+  const prefs = prefsResult["element-armory-ui-preferences"] as
+    | Partial<{ captureTheme: string; captureViewport: string }>
+    | undefined;
+  const captureTheme = prefs?.captureTheme ?? "default";
+  const captureViewport = viewportOverride ?? prefs?.captureViewport ?? "default";
+
+  let cssText: string;
+  let fontFaces: string;
+  let keyframesCss: string;
+  let layerOrder: string[];
+  let variableDefinitions: ExtractCssViaCdpPayload["variableDefinitions"] | undefined;
+  let variableUsageContexts: ExtractCssViaCdpPayload["variableUsageContexts"] | undefined;
+
+  const needsEmulation = captureTheme !== "default" || captureViewport !== "default";
+
+  if (needsEmulation) {
+    const { selectors, cleanup } = addTempCaptureSelectors(element);
+    console.debug(`[EA] selector count: ${selectors.length}, stamping done (${elapsed()})`);
+    try {
+      console.debug(`[EA] starting CDP extraction with emulation (${elapsed()})`);
+      const cdpResponse = (await chrome.runtime.sendMessage({
+        type: "EXTRACT_CSS_VIA_CDP",
+        payload: {
+          selectors,
+          baseUrl,
+          theme: captureTheme !== "default" ? (captureTheme as "light" | "dark") : undefined,
+          viewport: captureViewport !== "default" ? captureViewport : undefined,
+        }
+      })) as RuntimeResponse<ExtractCssViaCdpPayload>;
+      console.debug(`[EA] CDP extraction done (${elapsed()})`);
+
+      if (cdpResponse.ok && cdpResponse.payload.cssText?.trim()) {
+        const p = cdpResponse.payload;
+        cssText = p.cssText;
+        fontFaces = p.fontFacesCss;
+        keyframesCss = p.keyframesCss;
+        layerOrder = p.layerOrder;
+        variableDefinitions = p.variableDefinitions;
+        variableUsageContexts = p.variableUsageContexts;
+      } else {
+        throw new Error(cdpResponse.ok ? "CDP returned empty CSS" : cdpResponse.error);
+      }
+    } catch (cdpErr) {
+      console.warn(`[EA] CDP emulation extraction failed, falling back (${elapsed()})`, cdpErr);
+      const extracted = await extractMatchingRules(element);
+      cssText = extracted.cssText;
+      layerOrder = extracted.layerOrder;
+      fontFaces = await extractUsedFontFaces(extracted.usedFontFamilies, baseUrl);
+      keyframesCss = await extractUsedKeyframes(extracted.usedAnimationNames);
+    } finally {
+      cleanup();
+    }
+  } else {
+    console.debug(`[EA] starting in-page extraction (${elapsed()})`);
+    const extracted = await extractMatchingRules(element);
+    console.debug(`[EA] in-page extraction done (${elapsed()})`);
+    cssText = extracted.cssText;
+    layerOrder = extracted.layerOrder;
+    fontFaces = await extractUsedFontFaces(extracted.usedFontFamilies, baseUrl);
+    keyframesCss = await extractUsedKeyframes(extracted.usedAnimationNames);
+  }
+
+  console.debug(`[EA] starting CSS variable extraction (${elapsed()})`);
+  const inlineStyleUsageContexts = collectInlineStyleUsageContexts(element);
+  const mergedUsageContexts =
+    variableUsageContexts && variableUsageContexts.length > 0
+      ? [...variableUsageContexts, ...inlineStyleUsageContexts]
+      : [{ cssText }, ...inlineStyleUsageContexts];
+  const varDefinitionsBlock = await extractUsedCssVariableDefinitions(
+    element,
+    cssText,
+    {
+      definitions: variableDefinitions,
+      usageContexts: mergedUsageContexts,
+      layerOrder,
+      rootSelector: `#${rootId}`
+    }
+  );
+  console.debug(`[EA] CSS variable extraction done (${elapsed()})`);
+
+  if (Date.now() - captureStart > 3000) {
+    console.warn(`[EA] capture took ${elapsed()} — slow capture detected.`);
+  }
+
+  const { stylesheets: externalFontLinks, preloads: fontPreloads } = extractAllFontLinks();
+
+  const layerOrderDeclaration = layerOrder.length > 0 ? `@layer ${layerOrder.join(", ")};` : "";
+
+  const styleBlock = [
+    layerOrderDeclaration,
+    fontFaces,
+    keyframesCss,
+    varDefinitionsBlock,
+    cssText,
+    pseudoCss
+  ]
+    .filter(Boolean)
+    .join("\n\n");
+
+  const capture: CapturedElementData = {
+    html,
+    jsx,
+    width,
+    height,
+    elementLabel: label,
+    thumbnail,
+    renderContext,
+    rootId,
+    styleBlock: styleBlock || undefined,
+    externalFontLinks: [...fontPreloads, ...externalFontLinks],
+    hasShadowDom: hasShadowDomInSubtree(element)
+  };
+
+  const snippet = buildSnippetFromCapture(capture);
+  await autoSaveSnippet(snippet);
+
+  if (processingOverlayShownAt !== null) {
+    const ms = Date.now() - processingOverlayShownAt;
+    const remaining = Math.max(0, MIN_PROCESSING_OVERLAY_MS - ms);
+    if (remaining > 0) {
+      await new Promise((r) => setTimeout(r, remaining));
+    }
+    processingOverlayShownAt = null;
+  }
+  processingOverlay?.hide();
+  picker?.stop();
+
+  if (bar) {
+    bar.destroy();
+  }
+
+  bar = new PostCaptureBar({
+    onCopyPrompt: () => { handleCopyPrompt(snippet); },
+    onOpenLibrary: () => { handleGoToLibrary(); },
+    onCaptureAnother: () => { handleCaptureAnother(); },
+    onDelete: (snippetId: string) => { handleDeleteSnippet(snippetId); },
+    onClose: () => { bar?.destroy(); bar = null; }
+  });
+
+  bar.show(snippet);
+}
+
+async function captureFullPage(mode: "page" | "mobile-page" | "desktop-page"): Promise<void> {
+  if (!isDomUsable()) return;
+  const viewportOverride =
+    mode === "mobile-page" ? "phone" :
+    mode === "desktop-page" ? "desktop" :
+    undefined;
+  const label =
+    mode === "mobile-page" ? "Mobile Page" :
+    mode === "desktop-page" ? "Desktop Page" :
+    "Page";
+  const element = document.body;
+  try {
+    await performCapture({
+      element,
+      width: document.documentElement.scrollWidth,
+      height: document.documentElement.scrollHeight,
+      label,
+      viewportOverride,
+      skipThumbnail: true,
+    });
+  } catch (error) {
+    console.error("Failed to capture page", error);
+    processingOverlayShownAt = null;
+    processingOverlay?.hide();
+  }
+}
+
 function ensurePicker(): ElementPicker {
   if (!picker) {
     picker = new ElementPicker({
       onSelected: (result) => {
-      void (async () => {
-        try {
-          // Stop pickers in other frames so only this capture is active
-          chrome.runtime.sendMessage({ type: "STOP_OTHER_PICKERS" }).catch(() => {});
-
-          picker?.hideOverlayForScreenshot();
+        chrome.runtime.sendMessage({ type: "STOP_OTHER_PICKERS" }).catch(() => {});
+        picker?.hideOverlayForScreenshot();
+        void (async () => {
           await new Promise<void>((r) =>
             requestAnimationFrame(() => requestAnimationFrame(() => r()))
           );
-          const viewportRect = getElementRectInTopViewport(result.element);
-
-          let thumbnail: string | undefined;
-          if (viewportRect.ok) {
-            try {
-              const response = (await chrome.runtime.sendMessage({
-                type: "CAPTURE_VISIBLE_TAB"
-              })) as RuntimeResponse<{ dataUrl: string }>;
-              if (response.ok && response.payload.dataUrl) {
-                thumbnail = await cropViewportToThumbnail(
-                  response.payload.dataUrl,
-                  {
-                    left: viewportRect.cropLeft,
-                    top: viewportRect.cropTop,
-                    width: viewportRect.cropWidth,
-                    height: viewportRect.cropHeight
-                  },
-                  viewportRect.viewportWidth,
-                  viewportRect.viewportHeight
-                );
-              }
-            } catch (thumbnailError) {
-              console.warn("Thumbnail generation failed, using fallback.", thumbnailError);
-            }
-          }
-          // When viewportRect.ok is false (e.g. cross-origin iframe), skip thumbnail to avoid wrong crop
-
-          if (!processingOverlay) {
-            processingOverlay = new ProcessingOverlay();
-          }
-          processingOverlayShownAt = Date.now();
-          processingOverlay.show();
-
-          const captureStart = Date.now();
-          const elapsed = () => `${Date.now() - captureStart}ms`;
-
-          const baseUrl = window.location.href;
-
-          // Stamp pseudo IDs before cloning so the clone carries them in HTML
-          const unstampPseudoIds = stampPseudoIds(result.element);
-          const unfreezeAnimations = freezeAnimations();
-          const cloned = cloneElementTreeWithInlineStyles(result.element, baseUrl);
-          unfreezeAnimations();
-          console.debug(`[EA] clone done (${elapsed()})`);
-
-          const rootId = `snippet-root-${nanoid()}`;
-          cloned.setAttribute("id", rootId);
-          cloned.setAttribute("data-snippet-root", "true");
-          processImageUrls(cloned, baseUrl);
-          await inlineSvgSprites(cloned, baseUrl);
-          console.debug(`[EA] svg sprites done (${elapsed()})`);
-          const html = serializeElementToHtml(cloned);
-          const jsx = htmlToJsx(html);
-
-          const renderContext = buildRenderContextFromElement(result.element);
-
-          // Add temporary selectors for CDP; clone was created before so snippet HTML stays clean
-          const { selectors, cleanup } = addTempCaptureSelectors(result.element);
-          console.debug(`[EA] selector count: ${selectors.length}, stamping done (${elapsed()})`);
-
-          // Extract pseudo-element rules while live element still has data-ea-id stamps
-          const pseudoRules = extractPseudoElementRules(result.element);
-          unstampPseudoIds();
-
-          const pseudoCss = pseudoRules
-            .map(({ selector, declarations }) => `${selector} {\n${declarations}\n}`)
-            .join("\n\n");
-
-          // Read capture preferences from storage
-          const prefsResult = await chrome.storage.local.get("element-armory-ui-preferences");
-          const prefs = prefsResult["element-armory-ui-preferences"] as
-            | Partial<{ captureTheme: string; captureViewport: string }>
-            | undefined;
-          const captureTheme = prefs?.captureTheme ?? "default";
-          const captureViewport = prefs?.captureViewport ?? "default";
-
-          let cssText: string;
-          let fontFaces: string;
-          let keyframesCss: string;
-          let layerOrder: string[];
-          let variableDefinitions: ExtractCssViaCdpPayload["variableDefinitions"] | undefined;
-          let variableUsageContexts: ExtractCssViaCdpPayload["variableUsageContexts"] | undefined;
-
           try {
-            console.debug(`[EA] starting CDP extraction (${elapsed()})`);
-            const cdpResponse = (await chrome.runtime.sendMessage({
-              type: "EXTRACT_CSS_VIA_CDP",
-              payload: {
-                selectors,
-                baseUrl,
-                theme: captureTheme !== "default" ? (captureTheme as "light" | "dark") : undefined,
-                viewport: captureViewport !== "default" ? captureViewport : undefined,
-              }
-            })) as RuntimeResponse<ExtractCssViaCdpPayload>;
-            console.debug(`[EA] CDP extraction done (${elapsed()})`);
-
-            if (cdpResponse.ok) {
-              const p = cdpResponse.payload;
-              const isEmpty = !p.cssText || !p.cssText.trim();
-              if (isEmpty) {
-                throw new Error("CDP returned empty CSS (e.g. iframe or no match); using in-page fallback");
-              }
-              cssText = p.cssText;
-              fontFaces = p.fontFacesCss;
-              keyframesCss = p.keyframesCss;
-              layerOrder = p.layerOrder;
-              variableDefinitions = p.variableDefinitions;
-              variableUsageContexts = p.variableUsageContexts;
-            } else {
-              throw new Error(cdpResponse.error);
-            }
-          } catch (cdpErr) {
-            console.warn(`[EA] CDP failed, falling back to in-page extraction (${elapsed()})`, cdpErr);
-            // Fallback to in-page extraction when CDP fails (e.g. debugger attached elsewhere, or iframe capture)
-            const extracted = await extractMatchingRules(result.element);
-            console.debug(`[EA] in-page extraction done (${elapsed()})`);
-            cssText = extracted.cssText;
-            layerOrder = extracted.layerOrder;
-            fontFaces = await extractUsedFontFaces(
-              extracted.usedFontFamilies,
-              baseUrl
-            );
-            keyframesCss = await extractUsedKeyframes(
-              extracted.usedAnimationNames
-            );
-            variableDefinitions = undefined;
-            variableUsageContexts = undefined;
-          } finally {
-            cleanup();
-          }
-
-          // Extract :root block for CSS variables used in matched rules
-          console.debug(`[EA] starting CSS variable extraction (${elapsed()})`);
-          const inlineStyleUsageContexts = collectInlineStyleUsageContexts(result.element);
-          const mergedUsageContexts =
-            variableUsageContexts && variableUsageContexts.length > 0
-              ? [...variableUsageContexts, ...inlineStyleUsageContexts]
-              : [{ cssText }, ...inlineStyleUsageContexts];
-          const varDefinitionsBlock = await extractUsedCssVariableDefinitions(
-            result.element,
-            cssText,
-            {
-              definitions: variableDefinitions,
-              usageContexts: mergedUsageContexts,
-              layerOrder,
-              rootSelector: `#${rootId}`
-            }
-          );
-          console.debug(`[EA] CSS variable extraction done (${elapsed()})`);
-
-          if (Date.now() - captureStart > 3000) {
-            console.warn(`[EA] capture took ${elapsed()} — slow capture detected. Check the steps above for bottlenecks.`);
-          }
-
-          // Extract external font links (Google Fonts, etc.)
-          const { stylesheets: externalFontLinks, preloads: fontPreloads } =
-            extractAllFontLinks();
-
-          const layerOrderDeclaration =
-            layerOrder.length > 0 ? `@layer ${layerOrder.join(", ")};` : "";
-
-          // Combine font-faces, keyframes, variable definitions, CSS rules, and pseudo-element rules
-          const styleBlock = [
-            layerOrderDeclaration,
-            fontFaces,
-            keyframesCss,
-            varDefinitionsBlock,
-            cssText,
-            pseudoCss
-          ]
-            .filter(Boolean)
-            .join("\n\n");
-
-          const capture: CapturedElementData = {
-            html,
-            jsx,
-            width: result.width,
-            height: result.height,
-            elementLabel: result.label,
-            thumbnail,
-            renderContext,
-            rootId,
-            styleBlock: styleBlock || undefined,
-            externalFontLinks: [...fontPreloads, ...externalFontLinks],
-            hasShadowDom: hasShadowDomInSubtree(result.element)
-          };
-
-          const snippet = buildSnippetFromCapture(capture);
-          await autoSaveSnippet(snippet);
-
-          // Keep overlay visible at least MIN_PROCESSING_OVERLAY_MS so it doesn't flash on quick captures
-          if (processingOverlayShownAt !== null) {
-            const elapsed = Date.now() - processingOverlayShownAt;
-            const remaining = Math.max(0, MIN_PROCESSING_OVERLAY_MS - elapsed);
-            if (remaining > 0) {
-              await new Promise((r) => setTimeout(r, remaining));
-            }
+            await performCapture({
+              element: result.element,
+              width: result.width,
+              height: result.height,
+              label: result.label,
+            });
+          } catch (error) {
+            console.error("Failed to capture element", error);
             processingOverlayShownAt = null;
+            processingOverlay?.hide();
+            picker?.stop();
           }
-          processingOverlay?.hide();
-          picker?.stop();
-
-          if (bar) {
-            bar.destroy();
-          }
-
-          bar = new PostCaptureBar({
-            onCopyPrompt: () => {
-              handleCopyPrompt(snippet);
-            },
-            onOpenLibrary: () => {
-              handleGoToLibrary();
-            },
-            onCaptureAnother: () => {
-              handleCaptureAnother();
-            },
-            onDelete: (snippetId: string) => {
-              handleDeleteSnippet(snippetId);
-            },
-            onClose: () => {
-              bar?.destroy();
-              bar = null;
-            }
-          });
-
-          bar.show(snippet);
-        } catch (error) {
-          console.error("Failed to capture element", error);
-          processingOverlayShownAt = null;
-          processingOverlay?.hide();
-          picker?.stop();
-        }
-      })();
-    },
-    onEscape: () => {
-      chrome.runtime.sendMessage({ type: "BROADCAST_CANCEL_CAPTURE" }).catch(() => {});
-    },
-    onFrameHoverActive: () => {
-      chrome.runtime.sendMessage({ type: "FRAME_HOVER_ACTIVE" }).catch(() => {});
-    }
-  });
+        })();
+      },
+      onEscape: () => {
+        chrome.runtime.sendMessage({ type: "BROADCAST_CANCEL_CAPTURE" }).catch(() => {});
+      },
+      onFrameHoverActive: () => {
+        chrome.runtime.sendMessage({ type: "FRAME_HOVER_ACTIVE" }).catch(() => {});
+      }
+    });
   }
 
   return picker;
@@ -488,14 +513,22 @@ async function handleDeleteSnippet(snippetId: string): Promise<void> {
   }
 }
 
-chrome.runtime.onMessage.addListener((message: { type?: string }) => {
+chrome.runtime.onMessage.addListener((message: { type?: string; mode?: CaptureMode }) => {
   if (!message?.type) {
     return;
   }
 
   if (message.type === "START_CAPTURE") {
+    const mode = message.mode ?? "element";
     if (isDomUsable()) {
-      ensurePicker().start();
+      if (mode === "page" || mode === "mobile-page" || mode === "desktop-page") {
+        // Page-level captures run only in the top frame
+        if (window === window.top) {
+          void captureFullPage(mode);
+        }
+      } else {
+        ensurePicker().start();
+      }
     }
     return;
   }

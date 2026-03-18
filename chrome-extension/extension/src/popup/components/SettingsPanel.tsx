@@ -1,5 +1,6 @@
 import { ChevronLeft } from 'lucide-react'
 import type { JSX } from 'react'
+import type { CaptureMode } from '../../shared/types/messages'
 
 export interface UiPreferences {
   thumbnailSize: 'compact' | 'balanced' | 'detailed'
@@ -7,6 +8,7 @@ export interface UiPreferences {
   exportFormat: 'html' | 'html-inline' | 'jsx'
   captureTheme: 'default' | 'light' | 'dark'
   captureViewport: 'default' | 'desktop' | 'laptop' | 'tablet' | 'phablet' | 'phone'
+  defaultCaptureMode: CaptureMode
 }
 
 interface SettingsPanelProps {
@@ -226,6 +228,34 @@ export function SettingsPanel ({
             >
               Dark
             </button>
+          </div>
+        </div>
+
+        <div className='settings-section'>
+          <h3 className='settings-section-title'>Default capture mode</h3>
+          <p className='settings-description'>
+            Sets the default action when you click the Capture button.
+          </p>
+          <div className='settings-controls'>
+            {(
+              [
+                { value: 'element', label: 'Element' },
+                { value: 'section', label: 'Section' },
+                { value: 'page', label: 'Page' },
+                { value: 'mobile-page', label: 'Mobile Page' },
+                { value: 'desktop-page', label: 'Desktop Page' },
+              ] as { value: CaptureMode; label: string }[]
+            ).map(({ value, label }) => (
+              <button
+                key={value}
+                type='button'
+                className={`settings-chip ${preferences.defaultCaptureMode === value ? 'settings-chip-active' : ''}`}
+                onClick={() => onChange({ ...preferences, defaultCaptureMode: value })}
+                aria-label={`Default to ${label} capture`}
+              >
+                {label}
+              </button>
+            ))}
           </div>
         </div>
 

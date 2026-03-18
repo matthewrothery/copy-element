@@ -7,6 +7,8 @@ export type RuntimeErrorCode =
   | "CONTENT_SCRIPT_UNREACHABLE"
   | "UNKNOWN_ERROR";
 
+export type CaptureMode = "element" | "section" | "page" | "mobile-page" | "desktop-page";
+
 export interface RuntimeSuccessResponse<T> {
   ok: true;
   payload: T;
@@ -24,6 +26,7 @@ export interface StartCaptureRequest {
   type: "START_CAPTURE";
   payload?: {
     tabId?: number;
+    mode?: CaptureMode;
   };
 }
 

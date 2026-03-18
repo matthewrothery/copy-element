@@ -1,7 +1,7 @@
 import { nanoid } from "nanoid";
 import type { Folder } from "../shared/types/folder";
 import type { CapturedElementData, Snippet } from "../shared/types/snippet";
-import type { AuthStatePayload, RuntimeErrorCode, RuntimeMessage, RuntimeResponse } from "../shared/types/messages";
+import type { AuthStatePayload, CaptureMode, RuntimeErrorCode, RuntimeMessage, RuntimeResponse } from "../shared/types/messages";
 import { SERVER_URL } from "../shared/server-url";
 
 export class RuntimeRequestError extends Error {
@@ -50,9 +50,9 @@ async function getActiveTabId(): Promise<number | undefined> {
   return tab?.id;
 }
 
-export async function startCapture(): Promise<void> {
+export async function startCapture(mode: CaptureMode = "element"): Promise<void> {
   const tabId = await getActiveTabId();
-  await sendRuntimeMessage<null>({ type: "START_CAPTURE", payload: { tabId } });
+  await sendRuntimeMessage<null>({ type: "START_CAPTURE", payload: { tabId, mode } });
 }
 
 export async function getLatestCapture(): Promise<CapturedElementData | null> {

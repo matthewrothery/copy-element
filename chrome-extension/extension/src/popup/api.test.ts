@@ -24,7 +24,7 @@ describe("popup api", () => {
     await startCapture();
     expect(chrome.runtime.sendMessage).toHaveBeenCalledWith({
       type: "START_CAPTURE",
-      payload: { tabId: 42 }
+      payload: { tabId: 42, mode: "element" }
     });
   });
 
