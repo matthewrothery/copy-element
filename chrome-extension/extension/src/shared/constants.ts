@@ -21,3 +21,16 @@ export const DRAG_TYPE_FOLDER = "application/x-element-armory-folder";
 export function createSvgElement(doc: Document, tagName: string): Element {
   return doc.createElementNS(SVG_NS, tagName);
 }
+
+/** Attribute names that mark extension-injected UI elements (overlays, bars, toasts). */
+export const CAPTURE_UI_ATTRS = [
+  "data-element-capture-overlay",
+  "data-element-capture-toast",
+  "data-element-capture-bar",
+  "data-element-capture-confetti",
+] as const;
+
+/** Returns true if the element is extension-injected UI that must never appear in captures. */
+export function isExtensionUiElement(el: Element): boolean {
+  return CAPTURE_UI_ATTRS.some((attr) => el.hasAttribute(attr));
+}

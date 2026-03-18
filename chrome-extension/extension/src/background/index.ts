@@ -141,7 +141,7 @@ function getAllFrameIds(tabId: number): Promise<number[]> {
 
 async function sendToAllFrames(
   tabId: number,
-  message: { type: "START_CAPTURE" | "CANCEL_CAPTURE" }
+  message: { type: "START_CAPTURE" | "CANCEL_CAPTURE"; mode?: string }
 ): Promise<void> {
   const frameIds = await getAllFrameIds(tabId);
   for (const frameId of frameIds) {
@@ -175,7 +175,7 @@ async function sendClearHoverToOtherFrames(tabId: number, exceptFrameId: number)
 
 export async function sendToTargetTab(
   payload: { tabId?: number } | undefined,
-  message: { type: "START_CAPTURE" | "CANCEL_CAPTURE" }
+  message: { type: "START_CAPTURE" | "CANCEL_CAPTURE"; mode?: string }
 ): Promise<RuntimeResponse<null>> {
   const targetTab = await resolveTargetTab(payload);
   if (!targetTab?.id) {
@@ -201,7 +201,7 @@ chrome.runtime.onMessage.addListener((message: RuntimeMessage, sender, sendRespo
   }
 
   if (message.type === "START_CAPTURE") {
-    void sendToTargetTab(message.payload, { type: "START_CAPTURE" }).then((response) => sendResponse(response));
+    void sendToTargetTab(message.payload, { type: "START_CAPTURE", mode: message.payload?.mode }).then((response) => sendResponse(response));
     return true;
   }
 
@@ -290,6 +290,32 @@ chrome.runtime.onMessage.addListener((message: RuntimeMessage, sender, sendRespo
 
   if (message.type === "GET_LATEST_CAPTURE") {
     sendResponse(success(latestCapture));
+    return true;
+  }
+
+  if (message.type === "FETCH_STYLESHEET_TEXT") {
+    void (async () => {
+      const { url } = message.payload;
+      try {
+        const controller = new AbortController();
+        const timeout = setTimeout(() => controller.abort(), 5000);
+        const res = await fetch(url, { signal: controller.signal });
+        clearTimeout(timeout);
+        if (!res.ok) {
+          sendResponse(success({ text: null }));
+          return;
+        }
+        const contentLength = res.headers.get("content-length");
+        if (contentLength && parseInt(contentLength, 10) > 2 * 1024 * 1024) {
+          sendResponse(success({ text: null }));
+          return;
+        }
+        const text = await res.text();
+        sendResponse(success({ text }));
+      } catch {
+        sendResponse(success({ text: null }));
+      }
+    })();
     return true;
   }
 
