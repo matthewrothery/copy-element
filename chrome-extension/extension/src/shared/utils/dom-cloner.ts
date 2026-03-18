@@ -1,4 +1,4 @@
-import { SVG_NS } from "../constants";
+import { SVG_NS, isExtensionUiElement } from "../constants";
 import { replaceAssetsWithPlaceholders } from "./asset-replacer";
 
 const SVG_PRESERVE_ATTRS = new Set([
@@ -76,7 +76,7 @@ function sanitizeTree(clone: Element): void {
   // Process children
   const children = Array.from(clone.children);
   for (const child of children) {
-    if (shouldSkipTag(child)) {
+    if (shouldSkipTag(child) || isExtensionUiElement(child)) {
       child.remove();
       continue;
     }
