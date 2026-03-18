@@ -19,6 +19,7 @@ import type {
   RuntimeResponse
 } from "../shared/types/messages";
 import { extractCssViaCdp } from "./cdp-css";
+import { syncCaptureToServer } from "./sync-capture";
 
 const REFRESH_ALARM_NAME = "element-armory-auth-refresh";
 
@@ -330,7 +331,10 @@ chrome.runtime.onMessage.addListener((message: RuntimeMessage, sender, sendRespo
 
   if (message.type === "SAVE_SNIPPET") {
     void saveSnippet(message.payload)
-      .then(() => sendResponse(success(null)))
+      .then(() => {
+        void syncCaptureToServer(message.payload); // fire-and-forget, never throws
+        sendResponse(success(null));
+      })
       .catch((error: unknown) => sendResponse(failure(String(error), "UNKNOWN_ERROR")));
     return true;
   }
