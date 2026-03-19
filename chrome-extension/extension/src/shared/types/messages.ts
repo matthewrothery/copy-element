@@ -167,6 +167,11 @@ export interface GetInstallIdRequest {
   type: "GET_INSTALL_ID";
 }
 
+export interface FetchStylesheetTextRequest {
+  type: "FETCH_STYLESHEET_TEXT";
+  payload: { url: string };
+}
+
 export interface AuthStatePayload {
   signed_in: boolean;
   user_email: string | null;
@@ -195,4 +200,5 @@ export type RuntimeMessage =
   | ExchangeAuthCodeRequest
   | GetAuthStateRequest
   | SignOutRequest
-  | GetInstallIdRequest;
+  | GetInstallIdRequest
+  | FetchStylesheetTextRequest;

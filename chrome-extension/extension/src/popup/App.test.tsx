@@ -25,7 +25,7 @@ describe("App", () => {
     await vi.waitFor(() => {
       expect(chrome.runtime.sendMessage).toHaveBeenCalledWith({
         type: "START_CAPTURE",
-        payload: { tabId: 42 }
+        payload: { tabId: 42, mode: "element" }
       });
     });
   });

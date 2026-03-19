@@ -1,4 +1,5 @@
 import { getAccessibleCssRules } from "./stylesheet-access";
+import { isExtensionUiElement } from "../constants";
 
 /**
  * Extracts CSS rules from page stylesheets that match captured elements.
@@ -13,15 +14,20 @@ export interface ExtractedStylesheet {
 }
 
 /**
- * Collects all elements in a subtree (including the root).
+ * Collects all elements in a subtree (including the root), skipping extension UI elements and their subtrees.
  */
 function collectAllElements(root: Element): Element[] {
-  const elements: Element[] = [root];
-  const walker = document.createTreeWalker(root, NodeFilter.SHOW_ELEMENT);
-  let node: Node | null;
-  while ((node = walker.nextNode())) {
-    elements.push(node as Element);
+  const elements: Element[] = [];
+
+  function traverse(el: Element): void {
+    if (isExtensionUiElement(el)) return;
+    elements.push(el);
+    for (const child of Array.from(el.children)) {
+      traverse(child as Element);
+    }
   }
+
+  traverse(root);
   return elements;
 }
 

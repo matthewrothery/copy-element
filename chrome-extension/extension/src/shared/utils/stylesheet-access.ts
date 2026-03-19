@@ -11,13 +11,15 @@ async function fetchStylesheetText(url: string): Promise<string | null> {
     return cached;
   }
 
+  // Route through the background service worker, which has <all_urls> host
+  // permissions and can fetch cross-origin stylesheets without CORS restrictions.
   const request = (async () => {
     try {
-      const response = await fetch(url);
-      if (!response.ok) {
-        return null;
-      }
-      return await response.text();
+      const response = await chrome.runtime.sendMessage({
+        type: "FETCH_STYLESHEET_TEXT",
+        payload: { url }
+      }) as { ok: true; payload: { text: string | null } };
+      return response.payload.text;
     } catch {
       return null;
     }
