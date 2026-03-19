@@ -1,6 +1,6 @@
 import type { CapturedElementData } from "../shared/types/snippet";
 import { deleteFolder, getFolders, saveFolder } from "../shared/storage/folder-storage";
-import { deleteSnippet, getSnippets, saveSnippet } from "../shared/storage/snippet-storage";
+import { deleteSnippet, getSnippetById, getSnippets, saveSnippet } from "../shared/storage/snippet-storage";
 import {
   clearAuthToken,
   getAuthExpiresAt,
@@ -350,6 +350,13 @@ chrome.runtime.onMessage.addListener((message: RuntimeMessage, sender, sendRespo
   if (message.type === "GET_SNIPPETS") {
     void getSnippets()
       .then((snippets) => sendResponse(success(snippets)))
+      .catch((error: unknown) => sendResponse(failure(String(error), "UNKNOWN_ERROR")));
+    return true;
+  }
+
+  if (message.type === "GET_SNIPPET_BY_ID") {
+    void getSnippetById(message.payload.id)
+      .then((snippet) => sendResponse(success(snippet)))
       .catch((error: unknown) => sendResponse(failure(String(error), "UNKNOWN_ERROR")));
     return true;
   }

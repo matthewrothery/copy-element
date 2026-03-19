@@ -154,6 +154,23 @@ export function buildPreviewForCapture(input: CapturePreviewInput): string {
 }
 
 /**
+ * Builds a srcDoc for the full-page editor preview.
+ * Unlike buildPreviewSrcDoc, content is not constrained to a fixed stage size —
+ * it fills the iframe naturally for live editing.
+ */
+export function buildEditorPreviewSrcDoc(html: string, css: string, snippet: Snippet): string {
+  const baseTag = snippet.sourceUrl ? getBaseTag(snippet.sourceUrl) : "";
+  const fontImports = externalFontLinksToImportCss(snippet.externalFontLinks ?? []);
+  const parts: string[] = [];
+  if (fontImports) parts.push(fontImports);
+  if (css.trim()) parts.push(css.trim());
+  const styleContent = parts.join("\n\n");
+  const styleTag = styleContent ? `<style>${styleContent}</style>` : "";
+  const bodyContent = wrapWithLayoutIfNeeded(html, snippet.renderContext);
+  return `<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">${baseTag}<style>*{box-sizing:border-box;}html,body{margin:0;padding:8px;}</style>${styleTag}</head><body>${bodyContent}</body></html>`;
+}
+
+/**
  * Builds a deterministic iframe srcDoc document for snippet preview.
  * Single stage wrapper; no inner scrollbar (body overflow hidden).
  * When sourceUrl is present, injects a base tag so relative URLs (e.g. SVG sprites) resolve correctly.

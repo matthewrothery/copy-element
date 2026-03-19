@@ -25,6 +25,6 @@ export default defineManifest({
   ],
   host_permissions: ["<all_urls>"],
   web_accessible_resources: [
-    { resources: ["auth-callback.html"], matches: ["<all_urls>"] }
+    { resources: ["auth-callback.html", "preview.html"], matches: ["<all_urls>"] }
   ]
 });

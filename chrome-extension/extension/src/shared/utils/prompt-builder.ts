@@ -45,6 +45,14 @@ const MCP_INTRO =
   "This is a component from Element Armory, copied from another website. It is your job to implement this UI component as per the user's instructions. Ideally it would match the existing theme, colors and code practices in the existing project.";
 
 /**
+ * Builds a short MCP prompt with just an @-mention URL for the snippet.
+ * Suitable for pasting into Claude Code, Cursor, or similar tools with MCP support.
+ */
+export function buildShortMcpPrompt(snippet: Snippet): string {
+  return `Implement this element extracted by Element Armory.\n@https://mcp.elementarmory.com/capture/${snippet.id}`;
+}
+
+/**
  * Builds the short "Copy MCP" prompt for pasting into AI tools: intro paragraph,
  * code (HTML + optional CSS + JSX), and snapshot image link (thumbnail data URL or placeholder).
  */

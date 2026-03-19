@@ -11,7 +11,8 @@ export default defineConfig({
     rollupOptions: {
       input: {
         app: "app.html",
-        authCallback: "auth-callback.html"
+        authCallback: "auth-callback.html",
+        preview: "preview.html"
       }
     }
   }

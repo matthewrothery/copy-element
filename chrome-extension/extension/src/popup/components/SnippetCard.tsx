@@ -1,9 +1,10 @@
 import { useRef, useState, useEffect } from "react";
-import { Code, Copy, Eye, MoreVertical, Trash2 } from "lucide-react";
+import { Code, Copy, ExternalLink, MoreVertical, Trash2 } from "lucide-react";
 import { DRAG_TYPE_SNIPPET, TAILWIND_COPY_PLACEHOLDER } from "../../shared/constants";
 import { buildCopyHtml } from "../../shared/utils/preview-srcdoc-builder";
 import type { Snippet } from "../../shared/types/snippet";
 import { buildCopyMcpPrompt, buildSnippetPrompt } from "../../shared/utils/prompt-builder";
+import { openPreviewInNewTab } from "../api";
 
 const ICON_SIZE = 16;
 
@@ -103,9 +104,9 @@ export function SnippetCard({ snippet, onOpen, onDelete, onCopy }: SnippetCardPr
         </button>
       </div>
       <div className="snippet-actions snippet-actions-secondary">
-        <button type="button" className="btn-secondary" onClick={() => onOpen(snippet)} aria-label={`Preview ${snippet.title}`}>
-          <Eye size={ICON_SIZE} aria-hidden />
-          Preview
+        <button type="button" className="btn-secondary" onClick={() => openPreviewInNewTab(snippet.id)} aria-label={`Open ${snippet.title} in editor`}>
+          <ExternalLink size={ICON_SIZE} aria-hidden />
+          Open in Editor
         </button>
         <div className="snippet-card-more" ref={menuRef}>
           <button

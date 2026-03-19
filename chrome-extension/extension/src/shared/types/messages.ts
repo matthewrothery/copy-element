@@ -72,6 +72,11 @@ export interface GetSnippetsRequest {
   type: "GET_SNIPPETS";
 }
 
+export interface GetSnippetByIdRequest {
+  type: "GET_SNIPPET_BY_ID";
+  payload: { id: string };
+}
+
 export interface GetLatestCaptureRequest {
   type: "GET_LATEST_CAPTURE";
 }
@@ -175,6 +180,7 @@ export type RuntimeMessage =
   | ElementCapturedRequest
   | SaveSnippetRequest
   | GetSnippetsRequest
+  | GetSnippetByIdRequest
   | GetLatestCaptureRequest
   | DeleteSnippetRequest
   | GetFoldersRequest

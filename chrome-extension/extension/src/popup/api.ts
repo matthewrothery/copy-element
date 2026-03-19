@@ -104,6 +104,15 @@ export async function deleteFolderFromBackground(id: string): Promise<void> {
   return sendRuntimeMessage<null>({ type: "DELETE_FOLDER", payload: { id } });
 }
 
+export async function getSnippetById(id: string): Promise<Snippet | null> {
+  return sendRuntimeMessage<Snippet | null>({ type: "GET_SNIPPET_BY_ID", payload: { id } });
+}
+
+export function openPreviewInNewTab(snippetId: string): void {
+  const url = `${chrome.runtime.getURL("preview.html")}?id=${encodeURIComponent(snippetId)}`;
+  void chrome.tabs.create({ url });
+}
+
 export function openLibraryInNewTab(snippetId?: string): void {
   const base = chrome.runtime.getURL("app.html");
   const url = snippetId ? `${base}?snippet=${encodeURIComponent(snippetId)}` : base;

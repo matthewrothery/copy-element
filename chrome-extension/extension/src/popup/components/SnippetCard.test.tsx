@@ -2,6 +2,11 @@ import { fireEvent, render, screen, within } from "@testing-library/react";
 import { describe, expect, it, vi } from "vitest";
 import { SnippetCard } from "./SnippetCard";
 
+vi.mock("../api", () => ({
+  openPreviewInNewTab: vi.fn(),
+  buildCopyHtml: vi.fn()
+}));
+
 const defaultSnippet = {
   id: "1",
   title: "Test",
@@ -45,7 +50,7 @@ describe("SnippetCard", () => {
   it("opens preview when thumbnail is clicked", () => {
     const onOpen = vi.fn();
     const { withinCard } = renderCard({ onOpen });
-    fireEvent.click(withinCard().getByRole("button", { name: /Open Test/ }));
+    fireEvent.click(withinCard().getByRole("button", { name: "Open Test" }));
     expect(onOpen).toHaveBeenCalledWith(defaultSnippet);
   });
 
