@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import Image from "next/image";
-import type { FooterProps, FooterLink, FooterLinkGroup, FooterLinkSection } from "./types";
+import type { FooterProps, FooterLink, FooterLinkGroup } from "./types";
 import "./Footer.css";
 
 const CHROME_STORE_URL = process.env.NEXT_PUBLIC_CHROME_STORE_URL ?? "#";
@@ -50,21 +50,18 @@ const DEFAULT_LINK_GROUPS: FooterLinkGroup[] = [
     ],
   },
   {
-    title: "Company",
-    links: [
-      { label: "About", href: "/about" },
-      { label: "Contact", href: "/contact" },
-      { label: "Careers", href: "/careers" },
-      { label: "Blog", href: "/blog" },
-      { label: "Press", href: "/press" },
-    ],
-  },
-  {
-    title: "Account",
-    links: [
-      { label: "Sign in", href: "/sign-in" },
-      { label: "Account", href: "/account" },
-      { label: "Billing", href: "/billing" },
+    sections: [
+      {
+        title: "Account",
+        links: [{ label: "My Account", href: "/account" }],
+      },
+      {
+        title: "Resources",
+        links: [
+          { label: "Blog", href: "/blog" },
+          { label: "Changelog", href: "/changelog" },
+        ],
+      },
     ],
   },
 ];
