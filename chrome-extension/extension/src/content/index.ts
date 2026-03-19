@@ -253,11 +253,6 @@ async function performCapture(opts: PerformCaptureOptions): Promise<void> {
 
   const renderContext = buildRenderContextFromElement(element);
 
-  // Add temporary selectors for CDP; clone was created before so snippet HTML stays clean
-  const { selectors, cleanup } = addTempCaptureSelectors(element);
-  console.debug(`[EA] selector count: ${selectors.length}, stamping done (${elapsed()})`);
-
-  // Extract pseudo-element rules while live element still has data-ea-id stamps
   const pseudoRules = extractPseudoElementRules(element);
   unstampPseudoIds();
 
@@ -265,7 +260,6 @@ async function performCapture(opts: PerformCaptureOptions): Promise<void> {
     .map(({ selector, declarations }) => `${selector} {\n${declarations}\n}`)
     .join("\n\n");
 
-  // Read capture preferences from storage
   const prefsResult = await chrome.storage.local.get("element-armory-ui-preferences");
   const prefs = prefsResult["element-armory-ui-preferences"] as
     | Partial<{ captureTheme: string; captureViewport: string }>
@@ -280,47 +274,53 @@ async function performCapture(opts: PerformCaptureOptions): Promise<void> {
   let variableDefinitions: ExtractCssViaCdpPayload["variableDefinitions"] | undefined;
   let variableUsageContexts: ExtractCssViaCdpPayload["variableUsageContexts"] | undefined;
 
-  try {
-    console.debug(`[EA] starting CDP extraction (${elapsed()})`);
-    const cdpResponse = (await chrome.runtime.sendMessage({
-      type: "EXTRACT_CSS_VIA_CDP",
-      payload: {
-        selectors,
-        baseUrl,
-        theme: captureTheme !== "default" ? (captureTheme as "light" | "dark") : undefined,
-        viewport: captureViewport !== "default" ? captureViewport : undefined,
-      }
-    })) as RuntimeResponse<ExtractCssViaCdpPayload>;
-    console.debug(`[EA] CDP extraction done (${elapsed()})`);
+  const needsEmulation = captureTheme !== "default" || captureViewport !== "default";
 
-    if (cdpResponse.ok) {
-      const p = cdpResponse.payload;
-      const isEmpty = !p.cssText || !p.cssText.trim();
-      if (isEmpty) {
-        throw new Error("CDP returned empty CSS (e.g. iframe or no match); using in-page fallback");
+  if (needsEmulation) {
+    const { selectors, cleanup } = addTempCaptureSelectors(element);
+    console.debug(`[EA] selector count: ${selectors.length}, stamping done (${elapsed()})`);
+    try {
+      console.debug(`[EA] starting CDP extraction with emulation (${elapsed()})`);
+      const cdpResponse = (await chrome.runtime.sendMessage({
+        type: "EXTRACT_CSS_VIA_CDP",
+        payload: {
+          selectors,
+          baseUrl,
+          theme: captureTheme !== "default" ? (captureTheme as "light" | "dark") : undefined,
+          viewport: captureViewport !== "default" ? captureViewport : undefined,
+        }
+      })) as RuntimeResponse<ExtractCssViaCdpPayload>;
+      console.debug(`[EA] CDP extraction done (${elapsed()})`);
+
+      if (cdpResponse.ok && cdpResponse.payload.cssText?.trim()) {
+        const p = cdpResponse.payload;
+        cssText = p.cssText;
+        fontFaces = p.fontFacesCss;
+        keyframesCss = p.keyframesCss;
+        layerOrder = p.layerOrder;
+        variableDefinitions = p.variableDefinitions;
+        variableUsageContexts = p.variableUsageContexts;
+      } else {
+        throw new Error(cdpResponse.ok ? "CDP returned empty CSS" : cdpResponse.error);
       }
-      cssText = p.cssText;
-      fontFaces = p.fontFacesCss;
-      keyframesCss = p.keyframesCss;
-      layerOrder = p.layerOrder;
-      variableDefinitions = p.variableDefinitions;
-      variableUsageContexts = p.variableUsageContexts;
-    } else {
-      throw new Error(cdpResponse.error);
+    } catch (cdpErr) {
+      console.warn(`[EA] CDP emulation extraction failed, falling back (${elapsed()})`, cdpErr);
+      const extracted = await extractMatchingRules(element);
+      cssText = extracted.cssText;
+      layerOrder = extracted.layerOrder;
+      fontFaces = await extractUsedFontFaces(extracted.usedFontFamilies, baseUrl);
+      keyframesCss = await extractUsedKeyframes(extracted.usedAnimationNames);
+    } finally {
+      cleanup();
     }
-  } catch (cdpErr) {
-    console.warn(`[EA] CDP failed, falling back to in-page extraction (${elapsed()})`, cdpErr);
-    // Fallback to in-page extraction when CDP fails (e.g. debugger attached elsewhere, or iframe capture)
+  } else {
+    console.debug(`[EA] starting in-page extraction (${elapsed()})`);
     const extracted = await extractMatchingRules(element);
     console.debug(`[EA] in-page extraction done (${elapsed()})`);
     cssText = extracted.cssText;
     layerOrder = extracted.layerOrder;
     fontFaces = await extractUsedFontFaces(extracted.usedFontFamilies, baseUrl);
     keyframesCss = await extractUsedKeyframes(extracted.usedAnimationNames);
-    variableDefinitions = undefined;
-    variableUsageContexts = undefined;
-  } finally {
-    cleanup();
   }
 
   // Extract :root block for CSS variables used in matched rules
