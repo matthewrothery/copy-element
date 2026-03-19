@@ -101,7 +101,7 @@ AWS_REGION=us-east-2 aws-vault exec <profile> -- docker-compose run --rm terrafo
 To force-unlock a stuck state:
 
 ```bash
-AWS_REGION=us-east-2 aws-vault exec <profile> --no-session -- docker-compose run --rm terraform force-unlock 'LOCK_ID'
+AWS_REGION=us-east-2 aws-vault exec demoly --no-session -- docker-compose run --rm terraform force-unlock 'LOCK_ID'
 ```
 
 ## GitHub Actions
