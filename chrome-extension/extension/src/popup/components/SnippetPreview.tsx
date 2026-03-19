@@ -1,4 +1,5 @@
 import React, { useEffect, useRef, useState } from "react";
+import { Copy } from "lucide-react";
 import { TAILWIND_COPY_PLACEHOLDER } from "../../shared/constants";
 import { captureIframeAsPngBlob } from "../../shared/utils/iframe-screenshot";
 import {
@@ -26,6 +27,7 @@ export function SnippetPreview({ snippet, onClose, onCopy, onToast }: SnippetPre
   const menuRef = useRef<HTMLDivElement>(null);
 
   const tokenCount = getSnippetPromptTokenEstimate(snippet);
+  const tokenLabel = tokenCount < 1000 ? `~${tokenCount}` : `~${(tokenCount / 1000).toFixed(1)}k`;
   const shortPrompt = buildShortMcpPrompt(snippet);
   const srcDoc = buildEditorPreviewSrcDoc(snippet.html, snippet.styleBlock ?? "", snippet);
 
@@ -134,16 +136,26 @@ export function SnippetPreview({ snippet, onClose, onCopy, onToast }: SnippetPre
         </div>
 
         <div className="snippet-preview-prompt-section">
-          <button type="button" className="btn-secondary" onClick={handleCopyPrompt}>
-            Copy Prompt (~{tokenCount} tokens)
-          </button>
-          <textarea
-            readOnly
-            className="snippet-preview-prompt-input"
-            value={shortPrompt}
-            aria-label="Prompt text"
-            rows={2}
-          />
+          <div className="snippet-preview-prompt-wrapper">
+            <textarea
+              readOnly
+              className="snippet-preview-prompt-input"
+              value={shortPrompt}
+              aria-label="Prompt text"
+              rows={2}
+              onClick={handleCopyPrompt}
+            />
+            <button
+              type="button"
+              className="snippet-preview-prompt-copy"
+              onClick={handleCopyPrompt}
+              aria-label="Copy prompt"
+              tabIndex={-1}
+            >
+              <Copy size={12} aria-hidden />
+              <span>{tokenLabel} tokens</span>
+            </button>
+          </div>
         </div>
       </div>
     </div>
