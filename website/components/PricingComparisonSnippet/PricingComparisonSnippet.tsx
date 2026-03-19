@@ -11,6 +11,7 @@ const wrapperStyle: React.CSSProperties = {
   rowGap: 64,
   width: "100%",
   maxWidth: 1200,
+  margin: "0 auto",
   color: "rgb(255, 255, 255)",
   fontFamily: 'system-ui, -apple-system, "SF Pro Display", "SF Pro", Inter, "Inter Fallback", sans-serif',
   fontSize: 16,
@@ -55,10 +56,13 @@ function PricingCard({
         </div>
         <div className="fQyoMZ">
           <div className="fpxFsr">
-            <div className="bdVIyf">{plan}</div>
+            <div className="plan-badges-row">
+              <div className="bdVIyf">{plan}</div>
+              {plan === "Yearly" && <div className="savings-badge">Save 53%</div>}
+            </div>
             <div className="fZJebw">
-              <div className="bMccnO">Screen Studio</div>
-              <p className="jpNrKr">All Screen Studio features included.</p>
+              <div className="bMccnO">Element Armory</div>
+              <p className="jpNrKr">All features included in both plans.</p>
             </div>
           </div>
           <div className="eTUWhE">
@@ -76,7 +80,7 @@ function PricingCard({
                 <div className="dXCMoG">∕ month</div>
               </div>
               <div className="irGrpC">
-                <div className="kxPTpI" style={{ position: "static", visibility: "hidden" as const }} />
+                <div className="kxPTpI" style={{ position: "static", visibility: "hidden" as const }}>{subtext}</div>
                 <div className="kxPTpI">{subtext}</div>
               </div>
             </div>
@@ -104,7 +108,7 @@ function PricingCard({
                         check
                       </span>
                     </div>
-                    <div className="hapacs">All Screen Studio features</div>
+                    <div className="hapacs">Capture any web UI element</div>
                   </div>
                 </div>
               </div>
@@ -116,35 +120,19 @@ function PricingCard({
                         check
                       </span>
                     </div>
-                    <div className="hapacs">Shareable links</div>
+                    <div className="hapacs">Export HTML &amp; React JSX</div>
                   </div>
                 </div>
               </div>
               <div className="dcsJIV">
-                <div className="gwAfnc">
-                  <div className="hLmPkB">
-                    <div className="eSUeSB">
-                      <div className="gLBKUq">
-                        <span className="fnYGBG icon-material material-symbols-rounded" aria-hidden>
-                          check
-                        </span>
-                      </div>
-                      <div className="hapacs">
-                        3 <u>personal</u> macOS devices
-                      </div>
-                      <div>
-                        <button type="button" className="fsCjWO gnuOvP" tabIndex={-1} aria-label="Help">
-                          <div className="eYNHBn dcIOCU idle" />
-                          <div className="jPVBTq">
-                            <div className="fYKwaz icon">
-                              <span className="fnYGBG icon-material material-symbols-rounded" aria-hidden>
-                                help
-                              </span>
-                            </div>
-                          </div>
-                        </button>
-                      </div>
+                <div className="hLmPkB">
+                  <div className="eSUeSB">
+                    <div className="gLBKUq">
+                      <span className="fnYGBG icon-material material-symbols-rounded" aria-hidden>
+                        check
+                      </span>
                     </div>
+                    <div className="hapacs">Unlimited snippet library saves</div>
                   </div>
                 </div>
               </div>
@@ -165,16 +153,16 @@ export function PricingComparisonSnippet({
         <div className="diglTO" data-snippet-root>
           <PricingCard
             plan="Monthly"
-            priceDigits="29"
+            priceDigits="19"
             priceWidth={90.6094}
-            subtext="Per month billed monthly. Switch to yearly anytime."
+            subtext="Billed monthly. Switch to yearly anytime."
             primary={false}
           />
           <PricingCard
             plan="Yearly"
             priceDigits="9"
             priceWidth={60.4062}
-            subtext="Per month billed yearly."
+            subtext="Billed yearly ($108/yr). Save $120 vs monthly."
             primary
           />
         </div>
