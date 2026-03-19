@@ -99,6 +99,109 @@
   --nav-text: var(--color-text-inverse);
 }
 
+/* Split capture button */
+.capture-split-button {
+  --csb-bg: var(--color-accent);
+  --csb-border: var(--color-accent);
+  --csb-text: var(--color-text-inverse);
+
+  position: relative;
+  display: flex;
+  border-radius: var(--radius-2);
+}
+
+.capture-split-main {
+  flex: 1;
+  min-height: 36px;
+  padding: 0 var(--space-3);
+  background: var(--csb-bg);
+  border: 1px solid var(--csb-border);
+  border-right: none;
+  border-radius: var(--radius-2) 0 0 var(--radius-2);
+  color: var(--csb-text);
+  font-size: var(--text-caption);
+  font-weight: var(--font-weight-medium);
+  cursor: pointer;
+  transition: background 120ms ease, border-color 120ms ease;
+}
+
+.capture-split-main:hover {
+  --csb-bg: var(--color-accent-hover);
+  --csb-border: var(--color-accent-hover);
+}
+
+.capture-split-main:disabled,
+.capture-split-caret:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.capture-split-main:focus-visible,
+.capture-split-caret:focus-visible {
+  outline: 2px solid var(--color-accent);
+  outline-offset: 2px;
+}
+
+.capture-split-caret {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  min-height: 36px;
+  background: var(--csb-bg);
+  border: 1px solid var(--csb-border);
+  border-left: 1px solid rgba(255, 255, 255, 0.3);
+  border-radius: 0 var(--radius-2) var(--radius-2) 0;
+  color: var(--csb-text);
+  cursor: pointer;
+  transition: background 120ms ease, border-color 120ms ease;
+}
+
+.capture-split-caret:hover {
+  --csb-bg: var(--color-accent-hover);
+  --csb-border: var(--color-accent-hover);
+}
+
+.capture-dropdown {
+  position: absolute;
+  top: calc(100% + var(--space-1));
+  left: 0;
+  right: 0;
+  z-index: 100;
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-2);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.12);
+  list-style: none;
+  margin: 0;
+  padding: var(--space-1) 0;
+  min-width: 100%;
+}
+
+.capture-dropdown-item {
+  display: block;
+  width: 100%;
+  padding: var(--space-2) var(--space-3);
+  background: none;
+  border: none;
+  text-align: left;
+  color: var(--color-text-secondary);
+  font-size: var(--text-caption);
+  font-weight: var(--font-weight-medium);
+  cursor: pointer;
+  transition: background 120ms ease, color 120ms ease;
+}
+
+.capture-dropdown-item:hover {
+  background: var(--color-surface-alt);
+  color: var(--color-text-primary);
+}
+
+.capture-dropdown-item--active {
+  color: var(--color-accent);
+  font-weight: var(--font-weight-semibold);
+}
+
 .main-content {
   flex: 1;
   overflow-y: auto;

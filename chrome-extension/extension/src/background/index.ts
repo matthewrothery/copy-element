@@ -141,7 +141,7 @@ function getAllFrameIds(tabId: number): Promise<number[]> {
 
 async function sendToAllFrames(
   tabId: number,
-  message: { type: "START_CAPTURE" | "CANCEL_CAPTURE" }
+  message: { type: "START_CAPTURE" | "CANCEL_CAPTURE"; mode?: string }
 ): Promise<void> {
   const frameIds = await getAllFrameIds(tabId);
   for (const frameId of frameIds) {
@@ -175,7 +175,7 @@ async function sendClearHoverToOtherFrames(tabId: number, exceptFrameId: number)
 
 export async function sendToTargetTab(
   payload: { tabId?: number } | undefined,
-  message: { type: "START_CAPTURE" | "CANCEL_CAPTURE" }
+  message: { type: "START_CAPTURE" | "CANCEL_CAPTURE"; mode?: string }
 ): Promise<RuntimeResponse<null>> {
   const targetTab = await resolveTargetTab(payload);
   if (!targetTab?.id) {
@@ -201,7 +201,7 @@ chrome.runtime.onMessage.addListener((message: RuntimeMessage, sender, sendRespo
   }
 
   if (message.type === "START_CAPTURE") {
-    void sendToTargetTab(message.payload, { type: "START_CAPTURE" }).then((response) => sendResponse(response));
+    void sendToTargetTab(message.payload, { type: "START_CAPTURE", mode: message.payload?.mode }).then((response) => sendResponse(response));
     return true;
   }
 

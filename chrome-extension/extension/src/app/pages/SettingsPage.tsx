@@ -5,7 +5,10 @@ const PREFERENCES_KEY = "element-armory-ui-preferences";
 const DEFAULT_PREFERENCES: UiPreferences = {
   thumbnailSize: "balanced",
   assetReplacementMode: "smart",
-  exportFormat: "html"
+  exportFormat: "html",
+  captureTheme: "default",
+  captureViewport: "default",
+  defaultCaptureMode: "element",
 };
 
 export function SettingsPage(): JSX.Element {
