@@ -1,4 +1,4 @@
-import { PutObjectCommand, S3Client } from '@aws-sdk/client-s3';
+import { GetObjectCommand, PutObjectCommand, S3Client } from '@aws-sdk/client-s3';
 import { getSignedUrl } from '@aws-sdk/s3-request-presigner';
 import { config } from '../config/index.js';
 
@@ -55,6 +55,18 @@ export async function createPresignedPutUrl(
   const url = await getSignedUrl(client, command, { expiresIn: PRESIGN_EXPIRY_SECONDS });
   const expiresAt = new Date(Date.now() + PRESIGN_EXPIRY_SECONDS * 1000).toISOString();
   return { url, expiresAt };
+}
+
+/**
+ * Create a presigned GET URL for reading a capture asset.
+ */
+export async function getSignedGetUrl(objectKey: string, ttlSeconds = 300): Promise<string> {
+  const client = getS3Client();
+  const command = new GetObjectCommand({
+    Bucket: config.S3_BUCKET_CAPTURES,
+    Key: objectKey,
+  });
+  return getSignedUrl(client, command, { expiresIn: ttlSeconds });
 }
 
 export const S3_MAX_PUT_SIZE = MAX_PUT_SIZE;

@@ -11,6 +11,7 @@ import { auth } from './auth.js';
 import { extensionSessionRouter } from '../api/routes/extension-session.js';
 import { handleStripeWebhook } from '../api/routes/billing.js';
 import { mountApi } from '../api/index.js';
+import { internalMcpRouter } from '../api/routes/internal-mcp.js';
 import { config } from '../config/index.js';
 import { logger } from '../logger.js';
 
@@ -89,20 +90,23 @@ export function createApp(): Express {
   // 10. Better Auth catch-all
   app.all('/api/auth/*', toNodeHandler(auth));
 
-  // 11. API routes
+  // 11. Internal MCP routes (not under /api/ — internal only)
+  app.use('/internal/mcp', internalMcpRouter);
+
+  // 12. API routes
   mountApi(app);
 
-  // 12. Static files
+  // 13. Static files
   app.use(express.static(publicDir));
 
-  // 13. 404 catch-all
+  // 14. 404 catch-all
   app.use((_req, _res, next) => {
     const err = new Error('Not Found') as Error & { status?: number };
     err.status = 404;
     next(err);
   });
 
-  // 14. Error handlers
+  // 15. Error handlers
   app.use((err: Error & { name?: string; status?: number; data?: unknown }, _req: Request, res: Response, next: NextFunction) => {
     if (err.name === 'UnauthorizedError') {
       res.status((err as { status?: number }).status ?? 401).json({ message: err.message }).end();

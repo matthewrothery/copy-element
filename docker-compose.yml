@@ -75,26 +75,27 @@ services:
       - element-armory-env
     restart: "no"
 
-  # mcp-server:
-  #   build:
-  #     context: ./mcp-server
-  #     dockerfile: Dockerfile.dev
-  #   container_name: copy-element-mcp-server
-  #   hostname: mcp-server
-  #   volumes:
-  #     - ./mcp-server:/app
-  #     - /app/node_modules
-  #     - mcp_snippets:/root/.snappymcp
-  #   command: /bin/sh -c "npm run build && npm run start"
-  #   networks:
-  #     - copy-element-env
-  #   restart: "no"
-  #   profiles:
-  #     - full
+  mcp-server:
+    image: node:24-alpine3.23
+    container_name: element-armory-mcp-server
+    hostname: mcp-server
+    working_dir: /app
+    environment:
+      MCP_PORT: 80
+      MAIN_SERVER_URL: http://server
+      INTERNAL_API_KEY: ${INTERNAL_API_KEY:-}
+      ANTHROPIC_API_KEY: ${ANTHROPIC_API_KEY:-}
+    ports:
+      - "${MCP_PORT:-9950}:80"
+    volumes:
+      - ./mcp-server:/app
+    command: /bin/sh -c "npm install && npm run dev"
+    networks:
+      - element-armory-env
+    restart: "no"
 
 volumes:
   element_armory_server_data:
-  # mcp_snippets:
 
 networks:
   element-armory-env:

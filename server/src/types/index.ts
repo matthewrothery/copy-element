@@ -25,6 +25,8 @@ export interface AppConfig {
   S3_BUCKET_CAPTURES: string;
   S3_ENDPOINT: string;
   S3_FORCE_PATH_STYLE: boolean;
+  INTERNAL_API_KEY: string;
+  ANTHROPIC_API_KEY: string;
 }
 
 export interface HealthResponse {
