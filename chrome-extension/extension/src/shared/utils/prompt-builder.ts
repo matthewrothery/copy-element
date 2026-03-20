@@ -41,6 +41,44 @@ export function getSnippetPromptTokenEstimate(snippet: Snippet): number {
   return estimateTokens(prompt);
 }
 
+/**
+ * Builds a simple prompt for Free-tier users: instruction + CSS + HTML inline.
+ */
+export function buildBasicAiPrompt(snippet: Snippet): string {
+  const html = buildCopyHtml(snippet);
+  const parts: string[] = ["Implement this component in our codebase."];
+  if (snippet.styleBlock?.trim()) {
+    parts.push("", "```css", snippet.styleBlock.trim(), "```");
+  }
+  parts.push("", "```html", html, "```");
+  return parts.join("\n");
+}
+
+/**
+ * Builds a codebase-aware prompt for Pro-tier users: full context with HTML, CSS, and JSX.
+ */
+export function buildAdvancedAiPrompt(snippet: Snippet): string {
+  const html = buildCopyHtml(snippet);
+  const lines: string[] = [
+    `## UI Snippet: ${snippet.title}`,
+    "",
+    `Source: ${snippet.sourceUrl}`,
+    `Dimensions: ${snippet.width}x${snippet.height}`,
+    "",
+    "Implement this UI component in our codebase, matching the existing theme, colors, and code practices.",
+    "",
+    "### HTML",
+    "```html",
+    html,
+    "```"
+  ];
+  if (snippet.styleBlock?.trim()) {
+    lines.push("", "### CSS", "```css", snippet.styleBlock.trim(), "```");
+  }
+  lines.push("", "### JSX", "```jsx", snippet.jsx, "```");
+  return lines.join("\n");
+}
+
 const MCP_INTRO =
   "This is a component from Element Armory, copied from another website. It is your job to implement this UI component as per the user's instructions. Ideally it would match the existing theme, colors and code practices in the existing project.";
 

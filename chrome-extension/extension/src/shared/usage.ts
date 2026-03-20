@@ -1,9 +1,13 @@
 /**
- * Shared usage (monthly capture count) for free tier.
+ * Shared usage tracking (monthly capture and MCP request counts).
  * Used by content script (writes on save) and popup (reads for meter).
  */
 
+import type { PlanCode } from "./types/plan";
+import { PLAN_FEATURES } from "./types/plan";
+
 export const SAVES_THIS_MONTH_KEY = "element-armory-saves-this-month";
+export const MCP_REQUESTS_THIS_MONTH_KEY = "element-armory-mcp-requests-this-month";
 
 export const FREE_TIER_MONTHLY_CAPTURE_LIMIT = 20;
 
@@ -40,16 +44,38 @@ export function getCurrentMonthKey(): string {
 }
 
 /**
- * Returns current month usage and limit. Used is 0 when stored month is not current.
+ * Returns the capture limit for a given plan.
  */
-export async function getUsageThisMonth(): Promise<{ used: number; limit: number }> {
+export function getCaptureLimit(plan: PlanCode): number | "unlimited" {
+  return PLAN_FEATURES[plan].capturesPerMonth;
+}
+
+/**
+ * Returns current month capture usage and the plan's capture limit.
+ */
+export async function getUsageThisMonth(plan: PlanCode): Promise<{ used: number; limit: number | "unlimited" }> {
   if (typeof chrome === "undefined" || typeof chrome.storage?.local?.get !== "function") {
-    return { used: 0, limit: FREE_TIER_MONTHLY_CAPTURE_LIMIT };
+    return { used: 0, limit: PLAN_FEATURES[plan].capturesPerMonth };
   }
   const result = await chrome.storage.local.get(SAVES_THIS_MONTH_KEY);
   const stored = result[SAVES_THIS_MONTH_KEY] as SavesThisMonth | undefined;
   const currentMonth = getCurrentMonthKey();
   const used =
     stored?.monthKey === currentMonth ? stored.count : 0;
-  return { used, limit: FREE_TIER_MONTHLY_CAPTURE_LIMIT };
+  return { used, limit: PLAN_FEATURES[plan].capturesPerMonth };
+}
+
+/**
+ * Returns current month MCP request usage and the plan's MCP limit.
+ */
+export async function getMcpUsageThisMonth(plan: PlanCode): Promise<{ used: number; limit: number | "unlimited" }> {
+  if (typeof chrome === "undefined" || typeof chrome.storage?.local?.get !== "function") {
+    return { used: 0, limit: PLAN_FEATURES[plan].mcpRequestsPerMonth };
+  }
+  const result = await chrome.storage.local.get(MCP_REQUESTS_THIS_MONTH_KEY);
+  const stored = result[MCP_REQUESTS_THIS_MONTH_KEY] as SavesThisMonth | undefined;
+  const currentMonth = getCurrentMonthKey();
+  const used =
+    stored?.monthKey === currentMonth ? stored.count : 0;
+  return { used, limit: PLAN_FEATURES[plan].mcpRequestsPerMonth };
 }

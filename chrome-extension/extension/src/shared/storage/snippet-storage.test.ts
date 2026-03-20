@@ -236,6 +236,61 @@ describe("snippet-storage", () => {
     expect(memory[LEGACY_STORAGE_KEY]).toBeUndefined();
   });
 
+  it("enforces FIFO when maxCount is reached", async () => {
+    const older: Snippet = {
+      id: "old",
+      title: "Older",
+      sourceUrl: "https://example.com",
+      html: "<div>old</div>",
+      jsx: "<div>old</div>",
+      thumbnail: "",
+      createdAt: 1000,
+      width: 10,
+      height: 10
+    };
+    const newer: Snippet = {
+      id: "new",
+      title: "Newer",
+      sourceUrl: "https://example.com",
+      html: "<div>new</div>",
+      jsx: "<div>new</div>",
+      thumbnail: "",
+      createdAt: 2000,
+      width: 10,
+      height: 10
+    };
+
+    await saveSnippet(older, 1);
+    await saveSnippet(newer, 1);
+
+    const snippets = await getSnippets();
+    expect(snippets).toHaveLength(1);
+    expect(snippets[0].id).toBe("new");
+    expect(await getSnippetById("old")).toBeNull();
+  });
+
+  it("does not delete when updating an existing snippet within maxCount", async () => {
+    const snippet: Snippet = {
+      id: "existing",
+      title: "Card",
+      sourceUrl: "https://example.com",
+      html: "<div></div>",
+      jsx: "<div></div>",
+      thumbnail: "",
+      createdAt: 1,
+      width: 10,
+      height: 10
+    };
+
+    await saveSnippet(snippet, 1);
+    const updated = { ...snippet, title: "Updated Card" };
+    await saveSnippet(updated, 1);
+
+    const snippets = await getSnippets();
+    expect(snippets).toHaveLength(1);
+    expect(snippets[0].title).toBe("Updated Card");
+  });
+
   it("getSnippetById reads only the snippet key", async () => {
     memory[STORAGE_INDEX_KEY] = ["1"];
     memory[snippetKey("1")] = {

@@ -3,11 +3,14 @@ import { nanoid } from "nanoid";
 import {
   deleteFolderFromBackground,
   deleteSnippetFromBackground,
+  getAuthStateFromBackground,
   getFoldersFromBackground,
   getSnippetsFromBackground,
   saveFolderToBackground,
   saveSnippetToBackground
 } from "../popup/api";
+import type { PlanCode } from "../shared/types/plan";
+import { resolvePlan } from "../shared/utils/plan-resolver";
 import { DeleteConfirmationModal } from "../popup/components/DeleteConfirmationModal";
 import { EmptyState } from "../popup/components/EmptyState";
 import { FolderCard } from "../popup/components/FolderCard";
@@ -58,6 +61,7 @@ export function LibraryApp(): JSX.Element {
   const [toastMessage, setToastMessage] = useState("");
   const [query, setQuery] = useState("");
   const [sortOrder, setSortOrder] = useState<"date-desc" | "date-asc" | "name-asc" | "name-desc">("date-desc");
+  const [plan, setPlan] = useState<PlanCode>("guest");
 
   const foldersById = useMemo(() => {
     const map = new Map<string, Folder>();
@@ -140,6 +144,9 @@ export function LibraryApp(): JSX.Element {
 
   useEffect(() => {
     void loadData();
+    void getAuthStateFromBackground()
+      .then((state) => setPlan(resolvePlan(state)))
+      .catch(() => {});
   }, [loadData]);
 
   useEffect(() => {
@@ -332,6 +339,7 @@ export function LibraryApp(): JSX.Element {
             {hasFolders && <h2 className="library-folders-title">Snippets</h2>}
             <SnippetLibrary
               snippets={filteredSnippets}
+              plan={plan}
               onOpen={setSelectedSnippet}
               onDelete={(id) => {
                 const s = snippets.find((x) => x.id === id);
@@ -353,6 +361,7 @@ export function LibraryApp(): JSX.Element {
       {selectedSnippet && (
         <SnippetPreview
           snippet={selectedSnippet}
+          plan={plan}
           onClose={() => setSelectedSnippet(null)}
           onCopy={(value, label) => void handleCopy(value, label)}
           onToast={setToastMessage}

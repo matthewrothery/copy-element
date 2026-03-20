@@ -23,6 +23,7 @@ function renderCard(props: Partial<React.ComponentProps<typeof SnippetCard>> = {
   const result = render(
     <SnippetCard
       snippet={defaultSnippet}
+      plan="free"
       onOpen={vi.fn()}
       onDelete={vi.fn()}
       onCopy={vi.fn()}

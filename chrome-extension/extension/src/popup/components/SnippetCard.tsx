@@ -1,9 +1,15 @@
 import { useRef, useState, useEffect } from "react";
-import { Code, Copy, ExternalLink, MoreVertical, Trash2 } from "lucide-react";
+import { Code, Copy, ExternalLink, Lock, MoreVertical, Trash2 } from "lucide-react";
 import { DRAG_TYPE_SNIPPET, TAILWIND_COPY_PLACEHOLDER } from "../../shared/constants";
 import { buildCopyHtml } from "../../shared/utils/preview-srcdoc-builder";
 import type { Snippet } from "../../shared/types/snippet";
-import { buildCopyMcpPrompt, buildSnippetPrompt } from "../../shared/utils/prompt-builder";
+import {
+  buildAdvancedAiPrompt,
+  buildBasicAiPrompt,
+  buildCopyMcpPrompt
+} from "../../shared/utils/prompt-builder";
+import type { PlanCode } from "../../shared/types/plan";
+import { PLAN_FEATURES } from "../../shared/types/plan";
 import { openPreviewInNewTab } from "../api";
 
 const ICON_SIZE = 16;
@@ -25,15 +31,17 @@ function getHostname(sourceUrl: string): string {
 
 interface SnippetCardProps {
   snippet: Snippet;
+  plan: PlanCode;
   onOpen: (snippet: Snippet) => void;
   onDelete: (id: string) => void;
   onCopy: (value: string, label: string) => void;
 }
 
-export function SnippetCard({ snippet, onOpen, onDelete, onCopy }: SnippetCardProps) {
+export function SnippetCard({ snippet, plan, onOpen, onDelete, onCopy }: SnippetCardProps) {
   const [menuOpen, setMenuOpen] = useState(false);
   const [isDragging, setIsDragging] = useState(false);
   const menuRef = useRef<HTMLDivElement>(null);
+  const features = PLAN_FEATURES[plan];
 
   function handleDragStart(e: React.DragEvent): void {
     e.dataTransfer.setData(DRAG_TYPE_SNIPPET, snippet.id);
@@ -57,6 +65,9 @@ export function SnippetCard({ snippet, onOpen, onDelete, onCopy }: SnippetCardPr
   }, [menuOpen]);
 
   const meta = `${getHostname(snippet.sourceUrl)} · ${formatSnippetDate(snippet.createdAt)}`;
+  const canBasicPrompt = features.canCopyBasicAiPrompt;
+  const canAdvancedPrompt = features.canCopyAdvancedAiPrompt;
+  const canMcp = features.mcpRequestsPerMonth !== 0;
 
   return (
     <article
@@ -87,10 +98,12 @@ export function SnippetCard({ snippet, onOpen, onDelete, onCopy }: SnippetCardPr
         <button
           type="button"
           className="btn-secondary btn-primary-action"
-          onClick={() => onCopy(buildSnippetPrompt(snippet), "Prompt")}
-          aria-label="Copy prompt"
+          onClick={() => canBasicPrompt && onCopy(buildBasicAiPrompt(snippet), "Prompt")}
+          disabled={!canBasicPrompt}
+          aria-label={canBasicPrompt ? "Copy prompt" : "Sign in to copy prompts"}
+          title={canBasicPrompt ? undefined : "Sign in to copy prompts"}
         >
-          <Copy size={ICON_SIZE} aria-hidden />
+          {canBasicPrompt ? <Copy size={ICON_SIZE} aria-hidden /> : <Lock size={ICON_SIZE} aria-hidden />}
           Copy prompt
         </button>
         <button
@@ -136,13 +149,33 @@ export function SnippetCard({ snippet, onOpen, onDelete, onCopy }: SnippetCardPr
               <button
                 type="button"
                 role="menuitem"
-                className="snippet-card-dropdown-item"
+                className={`snippet-card-dropdown-item${!canAdvancedPrompt ? " snippet-card-dropdown-item--locked" : ""}`}
+                disabled={!canAdvancedPrompt}
                 onClick={() => {
-                  onCopy(buildCopyMcpPrompt(snippet), "MCP");
-                  setMenuOpen(false);
+                  if (canAdvancedPrompt) {
+                    onCopy(buildAdvancedAiPrompt(snippet), "Advanced prompt");
+                    setMenuOpen(false);
+                  }
                 }}
+                title={canAdvancedPrompt ? undefined : "Upgrade to Pro for advanced prompts"}
               >
-                <Copy size={ICON_SIZE} aria-hidden />
+                {canAdvancedPrompt ? <Copy size={ICON_SIZE} aria-hidden /> : <Lock size={ICON_SIZE} aria-hidden />}
+                Copy advanced prompt
+              </button>
+              <button
+                type="button"
+                role="menuitem"
+                className={`snippet-card-dropdown-item${!canMcp ? " snippet-card-dropdown-item--locked" : ""}`}
+                disabled={!canMcp}
+                onClick={() => {
+                  if (canMcp) {
+                    onCopy(buildCopyMcpPrompt(snippet), "MCP");
+                    setMenuOpen(false);
+                  }
+                }}
+                title={canMcp ? undefined : "Sign in to use MCP prompts"}
+              >
+                {canMcp ? <Copy size={ICON_SIZE} aria-hidden /> : <Lock size={ICON_SIZE} aria-hidden />}
                 Copy MCP
               </button>
               <button

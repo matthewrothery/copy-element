@@ -126,13 +126,38 @@ export async function getSnippets(): Promise<Snippet[]> {
   return sortSnippets(snippets);
 }
 
-export async function saveSnippet(snippet: Snippet): Promise<void> {
+export async function saveSnippet(snippet: Snippet, maxCount: number | "unlimited" = "unlimited"): Promise<void> {
   const normalized = normalizeSnippet(snippet);
   const indexResult = (await chrome.storage.local.get(STORAGE_INDEX_KEY)) as StorageIndexShape;
   let ids: string[] = indexResult[STORAGE_INDEX_KEY] ?? [];
-  if (!ids.includes(snippet.id)) {
+
+  const isNew = !ids.includes(snippet.id);
+
+  // FIFO enforcement: when adding a new snippet and we're at the limit, delete oldest by createdAt.
+  if (isNew && typeof maxCount === "number" && ids.length >= maxCount) {
+    const keys = ids.map(snippetKey);
+    const items = await chrome.storage.local.get(keys);
+    const loaded: Array<{ id: string; createdAt: number }> = [];
+    for (const id of ids) {
+      const raw = items[snippetKey(id)];
+      if (raw && isSnippetRecord(raw)) {
+        loaded.push({ id, createdAt: raw.createdAt });
+      }
+    }
+    loaded.sort((a, b) => a.createdAt - b.createdAt);
+    const toDeleteCount = ids.length - maxCount + 1;
+    const toDelete = loaded.slice(0, toDeleteCount);
+    if (toDelete.length > 0) {
+      await chrome.storage.local.remove(toDelete.map((s) => snippetKey(s.id)));
+      const toDeleteIds = new Set(toDelete.map((s) => s.id));
+      ids = ids.filter((id) => !toDeleteIds.has(id));
+    }
+  }
+
+  if (isNew) {
     ids = [snippet.id, ...ids];
   }
+
   const updates: Record<string, Snippet | string[]> = {
     [snippetKey(snippet.id)]: normalized,
     [STORAGE_INDEX_KEY]: ids

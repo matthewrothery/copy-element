@@ -9,23 +9,32 @@ import {
   startCapture
 } from "./api";
 import type { CaptureMode } from "../shared/types/messages";
-import { Settings, User } from "lucide-react";
+import type { AuthStatePayload } from "../shared/types/messages";
+import { User } from "lucide-react";
 import { Header } from "./components/Header";
 import { MainPanel } from "./components/MainPanel";
 import { SettingsPanel, type UiPreferences } from "./components/SettingsPanel";
 import { AccountPanel } from "./components/AccountPanel";
 import { Toast } from "./components/Toast";
 import type { Snippet } from "../shared/types/snippet";
+import { PLAN_FEATURES } from "../shared/types/plan";
+import { resolvePlan } from "../shared/utils/plan-resolver";
 import {
-  FREE_TIER_MONTHLY_CAPTURE_LIMIT,
+  buildBasicAiPrompt,
+  buildAdvancedAiPrompt
+} from "../shared/utils/prompt-builder";
+import {
+  getCaptureLimit,
   getUsageThisMonth,
-  SAVES_THIS_MONTH_KEY
+  getMcpUsageThisMonth,
+  SAVES_THIS_MONTH_KEY,
+  MCP_REQUESTS_THIS_MONTH_KEY
 } from "../shared/usage";
-import { buildSnippetPrompt } from "../shared/utils/prompt-builder";
 import { UsageMeter } from "./components/UsageMeter";
 
 type PopupView = "home" | "settings" | "account";
 const PREFERENCES_KEY = "element-armory-ui-preferences";
+const DEFAULT_AUTH_STATE: AuthStatePayload = { signed_in: false, user_email: null, user_plan: null };
 const DEFAULT_PREFERENCES: UiPreferences = {
   thumbnailSize: "balanced",
   assetReplacementMode: "smart",
@@ -72,8 +81,13 @@ export function App(): JSX.Element {
   const [snippets, setSnippets] = useState<Snippet[]>([]);
   const [preferences, setPreferences] = useState<UiPreferences>(DEFAULT_PREFERENCES);
   const [loadingState, setLoadingState] = useState(false);
-  const [usage, setUsage] = useState<{ used: number; limit: number } | null>(null);
-  const [isSignedIn, setIsSignedIn] = useState(false);
+  const [usage, setUsage] = useState<{ used: number; limit: number | "unlimited" } | null>(null);
+  const [mcpUsage, setMcpUsage] = useState<{ used: number; limit: number | "unlimited" } | null>(null);
+  const [authState, setAuthState] = useState<AuthStatePayload>(DEFAULT_AUTH_STATE);
+
+  const plan = resolvePlan(authState);
+  const features = PLAN_FEATURES[plan];
+  const isSignedIn = authState.signed_in;
 
   const snippetCount = snippets.length;
   const recentSnippets = useMemo(() => snippets.slice(0, 2), [snippets]);
@@ -115,7 +129,8 @@ export function App(): JSX.Element {
 
   useEffect(() => {
     const loadUsage = (): void => {
-      void getUsageThisMonth().then(setUsage);
+      void getUsageThisMonth(plan).then(setUsage);
+      void getMcpUsageThisMonth(plan).then(setMcpUsage);
     };
     loadUsage();
     if (typeof chrome !== "undefined" && chrome.storage?.onChanged?.addListener) {
@@ -123,20 +138,23 @@ export function App(): JSX.Element {
         changes: { [key: string]: chrome.storage.StorageChange },
         areaName: string
       ): void => {
-        if (areaName === "local" && changes[SAVES_THIS_MONTH_KEY] !== undefined) {
+        if (
+          areaName === "local" &&
+          (changes[SAVES_THIS_MONTH_KEY] !== undefined || changes[MCP_REQUESTS_THIS_MONTH_KEY] !== undefined)
+        ) {
           loadUsage();
         }
       };
       chrome.storage.onChanged.addListener(listener);
       return () => chrome.storage.onChanged.removeListener(listener);
     }
-  }, []);
+  }, [plan]);
 
   useEffect(() => {
     void (async () => {
       try {
         const state = await getAuthStateFromBackground();
-        setIsSignedIn(state.signed_in);
+        setAuthState(state ?? DEFAULT_AUTH_STATE);
       } catch {
         // ignore
       }
@@ -148,7 +166,14 @@ export function App(): JSX.Element {
         areaName: string
       ): void => {
         if (areaName === "local" && "element-armory-auth-token" in changes) {
-          setIsSignedIn(!!changes["element-armory-auth-token"].newValue);
+          // Re-fetch full auth state on token change to get updated plan.
+          void getAuthStateFromBackground()
+            .then((state) => setAuthState(state ?? DEFAULT_AUTH_STATE))
+            .catch(() => {
+              if (!changes["element-armory-auth-token"].newValue) {
+                setAuthState(DEFAULT_AUTH_STATE);
+              }
+            });
         }
       };
       chrome.storage.onChanged.addListener(listener);
@@ -186,9 +211,16 @@ export function App(): JSX.Element {
   }
 
   async function handleCopyPrompt(snippet: Snippet): Promise<void> {
+    if (!features.canCopyBasicAiPrompt) {
+      setToastMessage("Sign in to copy prompts");
+      return;
+    }
     try {
-      await copyToClipboard(buildSnippetPrompt(snippet));
-      setToastMessage("Ready paste into your AI tool of choice!");
+      const prompt = features.canCopyAdvancedAiPrompt
+        ? buildAdvancedAiPrompt(snippet)
+        : buildBasicAiPrompt(snippet);
+      await copyToClipboard(prompt);
+      setToastMessage("Prompt copied!");
     } catch {
       setToastMessage("Failed to copy prompt");
     }
@@ -213,7 +245,7 @@ export function App(): JSX.Element {
               </ol>
             </div>
             </Header>
-      
+
       <main className="main-content">
         {view === "settings" ? (
           <SettingsPanel
@@ -224,7 +256,13 @@ export function App(): JSX.Element {
         ) : view === "account" ? (
           <AccountPanel
             onBack={() => setView("home")}
-            onSignedInChange={setIsSignedIn}
+            onSignedInChange={(signedIn) => {
+              if (!signedIn) {
+                setAuthState(DEFAULT_AUTH_STATE);
+              } else {
+                void getAuthStateFromBackground().then(setAuthState).catch(() => {});
+              }
+            }}
           />
         ) : (
           <MainPanel
@@ -237,8 +275,11 @@ export function App(): JSX.Element {
       </main>
       {view === "home" && (
         <UsageMeter
+          plan={plan}
           used={usage?.used ?? 0}
-          limit={usage?.limit ?? FREE_TIER_MONTHLY_CAPTURE_LIMIT}
+          limit={usage?.limit ?? getCaptureLimit(plan)}
+          mcpUsed={mcpUsage?.used}
+          mcpLimit={mcpUsage?.limit}
         />
       )}
       <footer className="footer">

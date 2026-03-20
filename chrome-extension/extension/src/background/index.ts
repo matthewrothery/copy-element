@@ -10,6 +10,9 @@ import {
   saveToken,
   saveUserProfile,
 } from "../shared/storage/auth-storage";
+import { PLAN_FEATURES } from "../shared/types/plan";
+import { resolvePlan } from "../shared/utils/plan-resolver";
+import { getCaptureLimit, getCurrentMonthKey, SAVES_THIS_MONTH_KEY, type SavesThisMonth } from "../shared/usage";
 import { SERVER_URL } from "../shared/server-url";
 import type {
   AuthStatePayload,
@@ -356,12 +359,32 @@ chrome.runtime.onMessage.addListener((message: RuntimeMessage, sender, sendRespo
   }
 
   if (message.type === "SAVE_SNIPPET") {
-    void saveSnippet(message.payload)
-      .then(() => {
+    void (async () => {
+      try {
+        // Resolve plan and check capture limit before saving.
+        const authState = await getAuthState();
+        const plan = resolvePlan(authState);
+        const captureLimit = getCaptureLimit(plan);
+
+        if (typeof captureLimit === "number") {
+          const monthKey = getCurrentMonthKey();
+          const usageResult = await chrome.storage.local.get(SAVES_THIS_MONTH_KEY);
+          const stored = usageResult[SAVES_THIS_MONTH_KEY] as SavesThisMonth | undefined;
+          const used = stored?.monthKey === monthKey ? stored.count : 0;
+          if (used >= captureLimit) {
+            sendResponse(failure("Monthly capture limit reached. Upgrade for more captures.", "CAPTURE_LIMIT_REACHED"));
+            return;
+          }
+        }
+
+        const savedElementsMax = PLAN_FEATURES[plan].savedElementsMax;
+        await saveSnippet(message.payload, savedElementsMax);
         void syncCaptureToServer(message.payload); // fire-and-forget, never throws
         sendResponse(success(null));
-      })
-      .catch((error: unknown) => sendResponse(failure(String(error), "UNKNOWN_ERROR")));
+      } catch (error: unknown) {
+        sendResponse(failure(String(error), "UNKNOWN_ERROR"));
+      }
+    })();
     return true;
   }
 

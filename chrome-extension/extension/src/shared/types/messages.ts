@@ -5,6 +5,7 @@ export type RuntimeErrorCode =
   | "NO_ACTIVE_TAB"
   | "UNSUPPORTED_TAB_URL"
   | "CONTENT_SCRIPT_UNREACHABLE"
+  | "CAPTURE_LIMIT_REACHED"
   | "UNKNOWN_ERROR";
 
 export type CaptureMode = "element" | "section" | "page" | "mobile-page" | "desktop-page";
