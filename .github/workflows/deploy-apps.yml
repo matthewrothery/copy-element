@@ -7,6 +7,7 @@ on:
     branches: [master]
     paths:
       - "server/**"
+      - "mcp-server/**"
   workflow_dispatch:
 
 env:
