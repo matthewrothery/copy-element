@@ -68,6 +68,23 @@
   outline-offset: 2px;
 }
 
+.library-sort {
+  height: 36px;
+  border-radius: var(--radius-2);
+  border: 1px solid var(--color-border);
+  background: var(--color-surface-alt);
+  color: var(--color-text-primary);
+  padding: 0 var(--space-3);
+  font-size: var(--text-body);
+  cursor: pointer;
+  flex-shrink: 0;
+}
+
+.library-sort:focus-visible {
+  outline: 2px solid var(--color-accent);
+  outline-offset: 2px;
+}
+
 .library-new-folder-btn {
   flex-shrink: 0;
 }

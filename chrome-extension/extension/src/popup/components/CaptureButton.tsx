@@ -19,9 +19,16 @@ interface CaptureButtonProps {
   defaultMode: CaptureMode;
   onCapture: (mode: CaptureMode) => void;
   disabled?: boolean;
+  /** When true, hides the mode menu; capture always uses `defaultMode` (synced from parent). */
+  hideCaptureOptions?: boolean;
 }
 
-export function CaptureButton({ defaultMode, onCapture, disabled }: CaptureButtonProps): JSX.Element {
+export function CaptureButton({
+  defaultMode,
+  onCapture,
+  disabled,
+  hideCaptureOptions = true,
+}: CaptureButtonProps): JSX.Element {
   const [open, setOpen] = useState(false);
   const [activeMode, setActiveMode] = useState<CaptureMode>(defaultMode);
   const containerRef = useRef<HTMLDivElement>(null);
@@ -31,7 +38,11 @@ export function CaptureButton({ defaultMode, onCapture, disabled }: CaptureButto
   }, [defaultMode]);
 
   useEffect(() => {
-    if (!open) return;
+    if (hideCaptureOptions) setOpen(false);
+  }, [hideCaptureOptions]);
+
+  useEffect(() => {
+    if (!open || hideCaptureOptions) return;
     function handleOutsideClick(e: MouseEvent): void {
       if (containerRef.current && !containerRef.current.contains(e.target as Node)) {
         setOpen(false);
@@ -39,7 +50,7 @@ export function CaptureButton({ defaultMode, onCapture, disabled }: CaptureButto
     }
     document.addEventListener("mousedown", handleOutsideClick);
     return () => document.removeEventListener("mousedown", handleOutsideClick);
-  }, [open]);
+  }, [open, hideCaptureOptions]);
 
   const activeOption = CAPTURE_OPTIONS.find((o) => o.mode === activeMode) ?? CAPTURE_OPTIONS[0];
 
@@ -55,7 +66,10 @@ export function CaptureButton({ defaultMode, onCapture, disabled }: CaptureButto
   }
 
   return (
-    <div className="capture-split-button" ref={containerRef}>
+    <div
+      className={`capture-split-button${hideCaptureOptions ? " capture-split-button--single" : ""}`}
+      ref={containerRef}
+    >
       <button
         type="button"
         className="capture-split-main"
@@ -65,31 +79,35 @@ export function CaptureButton({ defaultMode, onCapture, disabled }: CaptureButto
       >
         {activeOption.label}
       </button>
-      <button
-        type="button"
-        className={`capture-split-caret${open ? " capture-split-caret--open" : ""}`}
-        onClick={() => setOpen((v) => !v)}
-        disabled={disabled}
-        aria-label="More capture options"
-        aria-haspopup="listbox"
-        aria-expanded={open}
-      >
-        <ChevronDown size={14} aria-hidden />
-      </button>
-      {open && (
-        <ul className="capture-dropdown" role="listbox" aria-label="Capture mode">
-          {CAPTURE_OPTIONS.map((option) => (
-            <li key={option.mode} role="option" aria-selected={option.mode === activeMode}>
-              <button
-                type="button"
-                className={`capture-dropdown-item${option.mode === activeMode ? " capture-dropdown-item--active" : ""}`}
-                onClick={() => handleOptionClick(option)}
-              >
-                {option.label}
-              </button>
-            </li>
-          ))}
-        </ul>
+      {!hideCaptureOptions && (
+        <>
+          <button
+            type="button"
+            className={`capture-split-caret${open ? " capture-split-caret--open" : ""}`}
+            onClick={() => setOpen((v) => !v)}
+            disabled={disabled}
+            aria-label="More capture options"
+            aria-haspopup="listbox"
+            aria-expanded={open}
+          >
+            <ChevronDown size={14} aria-hidden />
+          </button>
+          {open && (
+            <ul className="capture-dropdown" role="listbox" aria-label="Capture mode">
+              {CAPTURE_OPTIONS.map((option) => (
+                <li key={option.mode} role="option" aria-selected={option.mode === activeMode}>
+                  <button
+                    type="button"
+                    className={`capture-dropdown-item${option.mode === activeMode ? " capture-dropdown-item--active" : ""}`}
+                    onClick={() => handleOptionClick(option)}
+                  >
+                    {option.label}
+                  </button>
+                </li>
+              ))}
+            </ul>
+          )}
+        </>
       )}
     </div>
   );

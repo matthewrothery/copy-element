@@ -57,6 +57,7 @@ export function LibraryApp(): JSX.Element {
   const [showNewFolder, setShowNewFolder] = useState(false);
   const [toastMessage, setToastMessage] = useState("");
   const [query, setQuery] = useState("");
+  const [sortOrder, setSortOrder] = useState<"date-desc" | "date-asc" | "name-asc" | "name-desc">("date-desc");
 
   const foldersById = useMemo(() => {
     const map = new Map<string, Folder>();
@@ -79,23 +80,36 @@ export function LibraryApp(): JSX.Element {
 
   const filteredSnippets = useMemo(() => {
     const trimmed = query.trim().toLowerCase();
-    if (!trimmed) {
-      return snippetsInCurrentFolder;
-    }
-    return snippetsInCurrentFolder.filter((snippet) => {
-      const domain = (() => {
-        try {
-          return new URL(snippet.sourceUrl).hostname;
-        } catch {
-          return snippet.sourceUrl;
-        }
-      })();
-      return (
-        snippet.title.toLowerCase().includes(trimmed) ||
-        domain.toLowerCase().includes(trimmed)
-      );
+    const filtered = !trimmed
+      ? snippetsInCurrentFolder
+      : snippetsInCurrentFolder.filter((snippet) => {
+          const domain = (() => {
+            try {
+              return new URL(snippet.sourceUrl).hostname;
+            } catch {
+              return snippet.sourceUrl;
+            }
+          })();
+          return (
+            snippet.title.toLowerCase().includes(trimmed) ||
+            domain.toLowerCase().includes(trimmed)
+          );
+        });
+
+    return [...filtered].sort((a, b) => {
+      switch (sortOrder) {
+        case "date-asc":
+          return a.createdAt - b.createdAt;
+        case "name-asc":
+          return a.title.localeCompare(b.title);
+        case "name-desc":
+          return b.title.localeCompare(a.title);
+        case "date-desc":
+        default:
+          return b.createdAt - a.createdAt;
+      }
     });
-  }, [query, snippetsInCurrentFolder]);
+  }, [query, snippetsInCurrentFolder, sortOrder]);
 
   const hasSnippets = filteredSnippets.length > 0;
   const hasFolders = childFolders.length > 0;
@@ -266,6 +280,17 @@ export function LibraryApp(): JSX.Element {
           placeholder="Search title or domain"
           aria-label="Search snippets"
         />
+        <select
+          className="library-sort"
+          value={sortOrder}
+          onChange={(e) => setSortOrder(e.target.value as typeof sortOrder)}
+          aria-label="Sort snippets"
+        >
+          <option value="date-desc">Newest first</option>
+          <option value="date-asc">Oldest first</option>
+          <option value="name-asc">Name A–Z</option>
+          <option value="name-desc">Name Z–A</option>
+        </select>
         <button
           type="button"
           className="btn-primary library-new-folder-btn"

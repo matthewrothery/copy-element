@@ -82,7 +82,7 @@ export function SnippetPreview({ snippet, onClose, onCopy, onToast }: SnippetPre
   }
 
   function handleCopyPrompt() {
-    onCopy(buildSnippetPrompt(snippet), "Prompt");
+    onCopy(shortPrompt, "Prompt");
   }
 
   return (

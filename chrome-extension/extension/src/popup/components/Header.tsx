@@ -7,13 +7,21 @@ interface HeaderProps {
   onCapture: (mode: CaptureMode) => void;
   defaultCaptureMode: CaptureMode;
   captureDisabled?: boolean;
+  hideCaptureOptions?: boolean;
   onLibrary: () => void;
   onToggleSettings: () => void;
   isSettingsView: boolean;
   children: React.ReactNode;
 }
 
-export function Header({ onCapture, defaultCaptureMode, captureDisabled, isSettingsView, children }: HeaderProps): React.ReactElement {
+export function Header({
+  onCapture,
+  defaultCaptureMode,
+  captureDisabled,
+  hideCaptureOptions,
+  isSettingsView,
+  children,
+}: HeaderProps): React.ReactElement {
   return (
     <header className="header">
       <div className="header-brand">
@@ -31,6 +39,7 @@ export function Header({ onCapture, defaultCaptureMode, captureDisabled, isSetti
               defaultMode={defaultCaptureMode}
               onCapture={onCapture}
               disabled={captureDisabled}
+              hideCaptureOptions={hideCaptureOptions}
             />
           </nav>
         </>
