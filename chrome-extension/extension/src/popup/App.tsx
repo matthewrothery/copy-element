@@ -242,14 +242,14 @@ export function App(): JSX.Element {
         />
       )}
       <footer className="footer">
-        <button
+        {/* <button
           type="button"
           className="footer-settings-button"
           onClick={() => setView("settings")}
           aria-label="Open settings"
         >
           <Settings size={18} aria-hidden />
-        </button>
+        </button> */}
         <span>v{extensionVersion}</span>
         <button
           type="button"

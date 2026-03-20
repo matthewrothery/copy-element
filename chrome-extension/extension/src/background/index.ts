@@ -18,7 +18,7 @@ import type {
   RuntimeMessage,
   RuntimeResponse
 } from "../shared/types/messages";
-import { extractCssViaCdp } from "./cdp-css";
+import { clearViewportEmulation, extractCssViaCdp, setViewportEmulation } from "./cdp-css";
 import { syncCaptureToServer } from "./sync-capture";
 
 const REFRESH_ALARM_NAME = "element-armory-auth-refresh";
@@ -510,6 +510,40 @@ chrome.runtime.onMessage.addListener((message: RuntimeMessage, sender, sendRespo
         await chrome.alarms.clear(REFRESH_ALARM_NAME);
         sendResponse(success(null));
       } catch (error: unknown) {
+        sendResponse(failure(String(error), "UNKNOWN_ERROR"));
+      }
+    })();
+    return true;
+  }
+
+  if (message.type === "SET_VIEWPORT_EMULATION") {
+    void (async () => {
+      const tabId = message.payload.tabId ?? sender.tab?.id;
+      if (typeof tabId !== "number") {
+        sendResponse(failure("tabId is required", "UNKNOWN_ERROR"));
+        return;
+      }
+      try {
+        await setViewportEmulation(tabId, message.payload.viewport);
+        sendResponse(success(null));
+      } catch (error) {
+        sendResponse(failure(String(error), "UNKNOWN_ERROR"));
+      }
+    })();
+    return true;
+  }
+
+  if (message.type === "CLEAR_VIEWPORT_EMULATION") {
+    void (async () => {
+      const tabId = message.payload?.tabId ?? sender.tab?.id;
+      if (typeof tabId !== "number") {
+        sendResponse(failure("tabId is required", "UNKNOWN_ERROR"));
+        return;
+      }
+      try {
+        await clearViewportEmulation(tabId);
+        sendResponse(success(null));
+      } catch (error) {
         sendResponse(failure(String(error), "UNKNOWN_ERROR"));
       }
     })();

@@ -172,6 +172,16 @@ export interface FetchStylesheetTextRequest {
   payload: { url: string };
 }
 
+export interface SetViewportEmulationRequest {
+  type: "SET_VIEWPORT_EMULATION";
+  payload: { viewport: ViewportPresetId; tabId?: number };
+}
+
+export interface ClearViewportEmulationRequest {
+  type: "CLEAR_VIEWPORT_EMULATION";
+  payload?: { tabId?: number };
+}
+
 export interface AuthStatePayload {
   signed_in: boolean;
   user_email: string | null;
@@ -201,4 +211,6 @@ export type RuntimeMessage =
   | GetAuthStateRequest
   | SignOutRequest
   | GetInstallIdRequest
-  | FetchStylesheetTextRequest;
+  | FetchStylesheetTextRequest
+  | SetViewportEmulationRequest
+  | ClearViewportEmulationRequest;

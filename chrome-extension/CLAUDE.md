@@ -252,3 +252,18 @@ Read `MEMORY.md` before beginning any task. It contains: project overview, curre
 Update `MEMORY.md` when: completing a task or phase, making architectural decisions, discovering important insights, encountering blockers, or changing project direction. Update the "Last updated" date and move completed items from "In Progress" to "Completed".
 
 `MEMORY.md` sections: Project Overview, Project Structure, Tech Stack, Competitors Analysis Summary, CSS Property Whitelist, Implementation Status, Key Insights, Design System, Performance Targets, Notes for Next Session, Questions to Resolve.
+
+
+
+
+
+
+
+
+
+
+
+
+Notes: 
+- We are hiding a settings icon in the popup footer.
+- 

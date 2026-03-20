@@ -746,3 +746,42 @@ export async function extractCssViaCdp(
     }
   }
 }
+
+/**
+ * Sets the viewport emulation for a tab via CDP.
+ * The emulation persists after the debugger detaches, allowing subsequent
+ * content-script operations (scroll, clone) to happen at the target size.
+ * CSS extraction teardown will clear the override when it finishes.
+ */
+export async function setViewportEmulation(tabId: number, viewport: ViewportPresetId): Promise<void> {
+  await chrome.debugger.attach({ tabId }, "1.3").catch((e) => {
+    throw new Error(`Debugger attach failed: ${(e as Error).message}`);
+  });
+  try {
+    const layoutMetrics = (await sendCommand(tabId, "Page.getLayoutMetrics")) as {
+      cssVisualViewport?: { zoom?: number };
+    };
+    const zoom = layoutMetrics?.cssVisualViewport?.zoom ?? 1;
+    const preset = VIEWPORT_PRESETS[viewport];
+    await sendCommand(tabId, "Emulation.setDeviceMetricsOverride", {
+      width:             Math.round(preset.width  * zoom),
+      height:            Math.round(preset.height * zoom),
+      deviceScaleFactor: 0,
+      mobile:            false,
+    });
+  } finally {
+    await chrome.debugger.detach({ tabId }).catch(() => {});
+  }
+}
+
+/** Clears any active viewport emulation override on the tab. */
+export async function clearViewportEmulation(tabId: number): Promise<void> {
+  await chrome.debugger.attach({ tabId }, "1.3").catch((e) => {
+    throw new Error(`Debugger attach failed: ${(e as Error).message}`);
+  });
+  try {
+    await sendCommand(tabId, "Emulation.clearDeviceMetricsOverride");
+  } finally {
+    await chrome.debugger.detach({ tabId }).catch(() => {});
+  }
+}
