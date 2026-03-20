@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { ChromeStoreCtaLabel } from "@/components/ChromeStoreCtaLabel";
 import type { CTABlockProps, CTABlockFeature } from "./types";
 import "./CTABlock.css";
 
@@ -6,7 +7,6 @@ const DEFAULT_TITLE = "Start capturing in seconds";
 const DEFAULT_SUBTITLE =
   "Install the extension, click any element, and copy clean HTML or JSX. No sign-up required.";
 const DEFAULT_CTA_HREF = process.env.NEXT_PUBLIC_CHROME_STORE_URL ?? "#";
-const DEFAULT_CTA_LABEL = "Add to Chrome";
 
 const DEFAULT_FEATURES: CTABlockFeature[] = [
   {
@@ -111,7 +111,7 @@ export function CTABlock({
   title = DEFAULT_TITLE,
   subtitle = DEFAULT_SUBTITLE,
   ctaHref = DEFAULT_CTA_HREF,
-  ctaLabel = DEFAULT_CTA_LABEL,
+  ctaLabel = <ChromeStoreCtaLabel />,
   secondaryCtaHref,
   secondaryCtaLabel,
   features = DEFAULT_FEATURES,

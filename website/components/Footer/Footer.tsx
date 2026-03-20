@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import Image from "next/image";
+import { ChromeStoreCtaLabel } from "@/components/ChromeStoreCtaLabel";
 import type { FooterProps, FooterLink, FooterLinkGroup } from "./types";
 import "./Footer.css";
 
@@ -135,7 +136,7 @@ export function Footer({
   copyrightText,
   showTopCta = false,
   topCtaHref = CHROME_STORE_URL,
-  topCtaLabel = "Install the extension",
+  topCtaLabel = <ChromeStoreCtaLabel />,
 }: FooterProps): React.ReactElement {
   const year = new Date().getFullYear();
   const copyright =

@@ -1,3 +1,5 @@
+import type { ReactNode } from "react";
+
 export type FooterLink = {
   label: string;
   href: string;
@@ -28,6 +30,6 @@ export type FooterProps = {
   showTopCta?: boolean;
   /** Top row CTA href (e.g. Chrome Store). */
   topCtaHref?: string;
-  /** Top row CTA label (e.g. "Install the extension"). */
-  topCtaLabel?: string;
+  /** Top row CTA label (default: canonical Chrome Store CTA). */
+  topCtaLabel?: ReactNode;
 };

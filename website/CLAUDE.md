@@ -10,6 +10,10 @@ Treat the root `CLAUDE.md` as the default source of truth for: token architectur
 
 Do not duplicate those rules here unless a website-specific exception is required.
 
+### Primary Chrome CTA
+
+Default label for Chrome Web Store links in header, hero, `CTABlock`, and footer top CTA: **`Add to Chrome - It's Free`** with **Free** bold — implement via `components/ChromeStoreCtaLabel`. See `website/.cursor/rules/about.mdc` for full copy rules.
+
 ### WebsiteConstraint: Marketing and Page-Layout Specific Guidance
 
 These rules are specific to the website and do not apply to the extension popup UI.

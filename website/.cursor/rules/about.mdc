@@ -213,15 +213,17 @@ Capture UI from any site and rebuild it with AI.
 Clean. Clear. Powerful.
 ```
 
-## Primary CTA
+## Primary CTA (Chrome Web Store)
 
-Examples allowed:
+The default primary CTA on marketing pages and site chrome (header, hero, bottom CTA block, footer top row when shown) is:
 
 ```
-Install the Extension
-Start Capturing UI
-Add to Chrome
+Add to Chrome - It's Free
 ```
+
+Render **Free** with semantic emphasis (`<strong>` or equivalent) and `font-weight` from design tokens—not plain text for the whole line.
+
+Do not use alternate install CTAs as the default (e.g. `Install`, `Install the extension`, or `Add to Chrome` alone) unless a page has a documented exception.
 
 Avoid generic CTAs like:
 

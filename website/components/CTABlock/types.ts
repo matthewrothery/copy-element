@@ -12,7 +12,7 @@ export type CTABlockProps = {
   title?: string;
   subtitle?: string;
   ctaHref?: string;
-  ctaLabel?: string;
+  ctaLabel?: ReactNode;
   secondaryCtaHref?: string;
   secondaryCtaLabel?: string;
   features?: CTABlockFeature[];

@@ -121,6 +121,8 @@ Button labels should be specific, for example:
 - `Copy HTML`
 - `Copy JSX`
 
+**Website primary Chrome CTA (default):** `Add to Chrome - It's Free` — emphasize **Free** (bold / strong) in UI. Use the shared `ChromeStoreCtaLabel` component in `website` rather than duplicating strings.
+
 Avoid vague labels like `Action`.
 
 ---

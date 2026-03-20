@@ -68,6 +68,7 @@ Hard rules:
 
 - Concise, technical but clear, developer-friendly
 - Button labels: specific (e.g. `Capture Element`, `Copy HTML`, `Copy JSX`)
+- **Website** default primary Chrome install CTA: `Add to Chrome - It's Free` with **Free** emphasized (use `website/components/ChromeStoreCtaLabel`)
 - Avoid vague labels like `Action`
 
 ### Parity Checklist (required before finalizing any UI work)
