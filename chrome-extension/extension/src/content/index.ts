@@ -418,7 +418,22 @@ async function captureFullPage(mode: "page" | "mobile-page" | "desktop-page"): P
     mode === "desktop-page" ? "Desktop Page" :
     "Page";
   const element = document.body;
+  let viewportWasSet = false;
   try {
+    // For non-default viewport captures, set the viewport before scrolling and cloning
+    // so that lazy-load triggers, page dimensions, and the DOM clone all reflect the
+    // target viewport size. CDP emulation persists after the debugger detaches, so
+    // subsequent in-page operations see the correct layout. CSS extraction teardown
+    // will clear the override once it finishes.
+    if (viewportOverride) {
+      await chrome.runtime.sendMessage({
+        type: "SET_VIEWPORT_EMULATION",
+        payload: { viewport: viewportOverride },
+      });
+      viewportWasSet = true;
+      // Wait for the page to reflow at the new viewport size before scrolling.
+      await new Promise<void>((resolve) => setTimeout(resolve, 200));
+    }
     // Scroll through the page to trigger lazy images and scroll-activated content
     // before freezing and cloning.
     await scrollPageToTriggerContent();
@@ -432,6 +447,11 @@ async function captureFullPage(mode: "page" | "mobile-page" | "desktop-page"): P
       skipScrollReveal: true,
     });
   } catch (error) {
+    // If we set the viewport but the capture failed before CSS extraction could
+    // tear it down, restore the viewport so the page isn't stuck at the wrong size.
+    if (viewportWasSet) {
+      chrome.runtime.sendMessage({ type: "CLEAR_VIEWPORT_EMULATION" }).catch(() => {});
+    }
     console.error("Failed to capture page", error);
     processingOverlayShownAt = null;
     processingOverlay?.hide();
