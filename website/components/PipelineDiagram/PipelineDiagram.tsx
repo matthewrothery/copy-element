@@ -6,8 +6,10 @@ import {
   useLayoutEffect,
   useRef,
   useState,
+  useSyncExternalStore,
   type ReactElement,
 } from "react";
+import { RotateCcw } from "lucide-react";
 import { PipelineBranchCard } from "./PipelineBranchCard";
 import { PipelineCaptureCard } from "./PipelineCaptureCard";
 import { PipelineHubCard } from "./PipelineHubCard";
@@ -16,21 +18,25 @@ import type { PipelineBranch, PipelineDiagramProps, PipelineStepStatus } from ".
 import "./PipelineDiagram.css";
 
 const FINAL_PHASE = 6;
-/** Pause after the last phase before animating again. */
-const LOOP_PAUSE_MS = 3000;
+
+const PREFERS_REDUCED_MOTION_QUERY = "(prefers-reduced-motion: reduce)";
+
+function subscribePrefersReducedMotion(onStoreChange: () => void): () => void {
+  const mq = window.matchMedia(PREFERS_REDUCED_MOTION_QUERY);
+  mq.addEventListener("change", onStoreChange);
+  return () => mq.removeEventListener("change", onStoreChange);
+}
+
+function getPrefersReducedMotionSnapshot(): boolean {
+  return window.matchMedia(PREFERS_REDUCED_MOTION_QUERY).matches;
+}
 
 function usePrefersReducedMotion(): boolean {
-  const [reduced, setReduced] = useState(false);
-
-  useEffect(() => {
-    const mq = window.matchMedia("(prefers-reduced-motion: reduce)");
-    setReduced(mq.matches);
-    const handler = (): void => setReduced(mq.matches);
-    mq.addEventListener("change", handler);
-    return () => mq.removeEventListener("change", handler);
-  }, []);
-
-  return reduced;
+  return useSyncExternalStore(
+    subscribePrefersReducedMotion,
+    getPrefersReducedMotionSnapshot,
+    () => false
+  );
 }
 
 function hubStatus(phase: number): "pending" | "running" | "success" {
@@ -77,9 +83,10 @@ export function PipelineDiagram({ graph, className }: PipelineDiagramProps): Rea
   }, []);
 
   const [phase, setPhase] = useState(0);
-  const [paths, setPaths] = useState<{ d: string; variant: "active" | "muted" }[]>([]);
+  const [paths, setPaths] = useState<{ id: string; d: string; variant: "active" | "muted" }[]>([]);
   const [svgSize, setSvgSize] = useState({ w: 0, h: 0 });
-  const [loopKey, setLoopKey] = useState(0);
+  const [replayKey, setReplayKey] = useState(0);
+  const [showReplay, setShowReplay] = useState(false);
 
   const reducedMotion = usePrefersReducedMotion();
   const [visible, setVisible] = useState(false);
@@ -105,39 +112,50 @@ export function PipelineDiagram({ graph, className }: PipelineDiagramProps): Rea
   useEffect(() => {
     if (!visible) return;
 
-    if (reducedMotion) {
-      setPhase(FINAL_PHASE);
-      return;
-    }
-
+    let cancelled = false;
     const timers: number[] = [];
-    const schedule: { phase: number; delay: number }[] = [
-      { phase: 1, delay: 0 },
-      { phase: 2, delay: 160 },
-      { phase: 3, delay: 980 },
-      { phase: 4, delay: 420 },
-      { phase: 5, delay: 320 },
-      { phase: 6, delay: 920 },
-    ];
-    let acc = 0;
-    schedule.forEach(({ phase: nextPhase, delay }) => {
-      acc += delay;
+
+    queueMicrotask(() => {
+      if (cancelled) return;
+
+      setShowReplay(false);
+
+      if (reducedMotion) {
+        setPhase(FINAL_PHASE);
+        setShowReplay(true);
+        return;
+      }
+
+      const schedule: { phase: number; delay: number }[] = [
+        { phase: 1, delay: 0 },
+        { phase: 2, delay: 440 },
+        { phase: 3, delay: 1250 },
+        { phase: 4, delay: 1250 },
+        { phase: 5, delay: 1250 },
+        { phase: 6, delay: 1250 },
+      ];
+      let acc = 0;
+      schedule.forEach(({ phase: nextPhase, delay }) => {
+        acc += delay;
+        timers.push(
+          window.setTimeout(() => {
+            if (!cancelled) setPhase(nextPhase);
+          }, acc)
+        );
+      });
+
       timers.push(
         window.setTimeout(() => {
-          setPhase(nextPhase);
-        }, acc)
+          if (!cancelled) setShowReplay(true);
+        }, acc + 600)
       );
     });
 
-    const totalMs = acc;
-    const loopTimer = window.setTimeout(() => {
-      setPhase(0);
-      setLoopKey((k) => k + 1);
-    }, totalMs + LOOP_PAUSE_MS);
-    timers.push(loopTimer);
-
-    return () => timers.forEach((t) => window.clearTimeout(t));
-  }, [visible, reducedMotion, loopKey]);
+    return () => {
+      cancelled = true;
+      timers.forEach((t) => window.clearTimeout(t));
+    };
+  }, [visible, reducedMotion, replayKey]);
 
   const measurePaths = useCallback((): void => {
     const container = containerRef.current;
@@ -146,8 +164,8 @@ export function PipelineDiagram({ graph, className }: PipelineDiagramProps): Rea
     if (container == null || captureEl == null || hub == null) return;
 
     const cRect = container.getBoundingClientRect();
-    const next: { d: string; variant: "active" | "muted" }[] = [];
-    const forkGap = 56;
+    const next: { id: string; d: string; variant: "active" | "muted" }[] = [];
+    const forkGap = 36;
 
     const capR = captureEl.getBoundingClientRect();
     const hR = hub.getBoundingClientRect();
@@ -155,7 +173,7 @@ export function PipelineDiagram({ graph, className }: PipelineDiagramProps): Rea
     const p1 = rectCenterLeft(hR, cRect);
 
     if (phase >= 1) {
-      next.push({ d: buildPathD([p0, p1]), variant: "active" });
+      next.push({ id: "capture-hub", d: buildPathD([p0, p1]), variant: "active" });
     }
 
     const hubRight = rectCenterRight(hR, cRect);
@@ -164,6 +182,7 @@ export function PipelineDiagram({ graph, className }: PipelineDiagramProps): Rea
 
     if (phase >= 4) {
       next.push({
+        id: "hub-fork",
         d: buildPathD([hubRight, { x: forkX, y: hubY }]),
         variant: "active",
       });
@@ -183,7 +202,7 @@ export function PipelineDiagram({ graph, className }: PipelineDiagramProps): Rea
           { x: forkX, y: target.y },
           target,
         ];
-        next.push({ d: buildPathD(elbow), variant });
+        next.push({ id: `branch-${bi}-elbow`, d: buildPathD(elbow), variant });
       }
 
       if (branch.steps.length > 1 && branch.skipped !== true) {
@@ -193,7 +212,7 @@ export function PipelineDiagram({ graph, className }: PipelineDiagramProps): Rea
           const from = rectCenterRight(b0, cRect);
           const to = rectCenterLeft(sR, cRect);
           if (phase >= 5) {
-            next.push({ d: buildPathD([from, to]), variant: "active" });
+            next.push({ id: `branch-${bi}-step2`, d: buildPathD([from, to]), variant: "active" });
           }
         }
       }
@@ -204,7 +223,9 @@ export function PipelineDiagram({ graph, className }: PipelineDiagramProps): Rea
   }, [graph.branches, phase]);
 
   useLayoutEffect(() => {
-    measurePaths();
+    queueMicrotask(() => {
+      measurePaths();
+    });
   }, [measurePaths, phase, visible]);
 
   useEffect(() => {
@@ -219,11 +240,14 @@ export function PipelineDiagram({ graph, className }: PipelineDiagramProps): Rea
   }, [measurePaths]);
 
   const hStatus = hubStatus(phase);
-  const showCapture = phase >= 1;
-  const showHub = phase >= 2;
-  const showBranches = phase >= 4;
 
   const summaryId = "pipeline-diagram-summary";
+
+  function handleReplay(): void {
+    setPhase(0);
+    setShowReplay(false);
+    setReplayKey((k) => k + 1);
+  }
 
   return (
     <div
@@ -242,13 +266,13 @@ export function PipelineDiagram({ graph, className }: PipelineDiagramProps): Rea
       <div className="pipeline-diagram-layout">
         <div className="pipeline-diagram-col pipeline-diagram-col--capture">
           <div ref={captureRef} className="pipeline-diagram-anchor">
-            <PipelineCaptureCard config={graph.capture} visible={showCapture} />
+            <PipelineCaptureCard config={graph.capture} visible={visible} />
           </div>
         </div>
 
         <div className="pipeline-diagram-col pipeline-diagram-col--hub">
           <div ref={hubRef} className="pipeline-diagram-anchor">
-            <PipelineHubCard config={graph.hub} status={hStatus} visible={showHub} />
+            <PipelineHubCard config={graph.hub} status={hStatus} visible={visible} />
           </div>
         </div>
 
@@ -264,7 +288,7 @@ export function PipelineDiagram({ graph, className }: PipelineDiagramProps): Rea
                   <PipelineBranchCard
                     step={step}
                     status={branchStepStatus(branch, si, phase)}
-                    visible={showBranches}
+                    visible={visible}
                   />
                 </div>
               ))}
@@ -281,9 +305,9 @@ export function PipelineDiagram({ graph, className }: PipelineDiagramProps): Rea
           viewBox={`0 0 ${svgSize.w} ${svgSize.h}`}
           aria-hidden="true"
         >
-          {paths.map((seg, i) => (
+          {paths.map((seg) => (
             <path
-              key={`${loopKey}-${seg.d}-${i}`}
+              key={`${replayKey}-${seg.id}`}
               className={[
                 "pipeline-edge",
                 seg.variant === "muted" ? "pipeline-edge--muted" : "pipeline-edge--active",
@@ -298,6 +322,16 @@ export function PipelineDiagram({ graph, className }: PipelineDiagramProps): Rea
           ))}
         </svg>
       )}
+
+      <button
+        className={["pipeline-replay-btn", showReplay ? "is-visible" : ""].filter(Boolean).join(" ")}
+        onClick={handleReplay}
+        aria-label="Replay animation"
+        type="button"
+      >
+        <RotateCcw size={12} strokeWidth={2.5} aria-hidden="true" />
+        Replay
+      </button>
     </div>
   );
 }

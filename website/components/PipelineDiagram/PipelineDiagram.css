@@ -13,7 +13,7 @@
   --pipeline-card-radius: var(--radius-lg);
   --pipeline-card-padding: var(--space-3);
   --pipeline-edge-width: 2px;
-  --pipeline-dot-travel-duration: 180ms;
+  --pipeline-dot-travel-duration: 270ms;
   --pipeline-column-gap: var(--space-6);
   --pipeline-branch-gap: var(--space-5);
 
@@ -85,7 +85,7 @@
 .pipeline-diagram-svg {
   position: absolute;
   inset: 0;
-  z-index: 0;
+  z-index: 2;
   pointer-events: none;
   overflow: visible;
 }
@@ -125,8 +125,8 @@
   opacity: 0;
   transform: translateY(6px);
   transition:
-    opacity 0.2s ease-out,
-    transform 0.2s ease-out;
+    opacity 0.3s ease-out,
+    transform 0.3s ease-out;
 }
 
 .pipeline-capture-card.is-visible {
@@ -164,8 +164,8 @@
   opacity: 0;
   transform: translateY(6px);
   transition:
-    opacity 0.2s ease-out,
-    transform 0.2s ease-out;
+    opacity 0.3s ease-out,
+    transform 0.3s ease-out;
 }
 
 .pipeline-hub-card.is-visible {
@@ -231,8 +231,8 @@
   opacity: 0;
   transform: translateY(6px);
   transition:
-    opacity 0.2s ease-out,
-    transform 0.2s ease-out;
+    opacity 0.3s ease-out,
+    transform 0.3s ease-out;
 }
 
 .pipeline-branch-card.is-visible {
@@ -323,6 +323,42 @@
   display: inline-block;
   width: 16px;
   height: 16px;
+}
+
+/* ---- Replay button ---- */
+
+.pipeline-replay-btn {
+  position: absolute;
+  bottom: var(--space-3);
+  right: var(--space-3);
+  z-index: 3;
+  display: flex;
+  align-items: center;
+  gap: var(--space-1);
+  padding: 5px 10px 5px 8px;
+  background: color-mix(in srgb, var(--surface) 90%, transparent);
+  border: 1px solid var(--pipeline-card-border);
+  border-radius: var(--radius-pill);
+  color: var(--text-muted);
+  font-size: var(--typo-label);
+  font-weight: var(--font-weight-semibold);
+  cursor: pointer;
+  opacity: 0;
+  pointer-events: none;
+  transition:
+    opacity 0.2s ease-out,
+    color 0.15s,
+    border-color 0.15s;
+}
+
+.pipeline-replay-btn.is-visible {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.pipeline-replay-btn:hover {
+  color: var(--text);
+  border-color: var(--border-strong);
 }
 
 @media (max-width: 720px) {

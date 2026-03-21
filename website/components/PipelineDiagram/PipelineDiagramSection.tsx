@@ -6,7 +6,8 @@ import type { PipelineGraphData } from "./types";
 
 const PIPELINE_GRAPH: PipelineGraphData = {
   capture: {
-    title: "Capture an element from any site",
+    title: "Capture element",
+    subtitle: "From any website",
   },
   hub: {
     id: "extract",
