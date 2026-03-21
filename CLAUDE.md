@@ -129,3 +129,7 @@ Always handle failures: DOM capture failures, storage failures, MCP network erro
 ### Architecture Documentation
 
 If architecture changes, update `ARCHITECTURE.md`.
+
+### Feature Tiers
+
+Account tiers (Guest, Free, Paid), feature limits, and enforcement locations are documented in `plan-features.md`.

@@ -7,13 +7,23 @@ interface SnippetLibraryProps {
   onOpen: (snippet: Snippet) => void;
   onDelete: (id: string) => void;
   onCopy: (value: string, label: string) => void;
+  isGuest?: boolean;
+  onCopyPromptAsGuest?: (snippet: Snippet) => void;
 }
 
-export function SnippetLibrary({ snippets, onOpen, onDelete, onCopy }: SnippetLibraryProps): React.ReactElement {
+export function SnippetLibrary({ snippets, onOpen, onDelete, onCopy, isGuest, onCopyPromptAsGuest }: SnippetLibraryProps): React.ReactElement {
   return (
     <section className="snippet-grid" aria-label="Snippet library">
       {snippets.map((snippet) => (
-        <SnippetCard key={snippet.id} snippet={snippet} onOpen={onOpen} onDelete={onDelete} onCopy={onCopy} />
+        <SnippetCard
+          key={snippet.id}
+          snippet={snippet}
+          onOpen={onOpen}
+          onDelete={onDelete}
+          onCopy={onCopy}
+          isGuest={isGuest}
+          onCopyPromptAsGuest={onCopyPromptAsGuest ? () => onCopyPromptAsGuest(snippet) : undefined}
+        />
       ))}
     </section>
   );

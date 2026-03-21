@@ -4,11 +4,15 @@ import {
   deleteFolderFromBackground,
   deleteSnippetFromBackground,
   getFoldersFromBackground,
+  getAuthStateFromBackground,
+  getInstallIdFromBackground,
   getSnippetsFromBackground,
+  openSignInPage,
   saveFolderToBackground,
   saveSnippetToBackground
 } from "../popup/api";
 import { DeleteConfirmationModal } from "../popup/components/DeleteConfirmationModal";
+import { SignInPromoModal } from "../popup/components/SignInPromoModal";
 import { EmptyState } from "../popup/components/EmptyState";
 import { FolderCard } from "../popup/components/FolderCard";
 import { FolderDeleteConfirmationModal } from "../popup/components/FolderDeleteConfirmationModal";
@@ -56,6 +60,8 @@ export function LibraryApp(): JSX.Element {
   const [folderToRename, setFolderToRename] = useState<Folder | null>(null);
   const [showNewFolder, setShowNewFolder] = useState(false);
   const [toastMessage, setToastMessage] = useState("");
+  const [isGuest, setIsGuest] = useState(false);
+  const [showPromoModal, setShowPromoModal] = useState(false);
   const [query, setQuery] = useState("");
   const [sortOrder, setSortOrder] = useState<"date-desc" | "date-asc" | "name-asc" | "name-desc">("date-desc");
 
@@ -143,6 +149,17 @@ export function LibraryApp(): JSX.Element {
   }, [loadData]);
 
   useEffect(() => {
+    void (async () => {
+      try {
+        const state = await getAuthStateFromBackground();
+        setIsGuest(!state.signed_in);
+      } catch {
+        // ignore; default to guest
+      }
+    })();
+  }, []);
+
+  useEffect(() => {
     if (!toastMessage) return;
     const timeoutId = window.setTimeout(() => setToastMessage(""), 2000);
     return () => window.clearTimeout(timeoutId);
@@ -205,6 +222,10 @@ export function LibraryApp(): JSX.Element {
 
   function subfolderCountForFolder(folderId: string): number {
     return folders.filter((f) => f.parentId === folderId).length;
+  }
+
+  function handleCopyPromptAsGuest(_snippet: Snippet): void {
+    setShowPromoModal(true);
   }
 
   async function handleCopy(value: string, label: string): Promise<void> {
@@ -338,6 +359,8 @@ export function LibraryApp(): JSX.Element {
                 if (s) setSnippetToDelete(s);
               }}
               onCopy={(value, label) => void handleCopy(value, label)}
+              isGuest={isGuest}
+              onCopyPromptAsGuest={handleCopyPromptAsGuest}
             />
           </section>
         ) : snippets.length > 0 ? (
@@ -384,6 +407,15 @@ export function LibraryApp(): JSX.Element {
           parentFolderId={currentFolderId}
           onCreate={(name) => void handleCreateFolder(name)}
           onCancel={() => setShowNewFolder(false)}
+        />
+      )}
+      {showPromoModal && (
+        <SignInPromoModal
+          onSignIn={() => {
+            setShowPromoModal(false);
+            void getInstallIdFromBackground().then(openSignInPage).catch(() => {});
+          }}
+          onClose={() => setShowPromoModal(false)}
         />
       )}
       {toastMessage && <Toast message={toastMessage} />}

@@ -5,6 +5,9 @@
 
 export const SAVES_THIS_MONTH_KEY = "element-armory-saves-this-month";
 
+/** Guest library hard ceiling (FIFO eviction, no monthly reset). */
+export const GUEST_LIBRARY_LIMIT = 10;
+
 export const FREE_TIER_MONTHLY_CAPTURE_LIMIT = 20;
 
 /** Threshold (0–1) above which to show upgrade hint. */
@@ -37,6 +40,13 @@ export function getCurrentMonthKey(): string {
   const y = now.getFullYear();
   const m = String(now.getMonth() + 1).padStart(2, "0");
   return `${y}-${m}`;
+}
+
+/**
+ * Returns guest usage derived from current snippet count. No storage read required.
+ */
+export function getGuestUsage(snippetCount: number): { used: number; limit: number } {
+  return { used: snippetCount, limit: GUEST_LIBRARY_LIMIT };
 }
 
 /**

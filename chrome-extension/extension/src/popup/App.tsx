@@ -18,10 +18,12 @@ import { Toast } from "./components/Toast";
 import type { Snippet } from "../shared/types/snippet";
 import {
   FREE_TIER_MONTHLY_CAPTURE_LIMIT,
+  getGuestUsage,
   getUsageThisMonth,
   SAVES_THIS_MONTH_KEY
 } from "../shared/usage";
 import { buildSnippetPrompt } from "../shared/utils/prompt-builder";
+import { buildCopyHtml } from "../shared/utils/preview-srcdoc-builder";
 import { UsageMeter } from "./components/UsageMeter";
 
 type PopupView = "home" | "settings" | "account";
@@ -72,11 +74,15 @@ export function App(): JSX.Element {
   const [snippets, setSnippets] = useState<Snippet[]>([]);
   const [preferences, setPreferences] = useState<UiPreferences>(DEFAULT_PREFERENCES);
   const [loadingState, setLoadingState] = useState(false);
-  const [usage, setUsage] = useState<{ used: number; limit: number } | null>(null);
+  const [storedUsage, setStoredUsage] = useState<{ used: number; limit: number } | null>(null);
   const [isSignedIn, setIsSignedIn] = useState(false);
 
   const snippetCount = snippets.length;
   const recentSnippets = useMemo(() => snippets.slice(0, 2), [snippets]);
+  const usage = useMemo(
+    () => isSignedIn ? storedUsage : getGuestUsage(snippetCount),
+    [isSignedIn, snippetCount, storedUsage]
+  );
 
   useEffect(() => {
     if (!hasStorageLocal) {
@@ -114,8 +120,9 @@ export function App(): JSX.Element {
   }, []);
 
   useEffect(() => {
+    if (!isSignedIn) return;
     const loadUsage = (): void => {
-      void getUsageThisMonth().then(setUsage);
+      void getUsageThisMonth().then(setStoredUsage);
     };
     loadUsage();
     if (typeof chrome !== "undefined" && chrome.storage?.onChanged?.addListener) {
@@ -130,7 +137,7 @@ export function App(): JSX.Element {
       chrome.storage.onChanged.addListener(listener);
       return () => chrome.storage.onChanged.removeListener(listener);
     }
-  }, []);
+  }, [isSignedIn]);
 
   useEffect(() => {
     void (async () => {
@@ -194,6 +201,15 @@ export function App(): JSX.Element {
     }
   }
 
+  async function handleCopyCode(snippet: Snippet): Promise<void> {
+    try {
+      await copyToClipboard(buildCopyHtml(snippet));
+      setToastMessage("Code copied to clipboard");
+    } catch {
+      setToastMessage("Failed to copy code");
+    }
+  }
+
   return (
     <div className="app-shell">
       <Header
@@ -232,6 +248,8 @@ export function App(): JSX.Element {
             recentSnippets={recentSnippets}
             onOpenLibrary={handleOpenLibrary}
             onCopyPrompt={handleCopyPrompt}
+            onCopyCode={handleCopyCode}
+            isGuest={!isSignedIn}
           />
         )}
       </main>

@@ -1,6 +1,7 @@
 import type { CapturedElementData } from "../shared/types/snippet";
 import { deleteFolder, getFolders, saveFolder } from "../shared/storage/folder-storage";
 import { deleteSnippet, getSnippetById, getSnippets, saveSnippet } from "../shared/storage/snippet-storage";
+import { GUEST_LIBRARY_LIMIT } from "../shared/usage";
 import {
   clearAuthToken,
   getAuthExpiresAt,
@@ -359,12 +360,23 @@ chrome.runtime.onMessage.addListener((message: RuntimeMessage, sender, sendRespo
   }
 
   if (message.type === "SAVE_SNIPPET") {
-    void saveSnippet(message.payload)
-      .then(() => {
+    void (async () => {
+      try {
+        const authState = await getAuthState();
+        if (!authState.signed_in) {
+          const snippets = await getSnippets();
+          while (snippets.length >= GUEST_LIBRARY_LIMIT) {
+            await deleteSnippet(snippets[snippets.length - 1].id);
+            snippets.pop();
+          }
+        }
+        await saveSnippet(message.payload);
         void syncCaptureToServer(message.payload); // fire-and-forget, never throws
         sendResponse(success(null));
-      })
-      .catch((error: unknown) => sendResponse(failure(String(error), "UNKNOWN_ERROR")));
+      } catch (error: unknown) {
+        sendResponse(failure(String(error), "UNKNOWN_ERROR"));
+      }
+    })();
     return true;
   }
 

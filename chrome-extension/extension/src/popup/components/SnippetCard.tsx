@@ -28,9 +28,11 @@ interface SnippetCardProps {
   onOpen: (snippet: Snippet) => void;
   onDelete: (id: string) => void;
   onCopy: (value: string, label: string) => void;
+  isGuest?: boolean;
+  onCopyPromptAsGuest?: () => void;
 }
 
-export function SnippetCard({ snippet, onOpen, onDelete, onCopy }: SnippetCardProps) {
+export function SnippetCard({ snippet, onOpen, onDelete, onCopy, isGuest, onCopyPromptAsGuest }: SnippetCardProps) {
   const [menuOpen, setMenuOpen] = useState(false);
   const [isDragging, setIsDragging] = useState(false);
   const menuRef = useRef<HTMLDivElement>(null);
@@ -87,7 +89,7 @@ export function SnippetCard({ snippet, onOpen, onDelete, onCopy }: SnippetCardPr
         <button
           type="button"
           className="btn-secondary btn-primary-action"
-          onClick={() => onCopy(buildSnippetPrompt(snippet), "Prompt")}
+          onClick={() => isGuest ? onCopyPromptAsGuest?.() : onCopy(buildSnippetPrompt(snippet), "Prompt")}
           aria-label="Copy prompt"
         >
           <Copy size={ICON_SIZE} aria-hidden />
@@ -121,42 +123,48 @@ export function SnippetCard({ snippet, onOpen, onDelete, onCopy }: SnippetCardPr
           </button>
           {menuOpen && (
             <div className="snippet-card-dropdown" role="menu">
-              <button
-                type="button"
-                role="menuitem"
-                className="snippet-card-dropdown-item"
-                onClick={() => {
-                  onCopy(snippet.jsx, "JSX");
-                  setMenuOpen(false);
-                }}
-              >
-                <Code size={ICON_SIZE} aria-hidden />
-                Copy JSX
-              </button>
-              <button
-                type="button"
-                role="menuitem"
-                className="snippet-card-dropdown-item"
-                onClick={() => {
-                  onCopy(buildCopyMcpPrompt(snippet), "MCP");
-                  setMenuOpen(false);
-                }}
-              >
-                <Copy size={ICON_SIZE} aria-hidden />
-                Copy MCP
-              </button>
-              <button
-                type="button"
-                role="menuitem"
-                className="snippet-card-dropdown-item"
-                onClick={() => {
-                  onCopy(TAILWIND_COPY_PLACEHOLDER, "Tailwind");
-                  setMenuOpen(false);
-                }}
-              >
-                <Code size={ICON_SIZE} aria-hidden />
-                Copy Tailwind
-              </button>
+              {!isGuest && (
+                <button
+                  type="button"
+                  role="menuitem"
+                  className="snippet-card-dropdown-item"
+                  onClick={() => {
+                    onCopy(snippet.jsx, "JSX");
+                    setMenuOpen(false);
+                  }}
+                >
+                  <Code size={ICON_SIZE} aria-hidden />
+                  Copy JSX
+                </button>
+              )}
+              {!isGuest && (
+                <button
+                  type="button"
+                  role="menuitem"
+                  className="snippet-card-dropdown-item"
+                  onClick={() => {
+                    onCopy(buildCopyMcpPrompt(snippet), "MCP");
+                    setMenuOpen(false);
+                  }}
+                >
+                  <Copy size={ICON_SIZE} aria-hidden />
+                  Copy MCP
+                </button>
+              )}
+              {!isGuest && (
+                <button
+                  type="button"
+                  role="menuitem"
+                  className="snippet-card-dropdown-item"
+                  onClick={() => {
+                    onCopy(TAILWIND_COPY_PLACEHOLDER, "Tailwind");
+                    setMenuOpen(false);
+                  }}
+                >
+                  <Code size={ICON_SIZE} aria-hidden />
+                  Copy Tailwind
+                </button>
+              )}
               <button
                 type="button"
                 role="menuitem"

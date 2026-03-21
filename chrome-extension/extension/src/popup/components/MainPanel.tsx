@@ -7,6 +7,8 @@ type MainPanelProps = {
   recentSnippets: Snippet[];
   onOpenLibrary: (snippetId?: string) => void;
   onCopyPrompt: (snippet: Snippet) => void;
+  onCopyCode: (snippet: Snippet) => void;
+  isGuest: boolean;
 };
 
 function getDomain(sourceUrl: string): string {
@@ -25,7 +27,9 @@ export function MainPanel({
   snippetCount,
   recentSnippets,
   onOpenLibrary,
-  onCopyPrompt
+  onCopyPrompt,
+  onCopyCode,
+  isGuest
 }: MainPanelProps): JSX.Element {
   return (
     <section className="popup-home" aria-label="Capture workflow overview">
@@ -64,8 +68,8 @@ export function MainPanel({
               <button
                 type="button"
                 className="recent-capture-cta recent-capture-cta-icon btn-secondary"
-                onClick={() => onCopyPrompt(snippet)}
-                aria-label="Copy prompt"
+                onClick={() => isGuest ? onCopyCode(snippet) : onCopyPrompt(snippet)}
+                aria-label={isGuest ? "Copy code" : "Copy prompt"}
               >
                 <Copy size={16} aria-hidden />
               </button>
