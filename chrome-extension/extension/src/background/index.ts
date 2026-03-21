@@ -14,10 +14,13 @@ import { SERVER_URL } from "../shared/server-url";
 import type {
   AuthStatePayload,
   ExtractCssViaCdpPayload,
+  McpTokenGeneratedPayload,
+  McpTokenMetaPayload,
   RuntimeErrorCode,
   RuntimeMessage,
   RuntimeResponse
 } from "../shared/types/messages";
+import { saveMcpApiKey } from "../shared/storage/mcp-storage";
 import { clearViewportEmulation, extractCssViaCdp, setViewportEmulation } from "./cdp-css";
 import { syncCaptureToServer } from "./sync-capture";
 
@@ -554,6 +557,89 @@ chrome.runtime.onMessage.addListener((message: RuntimeMessage, sender, sendRespo
     void getOrCreateInstallCredentials()
       .then((creds) => sendResponse(success({ install_id: creds.install_id })))
       .catch((error: unknown) => sendResponse(failure(String(error), "UNKNOWN_ERROR")));
+    return true;
+  }
+
+  if (message.type === "GET_MCP_TOKEN_META") {
+    void (async () => {
+      try {
+        const token = await getAuthToken();
+        if (!token) {
+          sendResponse(failure("Not signed in", "UNKNOWN_ERROR"));
+          return;
+        }
+        const res = await fetch(`${SERVER_URL}/api/mcp/token`, {
+          headers: { Authorization: `Bearer ${token}` },
+        });
+        if (!res.ok) {
+          sendResponse(failure("Failed to fetch MCP token metadata", "UNKNOWN_ERROR"));
+          return;
+        }
+        const data = (await res.json()) as { exists: boolean; created_at: number | null; last_used_at: number | null };
+        const payload: McpTokenMetaPayload = {
+          exists: data.exists,
+          created_at: data.created_at,
+          last_used_at: data.last_used_at,
+        };
+        sendResponse(success(payload));
+      } catch (error: unknown) {
+        sendResponse(failure(String(error), "UNKNOWN_ERROR"));
+      }
+    })();
+    return true;
+  }
+
+  if (message.type === "GENERATE_MCP_TOKEN") {
+    void (async () => {
+      try {
+        const token = await getAuthToken();
+        if (!token) {
+          sendResponse(failure("Not signed in", "UNKNOWN_ERROR"));
+          return;
+        }
+        const res = await fetch(`${SERVER_URL}/api/mcp/token`, {
+          method: "POST",
+          headers: { Authorization: `Bearer ${token}` },
+        });
+        if (!res.ok) {
+          sendResponse(failure("Failed to generate MCP token", "UNKNOWN_ERROR"));
+          return;
+        }
+        const data = (await res.json()) as { code: string; mcp_url: string };
+        await saveMcpApiKey(data.code);
+        const payload: McpTokenGeneratedPayload = { api_key: data.code };
+        sendResponse(success(payload));
+      } catch (error: unknown) {
+        sendResponse(failure(String(error), "UNKNOWN_ERROR"));
+      }
+    })();
+    return true;
+  }
+
+  if (message.type === "ROTATE_MCP_TOKEN") {
+    void (async () => {
+      try {
+        const token = await getAuthToken();
+        if (!token) {
+          sendResponse(failure("Not signed in", "UNKNOWN_ERROR"));
+          return;
+        }
+        const res = await fetch(`${SERVER_URL}/api/mcp/token`, {
+          method: "DELETE",
+          headers: { Authorization: `Bearer ${token}` },
+        });
+        if (!res.ok) {
+          sendResponse(failure("Failed to rotate MCP token", "UNKNOWN_ERROR"));
+          return;
+        }
+        const data = (await res.json()) as { code: string; mcp_url: string };
+        await saveMcpApiKey(data.code);
+        const payload: McpTokenGeneratedPayload = { api_key: data.code };
+        sendResponse(success(payload));
+      } catch (error: unknown) {
+        sendResponse(failure(String(error), "UNKNOWN_ERROR"));
+      }
+    })();
     return true;
   }
 

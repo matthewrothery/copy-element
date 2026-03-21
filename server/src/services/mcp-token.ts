@@ -37,7 +37,7 @@ export function generateMcpToken(userId: string): { code: string; mcpUrl: string
     ).run(userId, tokenHash, now);
   }
 
-  const mcpUrl = `https://mcp.elementarmory.com/u_${code}`;
+  const mcpUrl = 'https://mcp.elementarmory.com/mcp';
   return { code, mcpUrl };
 }
 

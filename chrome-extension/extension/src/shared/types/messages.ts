@@ -188,6 +188,28 @@ export interface AuthStatePayload {
   user_plan: string | null;
 }
 
+export interface GetMcpTokenMetaRequest {
+  type: "GET_MCP_TOKEN_META";
+}
+
+export interface GenerateMcpTokenRequest {
+  type: "GENERATE_MCP_TOKEN";
+}
+
+export interface RotateMcpTokenRequest {
+  type: "ROTATE_MCP_TOKEN";
+}
+
+export interface McpTokenMetaPayload {
+  exists: boolean;
+  created_at: number | null;
+  last_used_at: number | null;
+}
+
+export interface McpTokenGeneratedPayload {
+  api_key: string;
+}
+
 export type RuntimeMessage =
   | StartCaptureRequest
   | CancelCaptureRequest
@@ -213,4 +235,7 @@ export type RuntimeMessage =
   | GetInstallIdRequest
   | FetchStylesheetTextRequest
   | SetViewportEmulationRequest
-  | ClearViewportEmulationRequest;
+  | ClearViewportEmulationRequest
+  | GetMcpTokenMetaRequest
+  | GenerateMcpTokenRequest
+  | RotateMcpTokenRequest;
