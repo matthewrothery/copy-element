@@ -1,6 +1,6 @@
 import { Copy, Download } from "lucide-react";
 import { buildCopyHtml } from "../../shared/utils/preview-srcdoc-builder";
-import { buildCopyMcpPrompt, buildSnippetPrompt } from "../../shared/utils/prompt-builder";
+import { buildAdvancedSnippetPrompt, buildCopyMcpPrompt, buildSnippetPrompt } from "../../shared/utils/prompt-builder";
 import { downloadZip } from "../../shared/utils/download-zip";
 import type { Snippet } from "../../shared/types/snippet";
 
@@ -35,6 +35,14 @@ export function ActionBar({ snippet, currentHtml, currentCss, tokenCount, onToas
     }
   }
 
+  function handleCopyAdvancedPrompt() {
+    if (!isPaid) {
+      onUpgrade?.();
+      return;
+    }
+    copy(buildAdvancedSnippetPrompt({ ...snippet, html: currentHtml, styleBlock: currentCss }), "Advanced Prompt");
+  }
+
   function handleCopyMcp() {
     if (!isPaid) {
       onUpgrade?.();
@@ -63,6 +71,10 @@ export function ActionBar({ snippet, currentHtml, currentCss, tokenCount, onToas
         {tokenCount > 0 && (
           <span className="action-bar-token-count">(~{tokenCount.toLocaleString()} tokens)</span>
         )}
+      </button>
+      <button type="button" className="action-bar-btn" onClick={handleCopyAdvancedPrompt}>
+        <Copy size={ICON_SIZE} aria-hidden />
+        Copy Advanced Prompt
       </button>
       <button type="button" className="action-bar-btn" onClick={handleCopyMcp}>
         <Copy size={ICON_SIZE} aria-hidden />

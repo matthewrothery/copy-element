@@ -34,6 +34,23 @@ export function buildSnippetPrompt(snippet: Snippet): string {
 }
 
 /**
+ * Builds the codebase-aware advanced prompt for Pro users. Instructs the AI to implement
+ * the captured element into the existing codebase, matching its style and conventions.
+ */
+export function buildAdvancedSnippetPrompt(snippet: Snippet): string {
+  const html = buildCopyHtml(snippet);
+  const css = snippet.styleBlock?.trim() ?? "";
+  return (
+    `We have extracted a components styles and html code using the chrome extension Element Armory. ` +
+    `You need to implement this element into our code base. Focus on creating a perfect replica with ` +
+    `style changes to match our existing codebase and rules. The code may include external resources, ` +
+    `replace them with existing resources we have, or placeholders. ` +
+    `The css code is: ${css} ` +
+    `and the html code to go with it is: ${html}`
+  );
+}
+
+/**
  * Returns estimated token count for the full snippet prompt (HTML + JSX + metadata).
  */
 export function getSnippetPromptTokenEstimate(snippet: Snippet): number {

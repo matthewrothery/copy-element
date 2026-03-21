@@ -3,7 +3,7 @@ import { Code, Copy, ExternalLink, MoreVertical, Trash2 } from "lucide-react";
 import { DRAG_TYPE_SNIPPET, TAILWIND_COPY_PLACEHOLDER } from "../../shared/constants";
 import { buildCopyHtml } from "../../shared/utils/preview-srcdoc-builder";
 import type { Snippet } from "../../shared/types/snippet";
-import { buildCopyMcpPrompt, buildSnippetPrompt } from "../../shared/utils/prompt-builder";
+import { buildAdvancedSnippetPrompt, buildCopyMcpPrompt, buildSnippetPrompt } from "../../shared/utils/prompt-builder";
 import { openPreviewInNewTab } from "../api";
 
 const ICON_SIZE = 16;
@@ -32,9 +32,10 @@ interface SnippetCardProps {
   onCopyPromptAsGuest?: () => void;
   isFree?: boolean;
   onCopyPromptAsFree?: () => void;
+  onCopyMcpAsFree?: () => void;
 }
 
-export function SnippetCard({ snippet, onOpen, onDelete, onCopy, isGuest, onCopyPromptAsGuest, isFree, onCopyPromptAsFree }: SnippetCardProps) {
+export function SnippetCard({ snippet, onOpen, onDelete, onCopy, isGuest, onCopyPromptAsGuest, isFree, onCopyPromptAsFree, onCopyMcpAsFree }: SnippetCardProps) {
   const [menuOpen, setMenuOpen] = useState(false);
   const [isDragging, setIsDragging] = useState(false);
   const menuRef = useRef<HTMLDivElement>(null);
@@ -153,12 +154,30 @@ export function SnippetCard({ snippet, onOpen, onDelete, onCopy, isGuest, onCopy
                   role="menuitem"
                   className="snippet-card-dropdown-item"
                   onClick={() => {
-                    onCopy(buildCopyMcpPrompt(snippet), "MCP");
+                    if (isFree) {
+                      onCopyMcpAsFree?.();
+                    } else {
+                      onCopy(buildCopyMcpPrompt(snippet), "MCP");
+                    }
                     setMenuOpen(false);
                   }}
                 >
                   <Copy size={ICON_SIZE} aria-hidden />
                   Copy MCP
+                </button>
+              )}
+              {!isGuest && !isFree && (
+                <button
+                  type="button"
+                  role="menuitem"
+                  className="snippet-card-dropdown-item"
+                  onClick={() => {
+                    onCopy(buildAdvancedSnippetPrompt(snippet), "Advanced Prompt");
+                    setMenuOpen(false);
+                  }}
+                >
+                  <Copy size={ICON_SIZE} aria-hidden />
+                  Copy Advanced Prompt
                 </button>
               )}
               {!isGuest && (

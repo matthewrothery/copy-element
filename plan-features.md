@@ -57,9 +57,33 @@
 
 ## Paid Tier
 
-**No capture limit.**
+**Definition:** `signed_in && user_plan` in `['pro', 'team']`.
 
-**All copy actions available.**
+**Library limit:** Unlimited. No FIFO eviction.
+
+**Monthly captures:** Unlimited.
+
+**MCP requests:** Unlimited (`mcp-server/src/rate-limiter.ts` returns early for non-free users).
+
+**All copy actions available:**
+- Copy HTML / Copy Code — always available
+- Copy JSX — available
+- Copy Tailwind — available
+- Copy Prompt (basic) — `buildSnippetPrompt` in `chrome-extension/extension/src/shared/utils/prompt-builder.ts`
+- Copy Advanced Prompt — `buildAdvancedSnippetPrompt` in `prompt-builder.ts` (Pro only; free/guest: upgrade modal)
+- Copy MCP — `buildCopyMcpPrompt` in `prompt-builder.ts` (Pro only; free: upgrade modal, guest: hidden)
+
+**Codebase-aware advanced prompt template** (used by `buildAdvancedSnippetPrompt` and MCP `getAdvancedPrompt`):
+> We have extracted a components styles and html code using the chrome extension Element Armory. You need to implement this element into our code base. Focus on creating a perfect replica with style changes to match our existing codebase and rules. The code may include external resources, replace them with existing resources we have, or placeholders. The css code is: {css} and the html code to go with it is: {html}
+
+**Priority processing:** Planned (not yet implemented).
+
+**Enforcement locations:**
+- Copy MCP (popup): `SnippetCard.tsx` — `isFree` check calls `onCopyMcpAsFree` → upgrade modal; `isGuest` hides item
+- Copy MCP (editor): `ActionBar.tsx` — `!isPaid` → upgrade modal, no copy
+- Copy Advanced Prompt (popup): `SnippetCard.tsx` — hidden for guest and free users
+- Copy Advanced Prompt (editor): `ActionBar.tsx` — `!isPaid` → upgrade modal, no copy
+- MCP `getAdvancedPrompt` tool: `mcp-server/src/tools/prompts.ts` — returns `PLAN_REQUIRED` error for `planCode === 'free'`
 
 ---
 

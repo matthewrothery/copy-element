@@ -146,7 +146,7 @@ ${result.html}
 ${result.css}
 \`\`\`
 
-Rebuild this UI component precisely. Preserve all visual details, spacing, and interactive structure. Handle all external resources appropriately.`;
+You need to implement this element into the existing code base. Focus on creating a perfect replica with style changes to match the existing codebase and rules. The code may include external resources — replace them with existing resources, or use placeholders.`;
 
       return { content: [{ type: 'text' as const, text: prompt }] };
     }
