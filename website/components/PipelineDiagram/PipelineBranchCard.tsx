@@ -6,10 +6,13 @@ export function PipelineBranchCard({
   step,
   status,
   visible,
+  terminalHighlight,
 }: {
   step: PipelineBranch["steps"][0];
   status: PipelineStepStatus;
   visible: boolean;
+  /** Last step on a non-skipped branch: animated border (pricing-card style) when success. */
+  terminalHighlight?: boolean;
 }): ReactElement {
   const detail =
     status === "running"
@@ -20,17 +23,32 @@ export function PipelineBranchCard({
           ? (step.skippedDetail ?? "Skipped")
           : " ";
 
+  const showTrail = terminalHighlight === true;
+
   return (
     <div
       className={[
         "pipeline-branch-card",
         status === "skipped" ? "pipeline-branch-card--skipped" : "",
+        showTrail ? "pipeline-branch-card--terminal" : "",
         visible ? "is-visible" : "",
       ]
         .filter(Boolean)
         .join(" ")}
     >
-      <div className="pipeline-branch-card-inner">
+      {showTrail && (
+        <div className="pipeline-branch-card-terminal-trail" aria-hidden="true">
+          <div className="pipeline-branch-card-terminal-spot" />
+        </div>
+      )}
+      <div
+        className={[
+          "pipeline-branch-card-inner",
+          showTrail ? "pipeline-branch-card-inner--terminal" : "",
+        ]
+          .filter(Boolean)
+          .join(" ")}
+      >
         {step.icon != null && (
           <div className="pipeline-branch-card-icon" aria-hidden="true">
             {step.icon}

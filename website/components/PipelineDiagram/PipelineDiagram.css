@@ -256,6 +256,54 @@
   border-color: var(--pipeline-card-border-strong);
 }
 
+/* Last step on active branches — same border trail technique as pricing cards */
+.pipeline-branch-card--terminal {
+  position: relative;
+  z-index: 1;
+  border-radius: var(--pipeline-card-radius);
+  box-shadow: color-mix(in srgb, var(--accent) 10%, transparent) 0 0 36px 8px;
+  transition: box-shadow 0.5s ease;
+}
+
+.pipeline-branch-card-terminal-trail {
+  position: absolute;
+  inset: 0;
+  border-radius: var(--pipeline-card-radius);
+  overflow: hidden;
+  pointer-events: none;
+  z-index: 0;
+}
+
+.pipeline-branch-card-terminal-spot {
+  width: min(480px, 220%);
+  aspect-ratio: 1;
+  position: absolute;
+  background: radial-gradient(
+    100% 100% at right center,
+    transparent 0%,
+    color-mix(in srgb, var(--accent) 52%, transparent) 5%,
+    transparent 50%
+  );
+  offset-path: border-box;
+  offset-anchor: 100% 50%;
+  animation: pipeline-terminal-trail 20s linear infinite;
+}
+
+@keyframes pipeline-terminal-trail {
+  to {
+    offset-distance: 100%;
+  }
+}
+
+.pipeline-branch-card-inner.pipeline-branch-card-inner--terminal {
+  position: relative;
+  z-index: 1;
+  background: linear-gradient(var(--pipeline-card-bg), var(--pipeline-card-bg)) padding-box;
+  border: 1px solid transparent;
+  border-radius: var(--pipeline-card-radius);
+  box-shadow: 0 4px 16px color-mix(in srgb, var(--bg) 32%, transparent);
+}
+
 .pipeline-branch-card-icon {
   display: flex;
   align-items: center;
@@ -389,5 +437,14 @@
 
   .pipeline-status-icon--spin {
     animation: none;
+  }
+
+  .pipeline-branch-card-terminal-spot {
+    animation: none;
+    opacity: 0;
+  }
+
+  .pipeline-branch-card-inner.pipeline-branch-card-inner--terminal {
+    border-color: color-mix(in srgb, var(--accent) 38%, var(--pipeline-card-border));
   }
 }

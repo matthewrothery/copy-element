@@ -45,6 +45,10 @@ function hubStatus(phase: number): "pending" | "running" | "success" {
   return "success";
 }
 
+function isLastStepOfActiveBranch(branch: PipelineBranch, stepIndex: number): boolean {
+  return branch.skipped !== true && stepIndex === branch.steps.length - 1;
+}
+
 function branchStepStatus(
   branch: PipelineBranch,
   stepIndex: number,
@@ -279,19 +283,25 @@ export function PipelineDiagram({ graph, className }: PipelineDiagramProps): Rea
         <div className="pipeline-diagram-col pipeline-diagram-col--branches">
           {graph.branches.map((branch, bi) => (
             <div key={branch.id} className="pipeline-branch-row">
-              {branch.steps.map((step, si) => (
-                <div
-                  key={step.id}
-                  ref={setBranchRef(bi, si)}
-                  className="pipeline-diagram-anchor"
-                >
-                  <PipelineBranchCard
-                    step={step}
-                    status={branchStepStatus(branch, si, phase)}
-                    visible={visible}
-                  />
-                </div>
-              ))}
+              {branch.steps.map((step, si) => {
+                const stepStatus = branchStepStatus(branch, si, phase);
+                return (
+                  <div
+                    key={step.id}
+                    ref={setBranchRef(bi, si)}
+                    className="pipeline-diagram-anchor"
+                  >
+                    <PipelineBranchCard
+                      step={step}
+                      status={stepStatus}
+                      visible={visible}
+                      terminalHighlight={
+                        isLastStepOfActiveBranch(branch, si) && stepStatus === "success"
+                      }
+                    />
+                  </div>
+                );
+              })}
             </div>
           ))}
         </div>
