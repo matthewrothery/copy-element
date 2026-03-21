@@ -356,6 +356,10 @@
   color: var(--text-muted);
 }
 
+.pipeline-status-icon--pending {
+  color: var(--text-muted);
+}
+
 .pipeline-status-icon--spin {
   color: var(--pipeline-line-active);
   animation: pipeline-spin 0.9s linear infinite;
@@ -365,12 +369,6 @@
   to {
     transform: rotate(360deg);
   }
-}
-
-.pipeline-status-spacer {
-  display: inline-block;
-  width: 16px;
-  height: 16px;
 }
 
 /* ---- Replay button ---- */

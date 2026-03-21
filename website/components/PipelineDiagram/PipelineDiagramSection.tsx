@@ -61,10 +61,10 @@ const PIPELINE_GRAPH: PipelineGraphData = {
         {
           id: "design-ai",
           icon: <Sparkles size={18} strokeWidth={2} aria-hidden="true" />,
-          title: "Design ideas → AI implementation",
+          title: "Manually rebuild UI",
           runningDetail: "",
           successDetail: "",
-          skippedDetail: "Skipped",
+          skippedDetail: "Skipped - Hours saved every week",
         },
       ],
     },

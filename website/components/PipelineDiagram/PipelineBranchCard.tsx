@@ -21,7 +21,7 @@ export function PipelineBranchCard({
         ? step.successDetail
         : status === "skipped"
           ? (step.skippedDetail ?? "Skipped")
-          : " ";
+          : "";
 
   const showTrail = terminalHighlight === true;
 
@@ -67,7 +67,7 @@ export function PipelineBranchCard({
               .filter(Boolean)
               .join(" ")}
           >
-            {status === "pending" ? " " : detail}
+            {status === "pending" ? "waiting..." : detail}
           </div>
         </div>
       </div>

@@ -1,5 +1,5 @@
 import type { ReactElement } from "react";
-import { Check, CircleSlash, Loader2 } from "lucide-react";
+import { Check, CircleSlash, Clock, Loader2 } from "lucide-react";
 import type { PipelineStepStatus } from "./types";
 
 export function PipelineStatusGlyph({ status }: { status: PipelineStepStatus }): ReactElement {
@@ -16,5 +16,7 @@ export function PipelineStatusGlyph({ status }: { status: PipelineStepStatus }):
       <CircleSlash className="pipeline-status-icon pipeline-status-icon--skip" size={16} aria-hidden="true" />
     );
   }
-  return <span className="pipeline-status-spacer" aria-hidden="true" />;
+  return (
+    <Clock className="pipeline-status-icon pipeline-status-icon--pending" size={16} aria-hidden="true" />
+  );
 }
