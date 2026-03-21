@@ -1,0 +1,204 @@
+/* PipelineDiagram – self-contained */
+
+/* Layer 3 — component tokens */
+.pipeline-diagram {
+  --pipeline-card-bg: var(--surface);
+  --pipeline-card-border: var(--border);
+  --pipeline-card-border-highlight: var(--accent);
+  --pipeline-line-base: var(--border);
+  --pipeline-line-active: var(--accent);
+  --pipeline-icon-color: var(--accent);
+  --pipeline-title-size: var(--typo-title);
+  --pipeline-subtitle-size: var(--typo-largecopy);
+  --pipeline-micro-size: var(--typo-label);
+  --pipeline-card-radius: var(--radius-lg);
+  --pipeline-card-padding: var(--space-4);
+  --pipeline-connector-height: 48px;
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+}
+
+/* ---- Item wrapper ---- */
+.pipeline-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+  max-width: 520px;
+}
+
+/* ---- Node card ---- */
+.pipeline-node {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--space-3);
+  width: 100%;
+  padding: var(--pipeline-card-padding);
+  background: var(--pipeline-card-bg);
+  border: 1px solid var(--pipeline-card-border);
+  border-radius: var(--pipeline-card-radius);
+  opacity: 0;
+  transform: translateY(-8px);
+  transition: border-color 0.2s;
+}
+
+.pipeline-node--highlight {
+  border-color: var(--pipeline-card-border-highlight);
+  box-shadow: 0 0 0 1px var(--pipeline-card-border-highlight), 0 0 20px rgba(58, 130, 246, 0.12);
+}
+
+/* ---- Animation: triggered by is-visible class on parent ---- */
+
+@keyframes pipeline-node-enter {
+  0% {
+    opacity: 0;
+    transform: translateY(-8px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes pipeline-line-draw {
+  from {
+    stroke-dashoffset: 1;
+  }
+  to {
+    stroke-dashoffset: 0;
+  }
+}
+
+@keyframes pipeline-dot-travel {
+  0% {
+    transform: translateY(0px);
+    opacity: 1;
+  }
+  90% {
+    opacity: 1;
+  }
+  100% {
+    transform: translateY(40px);
+    opacity: 0;
+  }
+}
+
+.pipeline-diagram.is-visible .pipeline-node {
+  animation: pipeline-node-enter 0.3s cubic-bezier(0.37, 1.4, 0.42, 1) both;
+  animation-delay: var(--pipeline-node-delay, 0ms);
+}
+
+.pipeline-diagram.is-visible .pipeline-connector-line {
+  animation: pipeline-line-draw 0.25s ease-out both;
+  animation-delay: var(--pipeline-line-delay, 100ms);
+}
+
+.pipeline-diagram.is-visible .pipeline-connector-dot {
+  animation: pipeline-dot-travel 0.3s ease-in both;
+  animation-delay: var(--pipeline-dot-delay, 150ms);
+}
+
+/* ---- Connector ---- */
+.pipeline-connector {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: var(--pipeline-connector-height);
+  flex-shrink: 0;
+}
+
+.pipeline-connector-svg {
+  display: block;
+  overflow: visible;
+}
+
+.pipeline-connector-dot {
+  opacity: 0;
+}
+
+/* ---- Node icon ---- */
+.pipeline-node-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  width: 24px;
+  height: 24px;
+  margin-top: 2px;
+  color: var(--pipeline-icon-color);
+}
+
+.pipeline-node-icon svg {
+  width: 20px;
+  height: 20px;
+}
+
+/* ---- Node body ---- */
+.pipeline-node-body {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+  flex: 1;
+  min-width: 0;
+}
+
+.pipeline-node-title {
+  font-size: var(--pipeline-title-size);
+  font-weight: var(--font-weight-semibold);
+  color: var(--text);
+  line-height: 1.3;
+  letter-spacing: -0.01em;
+}
+
+.pipeline-node-subtitle {
+  font-size: var(--pipeline-subtitle-size);
+  font-weight: var(--font-weight-normal);
+  color: var(--text-muted);
+  line-height: 1.4;
+}
+
+.pipeline-node-microcopy {
+  font-size: var(--pipeline-micro-size);
+  font-weight: var(--font-weight-normal);
+  color: var(--text-muted);
+  opacity: 0.6;
+  margin-top: var(--space-1);
+  font-variant-numeric: tabular-nums;
+  letter-spacing: 0.02em;
+}
+
+/* ---- Tags ---- */
+.pipeline-node-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-1);
+  margin-top: var(--space-2);
+}
+
+.pipeline-node-tag {
+  display: inline-flex;
+  align-items: center;
+  padding: 2px 8px;
+  background: rgba(58, 130, 246, 0.12);
+  border: 1px solid rgba(58, 130, 246, 0.25);
+  border-radius: var(--radius-pill);
+  font-size: var(--pipeline-micro-size);
+  font-weight: var(--font-weight-semibold);
+  color: var(--accent);
+  letter-spacing: 0.01em;
+}
+
+/* ---- Responsive ---- */
+@media (max-width: 480px) {
+  .pipeline-item {
+    max-width: 100%;
+  }
+
+  .pipeline-node {
+    padding: var(--space-3);
+    gap: var(--space-2);
+  }
+}

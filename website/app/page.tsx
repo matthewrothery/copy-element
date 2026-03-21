@@ -4,6 +4,7 @@ import { FeatureSection } from "@/components/FeatureSection";
 import { FeatureGrid } from "@/components/FeatureGrid";
 import { ElementsShowcase } from "@/components/ElementsShowcase";
 import { SnippetHero } from "@/components/SnippetHero";
+import { PipelineDiagramSection } from "@/components/PipelineDiagram";
 import { CTABlock } from "@/components/CTABlock";
 import { FAQ } from "@/components/FAQ";
 import { Footer } from "@/components/Footer";
@@ -55,6 +56,10 @@ export default function Home(): React.ReactElement {
 
         <Section>
           <SnippetHero subheading="Snippet library" />
+        </Section>
+
+        <Section center>
+          <PipelineDiagramSection />
         </Section>
 
         <Section id="features">
