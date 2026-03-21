@@ -30,9 +30,11 @@ interface SnippetCardProps {
   onCopy: (value: string, label: string) => void;
   isGuest?: boolean;
   onCopyPromptAsGuest?: () => void;
+  isFree?: boolean;
+  onCopyPromptAsFree?: () => void;
 }
 
-export function SnippetCard({ snippet, onOpen, onDelete, onCopy, isGuest, onCopyPromptAsGuest }: SnippetCardProps) {
+export function SnippetCard({ snippet, onOpen, onDelete, onCopy, isGuest, onCopyPromptAsGuest, isFree, onCopyPromptAsFree }: SnippetCardProps) {
   const [menuOpen, setMenuOpen] = useState(false);
   const [isDragging, setIsDragging] = useState(false);
   const menuRef = useRef<HTMLDivElement>(null);
@@ -89,7 +91,15 @@ export function SnippetCard({ snippet, onOpen, onDelete, onCopy, isGuest, onCopy
         <button
           type="button"
           className="btn-secondary btn-primary-action"
-          onClick={() => isGuest ? onCopyPromptAsGuest?.() : onCopy(buildSnippetPrompt(snippet), "Prompt")}
+          onClick={() => {
+            if (isGuest) {
+              onCopyPromptAsGuest?.();
+            } else if (isFree) {
+              onCopyPromptAsFree?.();
+            } else {
+              onCopy(buildSnippetPrompt(snippet), "Prompt");
+            }
+          }}
           aria-label="Copy prompt"
         >
           <Copy size={ICON_SIZE} aria-hidden />

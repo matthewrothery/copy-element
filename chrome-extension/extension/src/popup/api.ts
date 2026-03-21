@@ -144,6 +144,10 @@ export async function rotateMcpToken(): Promise<McpTokenGeneratedPayload> {
   return sendRuntimeMessage<McpTokenGeneratedPayload>({ type: "ROTATE_MCP_TOKEN" });
 }
 
+export function openUpgradePage(): void {
+  chrome.tabs.create({ url: `${SERVER_URL}/billing` });
+}
+
 export function openSignInPage(installId: string): void {
   const signInUrl =
     `${SERVER_URL}/sign-in` +

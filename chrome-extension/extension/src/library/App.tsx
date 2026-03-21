@@ -8,11 +8,13 @@ import {
   getInstallIdFromBackground,
   getSnippetsFromBackground,
   openSignInPage,
+  openUpgradePage,
   saveFolderToBackground,
   saveSnippetToBackground
 } from "../popup/api";
 import { DeleteConfirmationModal } from "../popup/components/DeleteConfirmationModal";
 import { SignInPromoModal } from "../popup/components/SignInPromoModal";
+import { UpgradePromoModal } from "../popup/components/UpgradePromoModal";
 import { EmptyState } from "../popup/components/EmptyState";
 import { FolderCard } from "../popup/components/FolderCard";
 import { FolderDeleteConfirmationModal } from "../popup/components/FolderDeleteConfirmationModal";
@@ -24,6 +26,8 @@ import { SnippetPreview } from "../popup/components/SnippetPreview";
 import { Toast } from "../popup/components/Toast";
 import type { Folder } from "../shared/types/folder";
 import type { Snippet } from "../shared/types/snippet";
+import { buildSnippetPrompt } from "../shared/utils/prompt-builder";
+import { PAID_PLANS } from "../shared/usage";
 
 import logoUrl from "../../assets/logo.png";
 
@@ -61,7 +65,9 @@ export function LibraryApp(): JSX.Element {
   const [showNewFolder, setShowNewFolder] = useState(false);
   const [toastMessage, setToastMessage] = useState("");
   const [isGuest, setIsGuest] = useState(false);
+  const [isPaid, setIsPaid] = useState(false);
   const [showPromoModal, setShowPromoModal] = useState(false);
+  const [showUpgradeModal, setShowUpgradeModal] = useState(false);
   const [query, setQuery] = useState("");
   const [sortOrder, setSortOrder] = useState<"date-desc" | "date-asc" | "name-asc" | "name-desc">("date-desc");
 
@@ -153,6 +159,7 @@ export function LibraryApp(): JSX.Element {
       try {
         const state = await getAuthStateFromBackground();
         setIsGuest(!state.signed_in);
+        setIsPaid(state.signed_in && PAID_PLANS.includes(state.user_plan as never));
       } catch {
         // ignore; default to guest
       }
@@ -226,6 +233,16 @@ export function LibraryApp(): JSX.Element {
 
   function handleCopyPromptAsGuest(_snippet: Snippet): void {
     setShowPromoModal(true);
+  }
+
+  async function handleCopyPromptAsFree(snippet: Snippet): Promise<void> {
+    try {
+      await copyToClipboard(buildSnippetPrompt(snippet));
+      setToastMessage("Prompt copied");
+    } catch {
+      setToastMessage("Failed to copy prompt");
+    }
+    setShowUpgradeModal(true);
   }
 
   async function handleCopy(value: string, label: string): Promise<void> {
@@ -361,6 +378,8 @@ export function LibraryApp(): JSX.Element {
               onCopy={(value, label) => void handleCopy(value, label)}
               isGuest={isGuest}
               onCopyPromptAsGuest={handleCopyPromptAsGuest}
+              isFree={!isGuest && !isPaid}
+              onCopyPromptAsFree={(snippet) => void handleCopyPromptAsFree(snippet)}
             />
           </section>
         ) : snippets.length > 0 ? (
@@ -407,6 +426,12 @@ export function LibraryApp(): JSX.Element {
           parentFolderId={currentFolderId}
           onCreate={(name) => void handleCreateFolder(name)}
           onCancel={() => setShowNewFolder(false)}
+        />
+      )}
+      {showUpgradeModal && (
+        <UpgradePromoModal
+          onUpgrade={() => { openUpgradePage(); setShowUpgradeModal(false); }}
+          onClose={() => setShowUpgradeModal(false)}
         />
       )}
       {showPromoModal && (

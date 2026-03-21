@@ -1,13 +1,35 @@
 import { beforeEach, describe, expect, it, vi } from "vitest";
 import {
+  FREE_LIBRARY_LIMIT,
   FREE_TIER_MONTHLY_CAPTURE_LIMIT,
   getCurrentMonthKey,
   getUsageThisMonth,
   getUsageTier,
+  GUEST_LIBRARY_LIMIT,
+  PAID_PLANS,
   SAVES_THIS_MONTH_KEY
 } from "./usage";
 
 describe("usage", () => {
+  describe("tier limit constants", () => {
+    it("GUEST_LIBRARY_LIMIT is 10", () => {
+      expect(GUEST_LIBRARY_LIMIT).toBe(10);
+    });
+
+    it("FREE_LIBRARY_LIMIT is 25", () => {
+      expect(FREE_LIBRARY_LIMIT).toBe(25);
+    });
+
+    it("FREE_LIBRARY_LIMIT is greater than GUEST_LIBRARY_LIMIT", () => {
+      expect(FREE_LIBRARY_LIMIT).toBeGreaterThan(GUEST_LIBRARY_LIMIT);
+    });
+
+    it("PAID_PLANS contains pro and team", () => {
+      expect(PAID_PLANS).toContain("pro");
+      expect(PAID_PLANS).toContain("team");
+    });
+  });
+
   describe("getCurrentMonthKey", () => {
     it("returns YYYY-MM format", () => {
       const key = getCurrentMonthKey();

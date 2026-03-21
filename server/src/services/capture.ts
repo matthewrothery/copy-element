@@ -188,6 +188,28 @@ export function deleteOldestCaptureForInstall(installId: string): void {
   })();
 }
 
+/**
+ * Count captures for a given user (across all linked installs).
+ */
+export function countCapturesByUser(userId: string): number {
+  const db = getDb();
+  const row = db.prepare('SELECT COUNT(*) as count FROM captures WHERE user_id = ?').get(userId) as { count: number };
+  return row.count;
+}
+
+/**
+ * Delete the oldest capture (by captured_at) for a given user, including its assets.
+ */
+export function deleteOldestCaptureByUser(userId: string): void {
+  const db = getDb();
+  const oldest = db.prepare('SELECT id FROM captures WHERE user_id = ? ORDER BY captured_at ASC LIMIT 1').get(userId) as { id: number } | undefined;
+  if (!oldest) return;
+  db.transaction(() => {
+    db.prepare('DELETE FROM capture_assets WHERE capture_id = ?').run(oldest.id);
+    db.prepare('DELETE FROM captures WHERE id = ?').run(oldest.id);
+  })();
+}
+
 function attachAssets(db: ReturnType<typeof getDb>, capture: CaptureRow): CaptureWithAssets {
   const assets = db
     .prepare(

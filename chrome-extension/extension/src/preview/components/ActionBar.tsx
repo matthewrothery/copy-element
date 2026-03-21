@@ -12,9 +12,11 @@ interface ActionBarProps {
   currentCss: string;
   tokenCount: number;
   onToast: (msg: string) => void;
+  isPaid?: boolean;
+  onUpgrade?: () => void;
 }
 
-export function ActionBar({ snippet, currentHtml, currentCss, tokenCount, onToast }: ActionBarProps) {
+export function ActionBar({ snippet, currentHtml, currentCss, tokenCount, onToast, isPaid, onUpgrade }: ActionBarProps) {
   function copy(value: string, label: string) {
     void navigator.clipboard.writeText(value).then(
       () => onToast(`${label} copied`),
@@ -28,9 +30,16 @@ export function ActionBar({ snippet, currentHtml, currentCss, tokenCount, onToas
 
   function handleCopyPrompt() {
     copy(buildSnippetPrompt({ ...snippet, html: currentHtml, styleBlock: currentCss }), "Prompt");
+    if (!isPaid) {
+      onUpgrade?.();
+    }
   }
 
   function handleCopyMcp() {
+    if (!isPaid) {
+      onUpgrade?.();
+      return;
+    }
     copy(buildCopyMcpPrompt({ ...snippet, html: currentHtml, styleBlock: currentCss }), "MCP");
   }
 

@@ -1,7 +1,7 @@
 import type { CapturedElementData } from "../shared/types/snippet";
 import { deleteFolder, getFolders, saveFolder } from "../shared/storage/folder-storage";
 import { deleteSnippet, getSnippetById, getSnippets, saveSnippet } from "../shared/storage/snippet-storage";
-import { GUEST_LIBRARY_LIMIT } from "../shared/usage";
+import { FREE_LIBRARY_LIMIT, GUEST_LIBRARY_LIMIT, PAID_PLANS } from "../shared/usage";
 import {
   clearAuthToken,
   getAuthExpiresAt,
@@ -366,6 +366,12 @@ chrome.runtime.onMessage.addListener((message: RuntimeMessage, sender, sendRespo
         if (!authState.signed_in) {
           const snippets = await getSnippets();
           while (snippets.length >= GUEST_LIBRARY_LIMIT) {
+            await deleteSnippet(snippets[snippets.length - 1].id);
+            snippets.pop();
+          }
+        } else if (!PAID_PLANS.includes(authState.user_plan as never)) {
+          const snippets = await getSnippets();
+          while (snippets.length >= FREE_LIBRARY_LIMIT) {
             await deleteSnippet(snippets[snippets.length - 1].id);
             snippets.pop();
           }

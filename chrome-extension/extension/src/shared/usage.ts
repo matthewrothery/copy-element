@@ -8,6 +8,12 @@ export const SAVES_THIS_MONTH_KEY = "element-armory-saves-this-month";
 /** Guest library hard ceiling (FIFO eviction, no monthly reset). */
 export const GUEST_LIBRARY_LIMIT = 10;
 
+/** Free-tier library hard ceiling (FIFO eviction, no monthly reset). */
+export const FREE_LIBRARY_LIMIT = 25;
+
+/** Plan codes that grant paid access. */
+export const PAID_PLANS = ['pro', 'team'] as const;
+
 export const FREE_TIER_MONTHLY_CAPTURE_LIMIT = 20;
 
 /** Threshold (0–1) above which to show upgrade hint. */

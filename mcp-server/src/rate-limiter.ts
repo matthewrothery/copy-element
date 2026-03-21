@@ -2,7 +2,7 @@ import { apiPost } from './client/api-client.js';
 import { McpLimitError } from './types.js';
 import type { McpUser } from './types.js';
 
-const FREE_MONTHLY_LIMIT = 50;
+const FREE_MONTHLY_LIMIT = 10;
 
 interface IncrementResponse {
   callCount: number;

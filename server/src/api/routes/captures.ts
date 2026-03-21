@@ -2,7 +2,9 @@ import { Router, type Request, type Response } from 'express';
 import { nanoid } from 'nanoid';
 import {
   countCapturesByInstall,
+  countCapturesByUser,
   createCaptureWithAssets,
+  deleteOldestCaptureByUser,
   deleteOldestCaptureForInstall,
   listCapturesByInstall,
   listCapturesByUser,
@@ -16,11 +18,13 @@ import {
 } from '../../services/s3.js';
 import { requireInstallAuth, type RequestWithInstall } from '../middleware/install-auth.js';
 import { requireSession, type RequestWithSession } from '../middleware/session.js';
+import { hasActivePaidPlan } from '../../services/entitlements.js';
 
 export const capturesRouter = Router();
 
 const MAX_ASSETS_PER_CAPTURE = 10;
 const GUEST_CAPTURE_LIMIT = 10;
+const FREE_USER_CAPTURE_LIMIT = 25;
 const MAX_METADATA_JSON_LENGTH = 4096;
 const ALLOWED_SCREENSHOT_TYPES = ['image/png', 'image/jpeg', 'image/webp'];
 const ALLOWED_HTML_TYPES = ['text/html'];
@@ -150,6 +154,12 @@ capturesRouter.post(
         let count = countCapturesByInstall(installId);
         while (count > GUEST_CAPTURE_LIMIT) {
           deleteOldestCaptureForInstall(installId);
+          count--;
+        }
+      } else if (!hasActivePaidPlan(req.installUserId)) {
+        let count = countCapturesByUser(req.installUserId);
+        while (count > FREE_USER_CAPTURE_LIMIT) {
+          deleteOldestCaptureByUser(req.installUserId);
           count--;
         }
       }

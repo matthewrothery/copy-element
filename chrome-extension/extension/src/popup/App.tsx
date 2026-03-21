@@ -20,6 +20,7 @@ import {
   FREE_TIER_MONTHLY_CAPTURE_LIMIT,
   getGuestUsage,
   getUsageThisMonth,
+  PAID_PLANS,
   SAVES_THIS_MONTH_KEY
 } from "../shared/usage";
 import { buildSnippetPrompt } from "../shared/utils/prompt-builder";
@@ -76,6 +77,7 @@ export function App(): JSX.Element {
   const [loadingState, setLoadingState] = useState(false);
   const [storedUsage, setStoredUsage] = useState<{ used: number; limit: number } | null>(null);
   const [isSignedIn, setIsSignedIn] = useState(false);
+  const [isPaid, setIsPaid] = useState(false);
 
   const snippetCount = snippets.length;
   const recentSnippets = useMemo(() => snippets.slice(0, 2), [snippets]);
@@ -144,6 +146,7 @@ export function App(): JSX.Element {
       try {
         const state = await getAuthStateFromBackground();
         setIsSignedIn(state.signed_in);
+        setIsPaid(state.signed_in && PAID_PLANS.includes(state.user_plan as never));
       } catch {
         // ignore
       }
@@ -155,7 +158,15 @@ export function App(): JSX.Element {
         areaName: string
       ): void => {
         if (areaName === "local" && "element-armory-auth-token" in changes) {
-          setIsSignedIn(!!changes["element-armory-auth-token"].newValue);
+          if (!changes["element-armory-auth-token"].newValue) {
+            setIsSignedIn(false);
+            setIsPaid(false);
+          } else {
+            void getAuthStateFromBackground().then((state) => {
+              setIsSignedIn(state.signed_in);
+              setIsPaid(state.signed_in && PAID_PLANS.includes(state.user_plan as never));
+            }).catch(() => {});
+          }
         }
       };
       chrome.storage.onChanged.addListener(listener);
@@ -249,7 +260,7 @@ export function App(): JSX.Element {
             onOpenLibrary={handleOpenLibrary}
             onCopyPrompt={handleCopyPrompt}
             onCopyCode={handleCopyCode}
-            isGuest={!isSignedIn}
+            isGuest={!isPaid}
           />
         )}
       </main>

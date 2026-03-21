@@ -1,5 +1,7 @@
 import { useCallback, useEffect, useRef, useState } from "react";
-import { getSnippetById, saveSnippetToBackground } from "../popup/api";
+import { getAuthStateFromBackground, getSnippetById, openUpgradePage, saveSnippetToBackground } from "../popup/api";
+import { UpgradePromoModal } from "../popup/components/UpgradePromoModal";
+import { PAID_PLANS } from "../shared/usage";
 import { getSnippetPromptTokenEstimate } from "../shared/utils/prompt-builder";
 import { buildEditorPreviewSrcDoc } from "../shared/utils/preview-srcdoc-builder";
 import type { Snippet } from "../shared/types/snippet";
@@ -22,7 +24,15 @@ export function App() {
   const [saving, setSaving] = useState(false);
   const [saveSuccess, setSaveSuccess] = useState(false);
   const [toast, setToast] = useState<string | null>(null);
+  const [isPaid, setIsPaid] = useState(false);
+  const [showUpgradeModal, setShowUpgradeModal] = useState(false);
   const previewTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+
+  useEffect(() => {
+    void getAuthStateFromBackground().then((state) => {
+      setIsPaid(state.signed_in && PAID_PLANS.includes(state.user_plan as never));
+    }).catch(() => {});
+  }, []);
 
   useEffect(() => {
     const params = new URLSearchParams(window.location.search);
@@ -108,6 +118,8 @@ export function App() {
         saving={saving}
         saveSuccess={saveSuccess}
         onSave={() => void handleSave()}
+        isPaid={isPaid}
+        onUpgrade={() => setShowUpgradeModal(true)}
       />
       <ActionBar
         snippet={snippet}
@@ -115,6 +127,8 @@ export function App() {
         currentCss={cssContent}
         tokenCount={tokenCount}
         onToast={showToast}
+        isPaid={isPaid}
+        onUpgrade={() => setShowUpgradeModal(true)}
       />
       <CodeEditorPane
         html={htmlContent}
@@ -124,6 +138,12 @@ export function App() {
       />
       <PreviewPane srcDoc={srcDoc} />
       {toast && <div className="preview-toast" role="status">{toast}</div>}
+      {showUpgradeModal && (
+        <UpgradePromoModal
+          onUpgrade={() => { openUpgradePage(); setShowUpgradeModal(false); }}
+          onClose={() => setShowUpgradeModal(false)}
+        />
+      )}
     </div>
   );
 }
