@@ -11,7 +11,7 @@ import "./Header.css";
 const SCROLL_THRESHOLD_PX = 24;
 
 const DEFAULT_NAV: NavItem[] = [
-  { label: "Product", href: "/" },
+  { label: "Product", href: "/product" },
   { label: "Help", href: "/help" },
   { label: "Pricing", href: "/pricing" },
   { label: "Examples", href: "/examples" },
