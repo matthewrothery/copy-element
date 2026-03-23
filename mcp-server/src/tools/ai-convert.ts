@@ -6,7 +6,7 @@ import { apiGet, apiPost } from '../client/api-client.js';
 import { consumeCallQuota } from '../rate-limiter.js';
 import { config } from '../config.js';
 
-const AI_MODEL = 'claude-sonnet-4-6';
+const AI_MODEL = 'claude-haiku-4-5';
 const COST_INPUT_MICROS_PER_TOKEN = 3;
 const COST_OUTPUT_MICROS_PER_TOKEN = 15;
 const AI_TIMEOUT_MS = 120_000;
