@@ -1,0 +1,77 @@
+.example-card {
+  --card-preview-height: 220px;
+  --card-iframe-scale: 0.5;
+  --card-surface: var(--surface);
+  --card-border: var(--border);
+  --card-border-hover: rgba(255, 255, 255, 0.22);
+  --card-name-color: var(--text);
+  --card-category-color: var(--text-muted);
+  --card-category-bg: rgba(255, 255, 255, 0.06);
+  --card-radius: var(--radius-lg);
+
+  display: flex;
+  flex-direction: column;
+  border: 1px solid var(--card-border);
+  border-radius: var(--card-radius);
+  overflow: hidden;
+  background: var(--card-surface);
+  text-decoration: none;
+  transition: transform 180ms, border-color 180ms;
+  cursor: pointer;
+}
+
+.example-card:hover {
+  transform: translateY(-2px);
+  border-color: var(--card-border-hover);
+}
+
+.card-preview {
+  position: relative;
+  height: var(--card-preview-height);
+  overflow: hidden;
+  background: #f3f4f6;
+}
+
+.card-preview-frame {
+  width: calc(100% / var(--card-iframe-scale));
+  height: calc(var(--card-preview-height) / var(--card-iframe-scale));
+  transform: scale(var(--card-iframe-scale));
+  transform-origin: top left;
+  border: none;
+  display: block;
+  pointer-events: none;
+}
+
+.card-preview-overlay {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+}
+
+.card-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px 14px;
+  gap: 8px;
+  border-top: 1px solid var(--card-border);
+}
+
+.card-name {
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--card-name-color);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.card-category {
+  font-size: 11px;
+  color: var(--card-category-color);
+  background: var(--card-category-bg);
+  padding: 2px 8px;
+  border-radius: var(--radius-pill, 1000px);
+  white-space: nowrap;
+  flex-shrink: 0;
+}

@@ -1,7 +1,7 @@
 import { notFound } from "next/navigation";
 import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
-import { ArticleHeader, ArticleBody, SuggestedPosts } from "@/components/Article";
+import { ArticleHeader, ArticleBody, ArticleCTA, SuggestedPosts } from "@/components/Article";
 import { getAllPosts, getPost } from "@/lib/parseBlog";
 import "@/styles/blog.css";
 
@@ -50,6 +50,7 @@ export default async function BlogPostPage({
           coverImage={post.coverImage}
         />
         <ArticleBody contentHtml={post.contentHtml} />
+        <ArticleCTA />
         <SuggestedPosts posts={suggested} />
       </main>
       <Footer />
