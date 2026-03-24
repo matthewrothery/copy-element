@@ -126,6 +126,25 @@ Parent requirements: `overflow: visible` on the parent, standard section padding
 
 ---
 
+### Rule: Use PageHero for Content/Utility Page Heroes
+
+Content and utility pages (help, terms, privacy, cookies, etc.) must use the `PageHero` component from `website/components/PageHero`. Do not put `h1`/`p` directly inside a plain outer `Section`.
+
+**Why:** The outer `Section` has `gap: var(--section-gap)` = 256px. Placing `h1` and `p` directly inside it puts 256px of gap between them, making the hero enormous. The fix is always `outer Section → inner Section → content`. The inner `section-inner` uses `gap: var(--space-5)` (32px). `PageHero` encapsulates this pattern correctly.
+
+```tsx
+// Correct
+<PageHero title="Privacy Policy" subtitle="How we handle your data." />
+
+// Wrong — 256px gap between h1 and p due to --section-gap
+<Section style={{ paddingTop: "var(--space-7)" }}>
+  <h1 className="page-title">Privacy Policy</h1>
+  <p className="page-subtitle">How we handle your data.</p>
+</Section>
+```
+
+---
+
 ### Rule: Alias Component Heading Sizes to Global Tokens
 
 For component heading/subtitle size variables, do not hardcode pixel values. Define the component variable as an alias to global typography tokens in `styles/tokens.css`.

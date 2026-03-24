@@ -46,6 +46,10 @@ main {
   gap: var(--section-gap);
 }
 
+main.content-page {
+  gap: var(--space-6);
+}
+
 a {
   color: inherit;
   text-decoration: none;

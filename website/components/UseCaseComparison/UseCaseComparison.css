@@ -1,0 +1,80 @@
+/* UseCaseComparison — scenario cards with 2-col split */
+.ucc-root {
+  --ucc-card-bg: var(--surface);
+  --ucc-our-label-color: var(--accent);
+  --ucc-scenario-size: var(--typo-title);
+  --ucc-approach-size: var(--typo-copy);
+  --ucc-label-size: var(--typo-label);
+
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-6);
+}
+
+.ucc-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+}
+
+.ucc-card {
+  background: var(--ucc-card-bg);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  padding: var(--space-5);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+}
+
+.ucc-scenario {
+  font-size: var(--ucc-scenario-size);
+  font-weight: var(--font-weight-semibold);
+  color: var(--text);
+  margin: 0;
+}
+
+.ucc-split {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--space-4);
+}
+
+.ucc-side {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+}
+
+.ucc-side-label {
+  font-size: var(--ucc-label-size);
+  font-weight: var(--font-weight-semibold);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--ucc-our-label-color);
+}
+
+.ucc-side-label--theirs {
+  color: var(--text-muted);
+}
+
+.ucc-side-text {
+  font-size: var(--ucc-approach-size);
+  color: var(--text-muted);
+  line-height: 1.6;
+  margin: 0;
+}
+
+@media (max-width: 884px) {
+  .ucc-split {
+    grid-template-columns: 1fr;
+  }
+
+  .ucc-side--theirs {
+    padding-top: var(--space-3);
+    border-top: 1px solid var(--border);
+  }
+}

@@ -1,0 +1,109 @@
+/* ComparisonTable — feature matrix */
+.ct-scroll-wrapper {
+  --ct-our-col-bg: color-mix(in srgb, var(--accent) 8%, transparent);
+  --ct-our-col-border: color-mix(in srgb, var(--accent) 30%, transparent);
+  --ct-row-border: var(--border);
+  --ct-feature-size: var(--typo-copy);
+  --ct-header-size: var(--typo-label);
+
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+}
+
+.ct-table {
+  width: 100%;
+  min-width: 480px;
+  border-collapse: collapse;
+  font-family: var(--font-sans);
+}
+
+/* Header row */
+.ct-th {
+  padding: var(--space-3) var(--space-4);
+  font-size: var(--ct-header-size);
+  font-weight: var(--font-weight-semibold);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--text-muted);
+  text-align: left;
+  border-bottom: 1px solid var(--ct-row-border);
+  white-space: nowrap;
+}
+
+.ct-th--feature {
+  width: 55%;
+}
+
+.ct-th--ours {
+  width: 22.5%;
+  background: var(--ct-our-col-bg);
+  border-left: 1px solid var(--ct-our-col-border);
+  border-right: 1px solid var(--ct-our-col-border);
+  color: var(--accent);
+}
+
+.ct-th--theirs {
+  width: 22.5%;
+}
+
+/* Body rows */
+.ct-row:not(:last-child) {
+  border-bottom: 1px solid var(--ct-row-border);
+}
+
+.ct-td {
+  padding: var(--space-3) var(--space-4);
+  vertical-align: top;
+  font-size: var(--ct-feature-size);
+  color: var(--text);
+}
+
+.ct-td--feature {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+}
+
+.ct-td--ours {
+  background: var(--ct-our-col-bg);
+  border-left: 1px solid var(--ct-our-col-border);
+  border-right: 1px solid var(--ct-our-col-border);
+  text-align: center;
+}
+
+.ct-td--theirs {
+  text-align: center;
+}
+
+.ct-feature-label {
+  font-weight: var(--font-weight-semibold);
+  color: var(--text);
+  font-size: var(--ct-feature-size);
+}
+
+.ct-feature-note {
+  font-size: var(--typo-label);
+  color: var(--text-muted);
+  line-height: 1.5;
+}
+
+/* Status icons */
+.ct-status {
+  display: inline-block;
+  font-size: 16px;
+  line-height: 1;
+}
+
+.ct-status--yes {
+  color: #4ade80;
+}
+
+.ct-status--no {
+  color: var(--text-muted);
+}
+
+.ct-status--partial {
+  color: #facc15;
+}

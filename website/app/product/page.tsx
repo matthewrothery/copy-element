@@ -76,7 +76,7 @@ export default function ProductPage(): React.ReactElement {
               {
                 title: "Click to capture",
                 description:
-                  "Open Element Armory, hover any element, click. The extension extracts it with its visual styles — display, layout, typography, color, spacing. Nothing else.",
+                  "Open Element Armory, hover any element, click. The extension extracts it with its visual styles - display, layout, typography, color, spacing. Nothing else.",
               },
               {
                 title: "Copy HTML or JSX",
@@ -142,7 +142,7 @@ export default function ProductPage(): React.ReactElement {
               {
                 title: "MCP server",
                 description:
-                  "Connect Element Armory to Cursor or any MCP-compatible AI editor. Captured elements land directly in your tool's context — no manual paste required.",
+                  "Connect Element Armory to Cursor or any MCP-compatible AI editor. Captured elements land directly in your tool's context - no manual paste required.",
               },
               {
                 title: "AI-ready prompts",
@@ -152,7 +152,7 @@ export default function ProductPage(): React.ReactElement {
               {
                 title: "Framework-neutral output",
                 description:
-                  "HTML and JSX both work with any framework. Next.js, Remix, SvelteKit, or plain React — captured code drops in without modification.",
+                  "HTML and JSX both work with any framework. Next.js, Remix, SvelteKit, or plain React - captured code drops in without modification.",
               },
             ]}
           />
@@ -185,7 +185,7 @@ export default function ProductPage(): React.ReactElement {
               {
                 title: "Share with your team",
                 description:
-                  "Generate a share link for any snippet. Anyone with the link can view and copy the element — no account needed to receive.",
+                  "Generate a share link for any snippet. Anyone with the link can view and copy the element - no account needed to receive.",
               },
             ]}
           />
@@ -224,12 +224,12 @@ export default function ProductPage(): React.ReactElement {
               {
                 question: "Does it work with Cursor?",
                 answer:
-                  "Yes. Element Armory ships with an MCP server. Connect it to Cursor and captured elements land directly in your editor context. Setup takes under two minutes — see the help docs for a step-by-step guide.",
+                  "Yes. Element Armory ships with an MCP server. Connect it to Cursor and captured elements land directly in your editor context. Setup takes under two minutes - see the help docs for a step-by-step guide.",
               },
               {
                 question: "Can I use the output with any framework?",
                 answer:
-                  "Yes. HTML output is plain markup with inline styles — it works in any project. JSX output is valid React JSX with camelCase props and self-closing tags. Both formats are framework-neutral and require no cleanup.",
+                  "Yes. HTML output is plain markup with inline styles - it works in any project. JSX output is valid React JSX with camelCase props and self-closing tags. Both formats are framework-neutral and require no cleanup.",
               },
               {
                 question: "Do I need to sign up to start?",
@@ -239,7 +239,7 @@ export default function ProductPage(): React.ReactElement {
               {
                 question: "What sites does it work on?",
                 answer:
-                  "Any publicly accessible website. Element Armory runs entirely in your browser — it doesn't need access to a site's source code or APIs.",
+                  "Any publicly accessible website. Element Armory runs entirely in your browser - it doesn't need access to a site's source code or APIs.",
               },
               {
                 question: "Will saved snippets break if the original site changes?",
@@ -254,7 +254,7 @@ export default function ProductPage(): React.ReactElement {
               {
                 question: "Does it capture JavaScript behavior?",
                 answer:
-                  "No — by design. Element Armory captures visual structure and styles only. No scripts, event handlers, or runtime logic are included. This keeps output portable and safe to paste into any project.",
+                  "No - by design. Element Armory captures visual structure and styles only. No scripts, event handlers, or runtime logic are included. This keeps output portable and safe to paste into any project.",
               },
             ]}
           />

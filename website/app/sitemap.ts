@@ -7,31 +7,34 @@ const BASE_URL =
   process.env.NEXT_PUBLIC_SITE_URL ?? "https://elementarmory.com";
 
 export default function sitemap(): MetadataRoute.Sitemap {
-  const routes = ["", "/changelog", "/roadmap", "/privacy", "/terms"];
-  const staticPages = routes.map((path) => ({
-    url: path ? `${BASE_URL}${path}` : BASE_URL,
-    lastModified: new Date(),
-    changeFrequency: "weekly" as const,
-    priority: path === "" ? 1 : 0.8,
-  }));
+  const staticPaths = [
+    { url: "", priority: 1 as const, changeFrequency: "yearly" as const },
+    { url: "/changelog" },
+    { url: "/roadmap" },
+    { url: "/privacy" },
+    { url: "/terms" },
+    { url: "/cookies" },
+    { url: "/url-sitemap" },
+    { url: "/product" },
+    { url: "/compare/element-armory-vs-divmagic" },
+    { url: "/compare/element-armory-vs-css-scan" },
+    { url: "/compare/element-armory-vs-visbug" },
+    { url: "/compare/element-armory-vs-csspeeper" },
+    { url: "/examples" },
+  ];
+
+  const lastModified = new Date();
 
   return [
-    ...staticPages,
-    {
-      url: `${BASE_URL}/product`,
-      lastModified: new Date(),
-      changeFrequency: "weekly" as const,
-      priority: 0.9,
-    },
-    {
-      url: `${BASE_URL}/examples`,
-      lastModified: new Date(),
-      changeFrequency: "weekly" as const,
-      priority: 0.8,
-    },
+    ...staticPaths.map(({ url, priority = 0.8, changeFrequency = "weekly" as const }) => ({
+      url: `${BASE_URL}${url}`,
+      lastModified,
+      changeFrequency,
+      priority,
+    })),
     ...EXAMPLES.map((ex) => ({
       url: `${BASE_URL}/examples/${ex.id}`,
-      lastModified: new Date(),
+      lastModified,
       changeFrequency: "monthly" as const,
       priority: 0.7,
     })),

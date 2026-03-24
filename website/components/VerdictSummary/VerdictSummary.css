@@ -1,0 +1,79 @@
+/* VerdictSummary — 2-col "Choose X if..." cards */
+.vs-root {
+  --vs-card-bg: var(--surface);
+  --vs-card-border: var(--border);
+  --vs-our-border: var(--accent);
+  --vs-our-bg: color-mix(in srgb, var(--accent) 6%, transparent);
+  --vs-label-size: var(--typo-title);
+  --vs-item-size: var(--typo-largecopy);
+
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-6);
+}
+
+.vs-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--space-4);
+}
+
+.vs-card {
+  background: var(--vs-card-bg);
+  border: 1px solid var(--vs-card-border);
+  border-radius: var(--radius-lg);
+  padding: var(--space-5);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+}
+
+.vs-card--ours {
+  background: var(--vs-our-bg);
+  border-color: var(--vs-our-border);
+}
+
+.vs-card-label {
+  font-size: var(--vs-label-size);
+  font-weight: var(--font-weight-semibold);
+  color: var(--text);
+  margin: 0;
+}
+
+.vs-card--ours .vs-card-label {
+  color: var(--accent);
+}
+
+.vs-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+}
+
+.vs-list-item {
+  font-size: var(--vs-item-size);
+  color: var(--text-muted);
+  line-height: 1.6;
+  padding-left: var(--space-3);
+  position: relative;
+}
+
+.vs-list-item::before {
+  content: "—";
+  position: absolute;
+  left: 0;
+  color: var(--border-strong);
+}
+
+.vs-card--ours .vs-list-item::before {
+  color: var(--accent);
+}
+
+@media (max-width: 884px) {
+  .vs-grid {
+    grid-template-columns: 1fr;
+  }
+}

@@ -1,0 +1,48 @@
+/* Sitemap page layout */
+
+.sitemap-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: var(--space-6);
+}
+
+.sitemap-section {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+}
+
+.sitemap-section-title {
+  font-size: var(--typo-largecopy);
+  font-weight: var(--font-weight-semibold);
+  color: var(--text);
+  margin: 0;
+  padding-bottom: var(--space-2);
+  border-bottom: 1px solid var(--border);
+}
+
+.sitemap-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+}
+
+.sitemap-link {
+  font-size: var(--typo-copy);
+  color: var(--accent);
+  text-decoration: none;
+  text-underline-offset: 2px;
+}
+
+.sitemap-link:hover {
+  text-decoration: underline;
+}
+
+@media (min-width: 640px) {
+  .sitemap-grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}

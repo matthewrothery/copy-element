@@ -10,17 +10,6 @@ const CHROME_STORE_URL = process.env.NEXT_PUBLIC_CHROME_STORE_URL ?? "#";
 
 const DEFAULT_LINK_GROUPS: FooterLinkGroup[] = [
   {
-    title: "Use cases",
-    links: [
-      { label: "Design system extraction", href: "/use-cases/design-systems" },
-      { label: "AI-assisted development", href: "/use-cases/ai-development" },
-      { label: "Component reuse", href: "/use-cases/component-reuse" },
-      { label: "UI prototyping", href: "/use-cases/prototyping" },
-      { label: "Documentation & specs", href: "/use-cases/documentation" },
-      { label: "All use cases", href: "/use-cases" },
-    ],
-  },
-  {
     sections: [
       {
         title: "Compare",
@@ -43,10 +32,11 @@ const DEFAULT_LINK_GROUPS: FooterLinkGroup[] = [
   {
     title: "Tools",
     links: [
-      { label: "Free HTML copy tool", href: "/tools/html-copy" },
-      { label: "Element picker", href: "/tools/element-picker" },
-      { label: "CSS extractor", href: "/tools/css-extract" },
-      { label: "Component to code", href: "/tools/component-to-code" },
+      { label: "Copy HTML free", href: "/tools/html-copy" },
+      { label: "Copy as JSX", href: "/tools/copy-as-jsx" },
+      { label: "CSS to Tailwind", href: "/tools/css-to-tailwind" },
+      { label: "Color palette extractor", href: "/tools/color-palette" },
+      { label: "Component to AI prompt", href: "/tools/component-to-prompt" },
       { label: "All tools", href: "/tools" },
     ],
   },
@@ -71,9 +61,7 @@ const DEFAULT_LEGAL_LINKS: FooterLink[] = [
   { label: "Terms of Service", href: "/terms" },
   { label: "Privacy Policy", href: "/privacy" },
   { label: "Cookie Policy", href: "/cookies" },
-  { label: "AI & data", href: "/privacy/ai" },
-  { label: "Trust Center", href: "/trust" },
-  { label: "Manage cookies", href: "/cookies#manage" },
+  { label: "Sitemap", href: "/url-sitemap" },
 ];
 
 function isExternal(href: string): boolean {
@@ -145,20 +133,6 @@ export function Footer({
   return (
     <footer className="footer" role="contentinfo">
       <div className="footer-inner">
-        <div className="footer-brand">
-          <Link href="/" className="footer-brand-link" aria-label="Element Armory home">
-            <Image
-              src="/logo.png"
-              alt=""
-              width={32}
-              height={32}
-              className="footer-brand-icon"
-              aria-hidden
-            />
-            <span className="footer-brand-text">Element Armory</span>
-          </Link>
-        </div>
-
         {showTopCta && (
           <div className="footer-top">
             <p className="footer-tagline">
@@ -176,6 +150,23 @@ export function Footer({
         )}
 
         <div className="footer-grid">
+          <div className="footer-logo-column">
+            <Link href="/" className="footer-brand-link" aria-label="Element Armory home">
+              <Image
+                src="/logo.png"
+                alt=""
+                width={32}
+                height={32}
+                className="footer-brand-icon"
+                aria-hidden
+              />
+              <span className="footer-brand-text">Element Armory</span>
+            </Link>
+            <p className="footer-logo-tagline">
+              Capture UI from any site and rebuild it with AI.
+            </p>
+          </div>
+
           {linkGroups.map((group, index) =>
             group.sections ? (
               <div

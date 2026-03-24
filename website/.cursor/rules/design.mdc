@@ -34,6 +34,13 @@ These rules are specific to the website and do not apply to the extension popup 
 - keep copy concise and developer-focused
 - avoid visual clutter that dilutes the core promise
 
+## Content and Utility Page Heroes
+
+- **always use `<PageHero>` from `components/PageHero`** for content/utility pages (help, terms, privacy, cookies, etc.)
+- do NOT place `h1`/`p` directly inside a plain outer `Section` — the outer section has `gap: var(--section-gap)` = 256px, which blows up the spacing between title and subtitle
+- the correct pattern is always `outer Section → inner Section → content`; `PageHero` encapsulates this correctly
+- the inner `section-inner` uses `gap: var(--space-5)` (32px) between title and subtitle
+
 ## Content Layout
 
 - prioritize readable sections with clear vertical rhythm

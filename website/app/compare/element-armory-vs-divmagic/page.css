@@ -1,0 +1,45 @@
+/* element-armory-vs-divmagic page - layout glue only */
+
+.compare-table-section {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-6);
+}
+
+.compare-limitations {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-6);
+}
+
+.compare-limitations-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+}
+
+.compare-limitations-item {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  padding: var(--space-4) var(--space-5);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+}
+
+.compare-limitations-heading {
+  font-size: var(--typo-largecopy);
+  font-weight: var(--font-weight-semibold);
+  color: var(--text);
+}
+
+.compare-limitations-desc {
+  font-size: var(--typo-copy);
+  color: var(--text-muted);
+  line-height: 1.6;
+  margin: 0;
+}

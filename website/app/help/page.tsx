@@ -1,6 +1,7 @@
 import { FAQ } from "@/components/FAQ";
 import { Footer } from "@/components/Footer";
 import { Header } from "@/components/Header";
+import { PageHero } from "@/components/PageHero";
 import { Section } from "@/components/Section";
 
 export const dynamic = "force-static";
@@ -14,13 +15,11 @@ export default function HelpPage(): React.ReactElement {
   return (
     <>
       <Header />
-      <main>
-        <Section style={{ paddingTop: "var(--space-7)" }}>
-          <h1 className="page-title">Help</h1>
-          <p className="page-subtitle">
-            Documentation and support for Element Armory will be available here.
-          </p>
-        </Section>
+      <main className="content-page">
+        <PageHero
+          title="Help"
+          subtitle="Documentation and support for Element Armory will be available here."
+        />
 
         <Section id="faq">
           <FAQ />

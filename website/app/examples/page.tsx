@@ -10,7 +10,7 @@ export const dynamic = "force-static";
 export const metadata = {
   title: "UI Component Examples – Element Armory",
   description:
-    "Browse live HTML and CSS UI components — buttons, cards, forms, navigation and more. Edit code live and copy for use with AI.",
+    "Browse live HTML and CSS UI components - buttons, cards, forms, navigation and more. Edit code live and copy for use with AI.",
 };
 
 export default function ExamplesPage(): React.ReactElement {

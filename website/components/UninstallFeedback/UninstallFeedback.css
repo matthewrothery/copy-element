@@ -1,0 +1,211 @@
+/* UninstallFeedback – 3-layer token model */
+.uninstall-feedback {
+  /* Component tokens → semantic tokens */
+  --uf-form-max-width: 560px;
+  --uf-label-color: var(--text);
+  --uf-muted-color: var(--text-muted);
+  --uf-border-color: var(--border);
+  --uf-border-focus-color: var(--accent);
+  --uf-surface-color: var(--surface);
+  --uf-radio-size: 18px;
+  --uf-transition: 150ms ease;
+  --uf-gap-item: var(--space-3);
+  --uf-gap-section: var(--space-5);
+
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  padding-bottom: var(--space-7);
+}
+
+.uninstall-feedback-inner {
+  width: 100%;
+  max-width: var(--uf-form-max-width);
+}
+
+/* Fieldset */
+.uf-fieldset {
+  border: none;
+  padding: 0;
+  margin: 0 0 var(--uf-gap-section) 0;
+}
+
+.uf-legend {
+  font-size: var(--typo-copy);
+  font-weight: var(--font-weight-semibold);
+  color: var(--uf-muted-color);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  margin-bottom: var(--space-3);
+  display: block;
+}
+
+/* Radio options */
+.uf-radio-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+}
+
+.uf-radio-label {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  cursor: pointer;
+  padding: var(--space-2) var(--space-3);
+  border-radius: var(--radius-md);
+  border: 1px solid var(--uf-border-color);
+  background: transparent;
+  transition: border-color var(--uf-transition), background var(--uf-transition);
+  min-height: 44px;
+}
+
+.uf-radio-label:hover {
+  border-color: var(--uf-border-focus-color);
+}
+
+.uf-radio-label--selected {
+  border-color: var(--uf-border-focus-color);
+  background: rgba(58, 130, 246, 0.06);
+}
+
+.uf-radio-input {
+  appearance: none;
+  -webkit-appearance: none;
+  width: var(--uf-radio-size);
+  height: var(--uf-radio-size);
+  border-radius: 50%;
+  border: 2px solid var(--uf-border-color);
+  background: transparent;
+  flex-shrink: 0;
+  transition: border-color var(--uf-transition);
+  position: relative;
+  cursor: pointer;
+}
+
+.uf-radio-input:checked {
+  border-color: var(--uf-border-focus-color);
+  background: var(--uf-border-focus-color);
+  box-shadow: inset 0 0 0 3px var(--uf-surface-color);
+}
+
+.uf-radio-input:focus-visible {
+  outline: 2px solid var(--uf-border-focus-color);
+  outline-offset: 2px;
+}
+
+.uf-radio-text {
+  font-size: var(--typo-largecopy);
+  color: var(--uf-label-color);
+  line-height: 1.4;
+}
+
+/* Textarea */
+.uf-textarea-label {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+  font-size: var(--typo-copy);
+  font-weight: var(--font-weight-semibold);
+  color: var(--uf-muted-color);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+}
+
+.uf-textarea {
+  width: 100%;
+  min-height: 96px;
+  padding: var(--space-2) var(--space-3);
+  background: transparent;
+  border: 1px solid var(--uf-border-color);
+  border-radius: var(--radius-md);
+  color: var(--uf-label-color);
+  font-family: var(--font-sans);
+  font-size: var(--typo-largecopy);
+  resize: vertical;
+  transition: border-color var(--uf-transition);
+}
+
+.uf-textarea:focus {
+  outline: none;
+  border-color: var(--uf-border-focus-color);
+}
+
+.uf-textarea::placeholder {
+  color: var(--uf-muted-color);
+}
+
+/* Submit button */
+.uf-submit {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-2);
+  margin-top: var(--uf-gap-section);
+  padding: var(--space-2) var(--space-4);
+  background: var(--accent);
+  color: #ffffff;
+  border: none;
+  border-radius: var(--radius-md);
+  font-size: var(--typo-largecopy);
+  font-weight: var(--font-weight-semibold);
+  cursor: pointer;
+  min-height: 44px;
+  transition: background var(--uf-transition);
+}
+
+.uf-submit:hover:not(:disabled) {
+  background: var(--accent-hover);
+}
+
+.uf-submit:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+/* Spinner */
+.uf-spinner {
+  width: 16px;
+  height: 16px;
+  border: 2px solid rgba(255, 255, 255, 0.4);
+  border-top-color: #ffffff;
+  border-radius: 50%;
+  animation: uf-spin 0.6s linear infinite;
+  flex-shrink: 0;
+}
+
+@keyframes uf-spin {
+  to { transform: rotate(360deg); }
+}
+
+/* Error message */
+.uf-error {
+  margin-top: var(--space-3);
+  font-size: var(--typo-copy);
+  color: #ef4444;
+}
+
+/* Success state */
+.uf-success {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+  padding: var(--space-5);
+  border: 1px solid var(--uf-border-color);
+  border-radius: var(--radius-lg);
+}
+
+.uf-success-title {
+  font-size: var(--typo-title);
+  font-weight: var(--font-weight-semibold);
+  color: var(--uf-label-color);
+}
+
+.uf-success-body {
+  font-size: var(--typo-largecopy);
+  color: var(--uf-muted-color);
+  line-height: 1.5;
+}
