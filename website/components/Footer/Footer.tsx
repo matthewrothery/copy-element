@@ -20,13 +20,13 @@ const DEFAULT_LINK_GROUPS: FooterLinkGroup[] = [
           { label: "Element Armory vs CopyCSS", href: "/compare/element-armory-vs-copycss" },
         ],
       },
-      {
-        title: "Alternatives",
-        links: [
-          { label: "Best DivMagic Alternative", href: "/alternatives/divmagic" },
-          { label: "Best SnipCSS Alternative", href: "/alternatives/snipcss" },
-        ],
-      },
+      // {
+      //   title: "Alternatives",
+      //   links: [
+      //     { label: "Best DivMagic Alternative", href: "/alternatives/divmagic" },
+      //     { label: "Best SnipCSS Alternative", href: "/alternatives/snipcss" },
+      //   ],
+      // },
     ],
   },
   {
