@@ -6,6 +6,8 @@ import { billingRouter } from './routes/billing.js';
 import { capturesRouter } from './routes/captures.js';
 import { emailTrackingRouter } from './routes/email-tracking.js';
 import { mcpTokensRouter } from './routes/mcp-tokens.js';
+import { figmaSessionsRouter } from './routes/figma-sessions.js';
+import { uninstallFeedbackRouter } from './routes/uninstall-feedback.js';
 
 export function mountApi(app: Express): void {
   app.use(healthRouter);
@@ -13,6 +15,8 @@ export function mountApi(app: Express): void {
   app.use('/api/installs', installsRouter);
   app.use('/api/billing', billingRouter);
   app.use('/api/captures', capturesRouter);
+  app.use('/api/figma-sessions', figmaSessionsRouter);
   app.use('/api/email/track', emailTrackingRouter);
   app.use('/api/mcp', mcpTokensRouter);
+  app.use('/api/feedback/uninstall', uninstallFeedbackRouter);
 }

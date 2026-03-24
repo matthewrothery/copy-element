@@ -10,14 +10,17 @@ import {
   listCapturesByUser,
   type AssetKind,
   type CaptureAssetInput,
+  type CaptureWithAssets,
 } from '../../services/capture.js';
 import {
   buildCaptureObjectKey,
   createPresignedPutUrl,
+  getSignedGetUrl,
   S3_MAX_PUT_SIZE,
 } from '../../services/s3.js';
 import { requireInstallAuth, type RequestWithInstall } from '../middleware/install-auth.js';
 import { requireSession, type RequestWithSession } from '../middleware/session.js';
+import { requireFigmaAuth, type RequestWithFigmaUser } from '../middleware/figma-auth.js';
 import { hasActivePaidPlan } from '../../services/entitlements.js';
 
 export const capturesRouter = Router();
@@ -187,6 +190,50 @@ capturesRouter.get(
     const cursor = cursorRaw !== undefined && !Number.isNaN(cursorRaw) ? cursorRaw : undefined;
     const list = listCapturesByInstall(installId, { limit: Number.isNaN(limit) ? undefined : limit, cursor });
     res.status(200).json({ captures: list });
+  }
+);
+
+/** GET /api/captures/figma — Figma Bearer token auth. Returns captures with presigned asset URLs. */
+capturesRouter.get(
+  '/figma',
+  requireFigmaAuth,
+  async (req: RequestWithFigmaUser, res: Response) => {
+    const userId = req.figmaUserId!;
+    const limit = typeof req.query.limit === 'string' ? parseInt(req.query.limit, 10) : undefined;
+    const cursorRaw = typeof req.query.cursor === 'string' ? parseInt(req.query.cursor, 10) : undefined;
+    const cursor = cursorRaw !== undefined && !Number.isNaN(cursorRaw) ? cursorRaw : undefined;
+    const list = listCapturesByUser(userId, { limit: Number.isNaN(limit) ? undefined : limit, cursor });
+
+    const captures = await Promise.all(list.map(async (capture: CaptureWithAssets) => {
+      let metadata: Record<string, unknown> = {};
+      if (capture.metadata_json) {
+        try { metadata = JSON.parse(capture.metadata_json); } catch { /* ignore */ }
+      }
+
+      const screenshotAsset = capture.assets.find(a => a.asset_kind === 'screenshot');
+      const htmlAsset = capture.assets.find(a => a.asset_kind === 'html');
+      const stylesheetAsset = capture.assets.find(a => a.asset_kind === 'stylesheet');
+
+      const [screenshotUrl, htmlUrl, stylesheetUrl] = await Promise.all([
+        screenshotAsset ? getSignedGetUrl(screenshotAsset.object_key, 300) : Promise.resolve(null),
+        htmlAsset ? getSignedGetUrl(htmlAsset.object_key, 300) : Promise.resolve(null),
+        stylesheetAsset ? getSignedGetUrl(stylesheetAsset.object_key, 300) : Promise.resolve(null),
+      ]);
+
+      return {
+        id: String(capture.id),
+        title: typeof metadata.title === 'string' ? metadata.title : 'Untitled',
+        width: typeof metadata.width === 'number' ? metadata.width : 400,
+        height: typeof metadata.height === 'number' ? metadata.height : 200,
+        source_url: capture.source_url ?? null,
+        captured_at: capture.captured_at,
+        screenshot_url: screenshotUrl,
+        html_url: htmlUrl,
+        stylesheet_url: stylesheetUrl,
+      };
+    }));
+
+    res.status(200).json({ captures });
   }
 );
 

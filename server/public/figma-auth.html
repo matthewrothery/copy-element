@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Connect Figma — Element Armory</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; }
+    body {
+      font-family: system-ui, -apple-system, sans-serif;
+      background: #f8fafc;
+      color: #111827;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 100vh;
+      margin: 0;
+      padding: 1rem;
+    }
+    .card {
+      background: #ffffff;
+      border: 1px solid #e5e7eb;
+      border-radius: 12px;
+      padding: 2rem;
+      max-width: 400px;
+      width: 100%;
+      text-align: center;
+    }
+    .logo {
+      font-size: 0.8125rem;
+      font-weight: 600;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+      color: #6b7280;
+      margin-bottom: 1.5rem;
+    }
+    h1 { font-size: 1.25rem; font-weight: 600; margin: 0 0 0.5rem; }
+    p { font-size: 0.875rem; color: #6b7280; margin: 0 0 1.5rem; line-height: 1.5; }
+    .btn {
+      display: inline-block;
+      padding: 0.625rem 1.25rem;
+      background: #3b82f6;
+      color: #fff;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+      font-size: 0.875rem;
+      font-weight: 500;
+      text-decoration: none;
+      transition: background 120ms;
+    }
+    .btn:hover { background: #2563eb; }
+    .status {
+      font-size: 0.875rem;
+      padding: 0.75rem 1rem;
+      border-radius: 6px;
+      margin-top: 1rem;
+    }
+    .status.success { background: #f0fdf4; color: #15803d; border: 1px solid #bbf7d0; }
+    .status.error { background: #fef2f2; color: #dc2626; border: 1px solid #fecaca; }
+    .icon { font-size: 2.5rem; margin-bottom: 1rem; }
+    #content-loading { display: none; }
+    #content-auth { display: none; }
+    #content-done { display: none; }
+    #content-error { display: none; }
+  </style>
+</head>
+<body>
+  <div class="card">
+    <div class="logo">Element Armory</div>
+
+    <div id="content-loading">
+      <p style="color:#6b7280;">Checking authentication…</p>
+    </div>
+
+    <div id="content-auth">
+      <div class="icon">🔐</div>
+      <h1>Connect Figma Plugin</h1>
+      <p>Sign in to Element Armory to connect the Figma plugin to your capture library.</p>
+      <a id="signin-link" href="#" class="btn">Sign In</a>
+    </div>
+
+    <div id="content-done">
+      <div class="icon">✅</div>
+      <h1>Authenticated</h1>
+      <p>The Figma plugin is now connected to your account.<br>You can return to Figma.</p>
+      <div class="status success">Go back to the Figma plugin — it will update automatically.</div>
+    </div>
+
+    <div id="content-error">
+      <div class="icon">⚠️</div>
+      <h1>Something went wrong</h1>
+      <p id="error-message">Unable to complete authentication.</p>
+      <a href="#" onclick="location.reload()" class="btn">Try again</a>
+    </div>
+  </div>
+
+  <script>
+    (function () {
+      var base = window.location.origin;
+      var params = new URLSearchParams(window.location.search);
+      var sessionId = params.get('session_id');
+
+      function show(id) {
+        ['loading', 'auth', 'done', 'error'].forEach(function (name) {
+          document.getElementById('content-' + name).style.display = name === id ? 'block' : 'none';
+        });
+      }
+
+      function showError(msg) {
+        document.getElementById('error-message').textContent = msg || 'Unable to complete authentication.';
+        show('error');
+      }
+
+      show('loading');
+
+      if (!sessionId) {
+        showError('Missing session_id. Please reopen the Figma plugin and try again.');
+        return;
+      }
+
+      // Check if user is already signed in
+      fetch(base + '/api/me', { credentials: 'include' })
+        .then(function (res) { return res.json(); })
+        .then(function (me) {
+          if (!me.user) {
+            // Not signed in — show sign-in button with redirect back here
+            var returnUrl = encodeURIComponent('/figma-auth.html?session_id=' + encodeURIComponent(sessionId));
+            document.getElementById('signin-link').href = '/api/auth/sign-in?callbackURL=' + returnUrl;
+            show('auth');
+            return;
+          }
+          // Signed in — complete the Figma session
+          return fetch(base + '/api/figma-sessions/' + encodeURIComponent(sessionId) + '/complete', {
+            method: 'POST',
+            credentials: 'include',
+            headers: { 'Content-Type': 'application/json' },
+          }).then(function (res) {
+            if (res.ok) {
+              show('done');
+            } else {
+              return res.json().then(function (body) {
+                showError(body.error || 'Failed to complete session.');
+              });
+            }
+          });
+        })
+        .catch(function () {
+          showError('Network error. Please check your connection and try again.');
+        });
+    })();
+  </script>
+</body>
+</html>
