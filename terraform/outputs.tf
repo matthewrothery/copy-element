@@ -54,6 +54,16 @@ output "ecr_server_repo_url" {
   value       = aws_ecr_repository.server.repository_url
 }
 
+output "ecr_mcp_repo_url" {
+  description = "ECR repository URL for MCP server"
+  value       = aws_ecr_repository.mcp.repository_url
+}
+
+output "mcp_url" {
+  description = "MCP server URL"
+  value       = "https://${var.mcp_subdomain}.${var.hosted_zone}"
+}
+
 output "github_actions_user_name" {
   description = "GitHub Actions IAM user name"
   value       = aws_iam_user.github_actions_deployer.name

@@ -1,4 +1,4 @@
-# Deploy server to EC2 via ECR + SSM.
+# Deploy server and mcp-server to EC2 via ECR + SSM.
 # Builds for linux/amd64 to match EC2 (t3).
 name: Deploy apps to EC2
 
@@ -44,13 +44,47 @@ jobs:
           file: ./server/Dockerfile
           platforms: linux/amd64
           push: true
-          tags: ${{ steps.login-ecr.outputs.registry }}/copy-element-server:latest
+          tags: ${{ steps.login-ecr.outputs.registry }}/element-armory-server:latest
           cache-from: type=gha,scope=server
           cache-to: type=gha,mode=max,scope=server
 
+  build_mcp:
+    runs-on: ubuntu-latest
+    environment: production
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: ${{ env.AWS_REGION }}
+
+      - name: Login to Amazon ECR
+        id: login-ecr
+        uses: aws-actions/amazon-ecr-login@v2
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+        with:
+          platforms: linux/amd64
+
+      - name: Build and push mcp-server
+        uses: docker/build-push-action@v6
+        with:
+          context: ./mcp-server
+          file: ./mcp-server/Dockerfile
+          platforms: linux/amd64
+          push: true
+          tags: ${{ steps.login-ecr.outputs.registry }}/element-armory-mcp:latest
+          cache-from: type=gha,scope=mcp
+          cache-to: type=gha,mode=max,scope=mcp
+
   deploy_ec2:
     runs-on: ubuntu-latest
-    needs: [build_server]
+    needs: [build_server, build_mcp]
     environment: production
     steps:
       - name: Configure AWS credentials
@@ -66,7 +100,7 @@ jobs:
           COMMAND_ID=$(aws ssm send-command \
             --instance-ids "${{ secrets.EC2_INSTANCE_ID }}" \
             --document-name "AWS-RunShellScript" \
-            --parameters 'commands=["sudo -u ec2-user /home/ec2-user/copy-element/start.sh"]' \
+            --parameters 'commands=["sudo -u ec2-user /home/ec2-user/element-armory/start.sh"]' \
             --query 'Command.CommandId' \
             --output text | tr -d '\n\r' | xargs)
           echo "command_id=$COMMAND_ID" >> "$GITHUB_OUTPUT"

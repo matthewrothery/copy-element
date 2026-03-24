@@ -43,6 +43,19 @@ resource "aws_route53_record" "apex_txt" {
   records = local.apex_txt_values
 }
 
+# MCP subdomain A record
+resource "aws_route53_record" "mcp_a" {
+  zone_id = data.aws_route53_zone.main.zone_id
+  name    = "${var.mcp_subdomain}.${var.hosted_zone}"
+  type    = "A"
+
+  alias {
+    name                   = aws_cloudfront_distribution.mcp.domain_name
+    zone_id                = aws_cloudfront_distribution.mcp.hosted_zone_id
+    evaluate_target_health = false
+  }
+}
+
 # Gmail / Google Workspace MX record (apex)
 resource "aws_route53_record" "gmail_mx" {
   count   = length(var.gmail_mx) > 0 ? 1 : 0

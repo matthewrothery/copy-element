@@ -24,6 +24,7 @@ locals {
     # ECR Configuration
     ECR_REGISTRY="${data.aws_caller_identity.current.account_id}.dkr.ecr.${var.aws_region}.amazonaws.com"
     ECR_SERVER_REPO="${var.ecr_server_repo}"
+    ECR_MCP_REPO="${var.ecr_mcp_repo}"
 
     # App URL (for Better Auth, callbacks, etc.)
     APP_URL="https://${var.website_domain}"
@@ -35,6 +36,10 @@ locals {
     # S3 Configuration (capture assets / screenshots)
     S3_ASSETS_BUCKET="${local.s3_assets_bucket_name}"
     AWS_REGION="${var.aws_region}"
+
+    # MCP Server
+    INTERNAL_API_KEY="${var.internal_api_key}"
+    ANTHROPIC_API_KEY="${var.anthropic_api_key}"
 
     # Node Environment
     NODE_ENV=production

@@ -11,3 +11,17 @@ resource "aws_ecr_repository" "server" {
     Environment = var.environment
   }
 }
+
+resource "aws_ecr_repository" "mcp" {
+  name                 = var.ecr_mcp_repo
+  image_tag_mutability = "MUTABLE"
+
+  image_scanning_configuration {
+    scan_on_push = false
+  }
+
+  tags = {
+    Name        = "${var.project}-${var.environment}-mcp"
+    Environment = var.environment
+  }
+}

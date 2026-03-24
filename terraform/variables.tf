@@ -160,3 +160,27 @@ variable "gmail_mx" {
   type        = string
   default     = ""
 }
+
+variable "mcp_subdomain" {
+  description = "Subdomain for the MCP server (e.g. mcp → mcp.elementarmory.com)"
+  type        = string
+  default     = "mcp"
+}
+
+variable "ecr_mcp_repo" {
+  description = "ECR repository name for the MCP server"
+  type        = string
+  default     = "element-armory-mcp"
+}
+
+variable "internal_api_key" {
+  description = "Internal API key shared between app and mcp-server"
+  type        = string
+  sensitive   = true
+}
+
+variable "anthropic_api_key" {
+  description = "Anthropic API key for the MCP server"
+  type        = string
+  sensitive   = true
+}

@@ -33,6 +33,21 @@ services:
     networks:
       - element-armory-network
 
+  mcp:
+    image: ${ECR_REGISTRY}/${ECR_MCP_REPO}:latest
+    container_name: element-armory-mcp
+    environment:
+      NODE_ENV: production
+      MCP_PORT: 3001
+      MAIN_SERVER_URL: http://app:80
+      INTERNAL_API_KEY: ${INTERNAL_API_KEY}
+      ANTHROPIC_API_KEY: ${ANTHROPIC_API_KEY}
+    depends_on:
+      - app
+    restart: unless-stopped
+    networks:
+      - element-armory-network
+
 volumes:
   element-armory-nginx-cache:
 
