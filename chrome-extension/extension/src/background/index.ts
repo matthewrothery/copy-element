@@ -39,7 +39,10 @@ async function scheduleRefreshAlarm(): Promise<void> {
   await chrome.alarms.create(REFRESH_ALARM_NAME, { delayInMinutes: delayMinutes });
 }
 
+const UNINSTALL_URL = `${SERVER_URL}/uninstall`;
+
 chrome.runtime.onInstalled.addListener(() => {
+  void chrome.runtime.setUninstallURL(UNINSTALL_URL);
   void registerInstall();
   void scheduleRefreshAlarm();
 });
@@ -54,6 +57,7 @@ async function registerInstall(): Promise<void> {
 }
 
 chrome.runtime.onStartup.addListener(() => {
+  void chrome.runtime.setUninstallURL(UNINSTALL_URL);
   void registerInstall();
   void scheduleRefreshAlarm();
 });
