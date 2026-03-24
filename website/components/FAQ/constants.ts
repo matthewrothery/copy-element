@@ -2,14 +2,14 @@ import type { FAQItem } from "./types";
 
 export const DEFAULT_FAQ_ITEMS: FAQItem[] = [
   {
-    question: "What is Element Armory?",
+    question: "What does Element Armory do?",
     answer:
-      "Element Armory is a Chrome extension that lets you capture any UI element from a webpage and copy it as clean HTML or React JSX. You can save snippets to a library and reuse them in your projects or with AI tools.",
+      "Element Armory is a Chrome extension that captures any UI element from a webpage and exports it as clean HTML or React JSX. Save captured elements to a personal library and reuse them in your projects or feed them directly to AI tools.",
   },
   {
     question: "How does capture work?",
     answer:
-      "Install the extension, then click any element on a page. Element Armory copies it with minimal, portable styles—only display, layout, typography, and color. No scripts, trackers, or extra markup. You can export as plain HTML or React JSX.",
+      "Install the extension, then click any element on a page. Element Armory extracts it with minimal, portable styles — only display, layout, typography, and color. No scripts, trackers, or extra markup. Export as plain HTML or React JSX in one click.",
   },
   {
     question: "Which browsers are supported?",

@@ -4,19 +4,16 @@ import "./SnippetHero.css";
 
 const defaultHeadline = (
   <>
-    <p>Capture UI from any site.</p>
-    <p>Rebuild it with AI.</p>
+    <p>From any website</p>
+    <p>to your editor in seconds.</p>
   </>
 );
 
 const defaultSubtitle = (
   <>
     <p>
-      <strong>Clean. Clear. Powerful.</strong>
-    </p>
-    <p>
-      Click any element to copy clean HTML or JSX. No scripts or bloat—just the
-      styles you need.
+      Your captured elements, organized and ready. Copy HTML or JSX whenever
+      you need them — no hunting through tabs.
     </p>
   </>
 );

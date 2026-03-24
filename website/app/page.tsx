@@ -21,9 +21,9 @@ export default function Home(): React.ReactElement {
 
         <Section>
           <ElementsShowcase
-            subheading="Examples"
-            title="Captured with Element Armory"
-            subtitle="UI components captured from real sites and exported as clean HTML or JSX."
+            subheading="Real captures"
+            title="Built from what already works."
+            subtitle="Admire a UI pattern? Capture it. Study it. Build from it."
             items={[
               {
                 src: "https://picsum.photos/seed/element-pricing/1120/630",
@@ -64,24 +64,24 @@ export default function Home(): React.ReactElement {
 
         <Section id="features">
           <FeatureSection
-            subheading="Features"
-            title="Capture & export"
-            subtitle="Get clean HTML or JSX from any element. No extra markup or inline bloat."
+            subheading="How it works"
+            title="Click. Copy. Build."
+            subtitle="Any element, any page. Clean HTML or JSX — ready to paste in one click."
             tabs={[
               {
                 title: "One-click capture",
                 description:
-                  "Click any element on the page. Element Armory copies it with minimal, portable styles.",
+                  "Hover any element, click to capture. Element Armory strips it down to just the styles that matter.",
               },
               {
                 title: "HTML and JSX",
                 description:
-                  "Export as plain HTML or React JSX. Copy to clipboard or save to your library.",
+                  "Export as plain HTML or React JSX. Paste directly into your project or drop into an AI tool.",
               },
               {
                 title: "Inline styles only",
                 description:
-                  "Only visual styles are included. No scripts, trackers, or unnecessary attributes.",
+                  "Visual styles only — no scripts, trackers, or framework dependencies. Works anywhere.",
               },
             ]}
           />
@@ -89,25 +89,21 @@ export default function Home(): React.ReactElement {
 
         <Section>
           <FeatureSection
-            subheading="Features"
-            title="Snippet library"
-            subtitle={
-              <>
-                <strong>Save and reuse.</strong> Build a library of UI components from any website.
-              </>
-            }
+            subheading="Your library"
+            title="Save the good ones. Use them later."
+            subtitle="Build a personal library of UI components from any site. Organized, always one click from your clipboard."
             tabs={[
               {
                 title: "Save snippets",
-                description: "Store captured elements in your library with a title and source URL.",
+                description: "Tag and save any captured element with a title and source. Your library grows as you browse.",
               },
               {
                 title: "Copy anytime",
-                description: "Copy HTML or JSX from your library without revisiting the original page.",
+                description: "Paste HTML or JSX from your library without revisiting the original page — even offline.",
               },
               {
                 title: "Quick preview",
-                description: "Preview snippets before copying. Delete or organize as you like.",
+                description: "Preview before you copy. Delete what you don't need. Keep only what works.",
               },
             ]}
           />
@@ -115,32 +111,28 @@ export default function Home(): React.ReactElement {
 
         <Section>
           <FeatureGrid
-            title="Copy & reuse"
-            subtitle={
-              <>
-                <strong>Optimal output, baked in.</strong> Copy HTML or JSX from any element and paste into your project or share with your team.
-              </>
-            }
+            title="Paste-ready. Every time."
+            subtitle="Clean output that drops straight into your project. No cleanup, no reformatting."
             cards={[
               {
                 title: "Copy HTML",
                 description:
-                  "One click copies the element as clean HTML. Minimal markup, no scripts or trackers.",
+                  "One click. Clean markup, minimal styles. Paste into any page or framework.",
               },
               {
                 title: "Copy JSX",
                 description:
-                  "Export as React JSX. Paste into your codebase or use with AI tools via the MCP server.",
+                  "Export as React JSX. Ready for your codebase or your AI editor via the MCP server.",
               },
               {
                 title: "Save to library",
                 description:
-                  "Store captured elements in your snippet library with a title and source URL for later reuse.",
+                  "Keep the elements that matter. Access them from the extension, anytime.",
               },
               {
                 title: "Share link",
                 description:
-                  "Share snippets with your team. Anyone with the link can view and copy the captured UI.",
+                  "Send a snippet to your team. They can view and copy without installing anything.",
               },
             ]}
           />
@@ -148,22 +140,22 @@ export default function Home(): React.ReactElement {
 
         <Section>
           <FeatureSection
-            subheading="Developer-friendly"
-            title="Developer-friendly"
-            subtitle="Minimal output. No bloat. Framework-neutral HTML and JSX."
+            subheading="Built for developers"
+            title="Output your tools can actually use."
+            subtitle="Minimal, portable, framework-neutral. The code you'd write by hand — just faster."
             tabs={[
               {
                 title: "Minimal CSS",
                 description:
-                  "Only display, position, margin, padding, font, color, background, border, flex, grid.",
+                  "Only display, layout, spacing, typography, color, border, flex, and grid. Nothing else.",
               },
               {
                 title: "No defaults",
-                description: "Default values are omitted so your output stays small and readable.",
+                description: "Default browser values are stripped out. Your output stays readable and easy to override.",
               },
               {
                 title: "Portable",
-                description: "Output works anywhere. No dependency on the original site or framework.",
+                description: "No dependency on the source site or its framework. Drop it into anything.",
               },
             ]}
           />

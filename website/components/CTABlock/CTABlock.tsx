@@ -3,14 +3,14 @@ import { ChromeStoreCtaLabel } from "@/components/ChromeStoreCtaLabel";
 import type { CTABlockProps, CTABlockFeature } from "./types";
 import "./CTABlock.css";
 
-const DEFAULT_TITLE = "Start capturing in seconds";
+const DEFAULT_TITLE = "Your first capture is one click away.";
 const DEFAULT_SUBTITLE =
-  "Install the extension, click any element, and copy clean HTML or JSX. No sign-up required.";
+  "Install the extension and you're ready. No sign-up required.";
 const DEFAULT_CTA_HREF = process.env.NEXT_PUBLIC_CHROME_STORE_URL ?? "#";
 
 const DEFAULT_FEATURES: CTABlockFeature[] = [
   {
-    title: "See what you get",
+    title: "See the output",
     description: "Clean HTML or JSX. No bloat, no scripts.",
     href: "#features",
     linkLabel: "How it works",
@@ -19,7 +19,7 @@ const DEFAULT_FEATURES: CTABlockFeature[] = [
   {
     title: "Start building",
     description:
-      "Install the extension and capture your first element in under a minute.",
+      "Capture your first element in under a minute.",
     href: DEFAULT_CTA_HREF,
     linkLabel: "Get started",
     icon: "code",
