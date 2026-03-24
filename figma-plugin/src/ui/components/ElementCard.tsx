@@ -1,9 +1,9 @@
-import type { ElementItem } from "../types";
+import type { CaptureItem } from "../types";
 
 export interface ElementCardProps {
-  element: ElementItem;
-  onInsert: (element: ElementItem) => void;
-  onPreview: (element: ElementItem) => void;
+  element: CaptureItem;
+  onInsert: (element: CaptureItem) => void;
+  onPreview: (element: CaptureItem) => void;
 }
 
 export function ElementCard({ element, onInsert, onPreview }: ElementCardProps) {
@@ -15,7 +15,13 @@ export function ElementCard({ element, onInsert, onPreview }: ElementCardProps) 
       return null;
     }
   })();
-  const meta = hostname ? `${hostname} · ${element.createdAt}` : element.createdAt;
+
+  const date = new Date(element.capturedAt).toLocaleDateString(undefined, {
+    month: "short",
+    day: "numeric",
+    year: "numeric",
+  });
+  const meta = hostname ? `${hostname} · ${date}` : date;
 
   return (
     <article className="element-card">
@@ -23,11 +29,11 @@ export function ElementCard({ element, onInsert, onPreview }: ElementCardProps) 
         type="button"
         className="element-card-thumb-button"
         onClick={() => onPreview(element)}
-        aria-label={`Preview ${element.name}`}
+        aria-label={`Preview ${element.title}`}
       >
-        {element.preview ? (
+        {element.screenshotUrl ? (
           <img
-            src={element.preview}
+            src={element.screenshotUrl}
             alt=""
             className="element-card-thumb"
           />
@@ -36,8 +42,8 @@ export function ElementCard({ element, onInsert, onPreview }: ElementCardProps) 
         )}
       </button>
       <div className="element-card-meta">
-        <h3 className="element-card-title" title={element.name}>
-          {element.name}
+        <h3 className="element-card-title" title={element.title}>
+          {element.title}
         </h3>
         <p className="element-card-caption">{meta}</p>
       </div>

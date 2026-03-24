@@ -1,6 +1,7 @@
 {
   "compilerOptions": {
     "target": "ES5",
+    "lib": ["ES2015", "ES2020"],
     "module": "None",
     "outDir": "dist",
     "rootDir": "src",

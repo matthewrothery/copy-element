@@ -1,24 +1,24 @@
 import { ElementCard } from "./ElementCard";
-import type { ElementItem } from "../types";
+import type { CaptureItem } from "../types";
 
 export interface ElementListProps {
-  elements: ElementItem[];
-  onInsert: (element: ElementItem) => void;
-  onPreview: (element: ElementItem) => void;
+  elements: CaptureItem[];
+  onInsert: (element: CaptureItem) => void;
+  onPreview: (element: CaptureItem) => void;
 }
 
 export function ElementList({ elements, onInsert, onPreview }: ElementListProps) {
   if (elements.length === 0) {
     return (
       <div className="empty-state">
-        <h2>No components yet</h2>
+        <h2>No captures yet</h2>
         <p>Capture elements in the Chrome extension to see them here.</p>
       </div>
     );
   }
 
   return (
-    <section className="element-grid" aria-label="Component library">
+    <section className="element-grid" aria-label="Capture library">
       {elements.map((el) => (
         <ElementCard
           key={el.id}

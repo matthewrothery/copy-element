@@ -1,15 +1,17 @@
-/**
- * Element item — mirrors backend model (captured from Chrome extension).
- * API placeholders: GET /api/elements, GET /api/elements/:id
- */
-export interface ElementItem {
+/** A capture retrieved from the Element Armory backend. */
+export interface CaptureItem {
   id: string;
-  name: string;
-  html: string;
-  css: string;
-  /** Preview image URL or data URL */
-  preview: string;
-  createdAt: string;
-  /** Optional: source URL (e.g. from extension) */
+  title: string;
+  width: number;
+  height: number;
+  /** Optional source URL where the element was captured from */
   sourceUrl?: string;
+  /** Capture timestamp in epoch milliseconds */
+  capturedAt: number;
+  /** Presigned URL for the screenshot thumbnail */
+  screenshotUrl?: string;
+  /** Presigned URL for the captured HTML file */
+  htmlUrl?: string;
+  /** Presigned URL for the captured stylesheet file */
+  stylesheetUrl?: string;
 }

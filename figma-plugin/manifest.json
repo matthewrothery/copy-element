@@ -6,7 +6,11 @@
   "ui": "ui.html",
   "editorType": ["figma"],
   "networkAccess": {
-    "allowedDomains": ["https://api.elementarmory.com"],
-    "reasoning": "Fetch captured components from Element Armory backend"
+    "allowedDomains": [
+      "https://api.elementarmory.com",
+      "https://*.amazonaws.com",
+      "https://*.s3.*.amazonaws.com"
+    ],
+    "reasoning": "Fetch captures from Element Armory API; load HTML/CSS assets from S3 presigned URLs"
   }
 }
