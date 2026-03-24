@@ -8,6 +8,7 @@ on:
     paths:
       - "server/**"
       - "mcp-server/**"
+      - "terraform/scripts/start.sh"
   workflow_dispatch:
 
 env:
@@ -87,12 +88,30 @@ jobs:
     needs: [build_server, build_mcp]
     environment: production
     steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
       - name: Configure AWS credentials
         uses: aws-actions/configure-aws-credentials@v4
         with:
           aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           aws-region: ${{ env.AWS_REGION }}
+
+      - name: Sync start.sh to EC2
+        run: |
+          ENCODED=$(base64 -w 0 terraform/scripts/start.sh)
+          PARAMS=$(jq -n --arg e "$ENCODED" \
+            '{"commands":["printf \"%s\" \($e) | base64 -d > /home/ec2-user/element-armory/start.sh","chmod +x /home/ec2-user/element-armory/start.sh"]}')
+          COMMAND_ID=$(aws ssm send-command \
+            --instance-ids "${{ secrets.EC2_INSTANCE_ID }}" \
+            --document-name "AWS-RunShellScript" \
+            --parameters "$PARAMS" \
+            --query 'Command.CommandId' \
+            --output text | tr -d '\n\r' | xargs)
+          aws ssm wait command-executed \
+            --command-id "$COMMAND_ID" \
+            --instance-id "${{ secrets.EC2_INSTANCE_ID }}"
 
       - name: Deploy to EC2 via SSM
         id: ssm
