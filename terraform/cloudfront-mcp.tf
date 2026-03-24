@@ -8,7 +8,7 @@ data "aws_cloudfront_origin_request_policy" "all_viewer" {
 
 resource "aws_cloudfront_distribution" "mcp" {
   origin {
-    domain_name = aws_eip.ec2.public_ip
+    domain_name = aws_eip.ec2.public_dns
     origin_id   = "mcp-ec2-origin"
 
     custom_origin_config {

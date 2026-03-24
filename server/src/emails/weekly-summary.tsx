@@ -53,7 +53,7 @@ export function WeeklySummaryEmail({
   return (
     <Html>
       <Head />
-      <Preview>You captured {captureCount} {noun} this week — keep it up.</Preview>
+      <Preview>You captured {String(captureCount)} {noun} this week — keep it up.</Preview>
       <Body style={styles.main}>
         <Container style={styles.container}>
           <Heading style={styles.h1}>Your week in captures</Heading>
