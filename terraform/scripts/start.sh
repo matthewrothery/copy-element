@@ -51,7 +51,7 @@ docker compose --env-file "$ENV_FILE" -f "$RENDERED_COMPOSE_FILE" pull
 log "Running database migrations (one-shot app container)."
 if ! docker compose --env-file "$ENV_FILE" -f "$RENDERED_COMPOSE_FILE" run --rm \
   -e PGSSLMODE=verify-full \
-  app npm run migrate:up; then
+  app npm run migrate:prod; then
   log "ERROR: Migrations failed. Deployment aborted; existing containers unchanged."
   exit 1
 fi
