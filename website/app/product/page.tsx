@@ -15,6 +15,7 @@ export const metadata: Metadata = {
   title: "How It Works – Element Armory",
   description:
     "Click any element on any site. Get clean HTML or JSX instantly. Save it, reuse it, and pipe it straight into Cursor or Claude with the MCP server.",
+  alternates: { canonical: "/product" },
 };
 
 export const dynamic = "force-static";
@@ -210,8 +211,8 @@ export default function ProductPage(): React.ReactElement {
                 title: "Connect your AI tool",
                 description:
                   "Set up the MCP server in Cursor or Claude in under two minutes. Your captures flow directly into your editor.",
-                href: "/help",
-                linkLabel: "See setup guide",
+                href: "/changelog",
+                linkLabel: "See what's new",
                 icon: "tag",
               },
             ]}

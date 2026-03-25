@@ -8,6 +8,7 @@ export const dynamic = "force-static";
 export const metadata = {
   title: "Account – Element Armory",
   description: "Manage your Element Armory account and linked installs.",
+  robots: { index: false, follow: false },
 };
 
 export default function AccountPage(): React.ReactElement {

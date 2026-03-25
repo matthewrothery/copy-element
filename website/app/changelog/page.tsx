@@ -9,6 +9,7 @@ export const dynamic = "force-static";
 export const metadata = {
   title: "Changelog – Element Armory",
   description: "Element Armory extension updates and release notes.",
+  alternates: { canonical: "/changelog" },
 };
 
 export default function ChangelogPage(): React.ReactElement {

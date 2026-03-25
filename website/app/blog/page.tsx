@@ -9,6 +9,7 @@ export const dynamic = "force-static";
 export const metadata = {
   title: "Blog – Element Armory",
   description: "Element Armory blog: product updates and tips.",
+  alternates: { canonical: "/blog" },
 };
 
 export default function BlogPage(): React.ReactElement {

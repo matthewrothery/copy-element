@@ -9,6 +9,7 @@ export const dynamic = "force-static";
 export const metadata = {
   title: "You've left – Element Armory",
   description: "Help us improve by sharing why you uninstalled Element Armory.",
+  robots: { index: false, follow: false },
 };
 
 export default function UninstallPage(): React.ReactElement {

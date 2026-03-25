@@ -9,6 +9,7 @@ export const dynamic = "force-static";
 export const metadata = {
   title: "Terms of Service – Element Armory",
   description: "The terms and conditions governing your use of Element Armory.",
+  alternates: { canonical: "/terms" },
 };
 
 export default function TermsPage(): React.ReactElement {

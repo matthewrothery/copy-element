@@ -8,6 +8,7 @@ export const dynamic = "force-static";
 export const metadata = {
   title: "Roadmap – Element Armory",
   description: "Element Armory product roadmap and planned features.",
+  alternates: { canonical: "/roadmap" },
 };
 
 export default function RoadmapPage(): React.ReactElement {

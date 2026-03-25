@@ -10,6 +10,7 @@ export const dynamic = "force-static";
 export const metadata = {
   title: "Pricing – Element Armory",
   description: "Element Armory pricing and plans.",
+  alternates: { canonical: "/pricing" },
 };
 
 const PRICING_FAQ_ITEMS: FAQItem[] = [

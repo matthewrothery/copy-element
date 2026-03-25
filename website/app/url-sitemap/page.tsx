@@ -10,6 +10,7 @@ export const dynamic = "force-static";
 export const metadata = {
   title: "Sitemap – Element Armory",
   description: "All pages on Element Armory.",
+  alternates: { canonical: "/url-sitemap" },
 };
 
 const SITEMAP_SECTIONS = [
@@ -28,12 +29,12 @@ const SITEMAP_SECTIONS = [
   {
     title: "Tools",
     links: [
-      { label: "All Tools", href: "/tools" },
-      { label: "Copy HTML Free", href: "/tools/html-copy" },
-      { label: "Copy as JSX", href: "/tools/copy-as-jsx" },
-      { label: "CSS to Tailwind", href: "/tools/css-to-tailwind" },
-      { label: "Color Palette Extractor", href: "/tools/color-palette" },
-      { label: "Component to AI Prompt", href: "/tools/component-to-prompt" },
+      { label: "HTML → React / Tailwind Converter", href: "/tools/html-to-react" },
+      { label: "CSS → Tailwind Converter", href: "/tools/css-to-tailwind" },
+      { label: "UI Component Prompt Generator", href: "/tools/ui-prompt-generator" },
+      { label: "Border Radius Generator", href: "/tools/border-radius-generator" },
+      { label: "Gradient Generator", href: "/tools/gradient-generator" },
+      { label: "CSS Shadow Generator", href: "/tools/shadow-generator" },
     ],
   },
   {
@@ -43,13 +44,6 @@ const SITEMAP_SECTIONS = [
       { label: "Element Armory vs SnipCSS", href: "/compare/element-armory-vs-snipcss" },
       { label: "Element Armory vs CSS Scan", href: "/compare/element-armory-vs-css-scan" },
       { label: "Element Armory vs CopyCSS", href: "/compare/element-armory-vs-copycss" },
-    ],
-  },
-  {
-    title: "Alternatives",
-    links: [
-      { label: "Best DivMagic Alternative", href: "/alternatives/divmagic" },
-      { label: "Best SnipCSS Alternative", href: "/alternatives/snipcss" },
     ],
   },
   {

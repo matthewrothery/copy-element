@@ -9,6 +9,7 @@ export const dynamic = "force-static";
 export const metadata = {
   title: "Cookie Policy – Element Armory",
   description: "How Element Armory uses cookies and similar technologies.",
+  alternates: { canonical: "/cookies" },
 };
 
 export default function CookiesPage(): React.ReactElement {

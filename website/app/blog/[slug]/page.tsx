@@ -5,6 +5,8 @@ import { ArticleHeader, ArticleBody, ArticleCTA, SuggestedPosts } from "@/compon
 import { getAllPosts, getPost } from "@/lib/parseBlog";
 import "@/styles/blog.css";
 
+const BASE_URL = process.env.NEXT_PUBLIC_SITE_URL ?? "https://elementarmory.com";
+
 export const dynamic = "force-static";
 
 export function generateStaticParams(): { slug: string }[] {
@@ -15,13 +17,14 @@ export async function generateMetadata({
   params,
 }: {
   params: Promise<{ slug: string }>;
-}): Promise<{ title: string; description: string }> {
+}): Promise<{ title: string; description: string; alternates?: { canonical: string } }> {
   const { slug } = await params;
   const post = getPost(slug);
   if (!post) return { title: "Post Not Found", description: "" };
   return {
     title: `${post.title} – Element Armory`,
     description: post.excerpt,
+    alternates: { canonical: `/blog/${slug}` },
   };
 }
 
@@ -38,8 +41,35 @@ export default async function BlogPostPage({
     .filter((p) => p.slug !== slug)
     .slice(0, 4);
 
+  const articleSchema = {
+    "@context": "https://schema.org",
+    "@type": "Article",
+    headline: post.title,
+    description: post.excerpt,
+    datePublished: post.date,
+    dateModified: post.date,
+    author: {
+      "@type": "Person",
+      name: post.author,
+    },
+    publisher: {
+      "@type": "Organization",
+      name: "Element Armory",
+      logo: {
+        "@type": "ImageObject",
+        url: `${BASE_URL}/logo.png`,
+      },
+    },
+    url: `${BASE_URL}/blog/${post.slug}`,
+    ...(post.coverImage ? { image: post.coverImage } : {}),
+  };
+
   return (
     <>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(articleSchema) }}
+      />
       <Header />
       <main className="blog-page">
         <ArticleHeader

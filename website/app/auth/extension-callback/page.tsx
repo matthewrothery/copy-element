@@ -7,6 +7,7 @@ export const dynamic = "force-static";
 export const metadata = {
   title: "Connect extension – Element Armory",
   description: "Pass sign-in code to the Element Armory extension.",
+  robots: { index: false, follow: false },
 };
 
 function CallbackFallback(): React.ReactElement {

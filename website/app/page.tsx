@@ -1,3 +1,4 @@
+import type { Metadata } from "next";
 import { Header } from "@/components/Header";
 import { Hero } from "@/components/Hero";
 import { FeatureSection } from "@/components/FeatureSection";
@@ -9,6 +10,10 @@ import { CTABlock } from "@/components/CTABlock";
 import { FAQ } from "@/components/FAQ";
 import { Footer } from "@/components/Footer";
 import { Section } from "@/components/Section";
+
+export const metadata: Metadata = {
+  alternates: { canonical: "/" },
+};
 
 export default function Home(): React.ReactElement {
   return (

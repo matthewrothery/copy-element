@@ -9,6 +9,7 @@ export const dynamic = "force-static";
 export const metadata = {
   title: "Privacy Policy – Element Armory",
   description: "How Element Armory collects, uses, and protects your personal information.",
+  alternates: { canonical: "/privacy" },
 };
 
 export default function PrivacyPage(): React.ReactElement {

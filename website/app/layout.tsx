@@ -16,19 +16,25 @@ export const metadata: Metadata = {
     url: BASE_URL,
     siteName: "Element Armory",
     type: "website",
-    images: [],
+    images: [
+      {
+        url: "/og-image.png",
+        width: 1200,
+        height: 630,
+        alt: "Element Armory – Capture UI Elements",
+      },
+    ],
   },
   twitter: {
     card: "summary_large_image",
     title: "Element Armory – Capture UI Elements",
     description: "Capture UI from any site and rebuild it with AI. Clean. Clear. Powerful.",
+    images: ["/og-image.png"],
   },
-  alternates: { canonical: BASE_URL },
   robots: { index: true, follow: true },
 };
 
-// <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
-export const viewport = { width: "device-width", initialScale: 1, maximumScale: 1, userScalable: "no" };
+export const viewport = { width: "device-width", initialScale: 1 };
 
 
 export default function RootLayout({
@@ -37,13 +43,9 @@ export default function RootLayout({
   return (
     <html lang="en">
       <head>
-        <meta name="description" content="Capture UI from any site and rebuild it with AI. Clean. Clear. Powerful." />
-        <meta name="keywords" content="UI, design, development, AI, automation, productivity" />
+        <meta name="keywords" content="UI capture, HTML copy, JSX copy, AI UI prompts, Chrome extension, developer tools" />
         <meta name="author" content="Element Armory" />
-        <meta name="robots" content="index, follow" />
-        <meta name="googlebot" content="index, follow" />
-        <meta name="bingbot" content="index, follow" />
-        <meta name="yandexbot" content="index, follow" />
+        <link rel="alternate" type="application/rss+xml" title="Element Armory Blog" href={`${BASE_URL}/rss.xml`} />
       </head>
       <body>
         <JsonLd />

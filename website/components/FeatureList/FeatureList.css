@@ -1,0 +1,65 @@
+/* FeatureList – 3-layer token architecture */
+.feature-list {
+  /* Layer 2 → Layer 3 component tokens */
+  --feature-list-text: var(--text);
+  --feature-list-text-muted: var(--text-muted);
+  --feature-list-border: var(--border);
+  --feature-list-font-size: var(--typo-largecopy);
+  --feature-list-item-padding: var(--space-5);
+  --feature-list-max-width: 800px;
+
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  max-width: var(--feature-list-max-width);
+  margin-left: auto;
+  margin-right: auto;
+  list-style: none;
+  padding: 0;
+  margin-top: 0;
+  margin-bottom: 0;
+}
+
+.feature-list-item {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 0 0.35em;
+  padding: var(--feature-list-item-padding) 0;
+  border-bottom: 1px solid var(--feature-list-border);
+  font-size: var(--feature-list-font-size);
+  line-height: 1.5;
+}
+
+.feature-list-item:first-child {
+  border-top: 1px solid var(--feature-list-border);
+}
+
+.feature-list-feature {
+  color: var(--feature-list-text);
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+.feature-list-connector {
+  color: var(--feature-list-text-muted);
+  font-weight: 400;
+  white-space: nowrap;
+}
+
+.feature-list-benefit {
+  color: var(--feature-list-text-muted);
+  font-weight: 400;
+}
+
+@media (max-width: 600px) {
+  .feature-list-feature {
+    white-space: normal;
+    width: 100%;
+  }
+
+  .feature-list-connector,
+  .feature-list-benefit {
+    white-space: normal;
+  }
+}

@@ -6,7 +6,7 @@ export function JsonLd({
   name = "Element Armory",
   description = "Capture UI from any site and rebuild it with AI. Clean. Clear. Powerful.",
 }: JsonLdProps = {}): React.ReactElement {
-  const schema = {
+  const softwareApp = {
     "@context": "https://schema.org",
     "@type": "SoftwareApplication",
     name,
@@ -22,10 +22,49 @@ export function JsonLd({
     ...(storeUrl !== "#" && { downloadUrl: storeUrl }),
   };
 
+  const organization = {
+    "@context": "https://schema.org",
+    "@type": "Organization",
+    name,
+    url: baseUrl,
+    logo: {
+      "@type": "ImageObject",
+      url: `${baseUrl}/logo.png`,
+    },
+    sameAs: [
+      ...(storeUrl !== "#" ? [storeUrl] : []),
+    ],
+  };
+
+  const website = {
+    "@context": "https://schema.org",
+    "@type": "WebSite",
+    name,
+    url: baseUrl,
+    potentialAction: {
+      "@type": "SearchAction",
+      target: {
+        "@type": "EntryPoint",
+        urlTemplate: `${baseUrl}/blog?q={search_term_string}`,
+      },
+      "query-input": "required name=search_term_string",
+    },
+  };
+
   return (
-    <script
-      type="application/ld+json"
-      dangerouslySetInnerHTML={{ __html: JSON.stringify(schema) }}
-    />
+    <>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(softwareApp) }}
+      />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(organization) }}
+      />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(website) }}
+      />
+    </>
   );
 }

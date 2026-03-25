@@ -11,6 +11,7 @@ import { VerdictSummary } from "@/components/VerdictSummary";
 import { WorkflowComparison } from "@/components/WorkflowComparison";
 import { UseCaseComparison } from "@/components/UseCaseComparison";
 import { cssScanData as data } from "@/data/comparisons/cssscan";
+import { FaqSchema } from "@/components/FaqSchema";
 import "./page.css";
 
 export const dynamic = "force-static";
@@ -24,6 +25,7 @@ export const metadata: Metadata = {
 export default function CompareVsCssScanPage(): React.ReactElement {
   return (
     <>
+      {data.faq != null && data.faq.length > 0 && <FaqSchema items={data.faq} />}
       <Header />
       <main>
         <Section center>

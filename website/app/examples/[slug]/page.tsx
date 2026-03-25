@@ -17,6 +17,7 @@ export async function generateMetadata({
 }): Promise<{
   title: string;
   description: string;
+  alternates?: { canonical: string };
   openGraph?: { title: string; description: string };
 }> {
   const { slug } = await params;
@@ -25,6 +26,7 @@ export async function generateMetadata({
   return {
     title: `${ex.name} – UI Examples – Element Armory`,
     description: ex.description,
+    alternates: { canonical: `/examples/${slug}` },
     openGraph: {
       title: `${ex.name} – Element Armory`,
       description: ex.description,

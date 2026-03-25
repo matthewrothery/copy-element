@@ -1,0 +1,100 @@
+/* FeatureTable — single-product feature checklist, styled to match ComparisonTable */
+.ft-scroll-wrapper {
+  --ft-status-col-bg: color-mix(in srgb, var(--accent) 8%, transparent);
+  --ft-status-col-border: color-mix(in srgb, var(--accent) 30%, transparent);
+  --ft-row-border: var(--border);
+  --ft-feature-size: var(--typo-copy);
+  --ft-header-size: var(--typo-label);
+
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+}
+
+.ft-table {
+  width: 100%;
+  min-width: 360px;
+  border-collapse: collapse;
+  font-family: var(--font-sans);
+}
+
+/* Header row */
+.ft-th {
+  padding: var(--space-3) var(--space-4);
+  font-size: var(--ft-header-size);
+  font-weight: var(--font-weight-semibold);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--text-muted);
+  text-align: left;
+  border-bottom: 1px solid var(--ft-row-border);
+  white-space: nowrap;
+}
+
+.ft-th--feature {
+  width: 80%;
+}
+
+.ft-th--status {
+  width: 20%;
+  background: var(--ft-status-col-bg);
+  border-left: 1px solid var(--ft-status-col-border);
+  color: var(--accent);
+  text-align: center;
+}
+
+/* Body rows */
+.ft-row:not(:last-child) {
+  border-bottom: 1px solid var(--ft-row-border);
+}
+
+.ft-td {
+  padding: var(--space-3) var(--space-4);
+  vertical-align: top;
+  font-size: var(--ft-feature-size);
+  color: var(--text);
+}
+
+.ft-td--feature {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+}
+
+.ft-td--status {
+  background: var(--ft-status-col-bg);
+  border-left: 1px solid var(--ft-status-col-border);
+  text-align: center;
+}
+
+.ft-feature-label {
+  font-weight: var(--font-weight-semibold);
+  color: var(--text);
+  font-size: var(--ft-feature-size);
+}
+
+.ft-feature-note {
+  font-size: var(--typo-label);
+  color: var(--text-muted);
+  line-height: 1.5;
+}
+
+/* Status icons */
+.ft-status {
+  display: inline-block;
+  font-size: 16px;
+  line-height: 1;
+}
+
+.ft-status--yes {
+  color: #4ade80;
+}
+
+.ft-status--no {
+  color: var(--text-muted);
+}
+
+.ft-status--partial {
+  color: #facc15;
+}
