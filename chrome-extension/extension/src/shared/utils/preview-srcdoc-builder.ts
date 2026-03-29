@@ -167,7 +167,7 @@ export function buildEditorPreviewSrcDoc(html: string, css: string, snippet: Sni
   const styleContent = parts.join("\n\n");
   const styleTag = styleContent ? `<style>${styleContent}</style>` : "";
   const bodyContent = wrapWithLayoutIfNeeded(html, snippet.renderContext);
-  return `<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">${baseTag}<style>*{box-sizing:border-box;}html,body{margin:0;padding:8px;}</style>${styleTag}</head><body>${bodyContent}</body></html>`;
+  return `<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">${baseTag}<style>*{box-sizing:border-box;}html,body{margin:0;padding:8px;}.snippet-stage-parent{width:100%!important;min-width:0!important;max-width:100%!important;}</style>${styleTag}</head><body>${bodyContent}</body></html>`;
 }
 
 /**

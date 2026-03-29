@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import Image from "next/image";
 import { Header } from "@/components/Header";
 import { Hero } from "@/components/Hero";
 import { FeatureSection } from "@/components/FeatureSection";
@@ -21,7 +22,7 @@ export default function Home(): React.ReactElement {
       <Header />
       <main>
         <Section center>
-          <Hero />
+          <Hero media={<Image src="/assets/elementarmory.gif" alt="Element Armory" width={940} height={557} />} />
         </Section>
 
         <Section>
@@ -77,16 +78,19 @@ export default function Home(): React.ReactElement {
                 title: "One-click capture",
                 description:
                   "Hover any element, click to capture. Element Armory strips it down to just the styles that matter.",
+                image: "/assets/one-click-capture.png",
               },
               {
-                title: "HTML and JSX",
+                title: "HTML and CSS",
                 description:
-                  "Export as plain HTML or React JSX. Paste directly into your project or drop into an AI tool.",
+                  "Export as plain HTML and CSS. Paste directly into your project or drop into an AI tool.",
+                image: "/assets/capture-html-css.png",
               },
               {
                 title: "Inline styles only",
                 description:
                   "Visual styles only — no scripts, trackers, or framework dependencies. Works anywhere.",
+                image: "/assets/inline-styles-only.gif",
               },
             ]}
           />

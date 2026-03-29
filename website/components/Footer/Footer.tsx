@@ -30,17 +30,6 @@ const DEFAULT_LINK_GROUPS: FooterLinkGroup[] = [
     ],
   },
   {
-    title: "Tools",
-    links: [
-      { label: "HTML → React / Tailwind Converter", href: "/tools/html-to-react" },
-      { label: "CSS → Tailwind Converter", href: "/tools/css-to-tailwind" },
-      { label: "UI Component Prompt Generator", href: "/tools/ui-prompt-generator" },
-      { label: "Border Radius Generator", href: "/tools/border-radius-generator" },
-      { label: "Gradient Generator", href: "/tools/gradient-generator" },
-      { label: "CSS Shadow Generator", href: "/tools/shadow-generator" },
-    ],
-  },
-  {
     sections: [
       {
         title: "Account",

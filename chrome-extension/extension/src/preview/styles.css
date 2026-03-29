@@ -159,6 +159,44 @@ body,
 }
 
 /* ─────────────────────────────────────────────────────────────
+   Upgrade Banner
+   ───────────────────────────────────────────────────────────── */
+.upgrade-banner {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  height: 36px;
+  padding: 0 16px;
+  background: var(--preview-surface-alt);
+  border-bottom: 1px solid var(--preview-border);
+  flex-shrink: 0;
+  font-size: var(--text-caption);
+  color: var(--color-text-secondary);
+}
+
+.upgrade-banner-btn {
+  display: inline-flex;
+  align-items: center;
+  padding: 0 10px;
+  height: 24px;
+  font-size: var(--text-caption);
+  font-weight: 500;
+  color: var(--preview-accent);
+  background: transparent;
+  border: 1px solid var(--preview-accent);
+  border-radius: 6px;
+  cursor: pointer;
+  transition: color 120ms, background 120ms;
+  white-space: nowrap;
+}
+
+.upgrade-banner-btn:hover {
+  color: var(--color-text-inverse);
+  background: var(--preview-accent);
+}
+
+/* ─────────────────────────────────────────────────────────────
    Action bar
    ───────────────────────────────────────────────────────────── */
 .action-bar {

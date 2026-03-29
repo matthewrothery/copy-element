@@ -119,7 +119,7 @@ export function App() {
         saveSuccess={saveSuccess}
         onSave={() => void handleSave()}
         isPaid={isPaid}
-        onUpgrade={() => setShowUpgradeModal(true)}
+        onUpgrade={() => openUpgradePage()}
       />
       <ActionBar
         snippet={snippet}

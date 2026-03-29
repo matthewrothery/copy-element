@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import Image from "next/image";
 import { Header } from "@/components/Header";
 import { Hero } from "@/components/Hero";
 import { ElementsShowcase } from "@/components/ElementsShowcase";
@@ -30,7 +31,9 @@ export default function ProductPage(): React.ReactElement {
             title="The UI you want is already built. Just capture it."
             subtitle="Click any element on any site. Get clean HTML or JSX in one click."
             ctaSubtext="Free. No account required."
+            media={<Image src="/assets/elementarmory.gif" alt="Element Armory" width={940} height={557} />}
           />
+
         </Section>
 
         <Section>

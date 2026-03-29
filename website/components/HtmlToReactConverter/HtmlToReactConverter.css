@@ -1,0 +1,321 @@
+.html-converter {
+  /* Layer 3 — component tokens mapped from semantic tokens */
+  --converter-surface: var(--surface);
+  --converter-border: var(--border);
+  --converter-editor-bg: #0d0f14;
+  --converter-editor-text: var(--text);
+  --converter-label-text: var(--text-muted);
+  --converter-accent: var(--accent);
+  --converter-radius: var(--radius-md);
+  --converter-pane-height: clamp(700px, calc(100vh - 200px), 1100px);
+  --converter-options-height: 48px;
+  --converter-upsell-bg: rgba(59, 130, 246, 0.08);
+  --converter-upsell-border: rgba(59, 130, 246, 0.2);
+
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+}
+
+/* ─── Options bar ──────────────────────────────────────────────────────────── */
+
+.converter-options {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  flex-wrap: wrap;
+}
+
+/* Framework segmented control */
+
+.converter-framework {
+  display: flex;
+  border: 1px solid var(--converter-border);
+  border-radius: var(--converter-radius);
+  overflow: hidden;
+  flex-shrink: 0;
+}
+
+.converter-framework-btn {
+  background: transparent;
+  border: none;
+  border-left: 1px solid var(--converter-border);
+  color: var(--converter-label-text);
+  font-size: var(--typo-copy);
+  font-family: inherit;
+  font-weight: var(--font-weight-semibold);
+  padding: 0 var(--space-3);
+  height: var(--converter-options-height);
+  cursor: pointer;
+  transition: background 150ms, color 150ms;
+  white-space: nowrap;
+}
+
+.converter-framework-btn:first-child {
+  border-left: none;
+}
+
+.converter-framework-btn:hover {
+  background: rgba(255, 255, 255, 0.05);
+  color: var(--text);
+}
+
+.converter-framework-btn[aria-pressed="true"] {
+  background: var(--converter-accent);
+  color: #ffffff;
+}
+
+/* Toggle checkboxes */
+
+.converter-toggles {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  flex-wrap: wrap;
+}
+
+.converter-toggle {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  cursor: pointer;
+  user-select: none;
+  font-size: var(--typo-copy);
+  color: var(--converter-label-text);
+  transition: color 150ms;
+}
+
+.converter-toggle:hover {
+  color: var(--text);
+}
+
+.converter-toggle input[type="checkbox"] {
+  appearance: none;
+  width: 16px;
+  height: 16px;
+  border: 1px solid var(--converter-border);
+  border-radius: 4px;
+  background: transparent;
+  cursor: pointer;
+  position: relative;
+  flex-shrink: 0;
+  transition: background 150ms, border-color 150ms;
+}
+
+.converter-toggle input[type="checkbox"]:checked {
+  background: var(--converter-accent);
+  border-color: var(--converter-accent);
+}
+
+.converter-toggle input[type="checkbox"]:checked::after {
+  content: "";
+  position: absolute;
+  inset: 2px;
+  background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 12 12' fill='none' stroke='%23fff' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M2 6l3 3 5-5'/%3E%3C/svg%3E") center/contain no-repeat;
+}
+
+/* Convert action button */
+
+.converter-spacer {
+  flex: 1;
+}
+
+.converter-convert-btn {
+  background: var(--converter-accent);
+  border: none;
+  color: #ffffff;
+  font-size: var(--typo-copy);
+  font-family: inherit;
+  font-weight: var(--font-weight-semibold);
+  padding: 0 var(--space-4);
+  height: var(--converter-options-height);
+  border-radius: var(--converter-radius);
+  cursor: pointer;
+  transition: opacity 150ms;
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
+.converter-convert-btn:hover {
+  opacity: 0.88;
+}
+
+.converter-convert-btn:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+/* ─── Split panes ──────────────────────────────────────────────────────────── */
+
+.converter-panes {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0;
+  border: 1px solid var(--converter-border);
+  border-radius: var(--converter-radius);
+  overflow: hidden;
+}
+
+.converter-pane {
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+.converter-pane--input {
+  border-right: 1px solid var(--converter-border);
+}
+
+.converter-pane-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: var(--space-2) var(--space-3);
+  background: var(--converter-editor-bg);
+  border-bottom: 1px solid var(--converter-border);
+  flex-shrink: 0;
+  min-height: 36px;
+}
+
+.converter-pane-label {
+  font-size: 11px;
+  font-weight: var(--font-weight-semibold);
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--converter-label-text);
+}
+
+.converter-copy-btn {
+  background: transparent;
+  border: 1px solid var(--converter-border);
+  color: var(--converter-label-text);
+  font-size: 11px;
+  font-family: inherit;
+  font-weight: var(--font-weight-semibold);
+  padding: 3px var(--space-2);
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background 150ms, color 150ms, border-color 150ms;
+  display: inline-flex;
+  align-items: center;
+  white-space: nowrap;
+}
+
+.converter-copy-btn:hover {
+  background: rgba(255, 255, 255, 0.06);
+  color: var(--text);
+  border-color: rgba(255, 255, 255, 0.2);
+}
+
+.converter-copy-btn:disabled {
+  opacity: 0.3;
+  cursor: not-allowed;
+}
+
+.converter-textarea {
+  flex: 1;
+  font-family: ui-monospace, "SF Mono", "Cascadia Code", "Fira Code", monospace;
+  font-size: 14px;
+  resize: none;
+  width: 100%;
+  height: var(--converter-pane-height);
+  background: var(--converter-editor-bg);
+  color: var(--converter-editor-text);
+  border: none;
+  outline: none;
+  padding: var(--space-4);
+  line-height: 1.7;
+  tab-size: 2;
+}
+
+.converter-textarea::placeholder {
+  color: var(--converter-label-text);
+  opacity: 0.6;
+}
+
+.converter-textarea[readonly] {
+  cursor: default;
+}
+
+/* ─── Upsell strip ─────────────────────────────────────────────────────────── */
+
+.converter-upsell {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-3);
+  padding: var(--space-3) var(--space-4);
+  background: var(--converter-upsell-bg);
+  border: 1px solid var(--converter-upsell-border);
+  border-radius: var(--converter-radius);
+  flex-wrap: wrap;
+}
+
+.converter-upsell-text {
+  font-size: var(--typo-copy);
+  color: var(--converter-label-text);
+  line-height: 1.5;
+}
+
+.converter-upsell-link {
+  font-size: var(--typo-copy);
+  font-weight: var(--font-weight-semibold);
+  color: var(--converter-accent);
+  text-decoration: none;
+  white-space: nowrap;
+  transition: opacity 150ms;
+}
+
+.converter-upsell-link:hover {
+  opacity: 0.8;
+}
+
+/* ─── Toast ────────────────────────────────────────────────────────────────── */
+
+.converter-toast {
+  position: fixed;
+  bottom: var(--space-4);
+  left: 50%;
+  transform: translateX(-50%);
+  background: #1e293b;
+  color: #f1f5f9;
+  padding: var(--space-2) var(--space-3);
+  border-radius: var(--converter-radius);
+  font-size: var(--typo-copy);
+  font-weight: var(--font-weight-semibold);
+  z-index: 9999;
+  pointer-events: none;
+  white-space: nowrap;
+}
+
+/* ─── Mobile ───────────────────────────────────────────────────────────────── */
+
+@media (max-width: 768px) {
+  .converter-panes {
+    grid-template-columns: 1fr;
+  }
+
+  .converter-pane--input {
+    border-right: none;
+    border-bottom: 1px solid var(--converter-border);
+  }
+
+  .converter-textarea {
+    height: clamp(400px, 50vh, 600px);
+  }
+
+  .converter-options {
+    gap: var(--space-2);
+  }
+
+  .converter-spacer {
+    display: none;
+  }
+
+  .converter-convert-btn {
+    width: 100%;
+    justify-content: center;
+    order: 10;
+  }
+}
