@@ -36,14 +36,19 @@ vi.mock('../db/connection.js', () => ({
 }));
 
 // Import after mock setup
-const { countCapturesByUser, deleteOldestCaptureByUser } = await import('./capture.js');
+const {
+  countCapturesByUser,
+  countCapturesByInstallThisMonth,
+  countCapturesByUserThisMonth,
+  deleteOldestCaptureByUser,
+} = await import('./capture.js');
 
-function insertCapture(userId: string | null, capturedAt: number): number {
-  const now = Date.now();
+function insertCapture(userId: string | null, capturedAt: number, createdAt?: number, installId = 'install1'): number {
+  const now = createdAt ?? Date.now();
   const result = mockDb.prepare(
     `INSERT INTO captures (install_id, user_id, source_url, captured_at, created_by_install_id, status, created_at, updated_at)
-     VALUES ('install1', ?, 'http://example.com', ?, 'install1', 'ok', ?, ?)`
-  ).run(userId, capturedAt, now, now);
+     VALUES (?, ?, 'http://example.com', ?, ?, 'ok', ?, ?)`
+  ).run(installId, userId, capturedAt, installId, now, now);
   return result.lastInsertRowid as number;
 }
 
@@ -116,5 +121,49 @@ describe('deleteOldestCaptureByUser', () => {
 
     deleteOldestCaptureByUser('user-1');
     expect(countCapturesByUser('user-1')).toBe(2);
+  });
+});
+
+describe('countCapturesByInstallThisMonth', () => {
+  const thisMonthMs = new Date(new Date().getFullYear(), new Date().getMonth(), 15).getTime();
+  const lastMonthMs = new Date(new Date().getFullYear(), new Date().getMonth() - 1, 15).getTime();
+
+  it('returns 0 for install with no captures this month', () => {
+    expect(countCapturesByInstallThisMonth('install-a')).toBe(0);
+  });
+
+  it('counts only captures created this month', () => {
+    insertCapture(null, thisMonthMs, thisMonthMs, 'install-a');
+    insertCapture(null, thisMonthMs, thisMonthMs, 'install-a');
+    insertCapture(null, lastMonthMs, lastMonthMs, 'install-a');
+    expect(countCapturesByInstallThisMonth('install-a')).toBe(2);
+  });
+
+  it('does not count other installs', () => {
+    insertCapture(null, thisMonthMs, thisMonthMs, 'install-a');
+    insertCapture(null, thisMonthMs, thisMonthMs, 'install-b');
+    expect(countCapturesByInstallThisMonth('install-a')).toBe(1);
+  });
+});
+
+describe('countCapturesByUserThisMonth', () => {
+  const thisMonthMs = new Date(new Date().getFullYear(), new Date().getMonth(), 15).getTime();
+  const lastMonthMs = new Date(new Date().getFullYear(), new Date().getMonth() - 1, 15).getTime();
+
+  it('returns 0 for user with no captures this month', () => {
+    expect(countCapturesByUserThisMonth('user-x')).toBe(0);
+  });
+
+  it('counts only captures created this month', () => {
+    insertCapture('user-x', thisMonthMs, thisMonthMs);
+    insertCapture('user-x', thisMonthMs, thisMonthMs);
+    insertCapture('user-x', lastMonthMs, lastMonthMs);
+    expect(countCapturesByUserThisMonth('user-x')).toBe(2);
+  });
+
+  it('does not count other users', () => {
+    insertCapture('user-x', thisMonthMs, thisMonthMs);
+    insertCapture('user-y', thisMonthMs, thisMonthMs);
+    expect(countCapturesByUserThisMonth('user-x')).toBe(1);
   });
 });

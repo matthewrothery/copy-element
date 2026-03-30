@@ -21,7 +21,17 @@ import {
 import { requireInstallAuth, type RequestWithInstall } from '../middleware/install-auth.js';
 import { requireSession, type RequestWithSession } from '../middleware/session.js';
 import { requireFigmaAuth, type RequestWithFigmaUser } from '../middleware/figma-auth.js';
-import { hasActivePaidPlan } from '../../services/entitlements.js';
+import {
+  hasActivePaidPlan,
+  ANONYMOUS_MONTHLY_CAPTURE_LIMIT,
+  FREE_MONTHLY_CAPTURE_LIMIT,
+} from '../../services/entitlements.js';
+import {
+  countCapturesByInstallThisMonth,
+  countCapturesByUserThisMonth,
+} from '../../services/capture.js';
+import { recordEvent, wasEventFiredThisMonth, getUserEmail } from '../../services/events.js';
+import { enqueueJob } from '../../services/job-queue.js';
 
 export const capturesRouter = Router();
 
@@ -143,6 +153,52 @@ capturesRouter.post(
       });
     }
 
+    // Monthly quota pre-check
+    if (!req.installUserId) {
+      const used = countCapturesByInstallThisMonth(installId);
+      if (used >= ANONYMOUS_MONTHLY_CAPTURE_LIMIT) {
+        if (!wasEventFiredThisMonth('quota.reached', null, installId)) {
+          recordEvent({ type: 'quota.reached', installId, payload: { quota_limit: ANONYMOUS_MONTHLY_CAPTURE_LIMIT } });
+        }
+        res.status(402).json({
+          code: 'quota_reached',
+          error: 'Monthly capture limit reached. Create a free account for a higher limit.',
+          quota_used: used,
+          quota_limit: ANONYMOUS_MONTHLY_CAPTURE_LIMIT,
+        });
+        return;
+      }
+    } else if (!hasActivePaidPlan(req.installUserId)) {
+      const used = countCapturesByUserThisMonth(req.installUserId);
+      if (used >= FREE_MONTHLY_CAPTURE_LIMIT) {
+        if (!wasEventFiredThisMonth('quota.reached', req.installUserId)) {
+          recordEvent({ type: 'quota.reached', userId: req.installUserId, payload: { quota_limit: FREE_MONTHLY_CAPTURE_LIMIT } });
+          const email = getUserEmail(req.installUserId);
+          if (email) {
+            // Fire limit-reached email (fire-and-forget)
+            void import('../../services/email.js').then(({ sendLimitReachedEmail }) =>
+              sendLimitReachedEmail(email, FREE_MONTHLY_CAPTURE_LIMIT).catch((err) =>
+                console.warn('[captures] limit-reached email failed:', err)
+              )
+            );
+            // Schedule post-limit followup for 48h later
+            try {
+              enqueueJob('post_limit_followup', { userId: req.installUserId, email, quotaLimit: FREE_MONTHLY_CAPTURE_LIMIT }, Date.now() + 48 * 60 * 60 * 1000);
+            } catch (err) {
+              console.warn('[captures] post-limit followup job enqueue failed:', err);
+            }
+          }
+        }
+        res.status(402).json({
+          code: 'quota_reached',
+          error: 'Monthly capture limit reached. Upgrade to Pro for unlimited captures.',
+          quota_used: used,
+          quota_limit: FREE_MONTHLY_CAPTURE_LIMIT,
+        });
+        return;
+      }
+    }
+
     try {
       const capture = createCaptureWithAssets({
         install_id: installId,
@@ -153,6 +209,51 @@ capturesRouter.post(
         assets,
       });
 
+      // Fire capture.created event + milestone emails for logged-in users
+      if (req.installUserId) {
+        const totalCount = countCapturesByUser(req.installUserId);
+        recordEvent({ type: 'capture.created', userId: req.installUserId, installId, payload: { count: totalCount } });
+        const email = getUserEmail(req.installUserId);
+        if (email) {
+          if (totalCount === 1) {
+            void import('../../services/email.js').then(({ sendFirstCaptureEmail }) =>
+              sendFirstCaptureEmail(email).catch((err) =>
+                console.warn('[captures] first-capture email failed:', err)
+              )
+            );
+          }
+          if (totalCount === 3) {
+            void import('../../services/email.js').then(({ sendAccountNudgeEmail }) =>
+              sendAccountNudgeEmail(email).catch((err) =>
+                console.warn('[captures] account-nudge email failed:', err)
+              )
+            );
+          }
+          if (totalCount === 10) {
+            void import('../../services/email.js').then(({ sendCaptureMilestoneEmail }) =>
+              sendCaptureMilestoneEmail(email).catch((err) =>
+                console.warn('[captures] capture-milestone email failed:', err)
+              )
+            );
+          }
+          // Save-your-work: ≥80% of monthly quota (free users only)
+          if (!hasActivePaidPlan(req.installUserId)) {
+            const monthlyUsed = countCapturesByUserThisMonth(req.installUserId);
+            if (monthlyUsed / FREE_MONTHLY_CAPTURE_LIMIT >= 0.8) {
+              void import('../../services/email.js').then(({ sendSaveYourWorkEmail }) =>
+                sendSaveYourWorkEmail(email, monthlyUsed, FREE_MONTHLY_CAPTURE_LIMIT).catch((err) =>
+                  console.warn('[captures] save-your-work email failed:', err)
+                )
+              );
+            }
+          }
+        }
+      } else {
+        const totalCount = countCapturesByInstall(installId);
+        recordEvent({ type: 'capture.created', installId, payload: { count: totalCount } });
+      }
+
+      // Library size FIFO: evict oldest when over the total library cap
       if (!req.installUserId) {
         let count = countCapturesByInstall(installId);
         while (count > GUEST_CAPTURE_LIMIT) {

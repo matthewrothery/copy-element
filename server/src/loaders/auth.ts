@@ -60,6 +60,21 @@ export const auth = betterAuth({
           } catch (err) {
             console.warn('[auth] Welcome email failed:', err);
           }
+          try {
+            const { recordEvent } = await import('../services/events.js');
+            recordEvent({ type: 'user.created', userId: user.id });
+          } catch (err) {
+            console.warn('[auth] user.created event failed:', err);
+          }
+          try {
+            const { enqueueJob } = await import('../services/job-queue.js');
+            const name = user.name ?? undefined;
+            const now = Date.now();
+            enqueueJob('onboarding_24h', { userId: user.id, email: user.email, name }, now + 24 * 60 * 60 * 1000);
+            enqueueJob('onboarding_day3', { userId: user.id, email: user.email, name }, now + 3 * 24 * 60 * 60 * 1000);
+          } catch (err) {
+            console.warn('[auth] Onboarding job enqueue failed:', err);
+          }
         },
       },
     },

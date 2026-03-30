@@ -1,6 +1,9 @@
 import { getDb } from '../db/connection.js';
 import { ACTIVE_STATUSES, type PlanCode, type SubscriptionStatus } from './billing-plan-map.js';
 
+export const ANONYMOUS_MONTHLY_CAPTURE_LIMIT = 10;
+export const FREE_MONTHLY_CAPTURE_LIMIT = 20;
+
 export interface UserEntitlement {
   plan_code: PlanCode;
   status: SubscriptionStatus;

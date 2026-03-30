@@ -2,7 +2,11 @@ import { Router, type Request, type Response } from 'express';
 import Stripe from 'stripe';
 import { config } from '../../config/index.js';
 import { getOrCreateStripeCustomerForUser } from '../../services/billing-customer.js';
-import { getUserEntitlement } from '../../services/entitlements.js';
+import {
+  getUserEntitlement,
+  FREE_MONTHLY_CAPTURE_LIMIT,
+} from '../../services/entitlements.js';
+import { countCapturesByUserThisMonth } from '../../services/capture.js';
 import { syncFromStripeEvent } from '../../services/subscription-sync.js';
 import { getStripe } from '../../loaders/stripe.js';
 import { requireSession, type RequestWithSession } from '../middleware/session.js';
@@ -14,14 +18,21 @@ export const billingRouter = Router();
 
 /** GET /api/billing/entitlement — session or extension Bearer token required. Returns current user entitlement. */
 billingRouter.get('/entitlement', async (req: Request, res: Response) => {
+  function withQuota(entitlement: ReturnType<typeof getUserEntitlement>, userId: string) {
+    const isPaid = entitlement.active && entitlement.plan_code !== 'free';
+    const quota_used = isPaid ? 0 : countCapturesByUserThisMonth(userId);
+    const quota_limit = isPaid ? null : FREE_MONTHLY_CAPTURE_LIMIT;
+    return { ...entitlement, quota_used, quota_limit };
+  }
+
   // Support extension Bearer token
   const authHeader = req.headers.authorization;
   if (authHeader?.startsWith('Bearer ')) {
     const token = authHeader.slice(7).trim();
     const install = getInstallFromToken(token);
-    if (install?.user_id) {
+    if (install) {
       const entitlement = getUserEntitlement(install.user_id);
-      res.status(200).json(entitlement);
+      res.status(200).json(withQuota(entitlement, install.user_id));
       return;
     }
     res.status(401).json({ error: 'Unauthorized' });
@@ -35,7 +46,7 @@ billingRouter.get('/entitlement', async (req: Request, res: Response) => {
     return;
   }
   const entitlement = getUserEntitlement(session.user.id);
-  res.status(200).json(entitlement);
+  res.status(200).json(withQuota(entitlement, session.user.id));
 });
 
 /** POST /api/billing/checkout-session — session required. Returns { url } to redirect to Stripe Checkout. */

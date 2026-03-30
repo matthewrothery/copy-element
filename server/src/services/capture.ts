@@ -166,6 +166,35 @@ export function backfillUserIdForInstall(installId: string, userId: string): num
   return result.changes;
 }
 
+function getMonthStartMs(): number {
+  const now = new Date();
+  return new Date(now.getFullYear(), now.getMonth(), 1).getTime();
+}
+
+/**
+ * Count captures created by an install in the current calendar month.
+ * Uses server-set created_at to prevent client clock spoofing.
+ */
+export function countCapturesByInstallThisMonth(installId: string): number {
+  const db = getDb();
+  const row = db
+    .prepare('SELECT COUNT(*) as count FROM captures WHERE install_id = ? AND created_at >= ?')
+    .get(installId, getMonthStartMs()) as { count: number };
+  return row.count;
+}
+
+/**
+ * Count captures created by a user in the current calendar month.
+ * Uses server-set created_at to prevent client clock spoofing.
+ */
+export function countCapturesByUserThisMonth(userId: string): number {
+  const db = getDb();
+  const row = db
+    .prepare('SELECT COUNT(*) as count FROM captures WHERE user_id = ? AND created_at >= ?')
+    .get(userId, getMonthStartMs()) as { count: number };
+  return row.count;
+}
+
 /**
  * Count captures for a given install. Used for guest FIFO enforcement.
  */
