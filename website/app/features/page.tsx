@@ -61,29 +61,25 @@ export default function FeaturesPage(): React.ReactElement {
                 title: "Capture any UI element in one click",
                 description:
                   "Open Element Armory, hover any element, click. The extension extracts the full visual structure — layout, typography, color, spacing — so you can grab what you want without switching tools or writing a line.",
-                image:
-                  "https://picsum.photos/seed/feat-capture/1120/630",
+                image: "/assets/one-click-capture.png",
               },
               {
                 title: "Copy clean HTML with inline styles",
                 description:
                   "Get minimal markup with all visual styles already inlined. No scripts, no trackers, no framework dependencies — so you can paste real markup into your project without rewriting anything.",
-                image:
-                  "https://picsum.photos/seed/feat-html/1120/630",
+                image: "/assets/copy-code-snippet.png",
               },
               {
                 title: "Export as JSX",
                 description:
                   "Valid React JSX with camelCase props and self-closing tags — so you can drop captured components directly into your React codebase without a conversion step.",
-                image:
-                  "https://picsum.photos/seed/feat-jsx/1120/630",
+                image: "/assets/capture-html-css.png",
               },
               {
                 title: "Copy as Tailwind",
                 description:
                   "Captured styles translated into Tailwind utility classes — so you can integrate them into your utility-first workflow without manual translation.",
-                image:
-                  "https://picsum.photos/seed/feat-tailwind/1120/630",
+                image: "/assets/copy-code-snippet.png",
               },
             ]}
           />
@@ -103,22 +99,19 @@ export default function FeaturesPage(): React.ReactElement {
                 title: "Generate AI-ready prompts",
                 description:
                   "Copy a structured prompt that includes the captured element, its markup, and a clear instruction — so you can hand off UI to your AI assistant with full structural context and get usable output immediately.",
-                image:
-                  "https://picsum.photos/seed/feat-ai-prompt/1120/630",
+                image: "/assets/copy-ai-prompt.png",
               },
               {
                 title: "Connect via MCP server",
                 description:
                   "Connect Element Armory to Cursor, Windsurf, or any MCP-compatible editor. Captured elements land directly in your tool's context — so you can reference live snippets without any manual paste.",
-                image:
-                  "https://picsum.photos/seed/feat-mcp/1120/630",
+                image: "/assets/copy-mcp-prompt.png",
               },
               {
                 title: "Advanced codebase-aware prompts",
                 description:
                   "Generate prompts that include your existing file structure, component conventions, and style rules — so you can tell your AI exactly how to adapt the element to your codebase.",
-                image:
-                  "https://picsum.photos/seed/feat-codebase/1120/630",
+                image: "/assets/copy-advanced-prompt.png",
               },
             ]}
           />
@@ -138,16 +131,14 @@ export default function FeaturesPage(): React.ReactElement {
                 title: "Save to your personal library",
                 description:
                   "After capturing, save the element with a title and source URL — so you can reuse it across projects without revisiting the original site.",
-                image:
-                  "https://picsum.photos/seed/feat-library/800/500",
+                image: "/assets/auto-save-capture.png",
                 imageAlt: "Saved snippets in the library panel",
               },
               {
                 title: "Sync across devices",
                 description:
                   "Your library syncs to your account — so you can access your full collection from any machine, always up to date.",
-                image:
-                  "https://picsum.photos/seed/feat-sync/800/500",
+                image: "/assets/copy-anytime.png",
                 imageAlt: "Library synced across multiple devices",
               },
             ]}

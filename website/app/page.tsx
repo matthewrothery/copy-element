@@ -137,22 +137,22 @@ export default function Home(): React.ReactElement {
           <FeatureSection
             subheading="Built for developers"
             title="Output your tools can actually use."
-            subtitle="Stylesheet-driven extraction: smaller, class-based CSS that AI tools parse more reliably than computed-style dumps — portable once captured."
+            subtitle="Element Armory reads the page's real stylesheets — not getComputedStyle. The result is smaller, readable, class-based CSS that AI tools handle far better than inlined property dumps."
             tabs={[
               {
-                title: "Sheet-driven extraction",
+                title: "Only what applies",
                 description:
-                  "Walks the page’s real stylesheets and keeps only rules that apply to the captured element tree — not every computed property inlined.",
+                  "The extension walks the page's actual stylesheets and keeps only the rules that match the captured element and its children. No bloat, no noise — just the styles that are doing work.",
               },
               {
-                title: "Readable CSS",
+                title: "Readable by AI",
                 description:
-                  "Class-based rules in a style block. Browser defaults, transitions, animations, and pointer noise are stripped so output stays legible.",
+                  "Output is class-based CSS in a style block — the same structure AI tools are trained on. Browser defaults, transitions, animations, and pointer events are stripped so there's nothing to work around.",
               },
               {
-                title: "Standalone snippets",
+                title: "Independent of the source",
                 description:
-                  "No dependency on the source site or its framework. The original page can change — your snippet stays paste-ready anywhere.",
+                  "Once captured, your snippet has no dependency on the original site. The page can change, go down, or go behind a paywall — your code stays paste-ready.",
               },
             ]}
           />

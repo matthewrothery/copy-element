@@ -60,16 +60,19 @@ export default function ProductPage(): React.ReactElement {
                 title: "Click to capture",
                 description:
                   "Open Element Armory, hover any element, click. The extension extracts it with its visual styles - display, layout, typography, color, spacing. Nothing else.",
+                image: "/assets/one-click-capture.png",
               },
               {
                 title: "Copy HTML or JSX",
                 description:
                   "Choose your output format before you copy. Plain HTML for static projects, React JSX for component-based codebases. One click to clipboard.",
+                image: "/assets/copy-code-snippet.png",
               },
               {
                 title: "No bloat, no noise",
                 description:
                   "Output contains only the styles you can see. No scripts, no trackers, no framework dependencies. Paste it anywhere and it works.",
+                image: "/assets/capture-html-css.png",
               },
             ]}
           />
@@ -97,16 +100,19 @@ export default function ProductPage(): React.ReactElement {
                 title: "Save snippets",
                 description:
                   "After capturing, save the element to your library with a title and the source URL. It stays there across sessions and devices.",
+                image: "/assets/auto-save-capture.png",
               },
               {
                 title: "Copy without revisiting",
                 description:
                   "Open your library, find the snippet, copy HTML or JSX. The original site doesn't need to be open. Your code is already there.",
+                image: "/assets/copy-anytime.png",
               },
               {
                 title: "Preview and organize",
                 description:
                   "See a visual preview of every saved element. Delete what you don't need. Keep only what earns its place.",
+                image: "/assets/preview-and-edit.png",
               },
             ]}
           />
@@ -126,16 +132,19 @@ export default function ProductPage(): React.ReactElement {
                 title: "MCP server",
                 description:
                   "Connect Element Armory to Cursor or any MCP-compatible AI editor. Captured elements land directly in your tool's context - no manual paste required.",
+                image: "/assets/copy-mcp-prompt.png",
               },
               {
                 title: "AI-ready prompts",
                 description:
                   "Copy a codebase-aware prompt that includes the captured element, its structure, and a clear instruction. Paste into your AI tool and get accurate, usable output immediately.",
+                image: "/assets/copy-ai-or-mcp-prompt.png",
               },
               {
                 title: "Framework-neutral output",
                 description:
                   "HTML and JSX both work with any framework. Next.js, Remix, SvelteKit, or plain React - captured code drops in without modification.",
+                image: "/assets/claude-code.png",
               },
             ]}
           />
@@ -151,24 +160,28 @@ export default function ProductPage(): React.ReactElement {
             }
             cards={[
               {
-                title: "Copy HTML",
+                title: "Copy code snippets",
                 description:
-                  "Minimal markup. No inline event handlers, no tracking attributes, no framework-specific syntax. Just the structure.",
+                  "Clean HTML with scoped styles. Paste directly into any project or framework.",
+                image: "/assets/copy-code-snippet.png",
               },
               {
-                title: "Copy JSX",
+                title: "Copy AI prompt",
                 description:
-                  "Valid React JSX. className instead of class, self-closing tags, camelCase props. Drops straight into a component.",
+                  "A ready-made prompt with HTML and styles to rebuild the element in any AI tool.",
+                image: "/assets/copy-ai-prompt.png",
               },
               {
-                title: "Synced across devices",
+                title: "Copy advanced prompt",
                 description:
-                  "Your snippet library syncs to your account. Start capturing on one machine, access your snippets on another.",
+                  "A codebase-aware prompt that adapts the element to match your project.",
+                image: "/assets/copy-advanced-prompt.png",
               },
               {
-                title: "Share with your team",
+                title: "Copy MCP prompt",
                 description:
-                  "Generate a share link for any snippet. Anyone with the link can view and copy the element - no account needed to receive.",
+                  "Use with MCP to load the element directly into your editor as context.",
+                image: "/assets/copy-mcp-prompt.png",
               },
             ]}
           />
