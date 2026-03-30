@@ -62,11 +62,4 @@ describe("SnippetCard", () => {
     expect(onDelete).toHaveBeenCalledWith("1");
   });
 
-  it("calls onCopy with Tailwind placeholder when Copy Tailwind is chosen from more menu", () => {
-    const onCopy = vi.fn();
-    const { withinCard } = renderCard({ onCopy });
-    fireEvent.click(withinCard().getByRole("button", { name: "More options" }));
-    fireEvent.click(screen.getByRole("menuitem", { name: "Copy Tailwind" }));
-    expect(onCopy).toHaveBeenCalledWith("<!-- Tailwind conversion coming soon -->", "Tailwind");
-  });
 });

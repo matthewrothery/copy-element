@@ -1,6 +1,6 @@
 import { useRef, useState, useEffect } from "react";
 import { Code, Copy, ExternalLink, MoreVertical, Trash2 } from "lucide-react";
-import { DRAG_TYPE_SNIPPET, TAILWIND_COPY_PLACEHOLDER } from "../../shared/constants";
+import { DRAG_TYPE_SNIPPET } from "../../shared/constants";
 import { buildCopyHtml } from "../../shared/utils/preview-srcdoc-builder";
 import type { Snippet } from "../../shared/types/snippet";
 import { buildAdvancedSnippetPrompt, buildCopyMcpPrompt, buildSnippetPrompt } from "../../shared/utils/prompt-builder";
@@ -178,20 +178,6 @@ export function SnippetCard({ snippet, onOpen, onDelete, onCopy, isGuest, onCopy
                 >
                   <Copy size={ICON_SIZE} aria-hidden />
                   Copy Advanced Prompt
-                </button>
-              )}
-              {!isGuest && (
-                <button
-                  type="button"
-                  role="menuitem"
-                  className="snippet-card-dropdown-item"
-                  onClick={() => {
-                    onCopy(TAILWIND_COPY_PLACEHOLDER, "Tailwind");
-                    setMenuOpen(false);
-                  }}
-                >
-                  <Code size={ICON_SIZE} aria-hidden />
-                  Copy Tailwind
                 </button>
               )}
               <button

@@ -245,8 +245,8 @@ body,
    ───────────────────────────────────────────────────────────── */
 .code-editor-pane {
   display: flex;
-  height: var(--preview-editor-height);
-  flex-shrink: 0;
+  flex: 0 1 var(--preview-editor-height);
+  min-height: 140px;
   border-bottom: 1px solid var(--preview-border);
   overflow: hidden;
 }

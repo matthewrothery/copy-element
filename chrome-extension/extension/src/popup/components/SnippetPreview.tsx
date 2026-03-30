@@ -1,6 +1,5 @@
 import React, { useEffect, useRef, useState } from "react";
 import { Copy } from "lucide-react";
-import { TAILWIND_COPY_PLACEHOLDER } from "../../shared/constants";
 import { captureIframeAsPngBlob } from "../../shared/utils/iframe-screenshot";
 import {
   buildCopyMcpPrompt,
@@ -59,11 +58,6 @@ export function SnippetPreview({ snippet, onClose, onCopy, onToast }: SnippetPre
     onCopy(buildCopyMcpPrompt(snippet), "MCP");
   }
 
-  function handleCopyTailwind() {
-    setMenuOpen(false);
-    onCopy(TAILWIND_COPY_PLACEHOLDER, "Tailwind");
-  }
-
   async function handleCopyScreenshot() {
     setMenuOpen(false);
     if (screenshotCopying) return;
@@ -118,9 +112,6 @@ export function SnippetPreview({ snippet, onClose, onCopy, onToast }: SnippetPre
               <div className="snippet-preview-dropdown" role="menu">
                 <button type="button" role="menuitem" onClick={handleCopyMcp}>
                   Copy MCP
-                </button>
-                <button type="button" role="menuitem" onClick={handleCopyTailwind}>
-                  Copy Tailwind
                 </button>
                 <button
                   type="button"

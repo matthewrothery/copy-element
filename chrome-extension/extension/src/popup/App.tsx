@@ -15,6 +15,8 @@ import { MainPanel } from "./components/MainPanel";
 import { SettingsPanel, type UiPreferences } from "./components/SettingsPanel";
 import { AccountPanel } from "./components/AccountPanel";
 import { Toast } from "./components/Toast";
+import { SignInPromoModal } from "./components/SignInPromoModal";
+import { UpgradePromoModal } from "./components/UpgradePromoModal";
 import type { Snippet } from "../shared/types/snippet";
 import {
   FREE_TIER_MONTHLY_CAPTURE_LIMIT,
@@ -26,8 +28,13 @@ import {
 import { buildSnippetPrompt } from "../shared/utils/prompt-builder";
 import { buildCopyHtml } from "../shared/utils/preview-srcdoc-builder";
 import { UsageMeter } from "./components/UsageMeter";
+import { openUpgradePage } from "./api";
 
 type PopupView = "home" | "settings" | "account";
+type PaywallView = "signin-nudge" | "signin-gate" | "upgrade-gate" | null;
+
+const SIGNIN_NUDGE_KEY = "element-armory-signin-nudge-shown";
+const GUEST_NUDGE_THRESHOLD = 5;
 const PREFERENCES_KEY = "element-armory-ui-preferences";
 const DEFAULT_PREFERENCES: UiPreferences = {
   thumbnailSize: "balanced",
@@ -78,6 +85,7 @@ export function App(): JSX.Element {
   const [storedUsage, setStoredUsage] = useState<{ used: number; limit: number } | null>(null);
   const [isSignedIn, setIsSignedIn] = useState(false);
   const [isPaid, setIsPaid] = useState(false);
+  const [paywallView, setPaywallView] = useState<PaywallView>(null);
 
   const snippetCount = snippets.length;
   const recentSnippets = useMemo(() => snippets.slice(0, 2), [snippets]);
@@ -85,6 +93,17 @@ export function App(): JSX.Element {
     () => isSignedIn ? storedUsage : getGuestUsage(snippetCount),
     [isSignedIn, snippetCount, storedUsage]
   );
+  const isAtLimit = usage !== null && usage.used >= usage.limit;
+
+  // One-time nudge: prompt guest users to create an account after N captures
+  useEffect(() => {
+    if (!hasStorageLocal || isSignedIn || snippetCount < GUEST_NUDGE_THRESHOLD) return;
+    void chrome.storage.local.get(SIGNIN_NUDGE_KEY).then((result) => {
+      if (!result[SIGNIN_NUDGE_KEY]) {
+        setPaywallView("signin-nudge");
+      }
+    });
+  }, [hasStorageLocal, isSignedIn, snippetCount]);
 
   useEffect(() => {
     if (!hasStorageLocal) {
@@ -183,7 +202,18 @@ export function App(): JSX.Element {
     return () => window.clearTimeout(timeoutId);
   }, [toastMessage]);
 
+  function dismissPaywall(): void {
+    if (paywallView === "signin-nudge" && hasStorageLocal) {
+      void chrome.storage.local.set({ [SIGNIN_NUDGE_KEY]: true });
+    }
+    setPaywallView(null);
+  }
+
   async function handleCapture(mode: CaptureMode): Promise<void> {
+    if (isAtLimit) {
+      setPaywallView(!isSignedIn ? "signin-gate" : "upgrade-gate");
+      return;
+    }
     setLoadingState(true);
     try {
       await startCapture(mode);
@@ -297,6 +327,22 @@ export function App(): JSX.Element {
       </footer>
 
       {toastMessage && <Toast message={toastMessage} />}
+
+      {(paywallView === "signin-nudge" || paywallView === "signin-gate") && (
+        <SignInPromoModal
+          onSignIn={() => {
+            void getInstallIdFromBackground().then(openSignInPage).catch(() => {});
+            dismissPaywall();
+          }}
+          onClose={dismissPaywall}
+        />
+      )}
+      {paywallView === "upgrade-gate" && (
+        <UpgradePromoModal
+          onUpgrade={() => { openUpgradePage(); dismissPaywall(); }}
+          onClose={dismissPaywall}
+        />
+      )}
     </div>
   );
 }
