@@ -11,6 +11,7 @@ import { CTABlock } from "@/components/CTABlock";
 import { FAQ } from "@/components/FAQ";
 import { Footer } from "@/components/Footer";
 import { Section } from "@/components/Section";
+import { EXAMPLES } from "@/data/examples";
 
 export const metadata: Metadata = {
   alternates: { canonical: "/" },
@@ -30,33 +31,11 @@ export default function Home(): React.ReactElement {
             subheading="Real captures"
             title="Built from what already works."
             subtitle="Admire a UI pattern? Capture it. Study it. Build from it."
-            items={[
-              {
-                src: "https://picsum.photos/seed/element-pricing/1120/630",
-                alt: "Card layout",
-                label: "Pricing card",
-              },
-              {
-                src: "https://picsum.photos/seed/element-header/1120/630",
-                alt: "Navigation bar",
-                label: "Header with nav",
-              },
-              {
-                src: "https://picsum.photos/seed/element-form/1120/630",
-                alt: "Form controls",
-                label: "Form section",
-              },
-              {
-                src: "https://picsum.photos/seed/element-article/1120/630",
-                alt: "Content block",
-                label: "Article preview",
-              },
-              {
-                src: "https://picsum.photos/seed/element-footer/1120/630",
-                alt: "Footer",
-                label: "Site footer",
-              },
-            ]}
+            items={EXAMPLES.map((ex) => ({
+              exampleId: ex.id,
+              alt: ex.name,
+              label: ex.name,
+            }))}
           />
         </Section>
 

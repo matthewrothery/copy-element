@@ -13,91 +13,95 @@ export function getExample(id: string): Example | undefined {
 
 export const EXAMPLES: Example[] = [
   {
-    id: "primary-button",
-    name: "Primary Button",
-    description: "Blue primary action button with hover, active, and focus-visible states.",
-    category: "Buttons",
-    html: `<div class="demo">
-  <button class="btn">Get Started</button>
-</div>`,
-    css: `* { box-sizing: border-box; margin: 0; padding: 0; }
-body {
-  font-family: system-ui, -apple-system, sans-serif;
-  background: #f8fafc;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  min-height: 100vh;
-}
-.btn {
-  background: #3b82f6;
-  color: #fff;
-  border: none;
-  border-radius: 8px;
-  padding: 12px 24px;
-  font-size: 16px;
-  font-weight: 600;
-  cursor: pointer;
-  transition: background 150ms, transform 100ms;
-  font-family: inherit;
-  letter-spacing: 0.01em;
-}
-.btn:hover { background: #2563eb; }
-.btn:active { background: #1d4ed8; transform: translateY(1px); }
-.btn:focus-visible { outline: 2px solid #3b82f6; outline-offset: 3px; }`,
-  },
-  {
-    id: "ghost-button-group",
-    name: "Ghost Button Group",
+    id: "hero-section",
+    name: "Hero Section",
     description:
-      "Button group with ghost and primary variants for form actions like cancel, save draft, and publish.",
-    category: "Buttons",
-    html: `<div class="demo">
-  <div class="btn-group">
-    <button class="btn btn-ghost">Cancel</button>
-    <button class="btn btn-ghost">Save Draft</button>
-    <button class="btn btn-primary">Publish</button>
+      "Hero section with headline, subtitle, dual CTA buttons, and a social proof indicator.",
+    category: "Hero",
+    html: `<section class="hero">
+  <div class="hero-inner">
+    <span class="eyebrow">Now in public beta</span>
+    <h1 class="headline">Build UI faster<br>than ever before</h1>
+    <p class="subtitle">Capture any element from any website and get clean, ready-to-use HTML and CSS in seconds.</p>
+    <div class="cta-row">
+      <a href="#" class="btn btn-primary">Get Started Free</a>
+      <a href="#" class="btn btn-ghost">See examples</a>
+    </div>
+    <p class="social">Trusted by 2,400+ developers</p>
   </div>
-</div>`,
+</section>`,
     css: `* { box-sizing: border-box; margin: 0; padding: 0; }
 body {
   font-family: system-ui, -apple-system, sans-serif;
-  background: #f8fafc;
+  background: #ffffff;
   display: flex;
   align-items: center;
   justify-content: center;
   min-height: 100vh;
 }
-.btn-group {
+.hero { width: 100%; }
+.hero-inner {
+  max-width: 600px;
+  margin: 0 auto;
+  padding: 48px 32px;
+  text-align: center;
+}
+.eyebrow {
+  display: inline-block;
+  background: #eff6ff;
+  color: #3b82f6;
+  font-size: 12px;
+  font-weight: 600;
+  padding: 4px 12px;
+  border-radius: 999px;
+  margin-bottom: 20px;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+.headline {
+  font-size: 40px;
+  font-weight: 800;
+  color: #111827;
+  line-height: 1.2;
+  letter-spacing: -0.02em;
+  margin-bottom: 16px;
+}
+.subtitle {
+  font-size: 16px;
+  color: #6b7280;
+  line-height: 1.6;
+  max-width: 420px;
+  margin: 0 auto 28px;
+}
+.cta-row {
   display: flex;
-  gap: 8px;
-  align-items: center;
+  gap: 12px;
+  justify-content: center;
+  flex-wrap: wrap;
+  margin-bottom: 20px;
 }
 .btn {
-  border-radius: 7px;
-  padding: 9px 18px;
+  display: inline-flex;
+  align-items: center;
+  text-decoration: none;
+  border-radius: 8px;
+  padding: 11px 22px;
   font-size: 14px;
-  font-weight: 500;
-  cursor: pointer;
-  transition: all 150ms;
+  font-weight: 600;
   font-family: inherit;
-  line-height: 1.4;
+  transition: all 150ms;
+  cursor: pointer;
+  border: none;
 }
+.btn-primary { background: #3b82f6; color: #fff; }
+.btn-primary:hover { background: #2563eb; }
 .btn-ghost {
   background: transparent;
   color: #374151;
   border: 1px solid #d1d5db;
 }
-.btn-ghost:hover {
-  background: #f3f4f6;
-  border-color: #9ca3af;
-}
-.btn-primary {
-  background: #3b82f6;
-  color: #fff;
-  border: 1px solid #3b82f6;
-}
-.btn-primary:hover { background: #2563eb; border-color: #2563eb; }`,
+.btn-ghost:hover { background: #f9fafb; }
+.social { font-size: 12px; color: #9ca3af; }`,
   },
   {
     id: "feature-card",
@@ -267,6 +271,93 @@ body {
   transition: background 150ms;
 }
 .cta:hover { background: #2563eb; }`,
+  },
+  {
+    id: "primary-button",
+    name: "Primary Button",
+    description: "Blue primary action button with hover, active, and focus-visible states.",
+    category: "Buttons",
+    html: `<div class="demo">
+  <button class="btn">Get Started</button>
+</div>`,
+    css: `* { box-sizing: border-box; margin: 0; padding: 0; }
+body {
+  font-family: system-ui, -apple-system, sans-serif;
+  background: #f8fafc;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+}
+.btn {
+  background: #3b82f6;
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  padding: 12px 24px;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 150ms, transform 100ms;
+  font-family: inherit;
+  letter-spacing: 0.01em;
+}
+.btn:hover { background: #2563eb; }
+.btn:active { background: #1d4ed8; transform: translateY(1px); }
+.btn:focus-visible { outline: 2px solid #3b82f6; outline-offset: 3px; }`,
+  },
+  {
+    id: "ghost-button-group",
+    name: "Ghost Button Group",
+    description:
+      "Button group with ghost and primary variants for form actions like cancel, save draft, and publish.",
+    category: "Buttons",
+    html: `<div class="demo">
+  <div class="btn-group">
+    <button class="btn btn-ghost">Cancel</button>
+    <button class="btn btn-ghost">Save Draft</button>
+    <button class="btn btn-primary">Publish</button>
+  </div>
+</div>`,
+    css: `* { box-sizing: border-box; margin: 0; padding: 0; }
+body {
+  font-family: system-ui, -apple-system, sans-serif;
+  background: #f8fafc;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+}
+.btn-group {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+}
+.btn {
+  border-radius: 7px;
+  padding: 9px 18px;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 150ms;
+  font-family: inherit;
+  line-height: 1.4;
+}
+.btn-ghost {
+  background: transparent;
+  color: #374151;
+  border: 1px solid #d1d5db;
+}
+.btn-ghost:hover {
+  background: #f3f4f6;
+  border-color: #9ca3af;
+}
+.btn-primary {
+  background: #3b82f6;
+  color: #fff;
+  border: 1px solid #3b82f6;
+}
+.btn-primary:hover { background: #2563eb; border-color: #2563eb; }`,
   },
   {
     id: "status-badge",
@@ -481,96 +572,5 @@ body {
 }
 .btn:hover { background: #2563eb; }
 .hint { font-size: 12px; color: #9ca3af; }`,
-  },
-  {
-    id: "hero-section",
-    name: "Hero Section",
-    description:
-      "Hero section with headline, subtitle, dual CTA buttons, and a social proof indicator.",
-    category: "Hero",
-    html: `<section class="hero">
-  <div class="hero-inner">
-    <span class="eyebrow">Now in public beta</span>
-    <h1 class="headline">Build UI faster<br>than ever before</h1>
-    <p class="subtitle">Capture any element from any website and get clean, ready-to-use HTML and CSS in seconds.</p>
-    <div class="cta-row">
-      <a href="#" class="btn btn-primary">Get Started Free</a>
-      <a href="#" class="btn btn-ghost">See examples</a>
-    </div>
-    <p class="social">Trusted by 2,400+ developers</p>
-  </div>
-</section>`,
-    css: `* { box-sizing: border-box; margin: 0; padding: 0; }
-body {
-  font-family: system-ui, -apple-system, sans-serif;
-  background: #ffffff;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  min-height: 100vh;
-}
-.hero { width: 100%; }
-.hero-inner {
-  max-width: 600px;
-  margin: 0 auto;
-  padding: 48px 32px;
-  text-align: center;
-}
-.eyebrow {
-  display: inline-block;
-  background: #eff6ff;
-  color: #3b82f6;
-  font-size: 12px;
-  font-weight: 600;
-  padding: 4px 12px;
-  border-radius: 999px;
-  margin-bottom: 20px;
-  letter-spacing: 0.04em;
-  text-transform: uppercase;
-}
-.headline {
-  font-size: 40px;
-  font-weight: 800;
-  color: #111827;
-  line-height: 1.2;
-  letter-spacing: -0.02em;
-  margin-bottom: 16px;
-}
-.subtitle {
-  font-size: 16px;
-  color: #6b7280;
-  line-height: 1.6;
-  max-width: 420px;
-  margin: 0 auto 28px;
-}
-.cta-row {
-  display: flex;
-  gap: 12px;
-  justify-content: center;
-  flex-wrap: wrap;
-  margin-bottom: 20px;
-}
-.btn {
-  display: inline-flex;
-  align-items: center;
-  text-decoration: none;
-  border-radius: 8px;
-  padding: 11px 22px;
-  font-size: 14px;
-  font-weight: 600;
-  font-family: inherit;
-  transition: all 150ms;
-  cursor: pointer;
-  border: none;
-}
-.btn-primary { background: #3b82f6; color: #fff; }
-.btn-primary:hover { background: #2563eb; }
-.btn-ghost {
-  background: transparent;
-  color: #374151;
-  border: 1px solid #d1d5db;
-}
-.btn-ghost:hover { background: #f9fafb; }
-.social { font-size: 12px; color: #9ca3af; }`,
   },
 ];

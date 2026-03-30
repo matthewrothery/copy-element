@@ -2,6 +2,56 @@
 
 ---
 
+## LAUNCH — Chrome Web Store Submission
+
+### CRITICAL BLOCKERS (must be done before submitting)
+
+- [ ] Set `NEXT_PUBLIC_CHROME_STORE_URL` in production env (currently empty — all CTAs fall back to `#`)
+- [ ] Set `NEXT_PUBLIC_SITE_URL` to actual domain (currently `elementarmory.example.com` — breaks canonical URLs and OG metadata)
+- [ ] Create `/website/public/og-image.png` (1200×630px) — referenced in layout.tsx but missing; breaks social sharing
+- [x] Bump extension manifest version from `0.1.0` → `1.0.0` in `chrome-extension/extension/manifest.ts`
+- [ ] Create Chrome Web Store listing screenshots (1280×800px, min 1 required — currently none exist)
+- [ ] Create Chrome Web Store promotional tile (440×280px small promo image — required for listing)
+
+### Website — Missing Media Assets (launch blockers)
+
+- [ ] Replace all `picsum.photos` placeholder images on homepage (`app/page.tsx`) with real product screenshots
+- [ ] Replace all `picsum.photos` placeholder images on product page (`app/product/page.tsx`) with real screenshots
+- [ ] Replace all `picsum.photos` placeholder images on features page (`app/features/page.tsx`) with real screenshots
+- [ ] Create `/website/public/assets/inline-styles-only.gif` — referenced in `app/page.tsx` but file does not exist
+- [ ] Capture/create real screenshots for: capture flow, library view, sync, AI rebuild
+- [ ] Create or remove hero visual (Hero component renders `MediaPlaceholder` if no image prop supplied)
+
+### Website — Content & Copy
+
+- [x] Populate or remove the Roadmap page (`app/roadmap/page.tsx`) — currently shows placeholder text "Planned features and improvements will be listed here."
+- [ ] Verify `support@elementarmory.com` is live and monitored (appears in Privacy Policy, Terms, and uninstall feedback pages)
+- [x] Review all compare pages (`/compare/vs-*`) for accuracy against current feature set
+- [x] Audit changelog page — ensure it reflects real shipped versions, not placeholder entries
+
+### Extension — UI & Style Fixes
+
+- [x] Fix preview page editor zoom — `--preview-editor-height` is fixed at `280px` in `preview/styles.css`; the editor pane does not flex or resize with the window, leaving the preview iframe squished on smaller screens
+- [x] Tailwind copy button in extension popup returns `<!-- Tailwind conversion coming soon -->` — either implement or hide the button until the feature ships
+- [x] Capture count meter in popup — show `used / limit` visual progress bar (currently no quota UI)
+- [x] Paywall prompt at limit — currently no in-extension message when quota is reached
+
+### Extension — Quota & Entitlements (MVP enforcement)
+
+- [x] Server-side capture count per install and per user per billing period
+- [x] Return `quota_used` and `quota_limit` from `GET /api/billing/entitlement`
+- [x] Enforce at capture creation: anonymous over limit → 402 `quota_reached`; free over limit → 402 with upgrade URL; pro → pass
+
+### Infrastructure
+
+- [ ] Configure production environment variables for website deployment
+- [ ] Confirm `start.sh` and Docker setup works end-to-end in production
+- [ ] Nightly DB backup to S3 with retention policy
+- [ ] Basic monitoring / error tracking on server (request logs, health endpoint)
+- [ ] Verify extension connects to production API URL (not localhost) in release build
+
+---
+
 ## Email Templates — Immediate
 - [x] Welcome email (`server/src/emails/welcome.tsx`) — fires on account creation via databaseHooks
 - [x] Magic link email polish (`server/src/emails/magic-link.tsx`) — Hr separator, shared styles
@@ -16,7 +66,7 @@
 ---
 
 ## Email Templates — Event-Based
-- [ ] First capture — "You captured your first element. Here's what to do with it."
+- [x] First capture — "You captured your first element. Here's what to do with it."
 - [ ] 3rd–5th capture — soft nudge toward creating an account (anonymous → account conversion)
 - [ ] 10th capture milestone — celebrate; introduce AI rebuild / Pro features
 - [ ] Limit reached — explain quota; offer path to free account or Pro upgrade
@@ -68,16 +118,16 @@
 ---
 
 ## Extension In-Product Prompts
-- [ ] Capture count meter in popup — show `used / limit` with visual progress
-- [ ] Paywall prompt at limit — clear message, direct link to upgrade
-- [ ] "Create account" nudge for anonymous users after 5 captures — explain sync and higher quota
+- [x] Capture count meter in popup — show `used / limit` with visual progress
+- [x] Paywall prompt at limit — clear message, direct link to upgrade
+- [x] "Create account" nudge for anonymous users after 5 captures — explain sync and higher quota
 
 ---
 
 ## Capture Counting + Quota Enforcement
-- [ ] Server-side capture count per install and per user per billing period
-- [ ] Return `quota_used` and `quota_limit` in entitlements endpoint (`GET /api/billing/entitlement`)
-- [ ] Enforce at capture creation:
+- [x] Server-side capture count per install and per user per billing period
+- [x] Return `quota_used` and `quota_limit` in entitlements endpoint (`GET /api/billing/entitlement`)
+- [x] Enforce at capture creation:
   - Anonymous over limit → 402 with `quota_reached` error code
   - Free account over limit → 402 with upgrade URL
   - Pro → pass through
@@ -86,8 +136,8 @@
 
 ## Event Tracking
 - [ ] `user.created` event — stored in DB or emitted to event bus; used to trigger welcome email
-- [ ] `capture.created` event — include running count; used for milestone emails
-- [ ] `quota.reached` event — fire once per billing period; triggers limit email
+- [x] `capture.created` event — include running count; used for milestone emails
+- [x] `quota.reached` event — fire once per billing period; triggers limit email
 
 ---
 

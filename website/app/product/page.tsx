@@ -11,6 +11,7 @@ import { CTABlock } from "@/components/CTABlock";
 import { FAQ } from "@/components/FAQ";
 import { Footer } from "@/components/Footer";
 import { Section } from "@/components/Section";
+import { EXAMPLES } from "@/data/examples";
 
 export const metadata: Metadata = {
   title: "How It Works – Element Armory",
@@ -41,33 +42,11 @@ export default function ProductPage(): React.ReactElement {
             subheading="Captured in the wild"
             title="Any element. Any site. Yours in seconds."
             subtitle="These were captured from real sites using Element Armory. One click. Clean code."
-            items={[
-              {
-                src: "https://picsum.photos/seed/element-pricing/1120/630",
-                alt: "Pricing card layout",
-                label: "Pricing card",
-              },
-              {
-                src: "https://picsum.photos/seed/element-header/1120/630",
-                alt: "Navigation bar",
-                label: "Header with nav",
-              },
-              {
-                src: "https://picsum.photos/seed/element-form/1120/630",
-                alt: "Sign-up form",
-                label: "Auth form",
-              },
-              {
-                src: "https://picsum.photos/seed/element-article/1120/630",
-                alt: "Feature grid section",
-                label: "Feature grid",
-              },
-              {
-                src: "https://picsum.photos/seed/element-footer/1120/630",
-                alt: "Footer layout",
-                label: "Site footer",
-              },
-            ]}
+            items={EXAMPLES.map((ex) => ({
+              exampleId: ex.id,
+              alt: ex.name,
+              label: ex.name,
+            }))}
           />
         </Section>
 

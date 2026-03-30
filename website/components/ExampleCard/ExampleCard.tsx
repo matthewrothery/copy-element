@@ -9,7 +9,7 @@ function buildSrcDoc(html: string, css: string): string {
 
 export function ExampleCard({ example }: { example: Example }): ReactElement {
   return (
-    <Link href={`/examples/${example.id}`} className="example-card">
+    <Link href={`/examples/${example.id}/edit`} className="example-card">
       <div className="card-preview">
         <iframe
           className="card-preview-frame"

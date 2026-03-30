@@ -1,7 +1,7 @@
 import { notFound } from "next/navigation";
 import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
-import { ExampleLanding } from "@/components/ExampleLanding";
+import { ExampleDetail } from "@/components/ExampleDetail";
 import { EXAMPLES, getExample } from "@/data/examples";
 
 export const dynamic = "force-static";
@@ -24,9 +24,9 @@ export async function generateMetadata({
   const ex = getExample(slug);
   if (!ex) return { title: "Not Found", description: "" };
   return {
-    title: `${ex.name} – Element Armory`,
+    title: `${ex.name} – UI Examples – Element Armory`,
     description: ex.description,
-    alternates: { canonical: `/examples/${slug}` },
+    alternates: { canonical: `/examples/${slug}/edit` },
     openGraph: {
       title: `${ex.name} – Element Armory`,
       description: ex.description,
@@ -34,7 +34,7 @@ export async function generateMetadata({
   };
 }
 
-export default async function ExamplePage({
+export default async function ExampleEditPage({
   params,
 }: {
   params: Promise<{ slug: string }>;
@@ -47,7 +47,7 @@ export default async function ExamplePage({
     <>
       <Header />
       <main>
-        <ExampleLanding example={ex} />
+        <ExampleDetail example={ex} />
       </main>
       <Footer />
     </>

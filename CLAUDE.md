@@ -16,6 +16,26 @@ Messaging must feel: developer-focused, technical but clear, minimal, confident.
 
 ---
 
+## Memory
+
+This project maintains a `MEMORY.md` file in the directory root for cross-session context.
+
+Read `MEMORY.md` before beginning any task. It contains: project overview, current implementation status, technical decisions, notes from previous sessions, and open questions.
+
+Update `MEMORY.md` when: completing a task or phase, making architectural decisions, discovering important insights, encountering blockers, or changing project direction. Update the "Last updated" date and move completed items from "In Progress" to "Completed".
+
+`MEMORY.md` sections: Project Overview, Project Structure, Tech Stack, Competitors Analysis Summary, CSS Property Whitelist, Implementation Status, Key Insights, Design System, Performance Targets, Notes for Next Session, Questions to Resolve.
+
+---
+
+## Copywriting
+
+This project maintains a `copywriter.md` file in the directory root for copywriting context.
+
+If you are writing copy for the project, read `copywriter.md` before beginning the task. It contains: copywriting rules, best practices, and guidelines.
+
+---
+
 ## Shared UI Design Authority
 
 This is the default source of truth for UI style and interaction across `website`, `chrome-extension`, and `figma-plugin`.

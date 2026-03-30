@@ -4,6 +4,8 @@ export type ElementsShowcaseItem = {
   src?: string;
   alt: string;
   label: string;
+  /** When set, renders a live iframe preview from examples data and makes the card clickable. */
+  exampleId?: string;
 };
 
 export type ElementsShowcaseProps = {
