@@ -1,0 +1,464 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Settings — Arcflow</title>
+  <link rel="stylesheet" href="css/tokens.css" />
+  <link rel="stylesheet" href="css/base.css" />
+  <link rel="stylesheet" href="css/layout.css" />
+  <link rel="stylesheet" href="css/components.css" />
+  <style>
+    .settings-layout {
+      max-width: 680px;
+    }
+  </style>
+</head>
+<body>
+<div class="app">
+
+  <!-- Sidebar -->
+  <aside class="sidebar">
+    <a href="index.html" class="sidebar__logo">
+      <div class="sidebar__logo-icon">
+        <i data-lucide="zap"></i>
+      </div>
+      <span class="sidebar__logo-name">Arcflow</span>
+      <span class="sidebar__logo-badge">Pro</span>
+    </a>
+
+    <nav class="sidebar__nav">
+      <div class="nav__section">
+        <p class="nav__section-label">Main</p>
+        <a href="index.html" class="nav__link">
+          <i data-lucide="layout-dashboard"></i>
+          Dashboard
+        </a>
+        <a href="analytics.html" class="nav__link">
+          <i data-lucide="bar-chart-2"></i>
+          Analytics
+        </a>
+        <a href="users.html" class="nav__link">
+          <i data-lucide="users"></i>
+          Team
+        </a>
+      </div>
+      <div class="nav__section">
+        <p class="nav__section-label">Account</p>
+        <a href="settings.html" class="nav__link">
+          <i data-lucide="settings"></i>
+          Settings
+        </a>
+      </div>
+    </nav>
+
+    <div class="sidebar__user">
+      <div class="avatar avatar--blue">SC</div>
+      <div class="sidebar__user-info">
+        <p class="sidebar__user-name">Sarah Chen</p>
+        <p class="sidebar__user-email">sarah@arcflow.io</p>
+      </div>
+      <button class="sidebar__user-action" aria-label="Sign out">
+        <i data-lucide="log-out"></i>
+      </button>
+    </div>
+  </aside>
+
+  <!-- Main -->
+  <div class="main">
+    <header class="topbar">
+      <div class="topbar__left">
+        <div class="topbar__search">
+          <i data-lucide="search"></i>
+          <span class="topbar__search-text">Search anything...</span>
+        </div>
+      </div>
+      <div class="topbar__right">
+        <button class="topbar__icon-btn" aria-label="Notifications">
+          <i data-lucide="bell"></i>
+        </button>
+        <div class="topbar__divider"></div>
+        <div class="avatar avatar--blue">SC</div>
+      </div>
+    </header>
+
+    <main class="content">
+
+      <!-- Page Header -->
+      <div class="page-header">
+        <div>
+          <h1 class="page-header__title">Settings</h1>
+          <p class="page-header__subtitle">Manage your account and workspace preferences.</p>
+        </div>
+      </div>
+
+      <div class="settings-layout">
+
+        <!-- Tabs -->
+        <div class="tabs">
+          <button class="tabs__btn tabs__btn--active" data-tab-btn="general">General</button>
+          <button class="tabs__btn" data-tab-btn="security">Security</button>
+          <button class="tabs__btn" data-tab-btn="billing">Billing</button>
+          <button class="tabs__btn" data-tab-btn="notifications">Notifications</button>
+        </div>
+
+        <!-- General Tab -->
+        <div class="tabs__panel tabs__panel--active" data-tab-panel="general">
+          <div class="card">
+            <div class="card__header">
+              <span class="card__title">Profile</span>
+            </div>
+            <div class="card__body">
+              <div class="form-row">
+                <div class="form-group">
+                  <label class="form-label">First Name</label>
+                  <input type="text" class="form-input" value="Sarah" />
+                </div>
+                <div class="form-group">
+                  <label class="form-label">Last Name</label>
+                  <input type="text" class="form-input" value="Chen" />
+                </div>
+              </div>
+              <div class="form-group">
+                <label class="form-label">Email Address</label>
+                <input type="email" class="form-input" value="sarah@arcflow.io" />
+                <span class="form-hint">Used for login and important notifications.</span>
+              </div>
+              <div class="form-group">
+                <label class="form-label">Display Name</label>
+                <input type="text" class="form-input" value="Sarah Chen" />
+              </div>
+              <div style="display:flex;justify-content:flex-end;">
+                <button class="btn btn--primary">Save Changes</button>
+              </div>
+            </div>
+          </div>
+
+          <div class="card" style="margin-top:var(--space-4);">
+            <div class="card__header">
+              <span class="card__title">Workspace</span>
+            </div>
+            <div class="card__body">
+              <div class="form-group">
+                <label class="form-label">Workspace Name</label>
+                <input type="text" class="form-input" value="Arcflow HQ" />
+              </div>
+              <div class="form-group">
+                <label class="form-label">Timezone</label>
+                <select class="form-select">
+                  <option selected>UTC-08:00 — Pacific Time (US & Canada)</option>
+                  <option>UTC-05:00 — Eastern Time (US & Canada)</option>
+                  <option>UTC+00:00 — London</option>
+                  <option>UTC+01:00 — Amsterdam, Berlin</option>
+                  <option>UTC+05:30 — Mumbai</option>
+                  <option>UTC+09:00 — Tokyo</option>
+                </select>
+              </div>
+              <div class="form-group">
+                <label class="form-label">Date Format</label>
+                <select class="form-select">
+                  <option selected>MM/DD/YYYY</option>
+                  <option>DD/MM/YYYY</option>
+                  <option>YYYY-MM-DD</option>
+                </select>
+              </div>
+              <div style="display:flex;justify-content:flex-end;">
+                <button class="btn btn--primary">Save Changes</button>
+              </div>
+            </div>
+          </div>
+
+          <div class="card" style="margin-top:var(--space-4);border-color:var(--color-danger-subtle-border);">
+            <div class="card__header" style="border-bottom-color:var(--color-danger-subtle-border);">
+              <span class="card__title" style="color:var(--color-danger-text);">Danger Zone</span>
+            </div>
+            <div class="card__body">
+              <p style="font-size:var(--text-sm);color:var(--color-text-secondary);margin-bottom:var(--space-4);">
+                Permanently delete your workspace and all associated data. This action cannot be undone.
+              </p>
+              <button class="btn btn--danger">
+                <i data-lucide="trash-2"></i>
+                Delete Workspace
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Security Tab -->
+        <div class="tabs__panel" data-tab-panel="security">
+          <div class="card">
+            <div class="card__header">
+              <span class="card__title">Change Password</span>
+            </div>
+            <div class="card__body">
+              <div class="form-group">
+                <label class="form-label">Current Password</label>
+                <input type="password" class="form-input" placeholder="••••••••" />
+              </div>
+              <div class="form-group">
+                <label class="form-label">New Password</label>
+                <input type="password" class="form-input" placeholder="••••••••" />
+                <span class="form-hint">Minimum 8 characters. Use letters, numbers, and symbols.</span>
+              </div>
+              <div class="form-group">
+                <label class="form-label">Confirm New Password</label>
+                <input type="password" class="form-input" placeholder="••••••••" />
+              </div>
+              <div style="display:flex;justify-content:flex-end;">
+                <button class="btn btn--primary">Update Password</button>
+              </div>
+            </div>
+          </div>
+
+          <div class="card" style="margin-top:var(--space-4);">
+            <div class="card__header">
+              <span class="card__title">Two-Factor Authentication</span>
+              <span class="badge badge--success">Enabled</span>
+            </div>
+            <div class="card__body">
+              <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:var(--space-4);">
+                <div>
+                  <p style="font-weight:var(--font-medium);font-size:var(--text-sm);margin-bottom:2px;">Authenticator App</p>
+                  <p style="font-size:var(--text-xs);color:var(--color-text-muted);">Google Authenticator or similar</p>
+                </div>
+                <label class="toggle" aria-label="Toggle 2FA">
+                  <input type="checkbox" class="toggle__input" checked />
+                  <span class="toggle__track"></span>
+                </label>
+              </div>
+              <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:var(--space-4);">
+                <div>
+                  <p style="font-weight:var(--font-medium);font-size:var(--text-sm);margin-bottom:2px;">SMS Verification</p>
+                  <p style="font-size:var(--text-xs);color:var(--color-text-muted);">Requires a verified phone number</p>
+                </div>
+                <label class="toggle" aria-label="Toggle SMS">
+                  <input type="checkbox" class="toggle__input" />
+                  <span class="toggle__track"></span>
+                </label>
+              </div>
+              <div class="section-divider"></div>
+              <p style="font-size:var(--text-sm);color:var(--color-text-muted);margin-bottom:var(--space-3);">Recovery codes</p>
+              <button class="btn btn--secondary btn--sm">
+                <i data-lucide="key"></i>
+                View Recovery Codes
+              </button>
+            </div>
+          </div>
+
+          <div class="card" style="margin-top:var(--space-4);">
+            <div class="card__header">
+              <span class="card__title">Active Sessions</span>
+            </div>
+            <div class="card__body">
+              <div style="display:flex;flex-direction:column;gap:var(--space-4);">
+                <div style="display:flex;align-items:center;justify-content:space-between;gap:var(--space-3);">
+                  <div style="display:flex;align-items:center;gap:var(--space-3);">
+                    <div style="width:36px;height:36px;background:var(--color-surface-alt);border:1px solid var(--color-border);border-radius:var(--radius);display:flex;align-items:center;justify-content:center;color:var(--color-text-secondary);font-size:18px;flex-shrink:0;">
+                      <i data-lucide="monitor"></i>
+                    </div>
+                    <div>
+                      <p style="font-size:var(--text-sm);font-weight:var(--font-medium);">Chrome on macOS</p>
+                      <p style="font-size:var(--text-xs);color:var(--color-text-muted);">San Francisco, CA • Active now</p>
+                    </div>
+                  </div>
+                  <span class="badge badge--success">Current</span>
+                </div>
+                <div style="display:flex;align-items:center;justify-content:space-between;gap:var(--space-3);">
+                  <div style="display:flex;align-items:center;gap:var(--space-3);">
+                    <div style="width:36px;height:36px;background:var(--color-surface-alt);border:1px solid var(--color-border);border-radius:var(--radius);display:flex;align-items:center;justify-content:center;color:var(--color-text-secondary);font-size:18px;flex-shrink:0;">
+                      <i data-lucide="smartphone"></i>
+                    </div>
+                    <div>
+                      <p style="font-size:var(--text-sm);font-weight:var(--font-medium);">Safari on iPhone</p>
+                      <p style="font-size:var(--text-xs);color:var(--color-text-muted);">San Francisco, CA • 2 hrs ago</p>
+                    </div>
+                  </div>
+                  <button class="btn btn--ghost btn--sm" style="color:var(--color-danger-text);">Revoke</button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Billing Tab -->
+        <div class="tabs__panel" data-tab-panel="billing">
+
+          <!-- Current Plan -->
+          <div class="plan-card">
+            <div>
+              <div style="display:flex;align-items:center;gap:var(--space-2);margin-bottom:var(--space-2);">
+                <span class="plan-card__name">Pro Plan</span>
+                <span class="badge badge--blue">Current</span>
+              </div>
+              <div class="plan-card__price">$49 <span>/ month</span></div>
+              <div class="plan-card__features">
+                <div class="plan-card__feature">
+                  <i data-lucide="check"></i>
+                  Unlimited team members
+                </div>
+                <div class="plan-card__feature">
+                  <i data-lucide="check"></i>
+                  Advanced analytics &amp; reporting
+                </div>
+                <div class="plan-card__feature">
+                  <i data-lucide="check"></i>
+                  Priority support
+                </div>
+                <div class="plan-card__feature">
+                  <i data-lucide="check"></i>
+                  API access &amp; webhooks
+                </div>
+              </div>
+            </div>
+            <div style="display:flex;flex-direction:column;gap:var(--space-2);flex-shrink:0;">
+              <button class="btn btn--primary">Upgrade to Enterprise</button>
+              <button class="btn btn--ghost btn--sm" style="justify-content:center;">Manage Billing</button>
+            </div>
+          </div>
+
+          <!-- Usage -->
+          <div class="card" style="margin-top:var(--space-4);">
+            <div class="card__header">
+              <span class="card__title">Usage This Month</span>
+              <span style="font-size:var(--text-xs);color:var(--color-text-muted);">Resets Apr 1, 2026</span>
+            </div>
+            <div class="card__body">
+              <div class="usage-bar">
+                <div class="usage-bar__header">
+                  <span class="usage-bar__label">Team Members</span>
+                  <span class="usage-bar__value">12 / unlimited</span>
+                </div>
+                <div class="usage-bar__track">
+                  <div class="usage-bar__fill" style="width:100%;background:var(--color-success)"></div>
+                </div>
+              </div>
+              <div class="usage-bar" style="margin-top:var(--space-4);">
+                <div class="usage-bar__header">
+                  <span class="usage-bar__label">API Requests</span>
+                  <span class="usage-bar__value">84,210 / 500,000</span>
+                </div>
+                <div class="usage-bar__track">
+                  <div class="usage-bar__fill" style="width:17%"></div>
+                </div>
+              </div>
+              <div class="usage-bar" style="margin-top:var(--space-4);">
+                <div class="usage-bar__header">
+                  <span class="usage-bar__label">Data Storage</span>
+                  <span class="usage-bar__value">4.2 GB / 50 GB</span>
+                </div>
+                <div class="usage-bar__track">
+                  <div class="usage-bar__fill" style="width:8%;background:var(--color-success)"></div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Payment Method -->
+          <div class="card" style="margin-top:var(--space-4);">
+            <div class="card__header">
+              <span class="card__title">Payment Method</span>
+              <button class="btn btn--secondary btn--sm">
+                <i data-lucide="plus"></i>
+                Add Card
+              </button>
+            </div>
+            <div class="card__body">
+              <div style="display:flex;align-items:center;justify-content:space-between;gap:var(--space-3);">
+                <div style="display:flex;align-items:center;gap:var(--space-3);">
+                  <div style="width:44px;height:30px;background:var(--gray-800);border-radius:4px;display:flex;align-items:center;justify-content:center;flex-shrink:0;">
+                    <span style="font-size:10px;font-weight:700;color:white;letter-spacing:0.05em;">VISA</span>
+                  </div>
+                  <div>
+                    <p style="font-size:var(--text-sm);font-weight:var(--font-medium);">Visa ending in 4242</p>
+                    <p style="font-size:var(--text-xs);color:var(--color-text-muted);">Expires 08/2027</p>
+                  </div>
+                </div>
+                <span class="badge badge--success">Default</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Notifications Tab -->
+        <div class="tabs__panel" data-tab-panel="notifications">
+          <div class="card">
+            <div class="card__header">
+              <span class="card__title">Email Notifications</span>
+            </div>
+            <div class="card__body">
+              <div style="display:flex;flex-direction:column;gap:var(--space-5);">
+
+                <div style="display:flex;align-items:flex-start;justify-content:space-between;gap:var(--space-4);">
+                  <div>
+                    <p style="font-size:var(--text-sm);font-weight:var(--font-semibold);margin-bottom:2px;">New team member joined</p>
+                    <p style="font-size:var(--text-xs);color:var(--color-text-muted);">Get notified when someone accepts your invite.</p>
+                  </div>
+                  <label class="toggle" aria-label="Toggle new member notifications">
+                    <input type="checkbox" class="toggle__input" checked />
+                    <span class="toggle__track"></span>
+                  </label>
+                </div>
+
+                <div style="display:flex;align-items:flex-start;justify-content:space-between;gap:var(--space-4);">
+                  <div>
+                    <p style="font-size:var(--text-sm);font-weight:var(--font-semibold);margin-bottom:2px;">Weekly analytics digest</p>
+                    <p style="font-size:var(--text-xs);color:var(--color-text-muted);">Summary of key metrics sent every Monday morning.</p>
+                  </div>
+                  <label class="toggle" aria-label="Toggle weekly digest">
+                    <input type="checkbox" class="toggle__input" checked />
+                    <span class="toggle__track"></span>
+                  </label>
+                </div>
+
+                <div style="display:flex;align-items:flex-start;justify-content:space-between;gap:var(--space-4);">
+                  <div>
+                    <p style="font-size:var(--text-sm);font-weight:var(--font-semibold);margin-bottom:2px;">Usage limit warnings</p>
+                    <p style="font-size:var(--text-xs);color:var(--color-text-muted);">Alert when you reach 80% of any plan limit.</p>
+                  </div>
+                  <label class="toggle" aria-label="Toggle usage warnings">
+                    <input type="checkbox" class="toggle__input" checked />
+                    <span class="toggle__track"></span>
+                  </label>
+                </div>
+
+                <div style="display:flex;align-items:flex-start;justify-content:space-between;gap:var(--space-4);">
+                  <div>
+                    <p style="font-size:var(--text-sm);font-weight:var(--font-semibold);margin-bottom:2px;">Payment receipts</p>
+                    <p style="font-size:var(--text-xs);color:var(--color-text-muted);">Email receipt after each billing cycle.</p>
+                  </div>
+                  <label class="toggle" aria-label="Toggle payment receipts">
+                    <input type="checkbox" class="toggle__input" checked />
+                    <span class="toggle__track"></span>
+                  </label>
+                </div>
+
+                <div style="display:flex;align-items:flex-start;justify-content:space-between;gap:var(--space-4);">
+                  <div>
+                    <p style="font-size:var(--text-sm);font-weight:var(--font-semibold);margin-bottom:2px;">Product updates &amp; news</p>
+                    <p style="font-size:var(--text-xs);color:var(--color-text-muted);">Feature announcements and changelog highlights.</p>
+                  </div>
+                  <label class="toggle" aria-label="Toggle product updates">
+                    <input type="checkbox" class="toggle__input" />
+                    <span class="toggle__track"></span>
+                  </label>
+                </div>
+
+              </div>
+              <div class="section-divider"></div>
+              <div style="display:flex;justify-content:flex-end;">
+                <button class="btn btn--primary">Save Preferences</button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+    </main>
+  </div>
+</div>
+
+<script src="https://unpkg.com/lucide@latest/dist/umd/lucide.min.js"></script>
+<script src="js/app.js"></script>
+</body>
+</html>

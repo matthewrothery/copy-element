@@ -1,0 +1,141 @@
+/* =========================================================
+   TOKENS — 3-Layer Design System
+   Layer 1: Primitives | Layer 2: Semantics
+   Component tokens are declared in components.css
+   ========================================================= */
+
+:root {
+  /* === Layer 1: Primitives === */
+
+  --white: #ffffff;
+  --black: #000000;
+
+  /* Gray scale */
+  --gray-50:  #f9fafb;
+  --gray-100: #f3f4f6;
+  --gray-200: #e5e7eb;
+  --gray-300: #d1d5db;
+  --gray-400: #9ca3af;
+  --gray-500: #6b7280;
+  --gray-600: #4b5563;
+  --gray-700: #374151;
+  --gray-800: #1f2937;
+  --gray-900: #111827;
+
+  /* Blue */
+  --blue-50:  #eff6ff;
+  --blue-100: #dbeafe;
+  --blue-200: #bfdbfe;
+  --blue-500: #3b82f6;
+  --blue-600: #2563eb;
+  --blue-700: #1d4ed8;
+
+  /* Green */
+  --green-50:  #f0fdf4;
+  --green-100: #dcfce7;
+  --green-500: #22c55e;
+  --green-600: #16a34a;
+
+  /* Amber */
+  --amber-50:  #fffbeb;
+  --amber-100: #fef3c7;
+  --amber-500: #f59e0b;
+  --amber-600: #d97706;
+
+  /* Red */
+  --red-50:  #fef2f2;
+  --red-100: #fee2e2;
+  --red-500: #ef4444;
+  --red-600: #dc2626;
+
+  /* Purple */
+  --purple-50:  #faf5ff;
+  --purple-100: #f3e8ff;
+  --purple-500: #a855f7;
+
+  /* Spacing (4px base) */
+  --space-1: 4px;
+  --space-2: 8px;
+  --space-3: 12px;
+  --space-4: 16px;
+  --space-5: 24px;
+  --space-6: 32px;
+  --space-7: 48px;
+
+  /* Radius */
+  --radius-sm: 4px;
+  --radius:    8px;
+  --radius-lg: 12px;
+  --radius-xl: 16px;
+  --radius-full: 9999px;
+
+  /* Typography */
+  --text-xs:   11px;
+  --text-sm:   12px;
+  --text-base: 14px;
+  --text-md:   15px;
+  --text-lg:   16px;
+  --text-xl:   18px;
+  --text-2xl:  20px;
+  --text-3xl:  24px;
+
+  --font-normal:   400;
+  --font-medium:   500;
+  --font-semibold: 600;
+  --font-bold:     700;
+
+  /* Shadows */
+  --shadow-xs: 0 1px 2px rgba(0,0,0,0.05);
+  --shadow-sm: 0 1px 3px rgba(0,0,0,0.10), 0 1px 2px rgba(0,0,0,0.06);
+  --shadow:    0 4px 6px rgba(0,0,0,0.07), 0 2px 4px rgba(0,0,0,0.05);
+  --shadow-md: 0 10px 15px rgba(0,0,0,0.08), 0 4px 6px rgba(0,0,0,0.04);
+
+  /* Motion */
+  --ease-default: cubic-bezier(0.4, 0, 0.2, 1);
+  --duration-fast: 120ms;
+  --duration:      180ms;
+
+  /* === Layer 2: Semantics === */
+
+  /* Backgrounds */
+  --color-bg:           #f8fafc;
+  --color-surface:      var(--white);
+  --color-surface-alt:  var(--gray-50);
+  --color-surface-hover: var(--gray-50);
+
+  /* Borders */
+  --color-border:       var(--gray-200);
+  --color-border-strong: var(--gray-300);
+
+  /* Text */
+  --color-text:          var(--gray-900);
+  --color-text-secondary: var(--gray-600);
+  --color-text-muted:    var(--gray-500);
+  --color-text-inverse:  var(--white);
+
+  /* Accent */
+  --color-accent:              var(--blue-500);
+  --color-accent-hover:        var(--blue-600);
+  --color-accent-subtle:       var(--blue-50);
+  --color-accent-subtle-border: var(--blue-100);
+  --color-accent-text:         var(--blue-600);
+
+  /* Status: success */
+  --color-success:              var(--green-500);
+  --color-success-hover:        var(--green-600);
+  --color-success-subtle:       var(--green-50);
+  --color-success-subtle-border: var(--green-100);
+  --color-success-text:         var(--green-600);
+
+  /* Status: warning */
+  --color-warning:              var(--amber-500);
+  --color-warning-subtle:       var(--amber-50);
+  --color-warning-subtle-border: var(--amber-100);
+  --color-warning-text:         var(--amber-600);
+
+  /* Status: danger */
+  --color-danger:              var(--red-500);
+  --color-danger-subtle:       var(--red-50);
+  --color-danger-subtle-border: var(--red-100);
+  --color-danger-text:         var(--red-600);
+}

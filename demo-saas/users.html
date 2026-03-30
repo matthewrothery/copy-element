@@ -1,0 +1,335 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Team — Arcflow</title>
+  <link rel="stylesheet" href="css/tokens.css" />
+  <link rel="stylesheet" href="css/base.css" />
+  <link rel="stylesheet" href="css/layout.css" />
+  <link rel="stylesheet" href="css/components.css" />
+</head>
+<body>
+<div class="app">
+
+  <!-- Sidebar -->
+  <aside class="sidebar">
+    <a href="index.html" class="sidebar__logo">
+      <div class="sidebar__logo-icon">
+        <i data-lucide="zap"></i>
+      </div>
+      <span class="sidebar__logo-name">Arcflow</span>
+      <span class="sidebar__logo-badge">Pro</span>
+    </a>
+
+    <nav class="sidebar__nav">
+      <div class="nav__section">
+        <p class="nav__section-label">Main</p>
+        <a href="index.html" class="nav__link">
+          <i data-lucide="layout-dashboard"></i>
+          Dashboard
+        </a>
+        <a href="analytics.html" class="nav__link">
+          <i data-lucide="bar-chart-2"></i>
+          Analytics
+        </a>
+        <a href="users.html" class="nav__link">
+          <i data-lucide="users"></i>
+          Team
+        </a>
+      </div>
+      <div class="nav__section">
+        <p class="nav__section-label">Account</p>
+        <a href="settings.html" class="nav__link">
+          <i data-lucide="settings"></i>
+          Settings
+        </a>
+      </div>
+    </nav>
+
+    <div class="sidebar__user">
+      <div class="avatar avatar--blue">SC</div>
+      <div class="sidebar__user-info">
+        <p class="sidebar__user-name">Sarah Chen</p>
+        <p class="sidebar__user-email">sarah@arcflow.io</p>
+      </div>
+      <button class="sidebar__user-action" aria-label="Sign out">
+        <i data-lucide="log-out"></i>
+      </button>
+    </div>
+  </aside>
+
+  <!-- Main -->
+  <div class="main">
+    <header class="topbar">
+      <div class="topbar__left">
+        <div class="topbar__search">
+          <i data-lucide="search"></i>
+          <span class="topbar__search-text">Search anything...</span>
+        </div>
+      </div>
+      <div class="topbar__right">
+        <button class="topbar__icon-btn" aria-label="Notifications">
+          <i data-lucide="bell"></i>
+          <span class="topbar__notif-dot"></span>
+        </button>
+        <div class="topbar__divider"></div>
+        <div class="avatar avatar--blue">SC</div>
+      </div>
+    </header>
+
+    <main class="content">
+
+      <!-- Page Header -->
+      <div class="page-header">
+        <div>
+          <h1 class="page-header__title">Team</h1>
+          <p class="page-header__subtitle">Manage your workspace members and their permissions.</p>
+        </div>
+        <div class="page-header__actions">
+          <button class="btn btn--primary">
+            <i data-lucide="user-plus"></i>
+            Invite Member
+          </button>
+        </div>
+      </div>
+
+      <!-- Filters -->
+      <div class="filters-row">
+        <div class="filter-input-wrap">
+          <i data-lucide="search"></i>
+          <input type="text" class="filter-input" placeholder="Search members..." />
+        </div>
+        <select class="filter-select">
+          <option>All roles</option>
+          <option>Admin</option>
+          <option>Editor</option>
+          <option>Viewer</option>
+        </select>
+        <select class="filter-select">
+          <option>All statuses</option>
+          <option>Active</option>
+          <option>Inactive</option>
+        </select>
+      </div>
+
+      <!-- Members Table -->
+      <div class="card">
+        <div class="table-wrap">
+          <table class="table">
+            <thead>
+              <tr>
+                <th>Member</th>
+                <th>Role</th>
+                <th>Status</th>
+                <th>Last seen</th>
+                <th>Joined</th>
+                <th></th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>
+                  <div class="table__user">
+                    <div class="avatar avatar--blue">SC</div>
+                    <div>
+                      <p class="table__user-name">Sarah Chen</p>
+                      <p class="table__user-email">sarah@arcflow.io</p>
+                    </div>
+                  </div>
+                </td>
+                <td><span class="badge badge--blue">Admin</span></td>
+                <td><span class="badge badge--success badge--dot">Active</span></td>
+                <td style="color:var(--color-text-muted);font-size:12px;">Just now</td>
+                <td style="color:var(--color-text-muted);font-size:12px;">Jan 3, 2024</td>
+                <td><button class="table__action" aria-label="Options"><i data-lucide="more-horizontal"></i></button></td>
+              </tr>
+              <tr>
+                <td>
+                  <div class="table__user">
+                    <div class="avatar avatar--amber">MJ</div>
+                    <div>
+                      <p class="table__user-name">Marcus Johnson</p>
+                      <p class="table__user-email">marcus@arcflow.io</p>
+                    </div>
+                  </div>
+                </td>
+                <td><span class="badge badge--neutral">Editor</span></td>
+                <td><span class="badge badge--success badge--dot">Active</span></td>
+                <td style="color:var(--color-text-muted);font-size:12px;">1 hr ago</td>
+                <td style="color:var(--color-text-muted);font-size:12px;">Feb 14, 2024</td>
+                <td><button class="table__action" aria-label="Options"><i data-lucide="more-horizontal"></i></button></td>
+              </tr>
+              <tr>
+                <td>
+                  <div class="table__user">
+                    <div class="avatar avatar--green">PP</div>
+                    <div>
+                      <p class="table__user-name">Priya Patel</p>
+                      <p class="table__user-email">priya@arcflow.io</p>
+                    </div>
+                  </div>
+                </td>
+                <td><span class="badge badge--neutral">Editor</span></td>
+                <td><span class="badge badge--success badge--dot">Active</span></td>
+                <td style="color:var(--color-text-muted);font-size:12px;">3 hrs ago</td>
+                <td style="color:var(--color-text-muted);font-size:12px;">Mar 2, 2024</td>
+                <td><button class="table__action" aria-label="Options"><i data-lucide="more-horizontal"></i></button></td>
+              </tr>
+              <tr>
+                <td>
+                  <div class="table__user">
+                    <div class="avatar avatar--purple">TR</div>
+                    <div>
+                      <p class="table__user-name">Tom Richards</p>
+                      <p class="table__user-email">tom@arcflow.io</p>
+                    </div>
+                  </div>
+                </td>
+                <td><span class="badge badge--neutral">Viewer</span></td>
+                <td><span class="badge badge--neutral badge--dot">Inactive</span></td>
+                <td style="color:var(--color-text-muted);font-size:12px;">2 days ago</td>
+                <td style="color:var(--color-text-muted);font-size:12px;">Mar 18, 2024</td>
+                <td><button class="table__action" aria-label="Options"><i data-lucide="more-horizontal"></i></button></td>
+              </tr>
+              <tr>
+                <td>
+                  <div class="table__user">
+                    <div class="avatar avatar--red">AL</div>
+                    <div>
+                      <p class="table__user-name">Aisha Lee</p>
+                      <p class="table__user-email">aisha@arcflow.io</p>
+                    </div>
+                  </div>
+                </td>
+                <td><span class="badge badge--neutral">Editor</span></td>
+                <td><span class="badge badge--success badge--dot">Active</span></td>
+                <td style="color:var(--color-text-muted);font-size:12px;">4 hrs ago</td>
+                <td style="color:var(--color-text-muted);font-size:12px;">Apr 5, 2024</td>
+                <td><button class="table__action" aria-label="Options"><i data-lucide="more-horizontal"></i></button></td>
+              </tr>
+              <tr>
+                <td>
+                  <div class="table__user">
+                    <div class="avatar avatar--gray">DK</div>
+                    <div>
+                      <p class="table__user-name">David Kim</p>
+                      <p class="table__user-email">david@arcflow.io</p>
+                    </div>
+                  </div>
+                </td>
+                <td><span class="badge badge--blue">Admin</span></td>
+                <td><span class="badge badge--success badge--dot">Active</span></td>
+                <td style="color:var(--color-text-muted);font-size:12px;">30 min ago</td>
+                <td style="color:var(--color-text-muted);font-size:12px;">Apr 20, 2024</td>
+                <td><button class="table__action" aria-label="Options"><i data-lucide="more-horizontal"></i></button></td>
+              </tr>
+              <tr>
+                <td>
+                  <div class="table__user">
+                    <div class="avatar avatar--amber">NW</div>
+                    <div>
+                      <p class="table__user-name">Naomi Walsh</p>
+                      <p class="table__user-email">naomi@arcflow.io</p>
+                    </div>
+                  </div>
+                </td>
+                <td><span class="badge badge--neutral">Viewer</span></td>
+                <td><span class="badge badge--warning badge--dot">Pending</span></td>
+                <td style="color:var(--color-text-muted);font-size:12px;">Never</td>
+                <td style="color:var(--color-text-muted);font-size:12px;">May 7, 2024</td>
+                <td><button class="table__action" aria-label="Options"><i data-lucide="more-horizontal"></i></button></td>
+              </tr>
+              <tr>
+                <td>
+                  <div class="table__user">
+                    <div class="avatar avatar--green">RB</div>
+                    <div>
+                      <p class="table__user-name">Ravi Bhat</p>
+                      <p class="table__user-email">ravi@arcflow.io</p>
+                    </div>
+                  </div>
+                </td>
+                <td><span class="badge badge--neutral">Editor</span></td>
+                <td><span class="badge badge--success badge--dot">Active</span></td>
+                <td style="color:var(--color-text-muted);font-size:12px;">2 hrs ago</td>
+                <td style="color:var(--color-text-muted);font-size:12px;">May 22, 2024</td>
+                <td><button class="table__action" aria-label="Options"><i data-lucide="more-horizontal"></i></button></td>
+              </tr>
+              <tr>
+                <td>
+                  <div class="table__user">
+                    <div class="avatar avatar--purple">LM</div>
+                    <div>
+                      <p class="table__user-name">Layla Mitchell</p>
+                      <p class="table__user-email">layla@arcflow.io</p>
+                    </div>
+                  </div>
+                </td>
+                <td><span class="badge badge--neutral">Viewer</span></td>
+                <td><span class="badge badge--neutral badge--dot">Inactive</span></td>
+                <td style="color:var(--color-text-muted);font-size:12px;">1 week ago</td>
+                <td style="color:var(--color-text-muted);font-size:12px;">Jun 10, 2024</td>
+                <td><button class="table__action" aria-label="Options"><i data-lucide="more-horizontal"></i></button></td>
+              </tr>
+              <tr>
+                <td>
+                  <div class="table__user">
+                    <div class="avatar avatar--blue">JH</div>
+                    <div>
+                      <p class="table__user-name">James Huang</p>
+                      <p class="table__user-email">james@arcflow.io</p>
+                    </div>
+                  </div>
+                </td>
+                <td><span class="badge badge--neutral">Editor</span></td>
+                <td><span class="badge badge--success badge--dot">Active</span></td>
+                <td style="color:var(--color-text-muted);font-size:12px;">5 hrs ago</td>
+                <td style="color:var(--color-text-muted);font-size:12px;">Jul 3, 2024</td>
+                <td><button class="table__action" aria-label="Options"><i data-lucide="more-horizontal"></i></button></td>
+              </tr>
+              <tr>
+                <td>
+                  <div class="table__user">
+                    <div class="avatar avatar--red">FO</div>
+                    <div>
+                      <p class="table__user-name">Fatima Okonkwo</p>
+                      <p class="table__user-email">fatima@arcflow.io</p>
+                    </div>
+                  </div>
+                </td>
+                <td><span class="badge badge--neutral">Viewer</span></td>
+                <td><span class="badge badge--success badge--dot">Active</span></td>
+                <td style="color:var(--color-text-muted);font-size:12px;">Yesterday</td>
+                <td style="color:var(--color-text-muted);font-size:12px;">Aug 15, 2024</td>
+                <td><button class="table__action" aria-label="Options"><i data-lucide="more-horizontal"></i></button></td>
+              </tr>
+              <tr>
+                <td>
+                  <div class="table__user">
+                    <div class="avatar avatar--gray">EV</div>
+                    <div>
+                      <p class="table__user-name">Ethan Vance</p>
+                      <p class="table__user-email">ethan@arcflow.io</p>
+                    </div>
+                  </div>
+                </td>
+                <td><span class="badge badge--neutral">Editor</span></td>
+                <td><span class="badge badge--warning badge--dot">Pending</span></td>
+                <td style="color:var(--color-text-muted);font-size:12px;">Never</td>
+                <td style="color:var(--color-text-muted);font-size:12px;">Sep 2, 2024</td>
+                <td><button class="table__action" aria-label="Options"><i data-lucide="more-horizontal"></i></button></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+    </main>
+  </div>
+</div>
+
+<script src="https://unpkg.com/lucide@latest/dist/umd/lucide.min.js"></script>
+<script src="js/app.js"></script>
+</body>
+</html>

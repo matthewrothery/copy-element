@@ -1,0 +1,386 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Dashboard — Arcflow</title>
+  <link rel="stylesheet" href="css/tokens.css" />
+  <link rel="stylesheet" href="css/base.css" />
+  <link rel="stylesheet" href="css/layout.css" />
+  <link rel="stylesheet" href="css/components.css" />
+</head>
+<body>
+<div class="app">
+
+  <!-- Sidebar -->
+  <aside class="sidebar">
+    <a href="index.html" class="sidebar__logo">
+      <div class="sidebar__logo-icon">
+        <i data-lucide="zap"></i>
+      </div>
+      <span class="sidebar__logo-name">Arcflow</span>
+      <span class="sidebar__logo-badge">Pro</span>
+    </a>
+
+    <nav class="sidebar__nav">
+      <div class="nav__section">
+        <p class="nav__section-label">Main</p>
+        <a href="index.html" class="nav__link">
+          <i data-lucide="layout-dashboard"></i>
+          Dashboard
+        </a>
+        <a href="analytics.html" class="nav__link">
+          <i data-lucide="bar-chart-2"></i>
+          Analytics
+        </a>
+        <a href="users.html" class="nav__link">
+          <i data-lucide="users"></i>
+          Team
+        </a>
+      </div>
+      <div class="nav__section">
+        <p class="nav__section-label">Account</p>
+        <a href="settings.html" class="nav__link">
+          <i data-lucide="settings"></i>
+          Settings
+        </a>
+      </div>
+    </nav>
+
+    <div class="sidebar__user">
+      <div class="avatar avatar--blue">SC</div>
+      <div class="sidebar__user-info">
+        <p class="sidebar__user-name">Sarah Chen</p>
+        <p class="sidebar__user-email">sarah@arcflow.io</p>
+      </div>
+      <button class="sidebar__user-action" aria-label="Sign out">
+        <i data-lucide="log-out"></i>
+      </button>
+    </div>
+  </aside>
+
+  <!-- Main -->
+  <div class="main">
+    <header class="topbar">
+      <div class="topbar__left">
+        <div class="topbar__search">
+          <i data-lucide="search"></i>
+          <span class="topbar__search-text">Search anything...</span>
+        </div>
+      </div>
+      <div class="topbar__right">
+        <button class="topbar__icon-btn" aria-label="Notifications">
+          <i data-lucide="bell"></i>
+          <span class="topbar__notif-dot"></span>
+        </button>
+        <div class="topbar__divider"></div>
+        <div class="avatar avatar--blue">SC</div>
+      </div>
+    </header>
+
+    <main class="content">
+
+      <!-- Page Header -->
+      <div class="page-header">
+        <div>
+          <h1 class="page-header__title">Dashboard</h1>
+          <p class="page-header__subtitle">Welcome back, Sarah. Here's what's happening.</p>
+        </div>
+        <div class="page-header__actions">
+          <button class="btn btn--secondary">
+            <i data-lucide="download"></i>
+            Export
+          </button>
+          <button class="btn btn--primary">
+            <i data-lucide="user-plus"></i>
+            Invite Member
+          </button>
+        </div>
+      </div>
+
+      <!-- KPI Stat Cards -->
+      <div class="stat-grid">
+        <div class="stat-card">
+          <div class="stat-card__label">
+            <i data-lucide="users"></i>
+            Total Users
+          </div>
+          <div class="stat-card__value">4,821</div>
+          <div>
+            <span class="stat-card__trend stat-card__trend--up">
+              <i data-lucide="trending-up"></i>
+              +12.4%
+            </span>
+            <span class="stat-card__period">vs last month</span>
+          </div>
+        </div>
+
+        <div class="stat-card">
+          <div class="stat-card__label">
+            <i data-lucide="credit-card"></i>
+            Monthly Revenue
+          </div>
+          <div class="stat-card__value">$24,390</div>
+          <div>
+            <span class="stat-card__trend stat-card__trend--up">
+              <i data-lucide="trending-up"></i>
+              +8.1%
+            </span>
+            <span class="stat-card__period">vs last month</span>
+          </div>
+        </div>
+
+        <div class="stat-card">
+          <div class="stat-card__label">
+            <i data-lucide="activity"></i>
+            Active Sessions
+          </div>
+          <div class="stat-card__value">1,247</div>
+          <div>
+            <span class="stat-card__trend stat-card__trend--down">
+              <i data-lucide="trending-down"></i>
+              -3.2%
+            </span>
+            <span class="stat-card__period">vs last week</span>
+          </div>
+        </div>
+
+        <div class="stat-card">
+          <div class="stat-card__label">
+            <i data-lucide="target"></i>
+            Conversion Rate
+          </div>
+          <div class="stat-card__value">3.8%</div>
+          <div>
+            <span class="stat-card__trend stat-card__trend--up">
+              <i data-lucide="trending-up"></i>
+              +0.4%
+            </span>
+            <span class="stat-card__period">vs last month</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Chart + Quick Actions -->
+      <div class="dashboard-row">
+
+        <!-- Bar Chart Card -->
+        <div class="card">
+          <div class="card__header">
+            <span class="card__title">Sessions This Week</span>
+            <div class="date-range">
+              <button class="date-range__btn">7d</button>
+              <button class="date-range__btn date-range__btn--active">30d</button>
+              <button class="date-range__btn">90d</button>
+            </div>
+          </div>
+          <div class="bar-chart">
+            <div class="bar-chart__bars">
+              <div class="bar-chart__col">
+                <span class="bar-chart__value">842</span>
+                <div class="bar-chart__bar bar-chart__bar--muted" style="--h: 52%"></div>
+                <span class="bar-chart__label">Mon</span>
+              </div>
+              <div class="bar-chart__col">
+                <span class="bar-chart__value">1,103</span>
+                <div class="bar-chart__bar bar-chart__bar--muted" style="--h: 68%"></div>
+                <span class="bar-chart__label">Tue</span>
+              </div>
+              <div class="bar-chart__col">
+                <span class="bar-chart__value">978</span>
+                <div class="bar-chart__bar bar-chart__bar--muted" style="--h: 60%"></div>
+                <span class="bar-chart__label">Wed</span>
+              </div>
+              <div class="bar-chart__col">
+                <span class="bar-chart__value">1,247</span>
+                <div class="bar-chart__bar bar-chart__bar--muted" style="--h: 77%"></div>
+                <span class="bar-chart__label">Thu</span>
+              </div>
+              <div class="bar-chart__col">
+                <span class="bar-chart__value">1,389</span>
+                <div class="bar-chart__bar" style="--h: 86%"></div>
+                <span class="bar-chart__label">Fri</span>
+              </div>
+              <div class="bar-chart__col">
+                <span class="bar-chart__value">761</span>
+                <div class="bar-chart__bar bar-chart__bar--muted" style="--h: 47%"></div>
+                <span class="bar-chart__label">Sat</span>
+              </div>
+              <div class="bar-chart__col">
+                <span class="bar-chart__value">614</span>
+                <div class="bar-chart__bar bar-chart__bar--muted" style="--h: 38%"></div>
+                <span class="bar-chart__label">Sun</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Quick Actions -->
+        <div class="card">
+          <div class="card__header">
+            <span class="card__title">Quick Actions</span>
+          </div>
+          <div class="quick-actions__list">
+            <button class="quick-action">
+              <div class="quick-action__icon quick-action__icon--blue">
+                <i data-lucide="user-plus"></i>
+              </div>
+              <div>
+                <p class="quick-action__label">Invite Member</p>
+                <p class="quick-action__desc">Add a team member</p>
+              </div>
+              <i data-lucide="chevron-right" class="quick-action__arrow"></i>
+            </button>
+            <button class="quick-action">
+              <div class="quick-action__icon quick-action__icon--green">
+                <i data-lucide="file-text"></i>
+              </div>
+              <div>
+                <p class="quick-action__label">Export Report</p>
+                <p class="quick-action__desc">Download as CSV or PDF</p>
+              </div>
+              <i data-lucide="chevron-right" class="quick-action__arrow"></i>
+            </button>
+            <button class="quick-action">
+              <div class="quick-action__icon quick-action__icon--amber">
+                <i data-lucide="arrow-up-right"></i>
+              </div>
+              <div>
+                <p class="quick-action__label">Upgrade Plan</p>
+                <p class="quick-action__desc">Unlock advanced features</p>
+              </div>
+              <i data-lucide="chevron-right" class="quick-action__arrow"></i>
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Recent Activity Table -->
+      <div class="card">
+        <div class="card__header">
+          <span class="card__title">Recent Activity</span>
+          <button class="btn btn--ghost btn--sm">View all</button>
+        </div>
+        <div class="table-wrap">
+          <table class="table">
+            <thead>
+              <tr>
+                <th>User</th>
+                <th>Action</th>
+                <th>Status</th>
+                <th>Time</th>
+                <th></th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>
+                  <div class="table__user">
+                    <div class="avatar avatar--sm avatar--blue">SC</div>
+                    <div>
+                      <p class="table__user-name">Sarah Chen</p>
+                    </div>
+                  </div>
+                </td>
+                <td>Invited Marcus Johnson to workspace</td>
+                <td><span class="badge badge--success badge--dot">Completed</span></td>
+                <td style="color: var(--color-text-muted); font-size: 12px;">2 min ago</td>
+                <td><button class="table__action" aria-label="Options"><i data-lucide="more-horizontal"></i></button></td>
+              </tr>
+              <tr>
+                <td>
+                  <div class="table__user">
+                    <div class="avatar avatar--sm avatar--green">PP</div>
+                    <div>
+                      <p class="table__user-name">Priya Patel</p>
+                    </div>
+                  </div>
+                </td>
+                <td>Exported Q1 analytics report</td>
+                <td><span class="badge badge--success badge--dot">Completed</span></td>
+                <td style="color: var(--color-text-muted); font-size: 12px;">14 min ago</td>
+                <td><button class="table__action" aria-label="Options"><i data-lucide="more-horizontal"></i></button></td>
+              </tr>
+              <tr>
+                <td>
+                  <div class="table__user">
+                    <div class="avatar avatar--sm avatar--amber">MJ</div>
+                    <div>
+                      <p class="table__user-name">Marcus Johnson</p>
+                    </div>
+                  </div>
+                </td>
+                <td>Updated billing information</td>
+                <td><span class="badge badge--warning badge--dot">Pending</span></td>
+                <td style="color: var(--color-text-muted); font-size: 12px;">1 hr ago</td>
+                <td><button class="table__action" aria-label="Options"><i data-lucide="more-horizontal"></i></button></td>
+              </tr>
+              <tr>
+                <td>
+                  <div class="table__user">
+                    <div class="avatar avatar--sm avatar--purple">TR</div>
+                    <div>
+                      <p class="table__user-name">Tom Richards</p>
+                    </div>
+                  </div>
+                </td>
+                <td>Created new API key</td>
+                <td><span class="badge badge--success badge--dot">Completed</span></td>
+                <td style="color: var(--color-text-muted); font-size: 12px;">2 hrs ago</td>
+                <td><button class="table__action" aria-label="Options"><i data-lucide="more-horizontal"></i></button></td>
+              </tr>
+              <tr>
+                <td>
+                  <div class="table__user">
+                    <div class="avatar avatar--sm avatar--red">AL</div>
+                    <div>
+                      <p class="table__user-name">Aisha Lee</p>
+                    </div>
+                  </div>
+                </td>
+                <td>Disconnected Slack integration</td>
+                <td><span class="badge badge--danger badge--dot">Failed</span></td>
+                <td style="color: var(--color-text-muted); font-size: 12px;">3 hrs ago</td>
+                <td><button class="table__action" aria-label="Options"><i data-lucide="more-horizontal"></i></button></td>
+              </tr>
+              <tr>
+                <td>
+                  <div class="table__user">
+                    <div class="avatar avatar--sm avatar--blue">SC</div>
+                    <div>
+                      <p class="table__user-name">Sarah Chen</p>
+                    </div>
+                  </div>
+                </td>
+                <td>Changed workspace plan to Pro</td>
+                <td><span class="badge badge--success badge--dot">Completed</span></td>
+                <td style="color: var(--color-text-muted); font-size: 12px;">5 hrs ago</td>
+                <td><button class="table__action" aria-label="Options"><i data-lucide="more-horizontal"></i></button></td>
+              </tr>
+              <tr>
+                <td>
+                  <div class="table__user">
+                    <div class="avatar avatar--sm avatar--green">PP</div>
+                    <div>
+                      <p class="table__user-name">Priya Patel</p>
+                    </div>
+                  </div>
+                </td>
+                <td>Enabled two-factor authentication</td>
+                <td><span class="badge badge--success badge--dot">Completed</span></td>
+                <td style="color: var(--color-text-muted); font-size: 12px;">Yesterday</td>
+                <td><button class="table__action" aria-label="Options"><i data-lucide="more-horizontal"></i></button></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+    </main>
+  </div>
+</div>
+
+<script src="https://unpkg.com/lucide@latest/dist/umd/lucide.min.js"></script>
+<script src="js/app.js"></script>
+</body>
+</html>
