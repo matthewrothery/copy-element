@@ -305,7 +305,7 @@ export function LibraryApp(): JSX.Element {
   return (
     <div className="app-shell library-shell">
       <header className="library-header">
-        <img src={logoUrl} alt="" width={32} height={32} style={{ objectFit: "contain" }} />
+        {/* <img src={logoUrl} alt="" width={32} height={32} style={{ objectFit: "contain" }} /> */}
         <div className="library-header-copy">
           <h1 className="library-header-title">Library</h1>
           <p className="library-header-subtitle">{subtitle}</p>

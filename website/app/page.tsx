@@ -51,25 +51,25 @@ export default function Home(): React.ReactElement {
           <FeatureSection
             subheading="How it works"
             title="Click. Copy. Build."
-            subtitle="Any element, any page. Clean HTML or JSX — ready to paste in one click."
+            subtitle="Any element, any page. Capture in one click, copy an AI or MCP prompt, then rebuild with your tools."
             tabs={[
               {
-                title: "One-click capture",
+                title: "Click to capture",
                 description:
-                  "Hover any element, click to capture. Element Armory strips it down to just the styles that matter.",
+                  "Hover any element and click to capture. Element Armory keeps the markup and just the styles that matter.",
                 image: "/assets/one-click-capture.png",
               },
               {
-                title: "HTML and CSS",
+                title: "Copy AI or MCP prompt",
                 description:
-                  "Export as plain HTML and CSS. Paste directly into your project or drop into an AI tool.",
-                image: "/assets/capture-html-css.png",
+                  "Copy a prompt with full HTML, styles, and layout context, or connect MCP to load it automatically.",
+                image: "/assets/copy-ai-or-mcp-prompt.png",
               },
               {
-                title: "Inline styles only",
+                title: "Rebuild with AI",
                 description:
-                  "Visual styles only — no scripts, trackers, or framework dependencies. Works anywhere.",
-                image: "/assets/inline-styles-only.gif",
+                  "Use the prompt to rebuild, refactor, or match layouts. Built it fast, build it today.",
+                image: "/assets/claude-code.png",
               },
             ]}
           />
@@ -82,16 +82,19 @@ export default function Home(): React.ReactElement {
             subtitle="Build a personal library of UI components from any site. Organized, always one click from your clipboard."
             tabs={[
               {
-                title: "Save snippets",
-                description: "Tag and save any captured element with a title and source. Your library grows as you browse.",
+                title: "Auto-save captures",
+                description: "Capture any element and it's automatically saved to your library.",
+                image: "/assets/auto-save-capture.png",
               },
               {
                 title: "Copy anytime",
-                description: "Paste HTML or JSX from your library without revisiting the original page — even offline.",
+                description: "Copy elements from your library anytime - even offline.",
+                image: "/assets/copy-anytime.png",
               },
               {
-                title: "Quick preview",
-                description: "Preview before you copy. Delete what you don't need. Keep only what works.",
+                title: "Preview & edit",
+                description: "Preview elements and edit code before copying.",
+                image: "/assets/preview-and-edit.png",
               },
             ]}
           />
@@ -103,24 +106,28 @@ export default function Home(): React.ReactElement {
             subtitle="Clean output that drops straight into your project. No cleanup, no reformatting."
             cards={[
               {
-                title: "Copy HTML",
+                title: "Copy code snippets",
                 description:
-                  "One click. Clean markup, minimal styles. Paste into any page or framework.",
+                  "Clean HTML with scoped styles. Paste directly into any project or framework.",
+                image: "/assets/copy-code-snippet.png",
               },
               {
-                title: "Copy JSX",
+                title: "Copy AI prompt",
                 description:
-                  "Export as React JSX. Ready for your codebase or your AI editor via the MCP server.",
+                  "A ready-made prompt with HTML and styles to rebuild the element in any AI tool.",
+                image: "/assets/copy-ai-prompt.png",
               },
               {
-                title: "Save to library",
+                title: "Copy advanced prompt",
                 description:
-                  "Keep the elements that matter. Access them from the extension, anytime.",
+                  "A codebase-aware prompt that adapts the element to match your project.",
+                image: "/assets/copy-advanced-prompt.png",
               },
               {
-                title: "Share link",
+                title: "Copy MCP prompt",
                 description:
-                  "Send a snippet to your team. They can view and copy without installing anything.",
+                  "Use with MCP to load the element directly into your editor as context.",
+                image: "/assets/copy-mcp-prompt.png",
               },
             ]}
           />
@@ -130,20 +137,22 @@ export default function Home(): React.ReactElement {
           <FeatureSection
             subheading="Built for developers"
             title="Output your tools can actually use."
-            subtitle="Minimal, portable, framework-neutral. The code you'd write by hand — just faster."
+            subtitle="Stylesheet-driven extraction: smaller, class-based CSS that AI tools parse more reliably than computed-style dumps — portable once captured."
             tabs={[
               {
-                title: "Minimal CSS",
+                title: "Sheet-driven extraction",
                 description:
-                  "Only display, layout, spacing, typography, color, border, flex, and grid. Nothing else.",
+                  "Walks the page’s real stylesheets and keeps only rules that apply to the captured element tree — not every computed property inlined.",
               },
               {
-                title: "No defaults",
-                description: "Default browser values are stripped out. Your output stays readable and easy to override.",
+                title: "Readable CSS",
+                description:
+                  "Class-based rules in a style block. Browser defaults, transitions, animations, and pointer noise are stripped so output stays legible.",
               },
               {
-                title: "Portable",
-                description: "No dependency on the source site or its framework. Drop it into anything.",
+                title: "Standalone snippets",
+                description:
+                  "No dependency on the source site or its framework. The original page can change — your snippet stays paste-ready anywhere.",
               },
             ]}
           />
