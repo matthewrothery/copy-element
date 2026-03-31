@@ -153,3 +153,7 @@ If architecture changes, update `ARCHITECTURE.md`.
 ### Feature Tiers
 
 Account tiers (Guest, Free, Paid), feature limits, and enforcement locations are documented in `plan-features.md`.
+
+### Unshipped Features (do not claim in website copy or FAQs)
+
+**JSX export** and **Tailwind output** are not yet implemented. Do not describe them as available features anywhere on the website, in FAQs, or in marketing copy. HTML is the only supported export format.

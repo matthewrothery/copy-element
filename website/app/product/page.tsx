@@ -16,7 +16,7 @@ import { EXAMPLES } from "@/data/examples";
 export const metadata: Metadata = {
   title: "How It Works – Element Armory",
   description:
-    "Click any element on any site. Get clean HTML or JSX instantly. Save it, reuse it, and pipe it straight into Cursor or Claude with the MCP server.",
+    "Click any element on any site. Get clean HTML instantly. Save it, reuse it, and pipe it straight into Cursor or Claude with the MCP server.",
   alternates: { canonical: "/product" },
 };
 
@@ -30,7 +30,7 @@ export default function ProductPage(): React.ReactElement {
         <Section center>
           <Hero
             title="The UI you want is already built. Just capture it."
-            subtitle="Click any element on any site. Get clean HTML or JSX in one click."
+            subtitle="Click any element on any site. Get clean HTML in one click."
             ctaSubtext="Free. No account required."
             media={<Image src="/assets/elementarmory.gif" alt="Element Armory" width={940} height={557} />}
           />
@@ -63,9 +63,9 @@ export default function ProductPage(): React.ReactElement {
                 image: "/assets/one-click-capture.png",
               },
               {
-                title: "Copy HTML or JSX",
+                title: "Copy HTML",
                 description:
-                  "Choose your output format before you copy. Plain HTML for static projects, React JSX for component-based codebases. One click to clipboard.",
+                  "Clean markup with a scoped CSS style block. One click to clipboard — paste directly into any project or framework.",
                 image: "/assets/copy-code-snippet.png",
               },
               {
@@ -105,7 +105,7 @@ export default function ProductPage(): React.ReactElement {
               {
                 title: "Copy without revisiting",
                 description:
-                  "Open your library, find the snippet, copy HTML or JSX. The original site doesn't need to be open. Your code is already there.",
+                  "Open your library, find the snippet, copy HTML. The original site doesn't need to be open. Your code is already there.",
                 image: "/assets/copy-anytime.png",
               },
               {
@@ -143,7 +143,7 @@ export default function ProductPage(): React.ReactElement {
               {
                 title: "Framework-neutral output",
                 description:
-                  "HTML and JSX both work with any framework. Next.js, Remix, SvelteKit, or plain React - captured code drops in without modification.",
+                  "HTML works with any framework. Next.js, Remix, SvelteKit, or plain HTML — captured code drops in without modification.",
                 image: "/assets/claude-code.png",
               },
             ]}
@@ -225,7 +225,7 @@ export default function ProductPage(): React.ReactElement {
               {
                 question: "Can I use the output with any framework?",
                 answer:
-                  "Yes. HTML output is plain markup with inline styles - it works in any project. JSX output is valid React JSX with camelCase props and self-closing tags. Both formats are framework-neutral and require no cleanup.",
+                  "Yes. HTML output is clean markup with a scoped CSS style block — it works in any project without modification. Framework-neutral and requires no cleanup.",
               },
               {
                 question: "Do I need to sign up to start?",

@@ -11,7 +11,7 @@ const DEFAULT_CTA_HREF = process.env.NEXT_PUBLIC_CHROME_STORE_URL ?? "#";
 const DEFAULT_FEATURES: CTABlockFeature[] = [
   {
     title: "See the output",
-    description: "Clean HTML or JSX. No bloat, no scripts.",
+    description: "Clean HTML. No bloat, no scripts.",
     href: "#features",
     linkLabel: "How it works",
     icon: "tag",

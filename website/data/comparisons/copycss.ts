@@ -9,7 +9,7 @@ export const copycssData: ComparisonData = {
   meta: {
     title: "Element Armory vs CopyCSS – UI Capture Tool Comparison",
     description:
-      "Compare Element Armory and CopyCSS side by side. One copies CSS. The other captures full UI — HTML, JSX, a snippet library, and MCP server integration for AI coding tools.",
+      "Compare Element Armory and CopyCSS side by side. One copies CSS. The other captures full UI — HTML, a snippet library, and MCP server integration for AI coding tools.",
     canonicalPath: "/compare/element-armory-vs-copycss",
   },
   hero: {
@@ -21,7 +21,7 @@ export const copycssData: ComparisonData = {
     ours: {
       tool: "Element Armory",
       reasons: [
-        "You want usable HTML or JSX, not just CSS rules to apply yourself",
+        "You want usable HTML, not just CSS rules to apply yourself",
         "You use AI coding tools like Cursor and want your snippets accessible via MCP",
         "You want a persistent snippet library to save and reuse captured UI",
         "You need output that works across React, Vue, Svelte, or plain HTML without conversion",
@@ -46,7 +46,7 @@ export const copycssData: ComparisonData = {
       },
       {
         feature: "JSX export",
-        ours: "yes",
+        ours: "no",
         theirs: "no",
       },
       {
@@ -122,10 +122,10 @@ export const copycssData: ComparisonData = {
         {
           label: "Review the clean output",
           description:
-            "See the extracted HTML or JSX with minimal inline styles. Default CSS values are stripped automatically.",
+            "See the extracted HTML with a scoped CSS style block. Default CSS values are stripped automatically.",
         },
         {
-          label: "Copy HTML or JSX",
+          label: "Copy HTML",
           description:
             "One click copies to clipboard. Paste directly into your codebase, editor, or AI tool.",
         },
@@ -173,7 +173,7 @@ export const copycssData: ComparisonData = {
       {
         scenario: "Rebuilding a card component from a site you admire",
         oursApproach:
-          "Click the card, copy clean HTML or JSX with only the visual styles that matter. Paste into your project. Structure and styles are both captured.",
+          "Click the card, copy clean HTML with only the visual styles that matter. Paste into your project. Structure and styles are both captured.",
         theirsApproach:
           "Copy the CSS rules. Then write the HTML structure yourself to match the original. Extra steps for the same end result.",
       },
@@ -210,16 +210,6 @@ export const copycssData: ComparisonData = {
         description:
           "Element Armory captures element output for reuse — it's not a replacement for browser DevTools when you need to trace cascaded styles, specificity, or media query overrides.",
       },
-      {
-        heading: "No selector-level view",
-        description:
-          "Element Armory shows computed inline styles, not the original class declarations from source stylesheets. For debugging stylesheet specificity, use DevTools.",
-      },
-      {
-        heading: "No Tailwind output",
-        description:
-          "Element Armory outputs inline styles, not utility classes. If your project is 100% Tailwind, you'll need to convert the output manually or paste it into an AI tool to generate the Tailwind equivalent.",
-      },
     ],
   },
   faq: [
@@ -231,12 +221,12 @@ export const copycssData: ComparisonData = {
     {
       question: "What's the difference between CopyCSS and Element Armory?",
       answer:
-        "CopyCSS copies CSS rules from elements — useful for quick style inspection. Element Armory captures both the HTML structure and computed styles, then exports clean HTML or JSX you can paste directly into a project. It also includes a snippet library, MCP server integration, and shareable links.",
+        "CopyCSS copies CSS rules from elements — useful for quick style inspection. Element Armory captures both the HTML structure and the CSS rules that apply to it, then exports clean HTML you can paste directly into a project. It also includes a snippet library, MCP server integration, and shareable links.",
     },
     {
       question: "Can I use Element Armory just to copy CSS?",
       answer:
-        "Yes. When you click an element, Element Armory shows all computed styles. But it also captures the full HTML output alongside — so you get more than a CSS-only tool without any extra steps.",
+        "Yes. When you click an element, Element Armory extracts all CSS rules that apply to it from the page's actual stylesheets. But it also captures the full HTML output alongside — so you get more than a CSS-only tool without any extra steps.",
     },
     {
       question: "What is the MCP server integration?",

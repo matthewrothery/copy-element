@@ -9,19 +9,19 @@ export const csspeeperData: ComparisonData = {
   meta: {
     title: "Element Armory vs CSSPeeper – UI Capture Tool Comparison",
     description:
-      "Compare Element Armory and CSSPeeper. Element Armory captures full HTML and JSX for use in code with a snippet library and MCP integration. CSSPeeper is a design-focused CSS inspector showing colors, fonts, and assets.",
+      "Compare Element Armory and CSSPeeper. Element Armory captures full HTML for use in code with a snippet library and MCP integration. CSSPeeper is a design-focused CSS inspector showing colors, fonts, and assets.",
     canonicalPath: "/compare/element-armory-vs-csspeeper",
   },
   hero: {
     title: "Element Armory vs CSSPeeper",
     subtitle:
-      "CSSPeeper surfaces colors, fonts, and assets in a design-friendly panel. Element Armory captures the full element as HTML or JSX you can use in your project.",
+      "CSSPeeper surfaces colors, fonts, and assets in a design-friendly panel. Element Armory captures the full element as HTML you can use in your project.",
   },
   verdict: {
     ours: {
       tool: "Element Armory",
       reasons: [
-        "You need HTML or JSX from an element, not just its CSS properties",
+        "You need HTML from an element — structure and styles — not just isolated CSS properties",
         "You want a snippet library to save and reuse captured UI components",
         "You use AI coding tools and want your snippets accessible via MCP server",
         "You want to share captured elements with teammates via a link",
@@ -50,7 +50,7 @@ export const csspeeperData: ComparisonData = {
       },
       {
         feature: "JSX export",
-        ours: "yes",
+        ours: "no",
         theirs: "no",
       },
       {
@@ -124,10 +124,10 @@ export const csspeeperData: ComparisonData = {
         {
           label: "Click the element",
           description:
-            "Activate Element Armory and click any element. It extracts the HTML structure with minimal inline styles — not just isolated CSS properties.",
+            "Activate Element Armory and click any element. It extracts the HTML structure with a scoped CSS style block — not just isolated CSS properties.",
         },
         {
-          label: "Copy HTML or JSX",
+          label: "Copy HTML",
           description:
             "One click copies the full element. Paste it into your editor, component file, or AI coding session immediately.",
         },
@@ -175,7 +175,7 @@ export const csspeeperData: ComparisonData = {
       {
         scenario: "Extracting a card component for a React project",
         oursApproach:
-          "Click the card, copy the JSX. You get the full HTML structure with inline styles — paste into your component file and iterate.",
+          "Click the card, copy the HTML. You get the full structure with scoped CSS — paste into your component file and iterate.",
         theirsApproach:
           "CSSPeeper shows the card's CSS properties but doesn't export the HTML. You'd need to write the markup yourself.",
       },
@@ -233,12 +233,12 @@ export const csspeeperData: ComparisonData = {
     {
       question: "How is Element Armory different from CSSPeeper for developers?",
       answer:
-        "CSSPeeper shows you CSS properties in a design-friendly panel — useful for auditing a site's visual language. Element Armory captures the full HTML and JSX of an element so you can use it in your own project. They solve different problems.",
+        "CSSPeeper shows you CSS properties in a design-friendly panel — useful for auditing a site's visual language. Element Armory captures the full HTML of an element so you can use it in your own project. They solve different problems.",
     },
     {
       question: "Can Element Armory extract a site's color palette like CSSPeeper?",
       answer:
-        "No. Element Armory captures individual elements and includes their inline styles. It doesn't aggregate all colors from a page into a palette view. CSSPeeper is better suited for that specific workflow.",
+        "No. Element Armory captures individual elements and the CSS rules that apply to them. It doesn't aggregate all colors from a page into a palette view. CSSPeeper is better suited for that specific workflow.",
     },
     {
       question: "Does CSSPeeper export HTML?",
@@ -253,7 +253,7 @@ export const csspeeperData: ComparisonData = {
     {
       question: "Can I use CSSPeeper and Element Armory together?",
       answer:
-        "Yes — they complement each other. Use CSSPeeper to audit a site's colors, fonts, and assets; use Element Armory to capture the HTML and JSX of elements you want to reuse in your codebase.",
+        "Yes — they complement each other. Use CSSPeeper to audit a site's colors, fonts, and assets; use Element Armory to capture the HTML of elements you want to reuse in your codebase.",
     },
   ],
 };

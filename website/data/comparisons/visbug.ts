@@ -9,19 +9,19 @@ export const visbugData: ComparisonData = {
   meta: {
     title: "Element Armory vs VisBug – UI Capture Tool Comparison",
     description:
-      "Compare Element Armory and VisBug. Element Armory captures HTML and JSX from any site for use in code. VisBug is a visual design debugger for moving, styling, and measuring elements live in the browser — no code export.",
+      "Compare Element Armory and VisBug. Element Armory captures HTML from any site for use in code. VisBug is a visual design debugger for moving, styling, and measuring elements live in the browser — no code export.",
     canonicalPath: "/compare/element-armory-vs-visbug",
   },
   hero: {
     title: "Element Armory vs VisBug",
     subtitle:
-      "VisBug lets you edit and inspect UI visually in the browser. Element Armory captures it as HTML or JSX you can actually use in your codebase.",
+      "VisBug lets you edit and inspect UI visually in the browser. Element Armory captures it as HTML you can actually use in your codebase.",
   },
   verdict: {
     ours: {
       tool: "Element Armory",
       reasons: [
-        "You want to extract HTML or JSX from a site to use in your own project",
+        "You want to extract HTML from a site to use in your own project",
         "You work in React and need a component you can paste and iterate on",
         "You want a snippet library to save and reference captured UI",
         "You use AI coding tools and want your snippets available via MCP server",
@@ -50,7 +50,7 @@ export const visbugData: ComparisonData = {
       },
       {
         feature: "JSX export",
-        ours: "yes",
+        ours: "no",
         theirs: "no",
       },
       {
@@ -128,10 +128,10 @@ export const visbugData: ComparisonData = {
         {
           label: "Click to capture",
           description:
-            "Activate Element Armory and click the element. It extracts the HTML structure with minimal inline styles.",
+            "Activate Element Armory and click the element. It extracts the HTML structure with a scoped CSS style block.",
         },
         {
-          label: "Copy as HTML or JSX",
+          label: "Copy HTML",
           description:
             "Copy to clipboard. Paste directly into your editor, component file, or AI coding session.",
         },
@@ -174,7 +174,7 @@ export const visbugData: ComparisonData = {
       {
         scenario: "You want to reuse a pricing card from another site in your React app",
         oursApproach:
-          "Click the card, copy JSX. You get the full markup with inline styles — paste it into your component and iterate from there.",
+          "Click the card, copy HTML. You get the full markup with scoped CSS — paste it into your component and iterate from there.",
         theirsApproach:
           "VisBug doesn't extract code. You'd need to inspect manually in DevTools and rebuild the card yourself.",
       },
@@ -195,7 +195,7 @@ export const visbugData: ComparisonData = {
       {
         scenario: "You want to save a nav component and share it with your team",
         oursApproach:
-          "Capture the nav, save it to your snippet library with a source URL. Share the link — your teammate gets the HTML or JSX without visiting the original site.",
+          "Capture the nav, save it to your snippet library with a source URL. Share the link — your teammate gets the HTML without visiting the original site.",
         theirsApproach:
           "VisBug has no persistent storage or sharing. Changes you make are session-only and lost on page reload.",
       },
@@ -242,7 +242,7 @@ export const visbugData: ComparisonData = {
     {
       question: "Can I extract code from VisBug?",
       answer:
-        "No. VisBug is a visual editing tool — it doesn't export the elements you inspect or modify as HTML or JSX. To get code, you'd need to use DevTools manually or switch to Element Armory.",
+        "No. VisBug is a visual editing tool — it doesn't export the elements you inspect or modify as code. To get the HTML, you'd need to use DevTools manually or switch to Element Armory.",
     },
     {
       question: "Does Element Armory have MCP server support?",

@@ -22,7 +22,7 @@ export const snipcssData: ComparisonData = {
       tool: "Element Armory",
       reasons: [
         "You need the full HTML structure alongside styles — not just CSS rules",
-        "You want clean JSX you can paste directly into a React codebase",
+        "You want clean HTML you can paste directly into any codebase",
         "You use AI coding tools like Cursor and want MCP server integration",
         "You want to save and reuse captured elements in a persistent snippet library",
         "You want a free tier with no account required for basic capture and export",
@@ -46,7 +46,7 @@ export const snipcssData: ComparisonData = {
       },
       {
         feature: "JSX export",
-        ours: "yes",
+        ours: "no",
         theirs: "no",
       },
       {
@@ -116,10 +116,10 @@ export const snipcssData: ComparisonData = {
         {
           label: "Review the clean output",
           description:
-            "See the extracted HTML or JSX with minimal inline styles. Default CSS values are stripped automatically.",
+            "See the extracted HTML with a scoped CSS style block. Default CSS values are stripped automatically.",
         },
         {
-          label: "Copy HTML or JSX",
+          label: "Copy HTML",
           description:
             "One click copies to clipboard. Paste directly into your codebase, editor, or AI tool.",
         },
@@ -167,7 +167,7 @@ export const snipcssData: ComparisonData = {
       {
         scenario: "Rebuilding a button component from a site you admire",
         oursApproach:
-          "Click the button, copy clean HTML or JSX with only the visual styles that matter. Paste into your project. The full structure is already there.",
+          "Click the button, copy clean HTML with only the visual styles that matter. Paste into your project. The full structure is already there.",
         theirsApproach:
           "Copy the CSS rules. Then write the HTML structure manually, matching the original layout. Double the work for the same result.",
       },
@@ -204,16 +204,6 @@ export const snipcssData: ComparisonData = {
         description:
           "Element Armory captures element output for reuse — it's not a replacement for browser DevTools when you need to trace cascaded styles, specificity conflicts, or media query overrides.",
       },
-      {
-        heading: "No inline CSS selector view",
-        description:
-          "Element Armory shows computed inline styles, not the original CSS selectors and rules from stylesheets. If you need to see the original class declarations, use DevTools.",
-      },
-      {
-        heading: "No Tailwind output",
-        description:
-          "Element Armory outputs inline styles, not utility classes. If your project is 100% Tailwind, you'll need to convert the output manually or use an AI tool to translate it.",
-      },
     ],
   },
   faq: [
@@ -225,12 +215,12 @@ export const snipcssData: ComparisonData = {
     {
       question: "What's the difference between SnipCSS and Element Armory?",
       answer:
-        "SnipCSS extracts CSS rules from an element — useful for inspecting styles. Element Armory captures both the HTML structure and computed styles, then exports clean HTML or JSX you can paste directly into a project. It also adds a snippet library, MCP server integration, and shareable links.",
+        "SnipCSS extracts CSS rules from an element — useful for inspecting styles. Element Armory captures both the HTML structure and the CSS rules that apply to it, then exports clean HTML you can paste directly into a project. It also adds a snippet library, MCP server integration, and shareable links.",
     },
     {
       question: "Can I use Element Armory just to inspect CSS?",
       answer:
-        "Yes. When you click an element, Element Armory shows all its computed styles. But it also gives you the full HTML output alongside that — so you get more than a CSS-only tool without extra effort.",
+        "Yes. When you click an element, Element Armory extracts the CSS rules that apply to it from the page's actual stylesheets. But it also gives you the full HTML output alongside — so you get more than a CSS-only tool without extra effort.",
     },
     {
       question: "What is the MCP server integration?",
@@ -245,7 +235,7 @@ export const snipcssData: ComparisonData = {
     {
       question: "Can I switch from SnipCSS to Element Armory?",
       answer:
-        "Yes — install the Element Armory Chrome extension and you're ready. No migration needed. Element Armory is a superset of what SnipCSS does, with HTML and JSX export on top.",
+        "Yes — install the Element Armory Chrome extension and you're ready. No migration needed. Element Armory is a superset of what SnipCSS does, with full HTML export and a persistent snippet library on top.",
     },
   ],
 };

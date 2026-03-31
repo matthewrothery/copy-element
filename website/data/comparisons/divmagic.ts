@@ -9,7 +9,7 @@ export const divmagicData: ComparisonData = {
   meta: {
     title: "Element Armory vs DivMagic – UI Capture Tool Comparison",
     description:
-      "Compare Element Armory and DivMagic side by side. See which tool gives you cleaner HTML, better JSX export, MCP server support, and a free tier with no account required.",
+      "Compare Element Armory and DivMagic side by side. See which tool gives you cleaner HTML output, MCP server support, and a free tier with no account required.",
     canonicalPath: "/compare/element-armory-vs-divmagic",
   },
   hero: {
@@ -21,7 +21,7 @@ export const divmagicData: ComparisonData = {
     ours: {
       tool: "Element Armory",
       reasons: [
-        "You want clean HTML or JSX with minimal inline styles — no framework lock-in",
+        "You want clean HTML with minimal styles — no framework lock-in",
         "You use AI coding tools (Cursor, Copilot) and want MCP server integration",
         "You need a snippet library to save and reuse captured UI",
         "You want a free tier that works without creating an account",
@@ -46,7 +46,7 @@ export const divmagicData: ComparisonData = {
       },
       {
         feature: "JSX export",
-        ours: "yes",
+        ours: "no",
         theirs: "yes",
       },
       {
@@ -117,10 +117,10 @@ export const divmagicData: ComparisonData = {
         {
           label: "Review the clean output",
           description:
-            "See the extracted HTML or JSX with minimal inline styles. Default values are stripped automatically.",
+            "See the extracted HTML with a scoped CSS style block. Default values are stripped automatically.",
         },
         {
-          label: "Copy HTML or JSX",
+          label: "Copy HTML",
           description:
             "One click copies to clipboard. Paste directly into your codebase, editor, or AI tool.",
         },
@@ -168,7 +168,7 @@ export const divmagicData: ComparisonData = {
       {
         scenario: "Extracting a pricing card from a competitor's site",
         oursApproach:
-          "Click the card, copy clean HTML or JSX with only the visual styles that matter. Paste into your project as-is — no cleanup needed.",
+          "Click the card, copy clean HTML with only the visual styles that matter. Paste into your project as-is — no cleanup needed.",
         theirsApproach:
           "Click the card, get a Tailwind component. Requires Tailwind in your project or manual conversion.",
       },
@@ -201,11 +201,6 @@ export const divmagicData: ComparisonData = {
       "Honest about the tradeoffs. Element Armory optimizes for clean, portable output — not AI component generation.",
     items: [
       {
-        heading: "No built-in Tailwind output",
-        description:
-          "Element Armory outputs inline styles, not Tailwind classes. If your project is 100% Tailwind, you'll need to convert the output manually.",
-      },
-      {
         heading: "No AI chat interface",
         description:
           "Element Armory doesn't include a chat UI for asking questions about captured components. It integrates with AI tools you already use via MCP instead.",
@@ -213,7 +208,7 @@ export const divmagicData: ComparisonData = {
       {
         heading: "No framework-specific scaffolding",
         description:
-          "The output is portable HTML or JSX — not a pre-wrapped React component, Vue SFC, or Svelte file. You control the scaffolding.",
+          "The output is portable HTML — not a pre-wrapped React component, Vue SFC, or Svelte file. You control the scaffolding.",
       },
     ],
   },
@@ -226,12 +221,12 @@ export const divmagicData: ComparisonData = {
     {
       question: "How does Element Armory compare to DivMagic for React projects?",
       answer:
-        "Element Armory exports clean JSX that works in any React project. DivMagic also exports React components but leans toward Tailwind class generation. If you use inline styles or CSS modules, Element Armory's output requires less cleanup.",
+        "Element Armory exports clean HTML that works in any project. DivMagic also exports React components but leans toward Tailwind class generation. Element Armory outputs class-based CSS in a style block — it pairs naturally with CSS modules, scoped styles, or any styling approach in your project.",
     },
     {
       question: "Does Element Armory support Tailwind?",
       answer:
-        "Not directly. Element Armory outputs inline styles, not utility classes. You can use the captured output as a reference and apply your own Tailwind classes, or paste it into an AI tool to generate the Tailwind equivalent.",
+        "Not yet. Tailwind output is planned but not available in the current version. You can paste the captured HTML and CSS into an AI tool and ask it to generate the Tailwind equivalent.",
     },
     {
       question: "What is the MCP server integration?",
@@ -246,7 +241,7 @@ export const divmagicData: ComparisonData = {
     {
       question: "Can I switch from DivMagic to Element Armory?",
       answer:
-        "Yes — install the Element Armory Chrome extension and you're ready to start. There's no migration required since Element Armory outputs standard HTML and JSX.",
+        "Yes — install the Element Armory Chrome extension and you're ready to start. There's no migration required since Element Armory outputs standard HTML.",
     },
   ],
 };

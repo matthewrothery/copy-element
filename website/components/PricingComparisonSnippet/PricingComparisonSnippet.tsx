@@ -120,7 +120,7 @@ function PricingCard({
                         check
                       </span>
                     </div>
-                    <div className="hapacs">Export HTML &amp; React JSX</div>
+                    <div className="hapacs">Export clean HTML</div>
                   </div>
                 </div>
               </div>

@@ -12,6 +12,7 @@ import { extensionSessionRouter } from '../api/routes/extension-session.js';
 import { handleStripeWebhook } from '../api/routes/billing.js';
 import { mountApi } from '../api/index.js';
 import { internalMcpRouter } from '../api/routes/internal-mcp.js';
+import { internalAdminRouter } from '../api/routes/internal-admin.js';
 import { config } from '../config/index.js';
 import { logger } from '../logger.js';
 
@@ -92,6 +93,7 @@ export function createApp(): Express {
 
   // 11. Internal MCP routes (not under /api/ — internal only)
   app.use('/internal/mcp', internalMcpRouter);
+  app.use('/internal/admin', internalAdminRouter);
 
   // 12. API routes
   mountApi(app);

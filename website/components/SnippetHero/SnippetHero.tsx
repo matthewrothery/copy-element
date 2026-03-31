@@ -12,7 +12,7 @@ const defaultHeadline = (
 const defaultSubtitle = (
   <>
     <p>
-      Your captured elements, organized and ready. Copy HTML or JSX whenever
+      Your captured elements, organized and ready. Copy HTML whenever
       you need them — no hunting through tabs.
     </p>
   </>

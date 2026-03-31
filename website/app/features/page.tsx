@@ -17,8 +17,6 @@ export const dynamic = "force-static";
 const FEATURE_TABLE_ROWS: FeatureTableRow[] = [
   { feature: "Capture any UI element in one click", status: "yes" },
   { feature: "Copy clean HTML with inline styles", status: "yes" },
-  { feature: "Export as JSX", status: "yes" },
-  { feature: "Copy as Tailwind", status: "yes" },
   { feature: "Generate AI-ready prompts", status: "yes" },
   {
     feature: "Connect via MCP server",
@@ -37,7 +35,7 @@ const FEATURE_TABLE_ROWS: FeatureTableRow[] = [
 export const metadata: Metadata = {
   title: "Features – Element Armory",
   description:
-    "Capture any UI element, copy clean HTML or JSX, generate AI-ready prompts, and pipe snippets directly into your editor via MCP.",
+    "Capture any UI element, copy clean HTML, generate AI-ready prompts, and pipe snippets directly into your editor via MCP.",
   alternates: { canonical: "/features" },
 };
 
@@ -64,21 +62,9 @@ export default function FeaturesPage(): React.ReactElement {
                 image: "/assets/one-click-capture.png",
               },
               {
-                title: "Copy clean HTML with inline styles",
+                title: "Copy clean HTML with scoped CSS",
                 description:
-                  "Get minimal markup with all visual styles already inlined. No scripts, no trackers, no framework dependencies — so you can paste real markup into your project without rewriting anything.",
-                image: "/assets/copy-code-snippet.png",
-              },
-              {
-                title: "Export as JSX",
-                description:
-                  "Valid React JSX with camelCase props and self-closing tags — so you can drop captured components directly into your React codebase without a conversion step.",
-                image: "/assets/capture-html-css.png",
-              },
-              {
-                title: "Copy as Tailwind",
-                description:
-                  "Captured styles translated into Tailwind utility classes — so you can integrate them into your utility-first workflow without manual translation.",
+                  "Get minimal markup with a scoped CSS style block — only the visual rules that apply to the element. No scripts, no trackers, no framework dependencies — paste it into any project and it works.",
                 image: "/assets/copy-code-snippet.png",
               },
             ]}

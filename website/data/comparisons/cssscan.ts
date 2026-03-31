@@ -9,20 +9,20 @@ export const cssScanData: ComparisonData = {
   meta: {
     title: "Element Armory vs CSS Scan – UI Capture Tool Comparison",
     description:
-      "Compare Element Armory and CSS Scan. Element Armory captures full HTML and JSX with a free tier and MCP server integration. CSS Scan copies individual CSS properties — no HTML, no JSX, one-time purchase required.",
+      "Compare Element Armory and CSS Scan. Element Armory captures full HTML with a free tier and MCP server integration. CSS Scan copies individual CSS properties — no HTML export, one-time purchase required.",
     canonicalPath: "/compare/element-armory-vs-css-scan",
   },
   hero: {
     title: "Element Armory vs CSS Scan",
     subtitle:
-      "CSS Scan copies CSS values from elements. Element Armory captures the full HTML structure — and exports it as JSX. Here's how the two compare.",
+      "CSS Scan copies CSS values from elements. Element Armory captures the full HTML structure and exports it as clean, portable code. Here's how the two compare.",
   },
   verdict: {
     ours: {
       tool: "Element Armory",
       reasons: [
         "You need the full element — HTML structure, not just isolated CSS values",
-        "You work in React and want JSX you can paste directly into your codebase",
+        "You need the full element — HTML structure and styles — ready to paste into your project",
         "You want a snippet library to save and reuse captured UI",
         "You use AI coding tools and want MCP server access to your snippets",
         "You want a free tier that works without paying upfront",
@@ -49,7 +49,7 @@ export const cssScanData: ComparisonData = {
       },
       {
         feature: "JSX export",
-        ours: "yes",
+        ours: "no",
         theirs: "no",
       },
       {
@@ -118,12 +118,12 @@ export const cssScanData: ComparisonData = {
         {
           label: "Click any element",
           description:
-            "Activate the extension and click an element. Element Armory captures its HTML structure and inline styles.",
+            "Activate the extension and click an element. Element Armory captures its HTML structure with a scoped CSS style block.",
         },
         {
-          label: "Copy HTML or JSX",
+          label: "Copy HTML",
           description:
-            "One click copies the full element as clean HTML or JSX. Paste directly into your editor.",
+            "One click copies the full element as clean HTML. Paste directly into your editor.",
         },
         {
           label: "Save to your snippet library",
@@ -165,7 +165,7 @@ export const cssScanData: ComparisonData = {
       {
         scenario: "Rebuilding a button component you saw on another site",
         oursApproach:
-          "Click the button, copy the JSX. You get the HTML structure and inline styles together — paste it into your component file and it works.",
+          "Click the button, copy the HTML. You get the full structure with scoped CSS — paste it into your component file and it works.",
         theirsApproach:
           "Hover over the button, copy the CSS. You still need to write the HTML yourself and wire the styles up manually.",
       },
@@ -222,7 +222,7 @@ export const cssScanData: ComparisonData = {
     {
       question: "Does Element Armory export CSS like CSS Scan?",
       answer:
-        "Element Armory includes CSS in its output — as inline styles on the exported HTML or JSX. It doesn't have a hover inspector mode that shows raw CSS properties, but the exported element includes all the visual styles needed to reproduce it.",
+        "Element Armory includes CSS in its output — as a scoped style block alongside the exported HTML. It doesn't have a hover inspector mode that shows raw CSS properties, but the exported element includes all the visual styles needed to reproduce it.",
     },
     {
       question: "Can Element Armory replace CSS Scan for inspecting individual property values?",

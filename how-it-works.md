@@ -15,10 +15,10 @@
 **Supporting line:** Clean. Clear. Powerful.
 
 **What it is in one sentence:**  
-A Chrome extension that lets developers click any element on any website and instantly get clean, portable HTML or JSX — with AI integration built in.
+A Chrome extension that lets developers click any element on any website and instantly get clean, portable HTML and CSS snippets — with AI integration built in.
 
 **Who it is for:**  
-Developers who build UI. Specifically those who use AI coding tools (Cursor, Claude Code, etc.) and want to reference or replicate real-world UI patterns without manually inspecting DevTools, rewriting styles, or guessing at layout.
+Developers who build UI. Specifically those who use AI coding tools (Cursor, Claude Code, etc.) and want to reference or replicate real-world UI patterns without manually inspecting DevTools, rewriting styles, or guessing at layout. They want to be able to copy the HTML and CSS snippets and paste them into their codebase or AI tool of choice.
 
 ---
 
@@ -68,8 +68,6 @@ After capture, the user has several immediate options from the popup or the snip
 
 **Copy HTML** — Clean markup with scoped styles. Works in any project, any framework. Paste directly into a page.
 
-**Copy JSX** — Valid React JSX with `className` instead of `class`, camelCase props, self-closing tags. Drops into a component without modification.
-
 **Copy AI Prompt** — A pre-built prompt that includes the element's HTML, styles, and a clear instruction to rebuild it. Paste into any AI chat tool (ChatGPT, Claude, etc.) and get accurate output immediately.
 
 **Copy Advanced Prompt** *(paid)* — A codebase-aware version of the AI prompt that instructs the AI to adapt the captured element to match the existing codebase, swap external resources for local ones, and follow project conventions.
@@ -88,7 +86,7 @@ Two pathways:
 
 **Manual paste:** Copy the AI prompt or code directly. Paste into Cursor, Claude, ChatGPT, or any AI tool. The output already contains the structure, styles, and a clear instruction — the AI has everything it needs.
 
-**MCP server:** Connect the Element Armory MCP server to Cursor or Claude Code. When active, the extension exposes a set of MCP tools (`list_snippets`, `get_snippet`, `get_snippet_prompt`) that allow the AI editor to fetch captured elements directly as context — no paste required.
+**MCP server:** Connect the Element Armory MCP server over HTTPS (Cursor, Claude Code, Codex, or any HTTP MCP client) using an API token from the extension. The server exposes tools to list and fetch captures, build prompts, clean and analyze markup, map external assets, and run AI conversion to a target framework — no manual paste required for those flows.
 
 ---
 
@@ -149,12 +147,11 @@ Each snippet stores:
 - Source URL / domain
 - Date saved
 - HTML output
-- JSX output
 - CSS style block
 
 **Library views:** Grid layout in the popup (two columns, thumbnails), full editor view for detailed inspection and code editing.
 
-**Actions per snippet:** Copy HTML, Copy JSX, Copy AI Prompt, Copy Advanced Prompt (paid), Copy MCP (paid), Delete, Preview, Share link.
+**Actions per snippet:** Copy HTML, Copy AI Prompt, Copy Advanced Prompt (paid), Copy MCP (paid), Delete, Preview, Share link.
 
 **Share links:** Any snippet can be shared via a public URL. The recipient can view and copy the element without installing the extension or creating an account.
 
@@ -165,8 +162,6 @@ Each snippet stores:
 | Format | Description | Who gets it |
 |---|---|---|
 | HTML | Clean markup with scoped CSS | All users |
-| JSX | React-compatible JSX with camelCase props | Free + Paid |
-| Tailwind | CSS converted to Tailwind utility classes | Free + Paid |
 | AI Prompt (basic) | Pre-built prompt with HTML + styles | Free + Paid |
 | AI Prompt (advanced) | Codebase-aware prompt for AI editors | Paid only |
 | MCP | Prompt formatted for MCP server context | Paid only |
@@ -175,21 +170,35 @@ Each snippet stores:
 
 ### MCP Server Integration
 
-The MCP server is a local Node.js server that exposes the user's snippet library to MCP-compatible AI editors.
+The MCP server is a hosted HTTPS endpoint that exposes the signed-in user’s capture library to MCP-compatible AI editors and agents.
 
-**Setup:** One-time configuration in Cursor or Claude Code settings. Takes under two minutes.
+**Setup:** Generate an MCP API token in the extension (MCP page), then register the server URL with the `ELEMENT_ARMORY_API_KEY` header in your client (for example Cursor `mcp.json`, Claude Code `claude mcp add`, or Codex config). Typically under two minutes.
 
 **How it works:**
-1. User runs the MCP server locally (`npx snappymcp-host` or via `node dist/index.js`)
-2. AI editor connects to the server over stdio
-3. Captured elements become available as context tools inside the editor
+1. User adds the Element Armory MCP endpoint and API key to their AI tool
+2. The client connects to the server over HTTP (Streamable HTTP / MCP as supported by the client)
+3. Captures become callable MCP tools — list, fetch, prompt, transform, and convert without copy-paste
 
 **MCP tools exposed:**
-- `list_snippets` — Returns all saved snippets with id, title, sourceUrl, dimensions
-- `get_snippet` — Returns full snippet data (HTML, JSX, styleBlock) by ID
-- `get_snippet_prompt` — Returns a formatted prompt for a specific snippet
 
-**Use case:** Developer captures a hero section from a competitor's site, connects MCP, opens Cursor, and asks the AI to "rebuild this hero for our product" — the AI fetches the snippet directly without the developer pasting anything manually.
+**Captures**
+- `listCaptures` — Recent captures with metadata (id, source URL, captured time); optional pagination (`limit` up to 50)
+- `getCaptureById` — Full HTML and CSS for a capture by id
+- `getLatestCapture` — Full HTML and CSS for the most recent capture
+
+**Prompts**
+- `getBasicPrompt` — Formatted chat prompt including HTML and CSS (optional capture id; defaults to latest)
+- `getAdvancedPrompt` — Enhanced prompt with structure and resource context *(Pro)*
+
+**Transform**
+- `cleanCapture` — Strip scripts, event handlers, and tracking-oriented attributes; optional raw HTML/CSS instead of a stored capture
+- `extractComponentStructure` — Hierarchical element tree from HTML for layout understanding
+- `mapExternalResources` — External images, fonts, and CDN references found in given HTML/CSS
+
+**Convert**
+- `convertCapture` — AI conversion to a chosen framework (e.g. React, Vue, Svelte, Solid, Alpine, Astro, Lit, Preact) and styling mode (Tailwind, CSS Modules, styled-components, inline). **Costs 5 MCP quota units** per invocation.
+
+**Use case:** Developer captures a hero from a reference site, connects MCP in Cursor, and asks the model to rebuild it for their stack — the model can list or fetch the capture, sanitize it, inspect assets, and call `convertCapture` without the developer pasting HTML by hand.
 
 ---
 
@@ -207,8 +216,6 @@ Available on Free and Paid tiers. Guest users (no account) get local-only storag
 |---|---|---|---|
 | Capture elements | ✓ | ✓ | ✓ |
 | Copy HTML | ✓ | ✓ | ✓ |
-| Copy JSX | ✗ | ✓ | ✓ |
-| Copy Tailwind | ✗ | ✓ | ✓ |
 | Copy AI Prompt (basic) | ✗ | ✓ | ✓ |
 | Copy AI Prompt (advanced) | ✗ | ✗ | ✓ |
 | Copy MCP | ✗ | ✗ | ✓ |

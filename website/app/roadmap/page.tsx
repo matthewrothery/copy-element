@@ -42,7 +42,7 @@ const ROADMAP_ITEMS: { status: "in-progress" | "planned"; title: string; descrip
     status: "planned",
     title: "More export formats",
     description:
-      "Vue, Svelte, and other framework-specific component output alongside the existing HTML and JSX.",
+      "Vue, Svelte, JSX, and other framework-specific component output alongside existing HTML.",
   },
   {
     status: "planned",
