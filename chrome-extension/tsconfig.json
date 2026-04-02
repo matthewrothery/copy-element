@@ -16,5 +16,5 @@
     "types": ["chrome", "vitest/globals"],
     "baseUrl": "."
   },
-  "include": ["extension/src", "extension/manifest.ts", "vitest.config.ts"]
+  "include": ["extension/src", "extension/manifest.ts", "extension/prod.manifest.ts", "vitest.config.ts"]
 }

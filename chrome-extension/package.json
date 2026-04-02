@@ -6,6 +6,8 @@
   "scripts": {
     "dev": "vite",
     "build": "vite build",
+    "build:prod": "vite build --config vite.prod.config.ts",
+    "zip": "bash scripts/build-zip.sh",
     "test": "vitest run",
     "test:watch": "vitest"
   },

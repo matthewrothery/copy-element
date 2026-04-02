@@ -1,7 +1,9 @@
 node_modules/
 
 dist/
+releases/
 *.env
 .env.local
+.env.production
 
 competitors/
