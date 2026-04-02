@@ -122,17 +122,32 @@ const handlers: Record<JobType, JobHandler> = {
 let isProcessing = false;
 let workerInterval: ReturnType<typeof setInterval> | null = null;
 
+/**
+ * On startup, reset any jobs that were left in 'processing' from a previous
+ * crash or unclean shutdown. They will be retried as normal pending jobs.
+ */
+function recoverStuckJobs(): void {
+  const db = getDb();
+  const result = db
+    .prepare(`UPDATE job_queue SET status = 'pending', run_at = ? WHERE status = 'processing'`)
+    .run(Date.now());
+  if (result.changes > 0) {
+    console.log(`[job-queue] Recovered ${result.changes} stuck job(s) from previous run`);
+  }
+}
+
 async function processNextJob(): Promise<void> {
   if (isProcessing) return;
   isProcessing = true;
 
+  let job: JobRow | undefined;
   try {
-    const job = claimNextJob();
+    job = claimNextJob();
     if (!job) return;
 
     const handler = handlers[job.type as JobType];
     if (!handler) {
-      failJob(job.id, `Unknown job type: ${job.type}`, job.attempts, job.max_attempts);
+      failJob(job.id, `Unknown job type: ${job.type}`, job.attempts + 1, job.max_attempts);
       return;
     }
 
@@ -140,7 +155,11 @@ async function processNextJob(): Promise<void> {
     await handler(payload);
     completeJob(job.id);
   } catch (err) {
-    console.warn('[job-queue] processNextJob error:', err);
+    const message = err instanceof Error ? err.message : String(err);
+    if (job) {
+      failJob(job.id, message, job.attempts + 1, job.max_attempts);
+    }
+    console.warn('[job-queue] Job failed:', message);
   } finally {
     isProcessing = false;
   }
@@ -149,6 +168,7 @@ async function processNextJob(): Promise<void> {
 export function startJobWorker(intervalMs = 60_000): void {
   if (workerInterval) return;
 
+  recoverStuckJobs();
   void processNextJob();
 
   workerInterval = setInterval(() => {
