@@ -1,7 +1,7 @@
 import Link from "next/link";
 import { Footer } from "@/components/Footer";
 import { Header } from "@/components/Header";
-import { Section } from "@/components/Section";
+import { PageHero } from "@/components/PageHero";
 import "@/styles/policy.css";
 import "./sitemap-page.css";
 
@@ -70,10 +70,10 @@ export default function SitemapPage(): React.ReactElement {
     <>
       <Header />
       <main>
-        <Section style={{ paddingTop: "var(--space-7)", paddingBottom: 0 }}>
-          <h1 className="page-title">Sitemap</h1>
-          <p className="page-subtitle">All pages on Element Armory.</p>
-        </Section>
+        <PageHero
+          title="Sitemap"
+          subtitle="All pages on Element Armory."
+        />
 
         <div className="policy-content">
           <div className="sitemap-grid">

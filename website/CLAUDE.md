@@ -136,7 +136,7 @@ Content and utility pages (help, terms, privacy, cookies, etc.) must use the `Pa
 // Correct
 <PageHero title="Privacy Policy" subtitle="How we handle your data." />
 
-// Wrong — 256px gap between h1 and p due to --section-gap
+// Wrong - 256px gap between h1 and p due to --section-gap
 <Section style={{ paddingTop: "var(--space-7)" }}>
   <h1 className="page-title">Privacy Policy</h1>
   <p className="page-subtitle">How we handle your data.</p>
@@ -188,6 +188,6 @@ Format each entry as:
 
 ```[code example if applicable]```
 
-Check if an existing rule covers the issue before adding a new one — update instead of duplicating.
+Check if an existing rule covers the issue before adding a new one - update instead of duplicating.
 
 Also record important project knowledge in the `/docs` directory: architecture decisions, naming conventions, folder structure expectations, design system rules, build tool quirks, performance constraints.

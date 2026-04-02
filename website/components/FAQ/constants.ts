@@ -9,7 +9,7 @@ export const DEFAULT_FAQ_ITEMS: FAQItem[] = [
   {
     question: "How does capture work?",
     answer:
-      "Install the extension, then click any element on a page. Element Armory extracts it with minimal, portable styles — only display, layout, typography, and color. No scripts, trackers, or extra markup. Export as clean HTML in one click.",
+      "Install the extension, then click any element on a page. Element Armory extracts it with minimal, portable styles-only display, layout, typography, and color. No scripts, trackers, or extra markup. Export as clean HTML in one click.",
   },
   {
     question: "Which browsers are supported?",
@@ -19,11 +19,11 @@ export const DEFAULT_FAQ_ITEMS: FAQItem[] = [
   {
     question: "Is there a free plan?",
     answer:
-      "Yes. Install the extension and start capturing immediately — no account required. Create a free account for 25 saved snippets, 20 captures per month, and the basic AI prompt. Upgrade to Pro to remove all limits and unlock the advanced prompt and MCP copy.",
+      "Yes. Install the extension and start capturing immediately-no account required. Create a free account for 25 saved snippets, 20 captures per month, and the basic AI prompt. Upgrade to Pro to remove all limits and unlock the advanced prompt and MCP copy.",
   },
   {
     question: "What happens to the pages I capture from?",
     answer:
-      "Capture runs entirely in your browser — page content is not sent to our servers during capture. When you save a snippet to your library, the HTML and CSS are stored to your account for sync across devices. We don’t use your captured content for anything beyond storage and sync. See our Privacy Policy for details.",
+      "Capture runs entirely in your browser-page content is not sent to our servers during capture. When you save a snippet to your library, the HTML and CSS are stored to your account for sync across devices. We don’t use your captured content for anything beyond storage and sync. See our Privacy Policy for details.",
   },
 ];

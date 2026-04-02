@@ -1,4 +1,4 @@
-/* ComparisonTable — feature matrix */
+/* ComparisonTable - Feature Matrix */
 .ct-scroll-wrapper {
   --ct-our-col-bg: color-mix(in srgb, var(--accent) 8%, transparent);
   --ct-our-col-border: color-mix(in srgb, var(--accent) 30%, transparent);

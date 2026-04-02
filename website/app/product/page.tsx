@@ -65,7 +65,7 @@ export default function ProductPage(): React.ReactElement {
               {
                 title: "Copy HTML",
                 description:
-                  "Clean markup with a scoped CSS style block. One click to clipboard — paste directly into any project or framework.",
+                  "Clean markup with a scoped CSS style block. One click to clipboard - paste directly into any project or framework.",
                 image: "/assets/copy-code-snippet.png",
               },
               {
@@ -143,7 +143,7 @@ export default function ProductPage(): React.ReactElement {
               {
                 title: "Framework-neutral output",
                 description:
-                  "HTML works with any framework. Next.js, Remix, SvelteKit, or plain HTML — captured code drops in without modification.",
+                  "HTML works with any framework. Next.js, Remix, SvelteKit, or plain HTML-captured code drops in without modification.",
                 image: "/assets/claude-code.png",
               },
             ]}
@@ -225,7 +225,7 @@ export default function ProductPage(): React.ReactElement {
               {
                 question: "Can I use the output with any framework?",
                 answer:
-                  "Yes. HTML output is clean markup with a scoped CSS style block — it works in any project without modification. Framework-neutral and requires no cleanup.",
+                  "Yes. HTML output is clean markup with a scoped CSS style block-it works in any project without modification. Framework-neutral and requires no cleanup.",
               },
               {
                 question: "Do I need to sign up to start?",

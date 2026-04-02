@@ -12,7 +12,7 @@ coverImage: "https://picsum.photos/seed/stop-rewriting/800/400"
 
 Most UI work is not design. It is reconstruction.
 
-A product page, a sidebar, a pricing card, a settings panel — you open the browser, inspect the markup, measure spacing, copy colors, trace states, and rebuild the same pattern in your own stack. Then you do it again for the next screen.
+A product page, a sidebar, a pricing card, a settings panel - you open the browser, inspect the markup, measure spacing, copy colors, trace states, and rebuild the same pattern in your own stack. Then you do it again for the next screen.
 
 That loop is expensive.
 

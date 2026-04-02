@@ -130,7 +130,7 @@ export function AccountContent(): React.ReactElement | null {
         {entitlement !== null && (
           <span className="account-content-muted">
             {" "}
-            — Plan: {entitlement.plan_code}
+           - Plan: {entitlement.plan_code}
             {entitlement.active ? " (active)" : ""}
           </span>
         )}

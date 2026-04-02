@@ -153,6 +153,7 @@
   line-height: 1.33em;
   opacity: 0.3;
   color: var(--text);
+  margin-top: 10px;
 }
 
 .hero-media {

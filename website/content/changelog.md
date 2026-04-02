@@ -1,4 +1,4 @@
-## v1.1.0 — March 20, 2026
+## v1.1.0 - March 20, 2026
 
 ### Added
 - Multi-element capture: select and export multiple elements at once
@@ -13,7 +13,7 @@
 
 ---
 
-## v1.0.0 — March 1, 2026
+## v1.0.0 - March 1, 2026
 
 ### Added
 - Initial release of Element Armory

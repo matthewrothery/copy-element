@@ -30,7 +30,7 @@ export function parseChangelog(): ChangelogEntry[] {
     const lines = trimmed.split("\n");
     const header = lines[0].replace(/^## /, "").trim();
 
-    // Parse "v1.2.0 — March 15, 2026" or "v1.2.0 - March 15, 2026"
+    // Parse "v1.2.0 - March 15, 2026" or "v1.2.0 - March 15, 2026"
     const dashIndex = header.search(/\s[—–-]\s/);
     const version = dashIndex >= 0 ? header.slice(0, dashIndex).trim() : header;
     const date = dashIndex >= 0 ? header.slice(dashIndex).replace(/^[\s—–-]+/, "").trim() : "";

@@ -1,4 +1,5 @@
 import { Section } from "@/components/Section";
+import "./PageHero.css";
 
 interface PageHeroProps {
   title: string;
@@ -17,7 +18,7 @@ interface PageHeroProps {
  */
 export function PageHero({ title, subtitle }: PageHeroProps): React.ReactElement {
   return (
-    <Section style={{ paddingTop: "var(--space-7)", paddingBottom: 0 }}>
+    <Section className="page-hero" style={{ paddingTop: "var(--space-7)", paddingBottom: 0 }}>
       <Section inner>
         <h1 className="page-title">{title}</h1>
         <p className="page-subtitle">{subtitle}</p>

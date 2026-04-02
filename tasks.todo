@@ -60,22 +60,22 @@
 ---
 
 ## Email Templates — Onboarding Series
-- [ ] 24h reminder — "You signed up yesterday, have you tried capturing your first element?"
-- [ ] Day 3–5 value email — show a compelling use-case; link to docs or example captures
+- [x] 24h reminder — "You signed up yesterday, have you tried capturing your first element?"
+- [x] Day 3–5 value email — show a compelling use-case; link to docs or example captures
 
 ---
 
 ## Email Templates — Event-Based
 - [x] First capture — "You captured your first element. Here's what to do with it."
-- [ ] 3rd–5th capture — soft nudge toward creating an account (anonymous → account conversion)
-- [ ] 10th capture milestone — celebrate; introduce AI rebuild / Pro features
-- [ ] Limit reached — explain quota; offer path to free account or Pro upgrade
-- [ ] Post-limit follow-up (48h) — re-engage users who hit their limit but haven't upgraded
+- [x] 3rd–5th capture — soft nudge toward creating an account (anonymous → account conversion)
+- [x] 10th capture milestone — celebrate; introduce AI rebuild / Pro features
+- [x] Limit reached — explain quota; offer path to free account or Pro upgrade
+- [x] Post-limit follow-up (48h) — re-engage users who hit their limit but haven't upgraded
 
 ---
 
 ## Email Templates — Anonymous → Account Conversion
-- [ ] "Save your work" email — triggered when anonymous install approaches limit; explain account benefits (sync, library, higher quota)
+- [x] "Save your work" email — triggered when anonymous install approaches limit; explain account benefits (sync, library, higher quota)
 
 ---
 
@@ -142,9 +142,9 @@
 ---
 
 ## Background Job Queue
-- [ ] Email scheduling infrastructure — queue and deliver time-based emails (24h reminder, day 3–5)
-- [ ] Job runner options: simple DB-backed queue (SQLite), or BullMQ / pg-boss if moving to Postgres
-- [ ] Dead-letter handling and retry policy
+- [x] Email scheduling infrastructure — queue and deliver time-based emails (24h reminder, day 3–5)
+- [x] Job runner options: simple DB-backed queue (SQLite), or BullMQ / pg-boss if moving to Postgres
+- [x] Dead-letter handling and retry policy
 
 ---
 

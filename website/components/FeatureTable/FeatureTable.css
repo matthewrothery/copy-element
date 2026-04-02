@@ -1,4 +1,4 @@
-/* FeatureTable — single-product feature checklist, styled to match ComparisonTable */
+/* FeatureTable - single-product feature checklist, styled to match ComparisonTable */
 .ft-scroll-wrapper {
   --ft-status-col-bg: color-mix(in srgb, var(--accent) 8%, transparent);
   --ft-status-col-border: color-mix(in srgb, var(--accent) 30%, transparent);

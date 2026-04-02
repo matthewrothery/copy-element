@@ -3,7 +3,7 @@ title: "How Element Armory Captures UI From Any Website"
 slug: "how-element-armory-captures-ui"
 date: "2026-03-01"
 author: "Matt"
-excerpt: "A look at how Element Armory's capture pipeline works under the hood — from DOM selection to clean HTML and CSS output."
+excerpt: "A look at how Element Armory's capture pipeline works under the hood-from DOM selection to clean HTML and CSS output."
 readTime: "5 min read"
 coverImage: "https://picsum.photos/seed/element-armory/800/400"
 ---
@@ -18,7 +18,7 @@ The element is right there. Getting it out cleanly is not.
 
 Element Armory solves this with a three-stage pipeline.
 
-**Stage 1: Selection.** You hover over the page and click the element you want. The extension highlights it with a precise overlay — not a generic box highlight, but one that traces the exact rendered bounds.
+**Stage 1: Selection.** You hover over the page and click the element you want. The extension highlights it with a precise overlay - not a generic box highlight, but one that traces the exact rendered bounds.
 
 **Stage 2: Isolation.** Once selected, the extension walks the element's computed styles and filters them down to only the rules that affect that element. Inherited values that match browser defaults are dropped. The result is a minimal, accurate style set.
 
@@ -26,7 +26,7 @@ Element Armory solves this with a three-stage pipeline.
 
 ## Why `getComputedStyle` Alone Isn't Enough
 
-`getComputedStyle` returns every property for an element — including the hundreds of properties that are just browser defaults. Outputting that directly would produce unreadable noise.
+`getComputedStyle` returns every property for an element - including the hundreds of properties that are just browser defaults. Outputting that directly would produce unreadable noise.
 
 The pipeline filters by comparing the computed value against the initial value for each property. If they match, the property is omitted. This produces output that is small enough to read and work with.
 
@@ -53,7 +53,7 @@ Element Armory uses a depth limit with smart flattening. Child elements that are
 
 ## What You Get
 
-The output is portable. Paste the HTML and CSS into any project — React, Vue, plain HTML — and it works. There are no class name collisions because the extension namespaces all captured class names by default.
+The output is portable. Paste the HTML and CSS into any project - React, Vue, plain HTML-and it works. There are no class name collisions because the extension namespaces all captured class names by default.
 
 ## What's Next
 

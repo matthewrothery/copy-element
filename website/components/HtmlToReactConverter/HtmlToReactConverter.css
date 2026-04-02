@@ -1,5 +1,5 @@
 .html-converter {
-  /* Layer 3 — component tokens mapped from semantic tokens */
+  /* Layer 3 - component tokens mapped from semantic tokens */
   --converter-surface: var(--surface);
   --converter-border: var(--border);
   --converter-editor-bg: #0d0f14;

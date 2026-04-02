@@ -7,7 +7,7 @@ export const snipcssData: ComparisonData = {
     theirs: { name: "SnipCSS" },
   },
   meta: {
-    title: "Element Armory vs SnipCSS – UI Capture Tool Comparison",
+    title: "Element Armory vs SnipCSS - UI Capture Tool Comparison",
     description:
       "Compare Element Armory and SnipCSS side by side. See which tool captures full UI components versus CSS-only extraction, and which integrates better into a modern development workflow.",
     canonicalPath: "/compare/element-armory-vs-snipcss",
@@ -15,13 +15,13 @@ export const snipcssData: ComparisonData = {
   hero: {
     title: "Element Armory vs SnipCSS",
     subtitle:
-      "SnipCSS extracts CSS. Element Armory captures full UI — structure, styles, and a workflow that connects to your AI coding tools.",
+      "SnipCSS extracts CSS. Element Armory captures full UI-structure, styles, and a workflow that connects to your AI coding tools.",
   },
   verdict: {
     ours: {
       tool: "Element Armory",
       reasons: [
-        "You need the full HTML structure alongside styles — not just CSS rules",
+        "You need the full HTML structure alongside styles - not just CSS rules",
         "You want clean HTML you can paste directly into any codebase",
         "You use AI coding tools like Cursor and want MCP server integration",
         "You want to save and reuse captured elements in a persistent snippet library",
@@ -31,7 +31,7 @@ export const snipcssData: ComparisonData = {
     theirs: {
       tool: "SnipCSS",
       reasons: [
-        "You only need the CSS rules from an element — no HTML structure required",
+        "You only need the CSS rules from an element - no HTML structure required",
         "You're inspecting styles for reference or documentation, not rebuilding UI",
         "Your workflow is purely CSS-based and you don't need component output",
       ],
@@ -56,7 +56,7 @@ export const snipcssData: ComparisonData = {
       },
       {
         feature: "Full element structure captured",
-        note: "Element Armory captures the complete DOM subtree with its computed styles. SnipCSS captures CSS rules only — no markup.",
+        note: "Element Armory captures the complete DOM subtree with its computed styles. SnipCSS captures CSS rules only - no markup.",
         ours: "yes",
         theirs: "no",
       },
@@ -91,7 +91,7 @@ export const snipcssData: ComparisonData = {
       },
       {
         feature: "No account required",
-        note: "Use Element Armory as a guest — no sign-in needed for basic capture and export.",
+        note: "Use Element Armory as a guest - no sign-in needed for basic capture and export.",
         ours: "yes",
         theirs: "yes",
       },
@@ -131,7 +131,7 @@ export const snipcssData: ComparisonData = {
         {
           label: "Use via MCP server",
           description:
-            "Access your saved snippets from Cursor or any MCP-compatible AI coding tool — no copy-paste required.",
+            "Access your saved snippets from Cursor or any MCP-compatible AI coding tool - no copy-paste required.",
         },
       ],
     },
@@ -150,7 +150,7 @@ export const snipcssData: ComparisonData = {
         {
           label: "Copy the CSS",
           description:
-            "Copy the CSS rules to clipboard. You get styles only — no HTML markup.",
+            "Copy the CSS rules to clipboard. You get styles only - no HTML markup.",
         },
         {
           label: "Reconstruct manually",
@@ -162,7 +162,7 @@ export const snipcssData: ComparisonData = {
   },
   useCases: {
     title: "Which tool fits your scenario",
-    subtitle: "Common developer tasks — and how each tool handles them.",
+    subtitle: "Common developer tasks - and how each tool handles them.",
     scenarios: [
       {
         scenario: "Rebuilding a button component from a site you admire",
@@ -174,14 +174,14 @@ export const snipcssData: ComparisonData = {
       {
         scenario: "Saving UI references for a design system audit",
         oursApproach:
-          "Save each captured element to your snippet library with a label and source URL. Browse your full library later — no need to revisit the original sites.",
+          "Save each captured element to your snippet library with a label and source URL. Browse your full library later - no need to revisit the original sites.",
         theirsApproach:
-          "SnipCSS has no persistent snippet library. Each inspection session is standalone — nothing is saved between uses.",
+          "SnipCSS has no persistent snippet library. Each inspection session is standalone - nothing is saved between uses.",
       },
       {
         scenario: "Feeding captured UI into an AI coding session",
         oursApproach:
-          "Connect the Element Armory MCP server to Cursor. Your saved snippets are accessible directly inside the AI context — no manual copy-paste.",
+          "Connect the Element Armory MCP server to Cursor. Your saved snippets are accessible directly inside the AI context - no manual copy-paste.",
         theirsApproach:
           "No MCP integration. You copy the CSS and describe the structure to your AI tool manually.",
       },
@@ -190,19 +190,19 @@ export const snipcssData: ComparisonData = {
         oursApproach:
           "Click the element, see all computed styles including font and color values immediately.",
         theirsApproach:
-          "Hover over the element — SnipCSS shows CSS properties directly. A straightforward fit for quick style lookups.",
+          "Hover over the element - SnipCSS shows CSS properties directly. A straightforward fit for quick style lookups.",
       },
     ],
   },
   limitations: {
     title: "What Element Armory doesn't do",
     subtitle:
-      "Honest about the tradeoffs. Element Armory is built for capturing reusable UI — not as a general CSS inspector.",
+      "Honest about the tradeoffs. Element Armory is built for capturing reusable UI - not as a general CSS inspector.",
     items: [
       {
         heading: "Not a CSS debugger",
         description:
-          "Element Armory captures element output for reuse — it's not a replacement for browser DevTools when you need to trace cascaded styles, specificity conflicts, or media query overrides.",
+          "Element Armory captures element output for reuse - it's not a replacement for browser DevTools when you need to trace cascaded styles, specificity conflicts, or media query overrides.",
       },
     ],
   },
@@ -215,12 +215,12 @@ export const snipcssData: ComparisonData = {
     {
       question: "What's the difference between SnipCSS and Element Armory?",
       answer:
-        "SnipCSS extracts CSS rules from an element — useful for inspecting styles. Element Armory captures both the HTML structure and the CSS rules that apply to it, then exports clean HTML you can paste directly into a project. It also adds a snippet library, MCP server integration, and shareable links.",
+        "SnipCSS extracts CSS rules from an element - useful for inspecting styles. Element Armory captures both the HTML structure and the CSS rules that apply to it, then exports clean HTML you can paste directly into a project. It also adds a snippet library, MCP server integration, and shareable links.",
     },
     {
       question: "Can I use Element Armory just to inspect CSS?",
       answer:
-        "Yes. When you click an element, Element Armory extracts the CSS rules that apply to it from the page's actual stylesheets. But it also gives you the full HTML output alongside — so you get more than a CSS-only tool without extra effort.",
+        "Yes. When you click an element, Element Armory extracts the CSS rules that apply to it from the page's actual stylesheets. But it also gives you the full HTML output alongside - so you get more than a CSS-only tool without extra effort.",
     },
     {
       question: "What is the MCP server integration?",
@@ -235,7 +235,7 @@ export const snipcssData: ComparisonData = {
     {
       question: "Can I switch from SnipCSS to Element Armory?",
       answer:
-        "Yes — install the Element Armory Chrome extension and you're ready. No migration needed. Element Armory is a superset of what SnipCSS does, with full HTML export and a persistent snippet library on top.",
+        "Yes - install the Element Armory Chrome extension and you're ready. No migration needed. Element Armory is a superset of what SnipCSS does, with full HTML export and a persistent snippet library on top.",
     },
   ],
 };

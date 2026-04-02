@@ -137,22 +137,22 @@ export default function Home(): React.ReactElement {
           <FeatureSection
             subheading="Built for developers"
             title="Output your tools can actually use."
-            subtitle="Element Armory reads the page's real stylesheets — not getComputedStyle. The result is smaller, readable, class-based CSS that AI tools handle far better than inlined property dumps."
+            subtitle="Element Armory reads the page's real stylesheets-not getComputedStyle. The result is smaller, readable, class-based CSS that AI tools handle far better than inlined property dumps."
             tabs={[
               {
                 title: "Only what applies",
                 description:
-                  "The extension walks the page's actual stylesheets and keeps only the rules that match the captured element and its children. No bloat, no noise — just the styles that are doing work.",
+                  "The extension walks the page's actual stylesheets and keeps only the rules that match the captured element and its children. No bloat, no noise-just the styles that are doing work.",
               },
               {
                 title: "Readable by AI",
                 description:
-                  "Output is class-based CSS in a style block — the same structure AI tools are trained on. Browser defaults, transitions, animations, and pointer events are stripped so there's nothing to work around.",
+                  "Output is class-based CSS in a style block-the same structure AI tools are trained on. Browser defaults, transitions, animations, and pointer events are stripped so there's nothing to work around.",
               },
               {
                 title: "Independent of the source",
                 description:
-                  "Once captured, your snippet has no dependency on the original site. The page can change, go down, or go behind a paywall — your code stays paste-ready.",
+                  "Once captured, your snippet has no dependency on the original site. The page can change, go down, or go behind a paywall-your code stays paste-ready.",
               },
             ]}
           />

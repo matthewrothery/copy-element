@@ -132,9 +132,9 @@ export function BillingContent(): React.ReactElement | null {
         <p className="billing-content-plan">
           Plan: {entitlement.plan_code}
           {entitlement.active ? " (active)" : ""}
-          {entitlement.cancel_at_period_end ? " — cancels at period end" : ""}
+          {entitlement.cancel_at_period_end ? "- cancels at period end" : ""}
           {entitlement.current_period_end && entitlement.active
-            ? ` — renews ${new Date(entitlement.current_period_end).toLocaleDateString()}`
+            ? `- renews ${new Date(entitlement.current_period_end).toLocaleDateString()}`
             : ""}
         </p>
       )}

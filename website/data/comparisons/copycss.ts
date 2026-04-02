@@ -7,15 +7,15 @@ export const copycssData: ComparisonData = {
     theirs: { name: "CopyCSS" },
   },
   meta: {
-    title: "Element Armory vs CopyCSS – UI Capture Tool Comparison",
+    title: "Element Armory vs CopyCSS - UI Capture Tool Comparison",
     description:
-      "Compare Element Armory and CopyCSS side by side. One copies CSS. The other captures full UI — HTML, a snippet library, and MCP server integration for AI coding tools.",
+      "Compare Element Armory and CopyCSS side by side. One copies CSS. The other captures full UI - HTML, a snippet library, and MCP server integration for AI coding tools.",
     canonicalPath: "/compare/element-armory-vs-copycss",
   },
   hero: {
     title: "Element Armory vs CopyCSS",
     subtitle:
-      "CopyCSS copies styles. Element Armory captures full UI components — structure and styles — ready to drop into your codebase.",
+      "CopyCSS copies styles. Element Armory captures full UI components - structure and styles-ready to drop into your codebase.",
   },
   verdict: {
     ours: {
@@ -31,7 +31,7 @@ export const copycssData: ComparisonData = {
     theirs: {
       tool: "CopyCSS",
       reasons: [
-        "You only need to copy CSS from elements — no HTML structure required",
+        "You only need to copy CSS from elements - no HTML structure required",
         "You're doing a quick style lookup and don't need to rebuild the component",
         "Your workflow only ever needs the CSS layer of what you're inspecting",
       ],
@@ -56,7 +56,7 @@ export const copycssData: ComparisonData = {
       },
       {
         feature: "Full element structure captured",
-        note: "Element Armory captures the complete DOM subtree with computed styles. CopyCSS captures CSS only — no markup.",
+        note: "Element Armory captures the complete DOM subtree with computed styles. CopyCSS captures CSS only - no markup.",
         ours: "yes",
         theirs: "no",
       },
@@ -86,7 +86,7 @@ export const copycssData: ComparisonData = {
       },
       {
         feature: "Cross-framework output",
-        note: "Output works in any framework — React, Vue, Svelte, plain HTML — without conversion.",
+        note: "Output works in any framework-React, Vue, Svelte, plain HTML - without conversion.",
         ours: "yes",
         theirs: "no",
       },
@@ -97,7 +97,7 @@ export const copycssData: ComparisonData = {
       },
       {
         feature: "No account required",
-        note: "Use Element Armory as a guest — no sign-in needed for basic capture and export.",
+        note: "Use Element Armory as a guest - no sign-in needed for basic capture and export.",
         ours: "yes",
         theirs: "yes",
       },
@@ -137,7 +137,7 @@ export const copycssData: ComparisonData = {
         {
           label: "Use via MCP server",
           description:
-            "Access your saved snippets from Cursor or any MCP-compatible AI coding tool — no copy-paste required.",
+            "Access your saved snippets from Cursor or any MCP-compatible AI coding tool - no copy-paste required.",
         },
       ],
     },
@@ -156,19 +156,19 @@ export const copycssData: ComparisonData = {
         {
           label: "Copy the CSS",
           description:
-            "Copy the CSS to clipboard. You get styles only — no HTML structure is captured.",
+            "Copy the CSS to clipboard. You get styles only - no HTML structure is captured.",
         },
         {
           label: "Write the markup yourself",
           description:
-            "Build the HTML structure manually and apply the copied CSS. The component shape isn't captured — just the styles.",
+            "Build the HTML structure manually and apply the copied CSS. The component shape isn't captured - just the styles.",
         },
       ],
     },
   },
   useCases: {
     title: "Which tool fits your scenario",
-    subtitle: "Common developer tasks — and how each tool handles them.",
+    subtitle: "Common developer tasks - and how each tool handles them.",
     scenarios: [
       {
         scenario: "Rebuilding a card component from a site you admire",
@@ -180,14 +180,14 @@ export const copycssData: ComparisonData = {
       {
         scenario: "Building a UI reference library for a design sprint",
         oursApproach:
-          "Save each captured element to your snippet library with a label and source URL. Browse everything later from a single place — no browser history archaeology.",
+          "Save each captured element to your snippet library with a label and source URL. Browse everything later from a single place - no browser history archaeology.",
         theirsApproach:
           "CopyCSS has no snippet library. You'd need to paste the CSS somewhere else and manage it yourself.",
       },
       {
         scenario: "Feeding UI into an AI coding session in Cursor",
         oursApproach:
-          "Connect the Element Armory MCP server. Your saved snippets are available directly inside Cursor's AI context — reference them by name without leaving your editor.",
+          "Connect the Element Armory MCP server. Your saved snippets are available directly inside Cursor's AI context - reference them by name without leaving your editor.",
         theirsApproach:
           "No MCP integration. Copy the CSS manually, describe the HTML structure to your AI tool, and work from there.",
       },
@@ -203,12 +203,12 @@ export const copycssData: ComparisonData = {
   limitations: {
     title: "What Element Armory doesn't do",
     subtitle:
-      "Honest about the tradeoffs. Element Armory is built for capturing reusable UI — not as a general CSS inspector.",
+      "Honest about the tradeoffs. Element Armory is built for capturing reusable UI - not as a general CSS inspector.",
     items: [
       {
         heading: "Not a CSS debugger",
         description:
-          "Element Armory captures element output for reuse — it's not a replacement for browser DevTools when you need to trace cascaded styles, specificity, or media query overrides.",
+          "Element Armory captures element output for reuse - it's not a replacement for browser DevTools when you need to trace cascaded styles, specificity, or media query overrides.",
       },
     ],
   },
@@ -221,12 +221,12 @@ export const copycssData: ComparisonData = {
     {
       question: "What's the difference between CopyCSS and Element Armory?",
       answer:
-        "CopyCSS copies CSS rules from elements — useful for quick style inspection. Element Armory captures both the HTML structure and the CSS rules that apply to it, then exports clean HTML you can paste directly into a project. It also includes a snippet library, MCP server integration, and shareable links.",
+        "CopyCSS copies CSS rules from elements - useful for quick style inspection. Element Armory captures both the HTML structure and the CSS rules that apply to it, then exports clean HTML you can paste directly into a project. It also includes a snippet library, MCP server integration, and shareable links.",
     },
     {
       question: "Can I use Element Armory just to copy CSS?",
       answer:
-        "Yes. When you click an element, Element Armory extracts all CSS rules that apply to it from the page's actual stylesheets. But it also captures the full HTML output alongside — so you get more than a CSS-only tool without any extra steps.",
+        "Yes. When you click an element, Element Armory extracts all CSS rules that apply to it from the page's actual stylesheets. But it also captures the full HTML output alongside - so you get more than a CSS-only tool without any extra steps.",
     },
     {
       question: "What is the MCP server integration?",
@@ -241,7 +241,7 @@ export const copycssData: ComparisonData = {
     {
       question: "Can I switch from CopyCSS to Element Armory?",
       answer:
-        "Yes — install the Element Armory Chrome extension and you're ready. No migration needed. Element Armory captures everything CopyCSS does, plus the HTML structure on top.",
+        "Yes - install the Element Armory Chrome extension and you're ready. No migration needed. Element Armory captures everything CopyCSS does, plus the HTML structure on top.",
     },
   ],
 };

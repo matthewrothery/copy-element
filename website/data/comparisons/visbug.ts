@@ -7,9 +7,9 @@ export const visbugData: ComparisonData = {
     theirs: { name: "VisBug" },
   },
   meta: {
-    title: "Element Armory vs VisBug – UI Capture Tool Comparison",
+    title: "Element Armory vs VisBug - UI Capture Tool Comparison",
     description:
-      "Compare Element Armory and VisBug. Element Armory captures HTML from any site for use in code. VisBug is a visual design debugger for moving, styling, and measuring elements live in the browser — no code export.",
+      "Compare Element Armory and VisBug. Element Armory captures HTML from any site for use in code. VisBug is a visual design debugger for moving, styling, and measuring elements live in the browser - no code export.",
     canonicalPath: "/compare/element-armory-vs-visbug",
   },
   hero: {
@@ -138,7 +138,7 @@ export const visbugData: ComparisonData = {
         {
           label: "Save and reuse later",
           description:
-            "Save to your snippet library. Access it any time — or share it with a teammate via link.",
+            "Save to your snippet library. Access it any time - or share it with a teammate via link.",
         },
       ],
     },
@@ -174,7 +174,7 @@ export const visbugData: ComparisonData = {
       {
         scenario: "You want to reuse a pricing card from another site in your React app",
         oursApproach:
-          "Click the card, copy HTML. You get the full markup with scoped CSS — paste it into your component and iterate from there.",
+          "Click the card, copy HTML. You get the full markup with scoped CSS - paste it into your component and iterate from there.",
         theirsApproach:
           "VisBug doesn't extract code. You'd need to inspect manually in DevTools and rebuild the card yourself.",
       },
@@ -183,19 +183,19 @@ export const visbugData: ComparisonData = {
         oursApproach:
           "Element Armory isn't built for this. Use your browser's DevTools or VisBug.",
         theirsApproach:
-          "VisBug's measurement tool shows exact spacing between elements. Select the button, measure the padding visually — no DevTools needed.",
+          "VisBug's measurement tool shows exact spacing between elements. Select the button, measure the padding visually - no DevTools needed.",
       },
       {
         scenario: "You want to prototype a color change on a live page before touching code",
         oursApproach:
-          "Not the right tool. Element Armory captures existing elements — it doesn't let you edit them live.",
+          "Not the right tool. Element Armory captures existing elements - it doesn't let you edit them live.",
         theirsApproach:
-          "VisBug lets you click any element and change its color, font, or size directly on the rendered page — instantly visible.",
+          "VisBug lets you click any element and change its color, font, or size directly on the rendered page - instantly visible.",
       },
       {
         scenario: "You want to save a nav component and share it with your team",
         oursApproach:
-          "Capture the nav, save it to your snippet library with a source URL. Share the link — your teammate gets the HTML without visiting the original site.",
+          "Capture the nav, save it to your snippet library with a source URL. Share the link - your teammate gets the HTML without visiting the original site.",
         theirsApproach:
           "VisBug has no persistent storage or sharing. Changes you make are session-only and lost on page reload.",
       },
@@ -209,7 +209,7 @@ export const visbugData: ComparisonData = {
       {
         heading: "No live visual editing",
         description:
-          "Element Armory captures elements as they are — it doesn't let you move, resize, or restyle them on a live page. For visual QA or layout experimentation, VisBug is the right tool.",
+          "Element Armory captures elements as they are - it doesn't let you move, resize, or restyle them on a live page. For visual QA or layout experimentation, VisBug is the right tool.",
       },
       {
         heading: "No spacing measurement tool",
@@ -232,7 +232,7 @@ export const visbugData: ComparisonData = {
     {
       question: "Can I use VisBug and Element Armory together?",
       answer:
-        "Yes — they're complementary. Use VisBug to prototype visual changes on a live page; use Element Armory to capture, save, and export elements you want to reuse in your codebase.",
+        "Yes - they're complementary. Use VisBug to prototype visual changes on a live page; use Element Armory to capture, save, and export elements you want to reuse in your codebase.",
     },
     {
       question: "Does Element Armory let me edit elements visually like VisBug?",
@@ -242,12 +242,12 @@ export const visbugData: ComparisonData = {
     {
       question: "Can I extract code from VisBug?",
       answer:
-        "No. VisBug is a visual editing tool — it doesn't export the elements you inspect or modify as code. To get the HTML, you'd need to use DevTools manually or switch to Element Armory.",
+        "No. VisBug is a visual editing tool - it doesn't export the elements you inspect or modify as code. To get the HTML, you'd need to use DevTools manually or switch to Element Armory.",
     },
     {
       question: "Does Element Armory have MCP server support?",
       answer:
-        "Yes. Element Armory ships an MCP server that exposes your snippet library to AI coding tools like Cursor. VisBug has no equivalent — it has no persistent storage or AI integration.",
+        "Yes. Element Armory ships an MCP server that exposes your snippet library to AI coding tools like Cursor. VisBug has no equivalent - it has no persistent storage or AI integration.",
     },
     {
       question: "Is VisBug still maintained?",

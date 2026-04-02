@@ -1,0 +1,13 @@
+.page-hero {
+  --typo-hero: var(--typo-headline);
+  --typo-subtitle: var(--typo-headline-subtitle);
+  text-align: center;
+}
+
+.page-hero .section-inner {
+  align-items: center;
+}
+
+.page-hero .page-subtitle {
+  max-width: 750px;
+}

@@ -1,4 +1,4 @@
-/* PipelineDiagram — graph layout, tokens, dot grid */
+/* PipelineDiagram - graph layout, tokens, dot grid */
 
 .pipeline-diagram {
   --pipeline-card-bg: var(--surface);
@@ -256,7 +256,7 @@
   border-color: var(--pipeline-card-border-strong);
 }
 
-/* Last step on active branches — same border trail technique as pricing cards */
+/* Last step on active branches-same border trail technique as pricing cards */
 .pipeline-branch-card--terminal {
   position: relative;
   z-index: 1;

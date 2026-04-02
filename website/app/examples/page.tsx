@@ -1,6 +1,7 @@
 import { FAQ } from "@/components/FAQ";
 import { Footer } from "@/components/Footer";
 import { Header } from "@/components/Header";
+import { PageHero } from "@/components/PageHero";
 import { Section } from "@/components/Section";
 import { ExampleCard } from "@/components/ExampleCard";
 import { EXAMPLES } from "@/data/examples";
@@ -19,26 +20,23 @@ export default function ExamplesPage(): React.ReactElement {
     <>
       <Header />
       <main>
-        <Section style={{ paddingTop: "var(--space-7)" }}>
-          <Section inner>
-            <h1 className="page-title">Examples</h1>
-            <p className="page-subtitle">
-              Browse live HTML and CSS components. Click any example to edit the
-              code and copy it for use with AI.
-            </p>
-            <div
-              style={{
-                display: "grid",
-                gridTemplateColumns: "repeat(auto-fill, minmax(300px, 1fr))",
-                gap: "var(--space-4, 16px)",
-                width: "100%",
-              }}
-            >
-              {EXAMPLES.map((example) => (
-                <ExampleCard key={example.id} example={example} />
-              ))}
-            </div>
-          </Section>
+        <PageHero
+          title="Examples"
+          subtitle="Browse live HTML and CSS components. Click any example to edit the code and copy it for use with AI."
+        />
+        <Section>
+          <div
+            style={{
+              display: "grid",
+              gridTemplateColumns: "repeat(auto-fill, minmax(300px, 1fr))",
+              gap: "var(--space-4, 16px)",
+              width: "100%",
+            }}
+          >
+            {EXAMPLES.map((example) => (
+              <ExampleCard key={example.id} example={example} />
+            ))}
+          </div>
         </Section>
 
         <Section id="faq">

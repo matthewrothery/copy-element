@@ -51,7 +51,7 @@ function transformToJsx(html: string, tailwindAlreadyApplied: boolean): string {
       return `style={${styleStringToJsxObject(styleStr)}}`;
     });
   } else {
-    // Tailwind conversion leaves residual style attr for unmapped props — convert those
+    // Tailwind conversion leaves residual style attr for unmapped props - convert those
     result = result.replace(/\bstyle="([^"]*)"/g, (_, styleStr: string) => {
       return `style={${styleStringToJsxObject(styleStr)}}`;
     });
@@ -205,7 +205,7 @@ function mapCssToTailwind(property: string, value: string): string[] {
       break;
     }
 
-    // Spacing — padding
+    // Spacing-padding
     case "padding": {
       const px = parsePx(val);
       const scale = px !== null ? pxToTailwindScale(px) : null;
@@ -249,7 +249,7 @@ function mapCssToTailwind(property: string, value: string): string[] {
       break;
     }
 
-    // Spacing — margin
+    // Spacing-margin
     case "margin": {
       if (val === "auto") { classes.push("m-auto"); break; }
       const px = parsePx(val);
@@ -435,7 +435,7 @@ function convertInlineStylesToTailwind(html: string): string {
 
     // Build replacement: remove style if fully mapped, keep residual
     const tailwindAttr = tailwindClasses.length > 0
-      ? `data-tw="${tailwindClasses.join(" ")}"` // marker — merged into className later
+      ? `data-tw="${tailwindClasses.join(" ")}"` // marker-merged into className later
       : "";
 
     const residualStyle = unmapped.length > 0
@@ -489,7 +489,7 @@ function applyA11yFixes(html: string): string {
     return `<button${attrs} aria-label="Button">${content}</button>`;
   });
 
-  // Wrap bare <input> elements (not inside a <label>) — simplified: add aria-label if missing
+  // Wrap bare <input> elements (not inside a <label>)-simplified: add aria-label if missing
   result = result.replace(/<input\b([^>]*?)>/gi, (match, attrs: string) => {
     if (/\baria-label\s*=/.test(attrs) || /\bid\s*=/.test(attrs)) return match;
     const typeMatch = /\btype="([^"]+)"/.exec(attrs);

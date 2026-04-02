@@ -17,7 +17,7 @@ const HOW_IT_WORKS = [
   {
     n: "2",
     title: "Click to capture",
-    body: "Click to extract clean HTML and CSS. Visual styles only — no scripts, trackers, or dependencies.",
+    body: "Click to extract clean HTML and CSS. Visual styles only - no scripts, trackers, or dependencies.",
   },
   {
     n: "3",

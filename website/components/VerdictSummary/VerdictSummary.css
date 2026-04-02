@@ -1,4 +1,4 @@
-/* VerdictSummary — 2-col "Choose X if..." cards */
+/* VerdictSummary - 2-col "Choose X if..." cards */
 .vs-root {
   --vs-card-bg: var(--surface);
   --vs-card-border: var(--border);

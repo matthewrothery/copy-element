@@ -21,7 +21,7 @@ export const divmagicData: ComparisonData = {
     ours: {
       tool: "Element Armory",
       reasons: [
-        "You want clean HTML with minimal styles — no framework lock-in",
+        "You want clean HTML with minimal styles - no framework lock-in",
         "You use AI coding tools (Cursor, Copilot) and want MCP server integration",
         "You need a snippet library to save and reuse captured UI",
         "You want a free tier that works without creating an account",
@@ -63,7 +63,7 @@ export const divmagicData: ComparisonData = {
       },
       {
         feature: "Snippet library",
-        note: "Save captured elements for later reuse — with title and source URL.",
+        note: "Save captured elements for later reuse - with title and source URL.",
         ours: "yes",
         theirs: "no",
       },
@@ -80,7 +80,7 @@ export const divmagicData: ComparisonData = {
       },
       {
         feature: "No account required",
-        note: "Use Element Armory as a guest — no sign-in needed for basic capture and export.",
+        note: "Use Element Armory as a guest - no sign-in needed for basic capture and export.",
         ours: "yes",
         theirs: "no",
       },
@@ -91,7 +91,7 @@ export const divmagicData: ComparisonData = {
       },
       {
         feature: "Cross-framework output",
-        note: "Output works in any framework — React, Vue, Svelte, plain HTML.",
+        note: "Output works in any framework - React, Vue, Svelte, plain HTML.",
         ours: "yes",
         theirs: "partial",
       },
@@ -132,7 +132,7 @@ export const divmagicData: ComparisonData = {
         {
           label: "Use via MCP server",
           description:
-            "Access your saved snippets from Cursor or any MCP-compatible AI coding tool — no copy-paste required.",
+            "Access your saved snippets from Cursor or any MCP-compatible AI coding tool - no copy-paste required.",
         },
       ],
     },
@@ -163,26 +163,26 @@ export const divmagicData: ComparisonData = {
   useCases: {
     title: "Which tool fits your scenario",
     subtitle:
-      "Common developer tasks — and how each tool handles them.",
+      "Common developer tasks - and how each tool handles them.",
     scenarios: [
       {
         scenario: "Extracting a pricing card from a competitor's site",
         oursApproach:
-          "Click the card, copy clean HTML with only the visual styles that matter. Paste into your project as-is — no cleanup needed.",
+          "Click the card, copy clean HTML with only the visual styles that matter. Paste into your project as-is - no cleanup needed.",
         theirsApproach:
           "Click the card, get a Tailwind component. Requires Tailwind in your project or manual conversion.",
       },
       {
         scenario: "Saving UI references for a design system audit",
         oursApproach:
-          "Save each captured element to your snippet library with a label and source URL. Browse your full library later — no need to revisit the original sites.",
+          "Save each captured element to your snippet library with a label and source URL. Browse your full library later - no need to revisit the original sites.",
         theirsApproach:
           "DivMagic doesn't have a persistent snippet library. Each session starts fresh.",
       },
       {
         scenario: "Feeding captured UI into an AI coding session",
         oursApproach:
-          "Connect the Element Armory MCP server to Cursor. Your saved snippets are accessible directly inside the AI context — no manual copy-paste.",
+          "Connect the Element Armory MCP server to Cursor. Your saved snippets are accessible directly inside the AI context - no manual copy-paste.",
         theirsApproach:
           "No MCP integration. You copy the generated code and paste it into your AI tool manually.",
       },
@@ -198,7 +198,7 @@ export const divmagicData: ComparisonData = {
   limitations: {
     title: "What Element Armory doesn't do",
     subtitle:
-      "Honest about the tradeoffs. Element Armory optimizes for clean, portable output — not AI component generation.",
+      "Honest about the tradeoffs. Element Armory optimizes for clean, portable output - not AI component generation.",
     items: [
       {
         heading: "No AI chat interface",
@@ -208,7 +208,7 @@ export const divmagicData: ComparisonData = {
       {
         heading: "No framework-specific scaffolding",
         description:
-          "The output is portable HTML — not a pre-wrapped React component, Vue SFC, or Svelte file. You control the scaffolding.",
+          "The output is portable HTML - not a pre-wrapped React component, Vue SFC, or Svelte file. You control the scaffolding.",
       },
     ],
   },
@@ -221,7 +221,7 @@ export const divmagicData: ComparisonData = {
     {
       question: "How does Element Armory compare to DivMagic for React projects?",
       answer:
-        "Element Armory exports clean HTML that works in any project. DivMagic also exports React components but leans toward Tailwind class generation. Element Armory outputs class-based CSS in a style block — it pairs naturally with CSS modules, scoped styles, or any styling approach in your project.",
+        "Element Armory exports clean HTML that works in any project. DivMagic also exports React components but leans toward Tailwind class generation. Element Armory outputs class-based CSS in a style block - it pairs naturally with CSS modules, scoped styles, or any styling approach in your project.",
     },
     {
       question: "Does Element Armory support Tailwind?",
@@ -241,7 +241,7 @@ export const divmagicData: ComparisonData = {
     {
       question: "Can I switch from DivMagic to Element Armory?",
       answer:
-        "Yes — install the Element Armory Chrome extension and you're ready to start. There's no migration required since Element Armory outputs standard HTML.",
+        "Yes - install the Element Armory Chrome extension and you're ready to start. There's no migration required since Element Armory outputs standard HTML.",
     },
   ],
 };

@@ -1,5 +1,6 @@
 import { Footer } from "@/components/Footer";
 import { Header } from "@/components/Header";
+import { PageHero } from "@/components/PageHero";
 import { Section } from "@/components/Section";
 import { Changelog } from "@/components/Changelog";
 import { parseChangelog } from "@/lib/parseChangelog";
@@ -19,14 +20,12 @@ export default function ChangelogPage(): React.ReactElement {
     <>
       <Header />
       <main>
-        <Section style={{ paddingTop: "var(--space-7)" }}>
-          <Section inner>
-            <h1 className="page-title">Changelog</h1>
-            <p className="page-subtitle">
-              Release notes and updates for Element Armory.
-            </p>
-            <Changelog entries={entries} />
-          </Section>
+        <PageHero
+          title="Changelog"
+          subtitle="Release notes and updates for Element Armory."
+        />
+        <Section>
+          <Changelog entries={entries} />
         </Section>
 
         <Footer />

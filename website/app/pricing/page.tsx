@@ -2,6 +2,7 @@ import { FAQ } from "@/components/FAQ";
 import type { FAQItem } from "@/components/FAQ";
 import { Footer } from "@/components/Footer";
 import { Header } from "@/components/Header";
+import { PageHero } from "@/components/PageHero";
 import { Section } from "@/components/Section";
 import { PricingCards } from "@/components/PricingCards";
 
@@ -51,14 +52,12 @@ export default function PricingPage(): React.ReactElement {
     <>
       <Header />
       <main>
-        <Section className="pricing-page" style={{ paddingTop: "var(--space-7)" }}>
-          <Section inner>
-            <h1 className="page-title">Pricing</h1>
-            <p className="page-subtitle">
-              Free to start. Upgrade when you need unlimited captures and advanced AI features.
-            </p>
-            <PricingCards />
-          </Section>
+        <PageHero
+          title="Pricing"
+          subtitle="Free to start. Upgrade when you need unlimited captures and advanced AI features."
+        />
+        <Section>
+          <PricingCards />
         </Section>
 
         <Section id="faq">
