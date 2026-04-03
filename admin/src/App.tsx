@@ -1,4 +1,4 @@
-import { BrowserRouter, Routes, Route, Navigate, Outlet } from 'react-router-dom';
+import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 import { AuthProvider, useAuth } from '@/contexts/AuthContext';
 import { Layout } from '@/components/Layout/Layout';
 import { Spinner } from '@/components/Spinner/Spinner';
@@ -43,7 +43,7 @@ function RequireAdmin(): React.ReactElement {
     );
   }
 
-  return <Layout><Outlet /></Layout>;
+  return <Layout />;
 }
 
 export function App(): React.ReactElement {
