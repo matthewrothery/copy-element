@@ -38,6 +38,11 @@ s3_website_bucket = "elementarmory.com"
 session_secret = "your-session-secret-here"
 cookie_secret  = "your-cookie-secret-here"
 
+# Google OAuth (Better Auth). Authorized redirect URI in Google Cloud Console:
+# https://<website_domain>/api/auth/callback/google
+google_client_id     = ""
+google_client_secret = ""
+
 # Optional: Your local IP for database access (if needed)
 local_ip = ""
 

@@ -28,10 +28,14 @@ locals {
 
     # App URL (for Better Auth, callbacks, etc.)
     APP_URL="https://${var.website_domain}"
+    FRONTEND_URL="https://${var.website_domain}"
+    ADMIN_ORIGIN="https://${var.admin_subdomain}.${var.hosted_zone}"
 
     # Application Secrets
     SESSION_SECRET="${var.session_secret}"
     COOKIE_SECRET="${var.cookie_secret}"
+    GOOGLE_CLIENT_ID="${var.google_client_id}"
+    GOOGLE_CLIENT_SECRET="${var.google_client_secret}"
 
     # S3 Configuration (capture assets / screenshots)
     S3_ASSETS_BUCKET="${local.s3_assets_bucket_name}"

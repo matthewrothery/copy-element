@@ -109,6 +109,20 @@ variable "cookie_secret" {
   sensitive   = true
 }
 
+variable "google_client_id" {
+  description = "Google OAuth 2.0 client ID (Better Auth / sign-in with Google)"
+  type        = string
+  sensitive   = true
+  default     = ""
+}
+variable "google_client_secret" {
+  description = "Google OAuth 2.0 client secret"
+  type        = string
+  sensitive   = true
+  default     = ""
+}
+
+
 # ECR repository name
 variable "ecr_server_repo" {
   description = "ECR repository name for the API/server"
