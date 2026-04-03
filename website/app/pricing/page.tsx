@@ -1,10 +1,12 @@
+import Image from "next/image";
 import { FAQ } from "@/components/FAQ";
 import type { FAQItem } from "@/components/FAQ";
 import { Footer } from "@/components/Footer";
 import { Header } from "@/components/Header";
-import { PageHero } from "@/components/PageHero";
+import { Hero } from "@/components/Hero";
 import { Section } from "@/components/Section";
 import { PricingCards } from "@/components/PricingCards";
+import { GoalTrack } from "@/components/GoalTrack/GoalTrack";
 
 export const dynamic = "force-static";
 
@@ -52,10 +54,16 @@ export default function PricingPage(): React.ReactElement {
     <>
       <Header />
       <main>
-        <PageHero
-          title="Pricing"
-          subtitle="Free to start. Upgrade when you need unlimited captures and advanced AI features."
-        />
+        <Section center>
+          <Hero
+            title={<>Free to start.<br />Upgrade when you&apos;re ready.</>}
+            subtitle="Start capturing in under 60 seconds."
+            ctaSubtext="No credit card required."
+            media={null}
+            // media={<Image src="/assets/elementarmory.gif" alt="Element Armory" width={940} height={557} />}
+          />
+        </Section>
+        <GoalTrack goal="pricing_viewed" />
         <Section>
           <PricingCards />
         </Section>

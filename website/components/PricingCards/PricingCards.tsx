@@ -178,7 +178,7 @@ function PricingCard({ plan }: { plan: Plan }): React.ReactElement {
 }
 
 export function PricingCards(): React.ReactElement {
-  const [billing, setBilling] = useState<Billing>("monthly");
+  const [billing, setBilling] = useState<Billing>("yearly");
   const proPlan = billing === "yearly" ? PRO_YEARLY : PRO_MONTHLY;
 
   return (

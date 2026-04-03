@@ -1,0 +1,41 @@
+:root {
+  --line-chart-bg: transparent;
+  --line-chart-axis-color: var(--text-subtle);
+  --line-chart-axis-font: var(--typo-label);
+  --line-chart-empty-color: var(--text-subtle);
+}
+
+.line-chart {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+}
+
+.line-chart__label {
+  font-size: var(--typo-caption);
+  font-weight: var(--font-weight-medium);
+  color: var(--text-muted);
+  margin-bottom: var(--space-1);
+}
+
+.line-chart__svg {
+  width: 100%;
+  display: block;
+}
+
+.line-chart__axis {
+  display: flex;
+  justify-content: space-between;
+  font-size: var(--line-chart-axis-font);
+  color: var(--line-chart-axis-color);
+}
+
+.line-chart--empty {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--line-chart-empty-color);
+  font-size: var(--typo-copy);
+  border: 1px dashed var(--border);
+  border-radius: var(--radius);
+}

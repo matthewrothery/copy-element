@@ -5,8 +5,9 @@ import type { AppConfig } from '../types/index.js';
 function getConfig(): AppConfig {
   const portRaw = process.env[ENV_KEYS.PORT];
   const port = portRaw ? parseInt(portRaw, 10) : DEFAULTS.PORT;
+  const nodeEnv = process.env[ENV_KEYS.NODE_ENV] ?? 'development';
   return {
-    NODE_ENV: process.env[ENV_KEYS.NODE_ENV] ?? 'development',
+    NODE_ENV: nodeEnv,
     PORT: Number.isNaN(port) ? DEFAULTS.PORT : port,
     DATABASE_PATH: process.env[ENV_KEYS.DATABASE_PATH] ?? DEFAULTS.DATABASE_PATH,
     BETTER_AUTH_SECRET: process.env[ENV_KEYS.BETTER_AUTH_SECRET] ?? '',
@@ -30,6 +31,11 @@ function getConfig(): AppConfig {
     S3_FORCE_PATH_STYLE: process.env[ENV_KEYS.S3_FORCE_PATH_STYLE] === 'true' || process.env[ENV_KEYS.S3_FORCE_PATH_STYLE] === '1',
     INTERNAL_API_KEY: process.env[ENV_KEYS.INTERNAL_API_KEY] ?? '',
     ANTHROPIC_API_KEY: process.env[ENV_KEYS.ANTHROPIC_API_KEY] ?? '',
+    SUPPORT_EMAIL: process.env[ENV_KEYS.SUPPORT_EMAIL] ?? 'support@elementarmory.com',
+    ADMIN_ORIGIN:
+      process.env[ENV_KEYS.ADMIN_ORIGIN] ??
+      (nodeEnv === 'development' ? DEFAULTS.ADMIN_ORIGIN_LOCAL : 'https://admin.elementarmory.com'),
+    INTERNAL_TOOLS_PATH: process.env[ENV_KEYS.INTERNAL_TOOLS_PATH] ?? '',
   };
 }
 

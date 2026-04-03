@@ -75,6 +75,23 @@ services:
       - element-armory-env
     restart: "no"
 
+  admin:
+    image: node:24-alpine3.23
+    container_name: element-armory-admin
+    hostname: admin
+    working_dir: /app
+    environment:
+      NODE_ENV: development
+      API_PROXY_TARGET: http://server
+    ports:
+      - "${ADMIN_PORT:-9920}:5174"
+    volumes:
+      - ./admin:/app
+    command: /bin/sh -c "npm install && npm run dev"
+    networks:
+      - element-armory-env
+    restart: "no"
+
   mcp-server:
     image: node:24-alpine3.23
     container_name: element-armory-mcp-server

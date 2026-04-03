@@ -31,6 +31,16 @@ function getTrustedOrigins(): string[] {
       // ignore invalid FRONTEND_URL
     }
   }
+  if (config.ADMIN_ORIGIN) {
+    try {
+      const adminOrigin = new URL(config.ADMIN_ORIGIN).origin;
+      if (!origins.includes(adminOrigin)) {
+        origins.push(adminOrigin);
+      }
+    } catch {
+      // ignore invalid ADMIN_ORIGIN
+    }
+  }
   return origins;
 }
 
@@ -39,6 +49,12 @@ export const auth = betterAuth({
   baseURL: config.BETTER_AUTH_URL,
   secret: config.BETTER_AUTH_SECRET,
   trustedOrigins: getTrustedOrigins(),
+  advanced: {
+    crossSubdomainCookies: {
+      enabled: config.NODE_ENV === 'production',
+      domain: '.elementarmory.com',
+    },
+  },
   socialProviders: {
     google: {
       clientId: config.GOOGLE_CLIENT_ID,

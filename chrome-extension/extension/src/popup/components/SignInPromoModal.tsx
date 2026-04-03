@@ -1,11 +1,17 @@
+import { useEffect } from "react";
 import { createPortal } from "react-dom";
 
 interface SignInPromoModalProps {
   onSignIn: () => void;
   onClose: () => void;
+  onShown?: () => void;
 }
 
-export function SignInPromoModal({ onSignIn, onClose }: SignInPromoModalProps): React.JSX.Element {
+export function SignInPromoModal({ onSignIn, onClose, onShown }: SignInPromoModalProps): React.JSX.Element {
+  useEffect(() => {
+    onShown?.();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
   const content = (
     <div
       className="modal-backdrop"

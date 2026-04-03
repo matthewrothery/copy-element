@@ -27,9 +27,14 @@ export const ENV_KEYS = {
   S3_FORCE_PATH_STYLE: 'S3_FORCE_PATH_STYLE',
   INTERNAL_API_KEY: 'INTERNAL_API_KEY',
   ANTHROPIC_API_KEY: 'ANTHROPIC_API_KEY',
+  SUPPORT_EMAIL: 'SUPPORT_EMAIL',
+  ADMIN_ORIGIN: 'ADMIN_ORIGIN',
+  INTERNAL_TOOLS_PATH: 'INTERNAL_TOOLS_PATH',
 } as const;
 
 export const DEFAULTS = {
   PORT: 3000,
   DATABASE_PATH: './data/element-armory.db',
+  /** Host port for local admin SPA (see root start.sh / docker-compose ADMIN_PORT). */
+  ADMIN_ORIGIN_LOCAL: 'http://localhost:9920',
 } as const;

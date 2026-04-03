@@ -1,0 +1,107 @@
+:root {
+  /* Primary */
+  --btn-primary-bg: var(--accent);
+  --btn-primary-bg-hover: var(--accent-hover);
+  --btn-primary-text: var(--text-on-accent);
+
+  /* Secondary */
+  --btn-secondary-bg: var(--surface-raised);
+  --btn-secondary-bg-hover: var(--surface-overlay);
+  --btn-secondary-text: var(--text);
+  --btn-secondary-border: var(--border-strong);
+
+  /* Danger */
+  --btn-danger-bg: var(--danger-surface);
+  --btn-danger-bg-hover: var(--danger);
+  --btn-danger-text: var(--danger-text);
+
+  /* Ghost */
+  --btn-ghost-bg: transparent;
+  --btn-ghost-bg-hover: var(--surface-raised);
+  --btn-ghost-text: var(--text-muted);
+
+  /* Sizing */
+  --btn-padding-sm: var(--space-1) var(--space-3);
+  --btn-padding-md: var(--space-2) var(--space-4);
+  --btn-font-sm: var(--typo-caption);
+  --btn-font-md: var(--typo-copy);
+  --btn-radius: var(--radius);
+}
+
+.btn {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+  border: 1px solid transparent;
+  border-radius: var(--btn-radius);
+  font-weight: var(--font-weight-medium);
+  white-space: nowrap;
+  transition: background-color var(--transition-fast), border-color var(--transition-fast), opacity var(--transition-fast);
+  cursor: pointer;
+  outline: none;
+  min-height: 32px;
+}
+
+.btn:focus-visible {
+  outline: 2px solid var(--border-focus);
+  outline-offset: 2px;
+}
+
+.btn:disabled,
+.btn--loading {
+  opacity: 0.5;
+  cursor: not-allowed;
+  pointer-events: none;
+}
+
+/* Sizes */
+.btn--sm {
+  padding: var(--btn-padding-sm);
+  font-size: var(--btn-font-sm);
+}
+
+.btn--md {
+  padding: var(--btn-padding-md);
+  font-size: var(--btn-font-md);
+}
+
+/* Variants */
+.btn--primary {
+  background-color: var(--btn-primary-bg);
+  color: var(--btn-primary-text);
+}
+
+.btn--primary:hover:not(:disabled) {
+  background-color: var(--btn-primary-bg-hover);
+}
+
+.btn--secondary {
+  background-color: var(--btn-secondary-bg);
+  color: var(--btn-secondary-text);
+  border-color: var(--btn-secondary-border);
+}
+
+.btn--secondary:hover:not(:disabled) {
+  background-color: var(--btn-secondary-bg-hover);
+}
+
+.btn--danger {
+  background-color: var(--btn-danger-bg);
+  color: var(--btn-danger-text);
+  border-color: var(--danger);
+}
+
+.btn--danger:hover:not(:disabled) {
+  background-color: var(--btn-danger-bg-hover);
+  color: var(--primitive-white);
+}
+
+.btn--ghost {
+  background-color: var(--btn-ghost-bg);
+  color: var(--btn-ghost-text);
+}
+
+.btn--ghost:hover:not(:disabled) {
+  background-color: var(--btn-ghost-bg-hover);
+  color: var(--text);
+}

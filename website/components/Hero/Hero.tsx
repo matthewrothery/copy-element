@@ -50,14 +50,16 @@ export function Hero({
           <span className="hero-cta-label">{ctaSubtext}</span>
         </div>
       </div>
-      <div className="hero-media">
-        {media ?? (
-          <MediaPlaceholder
-            aspectRatio="video"
-            label="Product screenshot"
-          />
-        )}
-      </div>
+      {media != null && (
+        <div className="hero-media">
+          {media ?? (
+            <MediaPlaceholder
+              aspectRatio="video"
+              label="Product screenshot"
+            />
+          )}
+        </div>
+      )}
     </section>
   );
 }

@@ -8,6 +8,7 @@ import {
   openSignInPage,
   startCapture
 } from "./api";
+import { trackPopupEvent } from "../shared/analytics";
 import type { CaptureMode } from "../shared/types/messages";
 import { Settings, User } from "lucide-react";
 import { Header } from "./components/Header";
@@ -94,6 +95,11 @@ export function App(): JSX.Element {
     [isSignedIn, snippetCount, storedUsage]
   );
   const isAtLimit = usage !== null && usage.used >= usage.limit;
+
+  // Fire extension_opened once per popup open
+  useEffect(() => {
+    void trackPopupEvent('extension_opened');
+  }, []);
 
   // One-time nudge: prompt guest users to create an account after N captures
   useEffect(() => {
@@ -211,6 +217,8 @@ export function App(): JSX.Element {
 
   async function handleCapture(mode: CaptureMode): Promise<void> {
     if (isAtLimit) {
+      const limitType = !isSignedIn ? 'guest_library' : 'free_monthly';
+      void trackPopupEvent('limit_reached', { limit_type: limitType });
       setPaywallView(!isSignedIn ? "signin-gate" : "upgrade-gate");
       return;
     }
@@ -237,6 +245,7 @@ export function App(): JSX.Element {
     try {
       await copyToClipboard(buildSnippetPrompt(snippet));
       setToastMessage("Ready paste into your AI tool of choice!");
+      void trackPopupEvent('element_exported', { format: 'prompt_basic' });
     } catch {
       setToastMessage("Failed to copy prompt");
     }
@@ -246,6 +255,7 @@ export function App(): JSX.Element {
     try {
       await copyToClipboard(buildCopyHtml(snippet));
       setToastMessage("Code copied to clipboard");
+      void trackPopupEvent('element_exported', { format: 'html' });
     } catch {
       setToastMessage("Failed to copy code");
     }
@@ -335,12 +345,14 @@ export function App(): JSX.Element {
             dismissPaywall();
           }}
           onClose={dismissPaywall}
+          onShown={() => void trackPopupEvent('signin_modal_shown', { source: paywallView })}
         />
       )}
       {paywallView === "upgrade-gate" && (
         <UpgradePromoModal
           onUpgrade={() => { openUpgradePage(); dismissPaywall(); }}
           onClose={dismissPaywall}
+          onShown={() => void trackPopupEvent('upgrade_modal_shown', { source: 'popup_limit' })}
         />
       )}
     </div>

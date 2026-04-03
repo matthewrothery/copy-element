@@ -1,9 +1,10 @@
 import { Section } from "@/components/Section";
+import type { ReactNode } from "react";
 import "./PageHero.css";
 
 interface PageHeroProps {
   title: string;
-  subtitle: string;
+  subtitle: ReactNode;
 }
 
 /**

@@ -27,6 +27,9 @@ export interface AppConfig {
   S3_FORCE_PATH_STYLE: boolean;
   INTERNAL_API_KEY: string;
   ANTHROPIC_API_KEY: string;
+  SUPPORT_EMAIL: string;
+  ADMIN_ORIGIN: string;
+  INTERNAL_TOOLS_PATH: string;
 }
 
 export interface HealthResponse {

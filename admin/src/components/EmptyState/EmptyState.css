@@ -1,0 +1,30 @@
+:root {
+  --empty-state-padding: var(--space-8);
+  --empty-state-title-color: var(--text-muted);
+  --empty-state-description-color: var(--text-subtle);
+}
+
+.empty-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-3);
+  padding: var(--empty-state-padding);
+  text-align: center;
+}
+
+.empty-state__title {
+  font-size: var(--typo-body);
+  font-weight: var(--font-weight-medium);
+  color: var(--empty-state-title-color);
+}
+
+.empty-state__description {
+  font-size: var(--typo-copy);
+  color: var(--empty-state-description-color);
+  max-width: 320px;
+}
+
+.empty-state__action {
+  margin-top: var(--space-2);
+}

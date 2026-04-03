@@ -1,7 +1,7 @@
 import type { ReactNode } from "react";
 
 export type HeroProps = {
-  title?: string;
+  title?: ReactNode;
   subtitle?: ReactNode;
   ctaHref?: string;
   ctaLabel?: ReactNode;

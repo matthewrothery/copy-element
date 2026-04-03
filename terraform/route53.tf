@@ -56,6 +56,19 @@ resource "aws_route53_record" "mcp_a" {
   }
 }
 
+# Admin SPA A record
+resource "aws_route53_record" "admin_a" {
+  zone_id = data.aws_route53_zone.main.zone_id
+  name    = "${var.admin_subdomain}.${var.hosted_zone}"
+  type    = "A"
+
+  alias {
+    name                   = aws_cloudfront_distribution.admin.domain_name
+    zone_id                = aws_cloudfront_distribution.admin.hosted_zone_id
+    evaluate_target_health = false
+  }
+}
+
 # Gmail / Google Workspace MX record (apex)
 resource "aws_route53_record" "gmail_mx" {
   count   = length(var.gmail_mx) > 0 ? 1 : 0

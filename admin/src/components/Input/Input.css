@@ -1,0 +1,48 @@
+:root {
+  --input-bg: var(--surface-raised);
+  --input-bg-focus: var(--surface-overlay);
+  --input-border: var(--border);
+  --input-border-focus: var(--border-focus);
+  --input-text: var(--text);
+  --input-placeholder: var(--text-subtle);
+  --input-radius: var(--radius);
+  --input-padding: var(--space-2) var(--space-3);
+  --input-font: var(--typo-body);
+  --input-label-font: var(--typo-caption);
+  --input-label-color: var(--text-muted);
+  --input-label-gap: var(--space-1);
+}
+
+.input-wrapper {
+  display: flex;
+  flex-direction: column;
+  gap: var(--input-label-gap);
+}
+
+.input-label {
+  font-size: var(--input-label-font);
+  font-weight: var(--font-weight-medium);
+  color: var(--input-label-color);
+}
+
+.input {
+  background-color: var(--input-bg);
+  border: 1px solid var(--input-border);
+  border-radius: var(--input-radius);
+  color: var(--input-text);
+  font-size: var(--input-font);
+  padding: var(--input-padding);
+  width: 100%;
+  transition: border-color var(--transition-fast), background-color var(--transition-fast);
+  min-height: 36px;
+}
+
+.input::placeholder {
+  color: var(--input-placeholder);
+}
+
+.input:focus {
+  outline: none;
+  border-color: var(--input-border-focus);
+  background-color: var(--input-bg-focus);
+}

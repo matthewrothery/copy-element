@@ -184,3 +184,14 @@ variable "anthropic_api_key" {
   type        = string
   sensitive   = true
 }
+
+variable "admin_subdomain" {
+  description = "Subdomain for the admin SPA (e.g. admin → admin.elementarmory.com)"
+  type        = string
+  default     = "admin"
+}
+
+variable "s3_admin_bucket" {
+  description = "S3 bucket name for admin SPA"
+  type        = string
+}

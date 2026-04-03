@@ -1,0 +1,70 @@
+:root {
+  --table-bg: var(--surface);
+  --table-header-bg: var(--surface-raised);
+  --table-border: var(--border);
+  --table-row-hover: var(--surface-raised);
+  --table-radius: var(--radius-md);
+  --table-header-font: var(--typo-caption);
+  --table-header-weight: var(--font-weight-semibold);
+  --table-header-color: var(--text-muted);
+  --table-cell-font: var(--typo-body);
+  --table-cell-padding: var(--space-3) var(--space-4);
+}
+
+.table-wrapper {
+  width: 100%;
+  overflow-x: auto;
+  border: 1px solid var(--table-border);
+  border-radius: var(--table-radius);
+}
+
+.table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: var(--table-cell-font);
+}
+
+.table thead {
+  background-color: var(--table-header-bg);
+}
+
+.table th {
+  padding: var(--table-cell-padding);
+  text-align: left;
+  font-size: var(--table-header-font);
+  font-weight: var(--table-header-weight);
+  color: var(--table-header-color);
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
+  white-space: nowrap;
+  border-bottom: 1px solid var(--table-border);
+}
+
+.table td {
+  padding: var(--table-cell-padding);
+  border-bottom: 1px solid var(--table-border);
+  vertical-align: middle;
+}
+
+.table tbody tr:last-child td {
+  border-bottom: none;
+}
+
+.table tbody tr:hover {
+  background-color: var(--table-row-hover);
+}
+
+.table__loading,
+.table__empty {
+  text-align: center;
+  color: var(--text-subtle);
+  padding: var(--space-8) !important;
+}
+
+/* Mobile: hide lower-priority columns */
+@media (max-width: 640px) {
+  .table th.hide-mobile,
+  .table td.hide-mobile {
+    display: none;
+  }
+}

@@ -1,0 +1,34 @@
+:root {
+  --auth-callback-card-bg: var(--surface);
+  --auth-callback-card-border: var(--border);
+}
+
+.auth-callback {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: var(--bg);
+}
+
+.auth-callback__card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-4);
+  background-color: var(--auth-callback-card-bg);
+  border: 1px solid var(--auth-callback-card-border);
+  border-radius: var(--radius-lg);
+  padding: var(--space-8);
+}
+
+.auth-callback__message {
+  font-size: var(--typo-body);
+  color: var(--text-muted);
+}
+
+.auth-callback__error {
+  font-size: var(--typo-body);
+  color: var(--danger-text);
+  text-align: center;
+}

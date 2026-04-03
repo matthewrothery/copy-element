@@ -12,6 +12,7 @@ import {
   saveUserProfile,
 } from "../shared/storage/auth-storage";
 import { SERVER_URL } from "../shared/server-url";
+import { trackExtensionEvent } from "../shared/analytics";
 import type {
   AuthStatePayload,
   ExtractCssViaCdpPayload,
@@ -41,10 +42,15 @@ async function scheduleRefreshAlarm(): Promise<void> {
 
 const UNINSTALL_URL = `${SERVER_URL}/uninstall`;
 
-chrome.runtime.onInstalled.addListener(() => {
+chrome.runtime.onInstalled.addListener((details) => {
   void chrome.runtime.setUninstallURL(UNINSTALL_URL);
   void registerInstall();
   void scheduleRefreshAlarm();
+  if (details.reason === "install") {
+    void getOrCreateInstallCredentials().then((creds) => {
+      void trackExtensionEvent("extension_installed", creds.install_id);
+    });
+  }
 });
 
 async function registerInstall(): Promise<void> {
@@ -367,14 +373,21 @@ chrome.runtime.onMessage.addListener((message: RuntimeMessage, sender, sendRespo
     void (async () => {
       try {
         const authState = await getAuthState();
+        const creds = await getOrCreateInstallCredentials();
         if (!authState.signed_in) {
           const snippets = await getSnippets();
+          if (snippets.length >= GUEST_LIBRARY_LIMIT) {
+            void trackExtensionEvent("limit_reached", creds.install_id, { limit_type: "guest_library" });
+          }
           while (snippets.length >= GUEST_LIBRARY_LIMIT) {
             await deleteSnippet(snippets[snippets.length - 1].id);
             snippets.pop();
           }
         } else if (!PAID_PLANS.includes(authState.user_plan as never)) {
           const snippets = await getSnippets();
+          if (snippets.length >= FREE_LIBRARY_LIMIT) {
+            void trackExtensionEvent("limit_reached", creds.install_id, { limit_type: "free_library" });
+          }
           while (snippets.length >= FREE_LIBRARY_LIMIT) {
             await deleteSnippet(snippets[snippets.length - 1].id);
             snippets.pop();
@@ -382,8 +395,14 @@ chrome.runtime.onMessage.addListener((message: RuntimeMessage, sender, sendRespo
         }
         await saveSnippet(message.payload);
         void syncCaptureToServer(message.payload); // fire-and-forget, never throws
+        void trackExtensionEvent("element_captured", creds.install_id, {
+          url: message.payload.sourceUrl,
+        });
         sendResponse(success(null));
       } catch (error: unknown) {
+        void getOrCreateInstallCredentials().then((creds) => {
+          void trackExtensionEvent("element_capture_failed", creds.install_id);
+        });
         sendResponse(failure(String(error), "UNKNOWN_ERROR"));
       }
     })();
@@ -474,6 +493,8 @@ chrome.runtime.onMessage.addListener((message: RuntimeMessage, sender, sendRespo
         if (data.token && data.expires_at) {
           await saveToken(data.token, data.expires_at);
           await scheduleRefreshAlarm();
+          const creds = await getOrCreateInstallCredentials();
+          void trackExtensionEvent("account_created", creds.install_id);
           // Best-effort: fetch user info and save profile
           void (async () => {
             try {
@@ -629,6 +650,8 @@ chrome.runtime.onMessage.addListener((message: RuntimeMessage, sender, sendRespo
         }
         const data = (await res.json()) as { code: string; mcp_url: string };
         await saveMcpApiKey(data.code);
+        const creds = await getOrCreateInstallCredentials();
+        void trackExtensionEvent("mcp_connected", creds.install_id);
         const payload: McpTokenGeneratedPayload = { api_key: data.code };
         sendResponse(success(payload));
       } catch (error: unknown) {

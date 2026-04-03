@@ -1,0 +1,42 @@
+:root {
+  --users-email-font: var(--font-mono);
+}
+
+.users {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+}
+
+.users__search {
+  display: flex;
+  gap: var(--space-3);
+  align-items: flex-end;
+  max-width: 480px;
+}
+
+.users__search .input-wrapper {
+  flex: 1;
+}
+
+.users__count {
+  font-size: var(--typo-copy);
+  color: var(--text-subtle);
+}
+
+.users__email {
+  font-family: var(--users-email-font);
+  font-size: var(--typo-caption);
+}
+
+.users__pagination {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  justify-content: flex-end;
+}
+
+.users__page-info {
+  font-size: var(--typo-copy);
+  color: var(--text-muted);
+}

@@ -1,0 +1,52 @@
+:root {
+  --funnel-page-card-bg: var(--surface);
+  --funnel-page-card-border: var(--border);
+}
+
+.funnel {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-5);
+}
+
+.funnel__loading,
+.funnel__error {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: var(--space-8);
+  color: var(--text-muted);
+}
+
+.funnel__header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: var(--space-4);
+  flex-wrap: wrap;
+}
+
+.funnel__description {
+  font-size: var(--typo-body);
+  color: var(--text-muted);
+  flex: 1;
+  min-width: 0;
+}
+
+.funnel__days-select {
+  font-size: var(--typo-body);
+  padding: var(--space-1) var(--space-3);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  background: var(--surface);
+  color: var(--text);
+  cursor: pointer;
+  flex-shrink: 0;
+}
+
+.funnel__card {
+  background-color: var(--funnel-page-card-bg);
+  border: 1px solid var(--funnel-page-card-border);
+  border-radius: var(--radius-md);
+  padding: var(--space-6);
+}

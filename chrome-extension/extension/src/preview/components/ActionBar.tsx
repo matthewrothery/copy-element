@@ -3,6 +3,7 @@ import { buildCopyHtml } from "../../shared/utils/preview-srcdoc-builder";
 import { buildAdvancedSnippetPrompt, buildCopyMcpPrompt, buildSnippetPrompt } from "../../shared/utils/prompt-builder";
 import { downloadZip } from "../../shared/utils/download-zip";
 import type { Snippet } from "../../shared/types/snippet";
+import { trackPopupEvent } from "../../shared/analytics";
 
 const ICON_SIZE = 14;
 
@@ -17,19 +18,22 @@ interface ActionBarProps {
 }
 
 export function ActionBar({ snippet, currentHtml, currentCss, tokenCount, onToast, isPaid, onUpgrade }: ActionBarProps) {
-  function copy(value: string, label: string) {
+  function copy(value: string, label: string, format: string) {
     void navigator.clipboard.writeText(value).then(
-      () => onToast(`${label} copied`),
+      () => {
+        onToast(`${label} copied`);
+        void trackPopupEvent('element_exported', { format });
+      },
       () => onToast("Copy failed")
     );
   }
 
   function handleCopyCode() {
-    copy(buildCopyHtml({ ...snippet, html: currentHtml, styleBlock: currentCss }), "Code");
+    copy(buildCopyHtml({ ...snippet, html: currentHtml, styleBlock: currentCss }), "Code", "html");
   }
 
   function handleCopyPrompt() {
-    copy(buildSnippetPrompt({ ...snippet, html: currentHtml, styleBlock: currentCss }), "Prompt");
+    copy(buildSnippetPrompt({ ...snippet, html: currentHtml, styleBlock: currentCss }), "Prompt", "prompt_basic");
     if (!isPaid) {
       onUpgrade?.();
     }
@@ -40,7 +44,7 @@ export function ActionBar({ snippet, currentHtml, currentCss, tokenCount, onToas
       onUpgrade?.();
       return;
     }
-    copy(buildAdvancedSnippetPrompt({ ...snippet, html: currentHtml, styleBlock: currentCss }), "Advanced Prompt");
+    copy(buildAdvancedSnippetPrompt({ ...snippet, html: currentHtml, styleBlock: currentCss }), "Advanced Prompt", "prompt_advanced");
   }
 
   function handleCopyMcp() {
@@ -48,7 +52,7 @@ export function ActionBar({ snippet, currentHtml, currentCss, tokenCount, onToas
       onUpgrade?.();
       return;
     }
-    copy(buildCopyMcpPrompt({ ...snippet, html: currentHtml, styleBlock: currentCss }), "MCP");
+    copy(buildCopyMcpPrompt({ ...snippet, html: currentHtml, styleBlock: currentCss }), "MCP", "mcp");
   }
 
   async function handleDownload() {

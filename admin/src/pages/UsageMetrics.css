@@ -1,0 +1,19 @@
+.usage {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+}
+
+.usage__loading,
+.usage__error {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: var(--space-8);
+  color: var(--text-muted);
+}
+
+.usage__description {
+  font-size: var(--typo-body);
+  color: var(--text-muted);
+}

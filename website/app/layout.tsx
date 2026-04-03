@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import "@/styles/tokens.css";
 import "@/styles/base.css";
 import { JsonLd } from "@/components/JsonLd";
+import { Analytics } from "@/components/Analytics/Analytics";
 
 const BASE_URL = process.env.NEXT_PUBLIC_SITE_URL ?? "https://elementarmory.example.com";
 
@@ -49,6 +50,7 @@ export default function RootLayout({
       </head>
       <body>
         <JsonLd />
+        <Analytics />
         {children}
       </body>
     </html>

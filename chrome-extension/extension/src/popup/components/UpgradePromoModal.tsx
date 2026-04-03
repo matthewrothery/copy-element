@@ -1,11 +1,17 @@
+import { useEffect } from "react";
 import { createPortal } from "react-dom";
 
 interface UpgradePromoModalProps {
   onUpgrade: () => void;
   onClose: () => void;
+  onShown?: () => void;
 }
 
-export function UpgradePromoModal({ onUpgrade, onClose }: UpgradePromoModalProps): React.JSX.Element {
+export function UpgradePromoModal({ onUpgrade, onClose, onShown }: UpgradePromoModalProps): React.JSX.Element {
+  useEffect(() => {
+    onShown?.();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
   const content = (
     <div
       className="modal-backdrop"

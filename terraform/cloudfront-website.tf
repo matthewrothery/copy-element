@@ -1,4 +1,18 @@
 resource "aws_cloudfront_distribution" "website" {
+  # EC2 origin for dynamic API collect endpoint
+  origin {
+    domain_name = aws_eip.ec2.public_dns
+    origin_id   = "website-collect-ec2"
+
+    custom_origin_config {
+      http_port              = 80
+      https_port             = 443
+      origin_protocol_policy = "http-only"
+      origin_ssl_protocols   = ["TLSv1.2"]
+      origin_read_timeout    = 30
+    }
+  }
+
   origin {
     domain_name = aws_s3_bucket.website.bucket_regional_domain_name
     origin_id   = local.s3_origin_id
@@ -17,17 +31,17 @@ resource "aws_cloudfront_distribution" "website" {
   aliases = [var.website_domain, "www.${var.website_domain}"]
 
   custom_error_response {
-    error_caching_min_ttl = 60
+    error_caching_min_ttl = 10
     error_code            = 404
-    response_code         = 200
-    response_page_path    = "/index.html"
+    response_code         = 404
+    response_page_path    = "/404.html"
   }
 
   custom_error_response {
-    error_caching_min_ttl = 60
+    error_caching_min_ttl = 10
     error_code            = 403
-    response_code         = 200
-    response_page_path    = "/index.html"
+    response_code         = 404
+    response_page_path    = "/404.html"
   }
 
   price_class = var.website_price_class
@@ -48,6 +62,20 @@ resource "aws_cloudfront_distribution" "website" {
       event_type   = "viewer-request"
       function_arn = aws_cloudfront_function.rewrite_nextjs_routes.arn
     }
+  }
+
+  # Route /api/collect/* to EC2 — evaluated before default S3 behavior
+  ordered_cache_behavior {
+    path_pattern     = "/api/collect/*"
+    allowed_methods  = ["DELETE", "GET", "HEAD", "OPTIONS", "PATCH", "POST", "PUT"]
+    cached_methods   = ["GET", "HEAD"]
+    target_origin_id = "website-collect-ec2"
+
+    viewer_protocol_policy = "redirect-to-https"
+    compress               = false
+
+    cache_policy_id          = data.aws_cloudfront_cache_policy.caching_disabled.id
+    origin_request_policy_id = data.aws_cloudfront_origin_request_policy.all_viewer.id
   }
 
   ordered_cache_behavior {

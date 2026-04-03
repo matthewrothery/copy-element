@@ -12,6 +12,7 @@ import { AccountNudgeEmail } from '../emails/account-nudge.js';
 import { CaptureMilestoneEmail } from '../emails/capture-milestone.js';
 import { SaveYourWorkEmail } from '../emails/save-your-work.js';
 import { PostLimitFollowupEmail } from '../emails/post-limit-followup.js';
+import { SupportInquiryEmail } from '../emails/support-inquiry.js';
 import { config } from '../config/index.js';
 import { logEmailSend, wasSentRecently } from './email-tracking.js';
 import { isEmailSuppressed } from './email-suppression.js';
@@ -295,6 +296,43 @@ export async function sendPostLimitFollowupViaSes(email: string, quotaLimit: num
     logEmailSend({ id: sendId, email, template: 'post_limit_followup', subject, sesMsgId: response.MessageId, status: 'sent' });
   } catch (err) {
     logEmailSend({ id: sendId, email, template: 'post_limit_followup', subject, status: 'failed', error: (err as Error).message });
+    throw err;
+  }
+}
+
+export async function sendSupportInquiryViaSes(
+  name: string,
+  email: string,
+  topic: string,
+  message: string,
+): Promise<void> {
+  const sendId = nanoid();
+  const subject = `[Support] ${topic} — ${name}`;
+
+  if (!config.FROM_EMAIL || !config.AWS_SES_REGION) {
+    console.log(`[email] SES not configured — support inquiry from ${email} (${topic})`);
+    logEmailSend({ id: sendId, email, template: 'support-inquiry', subject, status: 'skipped' });
+    return;
+  }
+
+  const submittedAt = new Date().toUTCString();
+  const html = await render(createElement(SupportInquiryEmail, { name, email, topic, message, submittedAt }));
+
+  try {
+    const response = await sesClient.send(
+      new SendEmailCommand({
+        Source: config.FROM_EMAIL,
+        Destination: { ToAddresses: [config.SUPPORT_EMAIL] },
+        ReplyToAddresses: [email],
+        Message: {
+          Subject: { Data: subject },
+          Body: { Html: { Data: html } },
+        },
+      })
+    );
+    logEmailSend({ id: sendId, email, template: 'support-inquiry', subject, sesMsgId: response.MessageId, status: 'sent' });
+  } catch (err) {
+    logEmailSend({ id: sendId, email, template: 'support-inquiry', subject, status: 'failed', error: (err as Error).message });
     throw err;
   }
 }

@@ -1,5 +1,6 @@
 import { useCallback, useEffect, useMemo, useState, type JSX } from "react";
 import { nanoid } from "nanoid";
+import { trackPopupEvent } from "../shared/analytics";
 import {
   deleteFolderFromBackground,
   deleteSnippetFromBackground,
@@ -154,6 +155,11 @@ export function LibraryApp(): JSX.Element {
     void loadData();
   }, [loadData]);
 
+  // Track library opened
+  useEffect(() => {
+    void trackPopupEvent('library_viewed');
+  }, []);
+
   useEffect(() => {
     void (async () => {
       try {
@@ -239,6 +245,7 @@ export function LibraryApp(): JSX.Element {
     try {
       await copyToClipboard(buildSnippetPrompt(snippet));
       setToastMessage("Prompt copied");
+      void trackPopupEvent('element_exported', { format: 'prompt_basic' });
     } catch {
       setToastMessage("Failed to copy prompt");
     }
@@ -249,6 +256,8 @@ export function LibraryApp(): JSX.Element {
     try {
       await copyToClipboard(value);
       setToastMessage(`${label} copied to clipboard`);
+      const format = label.toLowerCase().includes('html') || label.toLowerCase().includes('code') ? 'html' : 'other';
+      void trackPopupEvent('element_exported', { format });
     } catch {
       setToastMessage(`Failed to copy ${label}`);
     }
@@ -432,6 +441,7 @@ export function LibraryApp(): JSX.Element {
         <UpgradePromoModal
           onUpgrade={() => { openUpgradePage(); setShowUpgradeModal(false); }}
           onClose={() => setShowUpgradeModal(false)}
+          onShown={() => void trackPopupEvent('upgrade_modal_shown', { source: 'library' })}
         />
       )}
       {showPromoModal && (
@@ -441,6 +451,7 @@ export function LibraryApp(): JSX.Element {
             void getInstallIdFromBackground().then(openSignInPage).catch(() => {});
           }}
           onClose={() => setShowPromoModal(false)}
+          onShown={() => void trackPopupEvent('signin_modal_shown', { source: 'library' })}
         />
       )}
       {toastMessage && <Toast message={toastMessage} />}
