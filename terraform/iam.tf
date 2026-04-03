@@ -137,7 +137,7 @@ resource "aws_iam_user" "github_actions_deployer" {
 resource "aws_iam_policy" "github_actions_deployment" {
   name        = "${var.project}-${var.environment}-github-deployment-policy"
   path        = "/"
-  description = "IAM policy for GitHub Actions to deploy website to S3/CloudFront and server to ECR/EC2"
+  description = "IAM policy for GitHub Actions to deploy website and admin SPA to S3/CloudFront and server to ECR/EC2"
 
   policy = jsonencode({
     Version = "2012-10-17"
@@ -154,7 +154,9 @@ resource "aws_iam_policy" "github_actions_deployment" {
         ]
         Resource = [
           aws_s3_bucket.website.arn,
-          "${aws_s3_bucket.website.arn}/*"
+          "${aws_s3_bucket.website.arn}/*",
+          aws_s3_bucket.admin.arn,
+          "${aws_s3_bucket.admin.arn}/*"
         ]
       },
       {
@@ -166,7 +168,8 @@ resource "aws_iam_policy" "github_actions_deployment" {
           "cloudfront:GetDistribution"
         ]
         Resource = [
-          aws_cloudfront_distribution.website.arn
+          aws_cloudfront_distribution.website.arn,
+          aws_cloudfront_distribution.admin.arn
         ]
       },
       {
