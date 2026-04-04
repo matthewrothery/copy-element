@@ -14,7 +14,8 @@ function getConfig(): AppConfig {
     BETTER_AUTH_URL: process.env[ENV_KEYS.BETTER_AUTH_URL] ?? `http://localhost:${Number.isNaN(port) ? DEFAULTS.PORT : port}`,
     GOOGLE_CLIENT_ID: process.env[ENV_KEYS.GOOGLE_CLIENT_ID] ?? '',
     GOOGLE_CLIENT_SECRET: process.env[ENV_KEYS.GOOGLE_CLIENT_SECRET] ?? '',
-    AWS_SES_REGION: process.env[ENV_KEYS.AWS_SES_REGION] ?? '',
+    AWS_SES_REGION:
+      process.env[ENV_KEYS.AWS_SES_REGION] || process.env[ENV_KEYS.AWS_REGION] || '',
     AWS_ACCESS_KEY_ID: process.env[ENV_KEYS.AWS_ACCESS_KEY_ID] ?? '',
     AWS_SECRET_ACCESS_KEY: process.env[ENV_KEYS.AWS_SECRET_ACCESS_KEY] ?? '',
     FROM_EMAIL: process.env[ENV_KEYS.FROM_EMAIL] ?? '',

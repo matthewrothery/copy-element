@@ -34,6 +34,8 @@ services:
       GOOGLE_CLIENT_SECRET: ${GOOGLE_CLIENT_SECRET}
       S3_ASSETS_BUCKET: ${S3_ASSETS_BUCKET}
       AWS_REGION: ${AWS_REGION}
+      # Same value as AWS_REGION unless you use SES in a different region.
+      AWS_SES_REGION: ${AWS_SES_REGION:-${AWS_REGION}}
     ports:
       - "3000:80"
     # SQLite on host disk (same path for `compose run` migrate and `up`).

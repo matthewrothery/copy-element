@@ -17,17 +17,28 @@ import { config } from '../config/index.js';
 import { logEmailSend, wasSentRecently } from './email-tracking.js';
 import { isEmailSuppressed } from './email-suppression.js';
 
-const sesClient = new SESClient({
-  region: config.AWS_SES_REGION,
-  ...(config.AWS_ACCESS_KEY_ID && config.AWS_SECRET_ACCESS_KEY
-    ? {
-        credentials: {
-          accessKeyId: config.AWS_ACCESS_KEY_ID,
-          secretAccessKey: config.AWS_SECRET_ACCESS_KEY,
-        },
-      }
-    : {}),
-});
+let sesClient: SESClient | undefined;
+
+function getSesClient(): SESClient {
+  const region = config.AWS_SES_REGION;
+  if (!region) {
+    throw new Error('SES is not configured: set AWS_SES_REGION or AWS_REGION');
+  }
+  if (!sesClient) {
+    sesClient = new SESClient({
+      region,
+      ...(config.AWS_ACCESS_KEY_ID && config.AWS_SECRET_ACCESS_KEY
+        ? {
+            credentials: {
+              accessKeyId: config.AWS_ACCESS_KEY_ID,
+              secretAccessKey: config.AWS_SECRET_ACCESS_KEY,
+            },
+          }
+        : {}),
+    });
+  }
+  return sesClient;
+}
 
 function buildPixelUrl(sendId: string): string {
   return `${config.BETTER_AUTH_URL}/api/email/track/open/${sendId}.gif`;
@@ -61,7 +72,7 @@ export async function sendWelcomeViaSes(email: string, name?: string): Promise<v
   const html = await render(createElement(WelcomeEmail, { email, name, pixelUrl, ctaUrl, unsubUrl }));
 
   try {
-    const response = await sesClient.send(
+    const response = await getSesClient().send(
       new SendEmailCommand({
         Source: config.FROM_EMAIL,
         Destination: { ToAddresses: [email] },
@@ -91,7 +102,7 @@ export async function sendFirstCaptureViaSes(email: string, name?: string): Prom
   const html = await render(createElement(FirstCaptureEmail, { email, name, libraryUrl, pixelUrl, unsubUrl }));
 
   try {
-    const response = await sesClient.send(
+    const response = await getSesClient().send(
       new SendEmailCommand({
         Source: config.FROM_EMAIL,
         Destination: { ToAddresses: [email] },
@@ -118,7 +129,7 @@ export async function sendLimitReachedViaSes(email: string, quotaLimit: number, 
   const html = await render(createElement(LimitReachedEmail, { email, name, quotaLimit, upgradeUrl, pixelUrl, unsubUrl }));
 
   try {
-    const response = await sesClient.send(
+    const response = await getSesClient().send(
       new SendEmailCommand({
         Source: config.FROM_EMAIL,
         Destination: { ToAddresses: [email] },
@@ -145,7 +156,7 @@ export async function sendOnboardingReminderViaSes(email: string, name?: string)
   const html = await render(createElement(OnboardingReminderEmail, { email, name, ctaUrl, pixelUrl, unsubUrl }));
 
   try {
-    const response = await sesClient.send(
+    const response = await getSesClient().send(
       new SendEmailCommand({
         Source: config.FROM_EMAIL,
         Destination: { ToAddresses: [email] },
@@ -172,7 +183,7 @@ export async function sendValueEmailViaSes(email: string, name?: string): Promis
   const html = await render(createElement(ValueEmail, { email, name, ctaUrl, pixelUrl, unsubUrl }));
 
   try {
-    const response = await sesClient.send(
+    const response = await getSesClient().send(
       new SendEmailCommand({
         Source: config.FROM_EMAIL,
         Destination: { ToAddresses: [email] },
@@ -199,7 +210,7 @@ export async function sendAccountNudgeViaSes(email: string, name?: string): Prom
   const html = await render(createElement(AccountNudgeEmail, { email, name, ctaUrl, pixelUrl, unsubUrl }));
 
   try {
-    const response = await sesClient.send(
+    const response = await getSesClient().send(
       new SendEmailCommand({
         Source: config.FROM_EMAIL,
         Destination: { ToAddresses: [email] },
@@ -226,7 +237,7 @@ export async function sendCaptureMilestoneViaSes(email: string, name?: string): 
   const html = await render(createElement(CaptureMilestoneEmail, { email, name, ctaUrl, pixelUrl, unsubUrl }));
 
   try {
-    const response = await sesClient.send(
+    const response = await getSesClient().send(
       new SendEmailCommand({
         Source: config.FROM_EMAIL,
         Destination: { ToAddresses: [email] },
@@ -256,7 +267,7 @@ export async function sendSaveYourWorkViaSes(email: string, quotaUsed: number, q
   const html = await render(createElement(SaveYourWorkEmail, { email, name, quotaUsed, quotaLimit, upgradeUrl, pixelUrl, unsubUrl }));
 
   try {
-    const response = await sesClient.send(
+    const response = await getSesClient().send(
       new SendEmailCommand({
         Source: config.FROM_EMAIL,
         Destination: { ToAddresses: [email] },
@@ -286,7 +297,7 @@ export async function sendPostLimitFollowupViaSes(email: string, quotaLimit: num
   const html = await render(createElement(PostLimitFollowupEmail, { email, name, quotaLimit, upgradeUrl, pixelUrl, unsubUrl }));
 
   try {
-    const response = await sesClient.send(
+    const response = await getSesClient().send(
       new SendEmailCommand({
         Source: config.FROM_EMAIL,
         Destination: { ToAddresses: [email] },
@@ -319,7 +330,7 @@ export async function sendSupportInquiryViaSes(
   const html = await render(createElement(SupportInquiryEmail, { name, email, topic, message, submittedAt }));
 
   try {
-    const response = await sesClient.send(
+    const response = await getSesClient().send(
       new SendEmailCommand({
         Source: config.FROM_EMAIL,
         Destination: { ToAddresses: [config.SUPPORT_EMAIL] },
@@ -358,7 +369,7 @@ export async function sendMagicLinkViaSes(email: string, url: string): Promise<v
   const html = await render(createElement(MagicLinkEmail, { url: wrappedUrl, email, pixelUrl, unsubUrl }));
 
   try {
-    const response = await sesClient.send(
+    const response = await getSesClient().send(
       new SendEmailCommand({
         Source: config.FROM_EMAIL,
         Destination: { ToAddresses: [email] },
