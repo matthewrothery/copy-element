@@ -3,18 +3,36 @@
 import { useState, useEffect, useCallback } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { getApiUrl, apiFetch } from "@/lib/api";
+import { apiFetch } from "@/lib/api";
 import "./AccountContent.css";
 
 type User = { id: string; name?: string | null; email?: string | null; image?: string | null };
-type Install = { install_id: string; created_at?: string; last_seen_at?: string; extension_version?: string; chrome_version?: string | null; os_family?: string | null };
+type Install = { install_id: string; created_at?: number; last_seen_at?: number; extension_version?: string | null; chrome_version?: string | null; os_family?: string | null };
+
+function relativeDate(epochMs: number): string {
+  const diff = Date.now() - epochMs;
+  const mins = Math.floor(diff / 60000);
+  if (mins < 2) return "just now";
+  if (mins < 60) return `${mins}m ago`;
+  const hours = Math.floor(mins / 60);
+  if (hours < 24) return `${hours}h ago`;
+  const days = Math.floor(hours / 24);
+  if (days === 1) return "yesterday";
+  if (days < 30) return `${days} days ago`;
+  const months = Math.floor(days / 30);
+  if (months < 12) return `${months === 1 ? "1 month" : `${months} months`} ago`;
+  const years = Math.floor(months / 12);
+  return `${years === 1 ? "1 year" : `${years} years`} ago`;
+}
 
 function installLabel(inst: Install): string {
   const parts: string[] = [];
   if (inst.os_family) parts.push(inst.os_family);
   if (inst.chrome_version) parts.push(`Chrome ${inst.chrome_version}`);
   if (inst.extension_version) parts.push(`v${inst.extension_version}`);
-  return parts.length > 0 ? parts.join(" · ") : inst.install_id;
+  const seen = inst.last_seen_at ? `last seen ${relativeDate(inst.last_seen_at)}` : null;
+  if (parts.length > 0) return seen ? `${parts.join(" · ")} · ${seen}` : parts.join(" · ");
+  return seen ?? inst.install_id;
 }
 type Entitlement = { plan_code: string; active: boolean } | null;
 
@@ -25,10 +43,6 @@ export function AccountContent(): React.ReactElement | null {
   const [entitlement, setEntitlement] = useState<Entitlement>(null);
   const [loading, setLoading] = useState(true);
   const [loadError, setLoadError] = useState<string | null>(null);
-  const [installIdInput, setInstallIdInput] = useState("");
-  const [codeResult, setCodeResult] = useState<{ type: "link" | "error"; text: string; callbackHref?: string } | null>(null);
-  const [codeSubmitting, setCodeSubmitting] = useState(false);
-
   const redirectToSignIn = useCallback(() => {
     router.replace("/sign-in?redirect=" + encodeURIComponent("/account"));
   }, [router]);
@@ -75,35 +89,6 @@ export function AccountContent(): React.ReactElement | null {
     load();
   }, [load]);
 
-  async function handleGetCode(e: React.FormEvent): Promise<void> {
-    e.preventDefault();
-    const install_id = installIdInput.trim();
-    if (!install_id) return;
-    setCodeResult(null);
-    setCodeSubmitting(true);
-    try {
-      const res = await apiFetch("/api/auth/extension-session/code", {
-        method: "POST",
-        body: JSON.stringify({ install_id }),
-      });
-      const data = (await res.json()) as { code?: string; error?: string };
-      if (!res.ok) {
-        setCodeResult({ type: "error", text: data.error ?? "Failed to get code." });
-        return;
-      }
-      const params = new URLSearchParams({ code: data.code ?? "", install_id });
-      setCodeResult({
-        type: "link",
-        text: "Code created. Open callback page to pass code to extension.",
-        callbackHref: "/auth/extension-callback?" + params.toString(),
-      });
-    } catch {
-      setCodeResult({ type: "error", text: "Network error." });
-    } finally {
-      setCodeSubmitting(false);
-    }
-  }
-
   async function handleUnlink(install_id: string): Promise<void> {
     try {
       const res = await apiFetch("/api/installs/unlink", {
@@ -143,47 +128,6 @@ export function AccountContent(): React.ReactElement | null {
           </span>
         )}
       </p>
-
-      <section aria-labelledby="account-connect-heading">
-        <h2 id="account-connect-heading" className="account-content-section-title">
-          Connect extension
-        </h2>
-        <p className="account-content-muted">
-          Get a one-time code to connect the extension to this account.
-        </p>
-        <form onSubmit={handleGetCode} className="account-content-code-form">
-          <input
-            type="text"
-            placeholder="Install ID (from extension)"
-            value={installIdInput}
-            onChange={(e) => setInstallIdInput(e.target.value)}
-            disabled={codeSubmitting}
-            className="account-content-input"
-            aria-label="Install ID from extension"
-          />
-          <button
-            type="submit"
-            disabled={codeSubmitting}
-            className="account-content-get-code"
-            aria-label="Get one-time code"
-          >
-            {codeSubmitting ? "Getting code…" : "Get code"}
-          </button>
-        </form>
-        {codeResult && (
-          <p className="account-content-code-result" role="alert">
-            {codeResult.type === "link" && codeResult.callbackHref ? (
-              <>
-                Code created.{" "}
-                <Link href={codeResult.callbackHref}>Open callback page</Link> to pass code to
-                extension.
-              </>
-            ) : (
-              codeResult.text
-            )}
-          </p>
-        )}
-      </section>
 
       <section aria-labelledby="account-installs-heading">
         <h2 id="account-installs-heading" className="account-content-section-title">

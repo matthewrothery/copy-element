@@ -58,12 +58,52 @@ chrome.runtime.onInstalled.addListener((details) => {
   });
 });
 
+interface UABrand { brand: string; version: string }
+interface NavigatorUAData { brands?: UABrand[]; platform?: string }
+
+function collectInstallMetadata(): {
+  extension_version?: string;
+  chrome_version?: string;
+  os_family?: string;
+  locale?: string;
+  timezone?: string;
+} {
+  const extension_version = chrome.runtime.getManifest().version;
+  const uaData = (navigator as Navigator & { userAgentData?: NavigatorUAData }).userAgentData;
+
+  let chrome_version: string | undefined;
+  if (uaData?.brands) {
+    const entry = uaData.brands.find((b) => b.brand === "Google Chrome" || b.brand === "Chromium");
+    chrome_version = entry?.version;
+  }
+  if (!chrome_version) {
+    chrome_version = navigator.userAgent.match(/Chrome\/(\d+)/)?.[1];
+  }
+
+  let os_family: string | undefined = uaData?.platform;
+  if (!os_family) {
+    const ua = navigator.userAgent;
+    if (ua.includes("CrOS")) os_family = "ChromeOS";
+    else if (ua.includes("Win")) os_family = "Windows";
+    else if (ua.includes("Mac")) os_family = "macOS";
+    else if (ua.includes("Linux")) os_family = "Linux";
+  }
+
+  return {
+    extension_version,
+    chrome_version,
+    os_family,
+    locale: navigator.language || undefined,
+    timezone: Intl.DateTimeFormat().resolvedOptions().timeZone || undefined,
+  };
+}
+
 async function registerInstall(): Promise<{ install_id: string; install_secret: string }> {
   const creds = await getOrCreateInstallCredentials();
   await fetch(`${SERVER_URL}/api/installs/register`, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ install_id: creds.install_id, install_secret: creds.install_secret }),
+    body: JSON.stringify({ install_id: creds.install_id, install_secret: creds.install_secret, ...collectInstallMetadata() }),
   }).catch(() => {});
   return creds;
 }
