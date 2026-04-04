@@ -50,7 +50,7 @@ export const auth = betterAuth({
   secret: config.BETTER_AUTH_SECRET,
   trustedOrigins: getTrustedOrigins(),
   advanced: {
-    crossSubdomainCookies: {
+    crossSubDomainCookies: {
       enabled: config.NODE_ENV === 'production',
       domain: '.elementarmory.com',
     },
