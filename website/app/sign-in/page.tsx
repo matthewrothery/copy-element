@@ -1,8 +1,7 @@
-import { Footer } from "@/components/Footer";
-import { Header } from "@/components/Header";
-import { Section } from "@/components/Section";
+import Link from "next/link";
 import { SignInForm } from "@/components/SignInForm";
 import { GoalTrack } from "@/components/GoalTrack/GoalTrack";
+import "./sign-in.css";
 
 export const dynamic = "force-static";
 
@@ -14,15 +13,12 @@ export const metadata = {
 
 export default function SignInPage(): React.ReactElement {
   return (
-    <>
-      <Header />
-      <main>
-        <GoalTrack goal="signup_started" />
-        <Section center style={{ paddingTop: "var(--space-6)", gap: "var(--space-5)" }}>
-          <SignInForm />
-        </Section>
-        <Footer />
-      </main>
-    </>
+    <main className="sign-in-page">
+      <Link href="/" className="sign-in-page-back" aria-label="Back to home">
+        ← Home
+      </Link>
+      <GoalTrack goal="signup_started" />
+      <SignInForm />
+    </main>
   );
 }

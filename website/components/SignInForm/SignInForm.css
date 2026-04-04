@@ -32,8 +32,8 @@
 
 .sign-in-form {
   --sign-in-form-max-width: 320px;
-  --sign-in-form-input-padding: var(--space-2) var(--space-3);
-  --sign-in-form-button-padding: 14px var(--space-3);
+  --sign-in-form-input-padding: 0 12px;
+  --sign-in-form-button-padding: 0 12px;
   --sign-in-form-error: #dc2626;
   --sign-in-form-success: #16a34a;
   /* Google dark theme – required by branding guidelines */
@@ -244,14 +244,14 @@
   display: block;
   width: 100%;
   padding: var(--sign-in-form-input-padding);
-  font-size: var(--typo-copy);
+  font-size: 14px;
   font-family: var(--font-sans);
   color: var(--text);
   background-color: var(--surface);
   border: 1px solid var(--border);
-  border-radius: var(--radius);
+  border-radius: 4px;
   box-sizing: border-box;
-  min-height: 44px;
+  height: 40px;
 }
 
 .sign-in-form-input::placeholder {
@@ -266,16 +266,16 @@
 .sign-in-form-submit {
   width: 100%;
   padding: var(--sign-in-form-button-padding);
-  font-size: var(--typo-copy);
-  font-weight: var(--font-weight-semibold);
+  font-size: 14px;
+  font-weight: 500;
   font-family: var(--font-sans);
-  color: var(--text);
+  color: #fff;
   background-color: var(--accent);
   border: none;
-  border-radius: var(--radius);
+  border-radius: 4px;
   cursor: pointer;
   transition: background-color 120ms;
-  min-height: 44px;
+  height: 40px;
 }
 
 .sign-in-form-submit:hover {
