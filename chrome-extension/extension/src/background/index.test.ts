@@ -157,4 +157,263 @@ describe("background helpers", () => {
       })
     );
   });
+
+  // --- Auth flow ---
+
+  it("EXCHANGE_AUTH_CODE: saves token, closes tab, and responds success", async () => {
+    vi.resetModules();
+    vi.stubGlobal("fetch", vi.fn().mockResolvedValue({
+      ok: true,
+      json: async () => ({ token: "new-jwt", expires_at: "2030-01-01T00:00:00Z" }),
+    }));
+    (chrome.storage.local.get as ReturnType<typeof vi.fn>).mockResolvedValue({
+      "element-armory-install-id": "inst-id",
+      "element-armory-install-secret": "inst-secret",
+    });
+    const tabRemove = vi.fn().mockResolvedValue(undefined);
+    (chrome.tabs as Record<string, unknown>).remove = tabRemove;
+
+    await import("./index");
+    const listener = (chrome.runtime.onMessage as { addListener: ReturnType<typeof vi.fn> })
+      .addListener.mock.calls[0][0] as (
+        msg: { type: string; payload?: unknown },
+        sender: { tab?: { id?: number } },
+        sendResponse: (r: unknown) => void
+      ) => void;
+
+    const sendResponse = vi.fn();
+    listener(
+      { type: "EXCHANGE_AUTH_CODE", payload: { code: "oauth-code-123", install_id: "inst-id" } },
+      { tab: { id: 99 } },
+      sendResponse
+    );
+    await new Promise((r) => setTimeout(r, 0));
+
+    expect(chrome.storage.local.set).toHaveBeenCalledWith(
+      expect.objectContaining({ "element-armory-auth-token": "new-jwt" })
+    );
+    expect(tabRemove).toHaveBeenCalledWith(99);
+    expect(sendResponse).toHaveBeenCalledWith({ ok: true, payload: null });
+  });
+
+  it("EXCHANGE_AUTH_CODE: responds with failure when server returns non-ok", async () => {
+    vi.resetModules();
+    vi.stubGlobal("fetch", vi.fn().mockResolvedValue({ ok: false, status: 401 }));
+    (chrome.storage.local.get as ReturnType<typeof vi.fn>).mockResolvedValue({
+      "element-armory-install-id": "inst-id",
+      "element-armory-install-secret": "inst-secret",
+    });
+
+    await import("./index");
+    const listener = (chrome.runtime.onMessage as { addListener: ReturnType<typeof vi.fn> })
+      .addListener.mock.calls[0][0] as (
+        msg: { type: string; payload?: unknown },
+        sender: unknown,
+        sendResponse: (r: unknown) => void
+      ) => void;
+
+    const sendResponse = vi.fn();
+    listener(
+      { type: "EXCHANGE_AUTH_CODE", payload: { code: "bad-code", install_id: "" } },
+      {},
+      sendResponse
+    );
+    await new Promise((r) => setTimeout(r, 0));
+
+    expect(sendResponse).toHaveBeenCalledWith(
+      expect.objectContaining({ ok: false })
+    );
+    expect(chrome.storage.local.set).not.toHaveBeenCalled();
+  });
+
+  it("GET_AUTH_STATE: returns signed-out state when no token stored", async () => {
+    vi.resetModules();
+    await import("./index");
+    const listener = (chrome.runtime.onMessage as { addListener: ReturnType<typeof vi.fn> })
+      .addListener.mock.calls[0][0] as (
+        msg: { type: string },
+        sender: unknown,
+        sendResponse: (r: unknown) => void
+      ) => void;
+
+    const sendResponse = vi.fn();
+    listener({ type: "GET_AUTH_STATE" }, {}, sendResponse);
+    await new Promise((r) => setTimeout(r, 0));
+
+    expect(sendResponse).toHaveBeenCalledWith({
+      ok: true,
+      payload: { signed_in: false, user_email: null, user_plan: null },
+    });
+  });
+
+  it("GET_AUTH_STATE: returns signed-in state when token and profile are stored", async () => {
+    vi.resetModules();
+    (chrome.storage.local.get as ReturnType<typeof vi.fn>).mockResolvedValue({
+      "element-armory-auth-token": "auth-tok",
+      "element-armory-user-email": "user@example.com",
+      "element-armory-user-plan": "pro",
+    });
+
+    await import("./index");
+    const listener = (chrome.runtime.onMessage as { addListener: ReturnType<typeof vi.fn> })
+      .addListener.mock.calls[0][0] as (
+        msg: { type: string },
+        sender: unknown,
+        sendResponse: (r: unknown) => void
+      ) => void;
+
+    const sendResponse = vi.fn();
+    listener({ type: "GET_AUTH_STATE" }, {}, sendResponse);
+    await new Promise((r) => setTimeout(r, 0));
+
+    expect(sendResponse).toHaveBeenCalledWith({
+      ok: true,
+      payload: { signed_in: true, user_email: "user@example.com", user_plan: "pro" },
+    });
+  });
+
+  // --- MCP flow ---
+
+  it("GENERATE_MCP_TOKEN: returns failure when user is not signed in", async () => {
+    vi.resetModules();
+    await import("./index");
+    const listener = (chrome.runtime.onMessage as { addListener: ReturnType<typeof vi.fn> })
+      .addListener.mock.calls[0][0] as (
+        msg: { type: string },
+        sender: unknown,
+        sendResponse: (r: unknown) => void
+      ) => void;
+
+    const sendResponse = vi.fn();
+    listener({ type: "GENERATE_MCP_TOKEN" }, {}, sendResponse);
+    await new Promise((r) => setTimeout(r, 0));
+
+    expect(sendResponse).toHaveBeenCalledWith(expect.objectContaining({ ok: false }));
+  });
+
+  it("GENERATE_MCP_TOKEN: fetches token, saves API key, and responds with api_key", async () => {
+    vi.resetModules();
+    vi.stubGlobal("fetch", vi.fn().mockResolvedValue({
+      ok: true,
+      json: async () => ({ code: "mcp-key-123", mcp_url: "https://mcp.example.com/mcp" }),
+    }));
+    (chrome.storage.local.get as ReturnType<typeof vi.fn>).mockResolvedValue({
+      "element-armory-auth-token": "auth-tok",
+      "element-armory-install-id": "inst-id",
+      "element-armory-install-secret": "inst-secret",
+    });
+
+    await import("./index");
+    const listener = (chrome.runtime.onMessage as { addListener: ReturnType<typeof vi.fn> })
+      .addListener.mock.calls[0][0] as (
+        msg: { type: string },
+        sender: unknown,
+        sendResponse: (r: unknown) => void
+      ) => void;
+
+    const sendResponse = vi.fn();
+    listener({ type: "GENERATE_MCP_TOKEN" }, {}, sendResponse);
+    await new Promise((r) => setTimeout(r, 0));
+
+    expect(chrome.storage.local.set).toHaveBeenCalledWith(
+      expect.objectContaining({ "element-armory-mcp-api-key": "mcp-key-123" })
+    );
+    expect(sendResponse).toHaveBeenCalledWith({
+      ok: true,
+      payload: { api_key: "mcp-key-123" },
+    });
+  });
+
+  it("ROTATE_MCP_TOKEN: returns failure when user is not signed in", async () => {
+    vi.resetModules();
+    await import("./index");
+    const listener = (chrome.runtime.onMessage as { addListener: ReturnType<typeof vi.fn> })
+      .addListener.mock.calls[0][0] as (
+        msg: { type: string },
+        sender: unknown,
+        sendResponse: (r: unknown) => void
+      ) => void;
+
+    const sendResponse = vi.fn();
+    listener({ type: "ROTATE_MCP_TOKEN" }, {}, sendResponse);
+    await new Promise((r) => setTimeout(r, 0));
+
+    expect(sendResponse).toHaveBeenCalledWith(expect.objectContaining({ ok: false }));
+  });
+
+  it("ROTATE_MCP_TOKEN: rotates token, saves new key, and responds with api_key", async () => {
+    vi.resetModules();
+    vi.stubGlobal("fetch", vi.fn().mockResolvedValue({
+      ok: true,
+      json: async () => ({ code: "mcp-rotated-key", mcp_url: "https://mcp.example.com/mcp" }),
+    }));
+    (chrome.storage.local.get as ReturnType<typeof vi.fn>).mockResolvedValue({
+      "element-armory-auth-token": "auth-tok",
+    });
+
+    await import("./index");
+    const listener = (chrome.runtime.onMessage as { addListener: ReturnType<typeof vi.fn> })
+      .addListener.mock.calls[0][0] as (
+        msg: { type: string },
+        sender: unknown,
+        sendResponse: (r: unknown) => void
+      ) => void;
+
+    const sendResponse = vi.fn();
+    listener({ type: "ROTATE_MCP_TOKEN" }, {}, sendResponse);
+    await new Promise((r) => setTimeout(r, 0));
+
+    expect(chrome.storage.local.set).toHaveBeenCalledWith(
+      expect.objectContaining({ "element-armory-mcp-api-key": "mcp-rotated-key" })
+    );
+    expect(sendResponse).toHaveBeenCalledWith({
+      ok: true,
+      payload: { api_key: "mcp-rotated-key" },
+    });
+  });
+
+  it("GET_MCP_TOKEN_META: returns failure when user is not signed in", async () => {
+    vi.resetModules();
+    await import("./index");
+    const listener = (chrome.runtime.onMessage as { addListener: ReturnType<typeof vi.fn> })
+      .addListener.mock.calls[0][0] as (
+        msg: { type: string },
+        sender: unknown,
+        sendResponse: (r: unknown) => void
+      ) => void;
+
+    const sendResponse = vi.fn();
+    listener({ type: "GET_MCP_TOKEN_META" }, {}, sendResponse);
+    await new Promise((r) => setTimeout(r, 0));
+
+    expect(sendResponse).toHaveBeenCalledWith(expect.objectContaining({ ok: false }));
+  });
+
+  it("GET_MCP_TOKEN_META: returns token metadata from server", async () => {
+    vi.resetModules();
+    vi.stubGlobal("fetch", vi.fn().mockResolvedValue({
+      ok: true,
+      json: async () => ({ exists: true, created_at: 1700000000000, last_used_at: 1700001000000 }),
+    }));
+    (chrome.storage.local.get as ReturnType<typeof vi.fn>).mockResolvedValue({
+      "element-armory-auth-token": "auth-tok",
+    });
+
+    await import("./index");
+    const listener = (chrome.runtime.onMessage as { addListener: ReturnType<typeof vi.fn> })
+      .addListener.mock.calls[0][0] as (
+        msg: { type: string },
+        sender: unknown,
+        sendResponse: (r: unknown) => void
+      ) => void;
+
+    const sendResponse = vi.fn();
+    listener({ type: "GET_MCP_TOKEN_META" }, {}, sendResponse);
+    await new Promise((r) => setTimeout(r, 0));
+
+    expect(sendResponse).toHaveBeenCalledWith({
+      ok: true,
+      payload: { exists: true, created_at: 1700000000000, last_used_at: 1700001000000 },
+    });
+  });
 });
