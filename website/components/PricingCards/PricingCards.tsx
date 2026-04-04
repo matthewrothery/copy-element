@@ -6,7 +6,7 @@ import "./PricingCards.css";
 const CHROME_STORE_URL = process.env.NEXT_PUBLIC_CHROME_STORE_URL ?? "#";
 const GET_STARTED_URL = "/sign-in";
 
-type Feature = { text: string };
+export type Feature = { text: string };
 
 type Plan = {
   name: string;
@@ -41,7 +41,7 @@ const FREE_PLAN: Plan = {
   ],
 };
 
-const PRO_FEATURES: Feature[] = [
+export const PRO_FEATURES: Feature[] = [
   { text: "Unlimited snippets" },
   { text: "Unlimited captures" },
   { text: "Advanced AI prompt" },
@@ -78,9 +78,9 @@ const PRO_YEARLY: Plan = {
   features: PRO_FEATURES,
 };
 
-type Billing = "monthly" | "yearly";
+export type Billing = "monthly" | "yearly";
 
-function BillingToggle({
+export function BillingToggle({
   value,
   onChange,
 }: {
@@ -110,7 +110,7 @@ function BillingToggle({
   );
 }
 
-function CheckIcon(): React.ReactElement {
+export function CheckIcon(): React.ReactElement {
   return (
     <svg
       className="pricing-card__check"

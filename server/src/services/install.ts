@@ -77,10 +77,10 @@ export function unlinkInstall(install_id: string, user_id: string): boolean {
   return result.changes > 0;
 }
 
-export function listInstallsByUserId(user_id: string): Array<{ install_id: string; created_at: number; last_seen_at: number; extension_version: string | null }> {
+export function listInstallsByUserId(user_id: string): Array<{ install_id: string; created_at: number; last_seen_at: number; extension_version: string | null; chrome_version: string | null; os_family: string | null }> {
   const db = getDb();
   const rows = db.prepare(
-    'SELECT install_id, created_at, last_seen_at, extension_version FROM installs WHERE user_id = ? ORDER BY last_seen_at DESC'
-  ).all(user_id) as Array<{ install_id: string; created_at: number; last_seen_at: number; extension_version: string | null }>;
+    'SELECT install_id, created_at, last_seen_at, extension_version, chrome_version, os_family FROM installs WHERE user_id = ? ORDER BY last_seen_at DESC'
+  ).all(user_id) as Array<{ install_id: string; created_at: number; last_seen_at: number; extension_version: string | null; chrome_version: string | null; os_family: string | null }>;
   return rows;
 }

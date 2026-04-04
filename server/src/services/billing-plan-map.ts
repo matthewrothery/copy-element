@@ -19,6 +19,6 @@ export const ACTIVE_STATUSES: SubscriptionStatus[] = ['active', 'trialing'];
 export function priceIdToPlanCode(priceId: string | null | undefined): PlanCode {
   if (!priceId) return 'free';
   if (priceId === config.STRIPE_PRICE_PRO_MONTHLY) return 'pro';
-  // Add more price IDs as needed, e.g. team monthly
+  if (priceId === config.STRIPE_PRICE_PRO_YEARLY) return 'pro';
   return 'free';
 }

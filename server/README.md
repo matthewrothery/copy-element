@@ -74,6 +74,7 @@ Stripe Hosted Checkout and Customer Portal are used for subscriptions. Required 
 - **STRIPE_SECRET_KEY** — Stripe secret key (e.g. `sk_test_...`).
 - **STRIPE_WEBHOOK_SECRET** — Webhook signing secret (e.g. `whsec_...`). For local dev, use [Stripe CLI](https://stripe.com/docs/stripe-cli) to forward events: `stripe listen --forward-to localhost:3000/api/billing/webhook`.
 - **STRIPE_PRICE_PRO_MONTHLY** — Price ID for the Pro monthly plan.
+- **STRIPE_PRICE_PRO_YEARLY** — Price ID for the Pro yearly plan.
 - **STRIPE_SUCCESS_URL**, **STRIPE_CANCEL_URL** — Redirect URLs after Checkout.
 - **STRIPE_PORTAL_RETURN_URL** — Return URL after Customer Portal.
 

@@ -6,6 +6,7 @@ import {
   getSnippetsFromBackground,
   openLibraryInNewTab,
   openSignInPage,
+  refreshPlanFromBackground,
   startCapture
 } from "./api";
 import { trackPopupEvent } from "../shared/analytics";
@@ -87,6 +88,8 @@ export function App(): JSX.Element {
   const [isSignedIn, setIsSignedIn] = useState(false);
   const [isPaid, setIsPaid] = useState(false);
   const [paywallView, setPaywallView] = useState<PaywallView>(null);
+  const [userEmail, setUserEmail] = useState<string | null>(null);
+  const [userPlan, setUserPlan] = useState<string | null>(null);
 
   const snippetCount = snippets.length;
   const recentSnippets = useMemo(() => snippets.slice(0, 2), [snippets]);
@@ -172,6 +175,10 @@ export function App(): JSX.Element {
         const state = await getAuthStateFromBackground();
         setIsSignedIn(state.signed_in);
         setIsPaid(state.signed_in && PAID_PLANS.includes(state.user_plan as never));
+        if (state.signed_in) {
+          setUserEmail(state.user_email);
+          setUserPlan(state.user_plan);
+        }
       } catch {
         // ignore
       }
@@ -186,10 +193,16 @@ export function App(): JSX.Element {
           if (!changes["element-armory-auth-token"].newValue) {
             setIsSignedIn(false);
             setIsPaid(false);
+            setUserEmail(null);
+            setUserPlan(null);
           } else {
             void getAuthStateFromBackground().then((state) => {
               setIsSignedIn(state.signed_in);
               setIsPaid(state.signed_in && PAID_PLANS.includes(state.user_plan as never));
+              if (state.signed_in) {
+                setUserEmail(state.user_email);
+                setUserPlan(state.user_plan);
+              }
             }).catch(() => {});
           }
         }
@@ -304,22 +317,25 @@ export function App(): JSX.Element {
           />
         )}
       </main>
-      {view === "home" && (
+      {view === "home" && !isPaid && (
         <UsageMeter
           used={usage?.used ?? 0}
           limit={usage?.limit ?? FREE_TIER_MONTHLY_CAPTURE_LIMIT}
         />
       )}
       <footer className="footer">
-        {/* <button
-          type="button"
-          className="footer-settings-button"
-          onClick={() => setView("settings")}
-          aria-label="Open settings"
-        >
-          <Settings size={18} aria-hidden />
-        </button> */}
-        <span>v{extensionVersion}</span>
+        {isSignedIn && userEmail ? (
+          <span className="footer-user-info">
+            <span className="footer-email">{userEmail}</span>
+            {userPlan && (
+              <span className={`footer-plan-badge footer-plan-${userPlan.toLowerCase()}`}>
+                {userPlan.charAt(0).toUpperCase() + userPlan.slice(1)}
+              </span>
+            )}
+          </span>
+        ) : (
+          <span>v{extensionVersion}</span>
+        )}
         <button
           type="button"
           className={`footer-account-button${isSignedIn ? " footer-account-button--signed-in" : ""}`}

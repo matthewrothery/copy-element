@@ -4,6 +4,7 @@ import {
   getAuthStateFromBackground,
   getInstallIdFromBackground,
   openSignInPage,
+  refreshPlanFromBackground,
   signOutFromBackground,
 } from "../api";
 
@@ -23,6 +24,7 @@ export function AccountPanel({ onBack, onSignedInChange }: AccountPanelProps): J
   useEffect(() => {
     void (async () => {
       try {
+        await refreshPlanFromBackground().catch(() => {});
         const state = await getAuthStateFromBackground();
         if (state.signed_in) {
           setUserEmail(state.user_email);

@@ -6,7 +6,7 @@ import { BillingContent } from "@/components/BillingContent";
 import styles from "./page.module.css";
 
 export const metadata = {
-  title: "Billing – Element Armory",
+  title: "Billing - Element Armory",
   description: "Manage your Element Armory billing and subscription.",
   robots: { index: false, follow: false },
 };

@@ -188,6 +188,14 @@ export interface AuthStatePayload {
   user_plan: string | null;
 }
 
+export interface RefreshPlanRequest {
+  type: "REFRESH_PLAN";
+}
+
+export interface RefreshPlanPayload {
+  plan_code: string;
+}
+
 export interface GetMcpTokenMetaRequest {
   type: "GET_MCP_TOKEN_META";
 }
@@ -238,4 +246,5 @@ export type RuntimeMessage =
   | ClearViewportEmulationRequest
   | GetMcpTokenMetaRequest
   | GenerateMcpTokenRequest
-  | RotateMcpTokenRequest;
+  | RotateMcpTokenRequest
+  | RefreshPlanRequest;

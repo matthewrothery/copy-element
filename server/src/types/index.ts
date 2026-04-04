@@ -18,6 +18,7 @@ export interface AppConfig {
   STRIPE_SECRET_KEY: string;
   STRIPE_WEBHOOK_SECRET: string;
   STRIPE_PRICE_PRO_MONTHLY: string;
+  STRIPE_PRICE_PRO_YEARLY: string;
   STRIPE_SUCCESS_URL: string;
   STRIPE_CANCEL_URL: string;
   STRIPE_PORTAL_RETURN_URL: string;

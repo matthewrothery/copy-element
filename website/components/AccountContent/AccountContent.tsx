@@ -7,7 +7,15 @@ import { getApiUrl, apiFetch } from "@/lib/api";
 import "./AccountContent.css";
 
 type User = { id: string; name?: string | null; email?: string | null; image?: string | null };
-type Install = { install_id: string; created_at?: string; last_seen_at?: string; extension_version?: string };
+type Install = { install_id: string; created_at?: string; last_seen_at?: string; extension_version?: string; chrome_version?: string | null; os_family?: string | null };
+
+function installLabel(inst: Install): string {
+  const parts: string[] = [];
+  if (inst.os_family) parts.push(inst.os_family);
+  if (inst.chrome_version) parts.push(`Chrome ${inst.chrome_version}`);
+  if (inst.extension_version) parts.push(`v${inst.extension_version}`);
+  return parts.length > 0 ? parts.join(" · ") : inst.install_id;
+}
 type Entitlement = { plan_code: string; active: boolean } | null;
 
 export function AccountContent(): React.ReactElement | null {
@@ -187,15 +195,12 @@ export function AccountContent(): React.ReactElement | null {
           ) : (
             installs.map((inst) => (
               <li key={inst.install_id} className="account-content-install-item">
-                <span className="account-content-install-id">{inst.install_id}</span>
-                <span className="account-content-install-meta">
-                  {inst.extension_version ?? ""}
-                </span>
+                <span className="account-content-install-id">{installLabel(inst)}</span>
                 <button
                   type="button"
                   onClick={() => handleUnlink(inst.install_id)}
                   className="account-content-unlink"
-                  aria-label={`Unlink install ${inst.install_id}`}
+                  aria-label={`Unlink install ${installLabel(inst)}`}
                 >
                   Unlink
                 </button>

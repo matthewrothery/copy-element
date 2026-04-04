@@ -18,6 +18,7 @@ import type {
   ExtractCssViaCdpPayload,
   McpTokenGeneratedPayload,
   McpTokenMetaPayload,
+  RefreshPlanPayload,
   RuntimeErrorCode,
   RuntimeMessage,
   RuntimeResponse
@@ -44,22 +45,22 @@ const UNINSTALL_URL = `${SERVER_URL}/uninstall`;
 
 chrome.runtime.onInstalled.addListener((details) => {
   void chrome.runtime.setUninstallURL(UNINSTALL_URL);
-  void registerInstall();
   void scheduleRefreshAlarm();
-  if (details.reason === "install") {
-    void getOrCreateInstallCredentials().then((creds) => {
+  void registerInstall().then((creds) => {
+    if (details.reason === "install") {
       void trackExtensionEvent("extension_installed", creds.install_id);
-    });
-  }
+    }
+  });
 });
 
-async function registerInstall(): Promise<void> {
+async function registerInstall(): Promise<{ install_id: string; install_secret: string }> {
   const creds = await getOrCreateInstallCredentials();
   await fetch(`${SERVER_URL}/api/installs/register`, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({ install_id: creds.install_id, install_secret: creds.install_secret }),
   }).catch(() => {});
+  return creds;
 }
 
 chrome.runtime.onStartup.addListener(() => {
@@ -600,6 +601,37 @@ chrome.runtime.onMessage.addListener((message: RuntimeMessage, sender, sendRespo
     void getOrCreateInstallCredentials()
       .then((creds) => sendResponse(success({ install_id: creds.install_id })))
       .catch((error: unknown) => sendResponse(failure(String(error), "UNKNOWN_ERROR")));
+    return true;
+  }
+
+  if (message.type === "REFRESH_PLAN") {
+    void (async () => {
+      try {
+        const token = await getAuthToken();
+        if (!token) {
+          sendResponse(success<RefreshPlanPayload>({ plan_code: "free" }));
+          return;
+        }
+        const res = await fetch(`${SERVER_URL}/api/billing/entitlement`, {
+          headers: { Authorization: `Bearer ${token}` },
+        });
+        if (res.ok) {
+          const data = (await res.json()) as { plan_code?: string };
+          const plan_code = data.plan_code ?? "free";
+          const authState = await getAuthState();
+          if (authState.user_email) {
+            await saveUserProfile(authState.user_email, plan_code);
+          }
+          sendResponse(success<RefreshPlanPayload>({ plan_code }));
+        } else {
+          const authState = await getAuthState();
+          sendResponse(success<RefreshPlanPayload>({ plan_code: authState.user_plan ?? "free" }));
+        }
+      } catch {
+        const authState = await getAuthState();
+        sendResponse(success<RefreshPlanPayload>({ plan_code: authState.user_plan ?? "free" }));
+      }
+    })();
     return true;
   }
 

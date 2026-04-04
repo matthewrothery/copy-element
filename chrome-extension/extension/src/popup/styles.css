@@ -604,6 +604,41 @@
   min-height: 32px;
 }
 
+.footer-user-info {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  min-width: 0;
+}
+
+.footer-email {
+  max-width: 160px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  color: var(--color-text-muted);
+  font-size: var(--text-caption);
+}
+
+.footer-plan-badge {
+  display: inline-block;
+  padding: 1px var(--space-2);
+  border-radius: var(--radius-1);
+  font-size: 11px;
+  font-weight: var(--font-weight-medium);
+  flex-shrink: 0;
+}
+
+.footer-plan-free {
+  background: var(--color-surface-alt);
+  color: var(--color-text-secondary);
+}
+
+.footer-plan-pro {
+  background: var(--color-accent-subtle);
+  color: var(--color-accent);
+}
+
 .settings-panel {
   display: flex;
   flex-direction: column;

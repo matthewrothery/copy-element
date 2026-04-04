@@ -61,8 +61,14 @@ billingRouter.post(
       const name = req.session!.user.name ?? null;
       const customerId = await getOrCreateStripeCustomerForUser(userId, email, name);
 
-      const body = req.body as { plan?: string };
-      const priceId = body?.plan === 'team' ? config.STRIPE_PRICE_PRO_MONTHLY : config.STRIPE_PRICE_PRO_MONTHLY;
+      const body = req.body as { interval?: string };
+      const interval = body?.interval === 'yearly' ? 'yearly' : 'monthly';
+      const priceId = interval === 'yearly' ? config.STRIPE_PRICE_PRO_YEARLY : config.STRIPE_PRICE_PRO_MONTHLY;
+
+      if (!priceId) {
+        res.status(500).json({ error: 'Billing is not configured for this interval.' });
+        return;
+      }
 
       const session = await stripe.checkout.sessions.create({
         mode: 'subscription',
@@ -117,11 +123,13 @@ billingRouter.post(
 export async function handleStripeWebhook(req: Request, res: Response): Promise<void> {
   const rawBody = req.body;
   if (!Buffer.isBuffer(rawBody)) {
+    console.error('Invalid body');
     res.status(400).send('Invalid body');
     return;
   }
   const sig = req.headers['stripe-signature'];
   if (typeof sig !== 'string' || !config.STRIPE_WEBHOOK_SECRET) {
+    console.error('Missing signature or webhook secret');
     res.status(400).send('Missing signature or webhook secret');
     return;
   }
@@ -130,6 +138,7 @@ export async function handleStripeWebhook(req: Request, res: Response): Promise<
     const stripe = getStripe();
     event = stripe.webhooks.constructEvent(rawBody, sig, config.STRIPE_WEBHOOK_SECRET);
   } catch (err) {
+    console.error('Invalid signature');
     res.status(400).send('Invalid signature');
     return;
   }
@@ -137,6 +146,7 @@ export async function handleStripeWebhook(req: Request, res: Response): Promise<
     await syncFromStripeEvent(event);
     res.status(200).json({ received: true });
   } catch {
+    console.error('Failed to sync from Stripe event');
     res.status(500).json({ received: false });
   }
 }

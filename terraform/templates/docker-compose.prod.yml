@@ -18,27 +18,9 @@ services:
   app:
     image: ${ECR_REGISTRY}/${ECR_SERVER_REPO}:latest
     container_name: element-armory-app
-    environment:
-      NODE_ENV: production
-      PORT: 80
-      DATABASE_URL: ${DATABASE_URL}
-      APP_URL: ${APP_URL}
-      SESSION_SECRET: ${SESSION_SECRET}
-      COOKIE_SECRET: ${COOKIE_SECRET}
-      # Server reads BETTER_AUTH_* (see server/src/config); was missing → broken OAuth / 502 via nginx
-      BETTER_AUTH_SECRET: ${SESSION_SECRET}
-      BETTER_AUTH_URL: ${APP_URL}
-      FRONTEND_URL: ${FRONTEND_URL}
-      ADMIN_ORIGIN: ${ADMIN_ORIGIN}
-      GOOGLE_CLIENT_ID: ${GOOGLE_CLIENT_ID}
-      GOOGLE_CLIENT_SECRET: ${GOOGLE_CLIENT_SECRET}
-      S3_ASSETS_BUCKET: ${S3_ASSETS_BUCKET}
-      AWS_REGION: ${AWS_REGION}
-      # Same value as AWS_REGION unless you use SES in a different region.
-      AWS_SES_REGION: ${AWS_SES_REGION:-${AWS_REGION}}
+    env_file: /home/ec2-user/element-armory/.env.server
     ports:
       - "3000:80"
-    # SQLite on host disk (same path for `compose run` migrate and `up`).
     volumes:
       - /home/ec2-user/element-armory/data:/data
     restart: unless-stopped
@@ -48,12 +30,10 @@ services:
   mcp:
     image: ${ECR_REGISTRY}/${ECR_MCP_REPO}:latest
     container_name: element-armory-mcp
+    env_file: /home/ec2-user/element-armory/.env.mcp
     environment:
-      NODE_ENV: production
       MCP_PORT: 3001
       MAIN_SERVER_URL: http://app:80
-      INTERNAL_API_KEY: ${INTERNAL_API_KEY}
-      ANTHROPIC_API_KEY: ${ANTHROPIC_API_KEY}
     depends_on:
       - app
     restart: unless-stopped

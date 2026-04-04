@@ -209,3 +209,55 @@ variable "s3_admin_bucket" {
   description = "S3 bucket name for admin SPA"
   type        = string
 }
+
+# Stripe billing
+variable "stripe_secret_key" {
+  description = "Stripe secret key (sk_live_* or sk_test_*)"
+  type        = string
+  sensitive   = true
+  default     = ""
+}
+
+variable "stripe_webhook_secret" {
+  description = "Stripe webhook signing secret (whsec_*)"
+  type        = string
+  sensitive   = true
+  default     = ""
+}
+
+variable "stripe_price_pro_monthly" {
+  description = "Stripe Price ID for the Pro monthly plan"
+  type        = string
+  default     = ""
+}
+
+variable "stripe_price_pro_yearly" {
+  description = "Stripe Price ID for the Pro yearly plan"
+  type        = string
+  default     = ""
+}
+
+variable "stripe_success_url" {
+  description = "URL Stripe redirects to after a successful checkout"
+  type        = string
+  default     = ""
+}
+
+variable "stripe_cancel_url" {
+  description = "URL Stripe redirects to when a checkout is cancelled"
+  type        = string
+  default     = ""
+}
+
+variable "stripe_portal_return_url" {
+  description = "URL Stripe redirects to when leaving the billing portal"
+  type        = string
+  default     = ""
+}
+
+# Email (AWS SES)
+variable "from_email" {
+  description = "Verified SES sender address used for transactional email (e.g. noreply@elementarmory.com)"
+  type        = string
+  default     = ""
+}

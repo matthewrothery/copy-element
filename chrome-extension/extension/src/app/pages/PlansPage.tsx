@@ -1,27 +1,98 @@
-import type { JSX } from "react";
+import { useEffect, useState, type JSX } from "react";
+import { getAuthState } from "../../shared/storage/auth-storage";
+import { getInstallIdFromBackground, openSignInPage, openUpgradePage, refreshPlanFromBackground } from "../../popup/api";
 
-const PRICING_URL = "https://elementarmory.com/pricing";
+type PlanView = "loading" | "free" | "pro";
 
 export function PlansPage(): JSX.Element {
+  const [view, setView] = useState<PlanView>("loading");
+  const [userEmail, setUserEmail] = useState<string | null>(null);
+
+  useEffect(() => {
+    void (async () => {
+      try {
+        await refreshPlanFromBackground().catch(() => {});
+        const state = await getAuthState();
+        if (!state.signed_in) {
+          setView("free");
+          return;
+        }
+        setUserEmail(state.user_email);
+        const plan = state.user_plan?.toLowerCase() ?? "free";
+        setView(plan === "pro" ? "pro" : "free");
+      } catch {
+        setView("free");
+      }
+    })();
+  }, []);
+
+  if (view === "loading") {
+    return (
+      <div className="app-page">
+        <div className="mcp-loading">
+          <span className="mcp-spinner" aria-label="Loading" />
+        </div>
+      </div>
+    );
+  }
+
   return (
     <div className="app-page">
       <header className="app-page-header">
         <h1 className="app-page-title">Plans & Pricing</h1>
-        <p className="app-page-subtitle">
-          Choose the plan that fits your workflow. View full pricing and features on our website.
-        </p>
+        {userEmail && (
+          <p className="app-page-subtitle">{userEmail}</p>
+        )}
       </header>
 
-      <section className="app-page-section">
-        <a
-          href={PRICING_URL}
-          target="_blank"
-          rel="noopener noreferrer"
-          className="app-page-cta"
-        >
-          View plans and pricing
-        </a>
-      </section>
+      {view === "pro" ? (
+        <section className="app-page-section">
+          <div className="plan-status-card">
+            <div className="plan-status-row">
+              <span className="plan-status-badge plan-status-pro">Pro · Active</span>
+            </div>
+            <p className="app-page-text">
+              You have full access to all Element Armory features including unlimited captures and MCP integration.
+            </p>
+            <button
+              type="button"
+              className="mcp-cta-btn"
+              onClick={openUpgradePage}
+            >
+              Manage billing
+            </button>
+          </div>
+        </section>
+      ) : (
+        <section className="app-page-section">
+          <div className="plan-status-card">
+            <div className="plan-status-row">
+              <span className="plan-status-badge plan-status-free">Free</span>
+            </div>
+            <ul className="app-page-list">
+              <li>Limited monthly captures</li>
+              <li>Local library storage</li>
+              <li>HTML export</li>
+            </ul>
+            <p className="app-page-text">
+              Upgrade to Pro for unlimited captures, MCP AI integration, and cloud sync.
+            </p>
+            <button
+              type="button"
+              className="mcp-cta-btn"
+              onClick={() => {
+                if (!userEmail) {
+                  void getInstallIdFromBackground().then(openSignInPage).catch(() => {});
+                } else {
+                  openUpgradePage();
+                }
+              }}
+            >
+              {userEmail ? "Upgrade to Pro" : "Sign in to upgrade"}
+            </button>
+          </div>
+        </section>
+      )}
     </div>
   );
 }
