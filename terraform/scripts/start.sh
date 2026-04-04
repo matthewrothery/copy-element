@@ -29,6 +29,8 @@ require_file "$COMPOSE_FILE"
 
 cd "$APP_DIR"
 
+mkdir -p "${APP_DIR}/data"
+
 set -a
 # shellcheck disable=SC1090
 source "$ENV_FILE"

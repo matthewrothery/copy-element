@@ -36,6 +36,9 @@ services:
       AWS_REGION: ${AWS_REGION}
     ports:
       - "3000:80"
+    # SQLite on host disk (same path for `compose run` migrate and `up`).
+    volumes:
+      - /home/ec2-user/element-armory/data:/data
     restart: unless-stopped
     networks:
       - element-armory-network

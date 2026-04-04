@@ -64,7 +64,7 @@ resource "aws_cloudfront_distribution" "website" {
     }
   }
 
-  # Route all /api/* to EC2 (Express). Without this, /api/auth/* and other API paths hit S3 and break CORS.
+  # Route /api/* to EC2 — evaluated before default S3 behavior
   ordered_cache_behavior {
     path_pattern     = "/api/*"
     allowed_methods  = ["DELETE", "GET", "HEAD", "OPTIONS", "PATCH", "POST", "PUT"]

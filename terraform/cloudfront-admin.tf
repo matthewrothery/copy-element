@@ -8,6 +8,20 @@ resource "aws_cloudfront_distribution" "admin" {
     }
   }
 
+  # EC2 origin for API requests
+  origin {
+    domain_name = aws_eip.ec2.public_dns
+    origin_id   = "admin-api-ec2"
+
+    custom_origin_config {
+      http_port              = 80
+      https_port             = 443
+      origin_protocol_policy = "http-only"
+      origin_ssl_protocols   = ["TLSv1.2"]
+      origin_read_timeout    = 30
+    }
+  }
+
   enabled             = true
   is_ipv6_enabled     = true
   http_version        = "http2and3"
@@ -32,6 +46,20 @@ resource "aws_cloudfront_distribution" "admin" {
   }
 
   price_class = "PriceClass_100"
+
+  # Forward /api/* to EC2 server — evaluated before S3 behaviors
+  ordered_cache_behavior {
+    path_pattern     = "/api/*"
+    allowed_methods  = ["DELETE", "GET", "HEAD", "OPTIONS", "PATCH", "POST", "PUT"]
+    cached_methods   = ["GET", "HEAD"]
+    target_origin_id = "admin-api-ec2"
+
+    viewer_protocol_policy = "redirect-to-https"
+    compress               = false
+
+    cache_policy_id          = data.aws_cloudfront_cache_policy.caching_disabled.id
+    origin_request_policy_id = data.aws_cloudfront_origin_request_policy.all_viewer.id
+  }
 
   # Long-lived cache for hashed assets
   ordered_cache_behavior {

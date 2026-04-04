@@ -7,7 +7,7 @@ COPY server/package.json server/package-lock.json* ./
 RUN npm ci
 
 COPY server/. .
-RUN npm run build && mkdir -p dist/db && cp -r src/db/migrations dist/db/
+RUN npm run build
 
 # ----------- RUNTIME STAGE -----------
 FROM node:24-alpine3.23 AS runner
