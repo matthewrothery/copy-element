@@ -7,7 +7,8 @@ import {
   openLibraryInNewTab,
   openSignInPage,
   refreshPlanFromBackground,
-  startCapture
+  startCapture,
+  trySilentAuthFromBackground,
 } from "./api";
 import { trackPopupEvent } from "../shared/analytics";
 import type { CaptureMode } from "../shared/types/messages";
@@ -178,6 +179,10 @@ export function App(): JSX.Element {
         if (state.signed_in) {
           setUserEmail(state.user_email);
           setUserPlan(state.user_plan);
+        } else {
+          // Not signed in — attempt silent auth using the website session cookie.
+          // If it succeeds, the storage change listener will re-render the signed-in state.
+          void trySilentAuthFromBackground().catch(() => {});
         }
       } catch {
         // ignore

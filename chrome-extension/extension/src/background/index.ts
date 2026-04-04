@@ -46,9 +46,14 @@ const UNINSTALL_URL = `${SERVER_URL}/uninstall`;
 chrome.runtime.onInstalled.addListener((details) => {
   void chrome.runtime.setUninstallURL(UNINSTALL_URL);
   void scheduleRefreshAlarm();
-  void registerInstall().then((creds) => {
+  void registerInstall().then(async (creds) => {
     if (details.reason === "install") {
       void trackExtensionEvent("extension_installed", creds.install_id);
+    }
+    try {
+      await trySilentAuth(creds.install_id, creds.install_secret);
+    } catch {
+      // Silently fail — user may not have a website session
     }
   });
 });
@@ -61,6 +66,60 @@ async function registerInstall(): Promise<{ install_id: string; install_secret: 
     body: JSON.stringify({ install_id: creds.install_id, install_secret: creds.install_secret }),
   }).catch(() => {});
   return creds;
+}
+
+async function trySilentAuth(installId: string, installSecret: string): Promise<boolean> {
+  // Step 1: Link install to website session (requires session cookie)
+  const linkRes = await fetch(`${SERVER_URL}/api/installs/link`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    credentials: "include",
+    body: JSON.stringify({ install_id: installId }),
+  });
+  if (!linkRes.ok) return false;
+
+  // Step 2: Get a short-lived auth code
+  const codeRes = await fetch(`${SERVER_URL}/api/auth/extension-session/code`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    credentials: "include",
+    body: JSON.stringify({ install_id: installId }),
+  });
+  if (!codeRes.ok) return false;
+  const codeData = (await codeRes.json()) as { code?: string };
+  if (!codeData.code) return false;
+
+  // Step 3: Exchange code for bearer token
+  const tokenRes = await fetch(`${SERVER_URL}/api/auth/extension-session`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ code: codeData.code, install_id: installId, install_secret: installSecret }),
+  });
+  if (!tokenRes.ok) return false;
+  const tokenData = (await tokenRes.json()) as { token?: string; expires_at?: string };
+  if (!tokenData.token || !tokenData.expires_at) return false;
+
+  await saveToken(tokenData.token, tokenData.expires_at);
+  await scheduleRefreshAlarm();
+
+  // Best-effort: fetch and save user profile
+  try {
+    const [meRes, entitlementRes] = await Promise.all([
+      fetch(`${SERVER_URL}/api/me`, { headers: { Authorization: `Bearer ${tokenData.token}` } }),
+      fetch(`${SERVER_URL}/api/billing/entitlement`, { headers: { Authorization: `Bearer ${tokenData.token}` } }),
+    ]);
+    const meData = meRes.ok ? ((await meRes.json()) as { user?: { email?: string } }) : null;
+    const entData = entitlementRes.ok ? ((await entitlementRes.json()) as { plan_code?: string }) : null;
+    const email = meData?.user?.email ?? null;
+    const planCode = entData?.plan_code ?? "free";
+    if (email) {
+      await saveUserProfile(email, planCode);
+    }
+  } catch {
+    // Silently fail — user info is non-critical
+  }
+
+  return true;
 }
 
 chrome.runtime.onStartup.addListener(() => {
@@ -688,6 +747,19 @@ chrome.runtime.onMessage.addListener((message: RuntimeMessage, sender, sendRespo
         sendResponse(success(payload));
       } catch (error: unknown) {
         sendResponse(failure(String(error), "UNKNOWN_ERROR"));
+      }
+    })();
+    return true;
+  }
+
+  if (message.type === "TRY_SILENT_AUTH") {
+    void (async () => {
+      try {
+        const creds = await getOrCreateInstallCredentials();
+        const result = await trySilentAuth(creds.install_id, creds.install_secret);
+        sendResponse(success({ success: result }));
+      } catch {
+        sendResponse(success({ success: false }));
       }
     })();
     return true;

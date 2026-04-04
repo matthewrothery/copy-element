@@ -1,7 +1,7 @@
 import { nanoid } from "nanoid";
 import type { Folder } from "../shared/types/folder";
 import type { CapturedElementData, Snippet } from "../shared/types/snippet";
-import type { AuthStatePayload, CaptureMode, McpTokenGeneratedPayload, McpTokenMetaPayload, RefreshPlanPayload, RuntimeErrorCode, RuntimeMessage, RuntimeResponse } from "../shared/types/messages";
+import type { AuthStatePayload, CaptureMode, McpTokenGeneratedPayload, McpTokenMetaPayload, RefreshPlanPayload, RuntimeErrorCode, RuntimeMessage, RuntimeResponse, TrySilentAuthPayload } from "../shared/types/messages";
 import { SERVER_URL } from "../shared/server-url";
 
 export class RuntimeRequestError extends Error {
@@ -146,6 +146,10 @@ export async function rotateMcpToken(): Promise<McpTokenGeneratedPayload> {
 
 export async function refreshPlanFromBackground(): Promise<RefreshPlanPayload> {
   return sendRuntimeMessage<RefreshPlanPayload>({ type: "REFRESH_PLAN" });
+}
+
+export async function trySilentAuthFromBackground(): Promise<TrySilentAuthPayload> {
+  return sendRuntimeMessage<TrySilentAuthPayload>({ type: "TRY_SILENT_AUTH" });
 }
 
 export function openUpgradePage(): void {

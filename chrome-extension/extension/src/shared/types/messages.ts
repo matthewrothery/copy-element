@@ -192,6 +192,14 @@ export interface RefreshPlanRequest {
   type: "REFRESH_PLAN";
 }
 
+export interface TrySilentAuthRequest {
+  type: "TRY_SILENT_AUTH";
+}
+
+export interface TrySilentAuthPayload {
+  success: boolean;
+}
+
 export interface RefreshPlanPayload {
   plan_code: string;
 }
@@ -247,4 +255,5 @@ export type RuntimeMessage =
   | GetMcpTokenMetaRequest
   | GenerateMcpTokenRequest
   | RotateMcpTokenRequest
-  | RefreshPlanRequest;
+  | RefreshPlanRequest
+  | TrySilentAuthRequest;
