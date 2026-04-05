@@ -1,11 +1,11 @@
 ---
 title: "Copy Any Website Element and Convert It to React"
 slug: "copy-any-website-element-and-convert-it-to-react"
-date: "2026-03-23"
-author: "Matt"
+date: "2026-03-27"
+author: "James"
 excerpt: "A practical workflow for capturing UI from any site, extracting the right structure, and rebuilding it as React without starting from scratch."
 readTime: "7 min read"
-coverImage: "https://pixabay.com/get/g81e222e5e85b2bce3681d17456194c0d064b692cae532aab529242e488a9614a3322be93a757f80385be40345708e316997aa596bf9753473ed30cc43ee30ba6_1280.jpg"
+coverImage: "/blog/copy-any-website-element-and-convert-it-to-react.jpg"
 ---
 
 # Copy Any Website Element and Convert It to React

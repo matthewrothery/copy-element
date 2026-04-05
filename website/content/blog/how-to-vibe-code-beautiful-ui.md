@@ -2,10 +2,10 @@
 title: "How to Vibe Code Beautiful UI"
 slug: "how-to-vibe-code-beautiful-ui"
 date: "2026-03-23"
-author: "Matt"
+author: "James"
 excerpt: "Vibe coding UI works when you stop asking for “something nice” and start giving the model structure, references, and constraints. Here’s a practical way to get clean, usable interfaces without fighting the output."
 readTime: "7 min read"
-coverImage: "https://pixabay.com/get/g1c3639d4ecdfea598065e43fa5dfbb1b8ba28170796acc7076547c0bc6b1dcf80bfb425fc065121bd229f79d7cd874d5212eaa4b22f33964a2074749e9fe2d78_1280.png"
+coverImage: "/blog/how-to-vibe-code-beautiful-ui.jpg"
 ---
 
 # How to Vibe Code Beautiful UI

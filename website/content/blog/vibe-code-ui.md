@@ -1,11 +1,11 @@
 ---
 title: "How to Vibe Code UI Without Getting Stuck"
 slug: "vibe-code-ui"
-date: "2026-03-23"
-author: "Matt"
+date: "2026-04-03"
+author: "James"
 excerpt: "Vibe coding UI works best when you stop asking AI to invent everything at once. Capture real interfaces, break them into pieces, and rebuild with intent."
 readTime: "7 min read"
-coverImage: "https://pixabay.com/get/gf75798a9a266ab9f47efa1a800db6c2fca397f244c3dca84eb89f4b47a2451a462aa1d1dfa6770c9306a7e2e3de66df504f45b317b572c52325ee0ebc3d4b4da_1280.png"
+coverImage: "/blog/vibe-code-ui.jpg"
 ---
 
 Vibe coding UI sounds easy until the layout drifts, spacing breaks, or the generated screen looks close but not usable.

@@ -2,10 +2,10 @@
 title: "How Element Armory Captures UI From Any Website"
 slug: "how-element-armory-captures-ui"
 date: "2026-03-01"
-author: "Matt"
+author: "James"
 excerpt: "A look at how Element Armory's capture pipeline works under the hood-from DOM selection to clean HTML and CSS output."
 readTime: "5 min read"
-coverImage: "https://picsum.photos/seed/element-armory/800/400"
+coverImage: "/blog/element-armory-captures-ui.jpg"
 ---
 
 ## The Problem With Inspecting UI
