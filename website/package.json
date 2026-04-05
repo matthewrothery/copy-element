@@ -9,6 +9,7 @@
     "lint": "eslint"
   },
   "dependencies": {
+    "@plausible-analytics/tracker": "^0.4.4",
     "gray-matter": "^4.0.3",
     "lucide-react": "^0.577.0",
     "marked": "^17.0.5",

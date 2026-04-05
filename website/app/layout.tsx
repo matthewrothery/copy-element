@@ -3,6 +3,7 @@ import "@/styles/tokens.css";
 import "@/styles/base.css";
 import { JsonLd } from "@/components/JsonLd";
 import { Analytics } from "@/components/Analytics/Analytics";
+import { PlausibleAnalytics } from "@/components/PlausibleAnalytics";
 
 const BASE_URL = process.env.NEXT_PUBLIC_SITE_URL ?? "https://elementarmory.example.com";
 
@@ -51,6 +52,7 @@ export default function RootLayout({
       <body>
         <JsonLd />
         <Analytics />
+        <PlausibleAnalytics />
         {children}
       </body>
     </html>
