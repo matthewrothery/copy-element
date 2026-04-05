@@ -112,6 +112,27 @@ resource "aws_iam_role_policy" "ec2_ssm" {
   })
 }
 
+# Policy for EC2 to send email via SES
+resource "aws_iam_role_policy" "ec2_ses_send" {
+  name = "${var.project}-${local.normalized_env}-ses-send"
+  role = aws_iam_role.ec2_instance_role.id
+
+  policy = jsonencode({
+    Version = "2012-10-17"
+    Statement = [
+      {
+        Effect = "Allow"
+        Action = ["ses:SendEmail", "ses:SendRawEmail"]
+        Resource = [
+          "arn:aws:ses:us-east-1:${local.account_id}:identity/${var.hosted_zone}",
+          "arn:aws:ses:us-east-1:${local.account_id}:configuration-set/${aws_sesv2_configuration_set.transactional.configuration_set_name}",
+          "arn:aws:ses:us-east-1:${local.account_id}:configuration-set/${aws_sesv2_configuration_set.marketing.configuration_set_name}"
+        ]
+      }
+    ]
+  })
+}
+
 resource "aws_iam_role_policy_attachment" "ec2_ssm_managed" {
   role       = aws_iam_role.ec2_instance_role.name
   policy_arn = "arn:aws:iam::aws:policy/AmazonSSMManagedInstanceCore"

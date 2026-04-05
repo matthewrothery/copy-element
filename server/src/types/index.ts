@@ -31,6 +31,7 @@ export interface AppConfig {
   SUPPORT_EMAIL: string;
   ADMIN_ORIGIN: string;
   INTERNAL_TOOLS_PATH: string;
+  ADMIN_EMAILS: string[];
 }
 
 export interface HealthResponse {

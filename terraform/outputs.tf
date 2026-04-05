@@ -69,9 +69,29 @@ output "github_actions_user_name" {
   value       = aws_iam_user.github_actions_deployer.name
 }
 
+output "ses_transactional_config_set_name" {
+  description = "SES configuration set name for transactional email"
+  value       = aws_sesv2_configuration_set.transactional.configuration_set_name
+}
+
+output "ses_marketing_config_set_name" {
+  description = "SES configuration set name for marketing email"
+  value       = aws_sesv2_configuration_set.marketing.configuration_set_name
+}
+
+output "ses_bounce_topic_arn" {
+  description = "SNS topic ARN for SES bounce notifications"
+  value       = aws_sns_topic.ses_bounces.arn
+}
+
+output "ses_complaint_topic_arn" {
+  description = "SNS topic ARN for SES complaint notifications"
+  value       = aws_sns_topic.ses_complaints.arn
+}
+
 output "deployment_instructions" {
   description = "Instructions for deploying applications"
-  value = <<-EOT
+  value       = <<-EOT
     To deploy:
     
     1. Build and push server image to ECR:

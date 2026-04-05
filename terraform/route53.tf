@@ -4,7 +4,9 @@ data "aws_route53_zone" "main" {
 }
 
 locals {
-  apex_txt_values = compact([var.search_console_txt, var.gmail_txt])
+  # SPF record always included — covers both SES and Google Workspace senders
+  ses_spf_record  = "v=spf1 include:amazonses.com include:_spf.google.com ~all"
+  apex_txt_values = compact([var.search_console_txt, var.gmail_txt, local.ses_spf_record])
 }
 
 # Website A record
@@ -67,6 +69,53 @@ resource "aws_route53_record" "admin_a" {
     zone_id                = aws_cloudfront_distribution.admin.hosted_zone_id
     evaluate_target_health = false
   }
+}
+
+# SES domain verification TXT record
+resource "aws_route53_record" "ses_verification" {
+  zone_id = data.aws_route53_zone.main.zone_id
+  name    = "_amazonses.${var.hosted_zone}"
+  type    = "TXT"
+  ttl     = 300
+  records = [aws_ses_domain_identity.main.verification_token]
+}
+
+# SES DKIM CNAME records (3 tokens)
+resource "aws_route53_record" "ses_dkim" {
+  count   = 3
+  zone_id = data.aws_route53_zone.main.zone_id
+  name    = "${aws_ses_domain_dkim.main.dkim_tokens[count.index]}._domainkey.${var.hosted_zone}"
+  type    = "CNAME"
+  ttl     = 300
+  records = ["${aws_ses_domain_dkim.main.dkim_tokens[count.index]}.dkim.amazonses.com"]
+}
+
+# DMARC TXT record
+resource "aws_route53_record" "dmarc" {
+  count   = var.ses_dmarc_rua != "" ? 1 : 0
+  zone_id = data.aws_route53_zone.main.zone_id
+  name    = "_dmarc.${var.hosted_zone}"
+  type    = "TXT"
+  ttl     = 300
+  records = ["v=DMARC1; p=${var.ses_dmarc_policy}; rua=mailto:${var.ses_dmarc_rua}; fo=1"]
+}
+
+# Custom MAIL FROM MX record — routes bounces back through our subdomain
+resource "aws_route53_record" "mail_from_mx" {
+  zone_id = data.aws_route53_zone.main.zone_id
+  name    = "mail.${var.hosted_zone}"
+  type    = "MX"
+  ttl     = 300
+  records = ["10 feedback-smtp.us-east-1.amazonses.com."]
+}
+
+# Custom MAIL FROM SPF TXT record
+resource "aws_route53_record" "mail_from_spf" {
+  zone_id = data.aws_route53_zone.main.zone_id
+  name    = "mail.${var.hosted_zone}"
+  type    = "TXT"
+  ttl     = 300
+  records = ["v=spf1 include:amazonses.com ~all"]
 }
 
 # Gmail / Google Workspace MX record (apex)

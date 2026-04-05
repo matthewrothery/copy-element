@@ -38,6 +38,10 @@ function getConfig(): AppConfig {
       process.env[ENV_KEYS.ADMIN_ORIGIN] ??
       (nodeEnv === 'development' ? DEFAULTS.ADMIN_ORIGIN_LOCAL : 'https://admin.elementarmory.com'),
     INTERNAL_TOOLS_PATH: process.env[ENV_KEYS.INTERNAL_TOOLS_PATH] ?? '',
+    ADMIN_EMAILS: (process.env[ENV_KEYS.ADMIN_EMAILS] ?? '')
+      .split(',')
+      .map(e => e.trim().toLowerCase())
+      .filter(Boolean),
   };
 }
 

@@ -32,20 +32,24 @@ locals {
     APP_URL="https://${var.website_domain}"
     FRONTEND_URL="https://${var.website_domain}"
     ADMIN_ORIGIN="https://${var.admin_subdomain}.${var.hosted_zone}"
+    BETTER_AUTH_URL="https://${var.website_domain}/api/auth"
 
     # Auth secrets
     SESSION_SECRET="${var.session_secret}"
     COOKIE_SECRET="${var.cookie_secret}"
     GOOGLE_CLIENT_ID="${var.google_client_id}"
     GOOGLE_CLIENT_SECRET="${var.google_client_secret}"
+    BETTER_AUTH_SECRET="${var.better_auth_secret}"
 
     # S3 (capture assets / screenshots)
     S3_ASSETS_BUCKET="${local.s3_assets_bucket_name}"
     AWS_REGION="${var.aws_region}"
-    AWS_SES_REGION="${var.aws_region}"
+    AWS_SES_REGION="us-east-1"
 
     # Transactional email (AWS SES)
     FROM_EMAIL="${var.from_email}"
+    SES_TRANSACTIONAL_CONFIG_SET="${aws_sesv2_configuration_set.transactional.configuration_set_name}"
+    SES_MARKETING_CONFIG_SET="${aws_sesv2_configuration_set.marketing.configuration_set_name}"
 
     # Stripe billing
     STRIPE_SECRET_KEY="${var.stripe_secret_key}"
@@ -58,6 +62,9 @@ locals {
 
     # Shared secret for server ↔ mcp-server calls
     INTERNAL_API_KEY="${var.internal_api_key}"
+
+    # Admin users (comma-separated emails)
+    ADMIN_EMAILS="${var.admin_emails}"
 
     NODE_ENV=production
   EOT
@@ -92,7 +99,7 @@ resource "aws_instance" "app" {
   ami           = data.aws_ami.amazon_linux_2023.id
   instance_type = var.ec2_instance_type
 
-  subnet_id                   = aws_subnet.public[0].id
+  subnet_id = aws_subnet.public[0].id
   # SSH security group only attached when local_ip is set — prevents open SSH to 0.0.0.0/0
   vpc_security_group_ids = var.local_ip != "" ? [
     aws_security_group.allow_web_traffic.id,

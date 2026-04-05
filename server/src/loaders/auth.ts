@@ -91,6 +91,14 @@ export const auth = betterAuth({
           } catch (err) {
             console.warn('[auth] Onboarding job enqueue failed:', err);
           }
+          try {
+            const { ensureAdminUser } = await import('../services/admin-users.js');
+            if (config.ADMIN_EMAILS.includes(user.email.toLowerCase())) {
+              ensureAdminUser(user.id);
+            }
+          } catch (err) {
+            console.warn('[auth] Admin promotion failed:', err);
+          }
         },
       },
     },

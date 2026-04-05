@@ -1,9 +1,9 @@
 terraform {
   backend "s3" {
-    bucket        = "element-armory-terraform-state"
-    region        = "us-east-2"
-    encrypt       = true
-    use_lockfile  = true
+    bucket       = "element-armory-terraform-state"
+    region       = "us-east-2"
+    encrypt      = true
+    use_lockfile = true
     # key supplied at init: -backend-config "key=state/$TF_VAR_environment"
   }
 
@@ -25,16 +25,19 @@ provider "aws" {
   region                   = var.aws_region
 }
 
-# NOTE: CloudFront requires the certificate to be in us-east-1
+# NOTE: CloudFront + SES (and SNS destinations for SES) must use us-east-1.
+# Mirror default provider auth so alias always uses the same credentials.
 provider "aws" {
-  alias   = "us_east_1"
-  region  = "us-east-1"
+  alias                    = "us_east_1"
+  region                   = "us-east-1"
+  shared_config_files      = ["~/.aws/config"]
+  shared_credentials_files = ["~/.aws/credentials"]
 }
 
 data "aws_caller_identity" "current" {}
 
 locals {
-  normalized_env         = lower(replace(var.environment, "/\\W|_|\\s/", "-"))
-  account_id             = data.aws_caller_identity.current.account_id
-  s3_assets_bucket_name  = "${var.s3_assets_bucket_base}-${local.normalized_env}"
+  normalized_env        = lower(replace(var.environment, "/\\W|_|\\s/", "-"))
+  account_id            = data.aws_caller_identity.current.account_id
+  s3_assets_bucket_name = "${var.s3_assets_bucket_base}-${local.normalized_env}"
 }

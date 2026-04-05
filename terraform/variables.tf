@@ -122,6 +122,13 @@ variable "google_client_secret" {
   default     = ""
 }
 
+variable "better_auth_secret" {
+  description = "Better Auth secret"
+  type        = string
+  sensitive   = true
+  default     = ""
+}
+
 
 # ECR repository name
 variable "ecr_server_repo" {
@@ -258,6 +265,24 @@ variable "stripe_portal_return_url" {
 # Email (AWS SES)
 variable "from_email" {
   description = "Verified SES sender address used for transactional email (e.g. noreply@elementarmory.com)"
+  type        = string
+  default     = ""
+}
+
+variable "ses_dmarc_policy" {
+  description = "DMARC policy: none (monitor), quarantine, or reject. Start with none until reports confirm all senders are covered."
+  type        = string
+  default     = "none"
+}
+
+variable "ses_dmarc_rua" {
+  description = "Email address for DMARC aggregate reports (e.g. dmarc-reports@elementarmory.com)"
+  type        = string
+  default     = ""
+}
+
+variable "admin_emails" {
+  description = "Comma-separated email addresses to auto-promote to admin (e.g. you@example.com)"
   type        = string
   default     = ""
 }
