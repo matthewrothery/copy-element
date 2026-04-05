@@ -139,6 +139,14 @@ export interface LimitReachedRow {
   count: number;
 }
 
+export interface UsageMetricsData {
+  avg_time_to_first_capture_min: number | null;
+  avg_captures_per_user: number | null;
+  mcp_connections: number;
+  avg_days_to_first_mcp_use: number | null;
+  upgrade_rate_pct: number | null;
+}
+
 export interface ComplimentaryData {
   grant: { id: string; plan_code: string; created_at: number } | null;
   entitlement: { plan_code: string; active: boolean };
@@ -168,6 +176,7 @@ export const api = {
   pageDurations: (days = 30) => get<{ pages: PageDurationRow[] }>('/api/admin/page-durations', { days }),
   preInstallJourney: (days = 30) => get<{ pages: PreInstallPage[] }>('/api/admin/pre-install-journey', { days }),
   limitReached: (days = 30) => get<{ breakdown: LimitReachedRow[] }>('/api/admin/limit-reached', { days }),
+  usageMetrics: () => get<UsageMetricsData>('/api/admin/usage-metrics'),
 
   grantComplimentary: (userId: string, planCode = 'pro') =>
     post<ComplimentaryData>(`/api/admin/users/${userId}/complimentary`, { plan_code: planCode }),

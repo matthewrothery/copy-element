@@ -624,6 +624,91 @@ export function getPreInstallJourney(days: number): PreInstallPage[] {
 }
 
 // ---------------------------------------------------------------------------
+// Usage Metrics
+// ---------------------------------------------------------------------------
+
+export interface UsageMetricsResult {
+  avg_time_to_first_capture_min: number | null;
+  avg_captures_per_user: number | null;
+  mcp_connections: number;
+  avg_days_to_first_mcp_use: number | null;
+  upgrade_rate_pct: number | null;
+}
+
+export function getUsageMetrics(): UsageMetricsResult {
+  const db = getDb();
+
+  // Average time (minutes) from install creation to first capture, per install
+  const timeToFirstCapture = db.prepare(`
+    SELECT AVG((fc.first_captured_at - i.created_at) / 60000.0) AS avg_min
+    FROM installs i
+    JOIN (
+      SELECT install_id, MIN(created_at) AS first_captured_at
+      FROM analytics_events
+      WHERE event_type = 'element_captured' AND install_id IS NOT NULL
+      GROUP BY install_id
+    ) fc ON fc.install_id = i.install_id
+    WHERE fc.first_captured_at >= i.created_at
+  `).get() as { avg_min: number | null };
+
+  // Average captures per user (users who have at least one capture)
+  const capturesPerUser = db.prepare(`
+    SELECT AVG(cnt) AS avg_captures
+    FROM (
+      SELECT COUNT(*) AS cnt
+      FROM captures
+      WHERE user_id IS NOT NULL
+      GROUP BY user_id
+    )
+  `).get() as { avg_captures: number | null };
+
+  // Count of distinct users who have created an MCP token (connected MCP)
+  const mcpConnections = (db.prepare(
+    `SELECT COUNT(DISTINCT user_id) AS n FROM mcp_tokens`,
+  ).get() as { n: number }).n;
+
+  // Average days from account creation to first MCP call
+  const firstMcpUse = db.prepare(`
+    SELECT AVG((mu.first_call_at - u.createdAt) / 86400000.0) AS avg_days
+    FROM (
+      SELECT user_id, MIN(first_call_at) AS first_call_at
+      FROM mcp_usage
+      WHERE first_call_at IS NOT NULL
+      GROUP BY user_id
+    ) mu
+    JOIN "user" u ON u.id = mu.user_id
+    WHERE mu.first_call_at >= u.createdAt
+  `).get() as { avg_days: number | null };
+
+  // Upgrade rate: active paid subscribers / users with at least one linked install
+  const linkedUsers = (db.prepare(
+    `SELECT COUNT(DISTINCT user_id) AS n FROM installs WHERE user_id IS NOT NULL`,
+  ).get() as { n: number }).n;
+
+  const paidSubscribers = (db.prepare(
+    `SELECT COUNT(DISTINCT user_id) AS n FROM subscriptions WHERE status = 'active' AND plan_code != 'free' AND source = 'stripe'`,
+  ).get() as { n: number }).n;
+
+  const upgradeRatePct = linkedUsers > 0
+    ? Math.round((paidSubscribers / linkedUsers) * 100 * 10) / 10
+    : null;
+
+  return {
+    avg_time_to_first_capture_min: timeToFirstCapture.avg_min != null
+      ? Math.round(timeToFirstCapture.avg_min * 10) / 10
+      : null,
+    avg_captures_per_user: capturesPerUser.avg_captures != null
+      ? Math.round(capturesPerUser.avg_captures * 10) / 10
+      : null,
+    mcp_connections: mcpConnections,
+    avg_days_to_first_mcp_use: firstMcpUse.avg_days != null
+      ? Math.round(firstMcpUse.avg_days * 10) / 10
+      : null,
+    upgrade_rate_pct: upgradeRatePct,
+  };
+}
+
+// ---------------------------------------------------------------------------
 // Limit Reached Breakdown
 // ---------------------------------------------------------------------------
 

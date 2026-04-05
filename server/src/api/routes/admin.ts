@@ -13,6 +13,7 @@ import {
   getPageDurations,
   getPreInstallJourney,
   getLimitReachedBreakdown,
+  getUsageMetrics,
 } from '../../services/admin-queries.js';
 import { grantComplimentary, revokeComplimentary, getComplimentaryGrant } from '../../services/complimentary.js';
 import { getUserEntitlement } from '../../services/entitlements.js';
@@ -96,6 +97,11 @@ adminRouter.get('/page-durations', (_req: Request, res: Response) => {
 adminRouter.get('/pre-install-journey', (_req: Request, res: Response) => {
   const days = Math.min(90, Math.max(1, parseInt((_req.query.days as string) ?? '30', 10) || 30));
   res.json({ pages: getPreInstallJourney(days) });
+});
+
+/** GET /api/admin/usage-metrics */
+adminRouter.get('/usage-metrics', (_req: Request, res: Response) => {
+  res.json(getUsageMetrics());
 });
 
 /** GET /api/admin/limit-reached?days=30 */

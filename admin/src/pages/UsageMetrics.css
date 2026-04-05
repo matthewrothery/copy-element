@@ -4,6 +4,12 @@
   gap: var(--space-4);
 }
 
+.usage__grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: var(--space-4);
+}
+
 .usage__loading,
 .usage__error {
   display: flex;
