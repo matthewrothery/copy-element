@@ -67,7 +67,17 @@ export function SignInForm(): React.ReactElement {
   const [callbackURL, setCallbackURL] = useState(getCallbackUrl);
 
   useEffect(() => {
-    setCallbackURL(getCallbackUrl());
+    const url = getCallbackUrl();
+    setCallbackURL(url);
+    // Redirect already-signed-in users away from the sign-in page
+    void apiFetch("/api/me", { credentials: "include" })
+      .then((res) => res.json() as Promise<{ user?: { id?: string } | null }>)
+      .then((data) => {
+        if (data?.user?.id) {
+          window.location.replace(url);
+        }
+      })
+      .catch(() => {});
   }, []);
 
   async function handleGoogleSignIn(): Promise<void> {
