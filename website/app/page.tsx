@@ -133,7 +133,7 @@ export default function Home(): React.ReactElement {
           />
         </Section>
 
-        <Section>
+        {/* <Section>
           <FeatureSection
             subheading="Built for developers"
             title="Output your tools can actually use."
@@ -156,7 +156,7 @@ export default function Home(): React.ReactElement {
               },
             ]}
           />
-        </Section>
+        </Section> */}
 
         <Section id="pricing">
           <CTABlock />
