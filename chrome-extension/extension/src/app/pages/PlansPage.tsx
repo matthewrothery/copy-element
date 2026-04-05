@@ -1,6 +1,6 @@
 import { useEffect, useState, type JSX } from "react";
 import { getAuthState } from "../../shared/storage/auth-storage";
-import { getInstallIdFromBackground, openSignInPage, openUpgradePage, refreshPlanFromBackground } from "../../popup/api";
+import { getInstallIdFromBackground, openBillingPortal, openSignInPage, openUpgradePage, refreshPlanFromBackground, signOutFromBackground } from "../../popup/api";
 
 type PlanView = "loading" | "free" | "pro";
 
@@ -36,14 +36,32 @@ export function PlansPage(): JSX.Element {
     );
   }
 
+  function handleSignOut(): void {
+    void signOutFromBackground().then(() => {
+      window.location.hash = "#/library";
+    }).catch(() => {
+      window.location.hash = "#/library";
+    });
+  }
+
   return (
     <div className="app-page">
       <header className="app-page-header">
         <h1 className="app-page-title">Plans & Pricing</h1>
-        {userEmail && (
-          <p className="app-page-subtitle">{userEmail}</p>
-        )}
       </header>
+
+      {userEmail && (
+        <div className="account-detail-section">
+          <span>Signed in as: {userEmail}</span>
+          <button
+            type="button"
+            className="account-detail-signout"
+            onClick={handleSignOut}
+          >
+            Sign out
+          </button>
+        </div>
+      )}
 
       {view === "pro" ? (
         <section className="app-page-section">
@@ -57,7 +75,7 @@ export function PlansPage(): JSX.Element {
             <button
               type="button"
               className="mcp-cta-btn"
-              onClick={openUpgradePage}
+              onClick={() => void openBillingPortal()}
             >
               Manage billing
             </button>

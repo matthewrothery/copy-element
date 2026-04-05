@@ -348,7 +348,7 @@ export function App(): JSX.Element {
             if (!isSignedIn) {
               void getInstallIdFromBackground().then(openSignInPage).catch(() => {});
             } else {
-              setView((v) => (v === "account" ? "home" : "account"));
+              chrome.tabs.create({ url: chrome.runtime.getURL("app.html#/plans") });
             }
           }}
           aria-label="Open account"

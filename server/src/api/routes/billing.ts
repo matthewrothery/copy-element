@@ -91,24 +91,58 @@ billingRouter.post(
   }
 );
 
-/** POST /api/billing/portal-session — session required. Returns { url } to redirect to Stripe Customer Portal. */
+/** POST /api/billing/portal-session — session or extension Bearer token required. Returns { url } to redirect to Stripe Customer Portal. */
 billingRouter.post(
   '/portal-session',
-  requireSession,
-  async (req: RequestWithSession, res: Response<{ url: string } | { error: string }>) => {
+  async (req: Request, res: Response<{ url: string } | { error: string }>) => {
     try {
       const stripe = getStripe();
-      const userId = req.session!.user.id;
-      const email = req.session!.user.email ?? '';
-      const name = req.session!.user.name ?? null;
-      const customerId = await getOrCreateStripeCustomerForUser(userId, email, name);
 
-      const session = await stripe.billingPortal.sessions.create({
+      let userId: string;
+      let email: string;
+      let name: string | null;
+
+      // Support extension Bearer token
+      const authHeader = req.headers.authorization;
+      if (authHeader?.startsWith('Bearer ')) {
+        const token = authHeader.slice(7).trim();
+        const install = getInstallFromToken(token);
+        if (!install) {
+          res.status(401).json({ error: 'Unauthorized' });
+          return;
+        }
+        const db = (await import('../../db/connection.js')).getDb();
+        const row = db
+          .prepare<[string], { email: string; name: string | null }>(
+            'SELECT email, name FROM "user" WHERE id = ?'
+          )
+          .get(install.user_id);
+        if (!row) {
+          res.status(401).json({ error: 'Unauthorized' });
+          return;
+        }
+        userId = install.user_id;
+        email = row.email;
+        name = row.name;
+      } else {
+        // Fall back to cookie-based session
+        const session = await auth.api.getSession({ headers: fromNodeHeaders(req.headers) });
+        if (!session) {
+          res.status(401).json({ error: 'Unauthorized' });
+          return;
+        }
+        userId = session.user.id;
+        email = session.user.email ?? '';
+        name = session.user.name ?? null;
+      }
+
+      const customerId = await getOrCreateStripeCustomerForUser(userId, email, name);
+      const portalSession = await stripe.billingPortal.sessions.create({
         customer: customerId,
         return_url: config.STRIPE_PORTAL_RETURN_URL,
       });
 
-      res.status(200).json({ url: session.url });
+      res.status(200).json({ url: portalSession.url });
     } catch (err) {
       const message = err instanceof Error ? err.message : 'Portal session failed';
       res.status(500).json({ error: message });

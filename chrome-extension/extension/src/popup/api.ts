@@ -156,6 +156,29 @@ export function openUpgradePage(): void {
   chrome.tabs.create({ url: `${SERVER_URL}/billing` });
 }
 
+export async function openBillingPortal(): Promise<void> {
+  const { getAuthToken } = await import("../shared/storage/auth-storage");
+  const token = await getAuthToken();
+  if (!token) {
+    chrome.tabs.create({ url: `${SERVER_URL}/billing` });
+    return;
+  }
+  const res = await fetch(`${SERVER_URL}/api/billing/portal-session`, {
+    method: "POST",
+    headers: { Authorization: `Bearer ${token}` },
+  });
+  if (!res.ok) {
+    chrome.tabs.create({ url: `${SERVER_URL}/billing` });
+    return;
+  }
+  const data = (await res.json()) as { url?: string };
+  if (data.url) {
+    chrome.tabs.create({ url: data.url });
+  } else {
+    chrome.tabs.create({ url: `${SERVER_URL}/billing` });
+  }
+}
+
 export function openSignInPage(installId: string): void {
   const signInUrl =
     `${SERVER_URL}/sign-in` +
