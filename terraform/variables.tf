@@ -182,6 +182,12 @@ variable "gmail_mx" {
   default     = ""
 }
 
+variable "gmail_dkim_txt" {
+  description = "TXT value for Google Workspace DKIM at google._domainkey (full v=DKIM1; ... line from Admin console). May be long (2048-bit key); split into ≤255-char Route 53 strings is automatic. Leave empty to skip."
+  type        = string
+  default     = ""
+}
+
 variable "mcp_subdomain" {
   description = "Subdomain for the MCP server (e.g. mcp → mcp.elementarmory.com)"
   type        = string

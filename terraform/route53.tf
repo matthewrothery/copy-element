@@ -7,6 +7,19 @@ locals {
   # SPF record always included — covers both SES and Google Workspace senders
   ses_spf_record  = "v=spf1 include:amazonses.com include:_spf.google.com ~all"
   apex_txt_values = compact([var.search_console_txt, var.gmail_txt, local.ses_spf_record])
+
+  # Route 53 TXT: each character-string must be ≤255 chars (RFC 1035).
+  # Multiple character-strings must live in ONE TXT record — resolvers concatenate them.
+  # regexall avoids integer-division edge cases from length()/255 arithmetic.
+  # Strip surrounding quotes defensively — Google Admin sometimes shows the value in quotes.
+  _gmail_dkim_raw = trimsuffix(trimprefix(trimspace(var.gmail_dkim_txt), "\""), "\"")
+  _gmail_dkim_chunks = length(local._gmail_dkim_raw) == 0 ? [] : regexall(".{1,255}", local._gmail_dkim_raw)
+  # The AWS provider auto-wraps each records element in outer quotes before sending to Route 53.
+  # So we only add the inner " " separators between chunks — the provider supplies the outer quotes,
+  # producing the correct format: "chunk1" "chunk2" (one TXT record, multiple character-strings).
+  gmail_dkim_txt_records = length(local._gmail_dkim_chunks) == 0 ? [] : [
+    join("\" \"", local._gmail_dkim_chunks)
+  ]
 }
 
 # Website A record
@@ -125,5 +138,16 @@ resource "aws_route53_record" "gmail_mx" {
   name    = var.website_domain
   type    = "MX"
   ttl     = 300
-  records = ["${var.gmail_mx_priority} ${var.gmail_mx}."]
+  # trimsuffix: var may include trailing dot; we always emit FQDN with one dot (double dot → DomainLabelEmpty)
+  records = ["${var.gmail_mx_priority} ${trimsuffix(var.gmail_mx, ".")}."]
+}
+
+# Google Workspace DKIM (TXT at google._domainkey)
+resource "aws_route53_record" "gmail_dkim" {
+  count   = length(var.gmail_dkim_txt) > 0 ? 1 : 0
+  zone_id = data.aws_route53_zone.main.zone_id
+  name    = "google._domainkey.${var.hosted_zone}"
+  type    = "TXT"
+  ttl     = 300
+  records = local.gmail_dkim_txt_records
 }

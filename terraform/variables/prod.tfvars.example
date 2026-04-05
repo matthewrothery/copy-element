@@ -49,5 +49,6 @@ local_ip = ""
 # Optional: Domain verification (leave empty to skip)
 # search_console_txt = ""
 # gmail_txt = ""
-# gmail_mx = "SMTP.GOOGLE.COM."
+# gmail_mx = "smtp.google.com" # or "smtp.google.com." — trailing dot is optional
 # gmail_mx_priority = 1
+# gmail_dkim_txt = "v=DKIM1; k=rsa; p=MIIB..." # Google Admin → Apps → Gmail → Authenticate email → DKIM
