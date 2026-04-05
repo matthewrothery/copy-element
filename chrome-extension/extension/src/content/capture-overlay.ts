@@ -3,6 +3,10 @@ import { TOKEN_VALUES } from "../shared/token-values";
 export class CaptureOverlay {
   private readonly boxElement: HTMLDivElement;
   private readonly tooltipElement: HTMLDivElement;
+  private readonly guideTop: HTMLDivElement;
+  private readonly guideBottom: HTMLDivElement;
+  private readonly guideLeft: HTMLDivElement;
+  private readonly guideRight: HTMLDivElement;
 
   public constructor() {
     this.boxElement = document.createElement("div");
@@ -37,8 +41,34 @@ export class CaptureOverlay {
     this.tooltipElement.style.textOverflow = "ellipsis";
     this.tooltipElement.style.whiteSpace = "nowrap";
 
+    this.guideTop = this.createGuide("horizontal");
+    this.guideBottom = this.createGuide("horizontal");
+    this.guideLeft = this.createGuide("vertical");
+    this.guideRight = this.createGuide("vertical");
+
     document.body.appendChild(this.boxElement);
     document.body.appendChild(this.tooltipElement);
+    document.body.appendChild(this.guideTop);
+    document.body.appendChild(this.guideBottom);
+    document.body.appendChild(this.guideLeft);
+    document.body.appendChild(this.guideRight);
+  }
+
+  private createGuide(direction: "horizontal" | "vertical"): HTMLDivElement {
+    const el = document.createElement("div");
+    el.setAttribute("data-element-capture-overlay", `guide-${direction}`);
+    el.style.position = "fixed";
+    el.style.pointerEvents = "none";
+    el.style.zIndex = "2147483645";
+    el.style.display = "none";
+    if (direction === "horizontal") {
+      el.style.height = "0";
+      el.style.borderTop = `1px dashed rgba(59, 130, 246, 0.5)`;
+    } else {
+      el.style.width = "0";
+      el.style.borderLeft = `1px dashed rgba(59, 130, 246, 0.5)`;
+    }
+    return el;
   }
 
   public showForElement(element: Element, options?: { isOverlay?: boolean }): void {
@@ -48,6 +78,30 @@ export class CaptureOverlay {
     this.boxElement.style.top = `${rect.top}px`;
     this.boxElement.style.width = `${rect.width}px`;
     this.boxElement.style.height = `${rect.height}px`;
+
+    // Horizontal guide at rect.top
+    this.guideTop.style.display = "block";
+    this.guideTop.style.top = `${rect.top}px`;
+    this.guideTop.style.left = "0";
+    this.guideTop.style.width = "100vw";
+
+    // Horizontal guide at rect.bottom
+    this.guideBottom.style.display = "block";
+    this.guideBottom.style.top = `${rect.bottom}px`;
+    this.guideBottom.style.left = "0";
+    this.guideBottom.style.width = "100vw";
+
+    // Vertical guide at rect.left
+    this.guideLeft.style.display = "block";
+    this.guideLeft.style.left = `${rect.left}px`;
+    this.guideLeft.style.top = "0";
+    this.guideLeft.style.height = "100vh";
+
+    // Vertical guide at rect.right
+    this.guideRight.style.display = "block";
+    this.guideRight.style.left = `${rect.right}px`;
+    this.guideRight.style.top = "0";
+    this.guideRight.style.height = "100vh";
 
     const label = `${element.tagName.toLowerCase()}${element.className ? `.${String(element.className).split(" ").join(".")}` : ""}`;
     let text = `${label}  ${Math.round(rect.width)} × ${Math.round(rect.height)}`;
@@ -74,10 +128,18 @@ export class CaptureOverlay {
   public hide(): void {
     this.boxElement.style.display = "none";
     this.tooltipElement.style.display = "none";
+    this.guideTop.style.display = "none";
+    this.guideBottom.style.display = "none";
+    this.guideLeft.style.display = "none";
+    this.guideRight.style.display = "none";
   }
 
   public destroy(): void {
     this.boxElement.remove();
     this.tooltipElement.remove();
+    this.guideTop.remove();
+    this.guideBottom.remove();
+    this.guideLeft.remove();
+    this.guideRight.remove();
   }
 }
