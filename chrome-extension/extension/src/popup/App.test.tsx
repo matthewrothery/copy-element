@@ -7,7 +7,7 @@ describe("App", () => {
   beforeEach(() => {
     vi.stubGlobal("chrome", {
       tabs: {
-        query: vi.fn(async () => [{ id: 42 }]),
+        query: vi.fn(async () => [{ id: 42, url: "https://example.com" }]),
         create: vi.fn()
       },
       runtime: {
@@ -31,9 +31,9 @@ describe("App", () => {
     });
   });
 
-  it("shows error toast when capture fails on unsupported URL", async () => {
+  it("shows inline error banner when capture fails with UNSUPPORTED_TAB_URL", async () => {
     vi.stubGlobal("chrome", {
-      tabs: { query: vi.fn(async () => [{ id: 42 }]) },
+      tabs: { query: vi.fn(async () => [{ id: 42, url: "https://example.com" }]) },
       runtime: {
         sendMessage: vi.fn(async () => ({
           ok: false,
@@ -48,7 +48,7 @@ describe("App", () => {
     fireEvent.click(buttons[0]);
 
     await vi.waitFor(() => {
-      expect(screen.getByText("Capture is not supported on this page.")).toBeInTheDocument();
+      expect(screen.getByText("Capture isn't supported on this page.")).toBeInTheDocument();
     });
   });
 });
@@ -75,7 +75,7 @@ describe("App – paywall gating", () => {
       makeSnippet(`s${i}`)
     );
     vi.stubGlobal("chrome", {
-      tabs: { query: vi.fn(async () => [{ id: 42 }]), create: vi.fn() },
+      tabs: { query: vi.fn(async () => [{ id: 42, url: "https://example.com" }]), create: vi.fn() },
       runtime: {
         sendMessage: vi.fn(async (msg: { type: string }) => {
           if (msg.type === "GET_SNIPPETS") return { ok: true, payload: guestSnippets };
@@ -110,7 +110,7 @@ describe("App – paywall gating", () => {
   it("shows upgrade modal when signed-in free user hits monthly capture limit", async () => {
     const currentMonth = getCurrentMonthKey();
     vi.stubGlobal("chrome", {
-      tabs: { query: vi.fn(async () => [{ id: 42 }]), create: vi.fn() },
+      tabs: { query: vi.fn(async () => [{ id: 42, url: "https://example.com" }]), create: vi.fn() },
       runtime: {
         sendMessage: vi.fn(async (msg: { type: string }) => {
           if (msg.type === "GET_SNIPPETS") return { ok: true, payload: [] };

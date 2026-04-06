@@ -26,6 +26,7 @@ import type {
 import { saveMcpApiKey } from "../shared/storage/mcp-storage";
 import { clearViewportEmulation, extractCssViaCdp, setViewportEmulation } from "./cdp-css";
 import { syncCaptureToServer } from "./sync-capture";
+import { isCapturableUrl } from "../shared/utils/capture-url";
 
 const REFRESH_ALARM_NAME = "element-armory-auth-refresh";
 
@@ -195,22 +196,7 @@ let latestCapture: CapturedElementData | null = null;
 
 const DEBUG_CAPTURE_FRAME_SEND = false;
 
-export function isCapturableUrl(url: string | undefined): boolean {
-  if (!url) {
-    return false;
-  }
-
-  const unsupportedPrefixes = ["chrome://", "chrome-extension://", "edge://", "about:"];
-  if (unsupportedPrefixes.some((prefix) => url.startsWith(prefix))) {
-    return false;
-  }
-
-  if (url.startsWith("https://chrome.google.com/webstore")) {
-    return false;
-  }
-
-  return true;
-}
+export { isCapturableUrl } from "../shared/utils/capture-url";
 
 export function getErrorCode(error: unknown): RuntimeErrorCode {
   const message = String(error);
@@ -256,11 +242,13 @@ function getAllFrameIds(tabId: number): Promise<number[]> {
 async function sendToAllFrames(
   tabId: number,
   message: { type: "START_CAPTURE" | "CANCEL_CAPTURE"; mode?: string }
-): Promise<void> {
+): Promise<number> {
   const frameIds = await getAllFrameIds(tabId);
+  let successCount = 0;
   for (const frameId of frameIds) {
     try {
       await chrome.tabs.sendMessage(tabId, message, { frameId });
+      successCount++;
     } catch (err) {
       if (DEBUG_CAPTURE_FRAME_SEND) {
         console.debug("[Element Armory] sendToAllFrames failed", { tabId, frameId, message: message.type, error: err });
@@ -268,6 +256,7 @@ async function sendToAllFrames(
       // Ignore failures (e.g. cross-origin frame, script not injected)
     }
   }
+  return successCount;
 }
 
 /** Send CLEAR_FRAME_HOVER to all frames in the tab except the given frame (the one that claimed hover). */
@@ -301,7 +290,10 @@ export async function sendToTargetTab(
   }
 
   try {
-    await sendToAllFrames(targetTab.id, message);
+    const successCount = await sendToAllFrames(targetTab.id, message);
+    if (message.type === "START_CAPTURE" && successCount === 0) {
+      return failure("Content script is not available on this tab. Reload the page and try again.", "CONTENT_SCRIPT_UNREACHABLE");
+    }
     return success(null);
   } catch (error: unknown) {
     const code = getErrorCode(error);

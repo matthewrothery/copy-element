@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useState, type JSX } from "react";
 import {
-  formatCaptureStartError,
+  RuntimeRequestError,
   getAuthStateFromBackground,
   getInstallIdFromBackground,
   getSnippetsFromBackground,
@@ -10,6 +10,7 @@ import {
   startCapture,
   trySilentAuthFromBackground,
 } from "./api";
+import { isCapturableUrl, getUnsupportedPageMessage } from "../shared/utils/capture-url";
 import { trackPopupEvent } from "../shared/analytics";
 import type { CaptureMode } from "../shared/types/messages";
 import { Settings, User } from "lucide-react";
@@ -91,6 +92,8 @@ export function App(): JSX.Element {
   const [paywallView, setPaywallView] = useState<PaywallView>(null);
   const [userEmail, setUserEmail] = useState<string | null>(null);
   const [userPlan, setUserPlan] = useState<string | null>(null);
+  const [captureBlockedReason, setCaptureBlockedReason] = useState<string | null>(null);
+  const [captureError, setCaptureError] = useState<{ message: string; showReload: boolean } | null>(null);
 
   const snippetCount = snippets.length;
   const recentSnippets = useMemo(() => snippets.slice(0, 2), [snippets]);
@@ -103,6 +106,15 @@ export function App(): JSX.Element {
   // Fire extension_opened once per popup open
   useEffect(() => {
     void trackPopupEvent('extension_opened');
+  }, []);
+
+  // Proactively check if the active tab supports capture
+  useEffect(() => {
+    void chrome.tabs.query({ active: true, lastFocusedWindow: true }).then(([tab]) => {
+      if (!tab?.url || !isCapturableUrl(tab.url)) {
+        setCaptureBlockedReason(getUnsupportedPageMessage(tab?.url));
+      }
+    });
   }, []);
 
   // One-time nudge: prompt guest users to create an account after N captures
@@ -240,15 +252,34 @@ export function App(): JSX.Element {
       setPaywallView(!isSignedIn ? "signin-gate" : "upgrade-gate");
       return;
     }
+    setCaptureError(null);
     setLoadingState(true);
     try {
       await startCapture(mode);
       window.close();
     } catch (error: unknown) {
-      setToastMessage(formatCaptureStartError(error));
+      if (error instanceof RuntimeRequestError) {
+        if (error.code === "CONTENT_SCRIPT_UNREACHABLE") {
+          setCaptureError({ message: "Reload the page to enable capture.", showReload: true });
+        } else if (error.code === "UNSUPPORTED_TAB_URL") {
+          setCaptureError({ message: "Capture isn't supported on this page.", showReload: false });
+        } else if (error.code === "NO_ACTIVE_TAB") {
+          setCaptureError({ message: "No active tab found.", showReload: false });
+        } else {
+          setToastMessage("Unable to start capture.");
+        }
+      } else {
+        setToastMessage("Unable to start capture.");
+      }
     } finally {
       setLoadingState(false);
     }
+  }
+
+  async function handleReloadPage(): Promise<void> {
+    const [tab] = await chrome.tabs.query({ active: true, lastFocusedWindow: true });
+    if (tab?.id) await chrome.tabs.reload(tab.id);
+    window.close();
   }
 
   function handleLibrary(): void {
@@ -284,7 +315,7 @@ export function App(): JSX.Element {
       <Header
         onCapture={(mode) => void handleCapture(mode)}
         defaultCaptureMode={preferences.defaultCaptureMode}
-        captureDisabled={loadingState}
+        captureDisabled={loadingState || captureBlockedReason !== null}
         onLibrary={handleLibrary}
         onToggleSettings={() => setView((current) => (current === "home" ? "settings" : "home"))}
         isSettingsView={view === "settings"}
@@ -298,7 +329,24 @@ export function App(): JSX.Element {
               </ol>
             </div>
             </Header>
-      
+
+      {(captureBlockedReason !== null || captureError !== null) && (
+        <div className="capture-error-banner" role="status">
+          <span className="capture-error-message">
+            {captureBlockedReason ?? captureError!.message}
+          </span>
+          {captureError?.showReload && (
+            <button
+              type="button"
+              className="capture-error-reload"
+              onClick={() => void handleReloadPage()}
+            >
+              Reload Page
+            </button>
+          )}
+        </div>
+      )}
+
       <main className="main-content">
         {view === "settings" ? (
           <SettingsPanel
