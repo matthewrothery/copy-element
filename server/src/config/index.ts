@@ -33,7 +33,8 @@ function getConfig(): AppConfig {
     S3_FORCE_PATH_STYLE: process.env[ENV_KEYS.S3_FORCE_PATH_STYLE] === 'true' || process.env[ENV_KEYS.S3_FORCE_PATH_STYLE] === '1',
     INTERNAL_API_KEY: process.env[ENV_KEYS.INTERNAL_API_KEY] ?? '',
     ANTHROPIC_API_KEY: process.env[ENV_KEYS.ANTHROPIC_API_KEY] ?? '',
-    SUPPORT_EMAIL: process.env[ENV_KEYS.SUPPORT_EMAIL] ?? 'support@elementarmory.com',
+    SUPPORT_EMAIL: process.env[ENV_KEYS.SUPPORT_EMAIL] ?? 'hello@elementarmory.com',
+    FEEDBACK_EMAIL: process.env[ENV_KEYS.FEEDBACK_EMAIL] ?? 'hello@elementarmory.com',
     ADMIN_ORIGIN:
       process.env[ENV_KEYS.ADMIN_ORIGIN] ??
       (nodeEnv === 'development' ? DEFAULTS.ADMIN_ORIGIN_LOCAL : 'https://admin.elementarmory.com'),

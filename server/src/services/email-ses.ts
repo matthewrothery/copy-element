@@ -13,6 +13,7 @@ import { CaptureMilestoneEmail } from '../emails/capture-milestone.js';
 import { SaveYourWorkEmail } from '../emails/save-your-work.js';
 import { PostLimitFollowupEmail } from '../emails/post-limit-followup.js';
 import { SupportInquiryEmail } from '../emails/support-inquiry.js';
+import { UninstallFeedbackEmail } from '../emails/uninstall-feedback.js';
 import { config } from '../config/index.js';
 import { logEmailSend, wasSentRecently } from './email-tracking.js';
 import { isEmailSuppressed } from './email-suppression.js';
@@ -344,6 +345,41 @@ export async function sendSupportInquiryViaSes(
     logEmailSend({ id: sendId, email, template: 'support-inquiry', subject, sesMsgId: response.MessageId, status: 'sent' });
   } catch (err) {
     logEmailSend({ id: sendId, email, template: 'support-inquiry', subject, status: 'failed', error: (err as Error).message });
+    throw err;
+  }
+}
+
+export async function sendUninstallFeedbackViaSes(
+  reason: string,
+  reasonLabel: string,
+  comment: string | null,
+): Promise<void> {
+  const sendId = nanoid();
+  const subject = `[Feedback] Uninstall — ${reasonLabel}`;
+
+  if (!config.FROM_EMAIL || !config.AWS_SES_REGION) {
+    console.log(`[uninstall-feedback] SES not configured — uninstall feedback (${reason})`);
+    logEmailSend({ id: sendId, email: config.FEEDBACK_EMAIL, template: 'uninstall-feedback', subject, status: 'skipped' });
+    return;
+  }
+
+  const submittedAt = new Date().toUTCString();
+  const html = await render(createElement(UninstallFeedbackEmail, { reason, reasonLabel, comment, submittedAt }));
+
+  try {
+    const response = await getSesClient().send(
+      new SendEmailCommand({
+        Source: config.FROM_EMAIL,
+        Destination: { ToAddresses: [config.FEEDBACK_EMAIL] },
+        Message: {
+          Subject: { Data: subject },
+          Body: { Html: { Data: html } },
+        },
+      })
+    );
+    logEmailSend({ id: sendId, email: config.FEEDBACK_EMAIL, template: 'uninstall-feedback', subject, sesMsgId: response.MessageId, status: 'sent' });
+  } catch (err) {
+    logEmailSend({ id: sendId, email: config.FEEDBACK_EMAIL, template: 'uninstall-feedback', subject, status: 'failed', error: (err as Error).message });
     throw err;
   }
 }

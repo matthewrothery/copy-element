@@ -29,6 +29,7 @@ export interface AppConfig {
   INTERNAL_API_KEY: string;
   ANTHROPIC_API_KEY: string;
   SUPPORT_EMAIL: string;
+  FEEDBACK_EMAIL: string;
   ADMIN_ORIGIN: string;
   INTERNAL_TOOLS_PATH: string;
   ADMIN_EMAILS: string[];
