@@ -42,7 +42,8 @@ export type ExtensionEventType =
   | 'library_viewed'
   | 'limit_reached'
   | 'upgrade_modal_shown'
-  | 'signin_modal_shown';
+  | 'signin_modal_shown'
+  | 'guest_prompt_limit_shown';
 
 /**
  * Convenience wrapper for popup / library / preview contexts.

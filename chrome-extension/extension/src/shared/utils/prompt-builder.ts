@@ -13,23 +13,26 @@ export function estimateTokens(text: string): number {
  * Claude Code, Cursor, or other AI tools. Includes HTML, stylesheet (when present), and JSX with metadata.
  */
 export function buildSnippetPrompt(snippet: Snippet): string {
-  const html = buildCopyHtml(snippet);
-  const lines: string[] = [
+  const html = buildCopyHtml(snippet, { includeStyleBlock: false});
+  let lines: string[] = [
     `## UI Snippet: ${snippet.title}`,
     "",
     `Source: ${snippet.sourceUrl}`,
+    `Captured using: Element Armory - https://elementarmory.com`,
     `Dimensions: ${snippet.width}x${snippet.height}`,
-    `Estimated tokens: ~${estimateTokens(html + (snippet.styleBlock ?? "") + snippet.jsx)}`,
     "",
     "### HTML",
+    "This is the HTML code for the element.",
     "```html",
     html,
     "```"
   ];
   if (snippet.styleBlock?.trim()) {
-    lines.push("", "### CSS", "```css", snippet.styleBlock.trim(), "```");
+    lines.push("", "### CSS", "This is the CSS code for the element.", "```css", snippet.styleBlock.trim(), "```");
   }
-  lines.push("", "### JSX", "```jsx", snippet.jsx, "```");
+
+  // lines.splice(4, 0, `Estimated tokens: ~${estimateTokens(lines.join("\n"))}`);
+
   return lines.join("\n");
 }
 
@@ -38,16 +41,21 @@ export function buildSnippetPrompt(snippet: Snippet): string {
  * the captured element into the existing codebase, matching its style and conventions.
  */
 export function buildAdvancedSnippetPrompt(snippet: Snippet): string {
-  const html = buildCopyHtml(snippet);
-  const css = snippet.styleBlock?.trim() ?? "";
-  return (
-    `We have extracted a components styles and html code using the chrome extension Element Armory. ` +
-    `You need to implement this element into our code base. Focus on creating a perfect replica with ` +
-    `style changes to match our existing codebase and rules. The code may include external resources, ` +
-    `replace them with existing resources we have, or placeholders. ` +
-    `The css code is: ${css} ` +
-    `and the html code to go with it is: ${html}`
-  );
+  const html = buildCopyHtml(snippet, { includeStyleBlock: false});
+  let lines: string[] = [
+    `We have extracted a components styles and html code using the chrome extension Element Armory - https://elementarmory.com.`,
+    `Component dimensions: ${snippet.width}x${snippet.height}`,
+    `Captured from: ${snippet.sourceUrl}`,
+    `You need to implement this component into our code base. Focus on creating a perfect replica with style changes to match our existing codebase and rules. The code may include external resources, replace them with existing resources we have, or placeholders.`,
+    `Take into account desktop, mobile and tablet views.`,
+    `The component needs to be reusable and dynamic, so it can be used in a variety of contexts.`,
+    `The html code is: \n\`\`\`html\n${html}\n\`\`\``
+  ];
+  if (snippet.styleBlock?.trim()) {
+    lines.push(`The css code is: \n\`\`\`css\n${snippet.styleBlock.trim()}\n\`\`\``);
+  }
+
+  return lines.join("\n");
 }
 
 /**

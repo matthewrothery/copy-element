@@ -9,7 +9,9 @@ const NAV_ITEMS: { route: AppRoute; label: string; icon: typeof BookMarked }[] =
   { route: "library", label: "Library", icon: BookMarked },
   { route: "mcp", label: "MCP", icon: Plug },
   { route: "plans", label: "Plans & Pricing", icon: CreditCard },
-  { route: "settings", label: "Settings", icon: Settings }
+
+  // Hiding the settings page for now, until we review & test settings further.
+  // { route: "settings", label: "Settings", icon: Settings }
 ];
 
 interface SidebarProps {

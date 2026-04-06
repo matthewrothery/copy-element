@@ -740,7 +740,7 @@
 /* Library in app: full width in main */
 .app-main .app-shell.library-shell {
   width: 100%;
-  min-height: auto;
+  /* min-height: auto; */
 }
 
 .app-main .library-shell .main-content {

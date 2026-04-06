@@ -29,6 +29,11 @@ import type { Folder } from "../shared/types/folder";
 import type { Snippet } from "../shared/types/snippet";
 import { buildSnippetPrompt } from "../shared/utils/prompt-builder";
 import { PAID_PLANS } from "../shared/usage";
+import {
+  getGuestPromptCount,
+  incrementGuestPromptCount,
+  GUEST_PROMPT_LIMIT
+} from "../shared/storage/guest-prompt-counter";
 
 import logoUrl from "../../assets/logo.png";
 
@@ -68,6 +73,7 @@ export function LibraryApp(): JSX.Element {
   const [isGuest, setIsGuest] = useState(false);
   const [isPaid, setIsPaid] = useState(false);
   const [showPromoModal, setShowPromoModal] = useState(false);
+  const [promoModalVariant, setPromoModalVariant] = useState<"default" | "limit-reached">("default");
   const [showUpgradeModal, setShowUpgradeModal] = useState(false);
   const [query, setQuery] = useState("");
   const [sortOrder, setSortOrder] = useState<"date-desc" | "date-asc" | "name-asc" | "name-desc">("date-desc");
@@ -237,8 +243,33 @@ export function LibraryApp(): JSX.Element {
     return folders.filter((f) => f.parentId === folderId).length;
   }
 
-  function handleCopyPromptAsGuest(_snippet: Snippet): void {
-    setShowPromoModal(true);
+  async function handleCopyPromptAsGuest(snippet: Snippet): Promise<void> {
+    const count = await getGuestPromptCount();
+
+    if (count >= GUEST_PROMPT_LIMIT) {
+      setPromoModalVariant("limit-reached");
+      setShowPromoModal(true);
+      void trackPopupEvent('guest_prompt_limit_shown');
+      return;
+    }
+
+    try {
+      await copyToClipboard(buildSnippetPrompt(snippet));
+      const newCount = await incrementGuestPromptCount();
+      void trackPopupEvent('element_exported', { format: 'prompt_basic', tier: 'guest' });
+
+      const remaining = GUEST_PROMPT_LIMIT - newCount;
+      if (remaining > 0) {
+        setToastMessage(`Prompt copied · ${remaining} free ${remaining === 1 ? "copy" : "copies"} left`);
+      } else {
+        setToastMessage("Prompt copied");
+        setPromoModalVariant("limit-reached");
+        setShowPromoModal(true);
+        void trackPopupEvent('guest_prompt_limit_shown');
+      }
+    } catch {
+      setToastMessage("Failed to copy prompt");
+    }
   }
 
   async function handleCopyPromptAsFree(snippet: Snippet): Promise<void> {
@@ -386,7 +417,7 @@ export function LibraryApp(): JSX.Element {
               }}
               onCopy={(value, label) => void handleCopy(value, label)}
               isGuest={isGuest}
-              onCopyPromptAsGuest={handleCopyPromptAsGuest}
+              onCopyPromptAsGuest={(snippet) => void handleCopyPromptAsGuest(snippet)}
               isFree={!isGuest && !isPaid}
               onCopyPromptAsFree={(snippet) => void handleCopyPromptAsFree(snippet)}
             />
@@ -446,6 +477,7 @@ export function LibraryApp(): JSX.Element {
       )}
       {showPromoModal && (
         <SignInPromoModal
+          variant={promoModalVariant}
           onSignIn={() => {
             setShowPromoModal(false);
             void getInstallIdFromBackground().then(openSignInPage).catch(() => {});

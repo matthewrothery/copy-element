@@ -5,13 +5,17 @@ interface SignInPromoModalProps {
   onSignIn: () => void;
   onClose: () => void;
   onShown?: () => void;
+  variant?: "default" | "limit-reached";
 }
 
-export function SignInPromoModal({ onSignIn, onClose, onShown }: SignInPromoModalProps): React.JSX.Element {
+export function SignInPromoModal({ onSignIn, onClose, onShown, variant = "default" }: SignInPromoModalProps): React.JSX.Element {
   useEffect(() => {
     onShown?.();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
+
+  const isLimitReached = variant === "limit-reached";
+
   const content = (
     <div
       className="modal-backdrop"
@@ -36,8 +40,11 @@ export function SignInPromoModal({ onSignIn, onClose, onShown }: SignInPromoModa
           </svg>
         </div>
         <h2 id="sign-in-promo-title" className="sign-in-promo-title">
-          Unlock the full workflow
+          {isLimitReached ? "You've used your 5 free prompts" : "Unlock the full workflow"}
         </h2>
+        {isLimitReached && (
+          <p className="sign-in-promo-lead">Create a free account to keep going.</p>
+        )}
         <ul className="sign-in-promo-benefits">
           <li>Copy rich AI prompts for any captured element</li>
           <li>Unlimited library access across devices</li>

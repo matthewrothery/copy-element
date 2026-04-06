@@ -98,7 +98,7 @@ export function SnippetCard({ snippet, onOpen, onDelete, onCopy, isGuest, onCopy
             } else if (isFree) {
               onCopyPromptAsFree?.();
             } else {
-              onCopy(buildSnippetPrompt(snippet), "Prompt");
+              onCopy(buildAdvancedSnippetPrompt(snippet), "Prompt");
             }
           }}
           aria-label="Copy prompt"
