@@ -12,7 +12,8 @@
     "migrate:prod": "node dist/db/migrate.js",
     "migrate:create": "tsx src/db/migrate-create.ts",
     "email:preview": "react-email dev --dir src/emails --port 3001",
-    "grant-complimentary": "tsx scripts/grant-complimentary.ts"
+    "grant-complimentary": "tsx scripts/grant-complimentary.ts",
+    "email:simulate": "tsx src/scripts/email-simulator.ts"
   },
   "engines": {
     "node": ">=18"
