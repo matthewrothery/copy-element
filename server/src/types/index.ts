@@ -13,6 +13,8 @@ export interface AppConfig {
   AWS_SES_REGION: string;
   AWS_ACCESS_KEY_ID: string;
   AWS_SECRET_ACCESS_KEY: string;
+  /** Present when using STS / assumed-role / aws-vault session credentials. */
+  AWS_SESSION_TOKEN: string;
   FROM_EMAIL: string;
   FRONTEND_URL: string;
   STRIPE_SECRET_KEY: string;

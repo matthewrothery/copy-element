@@ -15,6 +15,8 @@ export const ENV_KEYS = {
   AWS_REGION: 'AWS_REGION',
   AWS_ACCESS_KEY_ID: 'AWS_ACCESS_KEY_ID',
   AWS_SECRET_ACCESS_KEY: 'AWS_SECRET_ACCESS_KEY',
+  /** Set for temporary creds (STS, assume-role, aws-vault). Omit for long-lived IAM user keys. */
+  AWS_SESSION_TOKEN: 'AWS_SESSION_TOKEN',
   FROM_EMAIL: 'FROM_EMAIL',
   FRONTEND_URL: 'FRONTEND_URL',
   STRIPE_SECRET_KEY: 'STRIPE_SECRET_KEY',

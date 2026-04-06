@@ -18,6 +18,7 @@ function getConfig(): AppConfig {
       process.env[ENV_KEYS.AWS_SES_REGION] || process.env[ENV_KEYS.AWS_REGION] || '',
     AWS_ACCESS_KEY_ID: process.env[ENV_KEYS.AWS_ACCESS_KEY_ID] ?? '',
     AWS_SECRET_ACCESS_KEY: process.env[ENV_KEYS.AWS_SECRET_ACCESS_KEY] ?? '',
+    AWS_SESSION_TOKEN: process.env[ENV_KEYS.AWS_SESSION_TOKEN] ?? '',
     FROM_EMAIL: process.env[ENV_KEYS.FROM_EMAIL] ?? '',
     FRONTEND_URL: process.env[ENV_KEYS.FRONTEND_URL] ?? '',
     STRIPE_SECRET_KEY: process.env[ENV_KEYS.STRIPE_SECRET_KEY] ?? '',
