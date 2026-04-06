@@ -1371,6 +1371,48 @@
   outline-offset: 2px;
 }
 
+/* ─── MCP not-connected notice ─── */
+
+.snippet-preview-mcp-notice {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-3);
+  padding: var(--space-2) var(--space-3);
+  margin-bottom: var(--space-2);
+  background: var(--color-accent-subtle);
+  border: 1px solid var(--color-accent);
+  border-radius: var(--radius-1_5);
+}
+
+.snippet-preview-mcp-notice-text {
+  font-size: var(--text-caption);
+  color: var(--color-text-secondary);
+  line-height: 1.4;
+}
+
+.snippet-preview-mcp-notice-btn {
+  flex-shrink: 0;
+  font-size: var(--text-caption);
+  font-weight: 500;
+  color: var(--color-accent);
+  background: none;
+  border: none;
+  padding: 0;
+  cursor: pointer;
+  white-space: nowrap;
+}
+
+.snippet-preview-mcp-notice-btn:hover {
+  color: var(--color-accent-hover);
+}
+
+.snippet-preview-mcp-notice-btn:focus-visible {
+  outline: 2px solid var(--color-accent);
+  outline-offset: 2px;
+  border-radius: 2px;
+}
+
 .delete-confirmation-desc {
   margin: 0;
   color: var(--color-text-secondary);

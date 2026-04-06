@@ -134,7 +134,7 @@ export function SnippetCard({ snippet, onOpen, onDelete, onCopy, isGuest, onCopy
           </button>
           {menuOpen && (
             <div className="snippet-card-dropdown" role="menu">
-              {!isGuest && (
+              {/* {!isGuest && (
                 <button
                   type="button"
                   role="menuitem"
@@ -179,7 +179,7 @@ export function SnippetCard({ snippet, onOpen, onDelete, onCopy, isGuest, onCopy
                   <Copy size={ICON_SIZE} aria-hidden />
                   Copy Advanced Prompt
                 </button>
-              )}
+              )} */}
               <button
                 type="button"
                 role="menuitem"
