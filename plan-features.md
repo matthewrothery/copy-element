@@ -93,7 +93,7 @@
 |---|---|---|
 | Guest library FIFO (10) | `background/index.ts` SAVE_SNIPPET handler | `server/src/api/routes/captures.ts` POST handler |
 | Free library FIFO (25) | `background/index.ts` SAVE_SNIPPET handler | `server/src/api/routes/captures.ts` POST handler |
-| Free monthly captures (20) | `shared/usage.ts` + popup UsageMeter | (future) |
+| Free monthly captures (20) | `shared/usage.ts` + popup UsageMeter | `server/src/services/entitlements.ts` |
 | MCP free limit (10/month) | — | `mcp-server/src/rate-limiter.ts` `consumeCallQuota` |
 | Guest copy prompt | `SnippetCard.tsx` — shows `SignInPromoModal` | — |
 | Free copy prompt | `SnippetCard.tsx` — copies basic prompt + shows `UpgradePromoModal` | — |
