@@ -23,12 +23,15 @@ export function getUnsupportedPageMessage(url: string | undefined): string {
     return "Capture isn't supported on the Chrome Web Store.";
   }
   if (
-    url.startsWith("chrome://") ||
-    url.startsWith("chrome-extension://") ||
     url.startsWith("edge://") ||
     url.startsWith("about:")
   ) {
     return "Capture doesn't work on browser pages.";
+  } else if (
+    url.startsWith("chrome://") ||
+    url.startsWith("chrome-extension://")
+  ) {
+    return "Capture isn't supported on extension pages.";
   }
   return "Capture isn't supported on this page.";
 }

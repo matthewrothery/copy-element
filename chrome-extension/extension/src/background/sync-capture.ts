@@ -81,7 +81,39 @@ async function uploadToS3(uploadUrl: string, bytes: Uint8Array, contentType: str
   }
 }
 
-export async function syncCaptureToServer(snippet: Snippet): Promise<void> {
+/**
+ * Deletes a capture from the server by its server-assigned capture ID.
+ * Used when the local FIFO evicts a snippet that was previously synced.
+ * Never throws.
+ */
+export async function deleteServerCapture(serverCaptureId: string): Promise<void> {
+  try {
+    const [token, authFields] = await Promise.all([
+      getAuthToken(),
+      getOrCreateInstallCredentials(),
+    ]);
+    if (!token) return;
+
+    const res = await fetch(
+      `${SERVER_URL}/api/captures/install/${authFields.install_id}/${serverCaptureId}`,
+      {
+        method: "DELETE",
+        headers: buildHeaders(token),
+      }
+    );
+    if (!res.ok && res.status !== 404) {
+      console.error(`[sync-capture] deleteServerCapture ${serverCaptureId} failed: ${res.status}`);
+    }
+  } catch (error) {
+    console.error("[sync-capture] deleteServerCapture error", error);
+  }
+}
+
+/**
+ * Uploads a snippet to the server. Returns the server-assigned capture ID
+ * (stringified integer) on success, or null on any failure.
+ */
+export async function syncCaptureToServer(snippet: Snippet): Promise<string | null> {
   try {
     const [token, authFields] = await Promise.all([
       getAuthToken(),
@@ -131,7 +163,16 @@ export async function syncCaptureToServer(snippet: Snippet): Promise<void> {
       body: JSON.stringify({
         source_url: snippet.sourceUrl,
         captured_at: snippet.createdAt,
-        metadata: { snippet_id: snippet.id, title: snippet.title, width: snippet.width, height: snippet.height },
+        metadata: {
+          snippet_id: snippet.id,
+          title: snippet.title,
+          width: snippet.width,
+          height: snippet.height,
+          renderContext: snippet.renderContext ?? null,
+          rootId: snippet.rootId ?? null,
+          externalFontLinks: snippet.externalFontLinks ?? null,
+          folderId: snippet.folderId ?? null,
+        },
         assets: captureAssets,
         install_id: authFields.install_id,
         install_secret: authFields.install_secret,
@@ -141,7 +182,11 @@ export async function syncCaptureToServer(snippet: Snippet): Promise<void> {
     if (!res.ok) {
       throw new Error(`POST /api/captures failed: ${res.status}`);
     }
+
+    const data = await res.json() as { id: number };
+    return String(data.id);
   } catch (error) {
     console.error("[sync-capture]", error);
+    return null;
   }
 }

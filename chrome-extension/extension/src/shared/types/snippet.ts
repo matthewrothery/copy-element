@@ -71,6 +71,10 @@ export interface Snippet {
   externalFontLinks?: string[];
   /** Optional folder id. undefined/null = Library root. */
   folderId?: string | null;
+  /** Cloud sync state. undefined = pre-sync era legacy snippet. */
+  syncStatus?: 'pending' | 'synced' | 'failed';
+  /** Server-assigned capture ID (stringified integer). Set after successful sync. */
+  serverCaptureId?: string;
 }
 
 export interface CapturedElementData {

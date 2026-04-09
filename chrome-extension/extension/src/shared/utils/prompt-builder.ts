@@ -82,19 +82,21 @@ export function buildShortMcpPrompt(snippet: Snippet): string {
  * code (HTML + optional CSS + JSX), and snapshot image link (thumbnail data URL or placeholder).
  */
 export function buildCopyMcpPrompt(snippet: Snippet): string {
-  const html = buildCopyHtml(snippet);
-  const lines: string[] = [
-    MCP_INTRO,
-    "",
-    "Here is the code:",
-    "",
-    "```html",
-    html,
-    "```"
-  ];
-  if (snippet.styleBlock?.trim()) {
-    lines.push("", "```css", snippet.styleBlock.trim(), "```");
-  }
-  lines.push("", "```jsx", snippet.jsx, "```", "");
-  return lines.join("\n");
+  return buildShortMcpPrompt(snippet);
+  
+  // const html = buildCopyHtml(snippet);
+  // const lines: string[] = [
+  //   MCP_INTRO,
+  //   "",
+  //   "Here is the code:",
+  //   "",
+  //   "```html",
+  //   html,
+  //   "```"
+  // ];
+  // if (snippet.styleBlock?.trim()) {
+  //   lines.push("", "```css", snippet.styleBlock.trim(), "```");
+  // }
+  // lines.push("", "```jsx", snippet.jsx, "```", "");
+  // return lines.join("\n");
 }

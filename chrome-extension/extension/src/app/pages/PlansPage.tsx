@@ -114,7 +114,7 @@ export function PlansPage(): JSX.Element {
             <ul className="app-page-list app-page-list--unstyled">
               <li>✓ 25 saved elements</li>
               <li>✓ 20 captures per month</li>
-              <li>✓ HTML, JSX & Tailwind export</li>
+              <li>✓ HTML, CSS export</li>
               <li>✓ Basic AI prompts</li>
               <li>✓ 10 MCP requests per month</li>
               <li>✓ Cross-device sync</li>
@@ -147,7 +147,7 @@ export function PlansPage(): JSX.Element {
             <ul className="app-page-list app-page-list--unstyled">
               <li>✓ 25 saved elements <span className="plan-feature-note">(you have 10 as guest)</span></li>
               <li>✓ Cross-device sync</li>
-              <li>✓ JSX & Tailwind exports</li>
+              <li>✓ HTML, CSS export</li>
               <li>✓ AI copy prompts</li>
               <li>✓ 20 captures per month</li>
             </ul>
@@ -156,7 +156,7 @@ export function PlansPage(): JSX.Element {
               className="mcp-cta-btn"
               onClick={handleSignInClick}
             >
-              Sign in — it's free
+              Sign in - it's free
             </button>
           </div>
           <div className="plan-upgrade-callout">

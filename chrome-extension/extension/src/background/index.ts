@@ -1,4 +1,4 @@
-import type { CapturedElementData } from "../shared/types/snippet";
+import type { CapturedElementData, Snippet } from "../shared/types/snippet";
 import { deleteFolder, getFolders, saveFolder } from "../shared/storage/folder-storage";
 import { deleteSnippet, getSnippetById, getSnippets, saveSnippet } from "../shared/storage/snippet-storage";
 import { FREE_LIBRARY_LIMIT, GUEST_LIBRARY_LIMIT, PAID_PLANS } from "../shared/usage";
@@ -25,7 +25,8 @@ import type {
 } from "../shared/types/messages";
 import { saveMcpApiKey } from "../shared/storage/mcp-storage";
 import { clearViewportEmulation, extractCssViaCdp, setViewportEmulation } from "./cdp-css";
-import { syncCaptureToServer } from "./sync-capture";
+import { deleteServerCapture, syncCaptureToServer } from "./sync-capture";
+import { restoreCapturesFromCloud } from "./restore-from-cloud";
 import { isCapturableUrl } from "../shared/utils/capture-url";
 
 const REFRESH_ALARM_NAME = "element-armory-auth-refresh";
@@ -144,6 +145,7 @@ async function trySilentAuth(installId: string, installSecret: string): Promise<
   await scheduleRefreshAlarm();
 
   // Best-effort: fetch and save user profile
+  let planCode = "free";
   try {
     const [meRes, entitlementRes] = await Promise.all([
       fetch(`${SERVER_URL}/api/me`, { headers: { Authorization: `Bearer ${tokenData.token}` } }),
@@ -152,13 +154,16 @@ async function trySilentAuth(installId: string, installSecret: string): Promise<
     const meData = meRes.ok ? ((await meRes.json()) as { user?: { email?: string } }) : null;
     const entData = entitlementRes.ok ? ((await entitlementRes.json()) as { plan_code?: string }) : null;
     const email = meData?.user?.email ?? null;
-    const planCode = entData?.plan_code ?? "free";
+    planCode = entData?.plan_code ?? "free";
     if (email) {
       await saveUserProfile(email, planCode);
     }
   } catch {
     // Silently fail — user info is non-critical
   }
+
+  // Restore cloud captures after silent login
+  void restoreCapturesFromCloud(planCode).catch(() => {});
 
   return true;
 }
@@ -167,6 +172,16 @@ chrome.runtime.onStartup.addListener(() => {
   void chrome.runtime.setUninstallURL(UNINSTALL_URL);
   void registerInstall();
   void scheduleRefreshAlarm();
+  void retryPendingSyncs();
+  void (async () => {
+    const token = await getAuthToken();
+    if (!token) return;
+    const snippets = await getSnippets();
+    if (snippets.length === 0) {
+      const authState = await getAuthState();
+      void restoreCapturesFromCloud(authState.user_plan ?? undefined).catch(() => {});
+    }
+  })();
 });
 
 chrome.alarms.onAlarm.addListener((alarm) => {
@@ -298,6 +313,19 @@ export async function sendToTargetTab(
   } catch (error: unknown) {
     const code = getErrorCode(error);
     return failure(String(error), code);
+  }
+}
+
+async function retryPendingSyncs(): Promise<void> {
+  const token = await getAuthToken();
+  if (!token) return;
+  const snippets = await getSnippets();
+  const pending = snippets.filter((s) => s.syncStatus === "pending" || s.syncStatus === "failed");
+  for (const snippet of pending) {
+    const serverId = await syncCaptureToServer(snippet);
+    if (serverId) {
+      await saveSnippet({ ...snippet, syncStatus: "synced", serverCaptureId: serverId }).catch(() => {});
+    }
   }
 }
 
@@ -472,8 +500,12 @@ chrome.runtime.onMessage.addListener((message: RuntimeMessage, sender, sendRespo
             void trackExtensionEvent("limit_reached", creds.install_id, { limit_type: "guest_library" });
           }
           while (snippets.length >= GUEST_LIBRARY_LIMIT) {
-            await deleteSnippet(snippets[snippets.length - 1].id);
+            const oldest = snippets[snippets.length - 1];
+            await deleteSnippet(oldest.id);
             snippets.pop();
+            if (oldest.serverCaptureId) {
+              void deleteServerCapture(oldest.serverCaptureId).catch(() => {});
+            }
           }
         } else if (!PAID_PLANS.includes(authState.user_plan as never)) {
           const snippets = await getSnippets();
@@ -481,16 +513,30 @@ chrome.runtime.onMessage.addListener((message: RuntimeMessage, sender, sendRespo
             void trackExtensionEvent("limit_reached", creds.install_id, { limit_type: "free_library" });
           }
           while (snippets.length >= FREE_LIBRARY_LIMIT) {
-            await deleteSnippet(snippets[snippets.length - 1].id);
+            const oldest = snippets[snippets.length - 1];
+            await deleteSnippet(oldest.id);
             snippets.pop();
+            if (oldest.serverCaptureId) {
+              void deleteServerCapture(oldest.serverCaptureId).catch(() => {});
+            }
           }
         }
-        await saveSnippet(message.payload);
-        void syncCaptureToServer(message.payload); // fire-and-forget, never throws
+        const pendingSnippet: Snippet = { ...message.payload, syncStatus: 'pending' };
+        await saveSnippet(pendingSnippet);
+        sendResponse(success(null));
         void trackExtensionEvent("element_captured", creds.install_id, {
           url: message.payload.sourceUrl,
         });
-        sendResponse(success(null));
+        // Sync in background and update status once complete
+        void (async () => {
+          const serverId = await syncCaptureToServer(pendingSnippet);
+          const updated: Snippet = {
+            ...pendingSnippet,
+            syncStatus: serverId ? 'synced' : 'failed',
+            ...(serverId ? { serverCaptureId: serverId } : {}),
+          };
+          await saveSnippet(updated).catch(() => {});
+        })();
       } catch (error: unknown) {
         void getOrCreateInstallCredentials().then((creds) => {
           void trackExtensionEvent("element_capture_failed", creds.install_id);
@@ -609,6 +655,8 @@ chrome.runtime.onMessage.addListener((message: RuntimeMessage, sender, sendRespo
               if (email) {
                 await saveUserProfile(email, planCode);
               }
+              // Restore cloud captures after login
+              void restoreCapturesFromCloud(planCode).catch(() => {});
             } catch {
               // Silently fail — user info is non-critical
             }
