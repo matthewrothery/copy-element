@@ -69,8 +69,8 @@ export function SaveYourWorkEmail({ name, quotaUsed, quotaLimit, upgradeUrl, pix
 SaveYourWorkEmail.PreviewProps = {
   name: 'Alex',
   email: 'alex@example.com',
-  quotaUsed: 16,
-  quotaLimit: 20,
+  quotaUsed: 24,
+  quotaLimit: 30,
 } as SaveYourWorkEmailProps;
 
 export default SaveYourWorkEmail;

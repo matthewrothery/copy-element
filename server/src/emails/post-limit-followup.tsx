@@ -70,7 +70,7 @@ export function PostLimitFollowupEmail({ name, quotaLimit, upgradeUrl, pixelUrl,
 PostLimitFollowupEmail.PreviewProps = {
   name: 'Alex',
   email: 'alex@example.com',
-  quotaLimit: 20,
+  quotaLimit: 30,
 } as PostLimitFollowupEmailProps;
 
 export default PostLimitFollowupEmail;

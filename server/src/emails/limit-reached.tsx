@@ -70,7 +70,7 @@ export function LimitReachedEmail({ name, quotaLimit, upgradeUrl, pixelUrl, unsu
 LimitReachedEmail.PreviewProps = {
   name: 'Alex',
   email: 'alex@example.com',
-  quotaLimit: 20,
+  quotaLimit: 30,
 } as LimitReachedEmailProps;
 
 export default LimitReachedEmail;

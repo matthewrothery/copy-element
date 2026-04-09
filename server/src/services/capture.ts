@@ -239,6 +239,21 @@ export function deleteOldestCaptureByUser(userId: string): void {
   })();
 }
 
+/**
+ * Delete a capture by ID, verifying it belongs to the given install. Returns true if deleted,
+ * false if not found or owned by a different install.
+ */
+export function deleteCaptureById(captureId: number, installId: string): boolean {
+  const db = getDb();
+  const row = db.prepare('SELECT install_id FROM captures WHERE id = ?').get(captureId) as { install_id: string } | undefined;
+  if (!row || row.install_id !== installId) return false;
+  db.transaction(() => {
+    db.prepare('DELETE FROM capture_assets WHERE capture_id = ?').run(captureId);
+    db.prepare('DELETE FROM captures WHERE id = ?').run(captureId);
+  })();
+  return true;
+}
+
 function attachAssets(db: ReturnType<typeof getDb>, capture: CaptureRow): CaptureWithAssets {
   const assets = db
     .prepare(

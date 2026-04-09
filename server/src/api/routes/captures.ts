@@ -4,6 +4,7 @@ import {
   countCapturesByInstall,
   countCapturesByUser,
   createCaptureWithAssets,
+  deleteCaptureById,
   deleteOldestCaptureByUser,
   deleteOldestCaptureForInstall,
   listCapturesByInstall,
@@ -38,7 +39,7 @@ export const capturesRouter = Router();
 const MAX_ASSETS_PER_CAPTURE = 10;
 const GUEST_CAPTURE_LIMIT = 10;
 const FREE_USER_CAPTURE_LIMIT = 25;
-const MAX_METADATA_JSON_LENGTH = 4096;
+const MAX_METADATA_JSON_LENGTH = 8192;
 const ALLOWED_SCREENSHOT_TYPES = ['image/png', 'image/jpeg', 'image/webp'];
 const ALLOWED_HTML_TYPES = ['text/html'];
 const ALLOWED_STYLESHEET_TYPES = ['text/css', 'text/plain'];
@@ -273,6 +274,106 @@ capturesRouter.post(
       const message = err instanceof Error ? err.message : 'Failed to create capture';
       res.status(500).json({ error: message });
     }
+  }
+);
+
+/**
+ * GET /api/captures/install/:installId/restore — install-auth.
+ * Returns captures with presigned S3 GET URLs for all assets.
+ * Used by the extension to restore the local library after reinstall or login on a new device.
+ */
+capturesRouter.get(
+  '/install/:installId/restore',
+  requireInstallAuth,
+  async (req: RequestWithInstall, res: Response) => {
+    const installId = req.params.installId;
+    if (req.installId !== installId) {
+      res.status(403).json({ error: 'Cannot restore another install\'s captures' });
+      return;
+    }
+    const limitRaw = typeof req.query.limit === 'string' ? parseInt(req.query.limit, 10) : undefined;
+    const limit = limitRaw !== undefined && !Number.isNaN(limitRaw) ? Math.min(limitRaw, 50) : 50;
+    const cursorRaw = typeof req.query.cursor === 'string' ? parseInt(req.query.cursor, 10) : undefined;
+    const cursor = cursorRaw !== undefined && !Number.isNaN(cursorRaw) ? cursorRaw : undefined;
+
+    const list = req.installUserId
+      ? listCapturesByUser(req.installUserId, { limit: limit + 1, cursor })
+      : listCapturesByInstall(installId, { limit: limit + 1, cursor });
+    const hasMore = list.length > limit;
+    const page = hasMore ? list.slice(0, limit) : list;
+
+    try {
+      const captures = await Promise.all(page.map(async (capture: CaptureWithAssets) => {
+        let metadata: Record<string, unknown> = {};
+        if (capture.metadata_json) {
+          try { metadata = JSON.parse(capture.metadata_json); } catch { /* ignore */ }
+        }
+
+        const snippetId = typeof metadata.snippet_id === 'string' ? metadata.snippet_id : null;
+        if (!snippetId) return null; // pre-dates metadata schema; skip
+
+        const screenshotAsset = capture.assets.find(a => a.asset_kind === 'screenshot');
+        const htmlAsset = capture.assets.find(a => a.asset_kind === 'html');
+        const stylesheetAsset = capture.assets.find(a => a.asset_kind === 'stylesheet');
+
+        const [screenshotUrl, htmlUrl, stylesheetUrl] = await Promise.all([
+          screenshotAsset ? getSignedGetUrl(screenshotAsset.object_key, 300) : Promise.resolve(null),
+          htmlAsset ? getSignedGetUrl(htmlAsset.object_key, 300) : Promise.resolve(null),
+          stylesheetAsset ? getSignedGetUrl(stylesheetAsset.object_key, 300) : Promise.resolve(null),
+        ]);
+
+        return {
+          server_capture_id: String(capture.id),
+          snippet_id: snippetId,
+          title: typeof metadata.title === 'string' ? metadata.title : 'Untitled',
+          source_url: capture.source_url ?? null,
+          captured_at: capture.captured_at,
+          width: typeof metadata.width === 'number' ? metadata.width : 0,
+          height: typeof metadata.height === 'number' ? metadata.height : 0,
+          render_context: metadata.renderContext ?? null,
+          root_id: typeof metadata.rootId === 'string' ? metadata.rootId : null,
+          external_font_links: Array.isArray(metadata.externalFontLinks) ? metadata.externalFontLinks : null,
+          folder_id: typeof metadata.folderId === 'string' ? metadata.folderId : null,
+          html_url: htmlUrl,
+          screenshot_url: screenshotUrl,
+          stylesheet_url: stylesheetUrl,
+        };
+      }));
+
+      const filtered = captures.filter(Boolean);
+      const nextCursor = hasMore && page.length > 0 ? page[page.length - 1].captured_at : null;
+      res.status(200).json({ captures: filtered, has_more: hasMore, next_cursor: nextCursor });
+    } catch (err) {
+      const message = err instanceof Error ? err.message : 'Failed to generate restore payload';
+      res.status(500).json({ error: message });
+    }
+  }
+);
+
+/**
+ * DELETE /api/captures/install/:installId/:captureId — install-auth.
+ * Deletes a specific capture. Caller must own the install and the capture.
+ */
+capturesRouter.delete(
+  '/install/:installId/:captureId',
+  requireInstallAuth,
+  (req: RequestWithInstall, res: Response) => {
+    const installId = req.params.installId;
+    if (req.installId !== installId) {
+      res.status(403).json({ error: 'Cannot delete another install\'s captures' });
+      return;
+    }
+    const captureIdRaw = parseInt(req.params.captureId, 10);
+    if (Number.isNaN(captureIdRaw)) {
+      res.status(400).json({ error: 'Invalid capture ID' });
+      return;
+    }
+    const deleted = deleteCaptureById(captureIdRaw, installId);
+    if (!deleted) {
+      res.status(404).json({ error: 'Capture not found or not owned by this install' });
+      return;
+    }
+    res.status(204).send();
   }
 );
 
