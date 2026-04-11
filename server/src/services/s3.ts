@@ -12,10 +12,28 @@ function getS3Client(): S3Client {
     if (!config.S3_REGION || !config.S3_BUCKET_CAPTURES) {
       throw new Error('S3 is not configured: S3_REGION and S3_BUCKET_CAPTURES are required.');
     }
+    if (!config.AWS_ACCESS_KEY_ID || !config.AWS_SECRET_ACCESS_KEY) {
+      console.warn('[s3] AWS_ACCESS_KEY_ID or AWS_SECRET_ACCESS_KEY not set — SDK will attempt credential chain (may cause slow timeouts in dev)');
+    }
+    console.log('[s3] initialising S3Client', {
+      region: config.S3_REGION,
+      bucket: config.S3_BUCKET_CAPTURES,
+      endpoint: config.S3_ENDPOINT || '(default AWS)',
+      forcePathStyle: config.S3_FORCE_PATH_STYLE,
+      hasAccessKey: !!config.AWS_ACCESS_KEY_ID,
+      hasSecretKey: !!config.AWS_SECRET_ACCESS_KEY,
+    });
     clientInstance = new S3Client({
       region: config.S3_REGION,
       ...(config.S3_ENDPOINT && { endpoint: config.S3_ENDPOINT }),
       ...(config.S3_FORCE_PATH_STYLE && { forcePathStyle: true }),
+      ...(config.AWS_ACCESS_KEY_ID && config.AWS_SECRET_ACCESS_KEY && {
+        credentials: {
+          accessKeyId: config.AWS_ACCESS_KEY_ID,
+          secretAccessKey: config.AWS_SECRET_ACCESS_KEY,
+          ...(config.AWS_SESSION_TOKEN && { sessionToken: config.AWS_SESSION_TOKEN }),
+        },
+      }),
     });
   }
   return clientInstance;

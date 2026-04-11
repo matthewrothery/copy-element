@@ -28,6 +28,7 @@ export interface AppConfig {
   S3_BUCKET_CAPTURES: string;
   S3_ENDPOINT: string;
   S3_FORCE_PATH_STYLE: boolean;
+  SES_ENDPOINT: string;
   INTERNAL_API_KEY: string;
   ANTHROPIC_API_KEY: string;
   SUPPORT_EMAIL: string;

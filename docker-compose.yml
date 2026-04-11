@@ -29,6 +29,43 @@ services:
   #   restart: unless-stopped
 
 
+  localstack:
+    image: localstack/localstack:3
+    container_name: element-armory-localstack
+    ports:
+      - "4566:4566"
+    environment:
+      - SERVICES=s3,ses
+      - AWS_DEFAULT_REGION=us-east-2
+      - LOCALSTACK_AUTH_TOKEN=${LOCALSTACK_AUTH_TOKEN:-}
+    volumes:
+      - localstack_data:/var/lib/localstack
+      - ./localstack/init:/etc/localstack/init/ready.d
+    networks:
+      - element-armory-env
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:4566/_localstack/health"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+      start_period: 10s
+    restart: "no"
+
+  ses-viewer:
+    build: https://github.com/veertech/localstack-aws-ses-email-viewer.git
+    container_name: element-armory-ses-viewer
+    environment:
+      - LOCALSTACK_HOST=http://localstack:4566
+      - PORT=3005
+    ports:
+      - "3005:3005"
+    networks:
+      - element-armory-env
+    depends_on:
+      localstack:
+        condition: service_healthy
+    restart: "no"
+
   server:
     image: element-armory-server
     container_name: element-armory-server
@@ -52,6 +89,9 @@ services:
       - ./server/:/app
     networks:
       - element-armory-env
+    depends_on:
+      localstack:
+        condition: service_healthy
     restart: "no"
 
   website:
@@ -106,10 +146,14 @@ services:
     command: /bin/sh -c "npm install && npm run dev"
     networks:
       - element-armory-env
+    depends_on:
+      localstack:
+        condition: service_healthy
     restart: "no"
 
 volumes:
   element_armory_server_data:
+  localstack_data:
 
 networks:
   element-armory-env:

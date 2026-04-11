@@ -37,6 +37,7 @@ function getSesClient(): SESClient {
             },
           }
         : {}),
+      ...(config.SES_ENDPOINT ? { endpoint: config.SES_ENDPOINT } : {}),
     });
   }
   return sesClient;

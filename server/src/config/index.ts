@@ -32,6 +32,7 @@ function getConfig(): AppConfig {
     S3_BUCKET_CAPTURES: process.env[ENV_KEYS.S3_BUCKET_CAPTURES] ?? '',
     S3_ENDPOINT: process.env[ENV_KEYS.S3_ENDPOINT] ?? '',
     S3_FORCE_PATH_STYLE: process.env[ENV_KEYS.S3_FORCE_PATH_STYLE] === 'true' || process.env[ENV_KEYS.S3_FORCE_PATH_STYLE] === '1',
+    SES_ENDPOINT: process.env[ENV_KEYS.SES_ENDPOINT] ?? '',
     INTERNAL_API_KEY: process.env[ENV_KEYS.INTERNAL_API_KEY] ?? '',
     ANTHROPIC_API_KEY: process.env[ENV_KEYS.ANTHROPIC_API_KEY] ?? '',
     SUPPORT_EMAIL: process.env[ENV_KEYS.SUPPORT_EMAIL] ?? 'hello@elementarmory.com',

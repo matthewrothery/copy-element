@@ -1,3 +1,5 @@
 competitor-extensions/*
 maybe-devops/*
 .aws-renewal.pid
+
+.env

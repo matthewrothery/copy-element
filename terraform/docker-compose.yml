@@ -11,3 +11,16 @@ services:
       - AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}
       - AWS_SESSION_TOKEN=${AWS_SESSION_TOKEN}
       - AWS_REGION=${AWS_REGION}
+
+  # Run with: docker compose -f terraform/docker-compose.yml run --rm terraform-local init
+  #       and: docker compose -f terraform/docker-compose.yml run --rm terraform-local apply
+  terraform-local:
+    image: hashicorp/terraform:1.14.3
+    volumes:
+      - .:/terraform
+    working_dir: /terraform/local
+    network_mode: host
+    environment:
+      - AWS_ACCESS_KEY_ID=test
+      - AWS_SECRET_ACCESS_KEY=test
+      - AWS_DEFAULT_REGION=us-east-2
