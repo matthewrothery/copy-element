@@ -161,6 +161,20 @@ export function LibraryApp(): JSX.Element {
     void loadData();
   }, [loadData]);
 
+  useEffect(() => {
+    if (typeof chrome === "undefined" || !chrome.storage?.onChanged?.addListener) return;
+    const listener = (
+      changes: { [key: string]: chrome.storage.StorageChange },
+      areaName: string
+    ): void => {
+      if (areaName === "local" && "element-capture-snippet-ids" in changes) {
+        void loadData();
+      }
+    };
+    chrome.storage.onChanged.addListener(listener);
+    return () => chrome.storage.onChanged.removeListener(listener);
+  }, [loadData]);
+
   // Track library opened
   useEffect(() => {
     void trackPopupEvent('library_viewed');

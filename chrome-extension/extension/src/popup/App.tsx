@@ -152,14 +152,26 @@ export function App(): JSX.Element {
   }, [hasStorageLocal, preferences]);
 
   useEffect(() => {
-    void (async () => {
-      try {
-        const data = await getSnippetsFromBackground();
-        setSnippets(Array.isArray(data) ? data : []);
-      } catch {
-        setSnippets([]);
-      }
-    })();
+    const loadSnippets = (): void => {
+      void getSnippetsFromBackground()
+        .then((data) => setSnippets(Array.isArray(data) ? data : []))
+        .catch(() => setSnippets([]));
+    };
+
+    loadSnippets();
+
+    if (typeof chrome !== "undefined" && chrome.storage?.onChanged?.addListener) {
+      const listener = (
+        changes: { [key: string]: chrome.storage.StorageChange },
+        areaName: string
+      ): void => {
+        if (areaName === "local" && "element-capture-snippet-ids" in changes) {
+          loadSnippets();
+        }
+      };
+      chrome.storage.onChanged.addListener(listener);
+      return () => chrome.storage.onChanged.removeListener(listener);
+    }
   }, []);
 
   useEffect(() => {
