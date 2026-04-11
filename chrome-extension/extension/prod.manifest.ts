@@ -18,7 +18,6 @@ export default defineManifest({
     "tabs",
     "storage",
     "unlimitedStorage",
-    "scripting",
     "clipboardWrite",
     "debugger",
     "webNavigation",

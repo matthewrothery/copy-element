@@ -68,11 +68,6 @@ Captured snippets can contain full HTML, extracted CSS, metadata, and optional t
 
 **Status: required**
 
-### `scripting`
-Used to programmatically inject or activate capture logic in the current page when the user starts a capture. The extension uses `chrome.scripting` to run the page-side code that shows the hover overlay, lets the user select an element, and returns the capture result back to the extension UI. This permission is necessary because capture is user-triggered on arbitrary sites rather than limited to a fixed set of domains.
-
-**Status: required**
-
 ### `clipboardWrite`
 Used only when the user explicitly clicks a copy action inside the extension. It writes the generated HTML or AI-ready prompt text to the system clipboard so the user can paste it into their code editor or AI tool. The extension does not read clipboard contents and does not write to the clipboard without a direct user action.
 

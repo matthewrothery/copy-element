@@ -31,7 +31,7 @@ extension/
 
 ### Permissions
 
-Use minimal permissions. Preferred: `activeTab`, `storage`, `scripting`. Avoid unnecessary host permissions.
+Use minimal permissions. Preferred: `activeTab`, `storage`. Avoid unnecessary host permissions.
 
 ### Storage
 

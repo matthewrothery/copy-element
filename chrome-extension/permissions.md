@@ -8,7 +8,7 @@ This document justifies every permission declared in `extension/manifest.ts` and
 
 **API unlocked:** `chrome.tabs` access to the currently active tab when the user invokes the extension (clicks the toolbar icon or triggers a keyboard shortcut).
 
-**Justification:** Required to inject the element picker overlay into the page the user is actively viewing. Without `activeTab`, the extension cannot interact with the tab on user demand. This is the least-privilege alternative to a blanket host permission — access is granted only at the moment of user action, not passively.
+**Justification:** Used for user-initiated actions on the current page, especially starting a capture from the active tab and capturing the visible area for snippet thumbnails. The extension only acts on the tab the user is actively working with when they invoke the product.
 
 ---
 
@@ -33,14 +33,6 @@ This document justifies every permission declared in `extension/manifest.ts` and
 **API unlocked:** Removes the default 5 MB quota on `chrome.storage.local`.
 
 **Justification:** Captured snippets include inlined base64 images, embedded fonts, resolved CSS custom properties, and full computed style declarations. Complex components — especially those with high-resolution imagery or many nested elements — can exceed 5 MB individually. `unlimitedStorage` ensures capture never silently fails or truncates data due to quota limits.
-
----
-
-## `scripting`
-
-**API unlocked:** `chrome.scripting.executeScript` and `chrome.scripting.insertCSS`.
-
-**Justification:** The element picker, capture overlay, and post-capture bar are injected into the page programmatically at the moment of user action, not statically at page load. `scripting` allows the background service worker to inject and remove these scripts on demand, giving the extension precise control over when its UI is active in the page context.
 
 ---
 

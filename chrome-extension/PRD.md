@@ -527,7 +527,6 @@ Extension APIs:
 
 ```
 chrome.storage
-chrome.scripting
 chrome.tabs
 ```
 
