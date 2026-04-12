@@ -11,8 +11,16 @@ interface Result {
   plan?: string;
 }
 
+async function resolveToUserId(input: string): Promise<string> {
+  if (!input.includes('@')) return input;
+  const data = await api.users(1, 1, input);
+  const match = data.users.find((u) => u.email.toLowerCase() === input.toLowerCase());
+  if (!match) throw new Error(`No user found with email: ${input}`);
+  return match.id;
+}
+
 export function Complimentary(): React.ReactElement {
-  const [userId, setUserId] = useState('');
+  const [userInput, setUserInput] = useState('');
   const [planCode, setPlanCode] = useState<'pro' | 'team'>('pro');
   const [loading, setLoading] = useState(false);
   const [result, setResult] = useState<Result | null>(null);
@@ -20,21 +28,23 @@ export function Complimentary(): React.ReactElement {
 
   function handleGrant(e: React.FormEvent): void {
     e.preventDefault();
-    if (!userId.trim()) return;
+    if (!userInput.trim()) return;
     setLoading(true);
     setError(null);
-    api.grantComplimentary(userId.trim(), planCode)
-      .then(() => setResult({ userId: userId.trim(), action: 'granted', plan: planCode }))
+    resolveToUserId(userInput.trim())
+      .then((userId) => api.grantComplimentary(userId, planCode).then(() => userId))
+      .then((userId) => setResult({ userId, action: 'granted', plan: planCode }))
       .catch((err: unknown) => setError(String(err)))
       .finally(() => setLoading(false));
   }
 
   function handleRevoke(): void {
-    if (!userId.trim()) return;
+    if (!userInput.trim()) return;
     setLoading(true);
     setError(null);
-    api.revokeComplimentary(userId.trim())
-      .then(() => setResult({ userId: userId.trim(), action: 'revoked' }))
+    resolveToUserId(userInput.trim())
+      .then((userId) => api.revokeComplimentary(userId).then(() => userId))
+      .then((userId) => setResult({ userId, action: 'revoked' }))
       .catch((err: unknown) => setError(String(err)))
       .finally(() => setLoading(false));
   }
@@ -42,17 +52,17 @@ export function Complimentary(): React.ReactElement {
   return (
     <div className="comp">
       <p className="comp__description">
-        Grant or revoke complimentary paid access for a user. Use the Better Auth user ID.
+        Grant or revoke complimentary paid access for a user. Enter a user ID or email address.
       </p>
 
       <div className="comp__card">
         <form className="comp__form" onSubmit={handleGrant}>
           <Input
-            label="User ID"
+            label="User ID or Email"
             id="comp-user-id"
-            placeholder="e.g. usr_xxxxxxxxxxxx"
-            value={userId}
-            onChange={(e) => setUserId(e.target.value)}
+            placeholder="e.g. usr_xxxxxxxxxxxx or user@example.com"
+            value={userInput}
+            onChange={(e) => setUserInput(e.target.value)}
           />
 
           <div className="comp__plan-select">

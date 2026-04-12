@@ -40,3 +40,26 @@
   font-size: var(--typo-copy);
   color: var(--text-muted);
 }
+
+.users__copy-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 28px;
+  border: none;
+  border-radius: var(--radius);
+  background: transparent;
+  color: var(--text-subtle);
+  cursor: pointer;
+  transition: background 120ms, color 120ms;
+}
+
+.users__copy-btn:hover {
+  background: var(--surface-raised);
+  color: var(--text);
+}
+
+.users__copy-btn--copied {
+  color: var(--success-text, #16a34a);
+}

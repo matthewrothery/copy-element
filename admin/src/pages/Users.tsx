@@ -1,11 +1,44 @@
 import './Users.css';
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useCallback } from 'react';
 import { api, type AdminUser, type UserListData } from '@/lib/api';
 import { Table, type Column } from '@/components/Table/Table';
 import { Badge } from '@/components/Badge/Badge';
 import { Input } from '@/components/Input/Input';
 import { Button } from '@/components/Button/Button';
 import { formatRelativeDate } from '@/lib/format';
+
+function CopyIdButton({ id }: { id: string }): React.ReactElement {
+  const [copied, setCopied] = useState(false);
+
+  const handleCopy = useCallback((e: React.MouseEvent) => {
+    e.stopPropagation();
+    navigator.clipboard.writeText(id).then(() => {
+      setCopied(true);
+      setTimeout(() => setCopied(false), 1500);
+    }).catch(() => undefined);
+  }, [id]);
+
+  return (
+    <button
+      className={`users__copy-btn${copied ? ' users__copy-btn--copied' : ''}`}
+      onClick={handleCopy}
+      title={copied ? 'Copied!' : `Copy ID: ${id}`}
+      aria-label="Copy user ID"
+      type="button"
+    >
+      {copied ? (
+        <svg width="14" height="14" viewBox="0 0 16 16" fill="none" aria-hidden="true">
+          <path d="M3 8l3.5 3.5L13 4.5" stroke="currentColor" strokeWidth="1.75" strokeLinecap="round" strokeLinejoin="round"/>
+        </svg>
+      ) : (
+        <svg width="14" height="14" viewBox="0 0 16 16" fill="none" aria-hidden="true">
+          <rect x="5" y="5" width="8" height="9" rx="1.5" stroke="currentColor" strokeWidth="1.5"/>
+          <path d="M11 5V4a1.5 1.5 0 0 0-1.5-1.5h-6A1.5 1.5 0 0 0 2 4v7A1.5 1.5 0 0 0 3.5 12.5H5" stroke="currentColor" strokeWidth="1.5"/>
+        </svg>
+      )}
+    </button>
+  );
+}
 
 function planVariant(planCode: string): 'success' | 'info' | 'neutral' {
   if (planCode === 'pro' || planCode === 'team') return 'success';
@@ -37,6 +70,7 @@ export function Users(): React.ReactElement {
   }
 
   const columns: Column<AdminUser>[] = [
+    { key: 'copy', header: '', render: (r) => <CopyIdButton id={r.id} />, width: '40px' },
     { key: 'email', header: 'Email', render: (r) => <span className="users__email">{r.email}</span> },
     { key: 'name', header: 'Name', render: (r) => r.name },
     { key: 'plan', header: 'Plan', render: (r) => (
