@@ -3,9 +3,8 @@
 import Link from "next/link";
 import Image from "next/image";
 import { useState, useEffect } from "react";
-import { Menu, ExternalLink } from "lucide-react";
-import { ChromeStoreCtaLabel } from "@/components/ChromeStoreCtaLabel";
-import { CHROME_STORE_URL } from "@/lib/publicConfig";
+import { Menu } from "lucide-react";
+import { ChromeStoreCtaButton } from "@/components/ChromeStoreCtaButton";
 import type { HeaderProps, NavItem } from "./types";
 import "./Header.css";
 
@@ -20,8 +19,6 @@ const DEFAULT_NAV: NavItem[] = [
 
 export function Header({
   navItems = DEFAULT_NAV,
-  ctaHref = CHROME_STORE_URL,
-  ctaLabel = <ChromeStoreCtaLabel />,
   logoHref = "/",
   logoAlt = "",
   logoText = "Element Armory",
@@ -97,27 +94,15 @@ export function Header({
                 {item.label}
               </Link>
             ))}
-            <a
-              href={ctaHref}
-              target="_blank"
-              rel="noopener noreferrer"
+            <ChromeStoreCtaButton
               className="header-mobile-cta"
               onClick={() => setMobileMenuOpen(false)}
-            >
-              {ctaLabel}
-              <ExternalLink size={14} aria-hidden />
-            </a>
+            />
           </div>
         )}
 
         <div className="header-cta">
-          <a
-            href={ctaHref}
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            {ctaLabel}
-          </a>
+          <ChromeStoreCtaButton />
         </div>
       </header>
     </div>

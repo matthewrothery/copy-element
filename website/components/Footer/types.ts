@@ -1,4 +1,3 @@
-import type { ReactNode } from "react";
 
 export type FooterLink = {
   label: string;
@@ -28,8 +27,4 @@ export type FooterProps = {
   copyrightText?: string;
   /** Show top row with tagline + CTA. */
   showTopCta?: boolean;
-  /** Top row CTA href (e.g. Chrome Store). */
-  topCtaHref?: string;
-  /** Top row CTA label (default: canonical Chrome Store CTA). */
-  topCtaLabel?: ReactNode;
 };

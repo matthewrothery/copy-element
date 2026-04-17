@@ -409,13 +409,7 @@
 
 @media (max-width: 720px) {
   .pipeline-diagram {
-    padding: var(--space-3);
-    overflow-x: auto;
-    -webkit-overflow-scrolling: touch;
-  }
-
-  .pipeline-diagram-layout {
-    min-width: 640px;
+    display: none;
   }
 }
 

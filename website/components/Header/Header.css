@@ -98,33 +98,6 @@
   align-items: center;
 }
 
-.header-cta a {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  gap: var(--space-2);
-  padding: 14px 12px;
-  height: 38px;
-  font-size: var(--typo-copy);
-  font-weight: 500;
-  line-height: 1.5em;
-  border-radius: var(--radius);
-  border: 1px solid transparent;
-  background-color: var(--accent);
-  color: var(--text);
-  text-decoration: none;
-  transition: background-color 0.3s;
-}
-
-.header-cta a:hover {
-  background-color: var(--accent-hover);
-  transition-duration: 0.075s;
-}
-
-.header-cta a:active {
-  background-color: var(--accent-active);
-  transition-duration: 0.15s;
-}
 
 .header-mobile-toggle {
   display: none;
@@ -153,7 +126,7 @@
   z-index: 10;
 }
 
-.header-mobile-menu a {
+.header-mobile-menu a:not(.chrome-store-cta-btn) {
   padding: var(--space-2);
   font-size: var(--typo-largecopy);
   text-decoration: none;
@@ -161,45 +134,78 @@
 }
 
 .header-mobile-cta {
-  display: inline-flex;
-  align-items: center;
-  gap: var(--space-2);
-  padding: var(--space-2) var(--space-3);
-  font-size: var(--typo-copy);
-  font-weight: 500;
-  border-radius: var(--radius);
-  border: 1px solid transparent;
-  background-color: var(--accent);
-  color: var(--text);
-  text-decoration: none;
-  transition: background-color 0.2s;
   margin-top: var(--space-2);
 }
 
-.header-mobile-cta:hover {
-  background-color: var(--accent-hover);
-}
-
 @media (max-width: 884px) {
+  .header-wrapper {
+    padding-inline: 8px;
+  }
+
   .header {
     gap: 16px;
+    min-height: 40px;
+  }
+
+  .header-logo {
+    height: 40px;
   }
 
   .header-nav {
     display: none;
   }
 
+  .header-cta {
+    display: none;
+  }
+
+  .header-logo-icon {
+    width: 22px;
+    height: 22px;
+  }
+
+  .header-logo-text {
+    font-size: var(--typo-largecopy);
+  }
+
   .header-mobile-toggle {
     display: flex;
+    height: 40px;
+  }
+
+  .header-mobile-toggle-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .header-mobile-toggle-btn svg {
+    width: 20px;
+    height: 20px;
   }
 
   .header-mobile-menu {
     display: flex;
+    top: 40px;
+    left: 8px;
+    right: 8px;
+    border-radius: var(--radius);
+    border: 1px solid var(--border);
   }
 }
 
 @media (max-width: 480px) {
+  .header-wrapper {
+    padding-inline: 4px;
+    padding-top: 8px;
+  }
+
   .header {
     padding: 0 16px;
+  }
+
+  .header-mobile-menu {
+    left: 4px;
+    right: 4px;
   }
 }

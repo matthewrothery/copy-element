@@ -2,8 +2,7 @@
 
 import Link from "next/link";
 import Image from "next/image";
-import { ChromeStoreCtaLabel } from "@/components/ChromeStoreCtaLabel";
-import { CHROME_STORE_URL } from "@/lib/publicConfig";
+import { ChromeStoreCtaButton } from "@/components/ChromeStoreCtaButton";
 import type { FooterProps, FooterLink, FooterLinkGroup } from "./types";
 import "./Footer.css";
 
@@ -111,8 +110,6 @@ export function Footer({
   legalLinks = DEFAULT_LEGAL_LINKS,
   copyrightText,
   showTopCta = false,
-  topCtaHref = CHROME_STORE_URL,
-  topCtaLabel = <ChromeStoreCtaLabel />,
 }: FooterProps): React.ReactElement {
   const year = new Date().getFullYear();
   const copyright =
@@ -126,14 +123,7 @@ export function Footer({
             <p className="footer-tagline">
               Capture UI from any site and rebuild it with AI.
             </p>
-            <a
-              href={topCtaHref}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="footer-top-cta"
-            >
-              {topCtaLabel}
-            </a>
+            <ChromeStoreCtaButton variant="ghost" />
           </div>
         )}
 

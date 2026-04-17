@@ -1,16 +1,13 @@
 import Link from "next/link";
 import Image from "next/image";
-import { ChromeStoreCtaLabel } from "@/components/ChromeStoreCtaLabel";
+import { ChromeStoreCtaButton } from "@/components/ChromeStoreCtaButton";
 import { MediaPlaceholder } from "@/components/MediaPlaceholder";
-import { CHROME_STORE_URL } from "@/lib/publicConfig";
 import type { HeroProps } from "./types";
 import "./Hero.css";
 
 export function Hero({
   title = "Capture UI from any site and rebuild it with AI.",
   subtitle = <span>Clean. Clear. Powerful.</span>,
-  ctaHref = CHROME_STORE_URL,
-  ctaLabel = <ChromeStoreCtaLabel />,
   ctaSubtext = "Free. No account required.",
   logoHref = "/",
   media,
@@ -40,14 +37,7 @@ export function Hero({
           {subtitle != null && <p className="hero-subtitle">{subtitle}</p>}
         </div>
         <div className="hero-cta-block">
-          <a
-            href={ctaHref}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="hero-cta"
-          >
-            {ctaLabel}
-          </a>
+          <ChromeStoreCtaButton size="lg" />
           <span className="hero-cta-label">{ctaSubtext}</span>
         </div>
       </div>

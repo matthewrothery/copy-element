@@ -79,25 +79,6 @@
   margin: 0;
 }
 
-.footer-top-cta {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  padding: var(--space-2) var(--space-4);
-  font-size: var(--typo-copy);
-  font-weight: var(--font-weight-semibold);
-  line-height: 1.5;
-  border-radius: var(--radius);
-  background-color: rgba(255, 255, 255, 0.2);
-  color: var(--footer-text);
-  text-decoration: none;
-  transition: background-color 0.2s, color 0.2s;
-}
-
-.footer-top-cta:hover {
-  background-color: var(--footer-text);
-  color: var(--footer-bg);
-}
 
 /* Link groups grid */
 .footer-grid {
@@ -210,7 +191,24 @@
     --footer-padding-inline: 16px;
   }
 
+  .footer-inner {
+    gap: var(--space-5);
+  }
+
+  .footer-grid {
+    grid-template-columns: 1fr;
+    gap: var(--space-4);
+  }
+
   .footer-tagline {
     font-size: var(--typo-title);
+  }
+
+  .footer-legal-bar {
+    gap: var(--space-2);
+  }
+
+  .footer-legal-links {
+    gap: var(--space-2) var(--space-3);
   }
 }
