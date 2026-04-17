@@ -30,7 +30,9 @@ function buildSnippet(tool: ToolId, apiKey: string): string {
         2
       );
     case "claudecode":
-      return `claude mcp add element-armory --transport http-first \\\n  --header "ELEMENT_ARMORY_API_KEY: ${apiKey}" \\\n  ${MCP_ENDPOINT}`;
+      // claude mcp add --transport http secure-api https://mcp.elementarmory.com/mcp --header "ELEMENT_ARMORY_API_KEY: 3OcyEcUjgWIcWxvz7U8iWnBh"
+      return `claude mcp add --transport http secure-api ${MCP_ENDPOINT} --header "ELEMENT_ARMORY_API_KEY: ${apiKey}"`;
+      // return `claude mcp add element-armory --transport http secure-api \\\n  --header "ELEMENT_ARMORY_API_KEY: ${apiKey}" \\\n  ${MCP_ENDPOINT}`;
     case "codex":
       return JSON.stringify(
         {
