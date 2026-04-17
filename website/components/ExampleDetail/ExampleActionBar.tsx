@@ -1,7 +1,6 @@
 import type { ReactElement } from "react";
 import { ChromeStoreCtaLabel } from "@/components/ChromeStoreCtaLabel";
-
-const CHROME_STORE_HREF = process.env.NEXT_PUBLIC_CHROME_STORE_URL ?? "#";
+import { CHROME_STORE_URL } from "@/lib/publicConfig";
 
 type Props = {
   html: string;
@@ -71,7 +70,7 @@ export function ExampleActionBar({
         <span className="action-bar-hint">Capture your own elements →</span>
         <a
           className="action-btn"
-          href={CHROME_STORE_HREF}
+          href={CHROME_STORE_URL}
           target="_blank"
           rel="noopener noreferrer"
         >

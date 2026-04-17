@@ -75,6 +75,7 @@ These are non-sensitive and have working defaults, but you can override them:
 | Variable | Default | Purpose |
 |---|---|---|
 | `NEXT_PUBLIC_APP_URL` | `https://app.elementarmory.com` | Baked into the Next.js build as the API/app origin |
+| `NEXT_PUBLIC_CHROME_STORE_URL` | `https://chromewebstore.google.com/detail/element-armory-%E2%80%93-capture/ihndemikooddnhleamneebgedomkench` | Baked into the Next.js build for all website "Add to Chrome" CTAs |
 
 ---
 

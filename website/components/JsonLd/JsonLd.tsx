@@ -1,8 +1,9 @@
 import type { JsonLdProps } from "./types";
+import { CHROME_STORE_URL } from "@/lib/publicConfig";
 
 export function JsonLd({
   baseUrl = process.env.NEXT_PUBLIC_SITE_URL ?? "https://elementarmory.example.com",
-  storeUrl = process.env.NEXT_PUBLIC_CHROME_STORE_URL ?? "#",
+  storeUrl = CHROME_STORE_URL,
   name = "Element Armory",
   description = "Capture UI from any site and rebuild it with AI. Clean. Clear. Powerful.",
 }: JsonLdProps = {}): React.ReactElement {

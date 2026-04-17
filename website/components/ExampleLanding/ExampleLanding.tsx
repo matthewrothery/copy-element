@@ -2,6 +2,7 @@ import type { ReactElement } from "react";
 import Link from "next/link";
 import type { Example } from "@/data/examples";
 import { ChromeStoreCtaLabel } from "@/components/ChromeStoreCtaLabel";
+import { CHROME_STORE_URL } from "@/lib/publicConfig";
 import "./ExampleLanding.css";
 
 function buildSrcDoc(html: string, css: string): string {
@@ -82,7 +83,7 @@ export function ExampleLanding({ example }: { example: Example }): ReactElement 
             Open code editor
           </Link>
           <a
-            href={process.env.NEXT_PUBLIC_CHROME_STORE_URL ?? "#"}
+            href={CHROME_STORE_URL}
             className="example-landing-cta-secondary"
             target="_blank"
             rel="noreferrer"

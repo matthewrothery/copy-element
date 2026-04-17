@@ -1,9 +1,8 @@
 "use client";
 
 import { useState } from "react";
+import { CHROME_STORE_URL } from "@/lib/publicConfig";
 import "./PricingCards.css";
-
-const CHROME_STORE_URL = process.env.NEXT_PUBLIC_CHROME_STORE_URL ?? "#";
 const GET_STARTED_URL = "/sign-in";
 
 export type Feature = { text: string };

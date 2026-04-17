@@ -33,6 +33,7 @@ jobs:
       - name: Build Next.js
         env:
           NEXT_PUBLIC_APP_URL: ${{ vars.NEXT_PUBLIC_APP_URL || 'https://app.elementarmory.com' }}
+          NEXT_PUBLIC_CHROME_STORE_URL: ${{ vars.NEXT_PUBLIC_CHROME_STORE_URL || 'https://chromewebstore.google.com/detail/element-armory-%E2%80%93-capture/ihndemikooddnhleamneebgedomkench' }}
         run: npm run build
         working-directory: website
 

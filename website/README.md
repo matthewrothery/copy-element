@@ -28,7 +28,7 @@ Output is in `out/`. Serve with any static host.
 ## Environment (optional)
 
 - `NEXT_PUBLIC_SITE_URL` – Canonical URL (metadata, sitemap, robots). Default: `https://elementcapture.example.com`
-- `NEXT_PUBLIC_CHROME_STORE_URL` – Chrome Web Store link for “Add to Chrome”. Default: `#`
+- `NEXT_PUBLIC_CHROME_STORE_URL` – Chrome Web Store link for “Add to Chrome”. Default: official Element Armory Chrome Web Store URL
 
 ## Tech
 

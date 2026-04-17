@@ -5,6 +5,7 @@ import Image from "next/image";
 import { useState, useEffect } from "react";
 import { Menu, ExternalLink } from "lucide-react";
 import { ChromeStoreCtaLabel } from "@/components/ChromeStoreCtaLabel";
+import { CHROME_STORE_URL } from "@/lib/publicConfig";
 import type { HeaderProps, NavItem } from "./types";
 import "./Header.css";
 
@@ -19,7 +20,7 @@ const DEFAULT_NAV: NavItem[] = [
 
 export function Header({
   navItems = DEFAULT_NAV,
-  ctaHref = process.env.NEXT_PUBLIC_CHROME_STORE_URL ?? "#",
+  ctaHref = CHROME_STORE_URL,
   ctaLabel = <ChromeStoreCtaLabel />,
   logoHref = "/",
   logoAlt = "",

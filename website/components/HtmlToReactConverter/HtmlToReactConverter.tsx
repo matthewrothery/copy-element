@@ -3,9 +3,8 @@
 import { useState } from "react";
 import type { ReactElement } from "react";
 import { convertHtmlFull, type Framework } from "@/lib/htmlToReact";
+import { CHROME_STORE_URL } from "@/lib/publicConfig";
 import "./HtmlToReactConverter.css";
-
-const CHROME_STORE_URL = process.env.NEXT_PUBLIC_CHROME_STORE_URL ?? "#";
 
 const FRAMEWORKS: { id: Framework; label: string }[] = [
   { id: "react", label: "React" },

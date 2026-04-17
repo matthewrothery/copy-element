@@ -3,10 +3,9 @@
 import Link from "next/link";
 import Image from "next/image";
 import { ChromeStoreCtaLabel } from "@/components/ChromeStoreCtaLabel";
+import { CHROME_STORE_URL } from "@/lib/publicConfig";
 import type { FooterProps, FooterLink, FooterLinkGroup } from "./types";
 import "./Footer.css";
-
-const CHROME_STORE_URL = process.env.NEXT_PUBLIC_CHROME_STORE_URL ?? "#";
 
 const DEFAULT_LINK_GROUPS: FooterLinkGroup[] = [
   {

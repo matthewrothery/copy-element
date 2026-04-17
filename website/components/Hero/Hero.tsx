@@ -2,13 +2,14 @@ import Link from "next/link";
 import Image from "next/image";
 import { ChromeStoreCtaLabel } from "@/components/ChromeStoreCtaLabel";
 import { MediaPlaceholder } from "@/components/MediaPlaceholder";
+import { CHROME_STORE_URL } from "@/lib/publicConfig";
 import type { HeroProps } from "./types";
 import "./Hero.css";
 
 export function Hero({
   title = "Capture UI from any site and rebuild it with AI.",
   subtitle = <span>Clean. Clear. Powerful.</span>,
-  ctaHref = process.env.NEXT_PUBLIC_CHROME_STORE_URL ?? "#",
+  ctaHref = CHROME_STORE_URL,
   ctaLabel = <ChromeStoreCtaLabel />,
   ctaSubtext = "Free. No account required.",
   logoHref = "/",

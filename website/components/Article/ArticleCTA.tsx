@@ -1,8 +1,7 @@
 import type { ReactElement } from "react";
 import { ChromeStoreCtaLabel } from "@/components/ChromeStoreCtaLabel";
+import { CHROME_STORE_URL } from "@/lib/publicConfig";
 import "./ArticleCTA.css";
-
-const CHROME_STORE_HREF = process.env.NEXT_PUBLIC_CHROME_STORE_URL ?? "#";
 
 function ArrowIcon(): ReactElement {
   return (
@@ -38,7 +37,7 @@ export function ArticleCTA(): ReactElement {
         </div>
         <a
           className="article-cta-btn"
-          href={CHROME_STORE_HREF}
+          href={CHROME_STORE_URL}
           target="_blank"
           rel="noopener noreferrer"
         >

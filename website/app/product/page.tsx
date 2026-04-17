@@ -12,6 +12,7 @@ import { FAQ } from "@/components/FAQ";
 import { Footer } from "@/components/Footer";
 import { Section } from "@/components/Section";
 import { EXAMPLES } from "@/data/examples";
+import { CHROME_STORE_URL } from "@/lib/publicConfig";
 
 export const metadata: Metadata = {
   title: "How It Works – Element Armory",
@@ -198,7 +199,7 @@ export default function ProductPage(): React.ReactElement {
                 title: "Start capturing now",
                 description:
                   "Install the extension, open any site, click any element. That's it.",
-                href: process.env.NEXT_PUBLIC_CHROME_STORE_URL ?? "#",
+                href: CHROME_STORE_URL,
                 linkLabel: "Add to Chrome",
                 icon: "code",
               },

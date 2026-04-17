@@ -1,12 +1,13 @@
 import Link from 'next/link'
 import { ChromeStoreCtaLabel } from '@/components/ChromeStoreCtaLabel'
+import { CHROME_STORE_URL } from '@/lib/publicConfig'
 import type { CTABlockProps, CTABlockFeature } from './types'
 import './CTABlock.css'
 
 const DEFAULT_TITLE = 'Your first capture is one click away.'
 const DEFAULT_SUBTITLE =
   "Install the extension and you're ready. No sign-up required."
-const DEFAULT_CTA_HREF = process.env.NEXT_PUBLIC_CHROME_STORE_URL ?? '#'
+const DEFAULT_CTA_HREF = CHROME_STORE_URL
 
 const DEFAULT_FEATURES: CTABlockFeature[] = [
   {
