@@ -1,3 +1,22 @@
+## v1.1.0 - April 17, 2026
+
+### Added
+- Website install buttons now take you directly to the Chrome Web Store listing
+- Capture limits are now clearer and more consistent across account tiers
+
+### Changed
+- Improved mobile website layout and readability
+- Updated onboarding and in-product guidance to help new users get started faster
+- Refreshed privacy and account-related messaging for better clarity
+- Account and billing access from the extension is now easier
+
+### Fixed
+- Improved reliability when restoring previously captured elements
+- Clearer warnings when a page cannot be captured successfully
+- Minor extension stability and security improvements
+
+---
+
 ## v1.0.0 - April 5, 2026
 
 ### Added
