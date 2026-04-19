@@ -58,6 +58,12 @@ function getAllowedTypes(kind: AssetKind): string[] {
   }
 }
 
+/** Express 5 types `req.params.*` as `string | string[]`. */
+function routeParam(value: string | string[] | undefined): string {
+  if (value === undefined) return '';
+  return Array.isArray(value) ? (value[0] ?? '') : value;
+}
+
 /** POST /api/captures/upload-url — install-auth. Returns presigned PUT URL and object key. */
 capturesRouter.post(
   '/upload-url',
@@ -365,12 +371,12 @@ capturesRouter.delete(
   '/install/:installId/:captureId',
   requireInstallAuth,
   (req: RequestWithInstall, res: Response) => {
-    const installId = req.params.installId;
+    const installId = routeParam(req.params.installId);
     if (req.installId !== installId) {
       res.status(403).json({ error: 'Cannot delete another install\'s captures' });
       return;
     }
-    const captureIdRaw = parseInt(req.params.captureId, 10);
+    const captureIdRaw = parseInt(routeParam(req.params.captureId), 10);
     if (Number.isNaN(captureIdRaw)) {
       res.status(400).json({ error: 'Invalid capture ID' });
       return;
