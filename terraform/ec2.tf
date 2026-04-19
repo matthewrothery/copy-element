@@ -41,8 +41,9 @@ locals {
     GOOGLE_CLIENT_SECRET="${var.google_client_secret}"
     BETTER_AUTH_SECRET="${var.better_auth_secret}"
 
-    # S3 (capture assets / screenshots)
-    S3_ASSETS_BUCKET="${local.s3_assets_bucket_name}"
+    # S3 (capture assets / screenshots) — names must match server ENV_KEYS (see server/src/constants)
+    S3_BUCKET_CAPTURES="${local.s3_assets_bucket_name}"
+    S3_REGION="${var.aws_region}"
     AWS_REGION="${var.aws_region}"
     AWS_SES_REGION="us-east-1"
 
@@ -109,6 +110,11 @@ resource "aws_instance" "app" {
 
   iam_instance_profile = aws_iam_instance_profile.ec2_profile.name
   key_name             = var.ec2_key_pair_name != "" ? var.ec2_key_pair_name : null
+
+  # Allow Docker containers to use the instance profile via IMDSv2 (default hop limit 1 breaks this).
+  metadata_options {
+    http_put_response_hop_limit = 2
+  }
 
   user_data = file("${path.module}/scripts/user-data.sh")
 

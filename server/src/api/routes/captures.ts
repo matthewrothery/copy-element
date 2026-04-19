@@ -33,6 +33,7 @@ import {
 } from '../../services/capture.js';
 import { recordEvent, wasEventFiredThisMonth, getUserEmail } from '../../services/events.js';
 import { enqueueJob } from '../../services/job-queue.js';
+import { logger } from '../../logger.js';
 
 export const capturesRouter = Router();
 
@@ -92,7 +93,12 @@ capturesRouter.post(
       const { url, expiresAt } = await createPresignedPutUrl(objectKey, contentType, byteSize);
       res.status(200).json({ url, object_key: objectKey, expires_at: expiresAt });
     } catch (err) {
-      console.error('[captures] upload-url error:', err);
+      logger.error('[captures] upload-url error', {
+        installId,
+        assetKind,
+        contentType,
+        byteSize,
+      }, err);
       const message = err instanceof Error ? err.message : 'Failed to create upload URL';
       res.status(500).json({ error: message });
     }
