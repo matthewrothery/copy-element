@@ -1,0 +1,186 @@
+import "dotenv/config";
+import { readFileSync } from "fs";
+import { applyDiagramsToArticle } from "./applyDiagrams.js";
+import { loadConfig } from "./config.js";
+import { acquireLock } from "./lock.js";
+import { researchTopic } from "./research.js";
+import { parseTopicKeywords, pickNextKeyword } from "./topics.js";
+import { loadState, saveState } from "./state.js";
+import { generateTopicArticle } from "./generateArticle.js";
+import { validateArticleQuality } from "./quality.js";
+import { generateCoverImage } from "./generateImage.js";
+import { createArtifact } from "./artifact.js";
+import { writeDryRunArtifact } from "./localPublish.js";
+import { uploadArtifactToS3, getArtifactImageSignedUrl } from "./s3.js";
+import { sendArticleNotification } from "./email.js";
+import { buildRandomDailySchedule, minutesUntilSlot, sleep } from "./scheduler.js";
+import { loadInternalLinkCandidates, prioritizeInternalLinks } from "./internalLinks.js";
+
+async function runSingleCycle(): Promise<void> {
+  const config = loadConfig();
+  const state = loadState(config.statePath);
+  const usedKeywords = new Set(state.processedKeywordIds);
+  const usedSlugs = new Set(state.processedSlugs);
+
+  const allKeywords = parseTopicKeywords(config.listPath);
+  const internalLinkCandidates = loadInternalLinkCandidates(config.websiteRoot);
+  const keyword = pickNextKeyword(allKeywords, usedKeywords, {
+    websiteRoot: config.websiteRoot,
+    skipExistingTopicFiles: config.skipExistingTopicFiles,
+  });
+  if (!keyword) {
+    console.log(
+      "No remaining keywords (state file full, list exhausted, or every list item already exists under website/content/topics). " +
+        "Reset state and/or set AUTO_BLOG_ALLOW_TOPIC_OVERWRITE=true only if you intend to regenerate."
+    );
+    return;
+  }
+
+  const copywriterPrompt = readFileSync(config.copywriterPromptPath, "utf-8");
+  const guide = readFileSync(config.guidePath, "utf-8");
+  const rules = readFileSync(config.rulesPath, "utf-8");
+  const today = new Date().toISOString().slice(0, 10);
+
+  console.log(`Selected keyword: ${keyword.keyword}`);
+  const research = await researchTopic(keyword.keyword, 12);
+  if (research.length === 0) {
+    throw new Error("Research step returned no results.");
+  }
+
+  const draftArticle = await generateTopicArticle({
+    keyword,
+    date: today,
+    textProvider: config.textProvider,
+    model: config.textModel,
+    copywriterPrompt,
+    guide,
+    rules,
+    research,
+    internalLinkCandidates: prioritizeInternalLinks(internalLinkCandidates, keyword),
+  });
+
+  const diagramPass = applyDiagramsToArticle(draftArticle, config.maxDiagrams);
+
+  const qualityWarnings = [
+    ...validateArticleQuality(diagramPass.article, usedSlugs, research),
+    ...diagramPass.warnings,
+  ];
+  if (qualityWarnings.length > 0) {
+    console.warn(`Quality warnings (${qualityWarnings.length}):\n- ${qualityWarnings.join("\n- ")}`);
+  }
+
+  let coverBuffer: Buffer<ArrayBufferLike> = Buffer.alloc(0);
+  let coverExt = config.imageFormat;
+  if (!config.dryRun) {
+    try {
+      const image = await generateCoverImage(diagramPass.article, config);
+      coverBuffer = image.bytes;
+      coverExt = image.ext;
+    } catch (error) {
+      if (!config.allowImageFallback) {
+        throw error;
+      }
+      console.warn("Image generation failed; using fallback blank image buffer.");
+      coverBuffer = Buffer.from("");
+    }
+  }
+
+  const artifact = createArtifact({
+    article: diagramPass.article,
+    coverBuffer,
+    coverExt,
+    diagramBuffers: diagramPass.diagramBuffers,
+    keywordId: keyword.id,
+    keyword: keyword.keyword,
+    sourceUrls: research.map((item) => item.url),
+    model: `${config.textProvider}:${config.textModel}`,
+    imageModel: config.imageModel,
+    promptVersion: config.promptVersion,
+    author: config.author,
+    research,
+    qualityWarnings,
+  });
+
+  if (config.dryRun) {
+    const out = writeDryRunArtifact(config.packageRoot, artifact);
+    console.log(`Dry run complete: ${out.articlePath}`);
+  } else {
+    if (!config.s3Bucket) {
+      throw new Error("AUTO_BLOG_S3_BUCKET is required for non-dry-run execution.");
+    }
+
+    await uploadArtifactToS3(config.s3Bucket, config.s3Prefix, artifact);
+    console.log(`Uploaded artifact to s3://${config.s3Bucket}/${config.s3Prefix}/pending/${artifact.artifactId}`);
+
+    if (config.notifyTo && config.notifyFrom) {
+      try {
+        const imageUrl = await getArtifactImageSignedUrl(
+          config.s3Bucket,
+          config.s3Prefix,
+          artifact.artifactId,
+          coverExt
+        );
+        await sendArticleNotification({
+          to: config.notifyTo,
+          from: config.notifyFrom,
+          artifact,
+          model: config.textModel,
+          imageUrl,
+        });
+        console.log(`Notification sent to ${config.notifyTo}`);
+      } catch (error) {
+        state.emailFailures.push(artifact.artifactId);
+        if (config.requireEmail) {
+          throw error;
+        }
+      }
+    }
+  }
+
+  state.processedKeywordIds.push(keyword.id);
+  state.processedSlugs.push(diagramPass.article.slug);
+  state.lastRunAt = Date.now();
+  saveState(config.statePath, state);
+}
+
+async function runDaemon(): Promise<void> {
+  const config = loadConfig();
+  console.log("Auto-blogger daemon started.");
+  while (true) {
+    const schedule = buildRandomDailySchedule(config.dailyArticles, config.minGapMinutes);
+    console.log(`Today's schedule (minutes): ${schedule.join(", ")}`);
+
+    for (const slot of schedule) {
+      const waitMinutes = minutesUntilSlot(slot, new Date());
+      if (waitMinutes > 0) {
+        await sleep(waitMinutes * 60 * 1000);
+      }
+      await runSingleCycle();
+    }
+
+    const now = new Date();
+    const msUntilTomorrow =
+      new Date(now.getFullYear(), now.getMonth(), now.getDate() + 1).getTime() - now.getTime();
+    await sleep(msUntilTomorrow);
+  }
+}
+
+async function main(): Promise<void> {
+  const config = loadConfig();
+  const lock = acquireLock(config.lockPath);
+
+  try {
+    if (config.mode === "daemon") {
+      await runDaemon();
+      return;
+    }
+    await runSingleCycle();
+  } finally {
+    lock.release();
+  }
+}
+
+main().catch((error) => {
+  console.error(error);
+  process.exit(1);
+});
