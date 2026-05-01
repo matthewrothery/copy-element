@@ -61,7 +61,9 @@ resource "aws_iam_role_policy" "ec2_s3_assets" {
         ]
         Resource = [
           aws_s3_bucket.assets.arn,
-          "${aws_s3_bucket.assets.arn}/*"
+          "${aws_s3_bucket.assets.arn}/*",
+          aws_s3_bucket.auto_blog.arn,
+          "${aws_s3_bucket.auto_blog.arn}/*"
         ]
       }
     ]
@@ -177,7 +179,9 @@ resource "aws_iam_policy" "github_actions_deployment" {
           aws_s3_bucket.website.arn,
           "${aws_s3_bucket.website.arn}/*",
           aws_s3_bucket.admin.arn,
-          "${aws_s3_bucket.admin.arn}/*"
+          "${aws_s3_bucket.admin.arn}/*",
+          aws_s3_bucket.auto_blog.arn,
+          "${aws_s3_bucket.auto_blog.arn}/*"
         ]
       },
       {

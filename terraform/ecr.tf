@@ -25,3 +25,17 @@ resource "aws_ecr_repository" "mcp" {
     Environment = var.environment
   }
 }
+
+resource "aws_ecr_repository" "auto_blogger" {
+  name                 = var.ecr_auto_blogger_repo
+  image_tag_mutability = "MUTABLE"
+
+  image_scanning_configuration {
+    scan_on_push = false
+  }
+
+  tags = {
+    Name        = "${var.project}-${var.environment}-auto-blogger"
+    Environment = var.environment
+  }
+}

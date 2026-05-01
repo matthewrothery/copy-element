@@ -29,10 +29,12 @@ ec2_key_pair_name = ""
 
 # ECR repository name
 ecr_server_repo = "element-armory-server"
+ecr_auto_blogger_repo = "element-armory-auto-blogger"
 
 # S3 bucket names
 s3_website_bucket = "elementarmory.com"
 # s3_assets_bucket_base is optional; default "element-armory-assets" → bucket element-armory-assets-prod
+# s3_auto_blog_bucket_base is optional; default "element-armory-auto-blog" → bucket element-armory-auto-blog-prod
 
 # Application secrets (fill these in!)
 session_secret = "your-session-secret-here"
@@ -42,6 +44,8 @@ cookie_secret  = "your-cookie-secret-here"
 # https://<website_domain>/api/auth/callback/google
 google_client_id     = ""
 google_client_secret = ""
+openai_api_key       = ""
+auto_blog_notify_to  = "support@elementarmory.com"
 
 # Optional: Your local IP for database access (if needed)
 local_ip = ""

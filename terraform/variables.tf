@@ -149,6 +149,12 @@ variable "s3_assets_bucket_base" {
   default     = "element-armory-assets"
 }
 
+variable "s3_auto_blog_bucket_base" {
+  description = "Base name for auto-blog artifact bucket; actual bucket is {base}-{environment}"
+  type        = string
+  default     = "element-armory-auto-blog"
+}
+
 # Local IP for database access (optional)
 variable "local_ip" {
   description = "Your local IP address for database access"
@@ -200,6 +206,12 @@ variable "ecr_mcp_repo" {
   default     = "element-armory-mcp"
 }
 
+variable "ecr_auto_blogger_repo" {
+  description = "ECR repository name for the auto-blogger service"
+  type        = string
+  default     = "element-armory-auto-blogger"
+}
+
 variable "internal_api_key" {
   description = "Internal API key shared between app and mcp-server"
   type        = string
@@ -210,6 +222,13 @@ variable "anthropic_api_key" {
   description = "Anthropic API key for the MCP server"
   type        = string
   sensitive   = true
+}
+
+variable "openai_api_key" {
+  description = "OpenAI API key for auto-blogger text/image generation"
+  type        = string
+  sensitive   = true
+  default     = ""
 }
 
 variable "admin_subdomain" {
@@ -289,6 +308,12 @@ variable "ses_dmarc_rua" {
 
 variable "admin_emails" {
   description = "Comma-separated email addresses to auto-promote to admin (e.g. you@example.com)"
+  type        = string
+  default     = ""
+}
+
+variable "auto_blog_notify_to" {
+  description = "Email address that receives generated auto-blog article notifications"
   type        = string
   default     = ""
 }

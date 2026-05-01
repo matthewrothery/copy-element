@@ -40,6 +40,16 @@ services:
     networks:
       - element-armory-network
 
+  auto-blogger:
+    image: ${ECR_REGISTRY}/${ECR_AUTO_BLOGGER_REPO}:latest
+    container_name: element-armory-auto-blogger
+    env_file: /home/ec2-user/element-armory/.env.server
+    volumes:
+      - /home/ec2-user/element-armory/data:/data
+    restart: unless-stopped
+    networks:
+      - element-armory-network
+
 volumes:
   element-armory-nginx-cache:
 

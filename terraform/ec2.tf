@@ -27,6 +27,7 @@ locals {
     ECR_REGISTRY="${data.aws_caller_identity.current.account_id}.dkr.ecr.${var.aws_region}.amazonaws.com"
     ECR_SERVER_REPO="${var.ecr_server_repo}"
     ECR_MCP_REPO="${var.ecr_mcp_repo}"
+    ECR_AUTO_BLOGGER_REPO="${var.ecr_auto_blogger_repo}"
 
     # App URLs (Better Auth, callbacks, CORS)
     APP_URL="https://${var.website_domain}"
@@ -46,6 +47,17 @@ locals {
     S3_REGION="${var.aws_region}"
     AWS_REGION="${var.aws_region}"
     AWS_SES_REGION="us-east-1"
+    AUTO_BLOG_S3_BUCKET="${local.s3_auto_blog_bucket_name}"
+    AUTO_BLOG_S3_PREFIX="auto-blogger"
+    AUTO_BLOG_NOTIFY_TO="${var.auto_blog_notify_to}"
+    AUTO_BLOG_NOTIFY_FROM="${var.from_email}"
+    DAILY_ARTICLES="1"
+    AUTO_BLOG_MODE="daemon"
+    AUTO_BLOG_TARGET="topics"
+    AUTO_BLOG_IMAGE_MODEL="gpt-image-2"
+    AUTO_BLOG_IMAGE_STYLE="stencil"
+    AUTO_BLOG_IMAGE_PALETTE="vibrant"
+    OPENAI_API_KEY="${var.openai_api_key}"
 
     # Transactional email (AWS SES)
     FROM_EMAIL="${var.from_email}"

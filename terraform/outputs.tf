@@ -49,6 +49,11 @@ output "s3_assets_bucket" {
   value       = aws_s3_bucket.assets.bucket
 }
 
+output "s3_auto_blog_bucket" {
+  description = "S3 bucket name for auto-blog generated content artifacts"
+  value       = aws_s3_bucket.auto_blog.bucket
+}
+
 output "ecr_server_repo_url" {
   description = "ECR repository URL for server"
   value       = aws_ecr_repository.server.repository_url
@@ -57,6 +62,11 @@ output "ecr_server_repo_url" {
 output "ecr_mcp_repo_url" {
   description = "ECR repository URL for MCP server"
   value       = aws_ecr_repository.mcp.repository_url
+}
+
+output "ecr_auto_blogger_repo_url" {
+  description = "ECR repository URL for auto-blogger service"
+  value       = aws_ecr_repository.auto_blogger.repository_url
 }
 
 output "mcp_url" {
