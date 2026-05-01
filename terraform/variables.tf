@@ -316,11 +316,11 @@ variable "ses_dmarc_rua" {
 variable "admin_emails" {
   description = "Comma-separated email addresses to auto-promote to admin (e.g. you@example.com)"
   type        = string
-  default     = ""
+  default     = "hello@elementarmory.com"
 }
 
 variable "auto_blog_notify_to" {
   description = "Email address that receives generated auto-blog article notifications"
   type        = string
-  default     = ""
+  default     = "hello@elementarmory.com"
 }

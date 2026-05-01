@@ -4,6 +4,7 @@ set -euo pipefail
 APP_DIR="/home/ec2-user/element-armory"
 SERVER_ENV_FILE="${APP_DIR}/.env.server"
 MCP_ENV_FILE="${APP_DIR}/.env.mcp"
+AUTO_BLOGGER_ENV_FILE="${APP_DIR}/.env.auto-blogger"
 COMPOSE_FILE="${APP_DIR}/docker-compose.yml"
 RENDERED_COMPOSE_FILE="${APP_DIR}/docker-compose.rendered.yml"
 LOG_DIR="${APP_DIR}/logs"
@@ -27,6 +28,7 @@ log "Starting Element Armory deployment."
 
 require_file "$SERVER_ENV_FILE"
 require_file "$MCP_ENV_FILE"
+require_file "$AUTO_BLOGGER_ENV_FILE"
 require_file "$COMPOSE_FILE"
 
 cd "$APP_DIR"

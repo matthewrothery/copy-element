@@ -47,19 +47,6 @@ locals {
     S3_REGION="${var.aws_region}"
     AWS_REGION="${var.aws_region}"
     AWS_SES_REGION="us-east-1"
-    AUTO_BLOG_S3_BUCKET="${local.s3_auto_blog_bucket_name}"
-    AUTO_BLOG_S3_PREFIX="auto-blogger"
-    AUTO_BLOG_NOTIFY_TO="${var.auto_blog_notify_to}"
-    AUTO_BLOG_NOTIFY_FROM="${var.from_email}"
-    DAILY_ARTICLES="1"
-    AUTO_BLOG_MODE="daemon"
-    AUTO_BLOG_TARGET="topics"
-    AUTO_BLOG_IMAGE_MODEL="gemini-2.5-flash-image"
-    AUTO_BLOG_IMAGE_STYLE="stencil"
-    AUTO_BLOG_IMAGE_PALETTE="vibrant"
-    GEMINI_API_KEY="${var.gemini_api_key}"
-    OPENAI_API_KEY="${var.openai_api_key}"
-
     # Transactional email (AWS SES)
     FROM_EMAIL="${var.from_email}"
     SES_TRANSACTIONAL_CONFIG_SET="${aws_sesv2_configuration_set.transactional.configuration_set_name}"
@@ -90,6 +77,38 @@ locals {
 
     # Anthropic (AI completions)
     ANTHROPIC_API_KEY="${var.anthropic_api_key}"
+
+    NODE_ENV=production
+  EOT
+
+  # Runtime env for the auto-blogger container only.
+  auto_blogger_env_file = <<-EOT
+    # AI — text generation (defaults to anthropic; set AUTO_BLOG_TEXT_PROVIDER=openai to override)
+    ANTHROPIC_API_KEY="${var.anthropic_api_key}"
+    OPENAI_API_KEY="${var.openai_api_key}"
+
+    # AI — image generation (Gemini)
+    GEMINI_API_KEY="${var.gemini_api_key}"
+
+    # AWS
+    AWS_REGION="${var.aws_region}"
+    AWS_SES_REGION="us-east-1"
+
+    # S3 artifact bucket
+    AUTO_BLOG_S3_BUCKET="${local.s3_auto_blog_bucket_name}"
+    AUTO_BLOG_S3_PREFIX="auto-blogger"
+
+    # Email notifications
+    AUTO_BLOG_NOTIFY_TO="${var.auto_blog_notify_to}"
+    AUTO_BLOG_NOTIFY_FROM="${var.from_email}"
+
+    # Generation settings
+    DAILY_ARTICLES="1"
+    AUTO_BLOG_MODE="daemon"
+    AUTO_BLOG_TARGET="topics"
+    AUTO_BLOG_IMAGE_MODEL="gemini-2.5-flash-image"
+    AUTO_BLOG_IMAGE_STYLE="stencil"
+    AUTO_BLOG_IMAGE_PALETTE="vibrant"
 
     NODE_ENV=production
   EOT
@@ -174,6 +193,11 @@ resource "aws_ssm_association" "upload_runtime_env" {
       MCPENVEOF
       chown ec2-user:ec2-user ${local.ec2_app_path}/.env.mcp
       chmod 600 ${local.ec2_app_path}/.env.mcp
+      cat > ${local.ec2_app_path}/.env.auto-blogger <<'AUTOBLOGGERENVEOF'
+      ${local.auto_blogger_env_file}
+      AUTOBLOGGERENVEOF
+      chown ec2-user:ec2-user ${local.ec2_app_path}/.env.auto-blogger
+      chmod 600 ${local.ec2_app_path}/.env.auto-blogger
     EOC
   }
 
@@ -221,7 +245,7 @@ resource "aws_ssm_association" "run_deployment" {
   parameters = {
     commands = <<-EOC
       for i in $(seq 1 30); do
-        if [ -f ${local.ec2_app_path}/.env.server ] && [ -f ${local.ec2_app_path}/.env.mcp ] && [ -f ${local.ec2_app_path}/docker-compose.yml ] && [ -f ${local.ec2_app_path}/start.sh ]; then
+        if [ -f ${local.ec2_app_path}/.env.server ] && [ -f ${local.ec2_app_path}/.env.mcp ] && [ -f ${local.ec2_app_path}/.env.auto-blogger ] && [ -f ${local.ec2_app_path}/docker-compose.yml ] && [ -f ${local.ec2_app_path}/start.sh ]; then
           break
         fi
         sleep 2
