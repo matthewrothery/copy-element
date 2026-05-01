@@ -224,8 +224,15 @@ variable "anthropic_api_key" {
   sensitive   = true
 }
 
+variable "gemini_api_key" {
+  description = "Google Gemini API key for auto-blogger cover images (Nano Banana family)"
+  type        = string
+  sensitive   = true
+  default     = ""
+}
+
 variable "openai_api_key" {
-  description = "OpenAI API key for auto-blogger text/image generation"
+  description = "Optional OpenAI API key when AUTO_BLOG_TEXT_PROVIDER=openai"
   type        = string
   sensitive   = true
   default     = ""

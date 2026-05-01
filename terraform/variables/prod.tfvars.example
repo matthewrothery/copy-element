@@ -44,6 +44,7 @@ cookie_secret  = "your-cookie-secret-here"
 # https://<website_domain>/api/auth/callback/google
 google_client_id     = ""
 google_client_secret = ""
+gemini_api_key       = ""
 openai_api_key       = ""
 auto_blog_notify_to  = "support@elementarmory.com"
 
