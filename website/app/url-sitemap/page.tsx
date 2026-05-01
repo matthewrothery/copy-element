@@ -2,6 +2,7 @@ import Link from "next/link";
 import { Footer } from "@/components/Footer";
 import { Header } from "@/components/Header";
 import { PageHero } from "@/components/PageHero";
+import { getAllHubs } from "@/lib/parseTopics";
 import "@/styles/policy.css";
 import "./sitemap-page.css";
 
@@ -13,7 +14,9 @@ export const metadata = {
   alternates: { canonical: "/url-sitemap" },
 };
 
-const SITEMAP_SECTIONS = [
+const topicHubs = getAllHubs();
+
+const STATIC_SITEMAP_SECTIONS = [
   {
     title: "Main",
     links: [
@@ -77,7 +80,7 @@ export default function SitemapPage(): React.ReactElement {
 
         <div className="policy-content">
           <div className="sitemap-grid">
-            {SITEMAP_SECTIONS.map((section) => (
+            {STATIC_SITEMAP_SECTIONS.map((section) => (
               <div key={section.title} className="sitemap-section">
                 <h2 className="sitemap-section-title">{section.title}</h2>
                 <ul className="sitemap-list">
@@ -91,6 +94,48 @@ export default function SitemapPage(): React.ReactElement {
                 </ul>
               </div>
             ))}
+
+            <div className="sitemap-section sitemap-section--topics">
+              <h2 className="sitemap-section-title">Topics</h2>
+              <ul className="sitemap-list">
+                <li>
+                  <Link href="/topics" className="sitemap-link">
+                    All topics
+                  </Link>
+                </li>
+                {topicHubs.map((hub) => (
+                  <li key={hub.hub}>
+                    <Link href={`/topics/${hub.hub}`} className="sitemap-link">
+                      {hub.title}
+                    </Link>
+                    <ul className="sitemap-list sitemap-list--nested">
+                      {hub.clusters.map((cluster) => (
+                        <li key={`${hub.hub}/${cluster.cluster}`}>
+                          <Link
+                            href={`/topics/${hub.hub}/${cluster.cluster}`}
+                            className="sitemap-link"
+                          >
+                            {cluster.title}
+                          </Link>
+                          <ul className="sitemap-list sitemap-list--nested">
+                            {cluster.articles.map((article) => (
+                              <li key={`${hub.hub}/${cluster.cluster}/${article.slug}`}>
+                                <Link
+                                  href={`/topics/${hub.hub}/${cluster.cluster}/${article.slug}`}
+                                  className="sitemap-link"
+                                >
+                                  {article.title}
+                                </Link>
+                              </li>
+                            ))}
+                          </ul>
+                        </li>
+                      ))}
+                    </ul>
+                  </li>
+                ))}
+              </ul>
+            </div>
           </div>
         </div>
 

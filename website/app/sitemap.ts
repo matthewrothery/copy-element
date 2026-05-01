@@ -1,6 +1,7 @@
 import type { MetadataRoute } from "next";
 import { EXAMPLES } from "@/data/examples";
 import { getAllPosts } from "@/lib/parseBlog";
+import { getAllHubs, getAllClustersFlat, getAllArticlesFlat } from "@/lib/parseTopics";
 
 export const dynamic = "force-static";
 
@@ -19,6 +20,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
     { url: "/product", priority: 0.9, changeFrequency: "monthly" },
     { url: "/features", priority: 0.9, changeFrequency: "monthly" },
     { url: "/pricing", priority: 0.9, changeFrequency: "monthly" },
+    { url: "/topics", priority: 0.9, changeFrequency: "weekly" },
     { url: "/blog", priority: 0.8, changeFrequency: "weekly" },
     { url: "/examples", priority: 0.8, changeFrequency: "weekly" },
     { url: "/changelog", priority: 0.7, changeFrequency: "weekly" },
@@ -42,6 +44,27 @@ export default function sitemap(): MetadataRoute.Sitemap {
     priority: 0.7,
   }));
 
+  const topicHubs = getAllHubs().map((h) => ({
+    url: `${BASE_URL}/topics/${h.hub}`,
+    lastModified,
+    changeFrequency: "weekly" as const,
+    priority: 0.9,
+  }));
+
+  const topicClusters = getAllClustersFlat().map(({ hub, cluster }) => ({
+    url: `${BASE_URL}/topics/${hub}/${cluster}`,
+    lastModified,
+    changeFrequency: "weekly" as const,
+    priority: 0.8,
+  }));
+
+  const topicArticles = getAllArticlesFlat().map((a) => ({
+    url: `${BASE_URL}/topics/${a.hub}/${a.cluster}/${a.slug}`,
+    lastModified,
+    changeFrequency: "monthly" as const,
+    priority: 0.7,
+  }));
+
   return [
     ...staticPaths.map(({ url, priority = 0.8, changeFrequency = "monthly" }) => ({
       url: `${BASE_URL}${url}`,
@@ -50,6 +73,9 @@ export default function sitemap(): MetadataRoute.Sitemap {
       priority,
     })),
     ...blogPosts,
+    ...topicHubs,
+    ...topicClusters,
+    ...topicArticles,
     ...EXAMPLES.map((ex) => ({
       url: `${BASE_URL}/examples/${ex.id}`,
       lastModified,

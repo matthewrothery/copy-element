@@ -3,6 +3,7 @@ import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
 import { ArticleHeader, ArticleBody, ArticleCTA, SuggestedPosts } from "@/components/Article";
 import { getAllPosts, getPost } from "@/lib/parseBlog";
+import { schemaIsoDateFromFrontmatter } from "@/lib/schemaHelpers";
 import "@/styles/blog.css";
 
 const BASE_URL = process.env.NEXT_PUBLIC_SITE_URL ?? "https://elementarmory.com";
@@ -41,13 +42,18 @@ export default async function BlogPostPage({
     .filter((p) => p.slug !== slug)
     .slice(0, 4);
 
+  const postUrl = `${BASE_URL}/blog/${post.slug}`;
+  const published = schemaIsoDateFromFrontmatter(post.date);
+
   const articleSchema = {
     "@context": "https://schema.org",
     "@type": "Article",
+    "@id": `${postUrl}#article`,
     headline: post.title,
     description: post.excerpt,
-    datePublished: post.date,
-    dateModified: post.date,
+    datePublished: published,
+    dateModified: published,
+    inLanguage: "en-US",
     author: {
       "@type": "Person",
       name: post.author,
@@ -55,12 +61,18 @@ export default async function BlogPostPage({
     publisher: {
       "@type": "Organization",
       name: "Element Armory",
+      url: BASE_URL,
       logo: {
         "@type": "ImageObject",
         url: `${BASE_URL}/logo.png`,
       },
     },
-    url: `${BASE_URL}/blog/${post.slug}`,
+    mainEntityOfPage: {
+      "@type": "WebPage",
+      "@id": `${postUrl}#webpage`,
+      url: postUrl,
+    },
+    url: postUrl,
     ...(post.coverImage ? { image: post.coverImage } : {}),
   };
 

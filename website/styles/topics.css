@@ -1,0 +1,118 @@
+/* Topic authority system — page-level layout */
+
+/* Shared page container — matches blog-page width and padding */
+.topics-page {
+  max-width: 680px;
+  margin: 0 auto;
+  padding: 0 20px;
+  padding-top: var(--space-5);
+  padding-bottom: var(--space-7);
+  gap: 0;
+}
+
+/* Breadcrumb sits just above the heading */
+.topics-page .topic-breadcrumb {
+  margin-bottom: var(--space-3);
+}
+
+/* Index page heading — matches blog-index__heading */
+.topics-index-heading {
+  font-size: var(--typo-hero);
+  font-weight: var(--font-weight-bold);
+  color: var(--text);
+  margin: 0 0 var(--space-3);
+}
+
+/* Page header */
+.topics-page__header {
+  margin-bottom: var(--space-5);
+}
+
+.topics-page__eyebrow {
+  font-size: var(--typo-copy);
+  color: var(--text-muted);
+  margin: 0 0 var(--space-2);
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  flex-wrap: wrap;
+}
+
+/* Matches ArticleHeader title sizing */
+.topics-page__heading {
+  font-size: var(--typo-hero);
+  font-weight: var(--font-weight-bold);
+  color: var(--text);
+  margin: 0 0 var(--space-3);
+  line-height: 1.2;
+  letter-spacing: -0.011em;
+}
+
+.topics-page__excerpt {
+  font-size: 18px;
+  color: var(--text-muted);
+  line-height: 1.6;
+  margin: 0;
+}
+
+/* Card grids */
+.topics-hub-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: var(--space-3);
+}
+
+.topics-cluster-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: var(--space-3);
+}
+
+/* Article list — matches blog-index list pattern */
+.topics-article-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+}
+
+.topics-article-cover-wrap {
+  margin-bottom: var(--space-5);
+}
+
+.topics-article-cover {
+  width: 100%;
+  height: auto;
+  border-radius: var(--radius-3);
+  border: 1px solid var(--border-subtle);
+  display: block;
+}
+
+/* Responsive */
+@media (min-width: 728px) {
+  .topics-page__heading {
+    font-size: 42px;
+    line-height: 52px;
+  }
+}
+
+@media (max-width: 640px) {
+  .topics-hub-grid,
+  .topics-cluster-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 480px) {
+  .topics-page__heading {
+    font-size: 28px;
+    line-height: 36px;
+    letter-spacing: -0.014em;
+  }
+
+  .topics-page__excerpt {
+    font-size: var(--typo-largecopy);
+  }
+}

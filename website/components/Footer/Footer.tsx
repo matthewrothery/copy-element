@@ -36,6 +36,7 @@ const DEFAULT_LINK_GROUPS: FooterLinkGroup[] = [
       {
         title: "Resources",
         links: [
+          { label: "Topics", href: "/topics" },
           { label: "Blog", href: "/blog" },
           { label: "Changelog", href: "/changelog" },
         ],

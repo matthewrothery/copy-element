@@ -1,7 +1,7 @@
 import { readFileSync, readdirSync } from "fs";
 import { join } from "path";
 import matter from "gray-matter";
-import { marked } from "marked";
+import { markdownToArticleHtml } from "@/lib/markdownArticleHtml";
 
 export type BlogPost = {
   slug: string;
@@ -20,7 +20,7 @@ function parsePost(filename: string): BlogPost {
   const filePath = join(BLOG_DIR, filename);
   const raw = readFileSync(filePath, "utf-8");
   const { data, content } = matter(raw);
-  const contentHtml = marked(content) as string;
+  const contentHtml = markdownToArticleHtml(content);
 
   return {
     slug: data.slug as string,
