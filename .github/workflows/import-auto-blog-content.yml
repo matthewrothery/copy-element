@@ -1,0 +1,105 @@
+# Import generated topic artifacts from S3, commit them, and deploy website.
+name: Import auto-blog content
+
+on:
+  schedule:
+    - cron: "15 20 * * *"
+  workflow_dispatch:
+
+env:
+  AWS_REGION: ${{ secrets.AWS_REGION }}
+
+permissions:
+  contents: write
+
+concurrency:
+  group: import-auto-blog-content
+  cancel-in-progress: false
+
+jobs:
+  import_and_deploy:
+    runs-on: ubuntu-latest
+    environment: production
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+          cache: "npm"
+          cache-dependency-path: |
+            auto-blogger/package-lock.json
+            website/package-lock.json
+
+      - name: Install auto-blogger dependencies
+        run: npm ci
+        working-directory: auto-blogger
+
+      - name: Install website dependencies
+        run: npm ci
+        working-directory: website
+
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: ${{ env.AWS_REGION }}
+
+      - name: Import pending auto-blog artifacts
+        env:
+          AUTO_BLOG_S3_BUCKET: ${{ secrets.S3_AUTO_BLOG_BUCKET }}
+          AUTO_BLOG_S3_PREFIX: auto-blogger
+          AUTO_BLOG_IMPORT_LIMIT: 32
+        run: npm run import
+        working-directory: auto-blogger
+
+      - name: Detect imported changes
+        id: changes
+        run: |
+          if git diff --quiet -- website/content/topics website/public/topic-images; then
+            echo "has_changes=false" >> "$GITHUB_OUTPUT"
+          else
+            echo "has_changes=true" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Commit imported topics
+        if: steps.changes.outputs.has_changes == 'true'
+        run: |
+          git config user.name "element-armory-bot"
+          git config user.email "bot@elementarmory.com"
+          git add website/content/topics website/public/topic-images
+          git commit -m "Publish generated topic articles"
+          git push
+
+      - name: Build Next.js
+        if: steps.changes.outputs.has_changes == 'true'
+        env:
+          NEXT_PUBLIC_APP_URL: ${{ vars.NEXT_PUBLIC_APP_URL || 'https://app.elementarmory.com' }}
+          NEXT_PUBLIC_CHROME_STORE_URL: ${{ vars.NEXT_PUBLIC_CHROME_STORE_URL || 'https://chromewebstore.google.com/detail/element-armory-%E2%80%93-capture/ihndemikooddnhleamneebgedomkench' }}
+        run: npm run build
+        working-directory: website
+
+      - name: Sync static assets to S3
+        if: steps.changes.outputs.has_changes == 'true'
+        run: |
+          aws s3 sync website/out s3://${{ secrets.S3_WEBSITE_BUCKET }} --delete \
+            --cache-control "public, max-age=31536000, immutable"
+
+      - name: Sync HTML to S3
+        if: steps.changes.outputs.has_changes == 'true'
+        run: |
+          aws s3 sync website/out s3://${{ secrets.S3_WEBSITE_BUCKET }} \
+            --exclude "*" --include "*.html" \
+            --cache-control "public, max-age=300, s-maxage=300"
+
+      - name: Invalidate CloudFront
+        if: steps.changes.outputs.has_changes == 'true'
+        run: |
+          aws cloudfront create-invalidation \
+            --distribution-id ${{ secrets.CLOUDFRONT_WEBSITE_DISTRIBUTION_ID }} \
+            --paths "/*"

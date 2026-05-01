@@ -8,7 +8,9 @@ on:
     paths:
       - "server/**"
       - "mcp-server/**"
+      - "auto-blogger/**"
       - "terraform/scripts/start.sh"
+      - "terraform/templates/docker-compose.prod.yml"
   workflow_dispatch:
 
 env:
@@ -85,7 +87,7 @@ jobs:
 
   deploy_ec2:
     runs-on: ubuntu-latest
-    needs: [build_server, build_mcp]
+    needs: [build_server, build_mcp, build_auto_blogger]
     environment: production
     steps:
       - name: Checkout
@@ -142,3 +144,37 @@ jobs:
           echo "=== SSM command stderr ==="
           aws ssm get-command-invocation --command-id "$COMMAND_ID" --instance-id "$INSTANCE_ID" --query 'StandardErrorContent' --output text 2>/dev/null || true
           exit 1
+
+  build_auto_blogger:
+    runs-on: ubuntu-latest
+    environment: production
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: ${{ env.AWS_REGION }}
+
+      - name: Login to Amazon ECR
+        id: login-ecr
+        uses: aws-actions/amazon-ecr-login@v2
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+        with:
+          platforms: linux/amd64
+
+      - name: Build and push auto-blogger
+        uses: docker/build-push-action@v6
+        with:
+          context: ./auto-blogger
+          file: ./auto-blogger/Dockerfile
+          platforms: linux/amd64
+          push: true
+          tags: ${{ steps.login-ecr.outputs.registry }}/element-armory-auto-blogger:latest
+          cache-from: type=gha,scope=auto-blogger
+          cache-to: type=gha,mode=max,scope=auto-blogger

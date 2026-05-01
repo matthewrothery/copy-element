@@ -64,6 +64,12 @@ Add the following secrets:
 | `S3_WEBSITE_BUCKET` | `terraform output s3_website_bucket` |
 | `CLOUDFRONT_WEBSITE_DISTRIBUTION_ID` | `terraform output cloudfront_website_distribution_id` |
 
+### Auto-blog import deployment (`import-auto-blog-content.yml`)
+
+| Secret | How to get it |
+|---|---|
+| `S3_AUTO_BLOG_BUCKET` | `terraform output s3_auto_blog_bucket` |
+
 ---
 
 ## Step 4 — Add GitHub Variables (optional)
