@@ -3,7 +3,8 @@ name: Import auto-blog content
 
 on:
   schedule:
-    - cron: "15 20 * * *"
+    - cron: "0 0 * * *"
+    - cron: "0 12 * * *"
   workflow_dispatch:
 
 env:
