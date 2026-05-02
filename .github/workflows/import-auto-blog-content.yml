@@ -62,10 +62,14 @@ jobs:
       - name: Detect imported changes
         id: changes
         run: |
-          if git diff --quiet -- website/content/topics website/public/topic-images; then
-            echo "has_changes=false" >> "$GITHUB_OUTPUT"
-          else
+          TARGETS="website/content/topics website/public/topic-images"
+          porcelain=$(git status --porcelain -- $TARGETS)
+          if [ -n "$porcelain" ]; then
             echo "has_changes=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "has_changes=false" >> "$GITHUB_OUTPUT"
+            echo "No changes under topic paths (modified, untracked, or staged):"
+            git status --short -- $TARGETS
           fi
 
       - name: Commit imported topics
