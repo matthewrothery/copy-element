@@ -45,6 +45,8 @@ function getConfig(): AppConfig {
       .split(',')
       .map(e => e.trim().toLowerCase())
       .filter(Boolean),
+    JWT_SECRET: process.env[ENV_KEYS.JWT_SECRET] ?? '',
+    MCP_SERVER_URL: process.env[ENV_KEYS.MCP_SERVER_URL] ?? 'https://mcp.elementarmory.com',
   };
 }
 

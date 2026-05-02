@@ -1,43 +1,11 @@
 import { Router } from 'express';
 import { requireInternalAuth } from '../middleware/internal-auth.js';
-import { validateMcpTokenByHash } from '../../services/mcp-token.js';
-import { getUserEntitlement } from '../../services/entitlements.js';
-import { checkMcpLimit, incrementMcpUsage } from '../../services/mcp-usage.js';
+import { incrementMcpUsage } from '../../services/mcp-usage.js';
 import { listCapturesForUser, getCaptureWithAssets } from '../../services/mcp-capture.js';
 import { startConversion, completeConversion, failConversion } from '../../services/ai-conversion-log.js';
 
 const router = Router();
 router.use(requireInternalAuth);
-
-/**
- * POST /internal/mcp/auth
- * Body: { token_hash: string }
- * Resolves userId + plan + limit check from a pre-hashed MCP token.
- */
-router.post('/auth', (req, res) => {
-  const { token_hash } = req.body as { token_hash?: string };
-  if (!token_hash || typeof token_hash !== 'string') {
-    res.status(400).json({ error: 'token_hash required' });
-    return;
-  }
-
-  const result = validateMcpTokenByHash(token_hash);
-  if (!result) {
-    res.status(401).json({ error: 'Invalid token' });
-    return;
-  }
-
-  const { userId } = result;
-  const entitlement = getUserEntitlement(userId);
-  const limitCheck = checkMcpLimit(userId, entitlement.plan_code);
-
-  res.json({
-    userId,
-    planCode: entitlement.plan_code,
-    callCount: limitCheck.callCount,
-    limitReached: !limitCheck.allowed,
-  });
-});
 
 /**
  * GET /internal/mcp/captures

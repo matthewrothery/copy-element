@@ -3,8 +3,6 @@ export type PlanCode = 'free' | 'pro' | 'team';
 export interface McpUser {
   userId: string;
   planCode: PlanCode;
-  callCount: number;
-  limitReached: boolean;
 }
 
 export interface CaptureAsset {

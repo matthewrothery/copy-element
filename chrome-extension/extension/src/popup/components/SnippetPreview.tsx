@@ -11,7 +11,6 @@ import { buildCopyHtml, buildEditorPreviewSrcDoc } from "../../shared/utils/prev
 import { downloadZip } from "../../shared/utils/download-zip";
 import { PreviewPane } from "../../shared/components/PreviewPane";
 import type { Snippet } from "../../shared/types/snippet";
-import { getMcpApiKey } from "../../shared/storage/mcp-storage";
 
 interface SnippetPreviewProps {
   snippet: Snippet;
@@ -24,7 +23,6 @@ interface SnippetPreviewProps {
 export function SnippetPreview({ snippet, onClose, onCopy, onToast }: SnippetPreviewProps): React.JSX.Element {
   const [menuOpen, setMenuOpen] = useState(false);
   const [screenshotCopying, setScreenshotCopying] = useState(false);
-  const [mcpConnected, setMcpConnected] = useState<boolean | null>(null);
   const menuRef = useRef<HTMLDivElement>(null);
 
   const tokenCount = getSnippetPromptTokenEstimate(snippet);
@@ -42,10 +40,6 @@ export function SnippetPreview({ snippet, onClose, onCopy, onToast }: SnippetPre
     document.addEventListener("mousedown", handleClickOutside);
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, [menuOpen]);
-
-  useEffect(() => {
-    void getMcpApiKey().then((key) => setMcpConnected(key !== null));
-  }, []);
 
   function handleSetupMcp(): void {
     if (window.location.href.includes("app.html")) {
@@ -141,20 +135,18 @@ export function SnippetPreview({ snippet, onClose, onCopy, onToast }: SnippetPre
         </div>
 
         <div className="snippet-preview-prompt-section">
-          {mcpConnected === false && (
-            <div className="snippet-preview-mcp-notice" role="note">
-              <span className="snippet-preview-mcp-notice-text">
-                MCP not connected — this prompt requires an AI tool with MCP set up.
-              </span>
-              <button
-                type="button"
-                className="snippet-preview-mcp-notice-btn"
-                onClick={handleSetupMcp}
-              >
-                Set up MCP →
-              </button>
-            </div>
-          )}
+          <div className="snippet-preview-mcp-notice" role="note">
+            <span className="snippet-preview-mcp-notice-text">
+              Use this prompt with an AI tool connected via MCP.
+            </span>
+            <button
+              type="button"
+              className="snippet-preview-mcp-notice-btn"
+              onClick={handleSetupMcp}
+            >
+              Set up MCP →
+            </button>
+          </div>
           <div className="snippet-preview-prompt-wrapper">
             <textarea
               readOnly

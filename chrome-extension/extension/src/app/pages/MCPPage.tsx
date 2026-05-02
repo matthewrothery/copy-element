@@ -1,9 +1,6 @@
 import type { JSX } from "react";
 import { useEffect, useState } from "react";
 import { getAuthState } from "../../shared/storage/auth-storage";
-import { getMcpApiKey } from "../../shared/storage/mcp-storage";
-import { generateMcpToken, getMcpTokenMeta, rotateMcpToken } from "../../popup/api";
-import type { McpTokenMetaPayload } from "../../shared/types/messages";
 import { McpSignedOut } from "./mcp/McpSignedOut";
 import { McpConnect } from "./mcp/McpConnect";
 
@@ -43,81 +40,18 @@ const TOOLS: { category: string; items: { name: string; description: string; not
   },
 ];
 
-type PageState =
-  | { kind: "loading" }
-  | { kind: "signed-out" }
-  | { kind: "ready"; apiKey: string | null; meta: McpTokenMetaPayload; keyMissing: boolean };
+type PageState = "loading" | "signed-out" | "ready";
 
 export function MCPPage(): JSX.Element {
-  const [state, setState] = useState<PageState>({ kind: "loading" });
-  const [isLoading, setIsLoading] = useState(false);
+  const [state, setState] = useState<PageState>("loading");
 
   useEffect(() => {
-    void load();
+    void getAuthState().then((auth) => {
+      setState(auth.signed_in ? "ready" : "signed-out");
+    }).catch(() => {
+      setState("signed-out");
+    });
   }, []);
-
-  async function load(): Promise<void> {
-    setState({ kind: "loading" });
-    try {
-      const auth = await getAuthState();
-      if (!auth.signed_in) {
-        setState({ kind: "signed-out" });
-        return;
-      }
-
-      const [apiKey, meta] = await Promise.all([
-        getMcpApiKey(),
-        getMcpTokenMeta().catch(() => null),
-      ]);
-
-      const resolvedMeta: McpTokenMetaPayload = meta ?? {
-        exists: false,
-        created_at: null,
-        last_used_at: null,
-      };
-
-      // Key missing but token exists on server
-      const keyMissing = apiKey === null && resolvedMeta.exists;
-
-      setState({ kind: "ready", apiKey, meta: resolvedMeta, keyMissing });
-    } catch {
-      setState({ kind: "signed-out" });
-    }
-  }
-
-  async function handleGenerate(): Promise<void> {
-    setIsLoading(true);
-    try {
-      const result = await generateMcpToken();
-      const meta = await getMcpTokenMeta().catch(() => ({
-        exists: true,
-        created_at: Date.now(),
-        last_used_at: null,
-      }));
-      setState({ kind: "ready", apiKey: result.api_key, meta, keyMissing: false });
-    } catch {
-      // Keep current state; user can retry
-    } finally {
-      setIsLoading(false);
-    }
-  }
-
-  async function handleRotate(): Promise<void> {
-    setIsLoading(true);
-    try {
-      const result = await rotateMcpToken();
-      const meta = await getMcpTokenMeta().catch(() => ({
-        exists: true,
-        created_at: Date.now(),
-        last_used_at: null,
-      }));
-      setState({ kind: "ready", apiKey: result.api_key, meta, keyMissing: false });
-    } catch {
-      // Keep current state; user can retry
-    } finally {
-      setIsLoading(false);
-    }
-  }
 
   return (
     <div className="app-page">
@@ -128,50 +62,17 @@ export function MCPPage(): JSX.Element {
         </p>
       </header>
 
-      {state.kind === "loading" && (
+      {state === "loading" && (
         <div className="mcp-loading" aria-label="Loading">
           <span className="mcp-spinner" aria-hidden="true" />
         </div>
       )}
 
-      {state.kind === "signed-out" && <McpSignedOut />}
+      {state === "signed-out" && <McpSignedOut />}
 
-      {state.kind === "ready" && state.keyMissing && (
-        <div className="mcp-url-missing">
-          <p className="app-page-text">
-            A token exists on the server but the API key was not saved locally.
-            Rotate to generate a new key.
-          </p>
-          <button
-            className="mcp-cta-btn"
-            onClick={() => void handleRotate()}
-            disabled={isLoading}
-          >
-            {isLoading ? "Rotating…" : "Rotate to reveal new key"}
-          </button>
-        </div>
-      )}
-
-      {state.kind === "ready" && !state.keyMissing && (
+      {state === "ready" && (
         <>
-          <McpConnect
-            apiKey={state.apiKey}
-            meta={state.meta}
-            onGenerate={() => void handleGenerate()}
-            onRotate={() => void handleRotate()}
-            isLoading={isLoading}
-          />
-
-          {state.apiKey && (
-            <div className="mcp-status-row">
-              <span className="mcp-status-dot" aria-hidden="true" />
-              <span className="mcp-status-label">
-                {state.meta.last_used_at !== null
-                  ? "Token active · verified by recent tool call"
-                  : "Token active · not yet used by an AI tool"}
-              </span>
-            </div>
-          )}
+          <McpConnect />
 
           <section className="app-page-section mcp-tools-section" aria-labelledby="mcp-tools-heading">
             <h2 id="mcp-tools-heading" className="app-page-heading">Available tools</h2>

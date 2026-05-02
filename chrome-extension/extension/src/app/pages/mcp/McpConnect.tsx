@@ -1,28 +1,24 @@
 import type { JSX } from "react";
 import { useState } from "react";
-import type { McpTokenMetaPayload } from "../../../shared/types/messages";
 import { MCP_URL } from "../../../shared/mcp-url";
 
-const MCP_ENDPOINT = `${MCP_URL}/mcp`;
-
-type ToolId = "cursor" | "claudecode" | "codex" | "other";
+type ToolId = "cursor" | "claudecode" | "other";
 
 const TOOLS: { id: ToolId; label: string }[] = [
   { id: "cursor", label: "Cursor" },
   { id: "claudecode", label: "Claude Code" },
-  { id: "codex", label: "Codex" },
   { id: "other", label: "Other" },
 ];
 
-function buildSnippet(tool: ToolId, apiKey: string): string {
+function buildSnippet(tool: ToolId): string {
   switch (tool) {
     case "cursor":
       return JSON.stringify(
         {
           mcpServers: {
             "element-armory": {
-              url: MCP_ENDPOINT,
-              headers: { ELEMENT_ARMORY_API_KEY: apiKey },
+              url: MCP_URL,
+              type: "http",
             },
           },
         },
@@ -30,24 +26,9 @@ function buildSnippet(tool: ToolId, apiKey: string): string {
         2
       );
     case "claudecode":
-      // claude mcp add --transport http secure-api https://mcp.elementarmory.com/mcp --header "ELEMENT_ARMORY_API_KEY: 3OcyEcUjgWIcWxvz7U8iWnBh"
-      return `claude mcp add --transport http secure-api ${MCP_ENDPOINT} --header "ELEMENT_ARMORY_API_KEY: ${apiKey}"`;
-      // return `claude mcp add element-armory --transport http secure-api \\\n  --header "ELEMENT_ARMORY_API_KEY: ${apiKey}" \\\n  ${MCP_ENDPOINT}`;
-    case "codex":
-      return JSON.stringify(
-        {
-          mcpServers: {
-            "element-armory": {
-              url: MCP_ENDPOINT,
-              headers: { ELEMENT_ARMORY_API_KEY: apiKey },
-            },
-          },
-        },
-        null,
-        2
-      );
+      return `claude mcp add element-armory --transport http ${MCP_URL}`;
     case "other":
-      return `URL: ${MCP_ENDPOINT}\nHeader: ELEMENT_ARMORY_API_KEY: ${apiKey}`;
+      return MCP_URL;
   }
 }
 
@@ -57,10 +38,8 @@ function buildSnippetLabel(tool: ToolId): string {
       return "Add to ~/.cursor/mcp.json";
     case "claudecode":
       return "Run in terminal";
-    case "codex":
-      return "Add to ~/.codex/config.json";
     case "other":
-      return "HTTP MCP endpoint";
+      return "MCP server URL";
   }
 }
 
@@ -69,42 +48,21 @@ function buildSetupNote(tool: ToolId): string {
     case "cursor":
       return "After saving, open Cursor → Settings → MCP and verify element-armory appears with a green indicator.";
     case "claudecode":
-      return "Run this command once. Claude Code will connect automatically on next use.";
-    case "codex":
-      return "After saving, restart Codex. The element-armory server will appear in your MCP list.";
+      return "Run this command once. Claude Code will open a browser to log in automatically.";
     case "other":
-      return "Configure this as an HTTP MCP endpoint in your tool. Keep your API key private.";
+      return "Add this URL as an HTTP MCP endpoint. Your tool will open a browser to log in.";
   }
 }
 
-function formatRelativeTime(epochMs: number | null): string {
-  if (epochMs === null) return "never";
-  const diffMs = Date.now() - epochMs;
-  const diffDays = Math.floor(diffMs / (1000 * 60 * 60 * 24));
-  if (diffDays === 0) return "today";
-  if (diffDays === 1) return "1 day ago";
-  return `${diffDays} days ago`;
-}
-
-interface McpConnectProps {
-  apiKey: string | null;
-  meta: McpTokenMetaPayload;
-  onGenerate: () => void;
-  onRotate: () => void;
-  isLoading: boolean;
-}
-
-export function McpConnect({ apiKey, meta, onGenerate, onRotate, isLoading }: McpConnectProps): JSX.Element {
+export function McpConnect(): JSX.Element {
   const [selectedTool, setSelectedTool] = useState<ToolId>("cursor");
   const [copied, setCopied] = useState(false);
-  const [confirmRotate, setConfirmRotate] = useState(false);
 
   const toolIndex = TOOLS.findIndex((t) => t.id === selectedTool);
   const indicatorOffset = (toolIndex / TOOLS.length) * 100;
 
   async function handleCopy(): Promise<void> {
-    if (!apiKey) return;
-    const snippet = buildSnippet(selectedTool, apiKey);
+    const snippet = buildSnippet(selectedTool);
     await navigator.clipboard.writeText(snippet);
     setCopied(true);
     setTimeout(() => setCopied(false), 1500);
@@ -137,77 +95,21 @@ export function McpConnect({ apiKey, meta, onGenerate, onRotate, isLoading }: Mc
 
       <div className="mcp-config-section">
         <div className="mcp-config-label">{buildSnippetLabel(selectedTool)}</div>
-        {apiKey ? (
-          <>
-            <div className="mcp-config-block">
-              <pre className="mcp-config-pre" aria-label="MCP config snippet">
-                <code>{buildSnippet(selectedTool, apiKey)}</code>
-              </pre>
-              <button
-                className="mcp-copy-btn"
-                onClick={() => void handleCopy()}
-                aria-label="Copy to clipboard"
-                title="Copy to clipboard"
-              >
-                {copied ? "✓" : "⎘"}
-              </button>
-            </div>
-            <p className="mcp-setup-note">{buildSetupNote(selectedTool)}</p>
-          </>
-        ) : (
-          <div className="mcp-generate-cta">
-            <p className="mcp-generate-desc">Generate your API key to get started.</p>
-            <button
-              className="mcp-cta-btn"
-              onClick={onGenerate}
-              disabled={isLoading}
-              aria-label="Generate API key"
-            >
-              {isLoading ? "Generating…" : "Generate connection"}
-            </button>
-          </div>
-        )}
-      </div>
-
-      {apiKey && (
-        <div className="mcp-token-meta">
-          <span className="mcp-token-meta-info">
-            {meta.created_at !== null
-              ? `Created ${formatRelativeTime(meta.created_at)}`
-              : "Token active"}
-            {meta.last_used_at !== null && ` · Last used ${formatRelativeTime(meta.last_used_at)}`}
-          </span>
-          {confirmRotate ? (
-            <span className="mcp-rotate-confirm">
-              <span className="mcp-rotate-confirm-label">Invalidates existing config. Continue?</span>
-              <button
-                className="mcp-rotate-btn mcp-rotate-btn--danger"
-                onClick={() => { setConfirmRotate(false); onRotate(); }}
-                disabled={isLoading}
-                aria-label="Confirm rotate MCP token"
-              >
-                Yes, rotate
-              </button>
-              <button
-                className="mcp-rotate-btn"
-                onClick={() => setConfirmRotate(false)}
-                aria-label="Cancel rotate"
-              >
-                Cancel
-              </button>
-            </span>
-          ) : (
-            <button
-              className="mcp-rotate-btn"
-              onClick={() => setConfirmRotate(true)}
-              disabled={isLoading}
-              aria-label="Rotate MCP token"
-            >
-              {isLoading ? "Rotating…" : "Rotate"}
-            </button>
-          )}
+        <div className="mcp-config-block">
+          <pre className="mcp-config-pre" aria-label="MCP config snippet">
+            <code>{buildSnippet(selectedTool)}</code>
+          </pre>
+          <button
+            className="mcp-copy-btn"
+            onClick={() => void handleCopy()}
+            aria-label="Copy to clipboard"
+            title="Copy to clipboard"
+          >
+            {copied ? "✓" : "⎘"}
+          </button>
         </div>
-      )}
+        <p className="mcp-setup-note">{buildSetupNote(selectedTool)}</p>
+      </div>
     </div>
   );
 }

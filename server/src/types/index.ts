@@ -36,6 +36,8 @@ export interface AppConfig {
   ADMIN_ORIGIN: string;
   INTERNAL_TOOLS_PATH: string;
   ADMIN_EMAILS: string[];
+  JWT_SECRET: string;
+  MCP_SERVER_URL: string;
 }
 
 export interface HealthResponse {

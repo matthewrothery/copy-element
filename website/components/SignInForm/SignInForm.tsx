@@ -21,6 +21,10 @@ function getCallbackUrl(): string {
         "&extension_id=" + encodeURIComponent(extensionId)
       );
     }
+    const returnTo = params.get("return_to");
+    if (returnTo && returnTo.startsWith("/")) {
+      return window.location.origin + returnTo;
+    }
     return window.location.origin + CALLBACK_PATH;
   }
   const base = process.env.NEXT_PUBLIC_SITE_URL ?? "";

@@ -1,7 +1,7 @@
 import { nanoid } from "nanoid";
 import type { Folder } from "../shared/types/folder";
 import type { CapturedElementData, Snippet } from "../shared/types/snippet";
-import type { AuthStatePayload, CaptureMode, McpTokenGeneratedPayload, McpTokenMetaPayload, RefreshPlanPayload, RuntimeErrorCode, RuntimeMessage, RuntimeResponse, TrySilentAuthPayload } from "../shared/types/messages";
+import type { AuthStatePayload, CaptureMode, RefreshPlanPayload, RuntimeErrorCode, RuntimeMessage, RuntimeResponse, TrySilentAuthPayload } from "../shared/types/messages";
 import { SERVER_URL } from "../shared/server-url";
 
 export class RuntimeRequestError extends Error {
@@ -130,18 +130,6 @@ export async function signOutFromBackground(): Promise<void> {
 export async function getInstallIdFromBackground(): Promise<string> {
   const result = await sendRuntimeMessage<{ install_id: string }>({ type: "GET_INSTALL_ID" });
   return result.install_id;
-}
-
-export async function getMcpTokenMeta(): Promise<McpTokenMetaPayload> {
-  return sendRuntimeMessage<McpTokenMetaPayload>({ type: "GET_MCP_TOKEN_META" });
-}
-
-export async function generateMcpToken(): Promise<McpTokenGeneratedPayload> {
-  return sendRuntimeMessage<McpTokenGeneratedPayload>({ type: "GENERATE_MCP_TOKEN" });
-}
-
-export async function rotateMcpToken(): Promise<McpTokenGeneratedPayload> {
-  return sendRuntimeMessage<McpTokenGeneratedPayload>({ type: "ROTATE_MCP_TOKEN" });
 }
 
 export async function refreshPlanFromBackground(): Promise<RefreshPlanPayload> {

@@ -16,14 +16,11 @@ import { trackExtensionEvent } from "../shared/analytics";
 import type {
   AuthStatePayload,
   ExtractCssViaCdpPayload,
-  McpTokenGeneratedPayload,
-  McpTokenMetaPayload,
   RefreshPlanPayload,
   RuntimeErrorCode,
   RuntimeMessage,
   RuntimeResponse
 } from "../shared/types/messages";
-import { saveMcpApiKey } from "../shared/storage/mcp-storage";
 import { clearViewportEmulation, extractCssViaCdp, setViewportEmulation } from "./cdp-css";
 import { deleteServerCapture, syncCaptureToServer } from "./sync-capture";
 import { restoreCapturesFromCloud } from "./restore-from-cloud";
@@ -774,64 +771,6 @@ chrome.runtime.onMessage.addListener((message: RuntimeMessage, sender, sendRespo
     return true;
   }
 
-  if (message.type === "GET_MCP_TOKEN_META") {
-    void (async () => {
-      try {
-        const token = await getAuthToken();
-        if (!token) {
-          sendResponse(failure("Not signed in", "UNKNOWN_ERROR"));
-          return;
-        }
-        const res = await fetch(`${SERVER_URL}/api/mcp/token`, {
-          headers: { Authorization: `Bearer ${token}` },
-        });
-        if (!res.ok) {
-          sendResponse(failure("Failed to fetch MCP token metadata", "UNKNOWN_ERROR"));
-          return;
-        }
-        const data = (await res.json()) as { exists: boolean; created_at: number | null; last_used_at: number | null };
-        const payload: McpTokenMetaPayload = {
-          exists: data.exists,
-          created_at: data.created_at,
-          last_used_at: data.last_used_at,
-        };
-        sendResponse(success(payload));
-      } catch (error: unknown) {
-        sendResponse(failure(String(error), "UNKNOWN_ERROR"));
-      }
-    })();
-    return true;
-  }
-
-  if (message.type === "GENERATE_MCP_TOKEN") {
-    void (async () => {
-      try {
-        const token = await getAuthToken();
-        if (!token) {
-          sendResponse(failure("Not signed in", "UNKNOWN_ERROR"));
-          return;
-        }
-        const res = await fetch(`${SERVER_URL}/api/mcp/token`, {
-          method: "POST",
-          headers: { Authorization: `Bearer ${token}` },
-        });
-        if (!res.ok) {
-          sendResponse(failure("Failed to generate MCP token", "UNKNOWN_ERROR"));
-          return;
-        }
-        const data = (await res.json()) as { code: string; mcp_url: string };
-        await saveMcpApiKey(data.code);
-        const creds = await getOrCreateInstallCredentials();
-        void trackExtensionEvent("mcp_connected", creds.install_id);
-        const payload: McpTokenGeneratedPayload = { api_key: data.code };
-        sendResponse(success(payload));
-      } catch (error: unknown) {
-        sendResponse(failure(String(error), "UNKNOWN_ERROR"));
-      }
-    })();
-    return true;
-  }
-
   if (message.type === "TRY_SILENT_AUTH") {
     void (async () => {
       try {
@@ -840,33 +779,6 @@ chrome.runtime.onMessage.addListener((message: RuntimeMessage, sender, sendRespo
         sendResponse(success({ success: result }));
       } catch {
         sendResponse(success({ success: false }));
-      }
-    })();
-    return true;
-  }
-
-  if (message.type === "ROTATE_MCP_TOKEN") {
-    void (async () => {
-      try {
-        const token = await getAuthToken();
-        if (!token) {
-          sendResponse(failure("Not signed in", "UNKNOWN_ERROR"));
-          return;
-        }
-        const res = await fetch(`${SERVER_URL}/api/mcp/token`, {
-          method: "DELETE",
-          headers: { Authorization: `Bearer ${token}` },
-        });
-        if (!res.ok) {
-          sendResponse(failure("Failed to rotate MCP token", "UNKNOWN_ERROR"));
-          return;
-        }
-        const data = (await res.json()) as { code: string; mcp_url: string };
-        await saveMcpApiKey(data.code);
-        const payload: McpTokenGeneratedPayload = { api_key: data.code };
-        sendResponse(success(payload));
-      } catch (error: unknown) {
-        sendResponse(failure(String(error), "UNKNOWN_ERROR"));
       }
     })();
     return true;

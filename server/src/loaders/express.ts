@@ -13,6 +13,7 @@ import { handleStripeWebhook } from '../api/routes/billing.js';
 import { mountApi } from '../api/index.js';
 import { internalMcpRouter } from '../api/routes/internal-mcp.js';
 import { internalAdminRouter } from '../api/routes/internal-admin.js';
+import { oauthRouter } from '../api/routes/oauth.js';
 import { config } from '../config/index.js';
 import { logger } from '../logger.js';
 
@@ -79,8 +80,9 @@ export function createApp(): Express {
   // 6. Stripe webhook — must receive raw body; mount before express.json()
   app.post('/api/billing/webhook', express.raw({ type: 'application/json' }), handleStripeWebhook);
 
-  // 7. Body parsing
+  // 7. Body parsing — json for API routes, urlencoded for OAuth token/revoke endpoints
   app.use(express.json({ limit: '256kb' }));
+  app.use(express.urlencoded({ extended: false }));
 
   // 8. Auth route diagnostics
   addAuthRouteDiagnostics(app);
@@ -91,24 +93,27 @@ export function createApp(): Express {
   // 10. Better Auth catch-all
   app.all('/api/auth/*', toNodeHandler(auth));
 
-  // 11. Internal MCP routes (not under /api/ — internal only)
+  // 11. OAuth AS routes (/.well-known/oauth-authorization-server, /oauth/*)
+  app.use('/', oauthRouter);
+
+  // 12. Internal MCP routes (not under /api/ — internal only)
   app.use('/internal/mcp', internalMcpRouter);
   app.use('/internal/admin', internalAdminRouter);
 
-  // 12. API routes
+  // 13. API routes
   mountApi(app);
 
-  // 13. Static files
+  // 14. Static files
   app.use(express.static(publicDir));
 
-  // 14. 404 catch-all
+  // 15. 404 catch-all
   app.use((_req, _res, next) => {
     const err = new Error('Not Found') as Error & { status?: number };
     err.status = 404;
     next(err);
   });
 
-  // 15. Error handlers
+  // 16. Error handlers
   app.use((err: Error & { name?: string; status?: number; data?: unknown }, _req: Request, res: Response, next: NextFunction) => {
     if (err.name === 'UnauthorizedError') {
       res.status((err as { status?: number }).status ?? 401).json({ message: err.message }).end();

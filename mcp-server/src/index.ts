@@ -3,17 +3,18 @@ import http from 'node:http';
 import { McpServer } from '@modelcontextprotocol/sdk/server/mcp.js';
 import { StreamableHTTPServerTransport } from '@modelcontextprotocol/sdk/server/streamableHttp.js';
 import { config } from './config.js';
-import { validateUserCode } from './auth.js';
+import { validateJwt } from './auth.js';
 import { registerCaptureTools } from './tools/captures.js';
 import { registerPromptTools } from './tools/prompts.js';
 import { registerTransformTools } from './tools/transform.js';
 import { registerAiConvertTools } from './tools/ai-convert.js';
 
-const API_KEY_PATTERN = /^[A-Za-z0-9_-]{24}$/;
+const PRM_PATH = '/.well-known/oauth-protected-resource';
 
-function sendError(res: http.ServerResponse, status: number, message: string): void {
-  res.writeHead(status, { 'Content-Type': 'application/json' });
-  res.end(JSON.stringify({ error: message }));
+function sendJson(res: http.ServerResponse, status: number, body: unknown): void {
+  const data = JSON.stringify(body);
+  res.writeHead(status, { 'Content-Type': 'application/json', 'Content-Length': Buffer.byteLength(data) });
+  res.end(data);
 }
 
 function log(method: string, path: string, status: number, ms: number, extra?: string): void {
@@ -22,19 +23,23 @@ function log(method: string, path: string, status: number, ms: number, extra?: s
 }
 
 async function handleMcpRequest(
-  userCode: string,
+  token: string,
   req: http.IncomingMessage,
   res: http.ServerResponse,
   body: unknown
 ): Promise<void> {
-  const user = await validateUserCode(userCode);
+  const user = await validateJwt(token);
   if (!user) {
-    console.warn(`[MCP] Auth failed for key ${userCode.slice(0, 4)}… (hash not recognised by main server)`);
-    sendError(res, 401, 'Invalid or expired MCP token');
+    console.warn('[MCP] Auth failed — JWT invalid or expired');
+    res.writeHead(401, {
+      'Content-Type': 'application/json',
+      'WWW-Authenticate': `Bearer realm="mcp", resource_metadata="${config.MCP_SERVER_URL}${PRM_PATH}"`,
+    });
+    res.end(JSON.stringify({ error: 'Invalid or expired access token' }));
     return;
   }
 
-  console.log(`[MCP] Auth OK — userId=${user.userId} plan=${user.planCode} calls=${user.callCount} limitReached=${user.limitReached}`);
+  console.log(`[MCP] Auth OK — userId=${user.userId} plan=${user.planCode}`);
 
   const server = new McpServer({ name: 'element-armory-mcp', version: '1.0.0' });
 
@@ -55,25 +60,39 @@ const httpServer = http.createServer((req, res) => {
 
   console.log(`[MCP] → ${method} ${path}`);
 
-  if (path !== '/mcp') {
-    res.writeHead(404, { 'Content-Type': 'application/json' });
-    res.end(JSON.stringify({ error: 'Not found. Use /mcp with Authorization: Bearer <api-key>' }));
+  // OAuth Protected Resource Metadata — no auth required
+  if (method === 'GET' && path === PRM_PATH) {
+    sendJson(res, 200, {
+      resource: config.MCP_SERVER_URL,
+      authorization_servers: [config.MAIN_SERVER_ISSUER],
+      scopes_supported: ['mcp:tools'],
+      resource_name: 'Element Armory MCP',
+    });
+    log(method, path, 200, Date.now() - startMs);
+    return;
+  }
+
+  if (path !== '/') {
+    sendJson(res, 404, { error: 'Not found' });
     log(method, path, 404, Date.now() - startMs);
     return;
   }
 
-  // Accept key from custom header (preferred) or Authorization: Bearer (legacy)
-  const customHeader = req.headers['element_armory_api_key'] ?? req.headers['element-armory-api-key'] ?? '';
-  const authHeader = req.headers['authorization'] ?? '';
-  const apiKey = (customHeader as string).trim() || (authHeader as string).replace(/^Bearer\s+/i, '');
+  // Extract Bearer token from Authorization header
+  const authHeader = (req.headers['authorization'] as string | undefined) ?? '';
+  const token = authHeader.replace(/^Bearer\s+/i, '').trim();
 
-  if (!API_KEY_PATTERN.test(apiKey)) {
-    sendError(res, 401, 'Missing or invalid API key. Set the ELEMENT_ARMORY_API_KEY header.');
+  if (!token) {
+    res.writeHead(401, {
+      'Content-Type': 'application/json',
+      'WWW-Authenticate': `Bearer realm="mcp", resource_metadata="${config.MCP_SERVER_URL}${PRM_PATH}"`,
+    });
+    res.end(JSON.stringify({ error: 'Authorization required' }));
     log(method, path, 401, Date.now() - startMs);
     return;
   }
 
-  // Intercept and proxy the response status for logging
+  // Intercept response status for logging
   const origWriteHead = res.writeHead.bind(res) as typeof res.writeHead;
   let loggedStatus = 0;
   res.writeHead = ((...args: Parameters<typeof res.writeHead>) => {
@@ -86,17 +105,15 @@ const httpServer = http.createServer((req, res) => {
   });
 
   if (method === 'GET' || method === 'DELETE') {
-    // GET: SSE stream for server→client messages; DELETE: session termination.
-    // Pass directly to the transport — it will respond appropriately.
-    handleMcpRequest(apiKey, req, res, undefined).catch((err: unknown) => {
+    handleMcpRequest(token, req, res, undefined).catch((err: unknown) => {
       console.error('[MCP] Error handling GET/DELETE:', err);
-      if (!res.headersSent) sendError(res, 500, 'Internal server error');
+      if (!res.headersSent) sendJson(res, 500, { error: 'Internal server error' });
     });
     return;
   }
 
   if (method !== 'POST') {
-    sendError(res, 405, 'Method not allowed');
+    sendJson(res, 405, { error: 'Method not allowed' });
     return;
   }
 
@@ -109,28 +126,29 @@ const httpServer = http.createServer((req, res) => {
     try {
       body = JSON.parse(rawBody);
     } catch {
-      sendError(res, 400, 'Invalid JSON body');
+      sendJson(res, 400, { error: 'Invalid JSON body' });
       return;
     }
 
     const rpcMethod = (body as { method?: string })?.method ?? '(unknown)';
     console.log(`[MCP] POST ${path} rpc=${rpcMethod}`);
 
-    handleMcpRequest(apiKey, req, res, body).catch((err: unknown) => {
+    handleMcpRequest(token, req, res, body).catch((err: unknown) => {
       console.error('[MCP] Request error:', err);
-      if (!res.headersSent) sendError(res, 500, 'Internal server error');
+      if (!res.headersSent) sendJson(res, 500, { error: 'Internal server error' });
     });
   });
 
   req.on('error', (err) => {
     console.error('[MCP] Request stream error:', err);
-    if (!res.headersSent) sendError(res, 500, 'Request error');
+    if (!res.headersSent) sendJson(res, 500, { error: 'Request error' });
   });
 });
 
 httpServer.listen(config.MCP_PORT, () => {
   console.log(`[MCP] Element Armory MCP server running on port ${config.MCP_PORT}`);
   console.log(`[MCP] Main server: ${config.MAIN_SERVER_URL}`);
+  console.log(`[MCP] Resource URL: ${config.MCP_SERVER_URL}`);
 });
 
 httpServer.on('error', (err) => {
