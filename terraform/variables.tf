@@ -324,3 +324,9 @@ variable "auto_blog_notify_to" {
   type        = string
   default     = "hello@elementarmory.com"
 }
+
+variable "jwt_secret" {
+  description = "JWT secret for the MCP server"
+  type        = string
+  sensitive   = true
+}

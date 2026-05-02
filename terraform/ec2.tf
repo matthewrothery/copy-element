@@ -67,6 +67,10 @@ locals {
     # Admin users (comma-separated emails)
     ADMIN_EMAILS="${var.admin_emails}"
 
+    JWT_SECRET="${var.jwt_secret}"
+
+    MCP_SERVER_URL="https://${var.mcp_subdomain}.${var.hosted_zone}"
+
     NODE_ENV=production
   EOT
 
@@ -77,6 +81,10 @@ locals {
 
     # Anthropic (AI completions)
     ANTHROPIC_API_KEY="${var.anthropic_api_key}"
+
+    JWT_SECRET="${var.jwt_secret}"
+
+    MCP_SERVER_URL="https://${var.mcp_subdomain}.${var.hosted_zone}"
 
     NODE_ENV=production
   EOT
