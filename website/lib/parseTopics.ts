@@ -5,6 +5,25 @@ import { markdownToArticleHtml } from "@/lib/markdownArticleHtml";
 
 const TOPICS_DIR = join(process.cwd(), "content", "topics");
 
+/** Hub order for `/topics` index — matches auto-blogger list.md section order. */
+const TOPIC_HUB_ORDER: readonly string[] = [
+  "copy-ui-from-websites",
+  "tool-alternatives",
+  "ai-coding-workflows",
+  "ui-development-without-design-skills",
+  "component-reuse-libraries",
+  "chrome-extension-use-cases",
+  "inspecting-debugging-css",
+  "ui-patterns-reverse-engineering",
+  "landing-page-saas-ui",
+  "advanced-workflows-automation",
+];
+
+function hubSortIndex(hub: string): number {
+  const i = TOPIC_HUB_ORDER.indexOf(hub);
+  return i === -1 ? TOPIC_HUB_ORDER.length : i;
+}
+
 export type FaqItem = {
   question: string;
   answer: string;
@@ -143,7 +162,8 @@ function loadHub(hub: string): TopicHub {
   const entries = readdirSync(hubDir, { withFileTypes: true });
   const clusterDirs = entries
     .filter((e) => e.isDirectory())
-    .map((e) => e.name);
+    .map((e) => e.name)
+    .sort((a, b) => a.localeCompare(b));
 
   const clusters = clusterDirs.map((cluster) => loadCluster(hubDir, hub, cluster));
 
@@ -155,7 +175,12 @@ export function getAllHubs(): TopicHub[] {
   const entries = readdirSync(TOPICS_DIR, { withFileTypes: true });
   return entries
     .filter((e) => e.isDirectory())
-    .map((e) => loadHub(e.name));
+    .map((e) => loadHub(e.name))
+    .sort((a, b) => {
+      const d = hubSortIndex(a.hub) - hubSortIndex(b.hub);
+      if (d !== 0) return d;
+      return a.hub.localeCompare(b.hub);
+    });
 }
 
 export function getHub(hub: string): TopicHub | undefined {
