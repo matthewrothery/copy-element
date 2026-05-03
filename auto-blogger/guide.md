@@ -390,19 +390,19 @@ You need to **teach Google your structure**.
 
 These should be **index pages that target big keywords**.
 
-Example:
+Example (live URLs use the **`/topics/`** prefix):
 
 ```
-/copy-ui/
-/tool-alternatives/
-/ai-ui-workflows/
-/ui-without-design/
-/component-libraries/
-/chrome-extension-use-cases/
-/css-debugging/
-/ui-patterns/
-/saas-ui/
-/frontend-automation/
+/topics/copy-ui-from-websites/
+/topics/tool-alternatives/
+/topics/ai-coding-workflows/
+/topics/ui-development-without-design-skills/
+/topics/component-reuse-libraries/
+/topics/chrome-extension-use-cases/
+/topics/inspecting-debugging-css/
+/topics/ui-patterns-reverse-engineering/
+/topics/landing-page-saas-ui/
+/topics/advanced-workflows-automation/
 ```
 
 Each of these pages should:
@@ -420,9 +420,8 @@ Think of them as **mini landing pages, not blog indexes**.
 Example:
 
 ```
-/copy-ui/copy-css/
-/copy-ui/copy-html/
-/copy-ui/copy-components/
+/topics/copy-ui-from-websites/copy-css-from-website/
+/topics/copy-ui-from-websites/copy-html-from-website/
 ```
 
 These:
@@ -438,7 +437,7 @@ These:
 Example:
 
 ```
-/copy-ui/copy-css/how-to-copy-css-from-any-website
+/topics/copy-ui-from-websites/copy-css-from-website/how-to-copy-css-from-any-website
 ```
 
 These:
@@ -468,18 +467,18 @@ But it should:
 # 🧱 Visual Structure
 
 ```
-            [ /copy-ui/ ]
+            [ /topics/copy-ui-from-websites/ ]
                  ↓
-     [ /copy-ui/copy-css/ ]
+     [ /topics/copy-ui-from-websites/copy-css-from-website/ ]
                  ↓
-[ /copy-ui/copy-css/how-to-copy-css-from-any-website ]
+[ /topics/copy-ui-from-websites/copy-css-from-website/how-to-copy-css-from-any-website ]
 
                  ↕
    (internal links across related pages)
 
-            [ /ai-ui-workflows/ ]
+            [ /topics/ai-coding-workflows/ ]
                  ↓
-     [ /ai-ui-workflows/cursor/ ]
+     [ /topics/ai-coding-workflows/cursor-workflows/ ]
 ```
 
 ---

@@ -49,14 +49,14 @@ Use this when you want to regenerate one existing topic article and test image g
 Preview mode writes to `auto-blogger/dry-runs/<artifact-id>/`:
 
 ```bash
-npm run generate:local -- --path ../website/content/topics/copy-ui/copy-css/how-to-copy-css-from-any-website.md
+npm run generate:local -- --path ../website/content/topics/copy-ui-from-websites/copy-css-from-website/how-to-copy-css-from-any-website.md
 ```
 
 Write mode replaces the markdown under `website/content/topics` and writes the generated image under
 `website/public/topic-images`:
 
 ```bash
-npm run generate:local -- --path ../website/content/topics/copy-ui/copy-css/how-to-copy-css-from-any-website.md --write
+npm run generate:local -- --path ../website/content/topics/copy-ui-from-websites/copy-css-from-website/how-to-copy-css-from-any-website.md --write
 ```
 
 You can also target a keyword from `list.md`:

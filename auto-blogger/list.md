@@ -97,7 +97,7 @@
 
 ---
 
-# 2. Tool Alternatives (High Intent)
+# 2. Tool Alternatives
 ## DivMagic Alternative
 - divmagic alternative
 - better than divmagic
