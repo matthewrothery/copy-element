@@ -111,10 +111,10 @@ locals {
     AUTO_BLOG_NOTIFY_FROM="${var.from_email}"
 
     # Generation settings
-    DAILY_ARTICLES="1"
+    DAILY_ARTICLES="4"
     AUTO_BLOG_MODE="daemon"
     AUTO_BLOG_TARGET="topics"
-    AUTO_BLOG_IMAGE_MODEL="gemini-2.5-flash-image"
+    AUTO_BLOG_IMAGE_MODEL="gemini-3.1-flash-image-preview"
     AUTO_BLOG_IMAGE_STYLE="stencil"
     AUTO_BLOG_IMAGE_PALETTE="vibrant"
 
