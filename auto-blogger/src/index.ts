@@ -46,7 +46,7 @@ async function runSingleCycle(): Promise<void> {
     throw new Error("Research step returned no results.");
   }
 
-  const draftArticle = await generateTopicArticle({
+  const { article: draftArticle, tokenUsage } = await generateTopicArticle({
     keyword,
     date: today,
     textProvider: config.textProvider,
@@ -125,6 +125,7 @@ async function runSingleCycle(): Promise<void> {
           artifact,
           model: config.textModel,
           imageUrl,
+          tokenUsage,
         });
         console.log(`Notification sent to ${config.notifyTo}`);
       } catch (error) {

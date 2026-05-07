@@ -1,6 +1,6 @@
 import { SendEmailCommand, SESClient } from "@aws-sdk/client-ses";
 import { marked } from "marked";
-import { ArticleArtifact } from "./types.js";
+import { ArticleArtifact, TokenUsage } from "./types.js";
 
 function escapeHtml(text: string): string {
   return text
@@ -18,6 +18,38 @@ function qualityWarningsBlockHtml(warnings: string[]): string {
       <ul style="color: #92400e;">${items}</ul>`;
 }
 
+type ModelPricing = { inputPerMTok: number; outputPerMTok: number };
+
+const MODEL_PRICING: Record<string, ModelPricing> = {
+  "claude-haiku-4-5": { inputPerMTok: 1.0, outputPerMTok: 5.0 },
+  "gemini-3.1-flash-image-preview": { inputPerMTok: 2.0, outputPerMTok: 12.0 },
+  "gemini-2.5-flash-image": { inputPerMTok: 0.30, outputPerMTok: 8.0 },
+  "gemini-2.5-flash": { inputPerMTok: 2.0, outputPerMTok: 12.0 },
+  "gemini-2.5-pro": { inputPerMTok: 2.0, outputPerMTok: 12.0 },
+};
+
+function lookupPricing(model: string): ModelPricing | undefined {
+  const key = Object.keys(MODEL_PRICING).find((k) => model.includes(k));
+  return key ? MODEL_PRICING[key] : undefined;
+}
+
+function formatCost(usd: number): string {
+  if (usd < 0.01) return `$${usd.toFixed(4)}`;
+  return `$${usd.toFixed(4)}`;
+}
+
+function calcCostSummary(model: string, usage: TokenUsage): string {
+  const pricing = lookupPricing(model);
+  if (!pricing) return "Cost: unknown model";
+  const inputCost = (usage.inputTokens / 1_000_000) * pricing.inputPerMTok;
+  const outputCost = (usage.outputTokens / 1_000_000) * pricing.outputPerMTok;
+  const total = inputCost + outputCost;
+  return (
+    `${usage.inputTokens.toLocaleString()} input + ${usage.outputTokens.toLocaleString()} output tokens` +
+    ` = ${formatCost(total)} (${formatCost(inputCost)} in + ${formatCost(outputCost)} out)`
+  );
+}
+
 function getClient(): SESClient {
   return new SESClient({ region: process.env.AWS_SES_REGION ?? process.env.AWS_REGION ?? "us-east-2" });
 }
@@ -30,6 +62,7 @@ function buildHtml(input: {
   artifact: ArticleArtifact;
   imageUrl?: string;
   model: string;
+  tokenUsage?: TokenUsage;
 }): string {
   const articleHtml = marked.parse(input.artifact.articleMarkdown) as string;
   const sourceList = input.artifact.metadata.sourceUrls
@@ -61,6 +94,7 @@ function buildHtml(input: {
       <p><strong>Artifact ID:</strong> ${input.artifact.artifactId}</p>
       <p><strong>Text model:</strong> ${input.model}</p>
       <p><strong>Image model:</strong> ${input.artifact.metadata.imageModel}</p>
+      ${input.tokenUsage ? `<p><strong>Cost:</strong> ${escapeHtml(calcCostSummary(input.model, input.tokenUsage))}</p>` : ""}
       <p><strong>Article path:</strong> ${input.artifact.metadata.articlePath}</p>
       <p><strong>Cover path:</strong> ${input.artifact.metadata.imagePath}</p>
       ${
@@ -72,7 +106,7 @@ function buildHtml(input: {
   </html>`;
 }
 
-function buildText(artifact: ArticleArtifact, model: string): string {
+function buildText(artifact: ArticleArtifact, model: string, tokenUsage?: TokenUsage): string {
   const warningsBlock =
     artifact.metadata.qualityWarnings && artifact.metadata.qualityWarnings.length > 0
       ? [
@@ -90,6 +124,7 @@ function buildText(artifact: ArticleArtifact, model: string): string {
     `Artifact ID: ${artifact.artifactId}`,
     `Text model: ${model}`,
     `Image model: ${artifact.metadata.imageModel}`,
+    ...(tokenUsage ? [`Cost: ${calcCostSummary(model, tokenUsage)}`] : []),
     ...(artifact.metadata.assets?.length
       ? ["", "Assets:", ...artifact.metadata.assets.map((a) => `- ${a.websiteRelativePath}`)]
       : []),
@@ -107,6 +142,7 @@ export async function sendArticleNotification(input: {
   artifact: ArticleArtifact;
   model: string;
   imageUrl?: string;
+  tokenUsage?: TokenUsage;
 }): Promise<void> {
   const client = getClient();
   await client.send(
@@ -118,8 +154,8 @@ export async function sendArticleNotification(input: {
       Message: {
         Subject: { Data: buildSubject(input.artifact), Charset: "UTF-8" },
         Body: {
-          Html: { Data: buildHtml({ artifact: input.artifact, imageUrl: input.imageUrl, model: input.model }), Charset: "UTF-8" },
-          Text: { Data: buildText(input.artifact, input.model), Charset: "UTF-8" },
+          Html: { Data: buildHtml({ artifact: input.artifact, imageUrl: input.imageUrl, model: input.model, tokenUsage: input.tokenUsage }), Charset: "UTF-8" },
+          Text: { Data: buildText(input.artifact, input.model, input.tokenUsage), Charset: "UTF-8" },
         },
       },
     })

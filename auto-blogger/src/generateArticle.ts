@@ -7,6 +7,7 @@ import {
   GeneratedArticle,
   InternalLinkCandidate,
   ResearchResult,
+  TokenUsage,
   TopicKeyword,
 } from "./types.js";
 
@@ -99,7 +100,7 @@ export async function generateTopicArticle(input: {
   rules: string;
   research: ResearchResult[];
   internalLinkCandidates: InternalLinkCandidate[];
-}): Promise<GeneratedArticle> {
+}): Promise<{ article: GeneratedArticle; tokenUsage: TokenUsage }> {
   const model = createTextModel(input.textProvider, input.model);
   const system = buildSystemPrompt(input.copywriterPrompt, input.guide, input.rules);
   const researchSummary = summarizeResearch(input.research);
@@ -125,12 +126,17 @@ Return:
 - related slugs for same-cluster linking. Prefer slugs from existing article links when available.
 `;
 
-  const outline = await generateObject({
+  const outlineResult = await generateObject({
     model,
     schema: OutlineSchema,
     system,
     prompt: outlinePrompt,
   });
+  const outline = outlineResult;
+
+  const sourceUrlList = input.research
+    .map((item, idx) => `${idx + 1}. ${item.url} — ${item.title}`)
+    .join("\n");
 
   const draftPrompt = `
 Write a comprehensive topic article.
@@ -152,7 +158,8 @@ Requirements:
 - avoid generic filler
 - include links as plain markdown links where relevant
 - use 3-10 inline internal links from the provided existing internal link options. Never use more than 10 internal links. Choose only links that fit naturally in the paragraph.
-- when using concrete statistics, benchmarks, survey findings, market numbers, dates, or data points, cite the source with a plain markdown link to the original source.
+- you MUST include inline markdown links to 4-8 of the research source URLs listed below. Link to them naturally at the point where you reference their content — statistics, findings, or claims drawn from that source. Never list them as a block; embed them inline in the prose.
+- when using concrete statistics, benchmarks, survey findings, market numbers, dates, or data points, cite the source with a plain markdown link to the original source URL.
 - include concrete statistics or data where the research supports it. Keep data references native, organic, and human-readable, not a list of forced numbers.
 - do not include H1 title inside body
 - do not put FAQ content in the markdown body. Never use headings like ## FAQ, ### FAQ, or "Frequently asked questions", and do not duplicate Q&A lists in prose. FAQ items are supplied separately from the outline and become YAML frontmatter only; the published page renders them once below the article.
@@ -171,6 +178,9 @@ Diagram kinds:
 
 Every diagram must use a unique id and appear exactly once as {{DIAGRAM:id}} in the body.
 
+Research source URLs (link to 4-8 of these inline in the article body):
+${sourceUrlList}
+
 Research context:
 ${researchSummary}
 
@@ -186,29 +196,37 @@ ${internalLinksSummary}
     maxTokens: DRAFT_MAX_OUTPUT_TOKENS,
   });
 
+  const tokenUsage: TokenUsage = {
+    inputTokens: (outlineResult.usage?.promptTokens ?? 0) + (draft.usage?.promptTokens ?? 0),
+    outputTokens: (outlineResult.usage?.completionTokens ?? 0) + (draft.usage?.completionTokens ?? 0),
+  };
+
   // Lock URL slug to list.md so paths align with keyword.id and we do not collide with sibling filenames.
   const slugSegment = input.keyword.id.split("/").pop() ?? "";
   const slug = sanitizeSlug(slugSegment || input.keyword.keyword);
 
   return {
-    hubSlug: input.keyword.hubSlug,
-    hubTitle: input.keyword.hubTitle,
-    clusterSlug: input.keyword.clusterSlug,
-    clusterTitle: input.keyword.clusterTitle,
-    title: draft.object.title,
-    slug,
-    date: input.date,
-    excerpt: draft.object.excerpt,
-    readTime: draft.object.readTime,
-    faq: outline.object.faq
-      .filter((item) => Boolean(item.question && item.answer))
-      .map((item) => ({
-        question: item.question,
-        answer: item.answer,
-      })),
-    relatedSlugs: outline.object.relatedSlugs,
-    body: draft.object.body.trim(),
-    imagePrompt: draft.object.imagePrompt.trim(),
-    diagrams: draft.object.diagrams ?? [],
+    article: {
+      hubSlug: input.keyword.hubSlug,
+      hubTitle: input.keyword.hubTitle,
+      clusterSlug: input.keyword.clusterSlug,
+      clusterTitle: input.keyword.clusterTitle,
+      title: draft.object.title,
+      slug,
+      date: input.date,
+      excerpt: draft.object.excerpt,
+      readTime: draft.object.readTime,
+      faq: outline.object.faq
+        .filter((item) => Boolean(item.question && item.answer))
+        .map((item) => ({
+          question: item.question,
+          answer: item.answer,
+        })),
+      relatedSlugs: outline.object.relatedSlugs,
+      body: draft.object.body.trim(),
+      imagePrompt: draft.object.imagePrompt.trim(),
+      diagrams: draft.object.diagrams ?? [],
+    },
+    tokenUsage,
   };
 }

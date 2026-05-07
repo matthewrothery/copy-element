@@ -104,6 +104,11 @@ export type ArticleArtifact = {
   research: ResearchResult[];
 };
 
+export type TokenUsage = {
+  inputTokens: number;
+  outputTokens: number;
+};
+
 export type AutoBloggerState = {
   processedKeywordIds: string[];
   processedSlugs: string[];

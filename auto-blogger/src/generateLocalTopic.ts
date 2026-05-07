@@ -155,7 +155,7 @@ async function main(): Promise<void> {
     keyword
   );
 
-  const draftArticle = await generateTopicArticle({
+  const { article: draftArticle } = await generateTopicArticle({
     keyword,
     date,
     textProvider: config.textProvider,
