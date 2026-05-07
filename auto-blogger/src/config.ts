@@ -6,7 +6,10 @@ export type AutoBloggerConfig = {
   dryRun: boolean;
   dailyArticles: number;
   timezone: string;
+  windowStartHour: number;
+  windowEndHour: number;
   minGapMinutes: number;
+  maxGapMinutes: number;
   statePath: string;
   lockPath: string;
   author: string;
@@ -122,7 +125,10 @@ export function loadConfig(): AutoBloggerConfig {
     dryRun: boolEnv("AUTO_BLOG_DRY_RUN"),
     dailyArticles: parseIntEnv("DAILY_ARTICLES", 1),
     timezone: process.env.AUTO_BLOG_TIMEZONE ?? "Australia/Sydney",
-    minGapMinutes: parseIntEnv("AUTO_BLOG_MIN_GAP_MINUTES", 120),
+    windowStartHour: parseIntEnv("AUTO_BLOG_WINDOW_START_HOUR", 9),
+    windowEndHour: parseIntEnv("AUTO_BLOG_WINDOW_END_HOUR", 17),
+    minGapMinutes: parseIntEnv("AUTO_BLOG_MIN_GAP_MINUTES", 90),
+    maxGapMinutes: parseIntEnv("AUTO_BLOG_MAX_GAP_MINUTES", 120),
     statePath:
       process.env.AUTO_BLOG_STATE_PATH ??
       path.resolve(dataRoot, "auto-blogger-state.json"),

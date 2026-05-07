@@ -2,7 +2,6 @@ import "dotenv/config";
 import { readFileSync } from "fs";
 import { applyDiagramsToArticle } from "./applyDiagrams.js";
 import { loadConfig } from "./config.js";
-import { acquireLock } from "./lock.js";
 import { researchTopic } from "./research.js";
 import { parseTopicKeywords, pickNextKeyword } from "./topics.js";
 import { loadState, saveState } from "./state.js";
@@ -13,7 +12,7 @@ import { createArtifact } from "./artifact.js";
 import { writeDryRunArtifact } from "./localPublish.js";
 import { uploadArtifactToS3, getArtifactImageSignedUrl } from "./s3.js";
 import { sendArticleNotification } from "./email.js";
-import { buildRandomDailySchedule, minutesUntilSlot, sleep } from "./scheduler.js";
+import { buildRandomDailySchedule, minutesUntilSlot, msUntilNextWindowStart, sleep } from "./scheduler.js";
 import { loadInternalLinkCandidates, prioritizeInternalLinks } from "./internalLinks.js";
 
 async function runSingleCycle(): Promise<void> {
@@ -145,39 +144,40 @@ async function runSingleCycle(): Promise<void> {
 
 async function runDaemon(): Promise<void> {
   const config = loadConfig();
+  const windowStart = config.windowStartHour * 60;
+  const windowEnd = config.windowEndHour * 60;
   console.log("Auto-blogger daemon started.");
   while (true) {
-    const schedule = buildRandomDailySchedule(config.dailyArticles, config.minGapMinutes);
-    console.log(`Today's schedule (minutes): ${schedule.join(", ")}`);
+    const schedule = buildRandomDailySchedule(
+      config.dailyArticles,
+      windowStart,
+      windowEnd,
+      config.minGapMinutes,
+      config.maxGapMinutes
+    );
+    console.log(`Today's schedule (${config.timezone} minutes-from-midnight): ${schedule.join(", ")}`);
 
     for (const slot of schedule) {
-      const waitMinutes = minutesUntilSlot(slot, new Date());
+      const waitMinutes = minutesUntilSlot(slot, new Date(), config.timezone);
       if (waitMinutes > 0) {
         await sleep(waitMinutes * 60 * 1000);
       }
       await runSingleCycle();
     }
 
-    const now = new Date();
-    const msUntilTomorrow =
-      new Date(now.getFullYear(), now.getMonth(), now.getDate() + 1).getTime() - now.getTime();
-    await sleep(msUntilTomorrow);
+    const ms = msUntilNextWindowStart(windowStart, config.timezone);
+    console.log(`All slots done. Sleeping ${Math.round(ms / 60000)} minutes until next window.`);
+    await sleep(ms);
   }
 }
 
 async function main(): Promise<void> {
   const config = loadConfig();
-  const lock = acquireLock(config.lockPath);
-
-  try {
-    if (config.mode === "daemon") {
-      await runDaemon();
-      return;
-    }
-    await runSingleCycle();
-  } finally {
-    lock.release();
+  if (config.mode === "daemon") {
+    await runDaemon();
+    return;
   }
+  await runSingleCycle();
 }
 
 main().catch((error) => {
