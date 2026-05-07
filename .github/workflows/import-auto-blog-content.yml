@@ -62,23 +62,23 @@ jobs:
       - name: Detect imported changes
         id: changes
         run: |
-          TARGETS="website/content/topics website/public/topic-images"
+          TARGETS="website/content/topics website/public/topic-images website/content/blog website/public/blog"
           porcelain=$(git status --porcelain -- $TARGETS)
           if [ -n "$porcelain" ]; then
             echo "has_changes=true" >> "$GITHUB_OUTPUT"
           else
             echo "has_changes=false" >> "$GITHUB_OUTPUT"
-            echo "No changes under topic paths (modified, untracked, or staged):"
+            echo "No changes under content paths (modified, untracked, or staged):"
             git status --short -- $TARGETS
           fi
 
-      - name: Commit imported topics
+      - name: Commit imported content
         if: steps.changes.outputs.has_changes == 'true'
         run: |
           git config user.name "element-armory-bot"
           git config user.email "bot@elementarmory.com"
-          git add website/content/topics website/public/topic-images
-          git commit -m "Publish generated topic articles"
+          git add website/content/topics website/public/topic-images website/content/blog website/public/blog
+          git commit -m "Publish generated articles"
           git push
 
       - name: Build Next.js

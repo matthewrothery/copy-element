@@ -54,8 +54,9 @@ function getClient(): SESClient {
   return new SESClient({ region: process.env.AWS_SES_REGION ?? process.env.AWS_REGION ?? "us-east-2" });
 }
 
-function buildSubject(artifact: ArticleArtifact): string {
-  return `Generated topic article: ${artifact.metadata.title}`;
+function buildSubject(artifact: ArticleArtifact, subjectPrefix?: string): string {
+  const prefix = subjectPrefix ?? "Generated topic article";
+  return `${prefix}: ${artifact.metadata.title}`;
 }
 
 function buildHtml(input: {
@@ -74,7 +75,9 @@ function buildHtml(input: {
     <body style="font-family: Arial, sans-serif; line-height: 1.6; color: #111827;">
       <h1 style="margin-bottom: 4px;">${input.artifact.metadata.title}</h1>
       <p style="color: #6b7280; margin-top: 0;">
-        ${input.artifact.metadata.hubSlug} / ${input.artifact.metadata.clusterSlug} · ${input.artifact.metadata.date}
+        ${input.artifact.metadata.hubSlug && input.artifact.metadata.clusterSlug
+          ? `${input.artifact.metadata.hubSlug} / ${input.artifact.metadata.clusterSlug} · `
+          : ""}${input.artifact.metadata.date}
       </p>
       ${
         input.imageUrl
@@ -119,7 +122,9 @@ function buildText(artifact: ArticleArtifact, model: string, tokenUsage?: TokenU
 
   return [
     `Generated topic article: ${artifact.metadata.title}`,
-    `${artifact.metadata.hubSlug} / ${artifact.metadata.clusterSlug}`,
+    ...(artifact.metadata.hubSlug && artifact.metadata.clusterSlug
+      ? [`${artifact.metadata.hubSlug} / ${artifact.metadata.clusterSlug}`]
+      : []),
     `Date: ${artifact.metadata.date}`,
     `Artifact ID: ${artifact.artifactId}`,
     `Text model: ${model}`,
@@ -143,6 +148,7 @@ export async function sendArticleNotification(input: {
   model: string;
   imageUrl?: string;
   tokenUsage?: TokenUsage;
+  subjectPrefix?: string;
 }): Promise<void> {
   const client = getClient();
   await client.send(
@@ -152,7 +158,7 @@ export async function sendArticleNotification(input: {
         ToAddresses: [input.to],
       },
       Message: {
-        Subject: { Data: buildSubject(input.artifact), Charset: "UTF-8" },
+        Subject: { Data: buildSubject(input.artifact, input.subjectPrefix), Charset: "UTF-8" },
         Body: {
           Html: { Data: buildHtml({ artifact: input.artifact, imageUrl: input.imageUrl, model: input.model, tokenUsage: input.tokenUsage }), Charset: "UTF-8" },
           Text: { Data: buildText(input.artifact, input.model, input.tokenUsage), Charset: "UTF-8" },

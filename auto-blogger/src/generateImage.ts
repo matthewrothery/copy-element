@@ -1,6 +1,5 @@
 import { GoogleGenAI, Modality } from "@google/genai";
 import { AutoBloggerConfig } from "./config.js";
-import { GeneratedArticle } from "./types.js";
 
 export type GeneratedImage = {
   bytes: Buffer<ArrayBufferLike>;
@@ -32,7 +31,23 @@ function isGemini3TierImageModel(model: string): boolean {
   return model.includes("gemini-3");
 }
 
-function buildStyledPrompt(article: GeneratedArticle, config: AutoBloggerConfig): string {
+function buildStyledPrompt(
+  article: { imagePrompt: string; title: string; hubTitle?: string; clusterTitle?: string },
+  config: AutoBloggerConfig,
+  styleOverride?: string
+): string {
+  const artDirection = styleOverride ?? `- stencil street-art style
+- bold minimalist shapes
+- flat overlapping color layers
+- clear silhouette
+- no text or logos
+- no photorealism`;
+
+  const topicContext = article.hubTitle
+    ? `- ${article.hubTitle}${article.clusterTitle ? ` / ${article.clusterTitle}` : ""}
+- ${article.title}`
+    : `- ${article.title}`;
+
   return `
 Create a blog cover image.
 
@@ -40,25 +55,20 @@ Subject:
 ${article.imagePrompt}
 
 Art direction:
-- stencil street-art style
-- bold minimalist shapes
-- flat overlapping color layers
-- clear silhouette
-- no text or logos
-- no photorealism
+${artDirection}
 
 Palette:
 - ${config.imagePalette}
 
 Topic context:
-- ${article.hubTitle} / ${article.clusterTitle}
-- ${article.title}
+${topicContext}
 `;
 }
 
 export async function generateCoverImage(
-  article: GeneratedArticle,
-  config: AutoBloggerConfig
+  article: { imagePrompt: string; title: string; hubTitle?: string; clusterTitle?: string },
+  config: AutoBloggerConfig,
+  styleOverride?: string
 ): Promise<GeneratedImage> {
   const apiKey = process.env.GEMINI_API_KEY;
   if (!apiKey) {
@@ -66,7 +76,7 @@ export async function generateCoverImage(
   }
 
   const ai = new GoogleGenAI({ apiKey });
-  const prompt = buildStyledPrompt(article, config).trim();
+  const prompt = buildStyledPrompt(article, config, styleOverride).trim();
   const aspectRatio = aspectRatioFromImageSize(config.imageSize);
 
   const imageConfig: { aspectRatio: string; imageSize?: string } = { aspectRatio };

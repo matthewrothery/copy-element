@@ -6,14 +6,24 @@ import { researchTopic } from "./research.js";
 import { parseTopicKeywords, pickNextKeyword } from "./topics.js";
 import { loadState, saveState } from "./state.js";
 import { generateTopicArticle } from "./generateArticle.js";
+import { generateNewsArticle } from "./generateNewsArticle.js";
 import { validateArticleQuality } from "./quality.js";
 import { generateCoverImage } from "./generateImage.js";
-import { createArtifact } from "./artifact.js";
+import { createArtifact, createBlogArtifact } from "./artifact.js";
 import { writeDryRunArtifact } from "./localPublish.js";
 import { uploadArtifactToS3, getArtifactImageSignedUrl } from "./s3.js";
 import { sendArticleNotification } from "./email.js";
 import { buildRandomDailySchedule, minutesUntilSlot, msUntilNextWindowStart, sleep } from "./scheduler.js";
 import { loadInternalLinkCandidates, prioritizeInternalLinks } from "./internalLinks.js";
+import { fetchNewsItems } from "./newsSearch.js";
+
+const NEWS_IMAGE_STYLE = `- clean editorial style
+- modern geometric shapes
+- flat design, minimal
+- bold color blocks
+- no text or logos
+- no photorealism
+- no stencil or street-art`;
 
 async function runSingleCycle(): Promise<void> {
   const config = loadConfig();
@@ -143,32 +153,139 @@ async function runSingleCycle(): Promise<void> {
   saveState(config.statePath, state);
 }
 
+async function runNewsCycle(): Promise<void> {
+  const config = loadConfig();
+  const today = new Date().toISOString().slice(0, 10);
+
+  console.log("[news] Fetching news items...");
+  const items = await fetchNewsItems(6);
+  if (items.length === 0) {
+    throw new Error("[news] No recent news items found (within 48h).");
+  }
+  console.log(`[news] Fetched ${items.length} items.`);
+
+  const { post, tokenUsage } = await generateNewsArticle({
+    items,
+    date: today,
+    textProvider: config.textProvider,
+    model: config.textModel,
+  });
+  console.log(`[news] Generated post: ${post.title} (${post.slug})`);
+
+  let coverBuffer: Buffer<ArrayBufferLike> = Buffer.alloc(0);
+  let coverExt = config.imageFormat;
+  if (!config.dryRun) {
+    try {
+      const image = await generateCoverImage(post, config, NEWS_IMAGE_STYLE);
+      coverBuffer = image.bytes;
+      coverExt = image.ext;
+    } catch (error) {
+      if (!config.allowImageFallback) {
+        throw error;
+      }
+      console.warn("[news] Image generation failed; using fallback blank image buffer.");
+    }
+  }
+
+  const artifact = createBlogArtifact({
+    post,
+    coverBuffer,
+    coverExt,
+    model: `${config.textProvider}:${config.textModel}`,
+    imageModel: config.imageModel,
+    promptVersion: config.promptVersion,
+    author: config.author,
+  });
+
+  if (config.dryRun) {
+    const out = writeDryRunArtifact(config.packageRoot, artifact);
+    console.log(`[news] Dry run complete: ${out.articlePath}`);
+  } else {
+    if (!config.s3Bucket) {
+      throw new Error("AUTO_BLOG_S3_BUCKET is required for non-dry-run execution.");
+    }
+
+    await uploadArtifactToS3(config.s3Bucket, config.s3Prefix, artifact);
+    console.log(`[news] Uploaded artifact to s3://${config.s3Bucket}/${config.s3Prefix}/pending/${artifact.artifactId}`);
+
+    if (config.notifyTo && config.notifyFrom) {
+      try {
+        const imageUrl = await getArtifactImageSignedUrl(
+          config.s3Bucket,
+          config.s3Prefix,
+          artifact.artifactId,
+          coverExt
+        );
+        await sendArticleNotification({
+          to: config.notifyTo,
+          from: config.notifyFrom,
+          artifact,
+          model: config.textModel,
+          imageUrl,
+          tokenUsage,
+          subjectPrefix: "Generated news post",
+        });
+        console.log(`[news] Notification sent to ${config.notifyTo}`);
+      } catch (error) {
+        console.error("[news] Email notification failed:", error);
+      }
+    }
+  }
+}
+
 async function runDaemon(): Promise<void> {
   const config = loadConfig();
   const windowStart = config.windowStartHour * 60;
   const windowEnd = config.windowEndHour * 60;
   console.log("Auto-blogger daemon started.");
-  while (true) {
-    const schedule = buildRandomDailySchedule(
-      config.dailyArticles,
-      windowStart,
-      windowEnd,
-      config.minGapMinutes,
-      config.maxGapMinutes
-    );
-    console.log(`Today's schedule (${config.timezone} minutes-from-midnight): ${schedule.join(", ")}`);
 
-    for (const slot of schedule) {
-      const waitMinutes = minutesUntilSlot(slot, new Date(), config.timezone);
+  async function topicLoop(): Promise<void> {
+    while (true) {
+      const schedule = buildRandomDailySchedule(
+        config.dailyArticles,
+        windowStart,
+        windowEnd,
+        config.minGapMinutes,
+        config.maxGapMinutes
+      );
+      console.log(`[topic] Today's schedule (${config.timezone} minutes-from-midnight): ${schedule.join(", ")}`);
+
+      for (const slot of schedule) {
+        const waitMinutes = minutesUntilSlot(slot, new Date(), config.timezone);
+        if (waitMinutes > 0) {
+          await sleep(waitMinutes * 60 * 1000);
+        }
+        await runSingleCycle();
+      }
+
+      const ms = msUntilNextWindowStart(windowStart, config.timezone);
+      console.log(`[topic] All slots done. Sleeping ${Math.round(ms / 60000)} minutes until next window.`);
+      await sleep(ms);
+    }
+  }
+
+  async function newsLoop(): Promise<void> {
+    const slotMinutes = config.newsCycleHour * 60;
+    while (true) {
+      const waitMinutes = minutesUntilSlot(slotMinutes, new Date(), config.timezone);
       if (waitMinutes > 0) {
+        console.log(`[news] Waiting ${waitMinutes} minutes until ${config.newsCycleHour}:00 ${config.timezone}.`);
         await sleep(waitMinutes * 60 * 1000);
       }
-      await runSingleCycle();
+      try {
+        await runNewsCycle();
+      } catch (e) {
+        console.error("[news] cycle failed:", e);
+      }
+      const ms = msUntilNextWindowStart(slotMinutes, config.timezone);
+      await sleep(ms);
     }
+  }
 
-    const ms = msUntilNextWindowStart(windowStart, config.timezone);
-    console.log(`All slots done. Sleeping ${Math.round(ms / 60000)} minutes until next window.`);
-    await sleep(ms);
+  if (config.newsCycleEnabled) {
+    await Promise.all([topicLoop(), newsLoop()]);
+  } else {
+    await topicLoop();
   }
 }
 

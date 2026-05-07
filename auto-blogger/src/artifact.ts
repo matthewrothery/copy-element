@@ -1,5 +1,5 @@
 import crypto from "crypto";
-import type { ArtifactAssetMeta, GeneratedArticle, ResearchResult, ArticleArtifact } from "./types.js";
+import type { ArtifactAssetMeta, GeneratedArticle, GeneratedBlogPost, NewsItem, ResearchResult, ArticleArtifact } from "./types.js";
 import type { DiagramAssetBuffer } from "./applyDiagrams.js";
 
 function yyyymmddCompact(date: string): string {
@@ -12,6 +12,24 @@ function sha256(input: Buffer<ArrayBufferLike> | string): string {
 
 function escapeYaml(input: string): string {
   return input.replace(/"/g, '\\"');
+}
+
+function buildBlogFrontmatter(
+  post: GeneratedBlogPost,
+  author: string,
+  coverImage: string
+): string {
+  return [
+    "---",
+    `title: "${escapeYaml(post.title)}"`,
+    `slug: "${post.slug}"`,
+    `date: "${post.date}"`,
+    `author: "${escapeYaml(author)}"`,
+    `excerpt: "${escapeYaml(post.excerpt)}"`,
+    `readTime: "${escapeYaml(post.readTime)}"`,
+    `coverImage: "${coverImage}"`,
+    "---",
+  ].join("\n");
 }
 
 function buildFrontmatter(
@@ -149,5 +167,85 @@ export function createArtifact(input: {
         : {}),
     },
     research: input.research,
+  };
+}
+
+function newsItemToResearchResult(item: NewsItem): ResearchResult {
+  return {
+    title: item.title,
+    url: item.url,
+    snippet: item.source,
+    content: item.content,
+  };
+}
+
+export function createBlogArtifact(input: {
+  post: GeneratedBlogPost;
+  coverBuffer: Buffer<ArrayBufferLike>;
+  coverExt: "png" | "jpeg" | "webp";
+  model: string;
+  imageModel: string;
+  promptVersion: string;
+  author: string;
+  qualityWarnings?: string[];
+}): ArticleArtifact {
+  const dateCompact = yyyymmddCompact(input.post.date);
+  const artifactId = `news-${dateCompact}-${input.post.slug}`;
+  const coverFilename = `${input.post.slug}.${input.coverExt}`;
+  const articlePath = `website/content/blog/${input.post.slug}.md`;
+  const imagePath = `website/public/blog/${coverFilename}`;
+  const researchPath = `research/${artifactId}.json`;
+  const coverImageField = `/blog/${coverFilename}`;
+
+  const frontmatter = buildBlogFrontmatter(input.post, input.author, coverImageField);
+  const articleMarkdown = `${frontmatter}\n\n${input.post.body.trim()}\n`;
+
+  const coverS3Name = `cover.${input.coverExt}`;
+  const assetBuffers: ArticleArtifact["assetBuffers"] = [
+    {
+      s3Name: coverS3Name,
+      buffer: input.coverBuffer,
+      websiteRelativePath: imagePath,
+      contentType: `image/${input.coverExt}`,
+    },
+  ];
+
+  const assetsMeta: ArtifactAssetMeta[] = [
+    {
+      websiteRelativePath: imagePath,
+      s3Name: coverS3Name,
+      contentType: `image/${input.coverExt}`,
+      sha256: sha256(input.coverBuffer),
+    },
+  ];
+
+  const articleSha256 = sha256(articleMarkdown);
+  const sourceUrls = input.post.sourceItems.map((i) => i.url);
+
+  return {
+    artifactId,
+    articleMarkdown,
+    assetBuffers,
+    metadata: {
+      artifactId,
+      createdAt: new Date().toISOString(),
+      targetType: "blog",
+      slug: input.post.slug,
+      title: input.post.title,
+      date: input.post.date,
+      articlePath,
+      imagePath,
+      assets: assetsMeta,
+      researchPath,
+      model: input.model,
+      imageModel: input.imageModel,
+      promptVersion: input.promptVersion,
+      sourceUrls,
+      checksums: { articleSha256 },
+      ...(input.qualityWarnings && input.qualityWarnings.length > 0
+        ? { qualityWarnings: input.qualityWarnings }
+        : {}),
+    },
+    research: input.post.sourceItems.map(newsItemToResearchResult),
   };
 }

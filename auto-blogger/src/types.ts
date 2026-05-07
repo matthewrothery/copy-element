@@ -60,14 +60,33 @@ export type ArtifactAssetMeta = {
   sha256: string;
 };
 
+export type NewsItem = {
+  title: string;
+  url: string;
+  publishedAt: string;
+  source: string;
+  content?: string;
+};
+
+export type GeneratedBlogPost = {
+  title: string;
+  slug: string;
+  date: string;
+  excerpt: string;
+  readTime: string;
+  body: string;
+  imagePrompt: string;
+  sourceItems: NewsItem[];
+};
+
 export type ArticleArtifactMetadata = {
   artifactId: string;
   createdAt: string;
-  targetType: "topic";
-  keywordId: string;
-  keyword: string;
-  hubSlug: string;
-  clusterSlug: string;
+  targetType: "topic" | "blog";
+  keywordId?: string;
+  keyword?: string;
+  hubSlug?: string;
+  clusterSlug?: string;
   slug: string;
   title: string;
   date: string;

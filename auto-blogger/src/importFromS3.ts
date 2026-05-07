@@ -22,7 +22,9 @@ function safeTargetPath(workspaceRoot: string, relativePath: string): string {
 function assertAllowedTarget(relativePath: string): void {
   if (
     !relativePath.startsWith("website/content/topics/") &&
-    !relativePath.startsWith("website/public/topic-images/")
+    !relativePath.startsWith("website/public/topic-images/") &&
+    !relativePath.startsWith("website/content/blog/") &&
+    !relativePath.startsWith("website/public/blog/")
   ) {
     throw new Error(`Disallowed target path: ${relativePath}`);
   }

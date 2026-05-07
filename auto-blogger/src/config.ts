@@ -46,6 +46,8 @@ export type AutoBloggerConfig = {
   skipExistingTopicFiles: boolean;
   /** When true, import writes even if target paths already exist. */
   importOverwrite: boolean;
+  newsCycleEnabled: boolean;
+  newsCycleHour: number;
 };
 
 function parseIntEnv(name: string, fallback: number): number {
@@ -167,5 +169,7 @@ export function loadConfig(): AutoBloggerConfig {
     maxDiagrams: parseIntEnv("AUTO_BLOG_MAX_DIAGRAMS", 3),
     skipExistingTopicFiles: !boolEnv("AUTO_BLOG_ALLOW_TOPIC_OVERWRITE"),
     importOverwrite: boolEnv("AUTO_BLOG_IMPORT_OVERWRITE"),
+    newsCycleEnabled: boolEnv("AUTO_BLOG_NEWS_CYCLE_ENABLED"),
+    newsCycleHour: parseIntEnv("AUTO_BLOG_NEWS_CYCLE_HOUR", 10),
   };
 }
