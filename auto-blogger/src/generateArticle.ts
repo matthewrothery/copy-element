@@ -1,8 +1,8 @@
-import { generateObject } from "ai";
+import { generateObject, generateText } from "ai";
 import { anthropic } from "@ai-sdk/anthropic";
 import { openai } from "@ai-sdk/openai";
 import { z } from "zod";
-import { DiagramSpecSchema } from "./diagrams/schema.js";
+import { DiagramSpecSchema, type DiagramSpec } from "./diagrams/schema.js";
 import {
   GeneratedArticle,
   InternalLinkCandidate,
@@ -150,7 +150,12 @@ Context:
 - Reader: ${outline.object.targetReader}
 - Section headings: ${outline.object.sectionHeadings.join(" | ")}
 
-Requirements:
+CRITICAL BODY-COMPOSITION RULES (these must hold in the \`body\` string itself; satisfying the JSON schema is not enough):
+
+1. CITATIONS: The body MUST contain at least 4 inline markdown links of the form [anchor text](https://...) pointing to research source URLs from the list below. Embed them in the prose at the exact sentence where you reference each source's data, statistic, or claim. Never list them as a block. Skipping this is a hard failure.
+2. DIAGRAM SYNCHRONIZATION: For every entry you put in the \`diagrams\` array, the body MUST contain exactly one matching placeholder line of the form: {{DIAGRAM:<id>}}  where <id> matches the diagram's \`id\` field character-for-character. If you cannot place a diagram naturally in the body, do NOT include it in the diagrams array. The diagrams array and the placeholders in body must be in perfect 1:1 correspondence.
+
+Other requirements:
 - 1200-2000 words
 - markdown body only (no frontmatter)
 - start with a short upfront answer section before the first heading. Answer the keyword directly in a conversational way, like a helpful expert replying to a specific question. Keep it concise, concrete, and useful for AI summaries.
@@ -158,7 +163,6 @@ Requirements:
 - avoid generic filler
 - include links as plain markdown links where relevant
 - use 3-10 inline internal links from the provided existing internal link options. Never use more than 10 internal links. Choose only links that fit naturally in the paragraph.
-- you MUST include inline markdown links to 4-8 of the research source URLs listed below. Link to them naturally at the point where you reference their content — statistics, findings, or claims drawn from that source. Never list them as a block; embed them inline in the prose.
 - when using concrete statistics, benchmarks, survey findings, market numbers, dates, or data points, cite the source with a plain markdown link to the original source URL.
 - include concrete statistics or data where the research supports it. Keep data references native, organic, and human-readable, not a list of forced numbers.
 - do not include H1 title inside body
@@ -166,7 +170,6 @@ Requirements:
 - keep claims realistic
 - include at least one markdown comparison table when the topic compares approaches, tools, or workflows (for example manual DevTools vs extension-assisted capture).
 - add 1-3 programmatic diagrams when they clarify a workflow, comparison, or numbered process. Each diagram is data you output in the diagrams array (kind: flow | columns | steps), not SVG.
-- for each diagram you output, place its placeholder on its own line in the body: {{DIAGRAM:<id>}} where <id> matches that diagram's id field exactly (lowercase slug style, e.g. workflow, capture-flow).
 - optional short italic caption line immediately after a diagram placeholder is allowed.
 
 Also return an image prompt for a stencil street-art style cover image with bold minimal overlapping colors. No text in image.
@@ -176,8 +179,6 @@ Diagram kinds:
 - columns: 2-3 columns with a title and bullet-like rows per column (for contrasting methods).
 - steps: 3-7 numbered steps with short labels (horizontal layout).
 
-Every diagram must use a unique id and appear exactly once as {{DIAGRAM:id}} in the body.
-
 Research source URLs (link to 4-8 of these inline in the article body):
 ${sourceUrlList}
 
@@ -186,6 +187,11 @@ ${researchSummary}
 
 Existing internal link options:
 ${internalLinksSummary}
+
+BEFORE YOU FINISH, mentally verify against the body string you just wrote:
+(a) Does it contain at least 4 substrings of the form ](https://ANYTHING)? If not, add inline citations.
+(b) For each diagram \`id\` in your diagrams array, does the body contain the exact substring "{{DIAGRAM:" + id + "}}"? If not, either add the placeholder or remove the diagram from the array.
+Only emit your response once both checks pass.
 `;
 
   const draft = await generateObject({
@@ -201,9 +207,49 @@ ${internalLinksSummary}
     outputTokens: (outlineResult.usage?.completionTokens ?? 0) + (draft.usage?.completionTokens ?? 0),
   };
 
+  // Drop orphan diagram specs (no matching {{DIAGRAM:id}} placeholder in body).
+  // The model occasionally produces specs without embedding placeholders; without this filter,
+  // applyDiagramsToArticle would later emit a "no matching placeholder" warning per orphan.
+  const draftBody = draft.object.body.trim();
+  const draftDiagrams: DiagramSpec[] = (draft.object.diagrams ?? []).filter((d) =>
+    draftBody.includes(`{{DIAGRAM:${d.id}}}`)
+  );
+
+  // Citation remediation: if the model produced zero external markdown links, run a single
+  // text-mode follow-up that rewrites the body to embed inline citations. We do this rather
+  // than appending a "Sources" block because the editorial voice requires inline citations.
+  const externalLinkRe = /\]\(https?:\/\//g;
+  const hasExternalLinks = (draftBody.match(externalLinkRe)?.length ?? 0) >= 1;
+  let finalBody = draftBody;
+  if (!hasExternalLinks && input.research.length > 0) {
+    const remediation = await generateText({
+      model,
+      system,
+      prompt: `The article body below is missing inline source citations. Rewrite it so it contains 4-6 inline markdown links of the form [anchor](https://...) pointing to the most relevant URLs from the research source list. Embed each link in the prose at the exact sentence where you reference that source's claim, statistic, or finding. Do not add a "Sources" or "References" section. Do not add new paragraphs or change the structure. Preserve all existing internal links, diagram placeholders, headings, tables, and formatting. Output ONLY the rewritten markdown body — no preamble, no commentary, no fenced code block.
+
+Research source URLs:
+${sourceUrlList}
+
+Body to rewrite:
+---
+${draftBody}
+---`,
+      maxTokens: DRAFT_MAX_OUTPUT_TOKENS,
+    });
+    const rewritten = remediation.text.trim();
+    if ((rewritten.match(externalLinkRe)?.length ?? 0) >= 1) {
+      finalBody = rewritten;
+    }
+    tokenUsage.inputTokens += remediation.usage?.promptTokens ?? 0;
+    tokenUsage.outputTokens += remediation.usage?.completionTokens ?? 0;
+  }
+
   // Lock URL slug to list.md so paths align with keyword.id and we do not collide with sibling filenames.
   const slugSegment = input.keyword.id.split("/").pop() ?? "";
   const slug = sanitizeSlug(slugSegment || input.keyword.keyword);
+
+  // Re-filter diagrams against final body in case remediation removed any placeholders.
+  const finalDiagrams = draftDiagrams.filter((d) => finalBody.includes(`{{DIAGRAM:${d.id}}}`));
 
   return {
     article: {
@@ -223,9 +269,9 @@ ${internalLinksSummary}
           answer: item.answer,
         })),
       relatedSlugs: outline.object.relatedSlugs,
-      body: draft.object.body.trim(),
+      body: finalBody,
       imagePrompt: draft.object.imagePrompt.trim(),
-      diagrams: draft.object.diagrams ?? [],
+      diagrams: finalDiagrams,
     },
     tokenUsage,
   };
