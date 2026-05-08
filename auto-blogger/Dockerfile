@@ -1,21 +1,21 @@
-FROM node:24-alpine3.23 AS builder
+FROM node:24-slim AS builder
 
 WORKDIR /app
 
 COPY package.json package-lock.json* ./
-RUN npm ci
+RUN npm install --no-audit --no-fund
 
 COPY . .
 RUN npm run build
 
-FROM node:24-alpine3.23 AS runner
+FROM node:24-slim AS runner
 
 WORKDIR /app
 
 ENV NODE_ENV=production
 
 COPY package.json package-lock.json* ./
-RUN npm ci --omit=dev && npm cache clean --force
+RUN npm install --omit=dev --no-audit --no-fund && npm cache clean --force
 
 COPY --from=builder /app/dist ./dist
 COPY copywriter-prompt.md guide.md list.md rules.md ./
