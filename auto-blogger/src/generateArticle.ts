@@ -3,6 +3,7 @@ import { anthropic } from "@ai-sdk/anthropic";
 import { openai } from "@ai-sdk/openai";
 import { z } from "zod";
 import { DiagramSpecSchema, type DiagramSpec } from "./diagrams/schema.js";
+import { applyLinkPlaceholders, candidateId } from "./applyLinkPlaceholders.js";
 import {
   GeneratedArticle,
   InternalLinkCandidate,
@@ -37,6 +38,9 @@ const DraftSchema = z.object({
 /** Draft JSON includes a long markdown body; SDK default ~4096 completion tokens truncates before `body` is emitted (finishReason: length). */
 const DRAFT_MAX_OUTPUT_TOKENS = 8192;
 
+const MIN_INTERNAL_LINKS = 3;
+const MIN_EXTERNAL_LINKS = 3;
+
 function sanitizeSlug(input: string): string {
   return input
     .toLowerCase()
@@ -70,7 +74,7 @@ function summarizeResearch(research: ResearchResult[]): string {
     .map((item, idx) => {
       const snippet = item.content?.slice(0, 500) ?? item.snippet;
       const focus = item.focus === "statistics" ? "statistics/data" : "general";
-      return `Source ${idx + 1} (${focus})\nQuery: ${item.query ?? "n/a"}\nTitle: ${item.title}\nURL: ${item.url}\nSummary: ${snippet}`;
+      return `Source ${idx + 1} (${focus}) — cite as {{SRC:${idx + 1}|anchor text}}\nTitle: ${item.title}\nSummary: ${snippet}`;
     })
     .join("\n\n");
 }
@@ -81,13 +85,17 @@ function summarizeInternalLinks(candidates: InternalLinkCandidate[]): string {
   }
 
   return candidates
-    .map((candidate, idx) => {
-      const context = [candidate.topic, candidate.hubTitle, candidate.clusterTitle]
-        .filter(Boolean)
-        .join(" | ");
-      return `${idx + 1}. ${candidate.title} (${candidate.type})\nURL: ${candidate.url}\nTopic: ${context}`;
+    .map((candidate) => {
+      const id = candidateId(candidate);
+      const context = [candidate.hubTitle, candidate.clusterTitle].filter(Boolean).join(" / ");
+      return `- id: ${id} | "${candidate.title}" (${candidate.type})${context ? ` | ${context}` : ""}`;
     })
     .join("\n");
+}
+
+function countTokens(body: string, prefix: "LINK" | "SRC"): number {
+  const re = new RegExp(`\\{\\{${prefix}:`, "g");
+  return (body.match(re) ?? []).length;
 }
 
 export async function generateTopicArticle(input: {
@@ -100,7 +108,7 @@ export async function generateTopicArticle(input: {
   rules: string;
   research: ResearchResult[];
   internalLinkCandidates: InternalLinkCandidate[];
-}): Promise<{ article: GeneratedArticle; tokenUsage: TokenUsage }> {
+}): Promise<{ article: GeneratedArticle; tokenUsage: TokenUsage; resolutionWarnings: string[] }> {
   const model = createTextModel(input.textProvider, input.model);
   const system = buildSystemPrompt(input.copywriterPrompt, input.guide, input.rules);
   const researchSummary = summarizeResearch(input.research);
@@ -134,10 +142,6 @@ Return:
   });
   const outline = outlineResult;
 
-  const sourceUrlList = input.research
-    .map((item, idx) => `${idx + 1}. ${item.url} — ${item.title}`)
-    .join("\n");
-
   const draftPrompt = `
 Write a comprehensive topic article.
 
@@ -152,8 +156,9 @@ Context:
 
 CRITICAL BODY-COMPOSITION RULES (these must hold in the \`body\` string itself; satisfying the JSON schema is not enough):
 
-1. CITATIONS: The body MUST contain at least 4 inline markdown links of the form [anchor text](https://...) pointing to research source URLs from the list below. Embed them in the prose at the exact sentence where you reference each source's data, statistic, or claim. Never list them as a block. Skipping this is a hard failure.
-2. DIAGRAM SYNCHRONIZATION: For every entry you put in the \`diagrams\` array, the body MUST contain exactly one matching placeholder line of the form: {{DIAGRAM:<id>}}  where <id> matches the diagram's \`id\` field character-for-character. If you cannot place a diagram naturally in the body, do NOT include it in the diagrams array. The diagrams array and the placeholders in body must be in perfect 1:1 correspondence.
+1. CITATIONS: To cite a research source, emit \`{{SRC:<n>|<anchor text>}}\` inline at the sentence where you reference that source's claim. \`<n>\` is the source's number from the research list below (1-based). The body MUST contain at least ${MIN_EXTERNAL_LINKS} \`{{SRC:\` tokens; aim for 4-6. Skipping this is a hard failure. Never list sources as a block.
+2. INTERNAL LINKS: To link to existing site content, emit \`{{LINK:<id>|<anchor text>}}\` inline. \`<id>\` is the id from the internal-link candidate list below. The body MUST contain at least ${MIN_INTERNAL_LINKS} \`{{LINK:\` tokens; aim for 4-8. Choose ids only from the provided list — do not invent new ones.
+3. DIAGRAM SYNCHRONIZATION: For every entry you put in the \`diagrams\` array, the body MUST contain exactly one matching placeholder line of the form \`{{DIAGRAM:<id>}}\` where \`<id>\` matches the diagram's \`id\` field character-for-character. If you cannot place a diagram naturally in the body, do NOT include it in the diagrams array.
 
 Other requirements:
 - 1200-2000 words
@@ -161,10 +166,9 @@ Other requirements:
 - start with a short upfront answer section before the first heading. Answer the keyword directly in a conversational way, like a helpful expert replying to a specific question. Keep it concise, concrete, and useful for AI summaries.
 - practical examples and steps
 - avoid generic filler
-- include links as plain markdown links where relevant
-- use 3-10 inline internal links from the provided existing internal link options. Never use more than 10 internal links. Choose only links that fit naturally in the paragraph.
-- when using concrete statistics, benchmarks, survey findings, market numbers, dates, or data points, cite the source with a plain markdown link to the original source URL.
+- when using concrete statistics, benchmarks, survey findings, market numbers, dates, or data points, cite the source with a \`{{SRC:<n>|...}}\` placeholder.
 - include concrete statistics or data where the research supports it. Keep data references native, organic, and human-readable, not a list of forced numbers.
+- never include raw \`https://\` URLs or raw \`/topics/...\` paths in the body — always use the placeholder syntax.
 - do not include H1 title inside body
 - do not put FAQ content in the markdown body. Never use headings like ## FAQ, ### FAQ, or "Frequently asked questions", and do not duplicate Q&A lists in prose. FAQ items are supplied separately from the outline and become YAML frontmatter only; the published page renders them once below the article.
 - keep claims realistic
@@ -179,19 +183,17 @@ Diagram kinds:
 - columns: 2-3 columns with a title and bullet-like rows per column (for contrasting methods).
 - steps: 3-7 numbered steps with short labels (horizontal layout).
 
-Research source URLs (link to 4-8 of these inline in the article body):
-${sourceUrlList}
-
-Research context:
+Research context (cite via {{SRC:<n>|...}} where n is the Source number):
 ${researchSummary}
 
-Existing internal link options:
+Internal-link candidates (use the id field in {{LINK:<id>|...}}):
 ${internalLinksSummary}
 
 BEFORE YOU FINISH, mentally verify against the body string you just wrote:
-(a) Does it contain at least 4 substrings of the form ](https://ANYTHING)? If not, add inline citations.
-(b) For each diagram \`id\` in your diagrams array, does the body contain the exact substring "{{DIAGRAM:" + id + "}}"? If not, either add the placeholder or remove the diagram from the array.
-Only emit your response once both checks pass.
+(a) Does it contain at least ${MIN_EXTERNAL_LINKS} \`{{SRC:\` substrings? If not, add inline citations.
+(b) Does it contain at least ${MIN_INTERNAL_LINKS} \`{{LINK:\` substrings? If not, add inline internal links.
+(c) For each diagram \`id\` in your diagrams array, does the body contain \`{{DIAGRAM:\` + id + \`}}\`? If not, add the placeholder or remove the diagram.
+Only emit your response once all three checks pass.
 `;
 
   const draft = await generateObject({
@@ -207,49 +209,72 @@ Only emit your response once both checks pass.
     outputTokens: (outlineResult.usage?.completionTokens ?? 0) + (draft.usage?.completionTokens ?? 0),
   };
 
+  let workingBody = draft.object.body.trim();
+
   // Drop orphan diagram specs (no matching {{DIAGRAM:id}} placeholder in body).
-  // The model occasionally produces specs without embedding placeholders; without this filter,
-  // applyDiagramsToArticle would later emit a "no matching placeholder" warning per orphan.
-  const draftBody = draft.object.body.trim();
-  const draftDiagrams: DiagramSpec[] = (draft.object.diagrams ?? []).filter((d) =>
-    draftBody.includes(`{{DIAGRAM:${d.id}}}`)
+  let workingDiagrams: DiagramSpec[] = (draft.object.diagrams ?? []).filter((d) =>
+    workingBody.includes(`{{DIAGRAM:${d.id}}}`)
   );
 
-  // Citation remediation: if the model produced zero external markdown links, run a single
-  // text-mode follow-up that rewrites the body to embed inline citations. We do this rather
-  // than appending a "Sources" block because the editorial voice requires inline citations.
-  const externalLinkRe = /\]\(https?:\/\//g;
-  const hasExternalLinks = (draftBody.match(externalLinkRe)?.length ?? 0) >= 1;
-  let finalBody = draftBody;
-  if (!hasExternalLinks && input.research.length > 0) {
+  // Combined remediation: if either {{LINK:}} or {{SRC:}} count is below the floor, run
+  // a single text rewrite that adds the missing placeholders. Cheaper than re-drafting and
+  // bounded — we only accept the rewrite if both floors are met.
+  const initialInternal = countTokens(workingBody, "LINK");
+  const initialExternal = countTokens(workingBody, "SRC");
+  const internalShortfall = Math.max(0, MIN_INTERNAL_LINKS - initialInternal);
+  const externalShortfall = Math.max(0, MIN_EXTERNAL_LINKS - initialExternal);
+  const needsRemediation =
+    (internalShortfall > 0 && input.internalLinkCandidates.length > 0) ||
+    (externalShortfall > 0 && input.research.length > 0);
+
+  if (needsRemediation) {
     const remediation = await generateText({
       model,
       system,
-      prompt: `The article body below is missing inline source citations. Rewrite it so it contains 4-6 inline markdown links of the form [anchor](https://...) pointing to the most relevant URLs from the research source list. Embed each link in the prose at the exact sentence where you reference that source's claim, statistic, or finding. Do not add a "Sources" or "References" section. Do not add new paragraphs or change the structure. Preserve all existing internal links, diagram placeholders, headings, tables, and formatting. Output ONLY the rewritten markdown body — no preamble, no commentary, no fenced code block.
+      prompt: `The article body below is missing inline link placeholders. Rewrite it to add ${externalShortfall} more {{SRC:<n>|anchor}} citation${externalShortfall === 1 ? "" : "s"} and ${internalShortfall} more {{LINK:<id>|anchor}} internal link${internalShortfall === 1 ? "" : "s"}. Embed each one inline in the prose at a sentence where it makes natural sense.
 
-Research source URLs:
-${sourceUrlList}
+Rules:
+- use only ids from the candidate list and only source numbers from the research list below
+- do not add a "Sources" or "References" section
+- preserve all existing placeholders (\`{{LINK:\`, \`{{SRC:\`, \`{{DIAGRAM:\`), headings, tables, and structure
+- never include raw URLs or \`/topics/...\` paths
+- output ONLY the rewritten markdown body — no preamble, no commentary, no fenced code block
+
+Research sources:
+${researchSummary}
+
+Internal-link candidates:
+${internalLinksSummary}
 
 Body to rewrite:
 ---
-${draftBody}
+${workingBody}
 ---`,
       maxTokens: DRAFT_MAX_OUTPUT_TOKENS,
     });
     const rewritten = remediation.text.trim();
-    if ((rewritten.match(externalLinkRe)?.length ?? 0) >= 1) {
-      finalBody = rewritten;
+    if (
+      countTokens(rewritten, "LINK") >= MIN_INTERNAL_LINKS &&
+      countTokens(rewritten, "SRC") >= MIN_EXTERNAL_LINKS
+    ) {
+      workingBody = rewritten;
+      // Re-filter diagrams in case the rewrite dropped a placeholder.
+      workingDiagrams = workingDiagrams.filter((d) => workingBody.includes(`{{DIAGRAM:${d.id}}}`));
     }
     tokenUsage.inputTokens += remediation.usage?.promptTokens ?? 0;
     tokenUsage.outputTokens += remediation.usage?.completionTokens ?? 0;
   }
 
+  // Substitute {{LINK:}} and {{SRC:}} placeholders with real markdown links.
+  const resolution = applyLinkPlaceholders(
+    workingBody,
+    input.internalLinkCandidates,
+    input.research
+  );
+
   // Lock URL slug to list.md so paths align with keyword.id and we do not collide with sibling filenames.
   const slugSegment = input.keyword.id.split("/").pop() ?? "";
   const slug = sanitizeSlug(slugSegment || input.keyword.keyword);
-
-  // Re-filter diagrams against final body in case remediation removed any placeholders.
-  const finalDiagrams = draftDiagrams.filter((d) => finalBody.includes(`{{DIAGRAM:${d.id}}}`));
 
   return {
     article: {
@@ -269,10 +294,11 @@ ${draftBody}
           answer: item.answer,
         })),
       relatedSlugs: outline.object.relatedSlugs,
-      body: finalBody,
+      body: resolution.body,
       imagePrompt: draft.object.imagePrompt.trim(),
-      diagrams: finalDiagrams,
+      diagrams: workingDiagrams,
     },
     tokenUsage,
+    resolutionWarnings: resolution.warnings,
   };
 }

@@ -1,4 +1,4 @@
-import { GeneratedArticle, ResearchResult } from "./types.js";
+import { GeneratedArticle } from "./types.js";
 
 /** Plain intro before any H2, or narrative under a leading "## Quick Answer"-style heading. */
 const MIN_UPFRONT_CHARS = 100;
@@ -40,8 +40,7 @@ const BANNED_PHRASES = [
 
 export function validateArticleQuality(
   article: GeneratedArticle,
-  usedSlugs: Set<string>,
-  research: ResearchResult[] = []
+  usedSlugs: Set<string>
 ): string[] {
   const issues: string[] = [];
   const lowerBody = article.body.toLowerCase();
@@ -65,8 +64,15 @@ export function validateArticleQuality(
     issues.push(`Too many internal links: ${internalLinkCount}. Maximum is 10.`);
   }
 
-  if (research.some((item) => item.focus === "statistics") && externalSourceLinkCount === 0) {
-    issues.push("Article should cite at least one external source when statistics/data research is available.");
+  if (externalSourceLinkCount < 3) {
+    issues.push(
+      `Article has only ${externalSourceLinkCount} external citation${externalSourceLinkCount === 1 ? "" : "s"}; minimum is 3.`
+    );
+  }
+  if (internalLinkCount < 3) {
+    issues.push(
+      `Article has only ${internalLinkCount} internal link${internalLinkCount === 1 ? "" : "s"}; minimum is 3.`
+    );
   }
 
   for (const phrase of BANNED_PHRASES) {

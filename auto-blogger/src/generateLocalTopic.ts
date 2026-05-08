@@ -155,7 +155,7 @@ async function main(): Promise<void> {
     keyword
   );
 
-  const { article: draftArticle } = await generateTopicArticle({
+  const { article: draftArticle, resolutionWarnings } = await generateTopicArticle({
     keyword,
     date,
     textProvider: config.textProvider,
@@ -170,8 +170,9 @@ async function main(): Promise<void> {
   const diagramPass = applyDiagramsToArticle(draftArticle, config.maxDiagrams);
 
   const qualityWarnings = [
-    ...validateArticleQuality(diagramPass.article, new Set(), research),
+    ...validateArticleQuality(diagramPass.article, new Set()),
     ...diagramPass.warnings,
+    ...resolutionWarnings,
   ];
   if (qualityWarnings.length > 0) {
     console.warn(`Quality warnings (${qualityWarnings.length}):\n- ${qualityWarnings.join("\n- ")}`);

@@ -56,7 +56,7 @@ async function runSingleCycle(): Promise<void> {
     throw new Error("Research step returned no results.");
   }
 
-  const { article: draftArticle, tokenUsage } = await generateTopicArticle({
+  const { article: draftArticle, tokenUsage, resolutionWarnings } = await generateTopicArticle({
     keyword,
     date: today,
     textProvider: config.textProvider,
@@ -71,8 +71,9 @@ async function runSingleCycle(): Promise<void> {
   const diagramPass = applyDiagramsToArticle(draftArticle, config.maxDiagrams);
 
   const qualityWarnings = [
-    ...validateArticleQuality(diagramPass.article, usedSlugs, research),
+    ...validateArticleQuality(diagramPass.article, usedSlugs),
     ...diagramPass.warnings,
+    ...resolutionWarnings,
   ];
   if (qualityWarnings.length > 0) {
     console.warn(`Quality warnings (${qualityWarnings.length}):\n- ${qualityWarnings.join("\n- ")}`);
