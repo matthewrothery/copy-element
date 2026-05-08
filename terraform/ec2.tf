@@ -119,6 +119,10 @@ locals {
     AUTO_BLOG_IMAGE_STYLE="stencil"
     AUTO_BLOG_IMAGE_PALETTE="vibrant"
 
+    # News cycle (one news-roundup post per day, sourced from Google News RSS)
+    AUTO_BLOG_NEWS_CYCLE_ENABLED="true"
+    AUTO_BLOG_NEWS_CYCLE_HOUR="10"
+
     NODE_ENV=production
   EOT
 
