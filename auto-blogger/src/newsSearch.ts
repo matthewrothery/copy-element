@@ -1,19 +1,33 @@
 import httpcloak from "httpcloak";
 import { NewsItem } from "./types.js";
+import { extractReadableContent } from "./extractContent.js";
 
 export const NEWS_QUERIES = [
-  "vibe coding AI",
-  "AI UI tools",
-  "cursor windsurf AI coding",
-  "AI agent frontend development",
+  "vibe coding",
+  "vibe code",
+  "ui capture",
+  "building ui with ai",
+  "design with ai",
+  "ai ui generation",
+  "ai frontend tools",
+  "cursor windsurf",
+  "ai coding agents",
 ];
 
-const CHROME_PRESETS = [
-  "chrome-146",
-  "chrome-145",
-  "chrome-144",
-  "chrome-143",
-] as const;
+export const NEWS_RECENCY_HOURS = 24;
+
+const EXCLUDED_DOMAINS = [
+  "youtube.com",
+  "reddit.com",
+  "pinterest.com",
+  "amazon.com",
+  "facebook.com",
+  "twitter.com",
+  "x.com",
+  "tiktok.com",
+];
+
+const CHROME_PRESETS = ["chrome-146", "chrome-145", "chrome-144", "chrome-143"] as const;
 
 function randomPreset(): string {
   return CHROME_PRESETS[Math.floor(Math.random() * CHROME_PRESETS.length)];
@@ -44,71 +58,81 @@ async function fetchText(session: InstanceType<typeof httpcloak.Session>, url: s
   return response.text ?? "";
 }
 
-async function fetchContent(url: string): Promise<string | undefined> {
+/**
+ * Map an arbitrary recency window in hours to Bing's `qft=+filterui:age-...`
+ * date bucket. Bing only supports these four buckets.
+ */
+function bingAgeFilter(hours: number): string {
+  if (hours <= 24) return "age-lt24h";
+  if (hours <= 24 * 7) return "age-lt7d";
+  if (hours <= 24 * 30) return "age-lt1month";
+  return "age-lt1year";
+}
+
+function buildExclusionSuffix(): string {
+  return EXCLUDED_DOMAINS.map((d) => `-site:${d}`).join(" ");
+}
+
+function isExcludedUrl(url: string): boolean {
   try {
-    const session = createSession();
-    const html = await fetchText(session, url);
-    return stripTags(html).slice(0, 7000);
+    const host = new URL(url).hostname.toLowerCase();
+    return EXCLUDED_DOMAINS.some((d) => host === d || host.endsWith(`.${d}`));
   } catch {
-    return undefined;
+    return true;
   }
 }
 
-function parseGoogleNewsRss(xml: string): NewsItem[] {
+function parseBingResults(html: string): NewsItem[] {
   const items: NewsItem[] = [];
-  const itemBlocks = [...xml.matchAll(/<item>([\s\S]*?)<\/item>/g)];
+  const seen = new Set<string>();
+  // Bing wraps each organic result in <li class="b_algo"> ... <h2><a href="...">title</a></h2>
+  const blocks = [...html.matchAll(/<li[^>]*class="[^"]*b_algo[^"]*"[^>]*>([\s\S]*?)<\/li>/g)];
+  for (const block of blocks) {
+    const inner = block[1] ?? "";
+    const anchorMatch = inner.match(/<h2[^>]*>\s*<a[^>]+href="([^"]+)"[^>]*>([\s\S]*?)<\/a>/);
+    if (!anchorMatch) continue;
+    const url = decodeHtmlEntities(anchorMatch[1] ?? "").trim();
+    const title = decodeHtmlEntities(stripTags(anchorMatch[2] ?? ""));
+    if (!url || !title || seen.has(url)) continue;
+    if (!/^https?:\/\//i.test(url)) continue;
+    if (isExcludedUrl(url)) continue;
+    seen.add(url);
 
-  for (const block of itemBlocks) {
-    const content = block[1] ?? "";
-
-    const titleMatch =
-      content.match(/<title><!\[CDATA\[([\s\S]*?)\]\]><\/title>/) ??
-      content.match(/<title>([\s\S]*?)<\/title>/);
-    const linkMatch = content.match(/<link>([\s\S]*?)<\/link>/);
-    const pubDateMatch = content.match(/<pubDate>([\s\S]*?)<\/pubDate>/);
-    const sourceMatch = content.match(/<source[^>]*>([\s\S]*?)<\/source>/);
-
-    const title = decodeHtmlEntities(stripTags(titleMatch?.[1] ?? ""));
-    const url = decodeHtmlEntities((linkMatch?.[1] ?? "").trim());
-    const publishedAt = (pubDateMatch?.[1] ?? "").trim();
-    const source = decodeHtmlEntities(stripTags(sourceMatch?.[1] ?? ""));
-
-    if (title && url) {
-      items.push({ title, url, publishedAt, source });
+    let source = "";
+    try {
+      source = new URL(url).hostname.replace(/^www\./, "");
+    } catch {
+      // ignore
     }
-  }
 
+    items.push({ title, url, publishedAt: "", source });
+  }
   return items;
 }
 
-export async function fetchGoogleNewsRss(query: string): Promise<NewsItem[]> {
-  const url = `https://news.google.com/rss/search?q=${encodeURIComponent(query)}&hl=en-AU&gl=AU&ceid=AU:en`;
+export async function fetchBingResults(query: string): Promise<NewsItem[]> {
+  const exclusion = buildExclusionSuffix();
+  const fullQuery = `${query} ${exclusion}`.trim();
+  const ageFilter = bingAgeFilter(NEWS_RECENCY_HOURS);
+  const url =
+    `https://www.bing.com/search?q=${encodeURIComponent(fullQuery)}` +
+    `&qft=${encodeURIComponent("+filterui:" + ageFilter)}&form=QBRE&cc=au&setlang=en`;
   const session = createSession();
-  const xml = await fetchText(session, url);
-  return parseGoogleNewsRss(xml);
-}
-
-function isWithin48Hours(pubDateStr: string): boolean {
-  if (!pubDateStr) return false;
-  try {
-    const pub = new Date(pubDateStr).getTime();
-    const cutoff = Date.now() - 48 * 60 * 60 * 1000;
-    return pub >= cutoff;
-  } catch {
-    return false;
-  }
+  const html = await fetchText(session, url);
+  return parseBingResults(html);
 }
 
 export async function fetchNewsItems(limit = 6): Promise<NewsItem[]> {
-  const results = await Promise.allSettled(
-    NEWS_QUERIES.map((q) => fetchGoogleNewsRss(q))
-  );
+  const results = await Promise.allSettled(NEWS_QUERIES.map((q) => fetchBingResults(q)));
 
   const seenUrls = new Set<string>();
   const allItems: NewsItem[] = [];
 
   for (const result of results) {
-    if (result.status !== "fulfilled") continue;
+    if (result.status !== "fulfilled") {
+      console.warn(`[news] Bing query failed: ${result.reason}`);
+      continue;
+    }
     for (const item of result.value) {
       if (!item.url || seenUrls.has(item.url)) continue;
       seenUrls.add(item.url);
@@ -116,15 +140,11 @@ export async function fetchNewsItems(limit = 6): Promise<NewsItem[]> {
     }
   }
 
-  const recent = allItems
-    .filter((item) => isWithin48Hours(item.publishedAt))
-    .sort((a, b) => new Date(b.publishedAt).getTime() - new Date(a.publishedAt).getTime());
-
-  const top = recent.slice(0, limit);
+  const top = allItems.slice(0, limit);
 
   const enriched: NewsItem[] = [];
   for (const item of top) {
-    const content = await fetchContent(item.url);
+    const content = await extractReadableContent(item.url);
     enriched.push({ ...item, content });
   }
 

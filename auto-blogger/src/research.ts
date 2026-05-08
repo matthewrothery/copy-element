@@ -1,4 +1,5 @@
 import { ResearchResult } from "./types.js";
+import { extractReadableContent } from "./extractContent.js";
 
 const USER_AGENT =
   "Mozilla/5.0 (compatible; ElementArmoryAutoBlogger/1.0; +https://elementarmory.com)";
@@ -51,12 +52,7 @@ async function fetchHtml(url: string): Promise<string> {
 }
 
 async function fetchContent(url: string): Promise<string | undefined> {
-  try {
-    const html = await fetchHtml(url);
-    return stripTags(html).slice(0, 7000);
-  } catch {
-    return undefined;
-  }
+  return extractReadableContent(url);
 }
 
 async function searchDuckDuckGo(

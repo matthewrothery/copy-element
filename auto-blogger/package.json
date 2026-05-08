@@ -19,14 +19,17 @@
     "@aws-sdk/client-ses": "^3.1009.0",
     "@aws-sdk/s3-request-presigner": "^3.1009.0",
     "@google/genai": "^1.51.0",
+    "@mozilla/readability": "^0.6.0",
     "@zhafron/mcp-web-search": "^1.2.3",
     "ai": "^4.0.0",
     "dotenv": "^16.0.0",
     "httpcloak": "^1.6.5",
+    "jsdom": "^29.1.1",
     "marked": "^17.0.5",
     "zod": "^3.0.0"
   },
   "devDependencies": {
+    "@types/jsdom": "^28.0.1",
     "@types/node": "^22.0.0",
     "tsx": "^4.0.0",
     "typescript": "^5.0.0"

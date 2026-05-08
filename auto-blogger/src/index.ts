@@ -161,7 +161,8 @@ async function runNewsCycle(): Promise<void> {
   console.log("[news] Fetching news items...");
   const items = await fetchNewsItems(6);
   if (items.length === 0) {
-    throw new Error("[news] No recent news items found (within 48h).");
+    console.warn("[news] No recent news items found; skipping cycle.");
+    return;
   }
   console.log(`[news] Fetched ${items.length} items.`);
 
