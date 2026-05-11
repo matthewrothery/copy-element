@@ -1,4 +1,5 @@
 ---
+listKeywordId: "ai-coding-workflows/claude-code-workflows/use-ui-with-claude-code"
 hub: ai-coding-workflows
 hubTitle: "AI Coding Workflows"
 cluster: claude-code-workflows
@@ -9,6 +10,7 @@ date: "2026-05-11"
 author: "Element Armory Team"
 excerpt: "Learn how to capture clean HTML and CSS from live UI, give it to Claude Code, and turn concrete interface references into better frontend output."
 readTime: "7 min read"
+coverImage: "/topic-images/ai-coding-workflows/claude-code-workflows/use-ui-with-claude-code.png"
 faq:
   - question: "Can I paste captured HTML and CSS directly into Claude Code?"
     answer: "Yes. Claude Code works best when the HTML is focused and the CSS is clean. Element Armory captures the rendered component structure and computed styles so Claude Code can adapt the UI without guessing from a screenshot."

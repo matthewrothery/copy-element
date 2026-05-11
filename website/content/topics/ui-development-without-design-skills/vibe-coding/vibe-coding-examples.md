@@ -1,4 +1,5 @@
 ---
+listKeywordId: "ui-development-without-design-skills/vibe-coding/vibe-coding-examples"
 hub: ui-development-without-design-skills
 hubTitle: "UI Development Without Design Skills"
 cluster: vibe-coding
@@ -9,6 +10,7 @@ date: "2026-05-11"
 author: "Element Armory Team"
 excerpt: "See practical vibe coding examples for landing pages, dashboards, forms, and onboarding flows using AI tools, captured UI references, and fast iteration."
 readTime: "7 min read"
+coverImage: "/topic-images/ui-development-without-design-skills/vibe-coding/vibe-coding-examples.png"
 faq:
   - question: "Do I need design skills to vibe code UI?"
     answer: "No. You need a clear target, useful references, and a willingness to iterate. UI capture tools help by turning real interface patterns into concrete context for AI tools."
