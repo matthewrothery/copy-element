@@ -28,6 +28,17 @@ relatedSlugs:
   - browser-devtools-css-inspection
   - common-css-mistakes
   - responsive-design-debugging
+linkKeywords:
+  - "css debugging workflow"
+  - "systematic css troubleshooting"
+  - "finding css problems fast"
+  - "css selector and specificity issues"
+  - "why css silently fails"
+  - "devtools css inspection method"
+  - "css file path problems"
+  - "cascade and specificity conflicts"
+  - "css rule override detection"
+  - "diagnosing broken css rules"
 ---
 
 ## Quick Answer

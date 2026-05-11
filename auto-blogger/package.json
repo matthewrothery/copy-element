@@ -10,6 +10,7 @@
     "start": "node dist/index.js",
     "import": "tsx src/importFromS3.ts",
     "import:prod": "node dist/importFromS3.js",
+    "bootstrap-link-keywords": "tsx src/bootstrapLinkKeywords.ts",
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {

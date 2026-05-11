@@ -27,6 +27,19 @@ relatedSlugs:
   - /topics/tool-alternatives/css-scan-alternative/css-scan-alternative
   - /topics/ai-coding-workflows/cursor-workflows/use-ui-with-cursor-ai
   - /topics/ui-development-without-design-skills/copy-vs-design/copying-ui-legally
+linkKeywords:
+  - "extract css from any website"
+  - "copying website css quickly"
+  - "automated css extraction tools"
+  - "capture css from live sites"
+  - "css extraction without manual work"
+  - "browser tools for css copying"
+  - "fast website css capture"
+  - "extracting styles from websites"
+  - "css scraping made simple"
+  - "automated style extraction methods"
+  - "pull css from web pages"
+  - "instant css from websites"
 ---
 
 ## Quick Answer

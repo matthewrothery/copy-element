@@ -29,6 +29,13 @@ relatedSlugs:
   - claude-code-ui-integration
   - component-reuse-libraries
   - ui-patterns-reverse-engineering
+linkKeywords:
+  - "extracting html and css from live sites"
+  - "feed real code into ai tools"
+  - "show ai the actual website code"
+  - "paste production ui into cursor"
+  - "give ai real code examples"
+  - "ai learns faster from actual ui"
 ---
 
 ## The Direct Answer

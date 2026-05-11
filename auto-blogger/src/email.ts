@@ -1,6 +1,6 @@
 import { SendEmailCommand, SESClient } from "@aws-sdk/client-ses";
 import { marked } from "marked";
-import { ArticleArtifact, TokenUsage } from "./types.js";
+import { ArticleArtifact, BackfillSummary, TokenUsage } from "./types.js";
 
 function escapeHtml(text: string): string {
   return text
@@ -16,6 +16,51 @@ function qualityWarningsBlockHtml(warnings: string[]): string {
       <h2 style="color: #b45309;">Quality warnings</h2>
       <p style="color: #92400e;">Review before publishing. Generation continued so you can edit and reuse this copy.</p>
       <ul style="color: #92400e;">${items}</ul>`;
+}
+
+function backfillBlockHtml(summary: BackfillSummary | undefined): string {
+  if (!summary) return "";
+  if (summary.filesChanged === 0) {
+    return `<h2>Internal-link backfill</h2><p>No changes (no lexical matches in existing articles).</p>`;
+  }
+  const sha = summary.commitSha ? ` <code>${escapeHtml(summary.commitSha.slice(0, 7))}</code>` : "";
+  const pushedNote = summary.commitSha && !summary.pushed
+    ? `<p style="color: #b45309;">Auto-push failed; commit is local on the runner.</p>`
+    : "";
+  const fileItems = summary.perFile
+    .map((f) => {
+      const anchors = f.addedTargets.map((t) => `"${escapeHtml(t.anchor)}"`).join(", ");
+      return `<li><code>${escapeHtml(f.path)}</code> &mdash; ${anchors}</li>`;
+    })
+    .join("");
+  const warnBlock = summary.warnings.length
+    ? `<h3 style="color: #b45309;">Backfill warnings</h3><ul style="color: #92400e;">${summary.warnings.map((w) => `<li>${escapeHtml(w)}</li>`).join("")}</ul>`
+    : "";
+  return `
+      <h2>Internal-link backfill</h2>
+      <p>Added ${summary.linksAdded} internal link${summary.linksAdded === 1 ? "" : "s"} across ${summary.filesChanged} file${summary.filesChanged === 1 ? "" : "s"}${sha}.</p>
+      ${pushedNote}
+      <ul>${fileItems}</ul>
+      ${warnBlock}`;
+}
+
+function backfillBlockText(summary: BackfillSummary | undefined): string[] {
+  if (!summary) return [];
+  if (summary.filesChanged === 0) return ["", "Internal-link backfill: no changes."];
+  const lines = [
+    "",
+    `Internal-link backfill: added ${summary.linksAdded} link(s) across ${summary.filesChanged} file(s)` +
+      (summary.commitSha ? ` (commit ${summary.commitSha.slice(0, 7)}${summary.pushed ? ", pushed" : ", LOCAL — auto-push failed"})` : ""),
+  ];
+  for (const f of summary.perFile) {
+    const anchors = f.addedTargets.map((t) => `"${t.anchor}"`).join(", ");
+    lines.push(`- ${f.path}: ${anchors}`);
+  }
+  if (summary.warnings.length) {
+    lines.push("Backfill warnings:");
+    for (const w of summary.warnings) lines.push(`- ${w}`);
+  }
+  return lines;
 }
 
 type ModelPricing = { inputPerMTok: number; outputPerMTok: number };
@@ -64,6 +109,7 @@ function buildHtml(input: {
   imageUrl?: string;
   model: string;
   tokenUsage?: TokenUsage;
+  backfill?: BackfillSummary;
 }): string {
   const articleHtml = marked.parse(input.artifact.articleMarkdown) as string;
   const sourceList = input.artifact.metadata.sourceUrls
@@ -91,6 +137,7 @@ function buildHtml(input: {
       }
       <h2>Generated Copy</h2>
       <div>${articleHtml}</div>
+      ${backfillBlockHtml(input.backfill)}
       <h2>Source URLs</h2>
       <ul>${sourceList}</ul>
       <h2>Artifact Metadata</h2>
@@ -109,7 +156,12 @@ function buildHtml(input: {
   </html>`;
 }
 
-function buildText(artifact: ArticleArtifact, model: string, tokenUsage?: TokenUsage): string {
+function buildText(
+  artifact: ArticleArtifact,
+  model: string,
+  tokenUsage?: TokenUsage,
+  backfill?: BackfillSummary
+): string {
   const warningsBlock =
     artifact.metadata.qualityWarnings && artifact.metadata.qualityWarnings.length > 0
       ? [
@@ -135,10 +187,51 @@ function buildText(artifact: ArticleArtifact, model: string, tokenUsage?: TokenU
       : []),
     ...warningsBlock,
     artifact.articleMarkdown,
+    ...backfillBlockText(backfill),
     "",
     "Source URLs:",
     ...artifact.metadata.sourceUrls,
   ].join("\n");
+}
+
+export async function sendBackfillNotification(input: {
+  to: string;
+  from: string;
+  importedSlugs: string[];
+  summary: BackfillSummary;
+}): Promise<void> {
+  const client = getClient();
+  const subject =
+    input.summary.filesChanged === 0
+      ? `Backfill: no changes for ${input.importedSlugs.length} imported article(s)`
+      : `Backfill: +${input.summary.linksAdded} link(s) across ${input.summary.filesChanged} file(s)`;
+  const importedList = input.importedSlugs.map((s) => `<li>${escapeHtml(s)}</li>`).join("");
+  const html = `<html><body style="font-family: Arial, sans-serif; line-height: 1.6; color: #111827;">
+    <h1>${escapeHtml(subject)}</h1>
+    <h2>Imported articles</h2>
+    <ul>${importedList}</ul>
+    ${backfillBlockHtml(input.summary)}
+  </body></html>`;
+  const text = [
+    subject,
+    "",
+    "Imported articles:",
+    ...input.importedSlugs.map((s) => `- ${s}`),
+    ...backfillBlockText(input.summary),
+  ].join("\n");
+  await client.send(
+    new SendEmailCommand({
+      Source: input.from,
+      Destination: { ToAddresses: [input.to] },
+      Message: {
+        Subject: { Data: subject, Charset: "UTF-8" },
+        Body: {
+          Html: { Data: html, Charset: "UTF-8" },
+          Text: { Data: text, Charset: "UTF-8" },
+        },
+      },
+    })
+  );
 }
 
 export async function sendArticleNotification(input: {
@@ -149,6 +242,7 @@ export async function sendArticleNotification(input: {
   imageUrl?: string;
   tokenUsage?: TokenUsage;
   subjectPrefix?: string;
+  backfill?: BackfillSummary;
 }): Promise<void> {
   const client = getClient();
   await client.send(
@@ -160,8 +254,8 @@ export async function sendArticleNotification(input: {
       Message: {
         Subject: { Data: buildSubject(input.artifact, input.subjectPrefix), Charset: "UTF-8" },
         Body: {
-          Html: { Data: buildHtml({ artifact: input.artifact, imageUrl: input.imageUrl, model: input.model, tokenUsage: input.tokenUsage }), Charset: "UTF-8" },
-          Text: { Data: buildText(input.artifact, input.model, input.tokenUsage), Charset: "UTF-8" },
+          Html: { Data: buildHtml({ artifact: input.artifact, imageUrl: input.imageUrl, model: input.model, tokenUsage: input.tokenUsage, backfill: input.backfill }), Charset: "UTF-8" },
+          Text: { Data: buildText(input.artifact, input.model, input.tokenUsage, input.backfill), Charset: "UTF-8" },
         },
       },
     })

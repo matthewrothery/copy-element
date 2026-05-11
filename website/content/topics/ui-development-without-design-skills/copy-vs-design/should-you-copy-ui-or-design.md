@@ -28,6 +28,17 @@ relatedSlugs:
   - vibe-coding-frontend-guide
   - use-ui-with-cursor-ai
   - how-to-copy-css-from-any-website
+linkKeywords:
+  - "copy ui or design from scratch"
+  - "when to copy ui patterns"
+  - "copying ui as a learning strategy"
+  - "design from scratch vs copying"
+  - "intentional ui copying approach"
+  - "learning through ui replication"
+  - "copying ui with intention"
+  - "ui copying for faster shipping"
+  - "reverse-engineering design decisions"
+  - "when copying ui makes sense"
 ---
 
 ## The Direct Answer

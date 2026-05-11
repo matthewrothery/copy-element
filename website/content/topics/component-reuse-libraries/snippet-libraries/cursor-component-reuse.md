@@ -27,6 +27,17 @@ relatedSlugs:
   - prompt-for-react-components
   - vibe-coding-frontend-guide
   - copy-css-without-devtools
+linkKeywords:
+  - "reusing ui components with cursor"
+  - "capturing components for cursor"
+  - "component reuse with cursor ai"
+  - "feeding captured ui to cursor"
+  - "cursor component extraction workflow"
+  - "real code for cursor components"
+  - "cursor learns from actual ui"
+  - "concrete examples in cursor"
+  - "cursor component adaptation"
+  - "extracting live website components"
 ---
 
 ## Quick Answer

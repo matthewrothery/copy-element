@@ -26,6 +26,17 @@ relatedSlugs:
   - use-ui-with-cursor
   - capture-ui-for-ai-coding
   - component-reuse-libraries
+linkKeywords:
+  - "reusing saas dashboard components"
+  - "extracting ui patterns from production"
+  - "capture and adapt dashboard widgets"
+  - "copy dashboard layouts systematically"
+  - "extract saas ui for reuse"
+  - "dashboard component extraction workflow"
+  - "reusable dashboard pattern capture"
+  - "saas component library building"
+  - "fast dashboard widget extraction"
+  - "production dashboard code capture"
 ---
 
 ## The Direct Answer

@@ -28,6 +28,13 @@ relatedSlugs:
   - /topics/ai-coding-workflows/cursor-workflows/use-ui-with-cursor-ai
   - /topics/ui-development-without-design-skills/copy-vs-design/copying-ui-legally
   - /topics/copy-ui-from-websites
+linkKeywords:
+  - "extract html from websites"
+  - "copying website html quickly"
+  - "automated html extraction tools"
+  - "capture html from live sites"
+  - "html extraction without devtools"
+  - "fastest html copying methods"
 ---
 
 ## Quick Answer

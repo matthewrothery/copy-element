@@ -27,6 +27,13 @@ relatedSlugs:
   - how-to-copy-css-from-any-website
   - use-ui-with-cursor-ai
   - prompt-for-react-components
+linkKeywords:
+  - "extract html from the dom"
+  - "dom html extraction methods"
+  - "capturing rendered html from dom"
+  - "automated dom extraction tools"
+  - "extracting live page html"
+  - "dom html extraction workflow"
 ---
 
 ## Quick Answer

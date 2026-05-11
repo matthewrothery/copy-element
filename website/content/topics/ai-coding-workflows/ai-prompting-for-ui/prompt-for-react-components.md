@@ -26,6 +26,17 @@ relatedSlugs:
   - cursor-component-reuse
   - how-to-copy-css-from-any-website
   - how-to-copy-html-from-website
+linkKeywords:
+  - "prompting ai for react components"
+  - "react component prompt structure"
+  - "how to prompt ai for components"
+  - "effective react component prompts"
+  - "react component prompting techniques"
+  - "ai-generated react components"
+  - "structuring react component prompts"
+  - "react component prompt anatomy"
+  - "better react component prompts"
+  - "react component prompt patterns"
 ---
 
 ## Quick Answer

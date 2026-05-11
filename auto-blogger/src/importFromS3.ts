@@ -9,7 +9,9 @@ import {
   readS3Buffer,
   readS3Text,
 } from "./s3.js";
-import { ArticleArtifactMetadata } from "./types.js";
+import { ArticleArtifactMetadata, BackfillSummary } from "./types.js";
+import { runBackfillForImportedArticles } from "./backfillInternalLinks.js";
+import { sendBackfillNotification } from "./email.js";
 
 function safeTargetPath(workspaceRoot: string, relativePath: string): string {
   const out = path.resolve(workspaceRoot, relativePath);
@@ -54,6 +56,7 @@ async function main(): Promise<void> {
   }
 
   const workspaceRoot = path.resolve(config.packageRoot, "..");
+  const importedTopicSlugs: string[] = [];
 
   for (const prefix of selected) {
     const normalizedPrefix = prefix.endsWith("/") ? prefix.slice(0, -1) : prefix;
@@ -109,6 +112,9 @@ async function main(): Promise<void> {
 
       await movePrefixToPublished(config.s3Bucket, config.s3Prefix, artifactId, [coverName]);
 
+      if (metadata.targetType === "topic" && metadata.slug) {
+        importedTopicSlugs.push(metadata.slug);
+      }
       console.log(`Imported artifact ${artifactId} -> ${metadata.articlePath}`);
       continue;
     }
@@ -135,7 +141,42 @@ async function main(): Promise<void> {
 
     await movePrefixToPublished(config.s3Bucket, config.s3Prefix, artifactId, assetNames);
 
+    if (metadata.targetType === "topic" && metadata.slug) {
+      importedTopicSlugs.push(metadata.slug);
+    }
     console.log(`Imported artifact ${artifactId} -> ${metadata.articlePath}`);
+  }
+
+  if (importedTopicSlugs.length > 0) {
+    let summary: BackfillSummary | undefined;
+    try {
+      summary = await runBackfillForImportedArticles(workspaceRoot, importedTopicSlugs, {
+        textProvider: config.textProvider,
+        textModel: config.textModel,
+      });
+    } catch (err) {
+      console.warn(`Backfill failed (continuing): ${(err as Error).message}`);
+    }
+    if (summary) {
+      console.log(
+        `Backfill: ${summary.filesChanged} file(s) changed, ${summary.linksAdded} link(s) added` +
+          (summary.commitSha ? ` (commit ${summary.commitSha.slice(0, 7)}${summary.pushed ? ", pushed" : ", LOCAL"})` : "")
+      );
+      for (const w of summary.warnings) console.warn(`Backfill warning: ${w}`);
+
+      if (config.notifyTo && config.notifyFrom) {
+        try {
+          await sendBackfillNotification({
+            to: config.notifyTo,
+            from: config.notifyFrom,
+            importedSlugs: importedTopicSlugs,
+            summary,
+          });
+        } catch (err) {
+          console.warn(`Backfill notification email failed: ${(err as Error).message}`);
+        }
+      }
+    }
   }
 }
 

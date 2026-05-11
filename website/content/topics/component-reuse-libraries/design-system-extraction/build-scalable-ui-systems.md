@@ -26,6 +26,13 @@ relatedSlugs:
   - component-reuse-libraries-versioning-maintenance
   - component-reuse-libraries-ai-workflows
   - design-system-extraction-automation
+linkKeywords:
+  - "unified design systems approach"
+  - "organizing scattered ui components"
+  - "scalable component architecture layers"
+  - "building reusable ui libraries"
+  - "design system governance and naming"
+  - "extracting patterns into systems"
 ---
 
 ## Quick Answer

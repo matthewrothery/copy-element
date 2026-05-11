@@ -27,6 +27,13 @@ relatedSlugs:
   - /topics/tool-alternatives/css-scan-alternative/css-scan-alternative
   - /topics/ai-coding-workflows/cursor-workflows/use-ui-with-cursor-ai
   - /topics/ui-development-without-design-skills/copy-vs-design/copying-ui-legally
+linkKeywords:
+  - "copy css without devtools"
+  - "fastest css extraction methods"
+  - "extract css from websites"
+  - "css copying browser extensions"
+  - "quick css capture techniques"
+  - "css extraction without inspecting"
 ---
 
 ## Quick Answer

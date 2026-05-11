@@ -28,6 +28,17 @@ relatedSlugs:
   - build-ui-library-from-production-sites
   - ai-coding-workflows-with-chrome-extensions
   - component-reuse-strategies-for-developers
+linkKeywords:
+  - "automate repetitive ui work"
+  - "reclaim developer time weekly"
+  - "eliminate manual component rebuilding"
+  - "stop wasting time on ui"
+  - "automate ui inspection tasks"
+  - "capture and reuse components"
+  - "reduce ui context switching"
+  - "speed up component discovery"
+  - "automate ui extraction workflow"
+  - "build faster with component libraries"
 ---
 
 ## The Direct Answer

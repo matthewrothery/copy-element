@@ -2,17 +2,48 @@ import { existsSync, readdirSync, readFileSync } from "fs";
 import path from "path";
 import { InternalLinkCandidate, TopicKeyword } from "./types.js";
 
-function extractFrontmatter(raw: string): Record<string, string> {
-  const match = raw.match(/^---\r?\n([\s\S]*?)\r?\n---/);
-  if (!match) return {};
+type Frontmatter = {
+  scalars: Record<string, string>;
+  lists: Record<string, string[]>;
+};
 
-  const data: Record<string, string> = {};
-  for (const line of match[1].split(/\r?\n/)) {
-    const item = line.match(/^([A-Za-z][A-Za-z0-9]*):\s*(?:"([^"]*)"|(.+))\s*$/);
-    if (!item) continue;
-    data[item[1]] = (item[2] ?? item[3] ?? "").trim();
+function extractFrontmatterRaw(raw: string): Frontmatter {
+  const match = raw.match(/^---\r?\n([\s\S]*?)\r?\n---/);
+  const result: Frontmatter = { scalars: {}, lists: {} };
+  if (!match) return result;
+
+  const lines = match[1].split(/\r?\n/);
+  let i = 0;
+  while (i < lines.length) {
+    const line = lines[i];
+    const listHeader = line.match(/^([A-Za-z][A-Za-z0-9]*):\s*$/);
+    if (listHeader) {
+      const key = listHeader[1];
+      const items: string[] = [];
+      let j = i + 1;
+      while (j < lines.length) {
+        const itemLine = lines[j].match(/^\s+-\s+(?:"([^"]*)"|(.+))\s*$/);
+        if (!itemLine) break;
+        items.push((itemLine[1] ?? itemLine[2] ?? "").trim());
+        j += 1;
+      }
+      if (items.length > 0) {
+        result.lists[key] = items;
+        i = j;
+        continue;
+      }
+    }
+    const scalar = line.match(/^([A-Za-z][A-Za-z0-9]*):\s*(?:"([^"]*)"|(.+))\s*$/);
+    if (scalar) {
+      result.scalars[scalar[1]] = (scalar[2] ?? scalar[3] ?? "").trim();
+    }
+    i += 1;
   }
-  return data;
+  return result;
+}
+
+function extractFrontmatter(raw: string): Record<string, string> {
+  return extractFrontmatterRaw(raw).scalars;
 }
 
 function humanizeSlug(slug: string): string {
@@ -32,6 +63,10 @@ function readFrontmatter(filePath: string): Record<string, string> {
   return extractFrontmatter(readFileSync(filePath, "utf-8"));
 }
 
+function readFrontmatterFull(filePath: string): Frontmatter {
+  return extractFrontmatterRaw(readFileSync(filePath, "utf-8"));
+}
+
 function loadArticleCandidate(
   filePath: string,
   hubSlug: string,
@@ -39,10 +74,10 @@ function loadArticleCandidate(
   clusterSlug: string,
   clusterTitle: string
 ): InternalLinkCandidate | undefined {
-  const frontmatter = readFrontmatter(filePath);
+  const frontmatter = readFrontmatterFull(filePath);
   const parsed = path.parse(filePath);
-  const slug = frontmatter.slug || parsed.name;
-  const title = frontmatter.title;
+  const slug = frontmatter.scalars.slug || parsed.name;
+  const title = frontmatter.scalars.title;
   if (!title || !slug) return undefined;
 
   return {
@@ -55,14 +90,48 @@ function loadArticleCandidate(
     clusterSlug,
     clusterTitle,
     slug,
+    linkKeywords: frontmatter.lists.linkKeywords ?? [],
+    filePath,
+  };
+}
+
+function loadBlogCandidate(filePath: string): InternalLinkCandidate | undefined {
+  const frontmatter = readFrontmatterFull(filePath);
+  const parsed = path.parse(filePath);
+  const slug = frontmatter.scalars.slug || parsed.name;
+  const title = frontmatter.scalars.title;
+  if (!title || !slug) return undefined;
+
+  return {
+    title,
+    topic: "Blog",
+    url: `/blog/${slug}`,
+    type: "blog",
+    hubSlug: "blog",
+    hubTitle: "Blog",
+    slug,
+    filePath,
   };
 }
 
 export function loadInternalLinkCandidates(websiteRoot: string): InternalLinkCandidate[] {
   const topicsRoot = path.resolve(websiteRoot, "content", "topics");
-  if (!existsSync(topicsRoot)) return [];
 
   const candidates: InternalLinkCandidate[] = [];
+  const blogRoot = path.resolve(websiteRoot, "content", "blog");
+  if (existsSync(blogRoot)) {
+    const blogFiles = readdirSync(blogRoot, { withFileTypes: true })
+      .filter((entry) => entry.isFile() && entry.name.endsWith(".md"))
+      .map((entry) => path.join(blogRoot, entry.name));
+
+    for (const blogFile of blogFiles) {
+      const blog = loadBlogCandidate(blogFile);
+      if (blog) candidates.push(blog);
+    }
+  }
+
+  if (!existsSync(topicsRoot)) return candidates;
+
   const hubEntries = readdirSync(topicsRoot, { withFileTypes: true }).filter((entry) =>
     entry.isDirectory()
   );
@@ -155,4 +224,56 @@ function scoreCandidate(candidate: InternalLinkCandidate, keyword: TopicKeyword)
   if (candidate.type === "article") score += 2;
   if (candidate.type === "cluster") score += 1;
   return score;
+}
+
+export type KeywordIndexEntry = {
+  phrase: string;
+  phraseLower: string;
+  candidateId: string;
+  candidateUrl: string;
+};
+
+function candidateIdFor(c: InternalLinkCandidate): string {
+  if (c.type === "article") return c.slug ?? c.url;
+  if (c.type === "blog") return `blog:${c.slug ?? c.url}`;
+  if (c.type === "cluster") return `${c.hubSlug}__${c.clusterSlug ?? ""}`;
+  return c.hubSlug;
+}
+
+/**
+ * Flat phrase → candidate index. Sorted by descending phrase length so a greedy
+ * scan prefers the most specific match. Phrases are lowercased for matching.
+ */
+export function buildKeywordIndex(candidates: InternalLinkCandidate[]): KeywordIndexEntry[] {
+  const entries: KeywordIndexEntry[] = [];
+  for (const c of candidates) {
+    const keywords = c.linkKeywords ?? [];
+    for (const kw of keywords) {
+      const phrase = kw.trim();
+      if (phrase.length < 3) continue;
+      entries.push({
+        phrase,
+        phraseLower: phrase.toLowerCase(),
+        candidateId: candidateIdFor(c),
+        candidateUrl: c.url,
+      });
+    }
+  }
+  entries.sort((a, b) => b.phraseLower.length - a.phraseLower.length);
+  return entries;
+}
+
+/**
+ * Collect all linkKeywords currently in use (lowercased) so a new article can
+ * avoid emitting collisions.
+ */
+export function collectExistingKeywords(candidates: InternalLinkCandidate[]): Set<string> {
+  const set = new Set<string>();
+  for (const c of candidates) {
+    for (const kw of c.linkKeywords ?? []) {
+      const v = kw.trim().toLowerCase();
+      if (v) set.add(v);
+    }
+  }
+  return set;
 }

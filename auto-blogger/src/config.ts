@@ -48,6 +48,8 @@ export type AutoBloggerConfig = {
   importOverwrite: boolean;
   newsCycleEnabled: boolean;
   newsCycleHour: number;
+  newsRecencyHours: number;
+  newsMinItems: number;
 };
 
 function parseIntEnv(name: string, fallback: number): number {
@@ -171,5 +173,7 @@ export function loadConfig(): AutoBloggerConfig {
     importOverwrite: boolEnv("AUTO_BLOG_IMPORT_OVERWRITE"),
     newsCycleEnabled: boolEnv("AUTO_BLOG_NEWS_CYCLE_ENABLED"),
     newsCycleHour: parseIntEnv("AUTO_BLOG_NEWS_CYCLE_HOUR", 10),
+    newsRecencyHours: parseIntEnv("AUTO_BLOG_NEWS_RECENCY_HOURS", 168),
+    newsMinItems: parseIntEnv("AUTO_BLOG_NEWS_MIN_ITEMS", 3),
   };
 }

@@ -26,6 +26,17 @@ relatedSlugs:
   - cursor-vs-other-ai-coding-tools
   - building-components-with-ai-assistance
   - cursor-best-practices-for-teams
+linkKeywords:
+  - "building ui faster with cursor"
+  - "cursor workflows for components"
+  - "practical ui development with cursor"
+  - "cursor component scaffolding"
+  - "ai-powered ui development workflow"
+  - "cursor for production-ready components"
+  - "iterating ui designs with cursor"
+  - "cursor inline editing for components"
+  - "design-to-code with cursor"
+  - "cursor ui pattern integration"
 ---
 
 ## Direct Answer

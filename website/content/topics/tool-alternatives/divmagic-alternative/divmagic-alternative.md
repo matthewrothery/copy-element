@@ -28,6 +28,13 @@ relatedSlugs:
   - use-ui-with-cursor-ai
   - how-to-copy-html-from-website
   - prompt-for-react-components
+linkKeywords:
+  - "element armory vs divmagic"
+  - "divmagic alternative for developers"
+  - "capture html and css together"
+  - "ai-ready component extraction"
+  - "complete ui component capture"
+  - "divmagic replacement tool"
 ---
 
 ## The Direct Answer

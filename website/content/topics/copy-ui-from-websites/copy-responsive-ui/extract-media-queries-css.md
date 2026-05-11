@@ -28,6 +28,15 @@ relatedSlugs:
   - capture-ui-for-ai-coding
   - responsive-design-patterns
   - css-component-extraction
+linkKeywords:
+  - "extracting media queries from css"
+  - "how to extract media queries"
+  - "media query extraction methods"
+  - "isolating responsive breakpoints"
+  - "finding media queries in css"
+  - "automated media query capture"
+  - "manual vs automated extraction"
+  - "responsive breakpoint extraction"
 ---
 
 ## Quick Answer

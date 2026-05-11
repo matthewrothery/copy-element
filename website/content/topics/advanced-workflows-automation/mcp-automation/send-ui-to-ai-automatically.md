@@ -28,6 +28,15 @@ relatedSlugs:
   - claude-code-ui-components
   - automate-component-extraction
   - ai-coding-tools-comparison
+linkKeywords:
+  - "automating component capture for ai"
+  - "automatic ui extraction workflow"
+  - "capture ui and send to ai"
+  - "streamline ui code extraction"
+  - "ai-assisted component extraction"
+  - "automate ui to ai pipeline"
+  - "extract and feed ui to ai"
+  - "production ui into ai tools"
 ---
 
 ## Quick Answer

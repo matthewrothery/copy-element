@@ -26,6 +26,13 @@ relatedSlugs:
   - best-prompts-for-ui-generation
   - use-ui-with-cursor-ai
   - copy-css-without-devtools
+linkKeywords:
+  - "what is vibe coding"
+  - "vibe coding explained"
+  - "vibe coding development approach"
+  - "intuitive ui iteration method"
+  - "building ui by feel"
+  - "rapid ui iteration workflow"
 ---
 
 ## Quick Answer

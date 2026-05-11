@@ -26,6 +26,15 @@ relatedSlugs:
   - component-reuse-libraries
   - inspecting-debugging-css
   - chrome-extension-developer-tools
+linkKeywords:
+  - "frontend automation tools"
+  - "automate repetitive ui tasks"
+  - "browser extensions for developers"
+  - "speed up frontend workflow"
+  - "eliminate manual ui work"
+  - "capture ui without devtools"
+  - "one-click component extraction"
+  - "reduce frontend context switching"
 ---
 
 ## Quick Answer

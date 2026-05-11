@@ -45,6 +45,10 @@ function buildFrontmatter(
     )
     .join("\n");
   const relatedYaml = article.relatedSlugs.map((slug) => `  - ${slug}`).join("\n");
+  const sortedKeywords = [...(article.linkKeywords ?? [])].sort((a, b) => a.localeCompare(b));
+  const keywordsYaml = sortedKeywords
+    .map((kw) => `  - "${escapeYaml(kw)}"`)
+    .join("\n");
 
   return [
     "---",
@@ -64,6 +68,8 @@ function buildFrontmatter(
     faqYaml || "  []",
     "relatedSlugs:",
     relatedYaml || "  []",
+    "linkKeywords:",
+    keywordsYaml || "  []",
     "---",
   ].join("\n");
 }

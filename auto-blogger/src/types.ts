@@ -27,12 +27,29 @@ export type InternalLinkCandidate = {
   title: string;
   topic: string;
   url: string;
-  type: "hub" | "cluster" | "article";
+  type: "hub" | "cluster" | "article" | "blog";
   hubSlug: string;
   hubTitle: string;
   clusterSlug?: string;
   clusterTitle?: string;
   slug?: string;
+  linkKeywords?: string[];
+  /** Absolute path to the article's markdown file on disk (article candidates only). */
+  filePath?: string;
+};
+
+export type BackfillFileChange = {
+  path: string;
+  addedTargets: { id: string; anchor: string }[];
+};
+
+export type BackfillSummary = {
+  filesChanged: number;
+  linksAdded: number;
+  perFile: BackfillFileChange[];
+  commitSha?: string;
+  pushed: boolean;
+  warnings: string[];
 };
 
 export type GeneratedArticle = {
@@ -51,6 +68,8 @@ export type GeneratedArticle = {
   imagePrompt: string;
   /** Structured diagram specs; rendered to SVG in the pipeline (see applyDiagrams). */
   diagrams: DiagramSpec[];
+  /** Anchor-quality phrases used by the backfill pass to find link opportunities in other posts. */
+  linkKeywords: string[];
 };
 
 export type ArtifactAssetMeta = {
@@ -65,6 +84,8 @@ export type NewsItem = {
   url: string;
   publishedAt: string;
   source: string;
+  publisherUrl?: string;
+  description?: string;
   content?: string;
 };
 

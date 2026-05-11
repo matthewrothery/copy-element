@@ -23,6 +23,15 @@ relatedSlugs:
   - troubleshoot-css-problems
   - copy-css-without-devtools
   - copy-html-without-inspect-element
+linkKeywords:
+  - "faster css debugging workflow"
+  - "css debugging without inspect element"
+  - "speed up css debugging"
+  - "alternatives to inspect element"
+  - "css extraction faster than devtools"
+  - "component capture instead of devtools"
+  - "skip inspect element for components"
+  - "devtools alternatives for css work"
 ---
 
 ## The Short Answer

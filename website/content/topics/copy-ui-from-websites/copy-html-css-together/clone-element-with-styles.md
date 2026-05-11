@@ -28,6 +28,13 @@ relatedSlugs:
   - extract-styles-from-element
   - reuse-ui-components
   - ai-coding-with-captured-ui
+linkKeywords:
+  - "cloning elements with computed styles"
+  - "preserve styles when cloning elements"
+  - "copy element styles in javascript"
+  - "clone dom elements with css"
+  - "getcomputedstyle for element cloning"
+  - "applying styles to cloned elements"
 ---
 
 ## Quick Answer

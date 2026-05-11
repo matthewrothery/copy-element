@@ -27,6 +27,17 @@ relatedSlugs:
   - build-ui-faster-with-cursor
   - best-prompts-for-ui-generation
   - copy-html-without-inspect-element
+linkKeywords:
+  - "using real ui with cursor"
+  - "real ui in cursor workflows"
+  - "capturing ui for cursor ai"
+  - "feeding ui into cursor prompts"
+  - "production ui with cursor"
+  - "cursor ai ui extraction"
+  - "real website ui with cursor"
+  - "concrete ui examples for cursor"
+  - "cursor component from real ui"
+  - "refactoring ui with cursor ai"
 ---
 
 ## Quick Answer

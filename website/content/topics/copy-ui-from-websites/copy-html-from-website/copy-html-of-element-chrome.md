@@ -28,6 +28,13 @@ relatedSlugs:
   - extract-html-from-webpage
   - element-armory-alternative
   - ai-coding-workflows
+linkKeywords:
+  - "extract element html from chrome"
+  - "copying single element code"
+  - "grab html with chrome inspect"
+  - "isolate element html quickly"
+  - "extract component code from websites"
+  - "chrome devtools html extraction"
 ---
 
 ## Quick Answer

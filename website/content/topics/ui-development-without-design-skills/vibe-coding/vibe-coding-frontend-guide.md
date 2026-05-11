@@ -27,6 +27,13 @@ relatedSlugs:
   - cursor-component-reuse
   - best-prompts-for-ui-generation
   - prompt-for-react-components
+linkKeywords:
+  - "vibe coding frontend workflow"
+  - "capture adapt deploy components"
+  - "building ui from production code"
+  - "ai-powered component adaptation"
+  - "frontend development without mockups"
+  - "practical vibe coding guide"
 ---
 
 ## Quick Answer

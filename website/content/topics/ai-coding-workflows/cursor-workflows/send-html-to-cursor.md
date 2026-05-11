@@ -26,6 +26,17 @@ relatedSlugs:
   - element-armory-cursor-integration
   - ai-assisted-component-building
   - cursor-ide-productivity-tips
+linkKeywords:
+  - "send html to cursor"
+  - "html to cursor workflow"
+  - "capturing html for cursor ai"
+  - "cursor html editing workflow"
+  - "ai-assisted component editing"
+  - "refining captured html with cursor"
+  - "html capture and refinement"
+  - "cursor component editing from html"
+  - "streamline html editing with ai"
+  - "direct html to cursor process"
 ---
 
 ## Quick Answer

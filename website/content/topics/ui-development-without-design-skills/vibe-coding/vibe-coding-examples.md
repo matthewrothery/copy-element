@@ -26,6 +26,13 @@ relatedSlugs:
   - quick-ui-improvements
   - use-ui-with-cursor-ai
   - use-ui-with-claude-code
+linkKeywords:
+  - "practical ui workflows for builders"
+  - "vibe coding workflow examples"
+  - "ai-guided ui iteration process"
+  - "reference-based component building"
+  - "tightening ui with ai feedback"
+  - "iterative ui refinement with ai"
 ---
 
 ## What These Examples Show

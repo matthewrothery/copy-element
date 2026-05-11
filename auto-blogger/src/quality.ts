@@ -3,6 +3,17 @@ import { GeneratedArticle } from "./types.js";
 /** Plain intro before any H2, or narrative under a leading "## Quick Answer"-style heading. */
 const MIN_UPFRONT_CHARS = 100;
 
+const INTERNAL_FLOOR = 3;
+const EXTERNAL_FLOOR = 2;
+const WORDS_PER_LINK = 120;
+const CEILING_HEADROOM = 2;
+
+export function linkBudget(body: string): { target: number; ceiling: number } {
+  const words = body.trim().split(/\s+/).filter(Boolean).length;
+  const target = Math.max(5, Math.round(words / WORDS_PER_LINK));
+  return { target, ceiling: target + CEILING_HEADROOM };
+}
+
 const UPFRONT_ANSWER_HEADING = /^##\s+(Quick Answer|TL;DR|Short Answer|At a Glance|Summary|Key takeaways|Executive summary|Overview)\s*$/i;
 
 function measureUpfrontAnswerChars(body: string): number {
@@ -47,6 +58,8 @@ export function validateArticleQuality(
   const body = article.body.trim();
   const internalLinkCount = (article.body.match(/\]\(\/topics\//g) ?? []).length;
   const externalSourceLinkCount = (article.body.match(/\]\(https?:\/\//g) ?? []).length;
+  const { target, ceiling } = linkBudget(article.body);
+  const totalLinks = internalLinkCount + externalSourceLinkCount;
 
   if (article.body.length < 4000) {
     issues.push("Body content looks too short for authoritative article.");
@@ -60,19 +73,50 @@ export function validateArticleQuality(
     issues.push("Article should start with a useful upfront answer before the first section heading.");
   }
 
-  if (internalLinkCount > 10) {
-    issues.push(`Too many internal links: ${internalLinkCount}. Maximum is 10.`);
+  if (internalLinkCount < INTERNAL_FLOOR) {
+    issues.push(
+      `Article has only ${internalLinkCount} internal link${internalLinkCount === 1 ? "" : "s"}; minimum is ${INTERNAL_FLOOR}.`
+    );
+  }
+  if (externalSourceLinkCount < EXTERNAL_FLOOR) {
+    issues.push(
+      `Article has only ${externalSourceLinkCount} external citation${externalSourceLinkCount === 1 ? "" : "s"}; minimum is ${EXTERNAL_FLOOR}.`
+    );
+  }
+  if (totalLinks > ceiling) {
+    issues.push(
+      `Too many links: ${totalLinks} (internal+external). Target is ~${target}, ceiling is ${ceiling}.`
+    );
   }
 
-  if (externalSourceLinkCount < 3) {
-    issues.push(
-      `Article has only ${externalSourceLinkCount} external citation${externalSourceLinkCount === 1 ? "" : "s"}; minimum is 3.`
-    );
+  const linkRe = /\[([^\]]+)\]\(([^)]+)\)/g;
+  const seenUrls = new Map<string, number>();
+  const seenAnchors = new Map<string, number>();
+  for (const m of article.body.matchAll(linkRe)) {
+    const anchor = m[1].trim().toLowerCase();
+    const url = m[2].trim();
+    seenUrls.set(url, (seenUrls.get(url) ?? 0) + 1);
+    seenAnchors.set(anchor, (seenAnchors.get(anchor) ?? 0) + 1);
   }
-  if (internalLinkCount < 3) {
-    issues.push(
-      `Article has only ${internalLinkCount} internal link${internalLinkCount === 1 ? "" : "s"}; minimum is 3.`
-    );
+  for (const [url, n] of seenUrls) {
+    if (n > 1) issues.push(`Duplicate link target: ${url} appears ${n} times.`);
+  }
+  for (const [anchor, n] of seenAnchors) {
+    if (n > 1) issues.push(`Duplicate anchor text: "${anchor}" appears ${n} times.`);
+  }
+
+  if (article.linkKeywords && article.linkKeywords.length > 0) {
+    if (article.linkKeywords.length < 6) {
+      issues.push(`linkKeywords has only ${article.linkKeywords.length} entries; aim for 6-12 unique phrases.`);
+    }
+    const seen = new Set<string>();
+    for (const kw of article.linkKeywords) {
+      const v = kw.trim().toLowerCase();
+      if (v && seen.has(v)) issues.push(`Duplicate linkKeyword: "${kw}"`);
+      if (v) seen.add(v);
+    }
+  } else {
+    issues.push("linkKeywords missing; backfill will skip this article as a link target.");
   }
 
   for (const phrase of BANNED_PHRASES) {

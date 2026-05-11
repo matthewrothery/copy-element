@@ -27,6 +27,17 @@ relatedSlugs:
   - cursor-component-reuse
   - copy-css-without-devtools
   - vibe-coding-frontend-guide
+linkKeywords:
+  - "best prompts for ui generation"
+  - "effective ui generation prompts"
+  - "high-quality ui prompts"
+  - "ai ui generation prompts"
+  - "component-focused ui prompts"
+  - "context-rich ui generation"
+  - "production-ready ui prompts"
+  - "ui generation prompt patterns"
+  - "specific ui generation techniques"
+  - "framework-aware ui prompts"
 ---
 
 ## Quick Answer

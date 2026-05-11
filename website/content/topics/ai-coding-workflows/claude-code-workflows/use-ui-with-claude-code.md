@@ -25,6 +25,13 @@ relatedSlugs:
   - send-html-to-cursor
   - best-prompts-for-ui-generation
   - copy-html-without-inspect-element
+linkKeywords:
+  - "capture production ui with claude"
+  - "using real ui in claude code"
+  - "feed captured components to claude"
+  - "claude code with actual ui"
+  - "reference-based component adaptation"
+  - "concrete ui for claude code"
 ---
 
 ## The Direct Answer

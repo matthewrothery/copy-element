@@ -26,6 +26,17 @@ relatedSlugs:
   - css-debugging-tools
   - understanding-css-specificity
   - box-model-explained
+linkKeywords:
+  - "understanding css cascade rules"
+  - "how css specificity works"
+  - "css inheritance and property flow"
+  - "building mental models for css"
+  - "css fundamentals for developers"
+  - "why css debugging gets easier"
+  - "learning css the right way"
+  - "css system over memorization"
+  - "cascade specificity and inheritance"
+  - "css concepts that actually stick"
 ---
 
 ## The Quick Answer

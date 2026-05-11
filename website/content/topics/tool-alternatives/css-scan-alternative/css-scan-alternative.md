@@ -28,6 +28,13 @@ relatedSlugs:
   - /topics/copy-ui-from-websites/copy-css-from-website/how-to-copy-css-from-any-website
   - /topics/ai-coding-workflows/cursor-workflows/use-ui-with-cursor-ai
   - /topics/copy-ui-from-websites/copy-css-from-website/copy-css-without-devtools
+linkKeywords:
+  - "css scan alternative"
+  - "better than css scan"
+  - "css scan replacement tool"
+  - "free css extraction tool"
+  - "css scan vs element armory"
+  - "modern css extraction workflow"
 ---
 
 ## The Direct Answer

@@ -28,6 +28,17 @@ relatedSlugs:
   - extract-ui-components-legally
   - ui-inspiration-vs-copying
   - design-system-reverse-engineering
+linkKeywords:
+  - "what you can legally copy from websites"
+  - "understanding website ui copyright rules"
+  - "legal boundaries of design cloning"
+  - "when ui design copying is allowed"
+  - "distinguishing inspiration from duplication"
+  - "what's protected in website design"
+  - "copying website layouts legally"
+  - "ui structure vs code copyright"
+  - "legal framework for design reuse"
+  - "brand assets and trademark protection"
 ---
 
 ## Quick Answer

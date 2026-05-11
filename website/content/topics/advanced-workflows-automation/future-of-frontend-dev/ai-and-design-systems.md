@@ -27,6 +27,13 @@ relatedSlugs:
   - design-system-extraction-automation
   - component-reuse-with-ai-tools
   - machine-readable-ui-patterns
+linkKeywords:
+  - "machine-readable design systems"
+  - "design systems for ai tools"
+  - "making design systems queryable"
+  - "ai-powered design system infrastructure"
+  - "design systems and code generation"
+  - "structuring design systems for ai"
 ---
 
 ## Quick Answer

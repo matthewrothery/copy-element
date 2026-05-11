@@ -28,6 +28,15 @@ relatedSlugs:
   - what-is-vibe-coding
   - copy-css-without-devtools
   - how-to-copy-css-from-any-website
+linkKeywords:
+  - "copying ui legally"
+  - "what you can copy from websites"
+  - "legal ui design copying"
+  - "copyright and design patterns"
+  - "when ui copying is legal"
+  - "ui code vs creative expression"
+  - "legal design pattern reuse"
+  - "copying website design legally"
 ---
 
 ## Quick Answer

@@ -19,6 +19,9 @@ export function candidateId(candidate: InternalLinkCandidate): string {
   if (candidate.type === "article") {
     return candidate.slug ?? candidate.url;
   }
+  if (candidate.type === "blog") {
+    return `blog:${candidate.slug ?? candidate.url}`;
+  }
   if (candidate.type === "cluster") {
     return `${candidate.hubSlug}__${candidate.clusterSlug ?? ""}`;
   }
@@ -38,15 +41,40 @@ export function applyLinkPlaceholders(
 
   let internalLinkCount = 0;
   let externalLinkCount = 0;
+  const seenInternalUrls = new Set<string>();
+  const seenExternalUrls = new Set<string>();
+  const seenAnchors = new Set<string>();
+
+  // Pre-seed with URLs and anchors already present in the body as resolved markdown
+  // links so backfill passes don't introduce duplicates.
+  const existingLinkRe = /\[([^\]]+)\]\(([^)]+)\)/g;
+  for (const m of body.matchAll(existingLinkRe)) {
+    const anchor = m[1].trim().toLowerCase();
+    const url = m[2].trim();
+    seenAnchors.add(anchor);
+    if (url.startsWith("/")) seenInternalUrls.add(url);
+    else if (/^https?:\/\//.test(url)) seenExternalUrls.add(url);
+  }
 
   let resolved = body.replace(INTERNAL_PLACEHOLDER_RE, (_match, idRaw: string, anchorRaw: string) => {
     const id = idRaw.trim();
     const anchor = anchorRaw.trim();
+    const anchorKey = anchor.toLowerCase();
     const url = slugToUrl.get(id);
     if (!url) {
       warnings.push(`Internal link placeholder references unknown id "${id}"; dropped.`);
       return anchor;
     }
+    if (seenInternalUrls.has(url)) {
+      warnings.push(`Duplicate internal link to ${url} dropped.`);
+      return anchor;
+    }
+    if (seenAnchors.has(anchorKey)) {
+      warnings.push(`Duplicate anchor text "${anchor}" dropped.`);
+      return anchor;
+    }
+    seenInternalUrls.add(url);
+    seenAnchors.add(anchorKey);
     internalLinkCount += 1;
     return `[${anchor}](${url})`;
   });
@@ -54,11 +82,22 @@ export function applyLinkPlaceholders(
   resolved = resolved.replace(EXTERNAL_PLACEHOLDER_RE, (_match, indexRaw: string, anchorRaw: string) => {
     const idx = Number.parseInt(indexRaw, 10);
     const anchor = anchorRaw.trim();
+    const anchorKey = anchor.toLowerCase();
     const item = Number.isFinite(idx) ? research[idx - 1] : undefined;
     if (!item || !item.url) {
       warnings.push(`Source placeholder references invalid index "${indexRaw}"; dropped.`);
       return anchor;
     }
+    if (seenExternalUrls.has(item.url)) {
+      warnings.push(`Duplicate external link to ${item.url} dropped.`);
+      return anchor;
+    }
+    if (seenAnchors.has(anchorKey)) {
+      warnings.push(`Duplicate anchor text "${anchor}" dropped.`);
+      return anchor;
+    }
+    seenExternalUrls.add(item.url);
+    seenAnchors.add(anchorKey);
     externalLinkCount += 1;
     return `[${anchor}](${item.url})`;
   });

@@ -23,6 +23,17 @@ relatedSlugs:
   - copy-css-without-devtools
   - how-to-copy-css-from-any-website
   - use-ui-with-cursor-ai
+linkKeywords:
+  - "faster css inspection workflow"
+  - "css extraction beyond devtools"
+  - "streamlined component style capture"
+  - "css inspection without devtools friction"
+  - "better css capture approach"
+  - "focused css extraction tools"
+  - "css inspection and extraction"
+  - "devtools alternative for css"
+  - "cleaner css workflow method"
+  - "component css capture faster"
 ---
 
 ## The Short Answer

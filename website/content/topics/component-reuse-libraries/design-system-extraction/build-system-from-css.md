@@ -27,6 +27,17 @@ relatedSlugs:
   - component-library-setup
   - css-organization-best-practices
   - reverse-engineer-design-systems
+linkKeywords:
+  - "building design systems from css"
+  - "extracting css patterns from production"
+  - "reverse-engineer design system components"
+  - "capture and organize css styles"
+  - "css extraction for design systems"
+  - "normalize and scale design tokens"
+  - "production-tested ui pattern extraction"
+  - "design system from live websites"
+  - "automated css capture workflow"
+  - "extract reusable design patterns"
 ---
 
 ## Quick Answer

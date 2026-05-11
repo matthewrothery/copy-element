@@ -4,6 +4,8 @@ import { openai } from "@ai-sdk/openai";
 import { z } from "zod";
 import { DiagramSpecSchema, type DiagramSpec } from "./diagrams/schema.js";
 import { applyLinkPlaceholders, candidateId } from "./applyLinkPlaceholders.js";
+import { collectExistingKeywords } from "./internalLinks.js";
+import { linkBudget } from "./quality.js";
 import {
   GeneratedArticle,
   InternalLinkCandidate,
@@ -33,13 +35,14 @@ const DraftSchema = z.object({
   body: z.string(),
   imagePrompt: z.string(),
   diagrams: z.array(DiagramSpecSchema).max(5).optional().default([]),
+  linkKeywords: z.array(z.string()).min(6).max(12),
 });
 
 /** Draft JSON includes a long markdown body; SDK default ~4096 completion tokens truncates before `body` is emitted (finishReason: length). */
 const DRAFT_MAX_OUTPUT_TOKENS = 8192;
 
 const MIN_INTERNAL_LINKS = 3;
-const MIN_EXTERNAL_LINKS = 3;
+const MIN_EXTERNAL_LINKS = 2;
 
 function sanitizeSlug(input: string): string {
   return input
@@ -88,7 +91,9 @@ function summarizeInternalLinks(candidates: InternalLinkCandidate[]): string {
     .map((candidate) => {
       const id = candidateId(candidate);
       const context = [candidate.hubTitle, candidate.clusterTitle].filter(Boolean).join(" / ");
-      return `- id: ${id} | "${candidate.title}" (${candidate.type})${context ? ` | ${context}` : ""}`;
+      const kws = (candidate.linkKeywords ?? []).slice(0, 4);
+      const kwHint = kws.length > 0 ? ` | anchors: ${kws.map((k) => `"${k}"`).join(", ")}` : "";
+      return `- id: ${id} | "${candidate.title}" (${candidate.type})${context ? ` | ${context}` : ""}${kwHint}`;
     })
     .join("\n");
 }
@@ -113,6 +118,11 @@ export async function generateTopicArticle(input: {
   const system = buildSystemPrompt(input.copywriterPrompt, input.guide, input.rules);
   const researchSummary = summarizeResearch(input.research);
   const internalLinksSummary = summarizeInternalLinks(input.internalLinkCandidates);
+  const existingKeywords = collectExistingKeywords(input.internalLinkCandidates);
+  const existingKeywordsList =
+    existingKeywords.size === 0
+      ? "(none)"
+      : Array.from(existingKeywords).slice(0, 200).map((k) => `- ${k}`).join("\n");
 
   const outlinePrompt = `
 Create an authoritative article outline for this target:
@@ -159,6 +169,7 @@ CRITICAL BODY-COMPOSITION RULES (these must hold in the \`body\` string itself; 
 1. CITATIONS: To cite a research source, emit \`{{SRC:<n>|<anchor text>}}\` inline at the sentence where you reference that source's claim. \`<n>\` is the source's number from the research list below (1-based). The body MUST contain at least ${MIN_EXTERNAL_LINKS} \`{{SRC:\` tokens; aim for 4-6. Skipping this is a hard failure. Never list sources as a block.
 2. INTERNAL LINKS: To link to existing site content, emit \`{{LINK:<id>|<anchor text>}}\` inline. \`<id>\` is the id from the internal-link candidate list below. The body MUST contain at least ${MIN_INTERNAL_LINKS} \`{{LINK:\` tokens; aim for 4-8. Choose ids only from the provided list — do not invent new ones.
 3. DIAGRAM SYNCHRONIZATION: For every entry you put in the \`diagrams\` array, the body MUST contain exactly one matching placeholder line of the form \`{{DIAGRAM:<id>}}\` where \`<id>\` matches the diagram's \`id\` field character-for-character. If you cannot place a diagram naturally in the body, do NOT include it in the diagrams array.
+4. LINK KEYWORDS: Emit a \`linkKeywords\` array of 6-12 short anchor-quality phrases (each 2-6 words) that would read naturally as a mid-sentence anchor pointing TO this article from another post. Include the primary keyword and 1-2 close paraphrases. Avoid single generic words like "HTML" or "AI". Do not include phrases already used by other articles (list below).
 
 Other requirements:
 - 1200-2000 words
@@ -189,11 +200,15 @@ ${researchSummary}
 Internal-link candidates (use the id field in {{LINK:<id>|...}}):
 ${internalLinksSummary}
 
+Anchor phrases already taken by other articles (your linkKeywords MUST NOT collide with these):
+${existingKeywordsList}
+
 BEFORE YOU FINISH, mentally verify against the body string you just wrote:
 (a) Does it contain at least ${MIN_EXTERNAL_LINKS} \`{{SRC:\` substrings? If not, add inline citations.
 (b) Does it contain at least ${MIN_INTERNAL_LINKS} \`{{LINK:\` substrings? If not, add inline internal links.
 (c) For each diagram \`id\` in your diagrams array, does the body contain \`{{DIAGRAM:\` + id + \`}}\`? If not, add the placeholder or remove the diagram.
-Only emit your response once all three checks pass.
+(d) Are your linkKeywords (6-12) all distinct from the "already taken" list above?
+Only emit your response once all four checks pass.
 `;
 
   const draft = await generateObject({
@@ -221,8 +236,10 @@ Only emit your response once all three checks pass.
   // bounded — we only accept the rewrite if both floors are met.
   const initialInternal = countTokens(workingBody, "LINK");
   const initialExternal = countTokens(workingBody, "SRC");
-  const internalShortfall = Math.max(0, MIN_INTERNAL_LINKS - initialInternal);
-  const externalShortfall = Math.max(0, MIN_EXTERNAL_LINKS - initialExternal);
+  const budget = linkBudget(workingBody);
+  const totalShortfall = Math.max(0, budget.target - (initialInternal + initialExternal));
+  const internalShortfall = Math.max(0, MIN_INTERNAL_LINKS - initialInternal) + Math.max(0, Math.ceil(totalShortfall / 2));
+  const externalShortfall = Math.max(0, MIN_EXTERNAL_LINKS - initialExternal) + Math.max(0, Math.floor(totalShortfall / 2));
   const needsRemediation =
     (internalShortfall > 0 && input.internalLinkCandidates.length > 0) ||
     (externalShortfall > 0 && input.research.length > 0);
@@ -276,6 +293,18 @@ ${workingBody}
   const slugSegment = input.keyword.id.split("/").pop() ?? "";
   const slug = sanitizeSlug(slugSegment || input.keyword.keyword);
 
+  // Filter out linkKeywords that collide with existing candidates' keywords. If we drop
+  // below 6, surface a warning but do not fail — quality.ts will record it.
+  const seenForKw = new Set<string>();
+  const filteredKeywords = (draft.object.linkKeywords ?? [])
+    .map((k) => k.trim())
+    .filter((k) => {
+      const v = k.toLowerCase();
+      if (!v || existingKeywords.has(v) || seenForKw.has(v)) return false;
+      seenForKw.add(v);
+      return true;
+    });
+
   return {
     article: {
       hubSlug: input.keyword.hubSlug,
@@ -297,6 +326,7 @@ ${workingBody}
       body: resolution.body,
       imagePrompt: draft.object.imagePrompt.trim(),
       diagrams: workingDiagrams,
+      linkKeywords: filteredKeywords,
     },
     tokenUsage,
     resolutionWarnings: resolution.warnings,

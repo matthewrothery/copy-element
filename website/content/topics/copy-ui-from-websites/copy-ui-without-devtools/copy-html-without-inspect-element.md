@@ -28,6 +28,13 @@ relatedSlugs:
   - extract-html-from-dom
   - use-ui-with-cursor-ai
   - use-ui-with-claude-code
+linkKeywords:
+  - "copy html without devtools"
+  - "extract html from websites fast"
+  - "automated html extraction method"
+  - "grab html without inspect element"
+  - "html copying without devtools"
+  - "faster way to copy html"
 ---
 
 ## Quick Answer
