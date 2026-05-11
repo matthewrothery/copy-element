@@ -31,7 +31,7 @@ export function ArticleCTA(): ReactElement {
             Capture any UI element. Get clean code instantly.
           </p>
           <p className="article-cta-body">
-            Click any element on any site and copy clean HTML or JSX. Free
+            Click any element on any site and copy clean HTML. Free
             Chrome extension, no sign-up required.
           </p>
         </div>

@@ -22,11 +22,11 @@ faq:
   - question: "Can I use captured UI from SaaS products in my own projects?"
     answer: "You can use captured UI as reference and learning material. However, directly copying code from commercial products without modification may violate their terms of service. Use Cursor to regenerate and customize the components based on the captured reference, making them your own."
 relatedSlugs:
-  - cursor-component-reuse
+  - use-ui-with-claude-code
+  - send-html-to-cursor
+  - build-ui-faster-with-cursor
   - best-prompts-for-ui-generation
-  - prompt-for-react-components
-  - how-to-copy-css-from-any-website
-  - copy-css-without-devtools
+  - copy-html-without-inspect-element
 ---
 
 ## Quick Answer
@@ -103,12 +103,12 @@ A weak prompt:
 > "Make this a React component"
 
 A strong prompt:
-> "I've captured this HTML and CSS from a production website. Convert it to a reusable React component with props for title, items, and onClick handlers. Keep the styling but use Tailwind classes instead of inline CSS. Make it responsive."
+> "I've captured this HTML and CSS from a production website. Convert it to a reusable React component with props for title, items, and onClick handlers. Keep the styling in a CSS module that fits our project. Make it responsive."
 
 The difference:
 
 * You're explicit about the output format (React)
-* You specify styling approach (Tailwind vs CSS modules)
+* You specify the styling approach (CSS modules, scoped CSS, or your existing project conventions)
 * You define what should be dynamic (props)
 * You set constraints (responsive)
 
@@ -152,14 +152,14 @@ Convert it to a React component with:
 - CTA button text as a prop
 - Mobile hamburger menu (hidden on desktop)
 - Sticky positioning
-- Use Tailwind for styling
+- Use our existing CSS module conventions
 
 Keep the visual design but make it flexible.
 ```
 
 **Step 4: Cursor generates the component**
 
-You get a fully functional React component with Tailwind classes, mobile responsiveness, and proper prop structure. No iteration needed.
+You get a functional React component with scoped CSS, mobile responsiveness, and proper prop structure. The captured HTML and CSS give Cursor a concrete baseline instead of a vague visual description.
 
 **Step 5: Customize if needed**
 
@@ -180,7 +180,7 @@ Not all prompts are equal when you're working with captured code.
 **Effective prompts include:**
 
 * "Convert this to [framework]" (React, Vue, Svelte)
-* "Refactor this to use [styling approach]" (Tailwind, CSS modules, styled-components)
+* "Refactor this to use [styling approach]" (CSS modules, scoped CSS, styled-components)
 * "Make this responsive for mobile" (with specific breakpoints)
 * "Add these features: [list]" (animations, dark mode, accessibility)
 * "Extract this into reusable components" (break monolithic code into smaller pieces)
@@ -196,7 +196,7 @@ These are too vague. Cursor doesn't know what "better" means. Be specific about 
 The best prompts combine:
 
 1. The captured code (context)
-2. The target format (React, Tailwind, etc.)
+2. The target format (React, Vue, CSS modules, etc.)
 3. The specific changes (responsive, dark mode, etc.)
 4. Any constraints (accessibility, performance, browser support)
 
@@ -314,5 +314,7 @@ Once you've done it once, you'll see why this workflow is becoming standard for 
 For more on [best prompts for UI generation](/topics/ai-coding-workflows/ai-prompting-for-ui/best-prompts-for-ui-generation), check out our guide on crafting prompts that Cursor responds to best.
 
 And if you want to explore [how to prompt AI for React components](/topics/ai-coding-workflows/ai-prompting-for-ui/prompt-for-react-components) specifically, we have a detailed walkthrough.
+
+If your workflow is moving into agentic coding, compare this with [using captured UI in Claude Code](/topics/ai-coding-workflows/claude-code-workflows/use-ui-with-claude-code). If your bottleneck is the capture step, start with [copy HTML without Inspect Element](/topics/copy-ui-from-websites/copy-ui-without-devtools/copy-html-without-inspect-element) or [DevTools alternatives](/topics/inspecting-debugging-css/devtools-alternatives).
 
 The future of component development isn't designing from scratch. It's capturing what works, refining it with AI, and shipping it fast.

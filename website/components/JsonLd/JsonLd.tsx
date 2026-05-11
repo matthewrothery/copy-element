@@ -1,8 +1,8 @@
 import type { JsonLdProps } from "./types";
-import { CHROME_STORE_URL } from "@/lib/publicConfig";
+import { CHROME_STORE_URL, SITE_URL } from "@/lib/publicConfig";
 
 export function JsonLd({
-  baseUrl = process.env.NEXT_PUBLIC_SITE_URL ?? "https://elementarmory.example.com",
+  baseUrl = SITE_URL,
   storeUrl = CHROME_STORE_URL,
   name = "Element Armory",
   description = "Capture UI from any site and rebuild it with AI. Clean. Clear. Powerful.",

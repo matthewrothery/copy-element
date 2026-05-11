@@ -10,11 +10,11 @@ import {
 } from "@/components/Topic";
 import { getAllClustersFlat, getCluster, getHub } from "@/lib/parseTopics";
 import { schemaIsoDateFromFrontmatter } from "@/lib/schemaHelpers";
+import { SITE_URL } from "@/lib/publicConfig";
 import "@/styles/topics.css";
+import "@/components/Article/ArticleBody.css";
 
 export const dynamic = "force-static";
-
-const BASE_URL = process.env.NEXT_PUBLIC_SITE_URL ?? "https://elementarmory.com";
 
 export function generateStaticParams(): { hub: string; cluster: string }[] {
   return getAllClustersFlat();
@@ -46,7 +46,7 @@ export default async function ClusterPage({
 
   const hub = getHub(hubSlug);
 
-  const pageUrl = `${BASE_URL}/topics/${hubSlug}/${clusterSlug}`;
+  const pageUrl = `${SITE_URL}/topics/${hubSlug}/${clusterSlug}`;
 
   const collectionSchema = {
     "@context": "https://schema.org",
@@ -58,23 +58,23 @@ export default async function ClusterPage({
     inLanguage: "en-US",
     isPartOf: {
       "@type": "WebSite",
-      "@id": `${BASE_URL}/#website`,
+      "@id": `${SITE_URL}/#website`,
       name: "Element Armory",
-      url: BASE_URL,
+      url: SITE_URL,
     },
     publisher: {
       "@type": "Organization",
       name: "Element Armory",
-      url: BASE_URL,
+      url: SITE_URL,
       logo: {
         "@type": "ImageObject",
-        url: `${BASE_URL}/logo.png`,
+        url: `${SITE_URL}/logo.png`,
       },
     },
     hasPart: cluster.articles.map((a) => ({
       "@type": "Article",
       headline: a.title,
-      url: `${BASE_URL}/topics/${hubSlug}/${clusterSlug}/${a.slug}`,
+      url: `${SITE_URL}/topics/${hubSlug}/${clusterSlug}/${a.slug}`,
       description: a.excerpt,
       datePublished: schemaIsoDateFromFrontmatter(a.date),
     })),
@@ -127,6 +127,13 @@ export default async function ClusterPage({
           <h1 className="topics-page__heading">{cluster.title}</h1>
           <p className="topics-page__excerpt">{cluster.excerpt}</p>
         </header>
+
+        {cluster.contentHtml && (
+          <article
+            className="article-body"
+            dangerouslySetInnerHTML={{ __html: cluster.contentHtml }}
+          />
+        )}
 
         <ul className="topics-article-list">
           {cluster.articles.map((article) => (

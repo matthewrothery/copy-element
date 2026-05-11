@@ -340,7 +340,7 @@ For now, the win is simple: **Stop manually copying CSS. Let your AI do the refa
 
 The best time to start automating UI capture is now. Even without MCP or advanced workflows, capturing UI and feeding it to Cursor or Claude saves hours per week.
 
-[Install Element Armory]
+[Add to Chrome - It's Free](https://chromewebstore.google.com/detail/element-armory-%E2%80%93-capture/ihndemikooddnhleamneebgedomkench)
 
 Then pick one component from a site you admire. Capture it. Paste it into Claude. Ask it to convert it to React. See how fast you can go.
 

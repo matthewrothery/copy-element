@@ -4,18 +4,17 @@ import "@/styles/base.css";
 import { JsonLd } from "@/components/JsonLd";
 import { Analytics } from "@/components/Analytics/Analytics";
 import { PlausibleAnalytics } from "@/components/PlausibleAnalytics";
-
-const BASE_URL = process.env.NEXT_PUBLIC_SITE_URL ?? "https://elementarmory.example.com";
+import { SITE_URL } from "@/lib/publicConfig";
 
 export const metadata: Metadata = {
   title: "Element Armory – Capture UI Elements",
   description:
     "Capture UI from any site and rebuild it with AI. Clean. Clear. Powerful.",
-  metadataBase: new URL(BASE_URL),
+  metadataBase: new URL(SITE_URL),
   openGraph: {
     title: "Element Armory – Capture UI Elements",
     description: "Capture UI from any site and rebuild it with AI. Clean. Clear. Powerful.",
-    url: BASE_URL,
+    url: SITE_URL,
     siteName: "Element Armory",
     type: "website",
     images: [
@@ -45,9 +44,9 @@ export default function RootLayout({
   return (
     <html lang="en">
       <head>
-        <meta name="keywords" content="UI capture, HTML copy, JSX copy, AI UI prompts, Chrome extension, developer tools" />
+        <meta name="keywords" content="UI capture, HTML copy, AI UI prompts, Chrome extension, developer tools" />
         <meta name="author" content="Element Armory" />
-        <link rel="alternate" type="application/rss+xml" title="Element Armory Blog" href={`${BASE_URL}/rss.xml`} />
+        <link rel="alternate" type="application/rss+xml" title="Element Armory Blog" href={`${SITE_URL}/rss.xml`} />
       </head>
       <body>
         <JsonLd />

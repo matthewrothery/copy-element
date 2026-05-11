@@ -6,15 +6,42 @@ import "./TopicRelatedLinks.css";
 type TopicRelatedLinksProps = {
   currentSlug: string;
   articles: TopicArticle[];
+  relatedSlugs?: string[];
+  allArticles?: TopicArticle[];
   heading?: string;
 };
 
 export function TopicRelatedLinks({
   currentSlug,
   articles,
+  relatedSlugs = [],
+  allArticles = [],
   heading = "Explore this topic",
 }: TopicRelatedLinksProps): ReactElement | null {
-  const related = articles.filter((a) => a.slug !== currentSlug).slice(0, 5);
+  const articlePool = allArticles.length > 0 ? allArticles : articles;
+  const explicitRelated = relatedSlugs
+    .map((relatedSlug) => relatedSlug.replace(/^\/?topics\//, "").replace(/^\//, ""))
+    .map((relatedSlug) =>
+      articlePool.find((article) => {
+        const articlePath = `${article.hub}/${article.cluster}/${article.slug}`;
+        return article.slug === relatedSlug || articlePath === relatedSlug;
+      })
+    )
+    .filter((article): article is TopicArticle => Boolean(article));
+
+  const fallbackRelated = articles.filter((a) => a.slug !== currentSlug);
+  const related = [...explicitRelated, ...fallbackRelated]
+    .filter(
+      (article, index, list) =>
+        article.slug !== currentSlug &&
+        list.findIndex(
+          (item) =>
+            item.hub === article.hub &&
+            item.cluster === article.cluster &&
+            item.slug === article.slug
+        ) === index
+    )
+    .slice(0, 5);
   if (related.length === 0) return null;
 
   return (

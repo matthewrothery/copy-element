@@ -1,7 +1,6 @@
 import Link from "next/link";
+import { SITE_URL } from "@/lib/publicConfig";
 import "./Breadcrumb.css";
-
-const BASE_URL = process.env.NEXT_PUBLIC_SITE_URL ?? "https://elementarmory.com";
 
 export type BreadcrumbItem = {
   label: string;
@@ -20,7 +19,7 @@ export function Breadcrumb({ items }: BreadcrumbProps): React.ReactElement {
       "@type": "ListItem",
       position: index + 1,
       name: item.label,
-      ...(item.href ? { item: `${BASE_URL}${item.href}` } : {}),
+      ...(item.href ? { item: `${SITE_URL}${item.href}` } : {}),
     })),
   };
 

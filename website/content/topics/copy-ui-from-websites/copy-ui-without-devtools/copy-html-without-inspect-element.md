@@ -21,13 +21,13 @@ faq:
   - question: "Can I use extracted HTML directly in my projects?"
     answer: "Yes, but with caveats. Extracted HTML is a starting point. You'll want to remove unnecessary classes, adjust responsive breakpoints, and test across browsers. It's fastest for component inspiration and structure, not for copy-paste production code."
   - question: "Does this work with React, Vue, or other frameworks?"
-    answer: "Extracted HTML works as vanilla HTML/CSS. You can use it as a reference to build framework components, or paste it into your project and refactor it into JSX or template syntax. It's most useful for understanding structure and styling patterns."
+    answer: "Extracted HTML works as vanilla HTML/CSS. You can use it as a reference to build framework components, or paste it into your project and refactor it into your preferred component syntax. It's most useful for understanding structure and styling patterns."
 relatedSlugs:
-  - copy-ui/copy-css-without-devtools
-  - copy-ui/copy-components-from-websites
-  - ai-ui-workflows/use-captured-ui-with-cursor
-  - copy-ui/html-extraction-best-practices
-  - tool-alternatives/divmagic-alternative
+  - copy-css-without-devtools
+  - how-to-copy-html-from-website
+  - extract-html-from-dom
+  - use-ui-with-cursor-ai
+  - use-ui-with-claude-code
 ---
 
 ## Quick Answer
@@ -274,7 +274,7 @@ Element Armory does this by analyzing the element's computed styles and outputti
 
 The time savings compound. If you capture 10 components, you save 2 hours. If you build a library of 100 components, you save 20 hours. And every time you reuse a component, you save another 10 minutes of manual work.
 
-For developers working with AI tools, the benefit is even larger. Clean, production-ready HTML means AI can understand your intent faster and generate better code. It's the difference between "fix this messy HTML" and "build a component from this clean HTML."
+For developers working with AI tools, the benefit is even larger. Clean HTML and CSS means AI can understand your intent faster and generate better code. It's the difference between "fix this messy HTML" and "build a component from this clean reference."
 
 ---
 
@@ -284,4 +284,6 @@ The fastest way to copy HTML from any website is to stop using DevTools for this
 
 Build your component library. Speed up your AI workflows. Stop wasting time on manual extraction.
 
-[Install Element Armory]
+[Add to Chrome - It's Free](https://chromewebstore.google.com/detail/element-armory-%E2%80%93-capture/ihndemikooddnhleamneebgedomkench)
+
+For adjacent workflows, read [how to use real UI with Cursor AI](/topics/ai-coding-workflows/cursor-workflows/use-ui-with-cursor-ai), [how to use UI with Claude Code](/topics/ai-coding-workflows/claude-code-workflows/use-ui-with-claude-code), and [DevTools alternatives](/topics/inspecting-debugging-css/devtools-alternatives).

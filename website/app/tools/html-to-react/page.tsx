@@ -51,7 +51,7 @@ const FAQ_ITEMS: FAQItem[] = [
   {
     question: "What's the easiest way to get React-ready code from any website?",
     answer:
-      "The Element Armory Chrome extension captures the exact HTML and computed styles from any live page-no copy-pasting required. It exports clean React JSX and CSS directly, saving you the manual conversion step.",
+      "The Element Armory Chrome extension captures the exact HTML and computed styles from any live page-no copy-pasting required. Use that captured HTML as the starting point for this converter or your AI coding workflow.",
   },
 ];
 

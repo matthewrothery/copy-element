@@ -23,7 +23,7 @@ const HOW_IT_WORKS = [
   {
     n: "3",
     title: "Paste into your project or AI tool",
-    body: "Copy HTML or JSX in one click. Drop it straight into your codebase or feed it to Cursor, Claude, or any AI editor.",
+    body: "Copy clean HTML in one click. Drop it straight into your codebase or feed it to Cursor, Claude, or any AI editor.",
   },
 ];
 

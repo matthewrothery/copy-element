@@ -3,11 +3,10 @@ import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
 import { TopicHubCard } from "@/components/Topic";
 import { getAllHubs } from "@/lib/parseTopics";
+import { SITE_URL } from "@/lib/publicConfig";
 import "@/styles/topics.css";
 
 export const dynamic = "force-static";
-
-const BASE_URL = process.env.NEXT_PUBLIC_SITE_URL ?? "https://elementarmory.com";
 
 export const metadata = {
   title: "Topics – Element Armory",
@@ -19,7 +18,7 @@ export const metadata = {
 export default function TopicsIndexPage(): ReactElement {
   const hubs = getAllHubs();
 
-  const pageUrl = `${BASE_URL}/topics`;
+  const pageUrl = `${SITE_URL}/topics`;
 
   const collectionSchema = {
     "@context": "https://schema.org",
@@ -32,23 +31,23 @@ export default function TopicsIndexPage(): ReactElement {
     inLanguage: "en-US",
     isPartOf: {
       "@type": "WebSite",
-      "@id": `${BASE_URL}/#website`,
+      "@id": `${SITE_URL}/#website`,
       name: "Element Armory",
-      url: BASE_URL,
+      url: SITE_URL,
     },
     publisher: {
       "@type": "Organization",
       name: "Element Armory",
-      url: BASE_URL,
+      url: SITE_URL,
       logo: {
         "@type": "ImageObject",
-        url: `${BASE_URL}/logo.png`,
+        url: `${SITE_URL}/logo.png`,
       },
     },
     hasPart: hubs.map((h) => ({
       "@type": "WebPage",
       name: h.title,
-      url: `${BASE_URL}/topics/${h.hub}`,
+      url: `${SITE_URL}/topics/${h.hub}`,
       description: h.excerpt,
     })),
   };

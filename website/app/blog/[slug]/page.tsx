@@ -4,9 +4,8 @@ import { Footer } from "@/components/Footer";
 import { ArticleHeader, ArticleBody, ArticleCTA, SuggestedPosts } from "@/components/Article";
 import { getAllPosts, getPost } from "@/lib/parseBlog";
 import { schemaIsoDateFromFrontmatter } from "@/lib/schemaHelpers";
+import { SITE_URL } from "@/lib/publicConfig";
 import "@/styles/blog.css";
-
-const BASE_URL = process.env.NEXT_PUBLIC_SITE_URL ?? "https://elementarmory.com";
 
 export const dynamic = "force-static";
 
@@ -42,7 +41,7 @@ export default async function BlogPostPage({
     .filter((p) => p.slug !== slug)
     .slice(0, 4);
 
-  const postUrl = `${BASE_URL}/blog/${post.slug}`;
+  const postUrl = `${SITE_URL}/blog/${post.slug}`;
   const published = schemaIsoDateFromFrontmatter(post.date);
 
   const articleSchema = {
@@ -61,10 +60,10 @@ export default async function BlogPostPage({
     publisher: {
       "@type": "Organization",
       name: "Element Armory",
-      url: BASE_URL,
+      url: SITE_URL,
       logo: {
         "@type": "ImageObject",
-        url: `${BASE_URL}/logo.png`,
+        url: `${SITE_URL}/logo.png`,
       },
     },
     mainEntityOfPage: {

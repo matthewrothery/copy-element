@@ -52,6 +52,7 @@ export type TopicCluster = {
   title: string;
   excerpt: string;
   faq: FaqItem[];
+  contentHtml?: string;
   articles: TopicArticle[];
 };
 
@@ -105,7 +106,7 @@ function parseClusterIndex(
   }
 
   const raw = readFileSync(filePath, "utf-8");
-  const { data } = matter(raw);
+  const { data, content } = matter(raw);
 
   return {
     hub: (data.hub as string) ?? hub,
@@ -114,6 +115,7 @@ function parseClusterIndex(
     title: data.title as string,
     excerpt: data.excerpt as string,
     faq: (data.faq as FaqItem[]) ?? [],
+    contentHtml: content.trim().length > 0 ? markdownToArticleHtml(content) : undefined,
     articles,
   };
 }

@@ -16,12 +16,11 @@ import {
   getCluster,
 } from "@/lib/parseTopics";
 import { schemaIsoDateFromFrontmatter } from "@/lib/schemaHelpers";
+import { SITE_URL } from "@/lib/publicConfig";
 import "@/styles/topics.css";
 import "@/components/Article/ArticleBody.css";
 
 export const dynamic = "force-static";
-
-const BASE_URL = process.env.NEXT_PUBLIC_SITE_URL ?? "https://elementarmory.com";
 
 export function generateStaticParams(): {
   hub: string;
@@ -63,7 +62,7 @@ export default async function ArticlePage({
   const cluster = getCluster(hubSlug, clusterSlug);
   const clusterArticles = getAllArticles(hubSlug, clusterSlug);
 
-  const articleUrl = `${BASE_URL}/topics/${hubSlug}/${clusterSlug}/${slug}`;
+  const articleUrl = `${SITE_URL}/topics/${hubSlug}/${clusterSlug}/${slug}`;
   const published = schemaIsoDateFromFrontmatter(article.date);
 
   const articleSchema = {
@@ -79,15 +78,15 @@ export default async function ArticlePage({
     author: {
       "@type": "Organization",
       name: "Element Armory",
-      url: BASE_URL,
+      url: SITE_URL,
     },
     publisher: {
       "@type": "Organization",
       name: "Element Armory",
-      url: BASE_URL,
+      url: SITE_URL,
       logo: {
         "@type": "ImageObject",
-        url: `${BASE_URL}/logo.png`,
+        url: `${SITE_URL}/logo.png`,
       },
     },
     mainEntityOfPage: {
@@ -96,7 +95,7 @@ export default async function ArticlePage({
       url: articleUrl,
     },
     url: articleUrl,
-    ...(article.coverImage ? { image: `${BASE_URL}${article.coverImage}` } : {}),
+    ...(article.coverImage ? { image: `${SITE_URL}${article.coverImage}` } : {}),
   };
 
   const faqSchema =
@@ -174,6 +173,8 @@ export default async function ArticlePage({
         <TopicRelatedLinks
           currentSlug={slug}
           articles={clusterArticles}
+          relatedSlugs={article.relatedSlugs}
+          allArticles={getAllArticlesFlat()}
         />
       </main>
       <Footer />

@@ -9,11 +9,10 @@ import {
   TopicCta,
 } from "@/components/Topic";
 import { getAllHubs, getHub } from "@/lib/parseTopics";
+import { SITE_URL } from "@/lib/publicConfig";
 import "@/styles/topics.css";
 
 export const dynamic = "force-static";
-
-const BASE_URL = process.env.NEXT_PUBLIC_SITE_URL ?? "https://elementarmory.com";
 
 export function generateStaticParams(): { hub: string }[] {
   return getAllHubs().map((h) => ({ hub: h.hub }));
@@ -48,7 +47,7 @@ export default async function HubPage({
     0
   );
 
-  const pageUrl = `${BASE_URL}/topics/${hub.hub}`;
+  const pageUrl = `${SITE_URL}/topics/${hub.hub}`;
 
   const collectionSchema = {
     "@context": "https://schema.org",
@@ -60,23 +59,23 @@ export default async function HubPage({
     inLanguage: "en-US",
     isPartOf: {
       "@type": "WebSite",
-      "@id": `${BASE_URL}/#website`,
+      "@id": `${SITE_URL}/#website`,
       name: "Element Armory",
-      url: BASE_URL,
+      url: SITE_URL,
     },
     publisher: {
       "@type": "Organization",
       name: "Element Armory",
-      url: BASE_URL,
+      url: SITE_URL,
       logo: {
         "@type": "ImageObject",
-        url: `${BASE_URL}/logo.png`,
+        url: `${SITE_URL}/logo.png`,
       },
     },
     hasPart: hub.clusters.map((c) => ({
       "@type": "WebPage",
       name: c.title,
-      url: `${BASE_URL}/topics/${hub.hub}/${c.cluster}`,
+      url: `${SITE_URL}/topics/${hub.hub}/${c.cluster}`,
       description: c.excerpt,
     })),
   };
