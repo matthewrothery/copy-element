@@ -179,8 +179,8 @@ export function createArtifact(input: {
 function newsItemToResearchResult(item: NewsItem): ResearchResult {
   return {
     title: item.title,
-    url: item.url,
-    snippet: item.source,
+    url: item.publisherUrl ?? item.url,
+    snippet: item.description ?? item.source,
     content: item.content,
   };
 }
@@ -226,7 +226,7 @@ export function createBlogArtifact(input: {
   ];
 
   const articleSha256 = sha256(articleMarkdown);
-  const sourceUrls = input.post.sourceItems.map((i) => i.url);
+  const sourceUrls = input.post.sourceItems.map((i) => i.publisherUrl ?? i.url);
 
   return {
     artifactId,

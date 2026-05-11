@@ -1,8 +1,9 @@
-import { generateObject } from "ai";
+import { generateObject, generateText } from "ai";
 import { anthropic } from "@ai-sdk/anthropic";
 import { openai } from "@ai-sdk/openai";
 import { z } from "zod";
-import { GeneratedBlogPost, NewsItem, TokenUsage } from "./types.js";
+import { applyLinkPlaceholders, candidateId } from "./applyLinkPlaceholders.js";
+import { GeneratedBlogPost, InternalLinkCandidate, NewsItem, ResearchResult, TokenUsage } from "./types.js";
 
 const OutlineSchema = z.object({
   angle: z.string(),
@@ -20,6 +21,8 @@ const DraftSchema = z.object({
 });
 
 const DRAFT_MAX_OUTPUT_TOKENS = 4096;
+const MIN_EXTERNAL_LINKS = 2;
+const MIN_INTERNAL_LINKS = 2;
 
 const SYSTEM_PROMPT = `You are an editorial writer for Element Armory – Capture UI Elements, a developer tool for capturing and rebuilding UI from any website.
 
@@ -34,9 +37,25 @@ function summarizeNewsItems(items: NewsItem[]): string {
   return items
     .map((item, idx) => {
       const body = item.content?.slice(0, 600) ?? "(no content fetched)";
-      return `Source ${idx + 1}\nTitle: ${item.title}\nURL: ${item.url}\nPublished: ${item.publishedAt}\nSource: ${item.source}\n\n${body}`;
+      return `Source ${idx + 1} — cite as {{SRC:${idx + 1}|anchor text}}\nTitle: ${item.title}\nURL: ${item.publisherUrl ?? item.url}\nPublished: ${item.publishedAt}\nSource: ${item.source}\n\n${body}`;
     })
     .join("\n\n---\n\n");
+}
+
+function summarizeInternalLinks(candidates: InternalLinkCandidate[]): string {
+  if (candidates.length === 0) {
+    return "No existing internal link candidates are available yet.";
+  }
+
+  return candidates
+    .map((candidate) => {
+      const id = candidateId(candidate);
+      const context = [candidate.hubTitle, candidate.clusterTitle].filter(Boolean).join(" / ");
+      const kws = (candidate.linkKeywords ?? []).slice(0, 4);
+      const kwHint = kws.length > 0 ? ` | anchors: ${kws.map((k) => `"${k}"`).join(", ")}` : "";
+      return `- id: ${id} | "${candidate.title}" (${candidate.type})${context ? ` | ${context}` : ""}${kwHint}`;
+    })
+    .join("\n");
 }
 
 function createTextModel(provider: "anthropic" | "openai", model: string) {
@@ -52,14 +71,30 @@ function sanitizeSlug(input: string): string {
     .replace(/-+/g, "-");
 }
 
+function countTokens(body: string, prefix: "LINK" | "SRC"): number {
+  const re = new RegExp(`\\{\\{${prefix}:`, "g");
+  return (body.match(re) ?? []).length;
+}
+
+function newsItemsToResearch(items: NewsItem[]): ResearchResult[] {
+  return items.map((item) => ({
+    title: item.title,
+    url: item.publisherUrl ?? item.url,
+    snippet: item.description ?? item.source,
+    content: item.content,
+  }));
+}
+
 export async function generateNewsArticle(input: {
   items: NewsItem[];
   date: string;
   textProvider: "anthropic" | "openai";
   model: string;
-}): Promise<{ post: GeneratedBlogPost; tokenUsage: TokenUsage }> {
+  internalLinkCandidates: InternalLinkCandidate[];
+}): Promise<{ post: GeneratedBlogPost; tokenUsage: TokenUsage; resolutionWarnings: string[] }> {
   const model = createTextModel(input.textProvider, input.model);
   const newsSummary = summarizeNewsItems(input.items);
+  const internalLinksSummary = summarizeInternalLinks(input.internalLinkCandidates);
 
   const outlinePrompt = `
 Today is ${input.date}. Based on the following recent news items, create an editorial commentary outline for a developer audience following the AI tooling and vibe coding space.
@@ -84,7 +119,7 @@ Return:
   const outline = outlineResult.object;
 
   const sourceUrlList = input.items
-    .map((item, idx) => `${idx + 1}. ${item.url} — ${item.title} (${item.source})`)
+    .map((item, idx) => `${idx + 1}. ${item.publisherUrl ?? item.url} — ${item.title} (${item.source})`)
     .join("\n");
 
   const draftPrompt = `
@@ -99,7 +134,10 @@ Requirements:
 - 600–900 words
 - markdown body only (no frontmatter)
 - editorial commentary tone — analysis, opinion, context, not a news summary
-- inline links to at least 3 of the source URLs below. Link at the point you reference their content.
+- cite source articles with inline {{SRC:<n>|anchor text}} placeholders. The body MUST contain at least ${MIN_EXTERNAL_LINKS} {{SRC: tokens.
+- link to existing Element Armory content with inline {{LINK:<id>|anchor text}} placeholders. The body MUST contain at least ${MIN_INTERNAL_LINKS} {{LINK: tokens when internal candidates are available.
+- choose internal link ids only from the candidate list below.
+- never include raw https:// URLs or raw /topics/... or /blog/... paths in the body. Always use placeholder syntax.
 - no FAQ section
 - no diagrams
 - no H1 title inside body
@@ -108,8 +146,11 @@ Requirements:
 
 Also return an image prompt for a clean editorial cover image. Modern, minimal, geometric. No text. No photorealism.
 
-Source URLs (link to at least 3 inline):
+Source URLs (cite with {{SRC:<n>|anchor text}}):
 ${sourceUrlList}
+
+Internal-link candidates (link with {{LINK:<id>|anchor text}}):
+${internalLinksSummary}
 
 News context:
 ${newsSummary}
@@ -130,6 +171,51 @@ ${newsSummary}
     outputTokens: (outlineResult.usage?.completionTokens ?? 0) + (draftResult.usage?.completionTokens ?? 0),
   };
 
+  let workingBody = draft.body.trim();
+  const initialExternal = countTokens(workingBody, "SRC");
+  const initialInternal = countTokens(workingBody, "LINK");
+  const externalShortfall = Math.max(0, MIN_EXTERNAL_LINKS - initialExternal);
+  const internalFloor = input.internalLinkCandidates.length > 0 ? MIN_INTERNAL_LINKS : 0;
+  const internalShortfall = Math.max(0, internalFloor - initialInternal);
+
+  if (externalShortfall > 0 || internalShortfall > 0) {
+    const remediation = await generateText({
+      model,
+      system: SYSTEM_PROMPT,
+      prompt: `The news commentary body below is missing inline link placeholders. Rewrite it to add ${externalShortfall} more {{SRC:<n>|anchor}} source citation${externalShortfall === 1 ? "" : "s"} and ${internalShortfall} more {{LINK:<id>|anchor}} internal link${internalShortfall === 1 ? "" : "s"}.
+
+Rules:
+- use only source numbers and internal-link ids from the lists below
+- preserve the same editorial argument, headings, and approximate length
+- do not add a Sources, References, FAQ, or link list section
+- never include raw URLs or raw internal paths
+- output ONLY the rewritten markdown body
+
+Sources:
+${newsSummary}
+
+Internal-link candidates:
+${internalLinksSummary}
+
+Body to rewrite:
+---
+${workingBody}
+---`,
+      maxTokens: DRAFT_MAX_OUTPUT_TOKENS,
+    });
+    const rewritten = remediation.text.trim();
+    if (
+      countTokens(rewritten, "SRC") >= MIN_EXTERNAL_LINKS &&
+      countTokens(rewritten, "LINK") >= internalFloor
+    ) {
+      workingBody = rewritten;
+    }
+    tokenUsage.inputTokens += remediation.usage?.promptTokens ?? 0;
+    tokenUsage.outputTokens += remediation.usage?.completionTokens ?? 0;
+  }
+
+  const research = newsItemsToResearch(input.items);
+  const resolution = applyLinkPlaceholders(workingBody, input.internalLinkCandidates, research);
   const slug = sanitizeSlug(outline.slug || draft.title);
 
   return {
@@ -139,10 +225,11 @@ ${newsSummary}
       date: input.date,
       excerpt: draft.excerpt,
       readTime: draft.readTime,
-      body: draft.body.trim(),
+      body: resolution.body,
       imagePrompt: draft.imagePrompt.trim(),
       sourceItems: input.items,
     },
     tokenUsage,
+    resolutionWarnings: resolution.warnings,
   };
 }

@@ -11,7 +11,8 @@
     "import": "tsx src/importFromS3.ts",
     "import:prod": "node dist/importFromS3.js",
     "bootstrap-link-keywords": "tsx src/bootstrapLinkKeywords.ts",
-    "typecheck": "tsc --noEmit"
+    "typecheck": "tsc --noEmit",
+    "test": "node --import tsx --test src/*.test.ts"
   },
   "dependencies": {
     "@ai-sdk/anthropic": "^1.2.12",

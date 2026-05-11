@@ -1,5 +1,6 @@
 import "dotenv/config";
-import { readFileSync } from "fs";
+import { existsSync, readFileSync, readdirSync } from "fs";
+import path from "path";
 import { applyDiagramsToArticle } from "./applyDiagrams.js";
 import { loadConfig } from "./config.js";
 import { researchTopic } from "./research.js";
@@ -7,7 +8,7 @@ import { parseTopicKeywords, pickNextKeyword } from "./topics.js";
 import { loadState, saveState } from "./state.js";
 import { generateTopicArticle } from "./generateArticle.js";
 import { generateNewsArticle } from "./generateNewsArticle.js";
-import { validateArticleQuality } from "./quality.js";
+import { validateArticleQuality, validateNewsPostQuality } from "./quality.js";
 import { generateCoverImage } from "./generateImage.js";
 import { createArtifact, createBlogArtifact } from "./artifact.js";
 import { writeDryRunArtifact } from "./localPublish.js";
@@ -24,6 +25,16 @@ const NEWS_IMAGE_STYLE = `- clean editorial style
 - no text or logos
 - no photorealism
 - no stencil or street-art`;
+
+function loadExistingBlogSlugs(websiteRoot: string): Set<string> {
+  const blogRoot = path.resolve(websiteRoot, "content", "blog");
+  if (!existsSync(blogRoot)) return new Set();
+  return new Set(
+    readdirSync(blogRoot)
+      .filter((file) => file.endsWith(".md"))
+      .map((file) => path.parse(file).name)
+  );
+}
 
 async function runSingleCycle(): Promise<void> {
   const config = loadConfig();
@@ -157,22 +168,36 @@ async function runSingleCycle(): Promise<void> {
 async function runNewsCycle(): Promise<void> {
   const config = loadConfig();
   const today = new Date().toISOString().slice(0, 10);
+  const internalLinkCandidates = loadInternalLinkCandidates(config.websiteRoot);
+  const usedBlogSlugs = loadExistingBlogSlugs(config.websiteRoot);
 
   console.log("[news] Fetching news items...");
-  const items = await fetchNewsItems(6);
+  const items = await fetchNewsItems(6, {
+    recencyHours: config.newsRecencyHours,
+    minItems: config.newsMinItems,
+  });
   if (items.length === 0) {
     console.warn("[news] No recent news items found; skipping cycle.");
     return;
   }
   console.log(`[news] Fetched ${items.length} items.`);
 
-  const { post, tokenUsage } = await generateNewsArticle({
+  const { post, tokenUsage, resolutionWarnings } = await generateNewsArticle({
     items,
     date: today,
     textProvider: config.textProvider,
     model: config.textModel,
+    internalLinkCandidates,
   });
   console.log(`[news] Generated post: ${post.title} (${post.slug})`);
+
+  const qualityWarnings = [
+    ...validateNewsPostQuality(post, usedBlogSlugs),
+    ...resolutionWarnings,
+  ];
+  if (qualityWarnings.length > 0) {
+    console.warn(`[news] Quality warnings (${qualityWarnings.length}):\n- ${qualityWarnings.join("\n- ")}`);
+  }
 
   let coverBuffer: Buffer<ArrayBufferLike> = Buffer.alloc(0);
   let coverExt = config.imageFormat;
@@ -197,6 +222,7 @@ async function runNewsCycle(): Promise<void> {
     imageModel: config.imageModel,
     promptVersion: config.promptVersion,
     author: config.author,
+    qualityWarnings,
   });
 
   if (config.dryRun) {

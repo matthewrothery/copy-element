@@ -1,4 +1,4 @@
-import { GeneratedArticle } from "./types.js";
+import { GeneratedArticle, GeneratedBlogPost } from "./types.js";
 
 /** Plain intro before any H2, or narrative under a leading "## Quick Answer"-style heading. */
 const MIN_UPFRONT_CHARS = 100;
@@ -56,7 +56,7 @@ export function validateArticleQuality(
   const issues: string[] = [];
   const lowerBody = article.body.toLowerCase();
   const body = article.body.trim();
-  const internalLinkCount = (article.body.match(/\]\(\/topics\//g) ?? []).length;
+  const internalLinkCount = (article.body.match(/\]\(\/(?:topics|blog)\//g) ?? []).length;
   const externalSourceLinkCount = (article.body.match(/\]\(https?:\/\//g) ?? []).length;
   const { target, ceiling } = linkBudget(article.body);
   const totalLinks = internalLinkCount + externalSourceLinkCount;
@@ -163,6 +163,78 @@ export function validateArticleQuality(
     issues.push(
       "Remove FAQ headings or FAQ lists from the markdown body; FAQs belong in frontmatter only for topic pages."
     );
+  }
+
+  return issues;
+}
+
+export function validateNewsPostQuality(
+  post: GeneratedBlogPost,
+  usedSlugs: Set<string> = new Set()
+): string[] {
+  const issues: string[] = [];
+  const lowerBody = post.body.toLowerCase();
+  const internalLinkCount = (post.body.match(/\]\(\/(?:topics|blog)\//g) ?? []).length;
+  const externalSourceLinkCount = (post.body.match(/\]\(https?:\/\//g) ?? []).length;
+  const linkRe = /\[([^\]]+)\]\(([^)]+)\)/g;
+  const seenUrls = new Map<string, number>();
+  const seenAnchors = new Map<string, number>();
+
+  if (post.sourceItems.length < 3) {
+    issues.push(`News post has only ${post.sourceItems.length} usable source item(s); minimum is 3.`);
+  }
+
+  for (const item of post.sourceItems) {
+    if (!item.content || item.content.trim().length < 300) {
+      issues.push(`Source content is missing or too short: ${item.title}`);
+    }
+  }
+
+  if (usedSlugs.has(post.slug)) {
+    issues.push(`Duplicate blog slug detected: ${post.slug}`);
+  }
+
+  if (externalSourceLinkCount < 2) {
+    issues.push(
+      `News post has only ${externalSourceLinkCount} external source link${externalSourceLinkCount === 1 ? "" : "s"}; minimum is 2.`
+    );
+  }
+
+  if (internalLinkCount < 2) {
+    issues.push(
+      `News post has only ${internalLinkCount} internal link${internalLinkCount === 1 ? "" : "s"}; minimum is 2.`
+    );
+  }
+
+  for (const match of post.body.matchAll(linkRe)) {
+    const anchor = match[1].trim().toLowerCase();
+    const url = match[2].trim();
+    seenUrls.set(url, (seenUrls.get(url) ?? 0) + 1);
+    seenAnchors.set(anchor, (seenAnchors.get(anchor) ?? 0) + 1);
+  }
+  for (const [url, count] of seenUrls) {
+    if (count > 1) issues.push(`Duplicate link target: ${url} appears ${count} times.`);
+  }
+  for (const [anchor, count] of seenAnchors) {
+    if (count > 1) issues.push(`Duplicate anchor text: "${anchor}" appears ${count} times.`);
+  }
+
+  if (/\{\{(?:LINK|SRC):/.test(post.body)) {
+    issues.push("Unresolved link placeholders remain in news post body.");
+  }
+
+  for (const phrase of BANNED_PHRASES) {
+    if (lowerBody.includes(phrase)) {
+      issues.push(`Unsupported feature claim detected: "${phrase}"`);
+    }
+  }
+
+  if (!post.excerpt || post.excerpt.length < 70) {
+    issues.push("Excerpt is too short.");
+  }
+
+  if (!post.imagePrompt || post.imagePrompt.length < 20) {
+    issues.push("Image prompt missing or too short.");
   }
 
   return issues;
