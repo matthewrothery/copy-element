@@ -158,9 +158,9 @@ resource "aws_cloudfront_response_headers_policy" "admin_security_headers" {
     }
 
     xss_protection {
-      protection  = true
-      mode_block  = true
-      override    = true
+      protection = true
+      mode_block = true
+      override   = true
     }
   }
 }

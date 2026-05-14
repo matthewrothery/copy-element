@@ -166,6 +166,6 @@ resource "aws_s3_bucket_lifecycle_configuration" "auto_blog" {
 }
 
 locals {
-  s3_origin_id = "${var.project}_${upper(replace(var.environment, "/\\W|_|\\s/", "-"))}_WEBSITE_ORIGIN"
+  s3_origin_id             = "${var.project}_${upper(replace(var.environment, "/\\W|_|\\s/", "-"))}_WEBSITE_ORIGIN"
   s3_auto_blog_bucket_name = "${var.s3_auto_blog_bucket_base}-${var.environment}"
 }

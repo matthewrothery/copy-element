@@ -246,6 +246,34 @@ resource "aws_ssm_association" "upload_runtime_config" {
   depends_on = [aws_instance.app, aws_iam_role_policy_attachment.ec2_ssm_managed]
 }
 
+resource "aws_ssm_association" "apply_swap" {
+  name             = "AWS-RunShellScript"
+  association_name = "${var.project}-${var.environment}-apply-swap"
+
+  targets {
+    key    = "InstanceIds"
+    values = [aws_instance.app.id]
+  }
+
+  parameters = {
+    commands = <<-EOC
+      # Idempotent: skip if /swapfile already present (user-data installs on launch,
+      # this association applies the same change to a running instance).
+      if [ ! -f /swapfile ]; then
+        fallocate -l 4G /swapfile
+        chmod 600 /swapfile
+        mkswap /swapfile
+        swapon /swapfile
+        echo '/swapfile none swap sw 0 0' >> /etc/fstab
+        echo 'vm.swappiness=10' > /etc/sysctl.d/99-swap.conf
+        sysctl -p /etc/sysctl.d/99-swap.conf
+      fi
+    EOC
+  }
+
+  depends_on = [aws_instance.app, aws_iam_role_policy_attachment.ec2_ssm_managed]
+}
+
 resource "aws_ssm_association" "run_deployment" {
   name             = "AWS-RunShellScript"
   association_name = "${var.project}-${var.environment}-run-deployment"

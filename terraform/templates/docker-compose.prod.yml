@@ -1,5 +1,9 @@
 name: element-armory-prod
 
+# Memory budget for the 1 GB t3.micro + 4 GB swap host:
+#   nginx 64 / 128m   app 512 / 768m   mcp 256 / 384m   auto-blogger 384 / 512m
+# Total cap ~1216 MiB; swap absorbs spikes when auto-blogger generation overlaps app load.
+
 services:
   nginx:
     image: nginx:alpine
@@ -12,6 +16,8 @@ services:
     depends_on:
       - app
     restart: unless-stopped
+    mem_limit: 64m
+    memswap_limit: 128m
     networks:
       - element-armory-network
 
@@ -24,6 +30,8 @@ services:
     volumes:
       - /home/ec2-user/element-armory/data:/data
     restart: unless-stopped
+    mem_limit: 512m
+    memswap_limit: 768m
     networks:
       - element-armory-network
 
@@ -37,6 +45,8 @@ services:
     depends_on:
       - app
     restart: unless-stopped
+    mem_limit: 256m
+    memswap_limit: 384m
     networks:
       - element-armory-network
 
@@ -47,6 +57,8 @@ services:
     volumes:
       - /home/ec2-user/element-armory/data:/data
     restart: unless-stopped
+    mem_limit: 384m
+    memswap_limit: 512m
     networks:
       - element-armory-network
 

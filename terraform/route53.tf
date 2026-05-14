@@ -12,7 +12,7 @@ locals {
   # Multiple character-strings must live in ONE TXT record — resolvers concatenate them.
   # regexall avoids integer-division edge cases from length()/255 arithmetic.
   # Strip surrounding quotes defensively — Google Admin sometimes shows the value in quotes.
-  _gmail_dkim_raw = trimsuffix(trimprefix(trimspace(var.gmail_dkim_txt), "\""), "\"")
+  _gmail_dkim_raw    = trimsuffix(trimprefix(trimspace(var.gmail_dkim_txt), "\""), "\"")
   _gmail_dkim_chunks = length(local._gmail_dkim_raw) == 0 ? [] : regexall(".{1,255}", local._gmail_dkim_raw)
   # The AWS provider auto-wraps each records element in outer quotes before sending to Route 53.
   # So we only add the inner " " separators between chunks — the provider supplies the outer quotes,
