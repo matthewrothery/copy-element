@@ -1,0 +1,4 @@
+interface:
+  display_name: "Write Copy"
+  short_description: "Draft conversion-ready page copy"
+  default_prompt: "Use $write-copy to draft copy for a use case page."
