@@ -13,6 +13,7 @@ import { Revenue } from '@/pages/Revenue';
 import { Errors } from '@/pages/Errors';
 import { Retention } from '@/pages/Retention';
 import { UsageMetrics } from '@/pages/UsageMetrics';
+import { Installs } from '@/pages/Installs';
 import { Complimentary } from '@/pages/Complimentary';
 import { BlogGenerator } from '@/pages/BlogGenerator';
 import { NotFound } from '@/pages/NotFound';
@@ -63,6 +64,7 @@ export function App(): React.ReactElement {
             <Route path="errors" element={<Errors />} />
             <Route path="retention" element={<Retention />} />
             <Route path="usage" element={<UsageMetrics />} />
+            <Route path="installs" element={<Installs />} />
             <Route path="complimentary" element={<Complimentary />} />
             <Route path="blog" element={<BlogGenerator />} />
           </Route>

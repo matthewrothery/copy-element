@@ -1,0 +1,62 @@
+.installs {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+}
+
+.installs__search {
+  display: flex;
+  gap: var(--space-3);
+  align-items: flex-end;
+  max-width: 480px;
+}
+
+.installs__search .input-wrapper {
+  flex: 1;
+}
+
+.installs__count {
+  font-size: var(--typo-copy);
+  color: var(--text-subtle);
+}
+
+.installs__id,
+.installs__email {
+  font-family: var(--font-mono);
+  font-size: var(--typo-caption);
+}
+
+.installs__pagination {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  justify-content: flex-end;
+}
+
+.installs__page-info {
+  font-size: var(--typo-copy);
+  color: var(--text-muted);
+}
+
+.installs__copy-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 28px;
+  border: none;
+  border-radius: var(--radius);
+  background: transparent;
+  color: var(--text-subtle);
+  cursor: pointer;
+  transition: background 120ms, color 120ms;
+}
+
+.installs__copy-btn:hover {
+  background: var(--surface-raised);
+  color: var(--text);
+}
+
+.installs__copy-btn--copied {
+  color: var(--success-text, #16a34a);
+}

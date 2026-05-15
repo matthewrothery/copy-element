@@ -779,9 +779,9 @@ export function getUsageMetrics(): UsageMetricsResult {
     )
   `).get() as { avg_captures: number | null };
 
-  // Count of distinct users who have created an MCP token (connected MCP)
+  // Count of distinct users who have an active MCP OAuth refresh token (connected MCP)
   const mcpConnections = (db.prepare(
-    `SELECT COUNT(DISTINCT user_id) AS n FROM mcp_tokens`,
+    `SELECT COUNT(DISTINCT user_id) AS n FROM oauth_refresh_tokens WHERE revoked_at IS NULL`,
   ).get() as { n: number }).n;
 
   // Average days from account creation to first MCP call
@@ -823,6 +823,91 @@ export function getUsageMetrics(): UsageMetricsResult {
       : null,
     upgrade_rate_pct: upgradeRatePct,
   };
+}
+
+// ---------------------------------------------------------------------------
+// Installs List (paginated, searchable)
+// ---------------------------------------------------------------------------
+
+export interface AdminInstall {
+  install_id: string;
+  created_at: number;
+  last_seen_at: number;
+  extension_version: string | null;
+  chrome_version: string | null;
+  os_family: string | null;
+  screen_width: number | null;
+  screen_height: number | null;
+  locale: string | null;
+  timezone: string | null;
+  user_id: string | null;
+  user_email: string | null;
+  capture_count: number;
+  last_capture_at: number | null;
+}
+
+export interface InstallListResult {
+  installs: AdminInstall[];
+  total: number;
+  page: number;
+}
+
+export function getInstallList(page: number, limit: number, search: string): InstallListResult {
+  const db = getDb();
+  const offset = (page - 1) * limit;
+  const searchLike = search ? `%${search}%` : '%';
+
+  const total = (db.prepare(`
+    SELECT COUNT(*) AS n
+    FROM installs i
+    LEFT JOIN "user" u ON u.id = i.user_id
+    WHERE (
+      i.install_id LIKE ?
+      OR COALESCE(u.email, '') LIKE ?
+      OR COALESCE(i.os_family, '') LIKE ?
+      OR COALESCE(i.extension_version, '') LIKE ?
+    )
+  `).get(searchLike, searchLike, searchLike, searchLike) as { n: number }).n;
+
+  const installs = db.prepare(`
+    SELECT
+      i.install_id,
+      i.created_at,
+      i.last_seen_at,
+      i.extension_version,
+      i.chrome_version,
+      i.os_family,
+      i.screen_width,
+      i.screen_height,
+      i.locale,
+      i.timezone,
+      i.user_id,
+      u.email AS user_email,
+      (
+        SELECT COUNT(*)
+        FROM analytics_events ae
+        WHERE ae.install_id = i.install_id
+          AND ae.event_type = 'element_captured'
+      ) AS capture_count,
+      (
+        SELECT MAX(ae.created_at)
+        FROM analytics_events ae
+        WHERE ae.install_id = i.install_id
+          AND ae.event_type = 'element_captured'
+      ) AS last_capture_at
+    FROM installs i
+    LEFT JOIN "user" u ON u.id = i.user_id
+    WHERE (
+      i.install_id LIKE ?
+      OR COALESCE(u.email, '') LIKE ?
+      OR COALESCE(i.os_family, '') LIKE ?
+      OR COALESCE(i.extension_version, '') LIKE ?
+    )
+    ORDER BY i.created_at DESC
+    LIMIT ? OFFSET ?
+  `).all(searchLike, searchLike, searchLike, searchLike, limit, offset) as AdminInstall[];
+
+  return { installs, total, page };
 }
 
 // ---------------------------------------------------------------------------

@@ -15,6 +15,7 @@ import {
   getLimitReachedBreakdown,
   getUsageMetrics,
   getExtensionActivity,
+  getInstallList,
 } from '../../services/admin-queries.js';
 import { grantComplimentary, revokeComplimentary, getComplimentaryGrant } from '../../services/complimentary.js';
 import { getUserEntitlement } from '../../services/entitlements.js';
@@ -111,6 +112,14 @@ adminRouter.get('/extension-activity', (_req: Request, res: Response) => {
   const periodEnd = Date.now();
   const periodStart = periodEnd - hours * 60 * 60 * 1000;
   res.json(getExtensionActivity(periodStart, periodEnd));
+});
+
+/** GET /api/admin/installs?page=1&limit=50&search= */
+adminRouter.get('/installs', (_req: Request, res: Response) => {
+  const page = Math.max(1, parseInt((_req.query.page as string) ?? '1', 10) || 1);
+  const limit = Math.min(100, Math.max(1, parseInt((_req.query.limit as string) ?? '50', 10) || 50));
+  const search = ((_req.query.search as string) ?? '').trim();
+  res.json(getInstallList(page, limit, search));
 });
 
 /** GET /api/admin/limit-reached?days=30 */

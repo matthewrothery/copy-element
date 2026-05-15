@@ -6,6 +6,7 @@ const NAV_ITEMS = [
   { to: '/funnel', label: 'Funnel', icon: '⫸' },
   { to: '/conversion', label: 'Conversion', icon: '⇥' },
   { to: '/usage', label: 'Usage', icon: '◈' },
+  { to: '/installs', label: 'Installs', icon: '⬇' },
   { to: '/retention', label: 'Retention', icon: '↩' },
   { to: '/analytics', label: 'Analytics', icon: '⊙' },
   { to: '/errors', label: 'Errors', icon: '⚡' },

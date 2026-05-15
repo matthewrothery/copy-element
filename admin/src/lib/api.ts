@@ -179,6 +179,29 @@ export interface ExtensionActivityData {
   recent_captures: ExtensionActivityCapture[];
 }
 
+export interface AdminInstall {
+  install_id: string;
+  created_at: number;
+  last_seen_at: number;
+  extension_version: string | null;
+  chrome_version: string | null;
+  os_family: string | null;
+  screen_width: number | null;
+  screen_height: number | null;
+  locale: string | null;
+  timezone: string | null;
+  user_id: string | null;
+  user_email: string | null;
+  capture_count: number;
+  last_capture_at: number | null;
+}
+
+export interface InstallListData {
+  installs: AdminInstall[];
+  total: number;
+  page: number;
+}
+
 export interface ComplimentaryData {
   grant: { id: string; plan_code: string; created_at: number } | null;
   entitlement: { plan_code: string; active: boolean };
@@ -210,6 +233,8 @@ export const api = {
   limitReached: (days = 30) => get<{ breakdown: LimitReachedRow[] }>('/api/admin/limit-reached', { days }),
   usageMetrics: () => get<UsageMetricsData>('/api/admin/usage-metrics'),
   extensionActivity: (hours = 24) => get<ExtensionActivityData>('/api/admin/extension-activity', { hours }),
+  installs: (page = 1, limit = 50, search = '') =>
+    get<InstallListData>('/api/admin/installs', { page, limit, search }),
 
   grantComplimentary: (userId: string, planCode = 'pro') =>
     post<ComplimentaryData>(`/api/admin/users/${userId}/complimentary`, { plan_code: planCode }),
