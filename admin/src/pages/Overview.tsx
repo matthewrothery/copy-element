@@ -30,6 +30,7 @@ export function Overview(): React.ReactElement {
     <div className="overview">
       <div className="overview__grid">
         <StatCard label="Daily Active Users" value={formatNumber(data.dau)} />
+        <StatCard label="Installs Today" value={formatNumber(data.installs_today)} />
         <StatCard label="Captures Today" value={formatNumber(data.captures_today)} />
         <StatCard label="MCP Requests Today" value={formatNumber(data.mcp_requests_today)} />
         <StatCard label="Signups (30d)" value={formatNumber(data.signups_last_n_days)} />

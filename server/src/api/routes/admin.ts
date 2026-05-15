@@ -14,6 +14,7 @@ import {
   getPreInstallJourney,
   getLimitReachedBreakdown,
   getUsageMetrics,
+  getExtensionActivity,
 } from '../../services/admin-queries.js';
 import { grantComplimentary, revokeComplimentary, getComplimentaryGrant } from '../../services/complimentary.js';
 import { getUserEntitlement } from '../../services/entitlements.js';
@@ -102,6 +103,14 @@ adminRouter.get('/pre-install-journey', (_req: Request, res: Response) => {
 /** GET /api/admin/usage-metrics */
 adminRouter.get('/usage-metrics', (_req: Request, res: Response) => {
   res.json(getUsageMetrics());
+});
+
+/** GET /api/admin/extension-activity?hours=24 */
+adminRouter.get('/extension-activity', (_req: Request, res: Response) => {
+  const hours = Math.min(24 * 30, Math.max(1, parseInt((_req.query.hours as string) ?? '24', 10) || 24));
+  const periodEnd = Date.now();
+  const periodStart = periodEnd - hours * 60 * 60 * 1000;
+  res.json(getExtensionActivity(periodStart, periodEnd));
 });
 
 /** GET /api/admin/limit-reached?days=30 */

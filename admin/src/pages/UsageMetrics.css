@@ -23,3 +23,44 @@
   font-size: var(--typo-body);
   color: var(--text-muted);
 }
+
+.usage__activity {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+  margin-top: var(--space-2);
+}
+
+.usage__activity-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-3);
+}
+
+.usage__section-title,
+.usage__table-title {
+  color: var(--text);
+  font-weight: var(--font-weight-semibold);
+  margin: 0;
+}
+
+.usage__section-title {
+  font-size: var(--typo-title);
+}
+
+.usage__table-title {
+  font-size: var(--typo-subtitle);
+  margin-bottom: var(--space-3);
+}
+
+.usage__period {
+  color: var(--text-muted);
+  font-size: var(--typo-small);
+}
+
+.usage__tables {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+  gap: var(--space-4);
+}

@@ -33,6 +33,7 @@ export interface AppConfig {
   ANTHROPIC_API_KEY: string;
   SUPPORT_EMAIL: string;
   FEEDBACK_EMAIL: string;
+  ADMIN_SUMMARY_EMAIL: string;
   ADMIN_ORIGIN: string;
   INTERNAL_TOOLS_PATH: string;
   ADMIN_EMAILS: string[];

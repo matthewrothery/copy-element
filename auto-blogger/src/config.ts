@@ -13,7 +13,7 @@ export type AutoBloggerConfig = {
   statePath: string;
   lockPath: string;
   author: string;
-  target: "topics";
+  target: "topics" | "news";
   listPath: string;
   guidePath: string;
   copywriterPromptPath: string;
@@ -94,7 +94,7 @@ export function loadConfig(): AutoBloggerConfig {
   const dataRoot = process.env.NODE_ENV === "production" ? "/data" : path.resolve(packageRoot, "data");
 
   const mode = (process.env.AUTO_BLOG_MODE ?? "once") as "once" | "daemon";
-  const target = (process.env.AUTO_BLOG_TARGET ?? "topics") as "topics";
+  const target = (process.env.AUTO_BLOG_TARGET ?? "topics") as "topics" | "news";
   const textProvider = (process.env.AUTO_BLOG_TEXT_PROVIDER ??
     (process.env.ANTHROPIC_API_KEY ? "anthropic" : "openai")) as "anthropic" | "openai";
   const imagePalette = (process.env.AUTO_BLOG_IMAGE_PALETTE ?? "vibrant") as
@@ -117,6 +117,9 @@ export function loadConfig(): AutoBloggerConfig {
 
   if (!["once", "daemon"].includes(mode)) {
     throw new Error(`AUTO_BLOG_MODE must be "once" or "daemon", received "${mode}"`);
+  }
+  if (!["topics", "news"].includes(target)) {
+    throw new Error(`AUTO_BLOG_TARGET must be "topics" or "news", received "${target}"`);
   }
   if (!["anthropic", "openai"].includes(textProvider)) {
     throw new Error(

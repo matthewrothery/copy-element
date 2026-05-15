@@ -37,6 +37,7 @@ function getConfig(): AppConfig {
     ANTHROPIC_API_KEY: process.env[ENV_KEYS.ANTHROPIC_API_KEY] ?? '',
     SUPPORT_EMAIL: process.env[ENV_KEYS.SUPPORT_EMAIL] ?? 'hello@elementarmory.com',
     FEEDBACK_EMAIL: process.env[ENV_KEYS.FEEDBACK_EMAIL] ?? 'hello@elementarmory.com',
+    ADMIN_SUMMARY_EMAIL: process.env[ENV_KEYS.ADMIN_SUMMARY_EMAIL] ?? 'hello@elementarmory.com',
     ADMIN_ORIGIN:
       process.env[ENV_KEYS.ADMIN_ORIGIN] ??
       (nodeEnv === 'development' ? DEFAULTS.ADMIN_ORIGIN_LOCAL : 'https://admin.elementarmory.com'),

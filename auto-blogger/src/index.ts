@@ -17,6 +17,7 @@ import { sendArticleNotification } from "./email.js";
 import { buildRandomDailySchedule, minutesUntilSlot, msUntilNextWindowStart, sleep } from "./scheduler.js";
 import { loadInternalLinkCandidates, prioritizeInternalLinks } from "./internalLinks.js";
 import { fetchNewsItems } from "./newsSearch.js";
+import { acquireLock } from "./lock.js";
 
 const NEWS_IMAGE_STYLE = `- clean editorial style
 - modern geometric shapes
@@ -323,7 +324,16 @@ async function main(): Promise<void> {
     await runDaemon();
     return;
   }
-  await runSingleCycle();
+  const lock = acquireLock(config.lockPath);
+  try {
+    if (config.target === "news") {
+      await runNewsCycle();
+    } else {
+      await runSingleCycle();
+    }
+  } finally {
+    lock.release();
+  }
 }
 
 main().catch((error) => {

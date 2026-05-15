@@ -14,6 +14,7 @@ import { SaveYourWorkEmail } from '../emails/save-your-work.js';
 import { PostLimitFollowupEmail } from '../emails/post-limit-followup.js';
 import { SupportInquiryEmail } from '../emails/support-inquiry.js';
 import { UninstallFeedbackEmail } from '../emails/uninstall-feedback.js';
+import { AdminDailySummaryEmail, type AdminDailySummaryEmailProps } from '../emails/admin-daily-summary.js';
 import { config } from '../config/index.js';
 import { logEmailSend, wasSentRecently } from './email-tracking.js';
 import { isEmailSuppressed } from './email-suppression.js';
@@ -382,6 +383,39 @@ export async function sendUninstallFeedbackViaSes(
     logEmailSend({ id: sendId, email: config.FEEDBACK_EMAIL, template: 'uninstall-feedback', subject, sesMsgId: response.MessageId, status: 'sent' });
   } catch (err) {
     logEmailSend({ id: sendId, email: config.FEEDBACK_EMAIL, template: 'uninstall-feedback', subject, status: 'failed', error: (err as Error).message });
+    throw err;
+  }
+}
+
+export async function sendAdminDailySummaryViaSes(
+  email: string,
+  summary: AdminDailySummaryEmailProps,
+): Promise<void> {
+  const sendId = nanoid();
+  const subject = 'Element Armory daily activity summary';
+
+  if (!config.FROM_EMAIL || !config.AWS_SES_REGION) {
+    console.log(`[admin-summary] SES not configured — daily summary for ${email}`);
+    logEmailSend({ id: sendId, email, template: 'admin-daily-summary', subject, status: 'skipped' });
+    return;
+  }
+
+  const html = await render(createElement(AdminDailySummaryEmail, summary));
+
+  try {
+    const response = await getSesClient().send(
+      new SendEmailCommand({
+        Source: config.FROM_EMAIL,
+        Destination: { ToAddresses: [email] },
+        Message: {
+          Subject: { Data: subject },
+          Body: { Html: { Data: html } },
+        },
+      })
+    );
+    logEmailSend({ id: sendId, email, template: 'admin-daily-summary', subject, sesMsgId: response.MessageId, status: 'sent' });
+  } catch (err) {
+    logEmailSend({ id: sendId, email, template: 'admin-daily-summary', subject, status: 'failed', error: (err as Error).message });
     throw err;
   }
 }

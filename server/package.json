@@ -13,7 +13,8 @@
     "migrate:create": "tsx src/db/migrate-create.ts",
     "email:preview": "react-email dev --dir src/emails --port 3001",
     "grant-complimentary": "tsx scripts/grant-complimentary.ts",
-    "email:simulate": "tsx src/scripts/email-simulator.ts"
+    "email:simulate": "tsx src/scripts/email-simulator.ts",
+    "email:admin-summary": "tsx src/scripts/admin-daily-summary.ts"
   },
   "engines": {
     "node": ">=18"

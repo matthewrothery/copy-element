@@ -2,6 +2,7 @@ import { nanoid } from 'nanoid';
 import { logEmailSend, wasSentRecently } from './email-tracking.js';
 import { isEmailSuppressed } from './email-suppression.js';
 import { FREE_MONTHLY_CAPTURE_LIMIT } from './entitlements.js';
+import type { AdminDailySummaryEmailProps } from '../emails/admin-daily-summary.js';
 
 const MAGIC_LINK_DEDUP_MS = 60 * 1000; // 1 minute
 
@@ -192,4 +193,21 @@ export async function sendLimitReachedEmail(email: string, quotaLimit = FREE_MON
   }
   const { sendLimitReachedViaSes } = await import('./email-ses.js');
   await sendLimitReachedViaSes(email, quotaLimit, name);
+}
+
+export async function sendAdminDailySummaryEmail(
+  email: string,
+  summary: AdminDailySummaryEmailProps,
+): Promise<void> {
+  const { config } = await import('../config/index.js');
+  const subject = 'Element Armory daily activity summary';
+
+  if (!config.FROM_EMAIL || !config.AWS_SES_REGION) {
+    logEmailSend({ id: nanoid(), email, template: 'admin-daily-summary', subject, status: 'skipped' });
+    console.log(`[admin-summary] Daily summary skipped for ${email}; SES is not configured.`);
+    return;
+  }
+
+  const { sendAdminDailySummaryViaSes } = await import('./email-ses.js');
+  await sendAdminDailySummaryViaSes(email, summary);
 }

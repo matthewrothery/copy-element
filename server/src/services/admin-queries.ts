@@ -17,6 +17,7 @@ function isoDate(ts: number): string {
 
 export interface OverviewResult {
   dau: number;
+  installs_today: number;
   captures_today: number;
   mcp_requests_today: number;
   signups_last_n_days: number;
@@ -35,6 +36,10 @@ export function getOverview(days: number): OverviewResult {
 
   const captures_today = (db.prepare(
     `SELECT COUNT(*) AS n FROM analytics_events WHERE event_type = 'element_captured' AND created_at >= ?`,
+  ).get(todayStart) as { n: number }).n;
+
+  const installs_today = (db.prepare(
+    `SELECT COUNT(*) AS n FROM installs WHERE created_at >= ?`,
   ).get(todayStart) as { n: number }).n;
 
   const mcp_requests_today = (db.prepare(
@@ -62,7 +67,119 @@ export function getOverview(days: number): OverviewResult {
     dau_sparkline.push({ date: isoDate(start), value: count });
   }
 
-  return { dau, captures_today, mcp_requests_today, signups_last_n_days, mrr_cents, dau_sparkline };
+  return { dau, installs_today, captures_today, mcp_requests_today, signups_last_n_days, mrr_cents, dau_sparkline };
+}
+
+// ---------------------------------------------------------------------------
+// Extension Activity
+// ---------------------------------------------------------------------------
+
+export interface ExtensionActivityInstall {
+  install_id: string;
+  created_at: number;
+  last_seen_at: number;
+  extension_version: string | null;
+  chrome_version: string | null;
+  os_family: string | null;
+  locale: string | null;
+  timezone: string | null;
+  user_email: string | null;
+}
+
+export interface ExtensionActivityCapture {
+  id: string;
+  install_id: string | null;
+  created_at: number;
+  source_url: string | null;
+  user_email: string | null;
+}
+
+export interface ExtensionActivityResult {
+  period_start: number;
+  period_end: number;
+  installs: number;
+  captures: number;
+  unique_capturing_installs: number;
+  linked_installs: number;
+  recent_installs: ExtensionActivityInstall[];
+  recent_captures: ExtensionActivityCapture[];
+}
+
+export function getExtensionActivity(
+  periodStart: number,
+  periodEnd: number,
+  limit = 20,
+): ExtensionActivityResult {
+  const db = getDb();
+  const boundedLimit = Math.min(50, Math.max(1, limit));
+
+  const installs = (db.prepare(
+    `SELECT COUNT(*) AS n FROM installs WHERE created_at >= ? AND created_at < ?`,
+  ).get(periodStart, periodEnd) as { n: number }).n;
+
+  const captures = (db.prepare(
+    `SELECT COUNT(*) AS n FROM analytics_events WHERE event_type = 'element_captured' AND created_at >= ? AND created_at < ?`,
+  ).get(periodStart, periodEnd) as { n: number }).n;
+
+  const unique_capturing_installs = (db.prepare(`
+    SELECT COUNT(DISTINCT install_id) AS n
+    FROM analytics_events
+    WHERE event_type = 'element_captured'
+      AND created_at >= ?
+      AND created_at < ?
+      AND install_id IS NOT NULL
+  `).get(periodStart, periodEnd) as { n: number }).n;
+
+  const linked_installs = (db.prepare(
+    `SELECT COUNT(*) AS n FROM installs WHERE user_id IS NOT NULL AND created_at >= ? AND created_at < ?`,
+  ).get(periodStart, periodEnd) as { n: number }).n;
+
+  const recent_installs = db.prepare(`
+    SELECT
+      i.install_id,
+      i.created_at,
+      i.last_seen_at,
+      i.extension_version,
+      i.chrome_version,
+      i.os_family,
+      i.locale,
+      i.timezone,
+      u.email AS user_email
+    FROM installs i
+    LEFT JOIN "user" u ON u.id = i.user_id
+    WHERE i.created_at >= ?
+      AND i.created_at < ?
+    ORDER BY i.created_at DESC
+    LIMIT ?
+  `).all(periodStart, periodEnd, boundedLimit) as ExtensionActivityInstall[];
+
+  const recent_captures = db.prepare(`
+    SELECT
+      ae.id,
+      ae.install_id,
+      ae.created_at,
+      json_extract(ae.properties_json, '$.url') AS source_url,
+      u.email AS user_email
+    FROM analytics_events ae
+    LEFT JOIN installs i ON i.install_id = ae.install_id
+    LEFT JOIN "user" u ON u.id = COALESCE(ae.user_id, i.user_id)
+    WHERE ae.event_type = 'element_captured'
+      AND ae.created_at >= ?
+      AND ae.created_at < ?
+    ORDER BY ae.created_at DESC
+    LIMIT ?
+  `).all(periodStart, periodEnd, boundedLimit) as ExtensionActivityCapture[];
+
+  return {
+    period_start: periodStart,
+    period_end: periodEnd,
+    installs,
+    captures,
+    unique_capturing_installs,
+    linked_installs,
+    recent_installs,
+    recent_captures,
+  };
 }
 
 // ---------------------------------------------------------------------------

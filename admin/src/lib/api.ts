@@ -38,6 +38,7 @@ async function del<T>(path: string): Promise<T> {
 
 export interface OverviewData {
   dau: number;
+  installs_today: number;
   captures_today: number;
   mcp_requests_today: number;
   signups_last_n_days: number;
@@ -147,6 +148,37 @@ export interface UsageMetricsData {
   upgrade_rate_pct: number | null;
 }
 
+export interface ExtensionActivityInstall {
+  install_id: string;
+  created_at: number;
+  last_seen_at: number;
+  extension_version: string | null;
+  chrome_version: string | null;
+  os_family: string | null;
+  locale: string | null;
+  timezone: string | null;
+  user_email: string | null;
+}
+
+export interface ExtensionActivityCapture {
+  id: string;
+  install_id: string | null;
+  created_at: number;
+  source_url: string | null;
+  user_email: string | null;
+}
+
+export interface ExtensionActivityData {
+  period_start: number;
+  period_end: number;
+  installs: number;
+  captures: number;
+  unique_capturing_installs: number;
+  linked_installs: number;
+  recent_installs: ExtensionActivityInstall[];
+  recent_captures: ExtensionActivityCapture[];
+}
+
 export interface ComplimentaryData {
   grant: { id: string; plan_code: string; created_at: number } | null;
   entitlement: { plan_code: string; active: boolean };
@@ -177,6 +209,7 @@ export const api = {
   preInstallJourney: (days = 30) => get<{ pages: PreInstallPage[] }>('/api/admin/pre-install-journey', { days }),
   limitReached: (days = 30) => get<{ breakdown: LimitReachedRow[] }>('/api/admin/limit-reached', { days }),
   usageMetrics: () => get<UsageMetricsData>('/api/admin/usage-metrics'),
+  extensionActivity: (hours = 24) => get<ExtensionActivityData>('/api/admin/extension-activity', { hours }),
 
   grantComplimentary: (userId: string, planCode = 'pro') =>
     post<ComplimentaryData>(`/api/admin/users/${userId}/complimentary`, { plan_code: planCode }),
