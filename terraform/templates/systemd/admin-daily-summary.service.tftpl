@@ -1,0 +1,25 @@
+[Unit]
+Description=Element Armory admin daily activity summary
+Documentation=https://github.com/matthewrothery/copy-element
+Wants=network-online.target docker.service
+After=network-online.target docker.service
+ConditionPathExists=/home/ec2-user/element-armory/.env.server
+
+[Service]
+Type=oneshot
+User=ec2-user
+TimeoutStartSec=10min
+Environment=AWS_REGION=${aws_region}
+
+ExecStartPre=/bin/bash -lc '/usr/bin/aws ecr get-login-password --region ${aws_region} | /usr/bin/docker login --username AWS --password-stdin ${ecr_registry}'
+ExecStartPre=/usr/bin/docker pull ${ecr_registry}/${ecr_server_repo}:latest
+
+ExecStart=/usr/bin/docker run --rm \
+  --name admin-daily-summary \
+  --env-file /home/ec2-user/element-armory/.env.server \
+  -v /home/ec2-user/element-armory/data:/data \
+  ${ecr_registry}/${ecr_server_repo}:latest \
+  node dist/scripts/admin-daily-summary.js
+
+[Install]
+WantedBy=multi-user.target

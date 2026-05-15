@@ -66,6 +66,7 @@ locals {
 
     # Admin users (comma-separated emails)
     ADMIN_EMAILS="${var.admin_emails}"
+    ADMIN_SUMMARY_EMAIL="${var.admin_summary_email}"
 
     JWT_SECRET="${var.jwt_secret}"
 
@@ -110,18 +111,18 @@ locals {
     AUTO_BLOG_NOTIFY_TO="${var.auto_blog_notify_to}"
     AUTO_BLOG_NOTIFY_FROM="${var.from_email}"
 
-    # Generation settings
+    # Generation settings.
+    # AUTO_BLOG_MODE and AUTO_BLOG_TARGET are intentionally NOT set here:
+    # the systemd unit injects them per-run (mode=once, target=topics|news).
     DAILY_ARTICLES="4"
-    AUTO_BLOG_MODE="daemon"
-    AUTO_BLOG_TARGET="topics"
     # gemini-3.1-flash-image-preview
     AUTO_BLOG_IMAGE_MODEL="gemini-2.5-flash-image"
     AUTO_BLOG_IMAGE_STYLE="stencil"
     AUTO_BLOG_IMAGE_PALETTE="vibrant"
 
-    # News cycle (one news-roundup post per day, sourced from Google News RSS)
-    AUTO_BLOG_NEWS_CYCLE_ENABLED="true"
-    AUTO_BLOG_NEWS_CYCLE_HOUR="10"
+    # News cycle hour is consumed by the systemd news timer, not the app loop
+    # (no daemon runs in prod). Kept here for reference / local dry runs.
+    AUTO_BLOG_NEWS_CYCLE_HOUR="${var.auto_blog_news_cycle_hour}"
 
     NODE_ENV=production
   EOT
@@ -129,6 +130,81 @@ locals {
   docker_compose_prod = file("${path.module}/templates/docker-compose.prod.yml")
   nginx_conf          = file("${path.module}/templates/nginx.conf")
   start_script        = file("${path.module}/scripts/start.sh")
+
+  ecr_registry = "${data.aws_caller_identity.current.account_id}.dkr.ecr.${var.aws_region}.amazonaws.com"
+
+  auto_blogger_service_unit = templatefile("${path.module}/templates/systemd/auto-blogger@.service.tftpl", {
+    aws_region            = var.aws_region
+    ecr_registry          = local.ecr_registry
+    ecr_auto_blogger_repo = var.ecr_auto_blogger_repo
+  })
+
+  auto_blogger_topics_timer = file("${path.module}/templates/systemd/auto-blogger-topics.timer")
+
+  auto_blogger_news_timer = templatefile("${path.module}/templates/systemd/auto-blogger-news.timer.tftpl", {
+    news_cycle_hour = format("%02d", var.auto_blog_news_cycle_hour)
+  })
+
+  admin_daily_summary_service_unit = templatefile("${path.module}/templates/systemd/admin-daily-summary.service.tftpl", {
+    aws_region      = var.aws_region
+    ecr_registry    = local.ecr_registry
+    ecr_server_repo = var.ecr_server_repo
+  })
+
+  admin_daily_summary_timer = templatefile("${path.module}/templates/systemd/admin-daily-summary.timer.tftpl", {
+    summary_hour = format("%02d", var.admin_summary_hour)
+  })
+
+  auto_blogger_timers_install_cmd = <<-EOC
+    set -e
+    cat > /etc/systemd/system/auto-blogger@.service <<'SERVICEEOF'
+    ${local.auto_blogger_service_unit}
+    SERVICEEOF
+    cat > /etc/systemd/system/auto-blogger-topics.timer <<'TOPICSEOF'
+    ${local.auto_blogger_topics_timer}
+    TOPICSEOF
+    cat > /etc/systemd/system/auto-blogger-news.timer <<'NEWSEOF'
+    ${local.auto_blogger_news_timer}
+    NEWSEOF
+    chmod 644 /etc/systemd/system/auto-blogger@.service \
+              /etc/systemd/system/auto-blogger-topics.timer \
+              /etc/systemd/system/auto-blogger-news.timer
+    systemctl daemon-reload
+    systemctl reset-failed 'auto-blogger@*.service' 'auto-blogger-topics.timer' 'auto-blogger-news.timer' || true
+    systemctl enable --now auto-blogger-topics.timer auto-blogger-news.timer
+  EOC
+
+  auto_blogger_timers_uninstall_cmd = <<-EOC
+    set -e
+    systemctl disable --now auto-blogger-topics.timer auto-blogger-news.timer || true
+    rm -f /etc/systemd/system/auto-blogger@.service \
+          /etc/systemd/system/auto-blogger-topics.timer \
+          /etc/systemd/system/auto-blogger-news.timer
+    systemctl daemon-reload
+  EOC
+
+  admin_summary_timer_install_cmd = <<-EOC
+    set -e
+    cat > /etc/systemd/system/admin-daily-summary.service <<'SERVICEEOF'
+    ${local.admin_daily_summary_service_unit}
+    SERVICEEOF
+    cat > /etc/systemd/system/admin-daily-summary.timer <<'TIMEREOF'
+    ${local.admin_daily_summary_timer}
+    TIMEREOF
+    chmod 644 /etc/systemd/system/admin-daily-summary.service \
+              /etc/systemd/system/admin-daily-summary.timer
+    systemctl daemon-reload
+    systemctl reset-failed admin-daily-summary.service admin-daily-summary.timer || true
+    systemctl enable --now admin-daily-summary.timer
+  EOC
+
+  admin_summary_timer_uninstall_cmd = <<-EOC
+    set -e
+    systemctl disable --now admin-daily-summary.timer || true
+    rm -f /etc/systemd/system/admin-daily-summary.service \
+          /etc/systemd/system/admin-daily-summary.timer
+    systemctl daemon-reload
+  EOC
 }
 
 # Elastic IP for stable CloudFront origin
@@ -298,5 +374,50 @@ resource "aws_ssm_association" "run_deployment" {
   depends_on = [
     aws_ssm_association.upload_runtime_env,
     aws_ssm_association.upload_runtime_config
+  ]
+}
+
+# Install (or, when var.enable_auto_blogger_timers = false, uninstall) the
+# systemd unit + timer files that fire one-shot auto-blogger containers.
+# Depends on run_deployment so the compose stack restarts (and any old
+# auto-blogger container is removed via --remove-orphans) BEFORE the timers
+# are armed — eliminates any window where both daemon and timer can fire.
+resource "aws_ssm_association" "install_auto_blogger_timers" {
+  name             = "AWS-RunShellScript"
+  association_name = "${var.project}-${var.environment}-install-auto-blogger-timers"
+
+  targets {
+    key    = "InstanceIds"
+    values = [aws_instance.app.id]
+  }
+
+  parameters = {
+    commands = var.enable_auto_blogger_timers ? local.auto_blogger_timers_install_cmd : local.auto_blogger_timers_uninstall_cmd
+  }
+
+  depends_on = [
+    aws_ssm_association.upload_runtime_env,
+    aws_ssm_association.upload_runtime_config,
+    aws_ssm_association.run_deployment,
+  ]
+}
+
+resource "aws_ssm_association" "install_admin_summary_timer" {
+  name             = "AWS-RunShellScript"
+  association_name = "${var.project}-${var.environment}-install-admin-summary-timer"
+
+  targets {
+    key    = "InstanceIds"
+    values = [aws_instance.app.id]
+  }
+
+  parameters = {
+    commands = var.enable_admin_summary_timer ? local.admin_summary_timer_install_cmd : local.admin_summary_timer_uninstall_cmd
+  }
+
+  depends_on = [
+    aws_ssm_association.upload_runtime_env,
+    aws_ssm_association.upload_runtime_config,
+    aws_ssm_association.run_deployment,
   ]
 }

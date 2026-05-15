@@ -1,0 +1,15 @@
+[Unit]
+Description=Element Armory auto-blogger topic article schedule
+
+[Timer]
+# Four topic articles per day at fixed Sydney times. If DAILY_ARTICLES changes,
+# update this OnCalendar list to match.
+OnCalendar=*-*-* 09:30 Australia/Sydney
+OnCalendar=*-*-* 11:30 Australia/Sydney
+OnCalendar=*-*-* 13:30 Australia/Sydney
+OnCalendar=*-*-* 15:30 Australia/Sydney
+Persistent=true
+Unit=auto-blogger@topics.service
+
+[Install]
+WantedBy=timers.target

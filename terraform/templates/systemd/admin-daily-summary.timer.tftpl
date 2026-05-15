@@ -1,0 +1,10 @@
+[Unit]
+Description=Element Armory admin daily activity summary schedule
+
+[Timer]
+OnCalendar=*-*-* ${summary_hour}:00 Australia/Sydney
+Persistent=true
+Unit=admin-daily-summary.service
+
+[Install]
+WantedBy=timers.target

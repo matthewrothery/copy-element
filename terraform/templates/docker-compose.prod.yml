@@ -1,8 +1,12 @@
 name: element-armory-prod
 
 # Memory budget for the 1 GB t3.micro + 4 GB swap host:
-#   nginx 64 / 128m   app 512 / 768m   mcp 256 / 384m   auto-blogger 384 / 512m
-# Total cap ~1216 MiB; swap absorbs spikes when auto-blogger generation overlaps app load.
+#   nginx 64 / 128m   app 512 / 768m   mcp 256 / 384m
+# Total RAM cap ~832 MiB leaving headroom for OS and transient one-shot containers.
+#
+# auto-blogger is intentionally absent: it runs as systemd one-shot timers,
+# not as a compose service. See terraform/templates/systemd/ and the
+# install_auto_blogger_timers SSM association in terraform/ec2.tf.
 
 services:
   nginx:
@@ -47,18 +51,6 @@ services:
     restart: unless-stopped
     mem_limit: 256m
     memswap_limit: 384m
-    networks:
-      - element-armory-network
-
-  auto-blogger:
-    image: ${ECR_REGISTRY}/${ECR_AUTO_BLOGGER_REPO}:latest
-    container_name: element-armory-auto-blogger
-    env_file: /home/ec2-user/element-armory/.env.auto-blogger
-    volumes:
-      - /home/ec2-user/element-armory/data:/data
-    restart: unless-stopped
-    mem_limit: 384m
-    memswap_limit: 512m
     networks:
       - element-armory-network
 

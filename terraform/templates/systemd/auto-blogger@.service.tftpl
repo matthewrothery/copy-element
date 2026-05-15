@@ -1,0 +1,33 @@
+[Unit]
+Description=Element Armory auto-blogger one-shot (%i)
+Documentation=https://github.com/matthewrothery/copy-element
+Wants=network-online.target docker.service
+After=network-online.target docker.service
+ConditionPathExists=/home/ec2-user/element-armory/.env.auto-blogger
+
+[Service]
+Type=oneshot
+User=ec2-user
+TimeoutStartSec=30min
+Environment=AWS_REGION=${aws_region}
+
+# Fresh ECR login + pull on every fire; tokens last 12h but the cost is trivial
+# (one GetAuthorizationToken + one image pull per scheduled run).
+ExecStartPre=/bin/bash -lc '/usr/bin/aws ecr get-login-password --region ${aws_region} | /usr/bin/docker login --username AWS --password-stdin ${ecr_registry}'
+ExecStartPre=/usr/bin/docker pull ${ecr_registry}/${ecr_auto_blogger_repo}:latest
+
+# %i is the systemd instance name (topics or news), threaded into AUTO_BLOG_TARGET.
+# AUTO_BLOG_MODE=once is also the config default — passed explicitly for clarity.
+ExecStart=/usr/bin/docker run --rm \
+  --name auto-blogger-%i \
+  --env-file /home/ec2-user/element-armory/.env.auto-blogger \
+  -e AUTO_BLOG_MODE=once \
+  -e AUTO_BLOG_TARGET=%i \
+  -v /home/ec2-user/element-armory/data:/data \
+  ${ecr_registry}/${ecr_auto_blogger_repo}:latest
+
+# Intentionally no Restart= directive. A failed slot is naturally retried on the
+# next scheduled fire; we do not want indefinite restart loops eating the box.
+
+[Install]
+WantedBy=multi-user.target

@@ -212,6 +212,30 @@ variable "ecr_auto_blogger_repo" {
   default     = "element-armory-auto-blogger"
 }
 
+variable "enable_auto_blogger_timers" {
+  description = "When true, installs and enables the auto-blogger systemd timers on the EC2 host. Flip to false to disable and remove the units (rollback path)."
+  type        = bool
+  default     = true
+}
+
+variable "auto_blog_news_cycle_hour" {
+  description = "Hour (0-23, Australia/Sydney) at which the daily news-roundup post is generated. Threaded into both the auto-blogger env file and the systemd news timer."
+  type        = number
+  default     = 10
+}
+
+variable "enable_admin_summary_timer" {
+  description = "When true, installs and enables the daily admin activity summary timer on the EC2 host."
+  type        = bool
+  default     = true
+}
+
+variable "admin_summary_hour" {
+  description = "Hour (0-23, Australia/Sydney) at which the daily admin activity summary email is sent."
+  type        = number
+  default     = 8
+}
+
 variable "internal_api_key" {
   description = "Internal API key shared between app and mcp-server"
   type        = string
@@ -315,6 +339,12 @@ variable "ses_dmarc_rua" {
 
 variable "admin_emails" {
   description = "Comma-separated email addresses to auto-promote to admin (e.g. you@example.com)"
+  type        = string
+  default     = "hello@elementarmory.com"
+}
+
+variable "admin_summary_email" {
+  description = "Email address that receives the daily install and capture summary"
   type        = string
   default     = "hello@elementarmory.com"
 }

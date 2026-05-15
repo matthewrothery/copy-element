@@ -47,6 +47,8 @@ google_client_secret = ""
 gemini_api_key       = ""
 openai_api_key       = ""
 auto_blog_notify_to  = "support@elementarmory.com"
+admin_summary_email  = "hello@elementarmory.com"
+admin_summary_hour   = 8
 
 # Optional: Your local IP for database access (if needed)
 local_ip = ""
