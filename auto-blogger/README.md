@@ -1,94 +1,112 @@
 # Auto Blogger
 
-Standalone service that generates topical authority articles for Element Armory.
+Generates topical authority articles and daily news commentary for a project's blog. Runs as two AWS Lambda functions on EventBridge Scheduler.
 
-The service:
+- `topicsHandler` — picks N keywords from `list.md`, generates N articles in parallel via `Promise.all`, stages artifacts in S3, sends one digest email.
+- `newsHandler` — fetches recent AI/developer news, generates one commentary post, stages in S3, sends digest email.
 
-- picks keywords from `list.md`
-- reads `guide.md`, `copywriter-prompt.md`, and `rules.md`
-- researches current web sources
-- generates article markdown and image prompts with Anthropic by default
-- generates stencil-style cover images with Gemini (Nano Banana / gemini-2.5-flash-image by default)
-- stages artifacts in S3
-- emails the generated copy and image
+State (claimed keywords, published slugs) lives in DynamoDB. Internal-link candidates come from an S3 manifest published by the website CI after each deploy.
 
-## Commands
+## Local dev
 
 ```bash
-npm run dev
-npm run build
-npm start
-npm run import
-```
-
-## Local dry run
-
-```bash
-cp .env.example .env
+cp .env.example .env          # fill in ANTHROPIC_API_KEY + GEMINI_API_KEY at minimum
 npm install
-npm run dev
+npm run dev                   # runs runParallelTopics(1) against filesystem state + local website content
 ```
 
-Dry runs require `ANTHROPIC_API_KEY`, skip image generation, and write artifacts under
-`auto-blogger/dry-runs/<artifact-id>/`. If you run `npm run generate:local` without
-`--no-image`, it also requires `GEMINI_API_KEY` for cover image generation.
+Without `AUTO_BLOG_S3_BUCKET` set, the config falls back to filesystem `StateStore` and filesystem `ContentRepository` (reads `../website/content/topics` directly). With `AUTO_BLOG_DRY_RUN=true`, no S3 uploads or emails are sent and artifacts are written to `auto-blogger/dry-runs/<id>/`.
 
-The local generation flow now:
-
-- loads existing topic hub, cluster, and article titles from `../website/content/topics`
-- passes those internal link options into the article prompt
-- asks for 3-10 natural inline internal links, capped at 10 per article
-- runs general research plus statistics/data-focused searches
-- requires concrete data claims to cite original sources with markdown links
-- starts the body with a short conversational answer before the first section heading
+```bash
+AUTO_BLOG_DRY_RUN=true npm run dev          # topic cycle, dry run
+AUTO_BLOG_TARGET=news AUTO_BLOG_DRY_RUN=true npm run dev   # news cycle, dry run
+```
 
 ## Local single-article generation
 
-Use this when you want to regenerate one existing topic article and test image generation locally.
-
-Preview mode writes to `auto-blogger/dry-runs/<artifact-id>/`:
+Regenerate one existing article and test image generation locally.
 
 ```bash
-npm run generate:local -- --path ../website/content/topics/copy-ui-from-websites/copy-css-from-website/how-to-copy-css-from-any-website.md
-```
+# Preview — writes to auto-blogger/dry-runs/<id>/
+npm run generate:local -- --path ../website/content/topics/<hub>/<cluster>/<slug>.md
 
-Write mode replaces the markdown under `website/content/topics` and writes the generated image under
-`website/public/topic-images`:
+# Write — replaces the markdown and image in the website directories
+npm run generate:local -- --path ../website/content/topics/<hub>/<cluster>/<slug>.md --write
 
-```bash
-npm run generate:local -- --path ../website/content/topics/copy-ui-from-websites/copy-css-from-website/how-to-copy-css-from-any-website.md --write
-```
-
-You can also target a keyword from `list.md`:
-
-```bash
+# By keyword
 npm run generate:local -- --keyword "how to copy css from any website"
 ```
 
-Options:
+Options: `--path`, `--keyword`, `--write`, `--no-image`, `--date YYYY-MM-DD`.
 
-- `--path <article.md>` regenerates from an existing topic article path
-- `--keyword "<keyword>"` generates from a keyword in `list.md`
-- `--write` writes into the website content/image directories
-- `--no-image` skips image generation for faster copy-only testing
-- `--date YYYY-MM-DD` overrides the generated article date
+## Building the Lambda zip
 
-## Required Production Env
+```bash
+npm run build:lambda      # produces dist/lambda/lambda.zip (~2–3 MB compressed)
+npm run package:lambda    # same + prints zip stats
+```
 
-- `ANTHROPIC_API_KEY`
-- `GEMINI_API_KEY`
-- `AUTO_BLOG_S3_BUCKET`
-- `AUTO_BLOG_NOTIFY_TO`
-- `AUTO_BLOG_NOTIFY_FROM`
+The zip is built by `build.lambda.mjs` (esbuild + adm-zip). `@aws-sdk/*` is excluded (provided by the Lambda Node 22 runtime). `jsdom` and `@mozilla/readability` are shipped as plain `node_modules` inside the zip because esbuild minification breaks jsdom's self-inspection.
 
-Optional: `OPENAI_API_KEY` only if `AUTO_BLOG_TEXT_PROVIDER=openai`.
+## Production topology
 
-## Common Env
+Two Lambda functions in `terraform/lambda.tf`, both in `us-east-2`:
 
-- `DAILY_ARTICLES=1`
-- `AUTO_BLOG_MODE=daemon`
-- `AUTO_BLOG_TEXT_PROVIDER=anthropic`
-- `AUTO_BLOG_TEXT_MODEL=claude-haiku-4-5`
-- `AUTO_BLOG_S3_PREFIX=auto-blogger`
-- `AUTO_BLOG_IMAGE_MODEL=gemini-2.5-flash-image`
-- `AUTO_BLOG_IMAGE_PALETTE=vibrant`
+| Function | Handler | Schedule (Australia/Sydney) |
+|---|---|---|
+| `element-armory-prod-auto-blogger-topics` | `index.topicsHandler` | `09:00` daily |
+| `element-armory-prod-auto-blogger-news` | `index.newsHandler` | `10:00` daily |
+
+State: DynamoDB on-demand table `element-armory-prod-auto-blogger-state`.
+
+Code updates: GitHub Actions `build_auto_blogger_lambda` job builds the zip and calls `aws lambda update-function-code` on every push to `master` touching `auto-blogger/**`.
+
+Config updates (env vars, memory, timeout): `terraform apply`.
+
+## Production env vars (set by terraform)
+
+| Variable | Source |
+|---|---|
+| `ANTHROPIC_API_KEY` | `var.anthropic_api_key` |
+| `GEMINI_API_KEY` | `var.gemini_api_key` |
+| `OPENAI_API_KEY` | `var.openai_api_key` |
+| `AUTO_BLOG_S3_BUCKET` | auto-blog S3 bucket name |
+| `AUTO_BLOG_S3_PREFIX` | `auto-blogger` |
+| `AUTO_BLOG_NOTIFY_TO` | `var.auto_blog_notify_to` |
+| `AUTO_BLOG_NOTIFY_FROM` | `var.from_email` |
+| `AUTO_BLOG_STATE_TABLE` | DynamoDB table name |
+| `AWS_SES_REGION` | `us-east-1` |
+| `DAILY_ARTICLES` | `4` |
+| `AUTO_BLOG_IMAGE_MODEL` | `gemini-2.5-flash-image` |
+| `AUTO_BLOG_IMAGE_STYLE` | `stencil` |
+| `AUTO_BLOG_IMAGE_PALETTE` | `vibrant` |
+
+## Project config shape
+
+All Element-Armory-specific values live in `auto-blogger.config.mts` at the repo root. To point the auto-blogger at a different project, copy `auto-blogger/` to the target repo and write a new config file — see `PORTING.md`.
+
+```ts
+import type { AutoBloggerProjectConfig } from "./auto-blogger/src/projectConfig.js";
+
+const config: AutoBloggerProjectConfig = {
+  brand: { productName, shortName, tagline, voice, unshippedFeatureClaims },
+  content: { listPath, guidePath, rulesPath, copywriterPromptPath },
+  news: { queries, relevanceKeywords, excludeKeywords, excludedDomains, userAgent },
+  contentRepository: { type: "s3-manifest", bucket, manifestKey, region },
+  output: { type: "s3-staging", bucket, prefix, notify: { mode: "digest", to, from } },
+  stateStore: { type: "dynamodb", tableName, region },
+  author: "...",
+};
+export default config;
+```
+
+## Smoke-testing a Lambda manually
+
+```bash
+aws lambda invoke \
+  --function-name element-armory-prod-auto-blogger-topics \
+  --payload '{}' --cli-binary-format raw-in-base64-out \
+  --region us-east-2 /tmp/out.json && cat /tmp/out.json
+```
+
+Then check CloudWatch Logs (`/aws/lambda/element-armory-prod-auto-blogger-topics`) and S3 (`s3://<bucket>/auto-blogger/pending/`) for the artifact.

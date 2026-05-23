@@ -3,6 +3,7 @@ import { anthropic } from "@ai-sdk/anthropic";
 import { openai } from "@ai-sdk/openai";
 import { z } from "zod";
 import { applyLinkPlaceholders, candidateId } from "./applyLinkPlaceholders.js";
+import type { BrandConfig } from "./projectConfig.js";
 import { GeneratedBlogPost, InternalLinkCandidate, NewsItem, ResearchResult, TokenUsage } from "./types.js";
 
 const OutlineSchema = z.object({
@@ -24,14 +25,19 @@ const DRAFT_MAX_OUTPUT_TOKENS = 4096;
 const MIN_EXTERNAL_LINKS = 2;
 const MIN_INTERNAL_LINKS = 2;
 
-const SYSTEM_PROMPT = `You are an editorial writer for Element Armory – Capture UI Elements, a developer tool for capturing and rebuilding UI from any website.
+function buildNewsSystemPrompt(brand: BrandConfig): string {
+  const unshippedLines = brand.unshippedFeatureClaims
+    .map((claim) => `Never claim ${claim} in ${brand.shortName}.`)
+    .join("\n");
+  return `You are an editorial writer for ${brand.productName}.
 
-Voice: developer-focused, technical but clear, minimal, confident. You write for developers who follow the AI tooling and vibe coding space closely.
+Voice: ${brand.voice}. You write for developers who follow the AI tooling and vibe coding space closely.
 
 You produce editorial news commentary: opinion, analysis, and context — not SEO-driven content. No FAQ. No diagrams. No comparison tables unless genuinely useful.
 
-Never claim JSX export or Tailwind output is currently available in Element Armory.
+${unshippedLines}
 Avoid hype. Avoid unsupported product claims. Avoid buzzwords.`;
+}
 
 function summarizeNewsItems(items: NewsItem[]): string {
   return items
@@ -90,9 +96,11 @@ export async function generateNewsArticle(input: {
   date: string;
   textProvider: "anthropic" | "openai";
   model: string;
+  brand: BrandConfig;
   internalLinkCandidates: InternalLinkCandidate[];
 }): Promise<{ post: GeneratedBlogPost; tokenUsage: TokenUsage; resolutionWarnings: string[] }> {
   const model = createTextModel(input.textProvider, input.model);
+  const systemPrompt = buildNewsSystemPrompt(input.brand);
   const newsSummary = summarizeNewsItems(input.items);
   const internalLinksSummary = summarizeInternalLinks(input.internalLinkCandidates);
 
@@ -112,7 +120,7 @@ Return:
   const outlineResult = await generateObject({
     model,
     schema: OutlineSchema,
-    system: SYSTEM_PROMPT,
+    system: systemPrompt,
     prompt: outlinePrompt,
   });
 
@@ -159,7 +167,7 @@ ${newsSummary}
   const draftResult = await generateObject({
     model,
     schema: DraftSchema,
-    system: SYSTEM_PROMPT,
+    system: systemPrompt,
     prompt: draftPrompt,
     maxTokens: DRAFT_MAX_OUTPUT_TOKENS,
   });
@@ -181,7 +189,7 @@ ${newsSummary}
   if (externalShortfall > 0 || internalShortfall > 0) {
     const remediation = await generateText({
       model,
-      system: SYSTEM_PROMPT,
+      system: systemPrompt,
       prompt: `The news commentary body below is missing inline link placeholders. Rewrite it to add ${externalShortfall} more {{SRC:<n>|anchor}} source citation${externalShortfall === 1 ? "" : "s"} and ${internalShortfall} more {{LINK:<id>|anchor}} internal link${internalShortfall === 1 ? "" : "s"}.
 
 Rules:

@@ -1,7 +1,7 @@
 import "dotenv/config";
 import { existsSync, readFileSync } from "fs";
 import path from "path";
-import { loadConfig } from "./config.js";
+import { loadConfig, loadProjectConfig } from "./config.js";
 import { parseTopicKeywords } from "./topics.js";
 import { researchTopic } from "./research.js";
 import { applyDiagramsToArticle } from "./applyDiagrams.js";
@@ -129,29 +129,35 @@ function findKeywordByText(keywords: TopicKeyword[], keywordText: string): Topic
 async function main(): Promise<void> {
   const options = parseArgs(process.argv.slice(2));
   const config = loadConfig();
+  const projectConfig = loadProjectConfig();
   const workspaceRoot = path.resolve(config.packageRoot, "..");
+  const websiteRoot =
+    projectConfig.contentRepository.type === "filesystem"
+      ? path.resolve(workspaceRoot, projectConfig.contentRepository.websiteRoot)
+      : path.resolve(workspaceRoot, "website");
   const articlePath = options.path
     ? path.resolve(process.cwd(), options.path)
     : undefined;
 
-  const allKeywords = parseTopicKeywords(config.listPath);
+  const allKeywords = parseTopicKeywords(projectConfig.content.listPath);
   const keyword = articlePath
-    ? keywordFromArticlePath(articlePath, config.websiteRoot)
+    ? keywordFromArticlePath(articlePath, websiteRoot)
     : findKeywordByText(allKeywords, options.keyword ?? "");
 
-  const copywriterPrompt = readFileSync(config.copywriterPromptPath, "utf-8");
-  const guide = readFileSync(config.guidePath, "utf-8");
-  const rules = readFileSync(config.rulesPath, "utf-8");
+  const copywriterPromptPath = projectConfig.content.copywriterPromptPath ?? "./auto-blogger/copywriter-prompt.md";
+  const copywriterPrompt = readFileSync(copywriterPromptPath, "utf-8");
+  const guide = readFileSync(projectConfig.content.guidePath, "utf-8");
+  const rules = readFileSync(projectConfig.content.rulesPath, "utf-8");
   const date = options.date ?? new Date().toISOString().slice(0, 10);
 
   console.log(`Generating local article: ${keyword.keyword}`);
-  const research = await researchTopic(keyword.keyword, 12);
+  const research = await researchTopic(keyword.keyword, 12, projectConfig.news.userAgent);
   if (research.length === 0) {
     throw new Error("Research step returned no results.");
   }
 
   const internalLinkCandidates = prioritizeInternalLinks(
-    loadInternalLinkCandidates(config.websiteRoot),
+    loadInternalLinkCandidates(websiteRoot),
     keyword
   );
 
@@ -163,6 +169,7 @@ async function main(): Promise<void> {
     copywriterPrompt,
     guide,
     rules,
+    brand: projectConfig.brand,
     research,
     internalLinkCandidates,
   });
@@ -205,7 +212,7 @@ async function main(): Promise<void> {
     model: `${config.textProvider}:${config.textModel}`,
     imageModel: config.imageModel,
     promptVersion: config.promptVersion,
-    author: config.author,
+    author: projectConfig.author,
     research,
     qualityWarnings,
   });

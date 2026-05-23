@@ -5,7 +5,7 @@ import { generateObject } from "ai";
 import { anthropic } from "@ai-sdk/anthropic";
 import { openai } from "@ai-sdk/openai";
 import { z } from "zod";
-import { loadConfig } from "./config.js";
+import { loadConfig, loadProjectConfig } from "./config.js";
 import { collectExistingKeywords, loadInternalLinkCandidates } from "./internalLinks.js";
 
 const KeywordsSchema = z.object({
@@ -122,11 +122,17 @@ ${takenSample}`;
 
 async function main(): Promise<void> {
   const config = loadConfig();
-  const articles = listTopicArticles(config.websiteRoot);
+  const projectConfig = loadProjectConfig();
+  const workspaceRoot = path.resolve(config.packageRoot, "..");
+  const websiteRoot =
+    projectConfig.contentRepository.type === "filesystem"
+      ? path.resolve(workspaceRoot, projectConfig.contentRepository.websiteRoot)
+      : path.resolve(workspaceRoot, "website");
+  const articles = listTopicArticles(websiteRoot);
   console.log(`Found ${articles.length} topic articles. Bootstrapping linkKeywords oldest-first.`);
 
   // Seed taken set from existing candidates.
-  const candidates = loadInternalLinkCandidates(config.websiteRoot);
+  const candidates = loadInternalLinkCandidates(websiteRoot);
   const taken = collectExistingKeywords(candidates);
 
   let updated = 0;
@@ -169,7 +175,7 @@ async function main(): Promise<void> {
       writeFileSync(article.filePath, updatedRaw, "utf-8");
       for (const kw of keywords) taken.add(kw.toLowerCase());
       updated += 1;
-      console.log(`[bootstrap] updated ${path.relative(config.websiteRoot, article.filePath)} (${keywords.length} kw)`);
+      console.log(`[bootstrap] updated ${path.relative(websiteRoot, article.filePath)} (${keywords.length} kw)`);
     } catch (err) {
       failed += 1;
       console.error(`[bootstrap] failed ${article.filePath}:`, err);

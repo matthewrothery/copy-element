@@ -60,3 +60,9 @@ jobs:
           aws cloudfront create-invalidation \
             --distribution-id ${{ secrets.CLOUDFRONT_WEBSITE_DISTRIBUTION_ID }} \
             --paths "/*"
+
+      - name: Publish internal-links manifest for auto-blogger Lambda
+        if: ${{ secrets.AUTO_BLOG_S3_BUCKET != '' }}
+        env:
+          AUTO_BLOG_S3_BUCKET: ${{ secrets.AUTO_BLOG_S3_BUCKET }}
+        run: node --import tsx website/scripts/publishInternalLinksManifest.mts

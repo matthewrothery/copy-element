@@ -1,9 +1,6 @@
 import { ResearchResult } from "./types.js";
 import { extractReadableContent } from "./extractContent.js";
 
-const USER_AGENT =
-  "Mozilla/5.0 (compatible; ElementArmoryAutoBlogger/1.0; +https://elementarmory.com)";
-
 function decodeHtmlEntities(input: string): string {
   return input
     .replace(/&amp;/g, "&")
@@ -43,8 +40,8 @@ function parseDuckDuckGoHtml(
   });
 }
 
-async function fetchHtml(url: string): Promise<string> {
-  const response = await fetch(url, { headers: { "user-agent": USER_AGENT } });
+async function fetchHtml(url: string, userAgent: string): Promise<string> {
+  const response = await fetch(url, { headers: { "user-agent": userAgent } });
   if (!response.ok) {
     throw new Error(`Failed request ${url} (${response.status})`);
   }
@@ -58,10 +55,11 @@ async function fetchContent(url: string): Promise<string | undefined> {
 async function searchDuckDuckGo(
   query: string,
   focus: ResearchResult["focus"],
-  limit: number
+  limit: number,
+  userAgent: string
 ): Promise<ResearchResult[]> {
   const searchUrl = `https://duckduckgo.com/html/?q=${encodeURIComponent(query)}`;
-  const html = await fetchHtml(searchUrl);
+  const html = await fetchHtml(searchUrl, userAgent);
   return parseDuckDuckGoHtml(html, query, focus).slice(0, limit);
 }
 
@@ -73,13 +71,17 @@ function buildResearchQueries(query: string): { query: string; focus: ResearchRe
   ];
 }
 
-export async function researchTopic(query: string, limit = 12): Promise<ResearchResult[]> {
+export async function researchTopic(
+  query: string,
+  limit: number,
+  userAgent: string
+): Promise<ResearchResult[]> {
   const seenUrls = new Set<string>();
   const results: ResearchResult[] = [];
 
   for (const search of buildResearchQueries(query)) {
     try {
-      const searchResults = await searchDuckDuckGo(search.query, search.focus, 6);
+      const searchResults = await searchDuckDuckGo(search.query, search.focus, 6, userAgent);
       for (const item of searchResults) {
         if (!item.url || seenUrls.has(item.url)) continue;
         seenUrls.add(item.url);

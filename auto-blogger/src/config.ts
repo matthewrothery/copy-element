@@ -1,5 +1,7 @@
 import path from "path";
 import { fileURLToPath } from "url";
+import projectConfig from "../../auto-blogger.config.mjs";
+import type { AutoBloggerProjectConfig } from "./projectConfig.js";
 
 export type AutoBloggerConfig = {
   mode: "once" | "daemon";
@@ -10,15 +12,8 @@ export type AutoBloggerConfig = {
   windowEndHour: number;
   minGapMinutes: number;
   maxGapMinutes: number;
-  statePath: string;
   lockPath: string;
-  author: string;
   target: "topics" | "news";
-  listPath: string;
-  guidePath: string;
-  copywriterPromptPath: string;
-  rulesPath: string;
-  websiteRoot: string;
   packageRoot: string;
   textProvider: "anthropic" | "openai";
   textModel: string;
@@ -33,10 +28,6 @@ export type AutoBloggerConfig = {
   /** Preferred filename extension when no image is generated (dry run / fallback). Actual Gemini output uses the API MIME type. */
   imageFormat: "png" | "jpeg" | "webp";
   allowImageFallback: boolean;
-  s3Bucket?: string;
-  s3Prefix: string;
-  notifyTo?: string;
-  notifyFrom?: string;
   requireEmail: boolean;
   importLimit: number;
   promptVersion: string;
@@ -86,11 +77,21 @@ function resolveImageModel(raw: string | undefined): string {
   return model;
 }
 
+/**
+ * Loads the per-project configuration. Statically imported so esbuild can
+ * inline the contents at bundle time — no runtime filesystem resolution
+ * inside the Lambda zip. The `../../auto-blogger.config.js` path resolves to
+ * `<repo-root>/auto-blogger.config.ts` at TS compile and bundle time, and to
+ * the same source file when run locally via tsx.
+ */
+export function loadProjectConfig(): AutoBloggerProjectConfig {
+  return projectConfig;
+}
+
 export function loadConfig(): AutoBloggerConfig {
   const currentDir = path.dirname(fileURLToPath(import.meta.url));
   const parentDir = path.dirname(currentDir);
   const packageRoot = path.basename(parentDir) === "dist" ? path.dirname(parentDir) : parentDir;
-  const websiteRoot = path.resolve(packageRoot, "../website");
   const dataRoot = process.env.NODE_ENV === "production" ? "/data" : path.resolve(packageRoot, "data");
 
   const mode = (process.env.AUTO_BLOG_MODE ?? "once") as "once" | "daemon";
@@ -136,20 +137,11 @@ export function loadConfig(): AutoBloggerConfig {
     windowEndHour: parseIntEnv("AUTO_BLOG_WINDOW_END_HOUR", 17),
     minGapMinutes: parseIntEnv("AUTO_BLOG_MIN_GAP_MINUTES", 90),
     maxGapMinutes: parseIntEnv("AUTO_BLOG_MAX_GAP_MINUTES", 120),
-    statePath:
-      process.env.AUTO_BLOG_STATE_PATH ??
-      path.resolve(dataRoot, "auto-blogger-state.json"),
     lockPath:
       process.env.AUTO_BLOG_LOCK_PATH ??
       path.resolve(dataRoot, "auto-blogger.lock"),
-    author: process.env.AUTO_BLOG_AUTHOR ?? "Element Armory Team",
     target,
-    listPath: path.resolve(packageRoot, "list.md"),
-    guidePath: path.resolve(packageRoot, "guide.md"),
-    copywriterPromptPath: path.resolve(packageRoot, "copywriter-prompt.md"),
-    rulesPath: path.resolve(packageRoot, "rules.md"),
     packageRoot,
-    websiteRoot,
     textProvider,
     textModel:
       process.env.AUTO_BLOG_TEXT_MODEL ??
@@ -164,10 +156,6 @@ export function loadConfig(): AutoBloggerConfig {
     imageQuality,
     imageFormat,
     allowImageFallback: boolEnv("AUTO_BLOG_ALLOW_IMAGE_FALLBACK"),
-    s3Bucket: process.env.AUTO_BLOG_S3_BUCKET,
-    s3Prefix: process.env.AUTO_BLOG_S3_PREFIX ?? "auto-blogger",
-    notifyTo: process.env.AUTO_BLOG_NOTIFY_TO,
-    notifyFrom: process.env.AUTO_BLOG_NOTIFY_FROM,
     requireEmail: boolEnv("AUTO_BLOG_REQUIRE_EMAIL"),
     importLimit: parseIntEnv("AUTO_BLOG_IMPORT_LIMIT", 8),
     promptVersion: process.env.AUTO_BLOG_PROMPT_VERSION ?? "v1",

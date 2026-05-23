@@ -6,6 +6,7 @@ import { DiagramSpecSchema, type DiagramSpec } from "./diagrams/schema.js";
 import { applyLinkPlaceholders, candidateId } from "./applyLinkPlaceholders.js";
 import { collectExistingKeywords } from "./internalLinks.js";
 import { linkBudget } from "./quality.js";
+import type { BrandConfig } from "./projectConfig.js";
 import {
   GeneratedArticle,
   InternalLinkCandidate,
@@ -57,12 +58,20 @@ function createTextModel(provider: "anthropic" | "openai", model: string) {
   return provider === "anthropic" ? anthropic(model) : openai(model);
 }
 
-function buildSystemPrompt(copywriterPrompt: string, guide: string, rules: string): string {
+function buildSystemPrompt(
+  copywriterPrompt: string,
+  guide: string,
+  rules: string,
+  brand: BrandConfig
+): string {
+  const unshippedLines = brand.unshippedFeatureClaims
+    .map((claim) => `Never claim ${claim}.`)
+    .join("\n");
   return `${copywriterPrompt}
 
-You are generating topic authority pages for Element Armory – Capture UI Elements.
-Voice: developer-focused, technical but clear, minimal, confident.
-Never claim JSX export or Tailwind output is currently available.
+You are generating topic authority pages for ${brand.productName}.
+Voice: ${brand.voice}.
+${unshippedLines}
 Avoid hype and avoid unsupported product claims.
 
 Topical strategy guide:
@@ -111,11 +120,12 @@ export async function generateTopicArticle(input: {
   copywriterPrompt: string;
   guide: string;
   rules: string;
+  brand: BrandConfig;
   research: ResearchResult[];
   internalLinkCandidates: InternalLinkCandidate[];
 }): Promise<{ article: GeneratedArticle; tokenUsage: TokenUsage; resolutionWarnings: string[] }> {
   const model = createTextModel(input.textProvider, input.model);
-  const system = buildSystemPrompt(input.copywriterPrompt, input.guide, input.rules);
+  const system = buildSystemPrompt(input.copywriterPrompt, input.guide, input.rules, input.brand);
   const researchSummary = summarizeResearch(input.research);
   const internalLinksSummary = summarizeInternalLinks(input.internalLinkCandidates);
   const existingKeywords = collectExistingKeywords(input.internalLinkCandidates);

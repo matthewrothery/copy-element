@@ -99,6 +99,21 @@ output "ses_complaint_topic_arn" {
   value       = aws_sns_topic.ses_complaints.arn
 }
 
+output "auto_blogger_topics_lambda_name" {
+  description = "Name of the auto-blogger topics Lambda function"
+  value       = var.enable_auto_blogger_lambdas ? aws_lambda_function.auto_blogger_topics[0].function_name : null
+}
+
+output "auto_blogger_news_lambda_name" {
+  description = "Name of the auto-blogger news Lambda function"
+  value       = var.enable_auto_blogger_lambdas ? aws_lambda_function.auto_blogger_news[0].function_name : null
+}
+
+output "auto_blogger_state_table_name" {
+  description = "DynamoDB table name for auto-blogger state"
+  value       = aws_dynamodb_table.auto_blogger_state.name
+}
+
 output "deployment_instructions" {
   description = "Instructions for deploying applications"
   value       = <<-EOT

@@ -1,0 +1,28 @@
+# Keep Docker build context lean when building auto-blogger with context: .
+# Only auto-blogger/ and auto-blogger.config.mts are needed.
+server/
+mcp-server/
+website/
+admin/
+chrome-extension/
+figma-plugin/
+terraform/
+localstack/
+competitor-extensions/
+demo-saas/
+internal-tools/
+prompts/
+plans/
+.claude/
+.agents/
+.codex/
+.cursor/
+.github/
+auto-blogger/node_modules/
+auto-blogger/dist/
+auto-blogger/dry-runs/
+auto-blogger/data/
+**/.git/
+**/.env
+**/.env.*
+**/node_modules/

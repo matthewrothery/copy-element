@@ -1,23 +1,27 @@
 import "dotenv/config";
-import { existsSync, readFileSync, readdirSync } from "fs";
-import path from "path";
+import { readFileSync } from "fs";
+import crypto from "crypto";
 import { applyDiagramsToArticle } from "./applyDiagrams.js";
-import { loadConfig } from "./config.js";
+import { loadConfig, loadProjectConfig } from "./config.js";
 import { researchTopic } from "./research.js";
-import { parseTopicKeywords, pickNextKeyword } from "./topics.js";
-import { loadState, saveState } from "./state.js";
+import { parseTopicKeywords } from "./topics.js";
 import { generateTopicArticle } from "./generateArticle.js";
 import { generateNewsArticle } from "./generateNewsArticle.js";
 import { validateArticleQuality, validateNewsPostQuality } from "./quality.js";
 import { generateCoverImage } from "./generateImage.js";
 import { createArtifact, createBlogArtifact } from "./artifact.js";
 import { writeDryRunArtifact } from "./localPublish.js";
-import { uploadArtifactToS3, getArtifactImageSignedUrl } from "./s3.js";
-import { sendArticleNotification } from "./email.js";
-import { buildRandomDailySchedule, minutesUntilSlot, msUntilNextWindowStart, sleep } from "./scheduler.js";
-import { loadInternalLinkCandidates, prioritizeInternalLinks } from "./internalLinks.js";
+import { prioritizeInternalLinks } from "./internalLinks.js";
 import { fetchNewsItems } from "./newsSearch.js";
-import { acquireLock } from "./lock.js";
+import { FilesystemStateStore } from "./stateStoreFilesystem.js";
+import { FilesystemContentRepository } from "./contentRepositoryFilesystem.js";
+import { S3SesOutputAdapter, LocalWriteOutputAdapter } from "./outputAdapterS3Ses.js";
+import type { AutoBloggerConfig } from "./config.js";
+import type { AutoBloggerProjectConfig } from "./projectConfig.js";
+import type { StateStore } from "./stateStore.js";
+import type { ContentRepository } from "./contentRepository.js";
+import type { OutputAdapter, ArticleResult, DigestSummary } from "./outputAdapter.js";
+import type { TopicKeyword } from "./types.js";
 
 const NEWS_IMAGE_STYLE = `- clean editorial style
 - modern geometric shapes
@@ -27,43 +31,57 @@ const NEWS_IMAGE_STYLE = `- clean editorial style
 - no photorealism
 - no stencil or street-art`;
 
-function loadExistingBlogSlugs(websiteRoot: string): Set<string> {
-  const blogRoot = path.resolve(websiteRoot, "content", "blog");
-  if (!existsSync(blogRoot)) return new Set();
-  return new Set(
-    readdirSync(blogRoot)
-      .filter((file) => file.endsWith(".md"))
-      .map((file) => path.parse(file).name)
-  );
+export type CycleDeps = {
+  config: AutoBloggerConfig;
+  projectConfig: AutoBloggerProjectConfig;
+  stateStore: StateStore;
+  contentRepo: ContentRepository;
+  outputAdapter: OutputAdapter;
+};
+
+function newRequestId(): string {
+  return crypto.randomBytes(8).toString("hex");
 }
 
-async function runSingleCycle(): Promise<void> {
-  const config = loadConfig();
-  const state = loadState(config.statePath);
-  const usedKeywords = new Set(state.processedKeywordIds);
-  const usedSlugs = new Set(state.processedSlugs);
-
-  const allKeywords = parseTopicKeywords(config.listPath);
-  const internalLinkCandidates = loadInternalLinkCandidates(config.websiteRoot);
-  const keyword = pickNextKeyword(allKeywords, usedKeywords, {
-    websiteRoot: config.websiteRoot,
-    skipExistingTopicFiles: config.skipExistingTopicFiles,
-  });
-  if (!keyword) {
-    console.log(
-      "No remaining keywords (state file full, list exhausted, or every list item already exists under website/content/topics). " +
-        "Reset state and/or set AUTO_BLOG_ALLOW_TOPIC_OVERWRITE=true only if you intend to regenerate."
-    );
-    return;
+/**
+ * Attempts to claim N unique keywords from the candidate pool. Skips
+ * already-claimed ids via `stateStore.claimKeyword`. Returns the actually
+ * claimed list (length may be < N if the pool is exhausted).
+ */
+export async function pickAndClaimKeywords(
+  pool: TopicKeyword[],
+  alreadyUsed: Set<string>,
+  alreadyPublished: Set<string>,
+  stateStore: StateStore,
+  n: number,
+  requestId: string
+): Promise<TopicKeyword[]> {
+  const available = pool.filter(
+    (kw) => !alreadyUsed.has(kw.id) && !alreadyPublished.has(kw.id)
+  );
+  const claimed: TopicKeyword[] = [];
+  const shuffled = [...available].sort(() => Math.random() - 0.5);
+  for (const kw of shuffled) {
+    if (claimed.length >= n) break;
+    const ok = await stateStore.claimKeyword(kw.id, requestId);
+    if (ok) claimed.push(kw);
   }
+  return claimed;
+}
 
-  const copywriterPrompt = readFileSync(config.copywriterPromptPath, "utf-8");
-  const guide = readFileSync(config.guidePath, "utf-8");
-  const rules = readFileSync(config.rulesPath, "utf-8");
-  const today = new Date().toISOString().slice(0, 10);
+async function runOneTopicPipeline(
+  keyword: TopicKeyword,
+  deps: CycleDeps,
+  copywriterPrompt: string,
+  guide: string,
+  rules: string,
+  internalLinkCandidates: ReturnType<typeof prioritizeInternalLinks>,
+  today: string
+): Promise<ArticleResult> {
+  const { config, projectConfig, stateStore, outputAdapter } = deps;
+  console.log(`[topic] Selected keyword: ${keyword.keyword}`);
 
-  console.log(`Selected keyword: ${keyword.keyword}`);
-  const research = await researchTopic(keyword.keyword, 12);
+  const research = await researchTopic(keyword.keyword, 12, projectConfig.news.userAgent);
   if (research.length === 0) {
     throw new Error("Research step returned no results.");
   }
@@ -76,11 +94,13 @@ async function runSingleCycle(): Promise<void> {
     copywriterPrompt,
     guide,
     rules,
+    brand: projectConfig.brand,
     research,
     internalLinkCandidates: prioritizeInternalLinks(internalLinkCandidates, keyword),
   });
 
   const diagramPass = applyDiagramsToArticle(draftArticle, config.maxDiagrams);
+  const usedSlugs = await stateStore.loadProcessedSlugs();
 
   const qualityWarnings = [
     ...validateArticleQuality(diagramPass.article, usedSlugs),
@@ -88,7 +108,9 @@ async function runSingleCycle(): Promise<void> {
     ...resolutionWarnings,
   ];
   if (qualityWarnings.length > 0) {
-    console.warn(`Quality warnings (${qualityWarnings.length}):\n- ${qualityWarnings.join("\n- ")}`);
+    console.warn(
+      `[topic] Quality warnings (${qualityWarnings.length}):\n- ${qualityWarnings.join("\n- ")}`
+    );
   }
 
   let coverBuffer: Buffer<ArrayBufferLike> = Buffer.alloc(0);
@@ -99,11 +121,8 @@ async function runSingleCycle(): Promise<void> {
       coverBuffer = image.bytes;
       coverExt = image.ext;
     } catch (error) {
-      if (!config.allowImageFallback) {
-        throw error;
-      }
-      console.warn("Image generation failed; using fallback blank image buffer.");
-      coverBuffer = Buffer.from("");
+      if (!config.allowImageFallback) throw error;
+      console.warn("[topic] Image generation failed; using fallback blank image buffer.");
     }
   }
 
@@ -118,225 +137,287 @@ async function runSingleCycle(): Promise<void> {
     model: `${config.textProvider}:${config.textModel}`,
     imageModel: config.imageModel,
     promptVersion: config.promptVersion,
-    author: config.author,
+    author: projectConfig.author,
     research,
     qualityWarnings,
   });
 
+  let coverUrl: string | undefined;
   if (config.dryRun) {
     const out = writeDryRunArtifact(config.packageRoot, artifact);
-    console.log(`Dry run complete: ${out.articlePath}`);
+    console.log(`[topic] Dry run complete: ${out.articlePath}`);
   } else {
-    if (!config.s3Bucket) {
-      throw new Error("AUTO_BLOG_S3_BUCKET is required for non-dry-run execution.");
-    }
-
-    await uploadArtifactToS3(config.s3Bucket, config.s3Prefix, artifact);
-    console.log(`Uploaded artifact to s3://${config.s3Bucket}/${config.s3Prefix}/pending/${artifact.artifactId}`);
-
-    if (config.notifyTo && config.notifyFrom) {
+    const result = await outputAdapter.publish(artifact);
+    coverUrl = result.coverUrl;
+    console.log(`[topic] Published artifact ${artifact.artifactId}`);
+    await stateStore.recordSlug(diagramPass.article.slug);
+    if (deps.projectConfig.output.type === "s3-staging" && deps.projectConfig.output.notify.mode === "per-article") {
       try {
-        const imageUrl = await getArtifactImageSignedUrl(
-          config.s3Bucket,
-          config.s3Prefix,
-          artifact.artifactId,
-          coverExt
-        );
-        await sendArticleNotification({
-          to: config.notifyTo,
-          from: config.notifyFrom,
-          artifact,
-          model: config.textModel,
-          imageUrl,
-          tokenUsage,
-        });
-        console.log(`Notification sent to ${config.notifyTo}`);
+        await outputAdapter.notifyPerArticle(artifact, tokenUsage, config.textModel, coverUrl);
       } catch (error) {
-        state.emailFailures.push(artifact.artifactId);
-        if (config.requireEmail) {
-          throw error;
-        }
+        await stateStore.recordEmailFailure(artifact.artifactId);
+        if (config.requireEmail) throw error;
       }
     }
   }
 
-  state.processedKeywordIds.push(keyword.id);
-  state.processedSlugs.push(diagramPass.article.slug);
-  state.lastRunAt = Date.now();
-  saveState(config.statePath, state);
+  return { artifact, tokenUsage, coverUrl };
 }
 
-async function runNewsCycle(): Promise<void> {
-  const config = loadConfig();
+/**
+ * Runs N topic article pipelines in parallel. Picks + atomically claims N
+ * keywords up front, then `Promise.allSettled` over the pipelines. Aggregates
+ * results into a digest summary and triggers a single digest email at the end.
+ */
+export async function runParallelTopics(n: number, deps: CycleDeps): Promise<DigestSummary> {
+  const { config, projectConfig, stateStore, contentRepo, outputAdapter } = deps;
+  const requestId = newRequestId();
   const today = new Date().toISOString().slice(0, 10);
-  const internalLinkCandidates = loadInternalLinkCandidates(config.websiteRoot);
-  const usedBlogSlugs = loadExistingBlogSlugs(config.websiteRoot);
+
+  const allKeywords = parseTopicKeywords(projectConfig.content.listPath);
+  const usedKeywords = await stateStore.loadProcessedKeywordIds();
+  const publishedKeywords = await contentRepo.loadPublishedKeywordIds();
+  const internalLinkCandidates = await contentRepo.loadCandidates();
+
+  const claimed = await pickAndClaimKeywords(
+    allKeywords,
+    usedKeywords,
+    publishedKeywords,
+    stateStore,
+    n,
+    requestId
+  );
+  if (claimed.length === 0) {
+    console.log("[topic] No unclaimed keywords; skipping cycle.");
+    const summary: DigestSummary = {
+      cycle: "topics",
+      date: today,
+      textModel: config.textModel,
+      results: [],
+      failures: [],
+    };
+    await outputAdapter.notifyDigest(summary);
+    return summary;
+  }
+  console.log(`[topic] Claimed ${claimed.length} keyword(s) for this cycle.`);
+
+  const copywriterPromptPath = projectConfig.content.copywriterPromptPath ?? "./auto-blogger/copywriter-prompt.md";
+  const copywriterPrompt = readFileSync(copywriterPromptPath, "utf-8");
+  const guide = readFileSync(projectConfig.content.guidePath, "utf-8");
+  const rules = readFileSync(projectConfig.content.rulesPath, "utf-8");
+
+  const settled = await Promise.allSettled(
+    claimed.map((kw) =>
+      runOneTopicPipeline(kw, deps, copywriterPrompt, guide, rules, internalLinkCandidates, today)
+    )
+  );
+
+  const results: ArticleResult[] = [];
+  const failures: DigestSummary["failures"] = [];
+  for (let i = 0; i < settled.length; i += 1) {
+    const r = settled[i];
+    const kw = claimed[i];
+    if (r.status === "fulfilled") {
+      results.push(r.value);
+    } else {
+      const message = r.reason instanceof Error ? r.reason.message : String(r.reason);
+      console.error(`[topic] Pipeline failed for "${kw.keyword}":`, r.reason);
+      failures.push({ label: kw.keyword, error: message });
+    }
+  }
+
+  await stateStore.recordRun(Date.now());
+  const summary: DigestSummary = {
+    cycle: "topics",
+    date: today,
+    textModel: config.textModel,
+    results,
+    failures,
+  };
+  try {
+    await outputAdapter.notifyDigest(summary);
+  } catch (error) {
+    console.warn("[topic] Digest notification failed:", error);
+  }
+
+  return summary;
+}
+
+/**
+ * Runs a single news commentary pipeline.
+ */
+export async function runNewsOnce(deps: CycleDeps): Promise<DigestSummary> {
+  const { config, projectConfig, stateStore, contentRepo, outputAdapter } = deps;
+  const today = new Date().toISOString().slice(0, 10);
+
+  const internalLinkCandidates = await contentRepo.loadCandidates();
+  const usedBlogSlugs = await contentRepo.loadExistingBlogSlugs();
 
   console.log("[news] Fetching news items...");
   const items = await fetchNewsItems(6, {
     recencyHours: config.newsRecencyHours,
     minItems: config.newsMinItems,
+    config: projectConfig.news,
   });
   if (items.length === 0) {
     console.warn("[news] No recent news items found; skipping cycle.");
-    return;
+    const summary: DigestSummary = {
+      cycle: "news",
+      date: today,
+      textModel: config.textModel,
+      results: [],
+      failures: [],
+    };
+    await outputAdapter.notifyDigest(summary);
+    return summary;
   }
   console.log(`[news] Fetched ${items.length} items.`);
 
-  const { post, tokenUsage, resolutionWarnings } = await generateNewsArticle({
-    items,
-    date: today,
-    textProvider: config.textProvider,
-    model: config.textModel,
-    internalLinkCandidates,
-  });
-  console.log(`[news] Generated post: ${post.title} (${post.slug})`);
+  const failures: DigestSummary["failures"] = [];
+  const results: ArticleResult[] = [];
 
-  const qualityWarnings = [
-    ...validateNewsPostQuality(post, usedBlogSlugs),
-    ...resolutionWarnings,
-  ];
-  if (qualityWarnings.length > 0) {
-    console.warn(`[news] Quality warnings (${qualityWarnings.length}):\n- ${qualityWarnings.join("\n- ")}`);
-  }
+  try {
+    const { post, tokenUsage, resolutionWarnings } = await generateNewsArticle({
+      items,
+      date: today,
+      textProvider: config.textProvider,
+      model: config.textModel,
+      brand: projectConfig.brand,
+      internalLinkCandidates,
+    });
+    console.log(`[news] Generated post: ${post.title} (${post.slug})`);
 
-  let coverBuffer: Buffer<ArrayBufferLike> = Buffer.alloc(0);
-  let coverExt = config.imageFormat;
-  if (!config.dryRun) {
-    try {
-      const image = await generateCoverImage(post, config, NEWS_IMAGE_STYLE);
-      coverBuffer = image.bytes;
-      coverExt = image.ext;
-    } catch (error) {
-      if (!config.allowImageFallback) {
-        throw error;
-      }
-      console.warn("[news] Image generation failed; using fallback blank image buffer.");
-    }
-  }
-
-  const artifact = createBlogArtifact({
-    post,
-    coverBuffer,
-    coverExt,
-    model: `${config.textProvider}:${config.textModel}`,
-    imageModel: config.imageModel,
-    promptVersion: config.promptVersion,
-    author: config.author,
-    qualityWarnings,
-  });
-
-  if (config.dryRun) {
-    const out = writeDryRunArtifact(config.packageRoot, artifact);
-    console.log(`[news] Dry run complete: ${out.articlePath}`);
-  } else {
-    if (!config.s3Bucket) {
-      throw new Error("AUTO_BLOG_S3_BUCKET is required for non-dry-run execution.");
+    const qualityWarnings = [...validateNewsPostQuality(post, usedBlogSlugs), ...resolutionWarnings];
+    if (qualityWarnings.length > 0) {
+      console.warn(`[news] Quality warnings (${qualityWarnings.length}):\n- ${qualityWarnings.join("\n- ")}`);
     }
 
-    await uploadArtifactToS3(config.s3Bucket, config.s3Prefix, artifact);
-    console.log(`[news] Uploaded artifact to s3://${config.s3Bucket}/${config.s3Prefix}/pending/${artifact.artifactId}`);
-
-    if (config.notifyTo && config.notifyFrom) {
+    let coverBuffer: Buffer<ArrayBufferLike> = Buffer.alloc(0);
+    let coverExt = config.imageFormat;
+    if (!config.dryRun) {
       try {
-        const imageUrl = await getArtifactImageSignedUrl(
-          config.s3Bucket,
-          config.s3Prefix,
-          artifact.artifactId,
-          coverExt
-        );
-        await sendArticleNotification({
-          to: config.notifyTo,
-          from: config.notifyFrom,
-          artifact,
-          model: config.textModel,
-          imageUrl,
-          tokenUsage,
-          subjectPrefix: "Generated news post",
-        });
-        console.log(`[news] Notification sent to ${config.notifyTo}`);
+        const image = await generateCoverImage(post, config, NEWS_IMAGE_STYLE);
+        coverBuffer = image.bytes;
+        coverExt = image.ext;
       } catch (error) {
-        console.error("[news] Email notification failed:", error);
+        if (!config.allowImageFallback) throw error;
+        console.warn("[news] Image generation failed; using fallback blank image buffer.");
       }
     }
+
+    const artifact = createBlogArtifact({
+      post,
+      coverBuffer,
+      coverExt,
+      model: `${config.textProvider}:${config.textModel}`,
+      imageModel: config.imageModel,
+      promptVersion: config.promptVersion,
+      author: projectConfig.author,
+      qualityWarnings,
+    });
+
+    let coverUrl: string | undefined;
+    if (config.dryRun) {
+      const out = writeDryRunArtifact(config.packageRoot, artifact);
+      console.log(`[news] Dry run complete: ${out.articlePath}`);
+    } else {
+      const result = await outputAdapter.publish(artifact);
+      coverUrl = result.coverUrl;
+      console.log(`[news] Published artifact ${artifact.artifactId}`);
+      await stateStore.recordSlug(post.slug);
+    }
+    results.push({ artifact, tokenUsage, coverUrl });
+  } catch (error) {
+    const message = error instanceof Error ? error.message : String(error);
+    console.error("[news] Pipeline failed:", error);
+    failures.push({ label: "news cycle", error: message });
   }
+
+  await stateStore.recordRun(Date.now());
+  const summary: DigestSummary = {
+    cycle: "news",
+    date: today,
+    textModel: config.textModel,
+    results,
+    failures,
+  };
+  try {
+    await outputAdapter.notifyDigest(summary);
+  } catch (error) {
+    console.warn("[news] Digest notification failed:", error);
+  }
+  return summary;
 }
 
-async function runDaemon(): Promise<void> {
+/**
+ * Instantiates the runtime dependencies (StateStore, ContentRepository,
+ * OutputAdapter) from the project + env configs. DynamoDB / S3-manifest
+ * implementations are picked up by the lambda entry; this default wires the
+ * filesystem implementations for local dev parity.
+ */
+export async function buildCycleDeps(): Promise<CycleDeps> {
   const config = loadConfig();
-  const windowStart = config.windowStartHour * 60;
-  const windowEnd = config.windowEndHour * 60;
-  console.log("Auto-blogger daemon started.");
+  const projectConfig = loadProjectConfig();
 
-  async function topicLoop(): Promise<void> {
-    while (true) {
-      const schedule = buildRandomDailySchedule(
-        config.dailyArticles,
-        windowStart,
-        windowEnd,
-        config.minGapMinutes,
-        config.maxGapMinutes
-      );
-      console.log(`[topic] Today's schedule (${config.timezone} minutes-from-midnight): ${schedule.join(", ")}`);
-
-      for (const slot of schedule) {
-        const waitMinutes = minutesUntilSlot(slot, new Date(), config.timezone);
-        if (waitMinutes > 0) {
-          await sleep(waitMinutes * 60 * 1000);
-        }
-        await runSingleCycle();
-      }
-
-      const ms = msUntilNextWindowStart(windowStart, config.timezone);
-      console.log(`[topic] All slots done. Sleeping ${Math.round(ms / 60000)} minutes until next window.`);
-      await sleep(ms);
-    }
-  }
-
-  async function newsLoop(): Promise<void> {
-    const slotMinutes = config.newsCycleHour * 60;
-    while (true) {
-      const waitMinutes = minutesUntilSlot(slotMinutes, new Date(), config.timezone);
-      if (waitMinutes > 0) {
-        console.log(`[news] Waiting ${waitMinutes} minutes until ${config.newsCycleHour}:00 ${config.timezone}.`);
-        await sleep(waitMinutes * 60 * 1000);
-      }
-      try {
-        await runNewsCycle();
-      } catch (e) {
-        console.error("[news] cycle failed:", e);
-      }
-      const ms = msUntilNextWindowStart(slotMinutes, config.timezone);
-      await sleep(ms);
-    }
-  }
-
-  if (config.newsCycleEnabled) {
-    await Promise.all([topicLoop(), newsLoop()]);
+  let stateStore: StateStore;
+  if (projectConfig.stateStore.type === "dynamodb") {
+    const mod = await import("./stateStoreDynamoDb.js");
+    stateStore = new mod.DynamoDbStateStore(
+      projectConfig.stateStore.tableName,
+      projectConfig.stateStore.region
+    );
   } else {
-    await topicLoop();
+    stateStore = new FilesystemStateStore(projectConfig.stateStore.statePath);
   }
+
+  let contentRepo: ContentRepository;
+  if (projectConfig.contentRepository.type === "s3-manifest") {
+    const mod = await import("./contentRepositoryS3Manifest.js");
+    contentRepo = new mod.S3ManifestContentRepository(
+      projectConfig.contentRepository.bucket,
+      projectConfig.contentRepository.manifestKey,
+      projectConfig.contentRepository.region
+    );
+  } else {
+    contentRepo = new FilesystemContentRepository(projectConfig.contentRepository.websiteRoot);
+  }
+
+  let outputAdapter: OutputAdapter;
+  if (projectConfig.output.type === "s3-staging") {
+    outputAdapter = new S3SesOutputAdapter(
+      projectConfig.output.bucket,
+      projectConfig.output.prefix,
+      projectConfig.output.notify
+    );
+  } else {
+    outputAdapter = new LocalWriteOutputAdapter(projectConfig.output.notify);
+  }
+
+  return { config, projectConfig, stateStore, contentRepo, outputAdapter };
 }
 
 async function main(): Promise<void> {
-  const config = loadConfig();
-  if (config.mode === "daemon") {
-    await runDaemon();
-    return;
-  }
-  const lock = acquireLock(config.lockPath);
-  try {
-    if (config.target === "news") {
-      await runNewsCycle();
-    } else {
-      await runSingleCycle();
-    }
-  } finally {
-    lock.release();
+  const deps = await buildCycleDeps();
+  if (deps.config.target === "news") {
+    await runNewsOnce(deps);
+  } else {
+    await runParallelTopics(deps.config.dailyArticles, deps);
   }
 }
 
-main().catch((error) => {
-  console.error(error);
-  process.exit(1);
-});
+// Only run main when invoked directly (not when imported by lambda.ts or tests).
+const isDirectInvocation = (() => {
+  try {
+    const argv1 = process.argv[1] ?? "";
+    return argv1.endsWith("index.js") || argv1.endsWith("index.ts");
+  } catch {
+    return false;
+  }
+})();
+
+if (isDirectInvocation) {
+  main().catch((error) => {
+    console.error(error);
+    process.exit(1);
+  });
+}

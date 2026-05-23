@@ -125,9 +125,10 @@ The infrastructure creates an IAM user for GitHub Actions deployment. To use it:
 - `variables.tf` — Variable definitions
 - `vpc.tf` — VPC, subnets, routing
 - `security-groups.tf` — Security group rules
-- `ec2.tf` — EC2 instance and SSM associations
+- `ec2.tf` — EC2 instance and SSM associations (server + mcp only; auto-blogger is Lambda)
 - `rds.tf` — RDS PostgreSQL
-- `s3.tf` — Website and assets buckets
+- `s3.tf` — Website, assets, and auto-blog S3 buckets
+- `lambda.tf` — Auto-blogger Lambda functions, DynamoDB state table, EventBridge Scheduler, IAM
 - `cloudfront-website.tf` — CloudFront for marketing site
 - `cloudfront-app.tf` — CloudFront for app origin
 - `route53.tf` — DNS records
@@ -138,3 +139,49 @@ The infrastructure creates an IAM user for GitHub Actions deployment. To use it:
 - `scripts/` — setup-backend.sh, user-data.sh, start.sh
 - `templates/` — docker-compose.prod.yml, nginx.conf, env.template
 - `variables/prod.tfvars.example` — Example variable values
+
+## Auto-blogger Lambda
+
+The auto-blogger runs as two Lambda functions defined in `lambda.tf`. Both are gated by `var.enable_auto_blogger_lambdas` (default `false`).
+
+### Enabling
+
+Before the first apply with `enable_auto_blogger_lambdas = true`, build the Lambda zip:
+
+```bash
+cd auto-blogger && npm run build:lambda
+```
+
+Then set in `variables/prod.tfvars`:
+
+```hcl
+enable_auto_blogger_lambdas = true
+```
+
+And apply:
+
+```bash
+AWS_REGION=us-east-2 aws-vault exec demoly -- docker-compose run --rm terraform apply -var-file=./variables/prod.tfvars
+```
+
+### Disabling
+
+Set `enable_auto_blogger_lambdas = false` and apply. The DynamoDB table is unconditional and persists (cheap on-demand billing; retains claimed keyword history). Destroy it manually if you want a clean slate.
+
+### Resources created
+
+| Resource | Name |
+|---|---|
+| DynamoDB table | `{project}-{env}-auto-blogger-state` |
+| Lambda (topics) | `{project}-{env}-auto-blogger-topics` |
+| Lambda (news) | `{project}-{env}-auto-blogger-news` |
+| EventBridge schedule | `{project}-{env}-auto-blogger-topics` — 09:00 Australia/Sydney |
+| EventBridge schedule | `{project}-{env}-auto-blogger-news` — 10:00 Australia/Sydney |
+| CloudWatch log group | `/aws/lambda/{project}-{env}-auto-blogger-topics` (30-day retention) |
+| CloudWatch log group | `/aws/lambda/{project}-{env}-auto-blogger-news` (30-day retention) |
+
+### Code deploys
+
+Terraform owns Lambda config (memory, timeout, env vars). GitHub Actions owns code — the `build_auto_blogger_lambda` job in `deploy-apps.yml` builds the zip and calls `aws lambda update-function-code` on every push to `master` touching `auto-blogger/**`.
+
+The Lambda function resources have `lifecycle { ignore_changes = [source_code_hash, filename] }` so terraform never rolls back a GHA code deploy.

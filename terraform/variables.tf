@@ -212,10 +212,10 @@ variable "ecr_auto_blogger_repo" {
   default     = "element-armory-auto-blogger"
 }
 
-variable "enable_auto_blogger_timers" {
-  description = "When true, installs and enables the auto-blogger systemd timers on the EC2 host. Flip to false to disable and remove the units (rollback path)."
+variable "enable_auto_blogger_lambdas" {
+  description = "When true, creates the auto-blogger Lambda functions, DynamoDB state table, and EventBridge Scheduler entries. Set enable_auto_blogger_timers = false at the same time to perform an atomic cutover from EC2 systemd timers to Lambda."
   type        = bool
-  default     = true
+  default     = false
 }
 
 variable "auto_blog_news_cycle_hour" {

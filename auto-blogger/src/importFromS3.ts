@@ -2,7 +2,7 @@ import "dotenv/config";
 import { existsSync, mkdirSync, writeFileSync } from "fs";
 import path from "path";
 import crypto from "crypto";
-import { loadConfig } from "./config.js";
+import { loadConfig, loadProjectConfig } from "./config.js";
 import {
   listPendingArtifactPrefixes,
   movePrefixToPublished,
@@ -43,11 +43,15 @@ function sha256(input: Buffer | string): string {
 
 async function main(): Promise<void> {
   const config = loadConfig();
-  if (!config.s3Bucket) {
-    throw new Error("AUTO_BLOG_S3_BUCKET is required for import");
+  const projectConfig = loadProjectConfig();
+  if (projectConfig.output.type !== "s3-staging") {
+    throw new Error("Import requires an s3-staging output adapter (AUTO_BLOG_S3_BUCKET must be set).");
   }
+  const s3Bucket = projectConfig.output.bucket;
+  const s3Prefix = projectConfig.output.prefix;
+  const notify = projectConfig.output.notify;
 
-  const pending = await listPendingArtifactPrefixes(config.s3Bucket, config.s3Prefix);
+  const pending = await listPendingArtifactPrefixes(s3Bucket, s3Prefix);
   const selected = pending.slice(0, config.importLimit);
 
   if (selected.length === 0) {
@@ -61,10 +65,10 @@ async function main(): Promise<void> {
   for (const prefix of selected) {
     const normalizedPrefix = prefix.endsWith("/") ? prefix.slice(0, -1) : prefix;
     const artifactId = path.basename(normalizedPrefix);
-    const metadataRaw = await readS3Text(config.s3Bucket, `${normalizedPrefix}/metadata.json`);
+    const metadataRaw = await readS3Text(s3Bucket, `${normalizedPrefix}/metadata.json`);
     const metadata = JSON.parse(metadataRaw) as ArticleArtifactMetadata;
 
-    const articleMarkdown = await readS3Text(config.s3Bucket, `${normalizedPrefix}/article.md`);
+    const articleMarkdown = await readS3Text(s3Bucket, `${normalizedPrefix}/article.md`);
 
     if (sha256(articleMarkdown) !== metadata.checksums.articleSha256) {
       throw new Error(`Checksum mismatch for article in artifact ${artifactId}`);
@@ -84,7 +88,7 @@ async function main(): Promise<void> {
       if (!legacyCoverOnly && assetNamesForMove.length === 0) {
         throw new Error(`Artifact ${artifactId} missing assets manifest and legacy cover checksum.`);
       }
-      await movePrefixToPublished(config.s3Bucket, config.s3Prefix, artifactId, assetNamesForMove);
+      await movePrefixToPublished(s3Bucket, s3Prefix, artifactId, assetNamesForMove);
       console.log(`Skipped import (article exists): ${metadata.articlePath}`);
       continue;
     }
@@ -93,7 +97,7 @@ async function main(): Promise<void> {
       const ext = extFromImagePath(metadata.imagePath);
       const coverName = `cover.${ext}`;
       const imageBuffer = await readS3Buffer(
-        config.s3Bucket,
+        s3Bucket,
         `${normalizedPrefix}/${coverName}`
       );
 
@@ -110,7 +114,7 @@ async function main(): Promise<void> {
       writeFileSync(articleOut, articleMarkdown, "utf-8");
       writeFileSync(imageOut, imageBuffer);
 
-      await movePrefixToPublished(config.s3Bucket, config.s3Prefix, artifactId, [coverName]);
+      await movePrefixToPublished(s3Bucket, s3Prefix, artifactId, [coverName]);
 
       if (metadata.targetType === "topic" && metadata.slug) {
         importedTopicSlugs.push(metadata.slug);
@@ -128,7 +132,7 @@ async function main(): Promise<void> {
 
     const assetNames: string[] = [];
     for (const asset of metadata.assets) {
-      const buf = await readS3Buffer(config.s3Bucket, `${normalizedPrefix}/${asset.s3Name}`);
+      const buf = await readS3Buffer(s3Bucket, `${normalizedPrefix}/${asset.s3Name}`);
       if (sha256(buf) !== asset.sha256) {
         throw new Error(`Checksum mismatch for asset ${asset.s3Name} in artifact ${artifactId}`);
       }
@@ -139,7 +143,7 @@ async function main(): Promise<void> {
       assetNames.push(asset.s3Name);
     }
 
-    await movePrefixToPublished(config.s3Bucket, config.s3Prefix, artifactId, assetNames);
+    await movePrefixToPublished(s3Bucket, s3Prefix, artifactId, assetNames);
 
     if (metadata.targetType === "topic" && metadata.slug) {
       importedTopicSlugs.push(metadata.slug);
@@ -164,11 +168,11 @@ async function main(): Promise<void> {
       );
       for (const w of summary.warnings) console.warn(`Backfill warning: ${w}`);
 
-      if (config.notifyTo && config.notifyFrom) {
+      if (notify.mode !== "none") {
         try {
           await sendBackfillNotification({
-            to: config.notifyTo,
-            from: config.notifyFrom,
+            to: notify.to,
+            from: notify.from,
             importedSlugs: importedTopicSlugs,
             summary,
           });

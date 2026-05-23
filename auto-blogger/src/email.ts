@@ -1,6 +1,7 @@
 import { SendEmailCommand, SESClient } from "@aws-sdk/client-ses";
 import { marked } from "marked";
 import { ArticleArtifact, BackfillSummary, TokenUsage } from "./types.js";
+import type { DigestSummary } from "./outputAdapter.js";
 
 function escapeHtml(text: string): string {
   return text
@@ -228,6 +229,103 @@ export async function sendBackfillNotification(input: {
         Body: {
           Html: { Data: html, Charset: "UTF-8" },
           Text: { Data: text, Charset: "UTF-8" },
+        },
+      },
+    })
+  );
+}
+
+function buildDigestSubject(summary: DigestSummary): string {
+  const count = summary.results.length;
+  const failed = summary.failures.length;
+  const cycle = summary.cycle === "topics" ? "topic articles" : "news posts";
+  if (failed === 0) {
+    return `Daily digest (${summary.date}): ${count} ${cycle}`;
+  }
+  return `Daily digest (${summary.date}): ${count} ${cycle}, ${failed} failure(s)`;
+}
+
+function buildDigestHtml(summary: DigestSummary): string {
+  const articleBlocks = summary.results
+    .map((r) => {
+      const m = r.artifact.metadata;
+      const cover = r.coverUrl
+        ? `<p><img src="${r.coverUrl}" alt="${escapeHtml(m.title)}" style="max-width: 480px; width: 100%; border-radius: 8px;" /></p>`
+        : "";
+      const warnings = m.qualityWarnings?.length
+        ? `<p style="color: #b45309;"><strong>Quality warnings:</strong> ${m.qualityWarnings.map(escapeHtml).join("; ")}</p>`
+        : "";
+      const cost = `<p style="color: #6b7280;"><small>${escapeHtml(calcCostSummary(summary.textModel, r.tokenUsage))}</small></p>`;
+      const breadcrumb =
+        m.hubSlug && m.clusterSlug ? `${escapeHtml(m.hubSlug)} / ${escapeHtml(m.clusterSlug)}` : escapeHtml("blog");
+      return `
+        <div style="margin-bottom: 32px; padding-bottom: 24px; border-bottom: 1px solid #e5e7eb;">
+          <h2 style="margin-bottom: 4px;">${escapeHtml(m.title)}</h2>
+          <p style="color: #6b7280; margin-top: 0;">${breadcrumb} · ${escapeHtml(m.date)}</p>
+          ${cover}
+          ${warnings}
+          ${cost}
+          <p><small>Artifact: <code>${escapeHtml(r.artifact.artifactId)}</code></small></p>
+        </div>`;
+    })
+    .join("");
+
+  const failureBlock = summary.failures.length
+    ? `<h2 style="color: #b91c1c;">Failures</h2>
+       <ul style="color: #991b1b;">${summary.failures
+         .map((f) => `<li><strong>${escapeHtml(f.label)}:</strong> ${escapeHtml(f.error)}</li>`)
+         .join("")}</ul>`
+    : "";
+
+  const totalInput = summary.results.reduce((acc, r) => acc + r.tokenUsage.inputTokens, 0);
+  const totalOutput = summary.results.reduce((acc, r) => acc + r.tokenUsage.outputTokens, 0);
+  const totalsLine = `<p style="color: #6b7280;"><small>Total tokens: ${totalInput.toLocaleString()} input + ${totalOutput.toLocaleString()} output across ${summary.results.length} article(s).</small></p>`;
+
+  return `
+  <html>
+    <body style="font-family: Arial, sans-serif; line-height: 1.6; color: #111827;">
+      <h1>${escapeHtml(buildDigestSubject(summary))}</h1>
+      ${totalsLine}
+      ${articleBlocks}
+      ${failureBlock}
+    </body>
+  </html>`;
+}
+
+function buildDigestText(summary: DigestSummary): string {
+  const lines: string[] = [buildDigestSubject(summary), ""];
+  for (const r of summary.results) {
+    const m = r.artifact.metadata;
+    lines.push(`- ${m.title} (${m.artifactId})`);
+    lines.push(`  ${m.date} · ${calcCostSummary(summary.textModel, r.tokenUsage)}`);
+    if (m.qualityWarnings?.length) {
+      lines.push(`  Quality warnings: ${m.qualityWarnings.join("; ")}`);
+    }
+  }
+  if (summary.failures.length) {
+    lines.push("", "Failures:");
+    for (const f of summary.failures) {
+      lines.push(`- ${f.label}: ${f.error}`);
+    }
+  }
+  return lines.join("\n");
+}
+
+export async function sendDigestNotification(input: {
+  to: string;
+  from: string;
+  summary: DigestSummary;
+}): Promise<void> {
+  const client = getClient();
+  await client.send(
+    new SendEmailCommand({
+      Source: input.from,
+      Destination: { ToAddresses: [input.to] },
+      Message: {
+        Subject: { Data: buildDigestSubject(input.summary), Charset: "UTF-8" },
+        Body: {
+          Html: { Data: buildDigestHtml(input.summary), Charset: "UTF-8" },
+          Text: { Data: buildDigestText(input.summary), Charset: "UTF-8" },
         },
       },
     })

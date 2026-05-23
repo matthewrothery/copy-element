@@ -1,12 +1,6 @@
+import type { NewsConfig } from "./projectConfig.js";
 import { NewsItem } from "./types.js";
 import { extractReadableContent } from "./extractContent.js";
-
-export const NEWS_QUERIES = [
-  "vibe coding AI",
-  "AI UI tools",
-  "AI frontend tools",
-  "AI coding agents",
-];
 
 export const DEFAULT_NEWS_RECENCY_HOURS = 168;
 export const MIN_NEWS_CONTENT_CHARS = 300;
@@ -15,19 +9,19 @@ const CONTENT_TIMEOUT_MS = 8_000;
 const MAX_ENRICHMENT_ATTEMPTS = 12;
 const ENRICHMENT_CONCURRENCY = 4;
 
-const USER_AGENT =
-  "Mozilla/5.0 (compatible; ElementArmoryAutoBlogger/1.0; +https://elementarmory.com)";
+function escapeRegExpClass(input: string): string {
+  return input.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+}
 
-const EXCLUDED_DOMAINS = [
-  "youtube.com",
-  "reddit.com",
-  "pinterest.com",
-  "amazon.com",
-  "facebook.com",
-  "twitter.com",
-  "x.com",
-  "tiktok.com",
-];
+function buildRelevanceRegex(keywords: string[]): RegExp {
+  const alternation = keywords.map(escapeRegExpClass).join("|");
+  return new RegExp(`\\b(${alternation})\\b`);
+}
+
+function buildExcludeRegex(keywords: string[]): RegExp {
+  const alternation = keywords.map(escapeRegExpClass).join("|");
+  return new RegExp(`\\b(${alternation})\\b`);
+}
 
 type RawNewsItem = NewsItem & {
   sourceUrl?: string;
@@ -90,13 +84,15 @@ function isGoogleNewsUrl(url: string): boolean {
   }
 }
 
-function isExcludedUrl(url: string): boolean {
-  try {
-    const host = new URL(url).hostname.toLowerCase();
-    return EXCLUDED_DOMAINS.some((d) => host === d || host.endsWith(`.${d}`));
-  } catch {
-    return true;
-  }
+function makeIsExcludedUrl(excludedDomains: string[]): (url: string) => boolean {
+  return (url: string) => {
+    try {
+      const host = new URL(url).hostname.toLowerCase();
+      return excludedDomains.some((d) => host === d || host.endsWith(`.${d}`));
+    } catch {
+      return true;
+    }
+  };
 }
 
 function normalizeUrlForDedupe(url: string): string {
@@ -122,19 +118,20 @@ function normalizeTitleForDedupe(title: string): string {
     .trim();
 }
 
-function isRelevantNewsItem(item: Pick<NewsItem, "title" | "description" | "source">): boolean {
-  const text = `${item.title} ${item.description ?? ""} ${item.source}`.toLowerCase();
-  if (/\b(one ui|galaxy|samsung|android update|smartphone)\b/.test(text)) return false;
-  return /\b(ai|vibe cod|coding agent|frontend|developer|design system|ui tool|cursor|windsurf|claude code)\b/.test(text);
+function makeIsRelevantNewsItem(
+  relevanceRegex: RegExp,
+  excludeRegex: RegExp
+): (item: Pick<NewsItem, "title" | "description" | "source">) => boolean {
+  return (item) => {
+    const text = `${item.title} ${item.description ?? ""} ${item.source}`.toLowerCase();
+    if (excludeRegex.test(text)) return false;
+    return relevanceRegex.test(text);
+  };
 }
 
 function titleWithoutSource(title: string, source: string): string {
-  const suffix = source ? new RegExp(`\\s+-\\s+${escapeRegExp(source)}\\s*$`, "i") : undefined;
+  const suffix = source ? new RegExp(`\\s+-\\s+${escapeRegExpClass(source)}\\s*$`, "i") : undefined;
   return (suffix ? title.replace(suffix, "") : title.replace(/\s+-\s+[^-]+$/, "")).trim();
-}
-
-function escapeRegExp(input: string): string {
-  return input.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
 }
 
 function googleNewsRssUrl(query: string): string {
@@ -156,11 +153,11 @@ function googleNewsArticleId(url: string): string | undefined {
   }
 }
 
-async function fetchHtml(url: string): Promise<string> {
+async function fetchHtml(url: string, userAgent: string): Promise<string> {
   const controller = new AbortController();
   const timeout = setTimeout(() => controller.abort(), FETCH_TIMEOUT_MS);
   const response = await fetch(url, {
-    headers: { "user-agent": USER_AGENT },
+    headers: { "user-agent": userAgent },
     signal: controller.signal,
   }).finally(() => clearTimeout(timeout));
   if (!response.ok) {
@@ -169,11 +166,11 @@ async function fetchHtml(url: string): Promise<string> {
   return response.text();
 }
 
-async function decodeGoogleNewsUrl(url: string): Promise<string | undefined> {
+async function decodeGoogleNewsUrl(url: string, userAgent: string): Promise<string | undefined> {
   const id = googleNewsArticleId(url);
   if (!id) return undefined;
 
-  const articlePageHtml = await fetchHtml(url);
+  const articlePageHtml = await fetchHtml(url, userAgent);
   const ts = articlePageHtml.match(/data-n-a-ts="([^"]+)"/)?.[1];
   const signature = articlePageHtml.match(/data-n-a-sg="([^"]+)"/)?.[1];
   if (!ts || !signature) return undefined;
@@ -231,7 +228,7 @@ async function decodeGoogleNewsUrl(url: string): Promise<string | undefined> {
       headers: {
         "content-type": "application/x-www-form-urlencoded;charset=utf-8",
         "referer": "https://news.google.com/",
-        "user-agent": USER_AGENT,
+        "user-agent": userAgent,
       },
       body: `f.req=${encodeURIComponent(JSON.stringify([[payload]]))}`,
       signal: controller.signal,
@@ -298,8 +295,8 @@ export function parseGoogleNewsRss(xml: string, query: string): RawNewsItem[] {
   return items;
 }
 
-async function fetchGoogleNewsRss(query: string): Promise<RawNewsItem[]> {
-  const xml = await fetchHtml(googleNewsRssUrl(query));
+async function fetchGoogleNewsRss(query: string, userAgent: string): Promise<RawNewsItem[]> {
+  const xml = await fetchHtml(googleNewsRssUrl(query), userAgent);
   return parseGoogleNewsRss(xml, query);
 }
 
@@ -324,14 +321,18 @@ export function parseDuckDuckGoResults(html: string): SearchResult[] {
   }));
 }
 
-async function searchDuckDuckGo(query: string, limit: number): Promise<SearchResult[]> {
+async function searchDuckDuckGo(query: string, limit: number, userAgent: string): Promise<SearchResult[]> {
   const searchUrl = `https://duckduckgo.com/html/?q=${encodeURIComponent(query)}`;
-  const html = await fetchHtml(searchUrl);
+  const html = await fetchHtml(searchUrl, userAgent);
   return parseDuckDuckGoResults(html).slice(0, limit);
 }
 
-async function fetchFallbackNews(query: string): Promise<RawNewsItem[]> {
-  const results = await searchDuckDuckGo(`${query} AI news`, 10);
+async function fetchFallbackNews(
+  query: string,
+  userAgent: string,
+  isExcludedUrl: (url: string) => boolean
+): Promise<RawNewsItem[]> {
+  const results = await searchDuckDuckGo(`${query} AI news`, 10, userAgent);
   return results
     .filter((item) => /^https?:\/\//i.test(item.url) && !isExcludedUrl(item.url) && !isGoogleNewsUrl(item.url))
     .map((item) => ({
@@ -353,12 +354,15 @@ function isRecentEnough(publishedAt: string, recencyHours: number): boolean {
   return Date.now() - publishedMs <= recencyHours * 60 * 60 * 1000;
 }
 
-function dedupeNewsItems(items: RawNewsItem[]): RawNewsItem[] {
+function dedupeNewsItems(
+  items: RawNewsItem[],
+  isRelevant: (item: Pick<NewsItem, "title" | "description" | "source">) => boolean
+): RawNewsItem[] {
   const seen = new Set<string>();
   const deduped: RawNewsItem[] = [];
 
   for (const item of items) {
-    if (!isRelevantNewsItem(item)) continue;
+    if (!isRelevant(item)) continue;
     const urlKey = normalizeUrlForDedupe(item.publisherUrl ?? item.url);
     const titleKey = normalizeTitleForDedupe(item.title);
     const key = `${urlKey}::${titleKey}`;
@@ -371,7 +375,13 @@ function dedupeNewsItems(items: RawNewsItem[]): RawNewsItem[] {
   return deduped;
 }
 
-async function resolvePublisherUrl(item: RawNewsItem): Promise<string | undefined> {
+type ResolveDeps = {
+  userAgent: string;
+  isExcludedUrl: (url: string) => boolean;
+};
+
+async function resolvePublisherUrl(item: RawNewsItem, deps: ResolveDeps): Promise<string | undefined> {
+  const { isExcludedUrl, userAgent } = deps;
   if (item.publisherUrl && !isGoogleNewsUrl(item.publisherUrl) && !isExcludedUrl(item.publisherUrl)) {
     return item.publisherUrl;
   }
@@ -380,7 +390,7 @@ async function resolvePublisherUrl(item: RawNewsItem): Promise<string | undefine
   }
 
   try {
-    const decoded = await decodeGoogleNewsUrl(item.url);
+    const decoded = await decodeGoogleNewsUrl(item.url, userAgent);
     if (decoded && !isGoogleNewsUrl(decoded) && !isExcludedUrl(decoded)) {
       return decoded;
     }
@@ -390,7 +400,7 @@ async function resolvePublisherUrl(item: RawNewsItem): Promise<string | undefine
 
   const cleanTitle = titleWithoutSource(item.title, item.source);
   try {
-    const results = await searchDuckDuckGo(`"${cleanTitle}" ${item.source}`.trim(), 6);
+    const results = await searchDuckDuckGo(`"${cleanTitle}" ${item.source}`.trim(), 6, userAgent);
     const match = results.find((result) => {
       if (!/^https?:\/\//i.test(result.url)) return false;
       if (isGoogleNewsUrl(result.url) || isExcludedUrl(result.url)) return false;
@@ -417,18 +427,19 @@ export const newsSearchTestHooks = {
 async function enrichItem(
   item: RawNewsItem,
   stats: DiscoveryStats,
-  recencyHours: number
+  recencyHours: number,
+  deps: ResolveDeps
 ): Promise<NewsItem | undefined> {
   if (!isRecentEnough(item.publishedAt, recencyHours)) {
     incrementSkipped(stats, "stale");
     return undefined;
   }
-  if (isExcludedUrl(item.publisherUrl ?? item.url)) {
+  if (deps.isExcludedUrl(item.publisherUrl ?? item.url)) {
     incrementSkipped(stats, "excluded-domain");
     return undefined;
   }
 
-  const publisherUrl = await resolvePublisherUrl(item);
+  const publisherUrl = await resolvePublisherUrl(item, deps);
   if (!publisherUrl) {
     incrementSkipped(stats, "missing-publisher-url");
     return undefined;
@@ -466,13 +477,25 @@ function logDiscoveryStats(stats: DiscoveryStats): void {
 }
 
 export async function fetchNewsItems(
-  limit = 6,
-  options: { recencyHours?: number; minItems?: number } = {}
+  limit: number,
+  options: {
+    recencyHours?: number;
+    minItems?: number;
+    config: NewsConfig;
+  }
 ): Promise<NewsItem[]> {
   const recencyHours = options.recencyHours ?? DEFAULT_NEWS_RECENCY_HOURS;
   const minItems = options.minItems ?? 3;
+  const news = options.config;
+  const isExcludedUrl = makeIsExcludedUrl(news.excludedDomains);
+  const isRelevantNewsItem = makeIsRelevantNewsItem(
+    buildRelevanceRegex(news.relevanceKeywords),
+    buildExcludeRegex(news.excludeKeywords)
+  );
+  const deps: ResolveDeps = { userAgent: news.userAgent, isExcludedUrl };
+
   const stats: DiscoveryStats = {
-    queryCount: NEWS_QUERIES.length,
+    queryCount: news.queries.length,
     rawItems: 0,
     dedupedItems: 0,
     enrichedItems: 0,
@@ -480,10 +503,12 @@ export async function fetchNewsItems(
     selected: [],
   };
 
-  const rssResults = await Promise.allSettled(NEWS_QUERIES.map((q) => fetchGoogleNewsRss(q)));
+  const rssResults = await Promise.allSettled(
+    news.queries.map((q) => fetchGoogleNewsRss(q, news.userAgent))
+  );
   const rawItems: RawNewsItem[] = [];
   for (let i = 0; i < rssResults.length; i += 1) {
-    const query = NEWS_QUERIES[i];
+    const query = news.queries[i];
     const result = rssResults[i];
     if (result.status === "fulfilled") {
       console.log(`[news] Google News RSS "${query}" returned ${result.value.length} raw item(s).`);
@@ -494,15 +519,20 @@ export async function fetchNewsItems(
   }
 
   stats.rawItems = rawItems.length;
-  let candidates = dedupeNewsItems(rawItems.filter((item) => isRecentEnough(item.publishedAt, recencyHours)));
+  let candidates = dedupeNewsItems(
+    rawItems.filter((item) => isRecentEnough(item.publishedAt, recencyHours)),
+    isRelevantNewsItem
+  );
 
   if (candidates.length < minItems) {
     console.warn(
       `[news] RSS returned only ${candidates.length} recent deduped item(s); trying free web-search fallback.`
     );
-    const fallbackResults = await Promise.allSettled(NEWS_QUERIES.map((q) => fetchFallbackNews(q)));
+    const fallbackResults = await Promise.allSettled(
+      news.queries.map((q) => fetchFallbackNews(q, news.userAgent, isExcludedUrl))
+    );
     for (let i = 0; i < fallbackResults.length; i += 1) {
-      const query = NEWS_QUERIES[i];
+      const query = news.queries[i];
       const result = fallbackResults[i];
       if (result.status === "fulfilled") {
         console.log(`[news] Fallback search "${query}" returned ${result.value.length} raw item(s).`);
@@ -512,7 +542,10 @@ export async function fetchNewsItems(
       }
     }
     stats.rawItems = rawItems.length;
-    candidates = dedupeNewsItems(rawItems.filter((item) => isRecentEnough(item.publishedAt, recencyHours)));
+    candidates = dedupeNewsItems(
+      rawItems.filter((item) => isRecentEnough(item.publishedAt, recencyHours)),
+      isRelevantNewsItem
+    );
   }
 
   candidates.sort((a, b) => {
@@ -526,7 +559,9 @@ export async function fetchNewsItems(
   const enrichmentCandidates = candidates.slice(0, MAX_ENRICHMENT_ATTEMPTS);
   for (let i = 0; i < enrichmentCandidates.length && enriched.length < limit; i += ENRICHMENT_CONCURRENCY) {
     const batch = enrichmentCandidates.slice(i, i + ENRICHMENT_CONCURRENCY);
-    const batchResults = await Promise.all(batch.map((item) => enrichItem(item, stats, recencyHours)));
+    const batchResults = await Promise.all(
+      batch.map((item) => enrichItem(item, stats, recencyHours, deps))
+    );
     for (const item of batchResults) {
       if (!item || enriched.length >= limit) continue;
       enriched.push(item);
