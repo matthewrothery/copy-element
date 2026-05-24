@@ -198,6 +198,11 @@ resource "aws_lambda_function" "auto_blogger_topics" {
 
   environment {
     variables = {
+      # jsdom (29.x) transitive deps include html-encoding-sniffer@6 which
+      # require()s @exodus/bytes (ESM-only). Node 22 throws ERR_REQUIRE_ESM
+      # without this flag. Default-on in Node 22.12+, but the Lambda nodejs22.x
+      # runtime currently ships an older patch.
+      NODE_OPTIONS          = "--experimental-require-module"
       ANTHROPIC_API_KEY     = var.anthropic_api_key
       GEMINI_API_KEY        = var.gemini_api_key
       OPENAI_API_KEY        = var.openai_api_key
@@ -242,6 +247,11 @@ resource "aws_lambda_function" "auto_blogger_news" {
 
   environment {
     variables = {
+      # jsdom (29.x) transitive deps include html-encoding-sniffer@6 which
+      # require()s @exodus/bytes (ESM-only). Node 22 throws ERR_REQUIRE_ESM
+      # without this flag. Default-on in Node 22.12+, but the Lambda nodejs22.x
+      # runtime currently ships an older patch.
+      NODE_OPTIONS          = "--experimental-require-module"
       ANTHROPIC_API_KEY     = var.anthropic_api_key
       GEMINI_API_KEY        = var.gemini_api_key
       OPENAI_API_KEY        = var.openai_api_key

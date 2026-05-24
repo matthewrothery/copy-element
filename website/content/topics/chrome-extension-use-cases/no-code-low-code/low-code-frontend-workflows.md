@@ -17,11 +17,11 @@ faq:
   - question: "Does low-code mean I don't need to know CSS?"
     answer: "Low-code platforms reduce CSS work, but understanding basic styling helps. Element Armory bridges this gap by capturing production-ready CSS from existing websites, so you can learn from real examples and reuse patterns without writing from scratch."
   - question: "How much faster is low-code frontend development with UI capture?"
-    answer: "{{SRC:11|Low-code platforms deliver 90% reduction in development time}}. Adding UI capture eliminates the manual CSS inspection step, saving 30-60 minutes per component. The exact gain depends on component complexity and your team's familiarity with the platform."
+    answer: "Low-code platforms deliver 90% reduction in development time. Adding UI capture eliminates the manual CSS inspection step, saving 30-60 minutes per component. The exact gain depends on component complexity and your team's familiarity with the platform."
   - question: "What's the difference between low-code and no-code for frontend work?"
     answer: "Low-code allows some custom code (CSS, JavaScript) when needed; no-code is purely visual. For frontend workflows, low-code is more flexible because you can capture and customize CSS when the visual builder doesn't meet your needs."
   - question: "Can non-technical people use low-code platforms effectively?"
-    answer: "Yes. {{SRC:6|Low-code platforms minimize the need for extensive coding}} and let non-technical builders create functional UIs visually. Element Armory helps by providing ready-made UI patterns they can customize without understanding CSS syntax."
+    answer: "Yes. Low-code platforms minimize the need for extensive coding and let non-technical builders create functional UIs visually. Element Armory helps by providing ready-made UI patterns they can customize without understanding CSS syntax."
 relatedSlugs:
   - no-code-low-code-ui-components
   - retool-superblocks-ui-patterns

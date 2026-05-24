@@ -15,13 +15,13 @@ faq:
   - question: "What's the difference between AI code generation and AI automation for frontend?"
     answer: "Code generation creates new code from prompts. Automation captures existing UI patterns, reuses components, and streamlines repetitive tasks like style extraction and component scaffolding. Together, they form a complete workflow."
   - question: "Will AI automation replace frontend developers?"
-    answer: "No. {{SRC:3|AI-driven frontend automation}} shifts developers from tedious manual work to higher-level decisions—design systems, user experience, and architectural choices. The role evolves, not disappears."
+    answer: "No. AI-driven frontend automation shifts developers from tedious manual work to higher-level decisions—design systems, user experience, and architectural choices. The role evolves, not disappears."
   - question: "How do I capture UI from production sites to use in my AI workflow?"
     answer: "Tools like Element Armory let you extract clean HTML and CSS from any website in seconds, then feed that into AI tools like Cursor or Claude for rapid prototyping and component building."
   - question: "What's the best way to avoid messy, unmaintainable code when using AI automation?"
-    answer: "{{SRC:4|Most developers use AI wrong}}—either depending on it uncritically or avoiding it entirely. The key is treating AI as a starting point, not a final product. Review, refactor, and establish clear component standards before automation scales."
+    answer: "Most developers use AI wrong—either depending on it uncritically or avoiding it entirely. The key is treating AI as a starting point, not a final product. Review, refactor, and establish clear component standards before automation scales."
   - question: "How much time can AI automation actually save in frontend development?"
-    answer: "{{SRC:5|68% of developers save at least 10 hours each week using AI tools}}. For frontend specifically, automation of UI capture, component generation, and style extraction can cut prototyping time by 40-60%."
+    answer: "68% of developers save at least 10 hours each week using AI tools. For frontend specifically, automation of UI capture, component generation, and style extraction can cut prototyping time by 40-60%."
 relatedSlugs:
   - cursor-workflows
   - ai-coding-workflows

@@ -7,9 +7,9 @@ export type LinkResolutionResult = {
   warnings: string[];
 };
 
-const INTERNAL_PLACEHOLDER_RE = /\{\{LINK:([^|}]+)\|([^}]+)\}\}/g;
-const EXTERNAL_PLACEHOLDER_RE = /\{\{SRC:(\d+)\|([^}]+)\}\}/g;
-const ANY_PLACEHOLDER_RE = /\{\{(?:LINK|SRC):[^}]*\}\}/g;
+const INTERNAL_PLACEHOLDER_RE = /\{\{LINK:([^|}]+)\|(.+?)\}\}/g;
+const EXTERNAL_PLACEHOLDER_RE = /\{\{SRC:(\d+)\|(.+?)\}\}/g;
+const ANY_PLACEHOLDER_RE = /\{\{(?:LINK|SRC):.*?\}\}/g;
 
 /**
  * Build a stable id for an internal-link candidate. The same derivation is used

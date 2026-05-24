@@ -15,7 +15,7 @@
  */
 
 import { build } from "esbuild";
-import { mkdirSync, rmSync, existsSync } from "fs";
+import { mkdirSync, rmSync, existsSync, writeFileSync, readFileSync } from "fs";
 import { execSync } from "child_process";
 import { join, dirname, resolve } from "path";
 import { fileURLToPath } from "url";
@@ -25,8 +25,11 @@ const outDir = join(__dirname, "dist", "lambda");
 const bundleFile = join(outDir, "index.mjs");
 const zipFile = join(outDir, "lambda.zip");
 
+// Clean dist/lambda from scratch so stale node_modules from prior builds
+// (e.g. nested `@mozilla-readability/readability` directories caused by
+// re-running `cp -r` into an existing target) cannot leak into the zip.
+if (existsSync(outDir)) rmSync(outDir, { recursive: true, force: true });
 mkdirSync(outDir, { recursive: true });
-if (existsSync(zipFile)) rmSync(zipFile);
 
 // --- Step 1: esbuild bundle ---
 console.log("Building bundle...");
@@ -76,44 +79,40 @@ await build({
 });
 console.log(`Bundle written: ${bundleFile}`);
 
-// --- Step 2: copy externaled node_modules into dist/lambda/node_modules ---
-// External packages to ship as node_modules inside the zip. For scoped
-// packages (@org/name), we preserve the directory structure.
-const externalPackages = ["jsdom", "@mozilla/readability", "httpcloak"];
-const nmSrc = join(__dirname, "node_modules");
+// --- Step 2: install externaled packages (with full transitive deps) ---
+// Externals (jsdom, @mozilla/readability, httpcloak) are not bundled by esbuild
+// and must ship as real node_modules inside the zip. Hand-copying the top-level
+// dirs breaks at runtime because their transitive deps (tough-cookie, whatwg-url,
+// parse5, ws, etc.) are missing — that's what caused the Lambda cold-start
+// `Cannot find module 'tough-cookie'` ImportModuleError.
+//
+// Emit a minimal package.json and run `npm install --omit=dev` so npm resolves
+// the full dependency tree for us, then ship the resulting node_modules.
+console.log("Installing external deps with transitive resolution...");
+const sourcePkg = JSON.parse(readFileSync(join(__dirname, "package.json"), "utf8"));
+const lambdaPkg = {
+  name: "auto-blogger-lambda",
+  version: "0.0.0",
+  private: true,
+  dependencies: {
+    jsdom: sourcePkg.dependencies.jsdom,
+    "@mozilla/readability": sourcePkg.dependencies["@mozilla/readability"],
+    httpcloak: sourcePkg.dependencies.httpcloak,
+  },
+};
+writeFileSync(join(outDir, "package.json"), JSON.stringify(lambdaPkg, null, 2));
+execSync("npm install --omit=dev --no-package-lock --no-audit --no-fund", {
+  cwd: outDir,
+  stdio: "inherit",
+});
 const nmDest = join(outDir, "node_modules");
-mkdirSync(nmDest, { recursive: true });
-for (const pkg of externalPackages) {
-  const src = join(nmSrc, pkg);
-  if (!existsSync(src)) {
-    console.warn(`Warning: ${pkg} not found in node_modules — skip`);
-    continue;
-  }
-  // Preserve scoped-package directory structure (@scope/name → @scope/name).
-  const destPkg = join(nmDest, pkg);
-  mkdirSync(dirname(destPkg), { recursive: true });
-  execSync(`cp -r "${src}" "${destPkg}"`, { stdio: "inherit" });
-  console.log(`Copied ${pkg}`);
-}
 
 // --- Step 3: zip ---
 console.log("Creating zip...");
 const { default: AdmZip } = await import("adm-zip");
 const zip = new AdmZip();
 zip.addLocalFile(bundleFile, "", "index.mjs");
-if (existsSync(nmDest)) {
-  // addLocalFolder adds the folder contents under the given zip path.
-  zip.addLocalFolder(nmDest, "node_modules");
-}
-// httpcloak requires its own deps (ws, etc.) from node_modules. Copy the
-// transitive deps it references that esbuild didn't bundle.
-const httpcloakDeps = ["ws", "node-forge"];
-for (const dep of httpcloakDeps) {
-  const depSrc = join(nmSrc, dep);
-  if (existsSync(depSrc)) {
-    zip.addLocalFolder(depSrc, `node_modules/${dep}`);
-  }
-}
+zip.addLocalFolder(nmDest, "node_modules");
 zip.writeZip(zipFile);
 
 // Print size.

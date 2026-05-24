@@ -50,7 +50,7 @@ When you encounter a layout problem in production or development, the instinct i
 Most layout issues trace back to three sources:
 
 **1. Box Model Confusion**
-Margins, padding, borders, and content width interact in ways that surprise developers. A single `padding: 20px` on a parent can cascade and break child alignment. {{SRC:4|Resetting browser defaults with `* { margin: 0; padding: 0; box-sizing: border-box; }` prevents spacing inconsistencies between browsers}}, eliminating a foundational source of unexpected gaps.
+Margins, padding, borders, and content width interact in ways that surprise developers. A single `padding: 20px` on a parent can cascade and break child alignment. Resetting browser defaults with `* { margin: 0; padding: 0; box-sizing: border-box; }` prevents spacing inconsistencies between browsers, eliminating a foundational source of unexpected gaps.
 
 **2. Flex and Grid Misunderstanding**
 Flexbox and Grid have implicit defaults that conflict with your expectations. A flex container defaults to `flex-wrap: nowrap`, which crushes children into a single line. Grid's auto-placement can stack items unexpectedly. These aren't bugs—they're features you didn't configure.

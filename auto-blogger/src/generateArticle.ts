@@ -330,7 +330,7 @@ ${workingBody}
         .filter((item) => Boolean(item.question && item.answer))
         .map((item) => ({
           question: item.question,
-          answer: item.answer,
+          answer: applyLinkPlaceholders(item.answer, input.internalLinkCandidates, input.research).body,
         })),
       relatedSlugs: outline.object.relatedSlugs,
       body: resolution.body,

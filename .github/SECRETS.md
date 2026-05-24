@@ -70,6 +70,15 @@ Add the following secrets:
 |---|---|
 | `S3_AUTO_BLOG_BUCKET` | `terraform output s3_auto_blog_bucket` |
 
+### Auto-blogger Lambda code deployment (`deploy-apps.yml`)
+
+Used by the `build_auto_blogger_lambda` job to push fresh code on every push touching `auto-blogger/**`. **Required** — if unset, the `aws lambda update-function-code` calls resolve to an empty `--function-name` and silently fail (the step has `continue-on-error: true`), leaving the deployed Lambda stuck on whatever zip Terraform last uploaded.
+
+| Secret | How to get it |
+|---|---|
+| `AUTO_BLOGGER_TOPICS_LAMBDA_NAME` | `terraform output auto_blogger_topics_lambda_name` (e.g. `element-armory-prod-auto-blogger-topics`) |
+| `AUTO_BLOGGER_NEWS_LAMBDA_NAME` | `terraform output auto_blogger_news_lambda_name` (e.g. `element-armory-prod-auto-blogger-news`) |
+
 ---
 
 ## Step 4 — Add GitHub Variables (optional)

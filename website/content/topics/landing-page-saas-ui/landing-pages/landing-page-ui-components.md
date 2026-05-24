@@ -13,15 +13,15 @@ readTime: "7 min read"
 coverImage: "/topic-images/landing-page-saas-ui/landing-pages/landing-page-ui-components.png"
 faq:
   - question: "What are the most important landing page UI components?"
-    answer: "The core components are: hero section, value proposition, social proof/stats, feature highlights, CTA buttons, forms, and pricing sections. Each serves a specific conversion purpose. {{SRC:3|Landing page components}} shows that hero sections are essential for setting context, while {{SRC:7|stats sections}} establish credibility through data."
+    answer: "The core components are: hero section, value proposition, social proof/stats, feature highlights, CTA buttons, forms, and pricing sections. Each serves a specific conversion purpose. Landing page components shows that hero sections are essential for setting context, while stats sections establish credibility through data."
   - question: "How do I know which components to include on my landing page?"
-    answer: "Start with the core components (hero, value prop, CTA), then add based on your goal. If you're selling to enterprises, add social proof and case studies. If you're freemium, emphasize features and pricing. {{SRC:11|Landing page statistics}} shows that conversion rates vary significantly based on component selection and placement."
+    answer: "Start with the core components (hero, value prop, CTA), then add based on your goal. If you're selling to enterprises, add social proof and case studies. If you're freemium, emphasize features and pricing. Landing page statistics shows that conversion rates vary significantly based on component selection and placement."
   - question: "Can I copy UI components from other landing pages?"
-    answer: "Yes. Studying high-converting landing pages is a best practice. You can extract HTML and CSS from live sites using tools like Element Armory, then adapt them to your brand. {{SRC:1|Website UI examples}} and {{SRC:12|website stats examples}} provide inspiration libraries for this purpose."
+    answer: "Yes. Studying high-converting landing pages is a best practice. You can extract HTML and CSS from live sites using tools like Element Armory, then adapt them to your brand. Website UI examples and website stats examples provide inspiration libraries for this purpose."
   - question: "What's the difference between a stats section and social proof?"
-    answer: "Stats sections display quantitative metrics (revenue, users, uptime) to establish scale and credibility. Social proof includes testimonials, logos, and case studies that show real customer validation. {{SRC:8|Stats sections}} are designed for visual impact with numerical data, while social proof focuses on customer voices and brand logos."
+    answer: "Stats sections display quantitative metrics (revenue, users, uptime) to establish scale and credibility. Social proof includes testimonials, logos, and case studies that show real customer validation. Stats sections are designed for visual impact with numerical data, while social proof focuses on customer voices and brand logos."
   - question: "How do I structure components for maximum conversions?"
-    answer: "Follow the conversion funnel: hook (hero) → educate (features) → prove (social proof/stats) → convince (pricing/comparison) → convert (CTA). Keep messaging clear and avoid jargon. {{SRC:3|Landing page best practices}} emphasize concise messaging, while {{SRC:11|conversion data}} shows that component order significantly impacts results."
+    answer: "Follow the conversion funnel: hook (hero) → educate (features) → prove (social proof/stats) → convince (pricing/comparison) → convert (CTA). Keep messaging clear and avoid jargon. Landing page best practices emphasize concise messaging, while conversion data shows that component order significantly impacts results."
 relatedSlugs:
   - copy-ui-from-website
   - saas-ui-patterns

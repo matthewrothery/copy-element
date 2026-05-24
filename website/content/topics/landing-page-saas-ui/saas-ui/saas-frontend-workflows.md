@@ -19,7 +19,7 @@ faq:
   - question: "How do design systems reduce frontend development time in SaaS?"
     answer: "A design system is a reusable library of components (buttons, forms, tables, modals) with consistent styling and behavior. Instead of rebuilding the same UI patterns across your SaaS, teams reference the system. This cuts development time by 30-50% and ensures consistency across dashboards, workflows, and user-facing features."
   - question: "Why is embedded analytics becoming critical for SaaS frontends?"
-    answer: "{{SRC:12|Embedded analytics}} puts data insights directly into your SaaS UI instead of forcing users to jump to external BI tools. This improves decision-making speed, increases feature adoption, and creates a more cohesive user experience. It's now table stakes for modern SaaS products."
+    answer: "Embedded analytics puts data insights directly into your SaaS UI instead of forcing users to jump to external BI tools. This improves decision-making speed, increases feature adoption, and creates a more cohesive user experience. It's now table stakes for modern SaaS products."
   - question: "How can I capture and reuse UI from competitor SaaS products?"
     answer: "Tools like Element Armory let you inspect and extract HTML + CSS from any live SaaS site. You can then use those patterns as inspiration for your own design system, feed them into AI tools for rapid prototyping, or build a personal UI library. This accelerates design decisions and reduces time spent on UI research."
 relatedSlugs:
