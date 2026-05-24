@@ -3,10 +3,10 @@ FROM node:24-alpine3.23 AS builder
 
 WORKDIR /app
 
-COPY server/package.json server/package-lock.json* ./
+COPY package.json package-lock.json* ./
 RUN npm ci
 
-COPY server/. .
+COPY . .
 RUN npm run build && mkdir -p dist/db && cp -r src/db/migrations dist/db/
 
 # ----------- RUNTIME STAGE -----------
@@ -17,7 +17,7 @@ WORKDIR /app
 ENV NODE_ENV=production
 ENV PORT=80
 
-COPY server/package.json server/package-lock.json* ./
+COPY package.json package-lock.json* ./
 RUN npm ci --omit=dev && npm cache clean --force
 
 COPY --from=builder /app/dist ./dist
