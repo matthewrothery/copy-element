@@ -79,7 +79,7 @@ const config: AutoBloggerProjectConfig = {
         notify:
           process.env.AUTO_BLOG_NOTIFY_TO && process.env.AUTO_BLOG_NOTIFY_FROM
             ? {
-                mode: "digest",
+                mode: "all",
                 to: process.env.AUTO_BLOG_NOTIFY_TO,
                 from: process.env.AUTO_BLOG_NOTIFY_FROM,
               }

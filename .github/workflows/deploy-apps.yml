@@ -180,7 +180,11 @@ jobs:
             --function-name "${{ secrets.AUTO_BLOGGER_TOPICS_LAMBDA_NAME }}" \
             --zip-file fileb://auto-blogger/dist/lambda/lambda.zip \
             --no-cli-pager
-        continue-on-error: true
+
+      - name: Wait for Lambda update (topics)
+        run: |
+          aws lambda wait function-updated \
+            --function-name "${{ secrets.AUTO_BLOGGER_TOPICS_LAMBDA_NAME }}"
 
       - name: Update Lambda function code (news)
         run: |
@@ -188,4 +192,8 @@ jobs:
             --function-name "${{ secrets.AUTO_BLOGGER_NEWS_LAMBDA_NAME }}" \
             --zip-file fileb://auto-blogger/dist/lambda/lambda.zip \
             --no-cli-pager
-        continue-on-error: true
+
+      - name: Wait for Lambda update (news)
+        run: |
+          aws lambda wait function-updated \
+            --function-name "${{ secrets.AUTO_BLOGGER_NEWS_LAMBDA_NAME }}"

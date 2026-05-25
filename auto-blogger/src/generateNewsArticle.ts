@@ -113,8 +113,8 @@ ${newsSummary}
 Return:
 - a specific editorial angle (what's the interesting story or tension here?)
 - a clear thesis (what point are you making?)
-- 3-7 section headings for the commentary
-- a URL slug (kebab-case, 3-6 words, date-free)
+- 3-7 section headings for the commentary (each heading should be descriptive and keyword-rich)
+- a URL slug (kebab-case, 3-6 words, date-free, includes the main topic keyword)
 `;
 
   const outlineResult = await generateObject({
@@ -142,6 +142,9 @@ Requirements:
 - 600–900 words
 - markdown body only (no frontmatter)
 - editorial commentary tone — analysis, opinion, context, not a news summary
+- open with a clear thesis paragraph (1-3 sentences stating your position) — this paragraph is your featured snippet candidate
+- title must be 50-60 chars, include the main topic keyword, make the newsworthy angle clear
+- excerpt must be 150-160 chars, summarise the editorial angle, include the main topic keyword, encourage clicks
 - cite source articles with inline {{SRC:<n>|anchor text}} placeholders. The body MUST contain at least ${MIN_EXTERNAL_LINKS} {{SRC: tokens.
 - link to existing Element Armory content with inline {{LINK:<id>|anchor text}} placeholders. The body MUST contain at least ${MIN_INTERNAL_LINKS} {{LINK: tokens when internal candidates are available.
 - choose internal link ids only from the candidate list below.

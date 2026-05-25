@@ -1,6 +1,6 @@
 import { uploadArtifactToS3, getArtifactImageSignedUrl } from "./s3.js";
 import { sendArticleNotification, sendDigestNotification } from "./email.js";
-import type { ArticleArtifact, TokenUsage } from "./types.js";
+import type { ArticleArtifact, TokenUsage, SeoScore } from "./types.js";
 import type { NotificationConfig } from "./projectConfig.js";
 import type { ArticleResult, DigestSummary, OutputAdapter } from "./outputAdapter.js";
 
@@ -24,7 +24,7 @@ export class S3SesOutputAdapter implements OutputAdapter {
   }
 
   async notifyDigest(summary: DigestSummary): Promise<void> {
-    if (this.notify.mode !== "digest") return;
+    if (this.notify.mode !== "digest" && this.notify.mode !== "all") return;
     await sendDigestNotification({
       to: this.notify.to,
       from: this.notify.from,
@@ -36,9 +36,10 @@ export class S3SesOutputAdapter implements OutputAdapter {
     artifact: ArticleArtifact,
     tokenUsage: TokenUsage,
     model: string,
-    coverUrl?: string
+    coverUrl?: string,
+    seoScore?: SeoScore
   ): Promise<void> {
-    if (this.notify.mode !== "per-article") return;
+    if (this.notify.mode !== "per-article" && this.notify.mode !== "all") return;
     await sendArticleNotification({
       to: this.notify.to,
       from: this.notify.from,
@@ -46,6 +47,7 @@ export class S3SesOutputAdapter implements OutputAdapter {
       model,
       imageUrl: coverUrl,
       tokenUsage,
+      seoScore,
     });
   }
 }
@@ -70,7 +72,8 @@ export class LocalWriteOutputAdapter implements OutputAdapter {
     _artifact: ArticleArtifact,
     _tokenUsage: TokenUsage,
     _model: string,
-    _coverUrl?: string
+    _coverUrl?: string,
+    _seoScore?: SeoScore
   ): Promise<void> {
     if (this.notify.mode === "none") return;
     console.log("[output] local-write mode: skipping per-article email.");

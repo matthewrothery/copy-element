@@ -84,6 +84,12 @@ export type NotificationConfig =
       to: string;
       from: string;
     }
+  | {
+      /** Sends both a per-article email on generation and a digest summary. */
+      mode: "all";
+      to: string;
+      from: string;
+    }
   | { mode: "none" };
 
 export type S3StagingOutputConfig = {

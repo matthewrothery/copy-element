@@ -94,6 +94,8 @@ function stubConfig(overrides: Partial<AutoBloggerConfig> = {}): AutoBloggerConf
     newsRecencyHours: 168,
     newsMinItems: 3,
     aiCallDelayMs: 0,
+    seoScore: false,
+    qualityGate: "off",
     ...overrides,
   };
 }

@@ -3,8 +3,16 @@ name: Import auto-blog content
 
 on:
   schedule:
+    # Catches 9am AEST topic + 10am AEST news (23:00/00:00 UTC prev/current day)
     - cron: "0 0 * * *"
-    - cron: "0 12 * * *"
+    # Catches 11am AEST topic (01:00 UTC)
+    - cron: "30 1 * * *"
+    # Catches 2pm AEST topic (04:00 UTC)
+    - cron: "0 5 * * *"
+    # Catches 4pm AEST topic (06:00 UTC)
+    - cron: "0 7 * * *"
+    # Afternoon catch-all
+    - cron: "0 13 * * *"
   workflow_dispatch:
 
 env:
@@ -108,3 +116,42 @@ jobs:
           aws cloudfront create-invalidation \
             --distribution-id ${{ secrets.CLOUDFRONT_WEBSITE_DISTRIBUTION_ID }} \
             --paths "/*"
+
+      - name: Mark artifacts published
+        if: steps.changes.outputs.has_changes == 'true'
+        env:
+          AUTO_BLOG_S3_BUCKET: ${{ secrets.S3_AUTO_BLOG_BUCKET }}
+          AUTO_BLOG_S3_PREFIX: auto-blogger
+        run: npm run mark-published
+        working-directory: auto-blogger
+
+      - name: Send published notification
+        if: steps.changes.outputs.has_changes == 'true'
+        env:
+          AUTO_BLOG_S3_BUCKET: ${{ secrets.S3_AUTO_BLOG_BUCKET }}
+          AUTO_BLOG_S3_PREFIX: auto-blogger
+          AUTO_BLOG_NOTIFY_TO: ${{ secrets.AUTO_BLOG_NOTIFY_TO }}
+          AUTO_BLOG_NOTIFY_FROM: ${{ secrets.AUTO_BLOG_NOTIFY_FROM }}
+          AUTO_BLOG_SITE_URL: ${{ vars.AUTO_BLOG_SITE_URL || 'https://elementarmory.com' }}
+          AWS_SES_REGION: ${{ secrets.AWS_REGION }}
+        run: npx tsx src/notifyPublished.ts
+        working-directory: auto-blogger
+
+      - name: Publish internal-links manifest for auto-blogger Lambda
+        if: steps.changes.outputs.has_changes == 'true'
+        env:
+          AUTO_BLOG_S3_BUCKET: ${{ secrets.S3_AUTO_BLOG_BUCKET }}
+        working-directory: website
+        run: node --import tsx scripts/publishInternalLinksManifest.mts
+
+      - name: Notify Google Search Console
+        if: steps.changes.outputs.has_changes == 'true' && env.GOOGLE_SERVICE_ACCOUNT_JSON != ''
+        env:
+          GOOGLE_SERVICE_ACCOUNT_JSON: ${{ secrets.GOOGLE_SERVICE_ACCOUNT_JSON }}
+          GOOGLE_SEARCH_CONSOLE_SITE_URL: ${{ vars.GOOGLE_SEARCH_CONSOLE_SITE_URL }}
+          AUTO_BLOG_SITE_URL: ${{ vars.AUTO_BLOG_SITE_URL || 'https://elementarmory.com' }}
+        run: |
+          trap "rm -f /tmp/gsc-key.json" EXIT
+          echo "$GOOGLE_SERVICE_ACCOUNT_JSON" > /tmp/gsc-key.json
+          GOOGLE_APPLICATION_CREDENTIALS=/tmp/gsc-key.json npx tsx src/notifySearchConsole.ts
+        working-directory: auto-blogger

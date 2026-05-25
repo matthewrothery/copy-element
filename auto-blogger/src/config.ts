@@ -43,6 +43,10 @@ export type AutoBloggerConfig = {
   newsMinItems: number;
   /** Minimum delay in ms between consecutive AI API calls within one article pipeline. */
   aiCallDelayMs: number;
+  /** When true, runs an AI-powered SEO quality scoring pass after article generation. */
+  seoScore: boolean;
+  /** Quality gate mode: "off" = publish everything, "warn" = publish + log warnings, "strict" = block articles with critical SEO issues. */
+  qualityGate: "off" | "warn" | "strict";
 };
 
 function parseIntEnv(name: string, fallback: number): number {
@@ -169,5 +173,9 @@ export function loadConfig(): AutoBloggerConfig {
     newsRecencyHours: parseIntEnv("AUTO_BLOG_NEWS_RECENCY_HOURS", 168),
     newsMinItems: parseIntEnv("AUTO_BLOG_NEWS_MIN_ITEMS", 3),
     aiCallDelayMs: parseIntEnv("AI_CALL_DELAY_MS", 1500),
+    seoScore: boolEnv("AUTO_BLOG_SEO_SCORE"),
+    qualityGate: (["off", "warn", "strict"].includes(process.env.AUTO_BLOG_QUALITY_GATE ?? "")
+      ? (process.env.AUTO_BLOG_QUALITY_GATE as "off" | "warn" | "strict")
+      : "off"),
   };
 }

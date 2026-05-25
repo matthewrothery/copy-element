@@ -111,7 +111,7 @@ export function buildSectionPrompt(params: SectionPromptParams): string {
       : "";
 
   const upfrontInstruction = isFirstSection
-    ? `Before the "## ${heading}" heading, write a short upfront answer (1-2 paragraphs, ≤120 words) that directly and concisely answers: "${primaryKeyword}". Speak like a helpful expert replying to a specific question. Then write the section content starting with the heading.\n\n`
+    ? `Before the "## ${heading}" heading, write a short upfront answer (1-2 paragraphs, ≤120 words) that directly and concisely answers: "${primaryKeyword}". Include the primary keyword in the first 100 words. If the query is a "what is" question, use a clear definition format. If it's a "how to" question, use a concise numbered list. Speak like a helpful expert replying to a specific question. Then write the section content starting with the heading.\n\n`
     : "";
 
   return `Write the content for this article section.
@@ -139,6 +139,7 @@ Links already placed — do NOT repeat these:
 Rules:
 - ${isFirstSection ? "Write the upfront answer paragraph(s) first, then begin the section with" : "Begin with"} "## ${heading}" exactly.
 - Write 150-350 words of markdown for this section only.
+- At least one H2 or H3 must contain the primary keyword or a close paraphrase.
 - Cite research inline via {{SRC:<n>|anchor text}}.
 - Link internal content via {{LINK:<id>|anchor text}}.
 - Never include raw URLs or /topics/... paths.
@@ -215,9 +216,9 @@ ${body}
 ---
 
 Generate:
-- title: compelling SEO title
+- title: compelling SEO title (50-60 chars, primary keyword near the start, include a power word or a number where natural)
 - slug: URL-safe slug (lowercase, hyphens only)
-- excerpt: 1-2 sentence summary for SEO (≥70 chars)
+- excerpt: 1-2 sentence summary for SEO (150-160 chars, includes the primary keyword, action-oriented language that encourages clicks)
 - readTime: estimated read time (e.g. "8 min read")
 - imagePrompt: prompt for a stencil street-art cover image with bold minimal overlapping colors. No text in image.
 - linkKeywords: 8-16 short anchor-quality phrases (2-6 words each) that read naturally as mid-sentence anchors pointing TO this article. Include the primary keyword and close paraphrases. Your linkKeywords MUST NOT include any phrase from this list:

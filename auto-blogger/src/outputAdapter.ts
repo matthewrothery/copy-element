@@ -1,10 +1,11 @@
-import type { ArticleArtifact, TokenUsage } from "./types.js";
+import type { ArticleArtifact, TokenUsage, SeoScore } from "./types.js";
 
 export type ArticleResult = {
   artifact: ArticleArtifact;
   tokenUsage: TokenUsage;
   /** Signed URL for the cover image (S3 staging only). */
   coverUrl?: string;
+  seoScore?: SeoScore;
 };
 
 export type DigestSummary = {
@@ -36,5 +37,5 @@ export interface OutputAdapter {
    * Sends one email per article. Used for legacy per-article notification
    * mode (local dev parity).
    */
-  notifyPerArticle(artifact: ArticleArtifact, tokenUsage: TokenUsage, model: string, coverUrl?: string): Promise<void>;
+  notifyPerArticle(artifact: ArticleArtifact, tokenUsage: TokenUsage, model: string, coverUrl?: string, seoScore?: SeoScore): Promise<void>;
 }

@@ -1,6 +1,6 @@
 import { SendEmailCommand, SESClient } from "@aws-sdk/client-ses";
 import { marked } from "marked";
-import { ArticleArtifact, BackfillSummary, TokenUsage } from "./types.js";
+import { ArticleArtifact, BackfillSummary, SeoScore, TokenUsage } from "./types.js";
 import type { DigestSummary } from "./outputAdapter.js";
 
 function escapeHtml(text: string): string {
@@ -9,6 +9,62 @@ function escapeHtml(text: string): string {
     .replace(/</g, "&lt;")
     .replace(/>/g, "&gt;")
     .replace(/"/g, "&quot;");
+}
+
+function seoScoreColor(score: number): string {
+  if (score >= 80) return "#15803d";
+  if (score >= 60) return "#b45309";
+  return "#b91c1c";
+}
+
+function seoScoreCardHtml(score: SeoScore): string {
+  const categories: Array<{ label: string; key: keyof Omit<SeoScore, "overall"> }> = [
+    { label: "Title", key: "title" },
+    { label: "Excerpt", key: "excerpt" },
+    { label: "Upfront Answer", key: "upfrontAnswer" },
+    { label: "Heading Optimization", key: "headingOptimization" },
+    { label: "Content Depth", key: "contentDepth" },
+    { label: "Featured Snippet", key: "featuredSnippetReady" },
+    { label: "Readability", key: "readability" },
+  ];
+  const rows = categories
+    .map((c) => {
+      const cat = score[c.key];
+      const color = seoScoreColor(cat.score);
+      return `<tr>
+        <td style="padding: 4px 8px; color: #6b7280;">${c.label}</td>
+        <td style="padding: 4px 8px; font-weight: bold; color: ${color};">${cat.score}</td>
+        <td style="padding: 4px 8px; color: #374151;">${escapeHtml(cat.suggestion)}</td>
+      </tr>`;
+    })
+    .join("");
+  const overallColor = seoScoreColor(score.overall);
+  return `
+    <h2>SEO Quality Score: <span style="color: ${overallColor};">${score.overall}/100</span></h2>
+    <table style="border-collapse: collapse; width: 100%; font-size: 14px;">
+      <thead>
+        <tr style="background: #f3f4f6;">
+          <th style="padding: 4px 8px; text-align: left;">Category</th>
+          <th style="padding: 4px 8px; text-align: left;">Score</th>
+          <th style="padding: 4px 8px; text-align: left;">Suggestion</th>
+        </tr>
+      </thead>
+      <tbody>${rows}</tbody>
+    </table>`;
+}
+
+function seoScoreCardText(score: SeoScore): string[] {
+  return [
+    "",
+    `SEO Score: ${score.overall}/100`,
+    `  Title: ${score.title.score} — ${score.title.suggestion}`,
+    `  Excerpt: ${score.excerpt.score} — ${score.excerpt.suggestion}`,
+    `  Upfront Answer: ${score.upfrontAnswer.score} — ${score.upfrontAnswer.suggestion}`,
+    `  Headings: ${score.headingOptimization.score} — ${score.headingOptimization.suggestion}`,
+    `  Content Depth: ${score.contentDepth.score} — ${score.contentDepth.suggestion}`,
+    `  Featured Snippet: ${score.featuredSnippetReady.score} — ${score.featuredSnippetReady.suggestion}`,
+    `  Readability: ${score.readability.score} — ${score.readability.suggestion}`,
+  ];
 }
 
 function qualityWarningsBlockHtml(warnings: string[]): string {
@@ -111,6 +167,7 @@ function buildHtml(input: {
   model: string;
   tokenUsage?: TokenUsage;
   backfill?: BackfillSummary;
+  seoScore?: SeoScore;
 }): string {
   const articleHtml = marked.parse(input.artifact.articleMarkdown) as string;
   const sourceList = input.artifact.metadata.sourceUrls
@@ -136,6 +193,7 @@ function buildHtml(input: {
           ? qualityWarningsBlockHtml(input.artifact.metadata.qualityWarnings)
           : ""
       }
+      ${input.seoScore ? seoScoreCardHtml(input.seoScore) : ""}
       <h2>Generated Copy</h2>
       <div>${articleHtml}</div>
       ${backfillBlockHtml(input.backfill)}
@@ -161,7 +219,8 @@ function buildText(
   artifact: ArticleArtifact,
   model: string,
   tokenUsage?: TokenUsage,
-  backfill?: BackfillSummary
+  backfill?: BackfillSummary,
+  seoScore?: SeoScore
 ): string {
   const warningsBlock =
     artifact.metadata.qualityWarnings && artifact.metadata.qualityWarnings.length > 0
@@ -187,6 +246,7 @@ function buildText(
       ? ["", "Assets:", ...artifact.metadata.assets.map((a) => `- ${a.websiteRelativePath}`)]
       : []),
     ...warningsBlock,
+    ...(seoScore ? seoScoreCardText(seoScore) : []),
     artifact.articleMarkdown,
     ...backfillBlockText(backfill),
     "",
@@ -332,6 +392,50 @@ export async function sendDigestNotification(input: {
   );
 }
 
+export async function sendPublishedNotification(input: {
+  to: string;
+  from: string;
+  articles: Array<{ title: string; urlPath: string }>;
+  siteUrl: string;
+}): Promise<void> {
+  const client = getClient();
+  const count = input.articles.length;
+  const subject = `Published to website: ${count} article${count === 1 ? "" : "s"}`;
+
+  const articleItems = input.articles
+    .map((a) => {
+      const url = `${input.siteUrl}${a.urlPath}`;
+      return `<li><a href="${escapeHtml(url)}">${escapeHtml(a.title)}</a><br><small>${escapeHtml(url)}</small></li>`;
+    })
+    .join("");
+
+  const html = `<html><body style="font-family: Arial, sans-serif; line-height: 1.6; color: #111827;">
+    <h1>${escapeHtml(subject)}</h1>
+    <p>The following article${count === 1 ? " is" : "s are"} now live on the website:</p>
+    <ul>${articleItems}</ul>
+  </body></html>`;
+
+  const textLines = [subject, "", `${count} article${count === 1 ? "" : "s"} published:`, ""];
+  for (const a of input.articles) {
+    textLines.push(`- ${a.title}`);
+    textLines.push(`  ${input.siteUrl}${a.urlPath}`);
+  }
+
+  await client.send(
+    new SendEmailCommand({
+      Source: input.from,
+      Destination: { ToAddresses: [input.to] },
+      Message: {
+        Subject: { Data: subject, Charset: "UTF-8" },
+        Body: {
+          Html: { Data: html, Charset: "UTF-8" },
+          Text: { Data: textLines.join("\n"), Charset: "UTF-8" },
+        },
+      },
+    })
+  );
+}
+
 export async function sendArticleNotification(input: {
   to: string;
   from: string;
@@ -341,6 +445,7 @@ export async function sendArticleNotification(input: {
   tokenUsage?: TokenUsage;
   subjectPrefix?: string;
   backfill?: BackfillSummary;
+  seoScore?: SeoScore;
 }): Promise<void> {
   const client = getClient();
   await client.send(
@@ -352,8 +457,8 @@ export async function sendArticleNotification(input: {
       Message: {
         Subject: { Data: buildSubject(input.artifact, input.subjectPrefix), Charset: "UTF-8" },
         Body: {
-          Html: { Data: buildHtml({ artifact: input.artifact, imageUrl: input.imageUrl, model: input.model, tokenUsage: input.tokenUsage, backfill: input.backfill }), Charset: "UTF-8" },
-          Text: { Data: buildText(input.artifact, input.model, input.tokenUsage, input.backfill), Charset: "UTF-8" },
+          Html: { Data: buildHtml({ artifact: input.artifact, imageUrl: input.imageUrl, model: input.model, tokenUsage: input.tokenUsage, backfill: input.backfill, seoScore: input.seoScore }), Charset: "UTF-8" },
+          Text: { Data: buildText(input.artifact, input.model, input.tokenUsage, input.backfill, input.seoScore), Charset: "UTF-8" },
         },
       },
     })

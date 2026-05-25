@@ -8,7 +8,10 @@ import { researchTopic } from "./research.js";
 import { parseTopicKeywords } from "./topics.js";
 import { generateTopicArticle } from "./generateArticle.js";
 import { generateNewsArticle } from "./generateNewsArticle.js";
-import { validateArticleQuality, validateNewsPostQuality } from "./quality.js";
+import { validateArticleQuality, validateNewsPostQuality, hasCriticalWarnings, categorizeWarning } from "./quality.js";
+import { scoreSeoQuality } from "./seoScoring.js";
+import { scoreNewsSeoQuality } from "./seoScoringNews.js";
+import type { SeoScore } from "./types.js";
 import { generateCoverImage } from "./generateImage.js";
 import { createArtifact, createBlogArtifact } from "./artifact.js";
 import { writeDryRunArtifact } from "./localPublish.js";
@@ -115,6 +118,24 @@ async function runOneTopicPipeline(
     );
   }
 
+  // Quality gate: block articles with critical warnings when gate is strict
+  if (config.qualityGate === "strict" && hasCriticalWarnings(qualityWarnings)) {
+    const criticals = qualityWarnings.filter((w) => categorizeWarning(w) === "critical");
+    console.warn(`[topic] Quality gate (strict) blocked "${keyword.keyword}": ${criticals.join("; ")}`);
+    throw new Error(`Quality gate blocked article: ${criticals.join("; ")}`);
+  }
+
+  // SEO scoring (env-gated)
+  let seoScore: SeoScore | undefined;
+  if (config.seoScore && !config.dryRun) {
+    try {
+      seoScore = await scoreSeoQuality(diagramPass.article, keyword.keyword, config.textProvider, config.textModel);
+      console.log(`[topic] SEO score: ${seoScore.overall}/100`);
+    } catch (err) {
+      console.warn(`[topic] SEO scoring failed (non-fatal): ${(err as Error).message}`);
+    }
+  }
+
   let coverBuffer: Buffer<ArrayBufferLike> = Buffer.alloc(0);
   let coverExt = config.imageFormat;
   if (!config.dryRun) {
@@ -153,9 +174,12 @@ async function runOneTopicPipeline(
     coverUrl = result.coverUrl;
     console.log(`[topic] Published artifact ${artifact.artifactId}`);
     await stateStore.recordSlug(diagramPass.article.slug);
-    if (deps.projectConfig.output.type === "s3-staging" && deps.projectConfig.output.notify.mode === "per-article") {
+    const notifyMode = deps.projectConfig.output.type === "s3-staging"
+      ? deps.projectConfig.output.notify.mode
+      : "none";
+    if (notifyMode === "per-article" || notifyMode === "all") {
       try {
-        await outputAdapter.notifyPerArticle(artifact, tokenUsage, config.textModel, coverUrl);
+        await outputAdapter.notifyPerArticle(artifact, tokenUsage, config.textModel, coverUrl, seoScore);
       } catch (error) {
         await stateStore.recordEmailFailure(artifact.artifactId);
         if (config.requireEmail) throw error;
@@ -163,7 +187,7 @@ async function runOneTopicPipeline(
     }
   }
 
-  return { artifact, tokenUsage, coverUrl };
+  return { artifact, tokenUsage, coverUrl, seoScore };
 }
 
 /**
@@ -314,17 +338,45 @@ export async function runNewsOnce(deps: CycleDeps): Promise<DigestSummary> {
       qualityWarnings,
     });
 
-    let coverUrl: string | undefined;
-    if (config.dryRun) {
-      const out = writeDryRunArtifact(config.packageRoot, artifact);
-      console.log(`[news] Dry run complete: ${out.articlePath}`);
-    } else {
-      const result = await outputAdapter.publish(artifact);
-      coverUrl = result.coverUrl;
-      console.log(`[news] Published artifact ${artifact.artifactId}`);
-      await stateStore.recordSlug(post.slug);
+    // SEO scoring for news posts (env-gated)
+    let seoScore: SeoScore | undefined;
+    if (config.seoScore && !config.dryRun) {
+      try {
+        seoScore = await scoreNewsSeoQuality(post, config.textProvider, config.textModel);
+        console.log(`[news] SEO score: ${seoScore.overall}/100`);
+      } catch (err) {
+        console.warn(`[news] SEO scoring failed (non-fatal): ${(err as Error).message}`);
+      }
     }
-    results.push({ artifact, tokenUsage, coverUrl });
+
+    // Quality gate for news posts
+    if (config.qualityGate === "strict" && hasCriticalWarnings(qualityWarnings)) {
+      const criticals = qualityWarnings.filter((w) => categorizeWarning(w) === "critical");
+      console.warn(`[news] Quality gate (strict) blocked news post: ${criticals.join("; ")}`);
+      failures.push({ label: "news cycle", error: `Quality gate blocked: ${criticals.join("; ")}` });
+    } else {
+      let coverUrl: string | undefined;
+      if (config.dryRun) {
+        const out = writeDryRunArtifact(config.packageRoot, artifact);
+        console.log(`[news] Dry run complete: ${out.articlePath}`);
+      } else {
+        const result = await outputAdapter.publish(artifact);
+        coverUrl = result.coverUrl;
+        console.log(`[news] Published artifact ${artifact.artifactId}`);
+        await stateStore.recordSlug(post.slug);
+        const notifyMode = projectConfig.output.type === "s3-staging"
+          ? projectConfig.output.notify.mode
+          : "none";
+        if (notifyMode === "per-article" || notifyMode === "all") {
+          try {
+            await outputAdapter.notifyPerArticle(artifact, tokenUsage, config.textModel, coverUrl, seoScore);
+          } catch (error) {
+            console.warn("[news] Per-article notification failed:", error);
+          }
+        }
+      }
+      results.push({ artifact, tokenUsage, coverUrl, seoScore });
+    }
   } catch (error) {
     const message = error instanceof Error ? error.message : String(error);
     console.error("[news] Pipeline failed:", error);

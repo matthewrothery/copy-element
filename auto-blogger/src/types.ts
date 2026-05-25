@@ -144,6 +144,22 @@ export type ArticleArtifact = {
   research: ResearchResult[];
 };
 
+export type SeoScoreCategory = {
+  score: number;
+  suggestion: string;
+};
+
+export type SeoScore = {
+  overall: number;
+  title: SeoScoreCategory;
+  excerpt: SeoScoreCategory;
+  upfrontAnswer: SeoScoreCategory;
+  headingOptimization: SeoScoreCategory;
+  contentDepth: SeoScoreCategory;
+  featuredSnippetReady: SeoScoreCategory;
+  readability: SeoScoreCategory;
+};
+
 export type TokenUsage = {
   inputTokens: number;
   outputTokens: number;

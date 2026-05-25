@@ -5,13 +5,29 @@ import crypto from "crypto";
 import { loadConfig, loadProjectConfig } from "./config.js";
 import {
   listPendingArtifactPrefixes,
-  movePrefixToPublished,
   readS3Buffer,
   readS3Text,
 } from "./s3.js";
 import { ArticleArtifactMetadata, BackfillSummary } from "./types.js";
 import { runBackfillForImportedArticles } from "./backfillInternalLinks.js";
 import { sendBackfillNotification } from "./email.js";
+
+export type ImportManifestEntry = {
+  artifactId: string;
+  assetS3Names: string[];
+  title: string;
+  /** URL path relative to site root, e.g. /topics/hub/cluster/slug or /blog/slug */
+  urlPath: string;
+};
+
+export type ImportManifest = {
+  bucket: string;
+  prefix: string;
+  artifacts: ImportManifestEntry[];
+  importedTopicSlugs: string[];
+};
+
+export const IMPORT_MANIFEST_PATH = "dist/import-manifest.json";
 
 function safeTargetPath(workspaceRoot: string, relativePath: string): string {
   const out = path.resolve(workspaceRoot, relativePath);
@@ -41,6 +57,15 @@ function sha256(input: Buffer | string): string {
   return crypto.createHash("sha256").update(input).digest("hex");
 }
 
+function urlPathFromArticlePath(articlePath: string): string {
+  // website/content/topics/hub/cluster/slug.md → /topics/hub/cluster/slug
+  // website/content/blog/slug.md → /blog/slug
+  const withoutExt = articlePath.replace(/\.md$/, "");
+  const contentIdx = withoutExt.indexOf("website/content/");
+  if (contentIdx === -1) return `/${withoutExt}`;
+  return `/${withoutExt.slice(contentIdx + "website/content/".length)}`;
+}
+
 async function main(): Promise<void> {
   const config = loadConfig();
   const projectConfig = loadProjectConfig();
@@ -61,6 +86,7 @@ async function main(): Promise<void> {
 
   const workspaceRoot = path.resolve(config.packageRoot, "..");
   const importedTopicSlugs: string[] = [];
+  const toPublish: ImportManifestEntry[] = [];
 
   for (const prefix of selected) {
     const normalizedPrefix = prefix.endsWith("/") ? prefix.slice(0, -1) : prefix;
@@ -88,7 +114,7 @@ async function main(): Promise<void> {
       if (!legacyCoverOnly && assetNamesForMove.length === 0) {
         throw new Error(`Artifact ${artifactId} missing assets manifest and legacy cover checksum.`);
       }
-      await movePrefixToPublished(s3Bucket, s3Prefix, artifactId, assetNamesForMove);
+      toPublish.push({ artifactId, assetS3Names: assetNamesForMove, title: metadata.title, urlPath: urlPathFromArticlePath(metadata.articlePath) });
       console.log(`Skipped import (article exists): ${metadata.articlePath}`);
       continue;
     }
@@ -114,7 +140,7 @@ async function main(): Promise<void> {
       writeFileSync(articleOut, articleMarkdown, "utf-8");
       writeFileSync(imageOut, imageBuffer);
 
-      await movePrefixToPublished(s3Bucket, s3Prefix, artifactId, [coverName]);
+      toPublish.push({ artifactId, assetS3Names: [coverName], title: metadata.title, urlPath: urlPathFromArticlePath(metadata.articlePath) });
 
       if (metadata.targetType === "topic" && metadata.slug) {
         importedTopicSlugs.push(metadata.slug);
@@ -143,12 +169,20 @@ async function main(): Promise<void> {
       assetNames.push(asset.s3Name);
     }
 
-    await movePrefixToPublished(s3Bucket, s3Prefix, artifactId, assetNames);
+    toPublish.push({ artifactId, assetS3Names: assetNames, title: metadata.title, urlPath: urlPathFromArticlePath(metadata.articlePath) });
 
     if (metadata.targetType === "topic" && metadata.slug) {
       importedTopicSlugs.push(metadata.slug);
     }
     console.log(`Imported artifact ${artifactId} -> ${metadata.articlePath}`);
+  }
+
+  if (!config.dryRun && toPublish.length > 0) {
+    const manifestPath = path.resolve(config.packageRoot, IMPORT_MANIFEST_PATH);
+    mkdirSync(path.dirname(manifestPath), { recursive: true });
+    const manifest: ImportManifest = { bucket: s3Bucket, prefix: s3Prefix, artifacts: toPublish, importedTopicSlugs };
+    writeFileSync(manifestPath, JSON.stringify(manifest, null, 2), "utf-8");
+    console.log(`[import] Wrote manifest for ${toPublish.length} artifact(s): ${manifestPath}`);
   }
 
   if (importedTopicSlugs.length > 0) {

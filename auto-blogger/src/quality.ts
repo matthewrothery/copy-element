@@ -1,5 +1,31 @@
 import { GeneratedArticle, GeneratedBlogPost } from "./types.js";
 
+export type WarningLevel = "critical" | "advisory";
+
+export type CategorizedWarning = {
+  message: string;
+  level: WarningLevel;
+};
+
+const CRITICAL_PATTERNS: RegExp[] = [
+  /^Duplicate slug detected:/,
+  /^Duplicate blog slug detected:/,
+  /^Body content looks too short/,
+  /^Unsupported feature claim detected:/,
+];
+
+export function categorizeWarning(message: string): WarningLevel {
+  return CRITICAL_PATTERNS.some((re) => re.test(message)) ? "critical" : "advisory";
+}
+
+export function categorizeWarnings(warnings: string[]): CategorizedWarning[] {
+  return warnings.map((message) => ({ message, level: categorizeWarning(message) }));
+}
+
+export function hasCriticalWarnings(warnings: string[]): boolean {
+  return warnings.some((w) => categorizeWarning(w) === "critical");
+}
+
 /** Plain intro before any H2, or narrative under a leading "## Quick Answer"-style heading. */
 const MIN_UPFRONT_CHARS = 100;
 
