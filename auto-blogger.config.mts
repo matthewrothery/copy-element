@@ -1,3 +1,4 @@
+import path from "path";
 import type { AutoBloggerProjectConfig } from "./auto-blogger/src/projectConfig.js";
 
 /**
@@ -7,6 +8,13 @@ import type { AutoBloggerProjectConfig } from "./auto-blogger/src/projectConfig.
  * come from environment variables set by terraform — see `terraform/lambda.tf`
  * and `terraform/ec2.tf` (for the EC2 dev path, until it is retired).
  */
+
+// Anchor content file paths to this config file's directory (repo root) so
+// they resolve identically when run from the repo locally and when bundled
+// into the Lambda zip (where cwd is `/var/task`, not the repo root).
+const CONFIG_DIR = import.meta.dirname;
+const contentPath = (rel: string): string => path.resolve(CONFIG_DIR, rel);
+
 const config: AutoBloggerProjectConfig = {
   brand: {
     productName: "Element Armory – Capture UI Elements",
@@ -19,10 +27,10 @@ const config: AutoBloggerProjectConfig = {
     ],
   },
   content: {
-    listPath: "./auto-blogger/list.md",
-    guidePath: "./auto-blogger/guide.md",
-    rulesPath: "./auto-blogger/rules.md",
-    copywriterPromptPath: "./auto-blogger/copywriter-prompt.md",
+    listPath: contentPath("auto-blogger/list.md"),
+    guidePath: contentPath("auto-blogger/guide.md"),
+    rulesPath: contentPath("auto-blogger/rules.md"),
+    copywriterPromptPath: contentPath("auto-blogger/copywriter-prompt.md"),
   },
   news: {
     queries: ["vibe coding AI", "AI UI tools", "AI frontend tools", "AI coding agents"],

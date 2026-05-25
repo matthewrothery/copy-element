@@ -108,11 +108,25 @@ execSync("npm install --omit=dev --no-package-lock --no-audit --no-fund", {
 const nmDest = join(outDir, "node_modules");
 
 // --- Step 3: zip ---
+// Lambda cwd at runtime is `/var/task`. The project config (auto-blogger.config.mts)
+// hardcodes paths like `./auto-blogger/list.md` which the handler reads via
+// fs.readFileSync — so those content files must be present at
+// `/var/task/auto-blogger/<file>` in the deployed zip.
 console.log("Creating zip...");
 const { default: AdmZip } = await import("adm-zip");
 const zip = new AdmZip();
 zip.addLocalFile(bundleFile, "", "index.mjs");
 zip.addLocalFolder(nmDest, "node_modules");
+const contentFiles = ["list.md", "guide.md", "rules.md", "copywriter-prompt.md"];
+for (const f of contentFiles) {
+  const src = join(__dirname, f);
+  if (!existsSync(src)) {
+    console.warn(`Warning: ${f} not found in auto-blogger/ — skipping`);
+    continue;
+  }
+  zip.addLocalFile(src, "auto-blogger", f);
+  console.log(`Bundled auto-blogger/${f}`);
+}
 zip.writeZip(zipFile);
 
 // Print size.
