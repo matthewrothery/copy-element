@@ -68,4 +68,5 @@ jobs:
         # AUTO_BLOG_S3_BUCKET is unset, which is the behavior we want.
         env:
           AUTO_BLOG_S3_BUCKET: ${{ secrets.AUTO_BLOG_S3_BUCKET }}
-        run: node --import tsx website/scripts/publishInternalLinksManifest.mts
+        working-directory: website
+        run: node --import tsx scripts/publishInternalLinksManifest.mts
