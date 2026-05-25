@@ -93,6 +93,7 @@ function stubConfig(overrides: Partial<AutoBloggerConfig> = {}): AutoBloggerConf
     newsCycleHour: 10,
     newsRecencyHours: 168,
     newsMinItems: 3,
+    aiCallDelayMs: 0,
     ...overrides,
   };
 }

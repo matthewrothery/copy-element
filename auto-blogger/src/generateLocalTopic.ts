@@ -172,6 +172,7 @@ async function main(): Promise<void> {
     brand: projectConfig.brand,
     research,
     internalLinkCandidates,
+    config: { aiCallDelayMs: config.aiCallDelayMs },
   });
 
   const diagramPass = applyDiagramsToArticle(draftArticle, config.maxDiagrams);

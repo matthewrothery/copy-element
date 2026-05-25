@@ -214,6 +214,7 @@ resource "aws_lambda_function" "auto_blogger_topics" {
       AWS_SES_REGION        = "us-east-1"
       NODE_ENV              = "production"
       DAILY_ARTICLES        = "4"
+      AI_CALL_DELAY_MS      = "2000"
       AUTO_BLOG_IMAGE_MODEL = "gemini-2.5-flash-image"
       AUTO_BLOG_IMAGE_STYLE = "stencil"
       AUTO_BLOG_IMAGE_PALETTE = "vibrant"

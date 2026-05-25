@@ -1,6 +1,7 @@
 import "dotenv/config";
 import { readFileSync } from "fs";
 import crypto from "crypto";
+import { sleep } from "./utils.js";
 import { applyDiagramsToArticle } from "./applyDiagrams.js";
 import { loadConfig, loadProjectConfig } from "./config.js";
 import { researchTopic } from "./research.js";
@@ -97,6 +98,7 @@ async function runOneTopicPipeline(
     brand: projectConfig.brand,
     research,
     internalLinkCandidates: prioritizeInternalLinks(internalLinkCandidates, keyword),
+    config: { aiCallDelayMs: config.aiCallDelayMs },
   });
 
   const diagramPass = applyDiagramsToArticle(draftArticle, config.maxDiagrams);
@@ -165,9 +167,10 @@ async function runOneTopicPipeline(
 }
 
 /**
- * Runs N topic article pipelines in parallel. Picks + atomically claims N
- * keywords up front, then `Promise.allSettled` over the pipelines. Aggregates
- * results into a digest summary and triggers a single digest email at the end.
+ * Runs N topic article pipelines sequentially. Picks + atomically claims N
+ * keywords up front, then processes each one in a `for` loop with an
+ * inter-article delay to stay within the Anthropic 50k-token/min rate limit.
+ * Aggregates results into a digest summary and triggers a single digest email at the end.
  */
 export async function runParallelTopics(n: number, deps: CycleDeps): Promise<DigestSummary> {
   const { config, projectConfig, stateStore, contentRepo, outputAdapter } = deps;
@@ -206,22 +209,17 @@ export async function runParallelTopics(n: number, deps: CycleDeps): Promise<Dig
   const guide = readFileSync(projectConfig.content.guidePath, "utf-8");
   const rules = readFileSync(projectConfig.content.rulesPath, "utf-8");
 
-  const settled = await Promise.allSettled(
-    claimed.map((kw) =>
-      runOneTopicPipeline(kw, deps, copywriterPrompt, guide, rules, internalLinkCandidates, today)
-    )
-  );
-
   const results: ArticleResult[] = [];
   const failures: DigestSummary["failures"] = [];
-  for (let i = 0; i < settled.length; i += 1) {
-    const r = settled[i];
+  for (let i = 0; i < claimed.length; i++) {
+    if (i > 0) await sleep(config.aiCallDelayMs * 4);
     const kw = claimed[i];
-    if (r.status === "fulfilled") {
-      results.push(r.value);
-    } else {
-      const message = r.reason instanceof Error ? r.reason.message : String(r.reason);
-      console.error(`[topic] Pipeline failed for "${kw.keyword}":`, r.reason);
+    try {
+      const result = await runOneTopicPipeline(kw, deps, copywriterPrompt, guide, rules, internalLinkCandidates, today);
+      results.push(result);
+    } catch (err) {
+      const message = err instanceof Error ? err.message : String(err);
+      console.error(`[topic] Pipeline failed for "${kw.keyword}":`, err);
       failures.push({ label: kw.keyword, error: message });
     }
   }

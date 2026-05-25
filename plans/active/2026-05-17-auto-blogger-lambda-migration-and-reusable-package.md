@@ -27,7 +27,7 @@ The previously-active plan is fully superseded; its swap + `mem_limit` changes (
 ## Requirements & constraints
 
 - **REQ-001** Topic-article cadence after migration matches today's pattern (4 articles per weekday by default; one news post per day). No missed days during cutover. No duplicate slug published.
-- **REQ-002** The four topic articles in a single daily run execute in parallel inside one Lambda invocation via `Promise.all` (not staggered, not fan-out).
+- **REQ-002** ~~The four topic articles in a single daily run execute in parallel inside one Lambda invocation via `Promise.all` (not staggered, not fan-out).~~ **Superseded by plan `2026-05-25-auto-blogger-rate-limit-fix.md`**: topic articles now execute sequentially in a `for` loop with a configurable inter-article delay (`AI_CALL_DELAY_MS * 4`) to stay within the Anthropic 50k-token/min rate limit. DynamoDB atomic claiming still protects against keyword collisions.
 - **REQ-003** State (which keywords/slugs are already taken) is read and updated atomically across the parallel pipelines so two simultaneous picks cannot collide.
 - **REQ-004** All Element-Armory-specific values move out of `auto-blogger/src/*` into a single `./auto-blogger.config.ts` at the repo root. No `grep -r "Element Armory" auto-blogger/src` match after the refactor (excluding `copywriter-prompt.md` if mentioned there, which is acceptable as a default-bundled asset).
 - **REQ-005** Copying `auto-blogger/` to another project + adding an `auto-blogger.config.ts` is sufficient to run it locally and deploy it as Lambda in the target project's terraform.

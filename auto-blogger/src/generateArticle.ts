@@ -1,11 +1,19 @@
 import { generateObject, generateText } from "ai";
+import type { LanguageModel } from "ai";
 import { anthropic } from "@ai-sdk/anthropic";
 import { openai } from "@ai-sdk/openai";
 import { z } from "zod";
-import { DiagramSpecSchema, type DiagramSpec } from "./diagrams/schema.js";
+import {
+  selectRelevantResearch,
+  generateSection,
+  generateEditorialPass,
+  generateMetadata,
+} from "./generateSection.js";
+import { sleep } from "./utils.js";
 import { applyLinkPlaceholders, candidateId } from "./applyLinkPlaceholders.js";
 import { collectExistingKeywords } from "./internalLinks.js";
 import { linkBudget } from "./quality.js";
+import type { AutoBloggerConfig } from "./config.js";
 import type { BrandConfig } from "./projectConfig.js";
 import {
   GeneratedArticle,
@@ -28,22 +36,9 @@ const OutlineSchema = z.object({
   ).max(5),
 });
 
-const DraftSchema = z.object({
-  title: z.string(),
-  slug: z.string(),
-  excerpt: z.string(),
-  readTime: z.string(),
-  body: z.string(),
-  imagePrompt: z.string(),
-  diagrams: z.array(DiagramSpecSchema).max(5).optional().default([]),
-  linkKeywords: z.array(z.string()).min(6).max(12),
-});
-
-/** Draft JSON includes a long markdown body; SDK default ~4096 completion tokens truncates before `body` is emitted (finishReason: length). */
-const DRAFT_MAX_OUTPUT_TOKENS = 8192;
-
 const MIN_INTERNAL_LINKS = 3;
 const MIN_EXTERNAL_LINKS = 2;
+const DRAFT_MAX_OUTPUT_TOKENS = 8192;
 
 function sanitizeSlug(input: string): string {
   return input
@@ -54,7 +49,7 @@ function sanitizeSlug(input: string): string {
     .replace(/-+/g, "-");
 }
 
-function createTextModel(provider: "anthropic" | "openai", model: string) {
+export function createTextModel(provider: "anthropic" | "openai", model: string): LanguageModel {
   return provider === "anthropic" ? anthropic(model) : openai(model);
 }
 
@@ -95,7 +90,6 @@ function summarizeInternalLinks(candidates: InternalLinkCandidate[]): string {
   if (candidates.length === 0) {
     return "No existing internal link candidates are available yet.";
   }
-
   return candidates
     .map((candidate) => {
       const id = candidateId(candidate);
@@ -123,6 +117,7 @@ export async function generateTopicArticle(input: {
   brand: BrandConfig;
   research: ResearchResult[];
   internalLinkCandidates: InternalLinkCandidate[];
+  config: Pick<AutoBloggerConfig, "aiCallDelayMs">;
 }): Promise<{ article: GeneratedArticle; tokenUsage: TokenUsage; resolutionWarnings: string[] }> {
   const model = createTextModel(input.textProvider, input.model);
   const system = buildSystemPrompt(input.copywriterPrompt, input.guide, input.rules, input.brand);
@@ -160,96 +155,74 @@ Return:
     system,
     prompt: outlinePrompt,
   });
-  const outline = outlineResult;
-
-  const draftPrompt = `
-Write a comprehensive topic article.
-
-Context:
-- Hub: ${input.keyword.hubTitle} (${input.keyword.hubSlug})
-- Cluster: ${input.keyword.clusterTitle} (${input.keyword.clusterSlug})
-- Keyword: ${input.keyword.keyword}
-- Date: ${input.date}
-- Angle: ${outline.object.angle}
-- Reader: ${outline.object.targetReader}
-- Section headings: ${outline.object.sectionHeadings.join(" | ")}
-
-CRITICAL BODY-COMPOSITION RULES (these must hold in the \`body\` string itself; satisfying the JSON schema is not enough):
-
-1. CITATIONS: To cite a research source, emit \`{{SRC:<n>|<anchor text>}}\` inline at the sentence where you reference that source's claim. \`<n>\` is the source's number from the research list below (1-based). The body MUST contain at least ${MIN_EXTERNAL_LINKS} \`{{SRC:\` tokens; aim for 4-6. Skipping this is a hard failure. Never list sources as a block.
-2. INTERNAL LINKS: To link to existing site content, emit \`{{LINK:<id>|<anchor text>}}\` inline. \`<id>\` is the id from the internal-link candidate list below. The body MUST contain at least ${MIN_INTERNAL_LINKS} \`{{LINK:\` tokens; aim for 4-8. Choose ids only from the provided list — do not invent new ones.
-3. DIAGRAM SYNCHRONIZATION: For every entry you put in the \`diagrams\` array, the body MUST contain exactly one matching placeholder line of the form \`{{DIAGRAM:<id>}}\` where \`<id>\` matches the diagram's \`id\` field character-for-character. If you cannot place a diagram naturally in the body, do NOT include it in the diagrams array.
-4. LINK KEYWORDS: Emit a \`linkKeywords\` array of 6-12 short anchor-quality phrases (each 2-6 words) that would read naturally as a mid-sentence anchor pointing TO this article from another post. Include the primary keyword and 1-2 close paraphrases. Avoid single generic words like "HTML" or "AI". Do not include phrases already used by other articles (list below).
-
-Other requirements:
-- 1200-2000 words
-- markdown body only (no frontmatter)
-- start with a short upfront answer section before the first heading. Answer the keyword directly in a conversational way, like a helpful expert replying to a specific question. Keep it concise, concrete, and useful for AI summaries.
-- practical examples and steps
-- avoid generic filler
-- when using concrete statistics, benchmarks, survey findings, market numbers, dates, or data points, cite the source with a \`{{SRC:<n>|...}}\` placeholder.
-- include concrete statistics or data where the research supports it. Keep data references native, organic, and human-readable, not a list of forced numbers.
-- never include raw \`https://\` URLs or raw \`/topics/...\` paths in the body — always use the placeholder syntax.
-- do not include H1 title inside body
-- do not put FAQ content in the markdown body. Never use headings like ## FAQ, ### FAQ, or "Frequently asked questions", and do not duplicate Q&A lists in prose. FAQ items are supplied separately from the outline and become YAML frontmatter only; the published page renders them once below the article.
-- keep claims realistic
-- include at least one markdown comparison table when the topic compares approaches, tools, or workflows (for example manual DevTools vs extension-assisted capture).
-- add 1-3 programmatic diagrams when they clarify a workflow, comparison, or numbered process. Each diagram is data you output in the diagrams array (kind: flow | columns | steps), not SVG.
-- optional short italic caption line immediately after a diagram placeholder is allowed.
-
-Also return an image prompt for a stencil street-art style cover image with bold minimal overlapping colors. No text in image.
-
-Diagram kinds:
-- flow: ordered nodes with short labels (sequence left-to-right).
-- columns: 2-3 columns with a title and bullet-like rows per column (for contrasting methods).
-- steps: 3-7 numbered steps with short labels (horizontal layout).
-
-Research context (cite via {{SRC:<n>|...}} where n is the Source number):
-${researchSummary}
-
-Internal-link candidates (use the id field in {{LINK:<id>|...}}):
-${internalLinksSummary}
-
-Anchor phrases already taken by other articles (your linkKeywords MUST NOT collide with these):
-${existingKeywordsList}
-
-BEFORE YOU FINISH, mentally verify against the body string you just wrote:
-(a) Does it contain at least ${MIN_EXTERNAL_LINKS} \`{{SRC:\` substrings? If not, add inline citations.
-(b) Does it contain at least ${MIN_INTERNAL_LINKS} \`{{LINK:\` substrings? If not, add inline internal links.
-(c) For each diagram \`id\` in your diagrams array, does the body contain \`{{DIAGRAM:\` + id + \`}}\`? If not, add the placeholder or remove the diagram.
-(d) Are your linkKeywords (6-12) all distinct from the "already taken" list above?
-Only emit your response once all four checks pass.
-`;
-
-  const draft = await generateObject({
-    model,
-    schema: DraftSchema,
-    system,
-    prompt: draftPrompt,
-    maxTokens: DRAFT_MAX_OUTPUT_TOKENS,
-  });
+  await sleep(input.config.aiCallDelayMs);
 
   const tokenUsage: TokenUsage = {
-    inputTokens: (outlineResult.usage?.promptTokens ?? 0) + (draft.usage?.promptTokens ?? 0),
-    outputTokens: (outlineResult.usage?.completionTokens ?? 0) + (draft.usage?.completionTokens ?? 0),
+    inputTokens: outlineResult.usage?.promptTokens ?? 0,
+    outputTokens: outlineResult.usage?.completionTokens ?? 0,
   };
 
-  let workingBody = draft.object.body.trim();
+  const { angle, targetReader, sectionHeadings } = outlineResult.object;
 
-  // Drop orphan diagram specs (no matching {{DIAGRAM:id}} placeholder in body).
-  let workingDiagrams: DiagramSpec[] = (draft.object.diagrams ?? []).filter((d) =>
-    workingBody.includes(`{{DIAGRAM:${d.id}}}`)
-  );
+  // Section-by-section generation
+  const sections: string[] = [];
+  const placedLinkIds = new Set<string>();
+  const placedSrcNums = new Set<number>();
+  let linksUsedSoFar = 0;
 
-  // Combined remediation: if either {{LINK:}} or {{SRC:}} count is below the floor, run
-  // a single text rewrite that adds the missing placeholders. Cheaper than re-drafting and
-  // bounded — we only accept the rewrite if both floors are met.
+  for (let i = 0; i < sectionHeadings.length; i++) {
+    const heading = sectionHeadings[i];
+    const relevantResearch = selectRelevantResearch(input.research, heading);
+    const previousSectionTail =
+      sections.length > 0 ? sections[sections.length - 1].slice(-300) : "";
+
+    const sectionResult = await generateSection(
+      {
+        heading,
+        angle,
+        targetReader,
+        allHeadings: sectionHeadings,
+        sectionIndex: i,
+        totalSections: sectionHeadings.length,
+        previousSectionTail,
+        relevantResearch,
+        internalLinkCandidates: input.internalLinkCandidates,
+        linksUsedSoFar,
+        placedLinkIds,
+        placedSrcNums,
+        isFirstSection: i === 0,
+        primaryKeyword: input.keyword.keyword,
+      },
+      model,
+      system,
+      input.config
+    );
+
+    sections.push(sectionResult.text);
+    tokenUsage.inputTokens += sectionResult.inputTokens;
+    tokenUsage.outputTokens += sectionResult.outputTokens;
+
+    for (const m of sectionResult.text.matchAll(/\{\{LINK:([^|}]+)/g)) {
+      placedLinkIds.add(m[1].trim());
+    }
+    for (const m of sectionResult.text.matchAll(/\{\{SRC:(\d+)/g)) {
+      placedSrcNums.add(Number(m[1]));
+    }
+    linksUsedSoFar +=
+      countTokens(sectionResult.text, "LINK") + countTokens(sectionResult.text, "SRC");
+  }
+
+  let workingBody = sections.join("\n\n");
+
+  // Remediation: add missing {{LINK:}} / {{SRC:}} tokens if floors are not met.
   const initialInternal = countTokens(workingBody, "LINK");
   const initialExternal = countTokens(workingBody, "SRC");
   const budget = linkBudget(workingBody);
   const totalShortfall = Math.max(0, budget.target - (initialInternal + initialExternal));
-  const internalShortfall = Math.max(0, MIN_INTERNAL_LINKS - initialInternal) + Math.max(0, Math.ceil(totalShortfall / 2));
-  const externalShortfall = Math.max(0, MIN_EXTERNAL_LINKS - initialExternal) + Math.max(0, Math.floor(totalShortfall / 2));
+  const internalShortfall =
+    Math.max(0, MIN_INTERNAL_LINKS - initialInternal) + Math.max(0, Math.ceil(totalShortfall / 2));
+  const externalShortfall =
+    Math.max(0, MIN_EXTERNAL_LINKS - initialExternal) + Math.max(0, Math.floor(totalShortfall / 2));
   const needsRemediation =
     (internalShortfall > 0 && input.internalLinkCandidates.length > 0) ||
     (externalShortfall > 0 && input.research.length > 0);
@@ -279,34 +252,63 @@ ${workingBody}
 ---`,
       maxTokens: DRAFT_MAX_OUTPUT_TOKENS,
     });
+    await sleep(input.config.aiCallDelayMs);
+    tokenUsage.inputTokens += remediation.usage?.promptTokens ?? 0;
+    tokenUsage.outputTokens += remediation.usage?.completionTokens ?? 0;
     const rewritten = remediation.text.trim();
     if (
       countTokens(rewritten, "LINK") >= MIN_INTERNAL_LINKS &&
       countTokens(rewritten, "SRC") >= MIN_EXTERNAL_LINKS
     ) {
       workingBody = rewritten;
-      // Re-filter diagrams in case the rewrite dropped a placeholder.
-      workingDiagrams = workingDiagrams.filter((d) => workingBody.includes(`{{DIAGRAM:${d.id}}}`));
     }
-    tokenUsage.inputTokens += remediation.usage?.promptTokens ?? 0;
-    tokenUsage.outputTokens += remediation.usage?.completionTokens ?? 0;
   }
 
-  // Substitute {{LINK:}} and {{SRC:}} placeholders with real markdown links.
+  // Editorial pass: holistic prose cleanup across all assembled sections.
+  const editorial = await generateEditorialPass(workingBody, model, system, input.config);
+  tokenUsage.inputTokens += editorial.inputTokens;
+  tokenUsage.outputTokens += editorial.outputTokens;
+  if (
+    editorial.text.length > 0 &&
+    countTokens(editorial.text, "LINK") >= countTokens(workingBody, "LINK") &&
+    countTokens(editorial.text, "SRC") >= countTokens(workingBody, "SRC")
+  ) {
+    workingBody = editorial.text;
+  } else if (editorial.text.length > 0) {
+    console.warn("[generateArticle] Editorial pass dropped link/source placeholders — keeping pre-editorial body.");
+  }
+
+  // Metadata call (title, slug, excerpt, readTime, imagePrompt, linkKeywords, diagrams)
+  const metadataResult = await generateMetadata(
+    workingBody,
+    { angle, targetReader, sectionHeadings },
+    { keyword: input.keyword, date: input.date, brand: input.brand, existingKeywordsList },
+    model,
+    system,
+    input.config
+  );
+  tokenUsage.inputTokens += metadataResult.inputTokens;
+  tokenUsage.outputTokens += metadataResult.outputTokens;
+
+  // Drop diagram specs with no matching placeholder in body.
+  const workingDiagrams = (metadataResult.object.diagrams ?? []).filter((d) =>
+    workingBody.includes(`{{DIAGRAM:${d.id}}}`)
+  );
+
+  // Resolve {{LINK:}} and {{SRC:}} placeholders to real markdown links.
   const resolution = applyLinkPlaceholders(
     workingBody,
     input.internalLinkCandidates,
     input.research
   );
 
-  // Lock URL slug to list.md so paths align with keyword.id and we do not collide with sibling filenames.
+  // Lock URL slug to list.md keyword id so paths align with keyword.id.
   const slugSegment = input.keyword.id.split("/").pop() ?? "";
   const slug = sanitizeSlug(slugSegment || input.keyword.keyword);
 
-  // Filter out linkKeywords that collide with existing candidates' keywords. If we drop
-  // below 6, surface a warning but do not fail — quality.ts will record it.
+  // Post-filter linkKeywords against existing candidates' keywords.
   const seenForKw = new Set<string>();
-  const filteredKeywords = (draft.object.linkKeywords ?? [])
+  const filteredKeywords = (metadataResult.object.linkKeywords ?? [])
     .map((k) => k.trim())
     .filter((k) => {
       const v = k.toLowerCase();
@@ -315,26 +317,32 @@ ${workingBody}
       return true;
     });
 
+  if (filteredKeywords.length < 6) {
+    console.warn(
+      `[generateArticle] linkKeywords filtered to ${filteredKeywords.length} entries (< 6); quality warning expected.`
+    );
+  }
+
   return {
     article: {
       hubSlug: input.keyword.hubSlug,
       hubTitle: input.keyword.hubTitle,
       clusterSlug: input.keyword.clusterSlug,
       clusterTitle: input.keyword.clusterTitle,
-      title: draft.object.title,
+      title: metadataResult.object.title,
       slug,
       date: input.date,
-      excerpt: draft.object.excerpt,
-      readTime: draft.object.readTime,
-      faq: outline.object.faq
+      excerpt: metadataResult.object.excerpt,
+      readTime: metadataResult.object.readTime,
+      faq: outlineResult.object.faq
         .filter((item) => Boolean(item.question && item.answer))
         .map((item) => ({
           question: item.question,
           answer: applyLinkPlaceholders(item.answer, input.internalLinkCandidates, input.research).body,
         })),
-      relatedSlugs: outline.object.relatedSlugs,
+      relatedSlugs: outlineResult.object.relatedSlugs,
       body: resolution.body,
-      imagePrompt: draft.object.imagePrompt.trim(),
+      imagePrompt: metadataResult.object.imagePrompt.trim(),
       diagrams: workingDiagrams,
       linkKeywords: filteredKeywords,
     },

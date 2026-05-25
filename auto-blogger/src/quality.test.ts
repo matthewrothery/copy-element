@@ -1,6 +1,6 @@
 import test from "node:test";
 import assert from "node:assert/strict";
-import { validateNewsPostQuality } from "./quality.js";
+import { validateNewsPostQuality, linkBudget } from "./quality.js";
 import type { GeneratedBlogPost } from "./types.js";
 
 function makePost(body: string): GeneratedBlogPost {
@@ -44,6 +44,21 @@ test("validateNewsPostQuality accepts enough source and internal links", () => {
   );
 
   assert.deepEqual(validateNewsPostQuality(post), []);
+});
+
+test("linkBudget returns correct target and ceiling for ~1200 words", () => {
+  // ~1200 words × "word " = roughly 6000 chars
+  const body = ("word ".repeat(1200)).trim();
+  const { target, ceiling } = linkBudget(body);
+  // target = round(1200 / 120) = 10, ceiling = 12
+  assert.equal(target, 10);
+  assert.equal(ceiling, 12);
+});
+
+test("linkBudget ceiling is always target + 2", () => {
+  const body = "word ".repeat(600).trim();
+  const { target, ceiling } = linkBudget(body);
+  assert.equal(ceiling, target + 2);
 });
 
 test("validateNewsPostQuality reports missing links and unresolved placeholders", () => {

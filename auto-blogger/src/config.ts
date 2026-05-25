@@ -41,6 +41,8 @@ export type AutoBloggerConfig = {
   newsCycleHour: number;
   newsRecencyHours: number;
   newsMinItems: number;
+  /** Minimum delay in ms between consecutive AI API calls within one article pipeline. */
+  aiCallDelayMs: number;
 };
 
 function parseIntEnv(name: string, fallback: number): number {
@@ -166,5 +168,6 @@ export function loadConfig(): AutoBloggerConfig {
     newsCycleHour: parseIntEnv("AUTO_BLOG_NEWS_CYCLE_HOUR", 10),
     newsRecencyHours: parseIntEnv("AUTO_BLOG_NEWS_RECENCY_HOURS", 168),
     newsMinItems: parseIntEnv("AUTO_BLOG_NEWS_MIN_ITEMS", 3),
+    aiCallDelayMs: parseIntEnv("AI_CALL_DELAY_MS", 1500),
   };
 }
