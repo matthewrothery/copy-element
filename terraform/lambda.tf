@@ -213,7 +213,7 @@ resource "aws_lambda_function" "auto_blogger_topics" {
       AUTO_BLOG_STATE_TABLE = local.dynamodb_table_name
       AWS_SES_REGION        = "us-east-1"
       NODE_ENV              = "production"
-      DAILY_ARTICLES        = "4"
+      DAILY_ARTICLES        = "1"
       AI_CALL_DELAY_MS      = "2000"
       AUTO_BLOG_IMAGE_MODEL = "gemini-2.5-flash-image"
       AUTO_BLOG_IMAGE_STYLE = "stencil"
@@ -285,12 +285,12 @@ resource "aws_lambda_function" "auto_blogger_news" {
 # ─────────────────────────────────────────────────────────────────────────────
 
 resource "aws_lambda_permission" "scheduler_invoke_topics" {
-  count         = var.enable_auto_blogger_lambdas ? 1 : 0
-  statement_id  = "AllowSchedulerInvoke"
+  for_each      = var.enable_auto_blogger_lambdas ? local.topics_schedules : {}
+  statement_id  = "AllowSchedulerInvoke-${each.key}"
   action        = "lambda:InvokeFunction"
   function_name = aws_lambda_function.auto_blogger_topics[0].function_name
   principal     = "scheduler.amazonaws.com"
-  source_arn    = aws_scheduler_schedule.auto_blogger_topics[0].arn
+  source_arn    = aws_scheduler_schedule.auto_blogger_topics[each.key].arn
 }
 
 resource "aws_lambda_permission" "scheduler_invoke_news" {
@@ -342,16 +342,26 @@ resource "aws_iam_role_policy" "scheduler_invoke_lambda" {
 
 # ─────────────────────────────────────────────────────────────────────────────
 # EventBridge Scheduler schedules (cron, Australia/Sydney timezone)
-# Topics 09:00, news 10:00 every day.
+# Topics 09:00, 11:00, 14:00, 16:00 — one article per run.
+# News 10:00 every day.
 # ─────────────────────────────────────────────────────────────────────────────
 
-resource "aws_scheduler_schedule" "auto_blogger_topics" {
-  count       = var.enable_auto_blogger_lambdas ? 1 : 0
-  name        = "${var.project}-${local.normalized_env}-auto-blogger-topics"
-  group_name  = "default"
-  description = "Daily auto-blogger topic articles (09:00 Sydney)"
+locals {
+  topics_schedules = {
+    "09h" = { hour = 9,  description = "09:00 Sydney" }
+    "11h" = { hour = 11, description = "11:00 Sydney" }
+    "14h" = { hour = 14, description = "14:00 Sydney" }
+    "16h" = { hour = 16, description = "16:00 Sydney" }
+  }
+}
 
-  schedule_expression          = "cron(0 9 * * ? *)"
+resource "aws_scheduler_schedule" "auto_blogger_topics" {
+  for_each    = var.enable_auto_blogger_lambdas ? local.topics_schedules : {}
+  name        = "${var.project}-${local.normalized_env}-auto-blogger-topics-${each.key}"
+  group_name  = "default"
+  description = "Auto-blogger topic article (${each.value.description})"
+
+  schedule_expression          = "cron(0 ${each.value.hour} * * ? *)"
   schedule_expression_timezone = "Australia/Sydney"
 
   flexible_time_window {
