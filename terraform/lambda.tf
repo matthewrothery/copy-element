@@ -418,6 +418,7 @@ resource "aws_iam_policy" "github_actions_lambda_deploy" {
       Action = [
         "lambda:UpdateFunctionCode",
         "lambda:GetFunction",
+        "lambda:GetFunctionConfiguration",
         "lambda:PublishVersion"
       ]
       Resource = [
