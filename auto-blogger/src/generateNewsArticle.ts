@@ -33,17 +33,19 @@ function buildNewsSystemPrompt(brand: BrandConfig): string {
 
 Voice: ${brand.voice}. You write for developers who follow the AI tooling and vibe coding space closely.
 
-You produce editorial news commentary: opinion, analysis, and context — not SEO-driven content. No FAQ. No diagrams. No comparison tables unless genuinely useful.
+You produce editorial news commentary: opinion, analysis, and context. Not SEO-driven content. No FAQ. No diagrams. No comparison tables unless genuinely useful.
 
 ${unshippedLines}
-Avoid hype. Avoid unsupported product claims. Avoid buzzwords.`;
+Avoid hype. Avoid unsupported product claims. Avoid buzzwords.
+
+Do not use em dashes (—) or en dashes (–) anywhere. If you spot them, break the sentence into two shorter, punchier sentences or swap the dashes for commas or parentheses. The goal is clear, structured prose that reads cleanly without dash-driven asides.`;
 }
 
 function summarizeNewsItems(items: NewsItem[]): string {
   return items
     .map((item, idx) => {
       const body = item.content?.slice(0, 600) ?? "(no content fetched)";
-      return `Source ${idx + 1} — cite as {{SRC:${idx + 1}|anchor text}}\nTitle: ${item.title}\nURL: ${item.publisherUrl ?? item.url}\nPublished: ${item.publishedAt}\nSource: ${item.source}\n\n${body}`;
+      return `Source ${idx + 1} (cite as {{SRC:${idx + 1}|anchor text}})\nTitle: ${item.title}\nURL: ${item.publisherUrl ?? item.url}\nPublished: ${item.publishedAt}\nSource: ${item.source}\n\n${body}`;
     })
     .join("\n\n---\n\n");
 }
@@ -127,7 +129,7 @@ Return:
   const outline = outlineResult.object;
 
   const sourceUrlList = input.items
-    .map((item, idx) => `${idx + 1}. ${item.publisherUrl ?? item.url} — ${item.title} (${item.source})`)
+    .map((item, idx) => `${idx + 1}. ${item.publisherUrl ?? item.url} | ${item.title} (${item.source})`)
     .join("\n");
 
   const draftPrompt = `
@@ -139,10 +141,10 @@ Thesis: ${outline.thesis}
 Section headings: ${outline.sectionHeadings.join(" | ")}
 
 Requirements:
-- 600–900 words
+- 600 to 900 words
 - markdown body only (no frontmatter)
-- editorial commentary tone — analysis, opinion, context, not a news summary
-- open with a clear thesis paragraph (1-3 sentences stating your position) — this paragraph is your featured snippet candidate
+- editorial commentary tone: analysis, opinion, context, not a news summary
+- open with a clear thesis paragraph (1-3 sentences stating your position). This opening paragraph is your featured snippet candidate.
 - title must be 50-60 chars, include the main topic keyword, make the newsworthy angle clear
 - excerpt must be 150-160 chars, summarise the editorial angle, include the main topic keyword, encourage clicks
 - cite source articles with inline {{SRC:<n>|anchor text}} placeholders. The body MUST contain at least ${MIN_EXTERNAL_LINKS} {{SRC: tokens.

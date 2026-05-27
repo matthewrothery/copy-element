@@ -85,7 +85,7 @@ export function buildSectionPrompt(params: SectionPromptParams): string {
   const researchLines = relevantResearch
     .map(({ item, sourceNum }) => {
       const snippet = (item.content ?? item.snippet).slice(0, 300);
-      return `Source ${sourceNum} — ${item.title}\n${snippet}`;
+      return `Source ${sourceNum}: ${item.title}\n${snippet}`;
     })
     .join("\n\n");
 
@@ -132,7 +132,7 @@ ${candidateLines || "(none available)"}
 
 Link budget for this section: Use at most ${sectionBudget} new link${sectionBudget === 1 ? "" : "s"} (internal + external combined). Full article ceiling: ~${ceiling}; ${linksUsedSoFar} placed so far.
 
-Links already placed — do NOT repeat these:
+Links already placed (do NOT repeat these):
 - Internal link ids: ${placedIdsStr}
 - Source numbers: ${placedSrcsStr}
 
@@ -144,7 +144,7 @@ Rules:
 - Link internal content via {{LINK:<id>|anchor text}}.
 - Never include raw URLs or /topics/... paths.
 - No H1 title, no frontmatter, no FAQ headings.
-- Output ONLY the section markdown — no preamble or commentary.`;
+- Output ONLY the section markdown. No preamble or commentary.`;
 }
 
 export type SectionResult = {
@@ -225,7 +225,7 @@ Generate:
 ${input.existingKeywordsList}
 - diagrams: up to 5 programmatic diagram specs (kind: flow | columns | steps). Only include specs whose id already appears as {{DIAGRAM:<id>}} in the body. If none, return an empty array.
 
-Return only the JSON fields — no commentary.`;
+Return only the JSON fields. No commentary.`;
 }
 
 export type EditorialResult = {
@@ -237,7 +237,7 @@ export type EditorialResult = {
 export function buildEditorialPrompt(body: string): string {
   return `Review and refine this assembled article body before publication. It was written section-by-section and may have repetitive phrasing, awkward transitions, or inconsistent tone where sections join.
 
-Your task — prose cleanup only:
+Your task is prose cleanup only:
 - Improve flow and transitions at section boundaries
 - Remove repeated phrases or redundant sentences across sections
 - Ensure voice and tone are consistent throughout (per your system instructions)
@@ -249,7 +249,7 @@ Hard constraints:
 - Do NOT add or remove link or citation placeholders
 - Do NOT change the overall structure or section order
 - Keep word count within ±10% of the original
-- Output ONLY the revised markdown body — no preamble, no commentary, no fenced code block
+- Output ONLY the revised markdown body. No preamble, no commentary, no fenced code block.
 
 Article body:
 ---

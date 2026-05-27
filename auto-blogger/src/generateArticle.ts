@@ -81,7 +81,7 @@ function summarizeResearch(research: ResearchResult[]): string {
     .map((item, idx) => {
       const snippet = item.content?.slice(0, 500) ?? item.snippet;
       const focus = item.focus === "statistics" ? "statistics/data" : "general";
-      return `Source ${idx + 1} (${focus}) — cite as {{SRC:${idx + 1}|anchor text}}\nTitle: ${item.title}\nSummary: ${snippet}`;
+      return `Source ${idx + 1} (${focus}; cite as {{SRC:${idx + 1}|anchor text}})\nTitle: ${item.title}\nSummary: ${snippet}`;
     })
     .join("\n\n");
 }
@@ -238,7 +238,7 @@ Rules:
 - do not add a "Sources" or "References" section
 - preserve all existing placeholders (\`{{LINK:\`, \`{{SRC:\`, \`{{DIAGRAM:\`), headings, tables, and structure
 - never include raw URLs or \`/topics/...\` paths
-- output ONLY the rewritten markdown body — no preamble, no commentary, no fenced code block
+- output ONLY the rewritten markdown body. No preamble, no commentary, no fenced code block.
 
 Research sources:
 ${researchSummary}
@@ -275,7 +275,7 @@ ${workingBody}
   ) {
     workingBody = editorial.text;
   } else if (editorial.text.length > 0) {
-    console.warn("[generateArticle] Editorial pass dropped link/source placeholders — keeping pre-editorial body.");
+    console.warn("[generateArticle] Editorial pass dropped link/source placeholders; keeping pre-editorial body.");
   }
 
   // Metadata call (title, slug, excerpt, readTime, imagePrompt, linkKeywords, diagrams)

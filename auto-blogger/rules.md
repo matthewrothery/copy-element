@@ -5,7 +5,7 @@ generation request after the copywriter prompt and topical guide.
 
 Default rules:
 
-- Do not use em dashes anywhere.
+- Do not use em dashes (—) or en dashes (–) anywhere. If you spot them, break the sentence into two shorter, punchier sentences or swap the dashes for commas or parentheses. The goal is clear, structured prose that reads cleanly without dash-driven asides.
 - Do not claim JSX export is currently available.
 - Do not claim Tailwind output is currently available.
 - Keep examples practical and developer-focused.
