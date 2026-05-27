@@ -47,7 +47,7 @@ Copying dashboard components from production SaaS tools saves hours of rebuildin
 
 ## Why Copying Dashboard Components Saves Hours
 
-Building dashboards from scratch is repetitive. You're not inventing new patterns—you're recreating layouts, cards, tables, and charts that already exist in production tools.
+Building dashboards from scratch is repetitive. You're not inventing new patterns-you're recreating layouts, cards, tables, and charts that already exist in production tools.
 
 The reality: most dashboards follow the same structural patterns. A metrics card looks the same whether it's in Salesforce or your internal tool. A data table with sorting and filtering works the same way. A time-series chart is a time-series chart.
 
@@ -79,7 +79,7 @@ You reconstruct the markup from memory or by copying fragments from the inspecto
 You paste it into your project, realize spacing is off, colors don't match, and responsive behavior is broken. Back to DevTools.
 
 **Step 5: Repeat for every component**
-A typical dashboard has 8–15 widgets. Multiply that by the number of dashboards you want to build, and you're looking at days of work.
+A typical dashboard has 8-15 widgets. Multiply that by the number of dashboards you want to build, and you're looking at days of work.
 
 [Most dashboard gadgets can be configured in under 60 minutes, but that assumes you're starting with a template or existing component](https://community.atlassian.com/forums/Jira-questions/Moving-or-Copying-Widgets-Between-Different-Dashboards/qaq-p/2657586). Without one, you're starting from zero.
 
@@ -93,7 +93,7 @@ The fastest way is to use Element Armory to capture components directly from pro
 Add the extension to your browser. It takes 30 seconds.
 
 **Step 2: Navigate to the dashboard**
-Open any SaaS dashboard—Azure DevOps, Salesforce, Power BI, or your own internal tool.
+Open any SaaS dashboard-Azure DevOps, Salesforce, Power BI, or your own internal tool.
 
 **Step 3: Click the component you want**
 Hover over a widget, card, table, or chart. Click it with the Element Armory extension active.
@@ -105,7 +105,7 @@ The extension extracts the full HTML structure and all computed styles in one ac
 Store the captured component in your snippet library or export it directly to your project.
 
 **Step 6: Adapt for your use case**
-Modify colors, spacing, or data bindings as needed. The hard part—the structure and styling—is already done.
+Modify colors, spacing, or data bindings as needed. The hard part-the structure and styling-is already done.
 
 ![Five-step workflow showing how to capture a dashboard component using Element Armory: install extension, navigate to dashboard, click component, capture HTML and CSS, save to library.](/topic-images/landing-page-saas-ui/saas-ui/copy-dashboard-components-diagram-dashboard-capture-flow.svg)
 
@@ -260,7 +260,7 @@ If you're capturing many components, consider scripting the process. Element Arm
 
 | Aspect | Manual DevTools | Element Armory |
 |--------|-----------------|----------------|
-| **Time per component** | 15–30 minutes | 30 seconds |
+| **Time per component** | 15-30 minutes | 30 seconds |
 | **Completeness** | Partial (often missing styles) | Complete (HTML + computed CSS) |
 | **Reusability** | Low (requires cleanup) | High (ready to use) |
 | **Consistency** | Variable (depends on inspector skill) | Consistent (automated extraction) |
@@ -273,7 +273,7 @@ If you're capturing many components, consider scripting the process. Element Arm
 
 The fastest way to build dashboards is to stop building from scratch. Start capturing components from production tools you already use.
 
-Pick one dashboard you admire—Azure DevOps, Salesforce, Power BI, or any internal tool. Identify 3–5 components you want to reuse. Capture them. Adapt them. Build your first dashboard 10x faster.
+Pick one dashboard you admire-Azure DevOps, Salesforce, Power BI, or any internal tool. Identify 3-5 components you want to reuse. Capture them. Adapt them. Build your first dashboard 10x faster.
 
 Your component library grows with every project. Over time, you'll have a rich set of patterns that work for your team, your brand, and your use cases.
 

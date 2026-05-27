@@ -43,7 +43,7 @@ A UI snippet library is a personal collection of reusable HTML, CSS, and JavaScr
 
 The key difference from pre-built libraries like Material UI is control: you own the code, it matches your brand exactly, and you only keep what you actually use. [Building your own UI library gives you autonomy to create elements tailored to your application](https://dev.to/byteflowinc/the-ultimate-guide-to-building-a-ui-library-mbp), without the bloat of frameworks designed for everyone.
 
-Think of it as a personal design system that grows with your work. You capture a navbar from a site you like, extract a pricing table from a competitor, save a form pattern that works well—and over time, you have a library that makes you faster at every new project.
+Think of it as a personal design system that grows with your work. You capture a navbar from a site you like, extract a pricing table from a competitor, save a form pattern that works well-and over time, you have a library that makes you faster at every new project.
 
 ---
 
@@ -63,7 +63,7 @@ A snippet library removes that friction. You capture what works, organize it, an
 
 Pre-built component libraries solve a real problem, but they introduce new ones.
 
-Material UI, Bootstrap, Chakra UI—these are powerful tools. But they come with:
+Material UI, Bootstrap, Chakra UI-these are powerful tools. But they come with:
 
 - **Opinionated design systems** that may not match your brand
 - **Dependency bloat** that increases bundle size
@@ -81,15 +81,15 @@ A snippet library flips this: you start with what you need, add to it as you go,
 
 A well-organized snippet library contains:
 
-**HTML + CSS components** — buttons, cards, forms, modals, navigation patterns, hero sections, pricing tables, testimonial blocks, footers.
+**HTML + CSS components** - buttons, cards, forms, modals, navigation patterns, hero sections, pricing tables, testimonial blocks, footers.
 
-**Layout patterns** — grid systems, flexbox layouts, responsive containers, sidebar patterns.
+**Layout patterns** - grid systems, flexbox layouts, responsive containers, sidebar patterns.
 
-**Utility snippets** — animations, transitions, hover states, focus states, accessibility patterns.
+**Utility snippets** - animations, transitions, hover states, focus states, accessibility patterns.
 
-**JavaScript interactions** — dropdowns, tabs, accordions, tooltips, lazy loading, scroll effects.
+**JavaScript interactions** - dropdowns, tabs, accordions, tooltips, lazy loading, scroll effects.
 
-**Design tokens** — color palettes, typography scales, spacing systems, shadow definitions.
+**Design tokens** - color palettes, typography scales, spacing systems, shadow definitions.
 
 The best snippet libraries are **small and focused**. You're not building a framework. You're capturing the 20% of components that solve 80% of your UI problems.
 
@@ -99,7 +99,7 @@ The best snippet libraries are **small and focused**. You're not building a fram
 
 ## How to Capture UI Snippets Efficiently
 
-Manual copying from DevTools is slow. You inspect an element, hunt through styles, copy CSS, reconstruct HTML—it's error-prone and time-consuming.
+Manual copying from DevTools is slow. You inspect an element, hunt through styles, copy CSS, reconstruct HTML-it's error-prone and time-consuming.
 
 A better approach: use a tool that captures clean, reusable code directly.
 
@@ -122,10 +122,10 @@ A disorganized library is useless. You need structure that lets you find what yo
 
 **Effective organization:**
 
-- **By component type** — buttons, cards, forms, navigation, modals, etc.
-- **By use case** — landing pages, dashboards, e-commerce, SaaS
-- **By complexity** — simple (single element), medium (multi-part), complex (interactive)
-- **By status** — tested, production-ready, experimental
+- **By component type** - buttons, cards, forms, navigation, modals, etc.
+- **By use case** - landing pages, dashboards, e-commerce, SaaS
+- **By complexity** - simple (single element), medium (multi-part), complex (interactive)
+- **By status** - tested, production-ready, experimental
 
 Use clear naming conventions. Instead of "button1," use "button-primary-solid" or "cta-button-large."
 
@@ -145,10 +145,10 @@ Your snippet library only works if it's part of your daily development process.
 
 **Integration points:**
 
-- **In your code editor** — use a snippet manager or extension to insert snippets with keyboard shortcuts
-- **In your design tool** — keep a Figma library synced with your code snippets
-- **In your AI coding workflow** — paste snippets into Cursor or Claude as context for faster generation
-- **In your project templates** — start new projects with your most-used snippets pre-loaded
+- **In your code editor** - use a snippet manager or extension to insert snippets with keyboard shortcuts
+- **In your design tool** - keep a Figma library synced with your code snippets
+- **In your AI coding workflow** - paste snippets into Cursor or Claude as context for faster generation
+- **In your project templates** - start new projects with your most-used snippets pre-loaded
 
 The friction should be near-zero. If accessing a snippet requires more than two clicks, you won't use it.
 
@@ -180,12 +180,12 @@ A snippet library only stays useful if you maintain it.
 
 **Maintenance practices:**
 
-- **Review quarterly** — remove snippets you haven't used in 6 months
-- **Update for new browsers** — check that old snippets still work in current browser versions
-- **Add accessibility notes** — document ARIA attributes, keyboard support, screen reader compatibility
-- **Test before saving** — verify that captured code works in isolation, not just in its original context
-- **Version your snippets** — keep old versions if a component evolves significantly
-- **Document dependencies** — note if a snippet requires a library, font, or specific setup
+- **Review quarterly** - remove snippets you haven't used in 6 months
+- **Update for new browsers** - check that old snippets still work in current browser versions
+- **Add accessibility notes** - document ARIA attributes, keyboard support, screen reader compatibility
+- **Test before saving** - verify that captured code works in isolation, not just in its original context
+- **Version your snippets** - keep old versions if a component evolves significantly
+- **Document dependencies** - note if a snippet requires a library, font, or specific setup
 
 A well-maintained library grows slowly and stays relevant. A neglected library becomes a graveyard of outdated code.
 
@@ -207,7 +207,7 @@ You don't need a complex tool, but the right one saves time.
 
 [Collaborative snippet repositories with AI-assisted generation](https://snippetlab.app/) let you create and share snippets in seconds, though for personal use, simpler tools often work better.
 
-The best tool is the one you'll actually use. Start simple—a folder with organized files—and upgrade only if you outgrow it.
+The best tool is the one you'll actually use. Start simple-a folder with organized files-and upgrade only if you outgrow it.
 
 ---
 
@@ -229,4 +229,4 @@ Begin by identifying the three UI components you build most often. Capture clean
 
 That's your foundation. Everything else builds from there.
 
-A snippet library isn't a one-time project. It's a practice—a way of working that makes you faster, more consistent, and more confident in your code. The investment is small. The return compounds over every project you build.
+A snippet library isn't a one-time project. It's a practice-a way of working that makes you faster, more consistent, and more confident in your code. The investment is small. The return compounds over every project you build.

@@ -15,13 +15,13 @@ faq:
   - question: "Is it legal to copy UI and CSS from other websites?"
     answer: "Yes, for learning and reuse in your own projects. CSS and HTML are functional code, not protected design. However, respect intellectual property: don't copy entire branded designs or proprietary systems. Use what you capture as inspiration and reference, not as wholesale theft. Most developers use this for learning component patterns, not cloning entire sites."
   - question: "Will copied CSS work in my project without modification?"
-    answer: "Usually, but not always. Captured CSS may reference external fonts, images, or variables from the original site. You'll often need to adjust paths, remove unused styles, or adapt colors and spacing to match your design system. That's why Element Armory captures clean, isolated code—it minimizes the work needed to integrate."
+    answer: "Usually, but not always. Captured CSS may reference external fonts, images, or variables from the original site. You'll often need to adjust paths, remove unused styles, or adapt colors and spacing to match your design system. That's why Element Armory captures clean, isolated code-it minimizes the work needed to integrate."
   - question: "How is this different from using a component library like shadcn/ui?"
     answer: "Component libraries give you pre-built, documented components. Capturing live UI lets you extract real, production-tested designs from any website. Libraries are faster for common patterns; capturing is better when you want to match a specific design or learn how a particular site solved a UI problem."
   - question: "Can I use this workflow with Tailwind CSS projects?"
     answer: "Yes. When you capture HTML and CSS, you get the actual styles applied. You can then convert those styles to Tailwind classes manually, or use the captured CSS as-is. Many developers capture first, then refactor to Tailwind if their project uses it."
   - question: "What if the website uses a CSS framework I don't recognize?"
-    answer: "Element Armory captures the computed styles—the final CSS that the browser renders. It doesn't matter if the original site uses Bootstrap, Tailwind, or custom CSS. You get clean, usable code that works in any project."
+    answer: "Element Armory captures the computed styles-the final CSS that the browser renders. It doesn't matter if the original site uses Bootstrap, Tailwind, or custom CSS. You get clean, usable code that works in any project."
 relatedSlugs:
   - copy-css-from-website
   - copy-html-from-website
@@ -43,7 +43,7 @@ linkKeywords:
 
 ## Quick Answer
 
-Production-ready UI means HTML and CSS that's already optimized for performance, accessibility, and real-world use—not a rough sketch or prototype. When you copy HTML and CSS together from a live website, you're capturing components that have already been tested in production, styled for actual users, and built to work across browsers. Instead of rebuilding from scratch or hunting through component libraries, you extract the exact code, paste it into your project, and it works immediately. This saves hours of development time and works seamlessly with AI coding tools like Cursor or Claude.
+Production-ready UI means HTML and CSS that's already optimized for performance, accessibility, and real-world use-not a rough sketch or prototype. When you copy HTML and CSS together from a live website, you're capturing components that have already been tested in production, styled for actual users, and built to work across browsers. Instead of rebuilding from scratch or hunting through component libraries, you extract the exact code, paste it into your project, and it works immediately. This saves hours of development time and works seamlessly with AI coding tools like Cursor or Claude.
 
 ---
 
@@ -57,7 +57,7 @@ Production-ready UI isn't just pretty code. It's code that:
 - **Performs well** without unnecessary bloat or render-blocking styles
 - **Follows accessibility standards** so it works for all users
 
-When you copy UI from a live website, you're getting all of this for free. The component has already been battle-tested with real traffic, real users, and real performance monitoring. You're not copying a design mockup or a tutorial example—you're copying code that's actively serving users right now.
+When you copy UI from a live website, you're getting all of this for free. The component has already been battle-tested with real traffic, real users, and real performance monitoring. You're not copying a design mockup or a tutorial example-you're copying code that's actively serving users right now.
 
 This is fundamentally different from:
 
@@ -97,7 +97,7 @@ Here's what most developers do today:
 8. Go back to DevTools and hunt for more CSS
 9. Repeat until it looks right
 
-This process takes 10–20 minutes per component. For a navbar, a card, a button group—you're spending hours just copying UI.
+This process takes 10-20 minutes per component. For a navbar, a card, a button group-you're spending hours just copying UI.
 
 **Why it breaks down:**
 
@@ -109,8 +109,8 @@ This process takes 10–20 minutes per component. For a navbar, a card, a button
 
 | Aspect | Manual DevTools | Automated Capture |
 |--------|-----------------|-------------------|
-| Time per component | 10–20 minutes | 10–30 seconds |
-| Completeness | 70–80% (styles missing) | 100% (all computed styles) |
+| Time per component | 10-20 minutes | 10-30 seconds |
+| Completeness | 70-80% (styles missing) | 100% (all computed styles) |
 | Reusability | Requires cleanup | Ready to use |
 | AI workflow friendly | No (incomplete code) | Yes (self-contained) |
 | Error rate | High (manual mistakes) | Low (automated) |
@@ -149,7 +149,7 @@ When you capture UI from a live website, you're inheriting several layers of qua
 
 **Performance optimization**: The website has already optimized images, lazy-loaded content, and minimized render-blocking resources. You're copying code that's been tested under real load.
 
-**Accessibility**: If the website is accessible (WCAG compliant), the components you copy are too. Proper heading hierarchy, ARIA labels, keyboard navigation—it's all there.
+**Accessibility**: If the website is accessible (WCAG compliant), the components you copy are too. Proper heading hierarchy, ARIA labels, keyboard navigation-it's all there.
 
 **Cross-browser compatibility**: The CSS you capture has already been tested on Chrome, Firefox, Safari, and Edge. You're not copying experimental code.
 
@@ -171,7 +171,7 @@ This is why capturing from production websites beats copying from tutorials or c
 
 **Form inputs**: Forms on production websites handle validation, error states, and accessibility. Copying a form gives you all of this built in.
 
-**Card components**: Product cards, testimonial cards, feature cards—these are everywhere on production sites. They're simple to copy and infinitely reusable.
+**Card components**: Product cards, testimonial cards, feature cards-these are everywhere on production sites. They're simple to copy and infinitely reusable.
 
 **Footer**: Footers contain links, social icons, and legal information. Copy one and you have a complete footer structure.
 

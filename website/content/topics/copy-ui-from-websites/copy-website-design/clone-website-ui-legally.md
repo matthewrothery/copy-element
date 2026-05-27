@@ -43,7 +43,7 @@ linkKeywords:
 
 ## Quick Answer
 
-You can legally study and rebuild website UI designs by extracting the *structure and layout* (which aren't copyrightable) and recreating them from scratch. What you **cannot** copy: original code, images, text, fonts, or unique creative elements that define the brand. The legal line is simple: **inspiration and learning are fine; duplication of protected assets is not**. Modern tools like browser extensions let you capture HTML and CSS to understand *how* a design works, but the responsibility to rebuild it legally—without copying protected content—falls on you.
+You can legally study and rebuild website UI designs by extracting the *structure and layout* (which aren't copyrightable) and recreating them from scratch. What you **cannot** copy: original code, images, text, fonts, or unique creative elements that define the brand. The legal line is simple: **inspiration and learning are fine; duplication of protected assets is not**. Modern tools like browser extensions let you capture HTML and CSS to understand *how* a design works, but the responsibility to rebuild it legally-without copying protected content-falls on you.
 
 ---
 
@@ -57,7 +57,7 @@ When developers talk about "cloning" a website, they usually mean one of three t
 
 Only the first two are potentially legal. The third is copyright infringement.
 
-The confusion exists because UI design itself—the arrangement of buttons, cards, and navigation—is generally *not* copyrightable. According to copyright law, functional design elements and layouts fall into a gray area. What *is* protected:
+The confusion exists because UI design itself-the arrangement of buttons, cards, and navigation-is generally *not* copyrightable. According to copyright law, functional design elements and layouts fall into a gray area. What *is* protected:
 
 - Original code (HTML, CSS, JavaScript)
 - Original images, icons, and graphics
@@ -133,7 +133,7 @@ Modern browser extensions and tools make it easy to *study* how websites are bui
 
 ### Step 1: Capture the Structure
 
-Use browser DevTools or an extension to inspect the HTML. You're looking at the *structure*—how elements are organized, not the code itself.
+Use browser DevTools or an extension to inspect the HTML. You're looking at the *structure*-how elements are organized, not the code itself.
 
 What you're learning:
 - Is the navigation a `<nav>` or a `<div>`?
@@ -195,7 +195,7 @@ Write down what you learned:
 Use Figma, Adobe XD, or pen and paper. Create your own mockup inspired by what you learned, but adapted to your needs.
 
 **4. Code it yourself**
-Write HTML and CSS from scratch. Don't copy-paste from the original. If you're using an extension to capture code, use it only as a reference—rewrite everything.
+Write HTML and CSS from scratch. Don't copy-paste from the original. If you're using an extension to capture code, use it only as a reference-rewrite everything.
 
 **5. Use licensed assets**
 - Download fonts from Google Fonts or similar
@@ -230,7 +230,7 @@ If a website has a distinctive illustration style, custom icon set, or unique vi
 
 **Mistake 4: Not changing enough**
 
-If your rebuilt site looks *too* similar to the original—same colors, same layout, same typography, same spacing—you're in a gray area legally and ethically.
+If your rebuilt site looks *too* similar to the original-same colors, same layout, same typography, same spacing-you're in a gray area legally and ethically.
 
 **Fix**: Adapt the design. Make it your own. Change colors, typography, spacing, and layout enough that it's clearly a different product.
 
@@ -300,6 +300,6 @@ This approach gives you the speed of AI without the legal risk of copying protec
 
 Cloning website UI legally is about **learning the design, not stealing the code**. You can study any website, understand how it's structured, and rebuild it yourself. What you cannot do is copy the actual code, images, or unique creative elements.
 
-The tools exist to help you learn faster. Use them to understand *how* designs work, not to shortcut the building process. Your own code, your own assets, your own adaptation—that's what makes it legal and, more importantly, what makes it yours.
+The tools exist to help you learn faster. Use them to understand *how* designs work, not to shortcut the building process. Your own code, your own assets, your own adaptation-that's what makes it legal and, more importantly, what makes it yours.
 
 When in doubt, ask yourself: "Did I write this code myself, or did I copy it?" If you copied it, rewrite it. That's the line between inspiration and infringement.

@@ -39,7 +39,7 @@ linkKeywords:
 
 ## What Layout Issues Actually Are (And Why They Matter)
 
-Layout issues are misalignments, spacing problems, overflow, or positioning failures that break the visual structure of a webpage. [Identifying layout issues means finding problems in how a webpage is arranged](https://www.alooba.com/skills/concepts/web-application-testing-and-debugging-583/identifying-layout-issues/), including misplaced text, images that don't fit correctly, and buttons positioned unexpectedly. The real cost isn't just aesthetics—[poor layout loses focus and communication purpose](https://din-studio.com/layout-design-explained/), which directly impacts user trust and conversion.
+Layout issues are misalignments, spacing problems, overflow, or positioning failures that break the visual structure of a webpage. [Identifying layout issues means finding problems in how a webpage is arranged](https://www.alooba.com/skills/concepts/web-application-testing-and-debugging-583/identifying-layout-issues/), including misplaced text, images that don't fit correctly, and buttons positioned unexpectedly. The real cost isn't just aesthetics-[poor layout loses focus and communication purpose](https://din-studio.com/layout-design-explained/), which directly impacts user trust and conversion.
 
 When you encounter a layout problem in production or development, the instinct is often to tweak CSS randomly. Instead, you need a systematic inspection workflow that isolates the root cause first, then applies the right fix.
 
@@ -53,7 +53,7 @@ Most layout issues trace back to three sources:
 Margins, padding, borders, and content width interact in ways that surprise developers. A single `padding: 20px` on a parent can cascade and break child alignment. Resetting browser defaults with `* { margin: 0; padding: 0; box-sizing: border-box; }` prevents spacing inconsistencies between browsers, eliminating a foundational source of unexpected gaps.
 
 **2. Flex and Grid Misunderstanding**
-Flexbox and Grid have implicit defaults that conflict with your expectations. A flex container defaults to `flex-wrap: nowrap`, which crushes children into a single line. Grid's auto-placement can stack items unexpectedly. These aren't bugs—they're features you didn't configure.
+Flexbox and Grid have implicit defaults that conflict with your expectations. A flex container defaults to `flex-wrap: nowrap`, which crushes children into a single line. Grid's auto-placement can stack items unexpectedly. These aren't bugs-they're features you didn't configure.
 
 **3. Responsive Breakpoint Gaps**
 Styles that work at 1920px fail at 768px because media queries weren't tested, or because a parent container shrinks but child widths stay fixed. Overflow cascades silently until you inspect.
@@ -104,7 +104,7 @@ A flex container with `flex-wrap: nowrap` (the default) will crush children if t
 Grid items without explicit placement rules stack in source order, which often isn't what you want. Check `grid-auto-flow` and `grid-template-columns`. If columns are too narrow or too many, items wrap unexpectedly.
 
 **Margin Collapse**
-Two adjacent block elements with margins don't add their margins—they collapse to the larger value. This surprises developers expecting `20px + 20px = 40px` spacing. Inspect the computed margin on both elements; you'll see only one margin applied.
+Two adjacent block elements with margins don't add their margins-they collapse to the larger value. This surprises developers expecting `20px + 20px = 40px` spacing. Inspect the computed margin on both elements; you'll see only one margin applied.
 
 **Inherited Width Constraints**
 A child element inherits `max-width` or `width` from a parent, then overflows when content grows. Check the Computed tab for `width`, `max-width`, and `min-width` on both parent and child.
@@ -125,7 +125,7 @@ A child element inherits `max-width` or `width` from a parent, then overflows wh
 - What are `grid-template-columns` and `grid-template-rows`? (are they too narrow or too many?)
 - Is `grid-auto-flow` set to `row` or `column`?
 - Are items using `grid-column` or `grid-row` to override auto-placement?
-- Check `gap`—is it creating unexpected spacing?
+- Check `gap`-is it creating unexpected spacing?
 
 Use the Layout panel in DevTools to visualize grid lines and flex directions. This is faster than reading CSS.
 
@@ -137,7 +137,7 @@ Use the Layout panel in DevTools to visualize grid lines and flex directions. Th
 Gaps between elements usually come from margin, padding, or gap properties. Inspect the element and its siblings. Check if a utility class (like `.mb-4` in Tailwind) is adding margin. Toggle it off to confirm.
 
 **Misaligned Text or Icons**
-Text and inline elements align to the baseline by default. If an icon sits lower than text, add `vertical-align: middle` to the icon or use Flexbox on the parent. Inspect the parent's `display` property—if it's `block`, switch to `flex` and set `align-items: center`.
+Text and inline elements align to the baseline by default. If an icon sits lower than text, add `vertical-align: middle` to the icon or use Flexbox on the parent. Inspect the parent's `display` property-if it's `block`, switch to `flex` and set `align-items: center`.
 
 **Overflow Hidden or Visible**
 If content is clipped unexpectedly, check `overflow` on the parent. If it's `hidden`, content outside the box is cut off. If it's `visible` (the default), content spills out. Use `overflow: auto` to add scrollbars only when needed.
@@ -154,13 +154,13 @@ Test your layout at multiple viewport widths: 320px (mobile), 768px (tablet), 10
 - Font sizes that stay too large on small screens
 - Images that overflow their containers
 
-For each breakpoint, inspect the element and check if media query rules are applied. In the Styles panel, media query rules appear with their breakpoint label. If a rule isn't applying, check the breakpoint value—it might be `@media (min-width: 769px)` when you're testing at 768px.
+For each breakpoint, inspect the element and check if media query rules are applied. In the Styles panel, media query rules appear with their breakpoint label. If a rule isn't applying, check the breakpoint value-it might be `@media (min-width: 769px)` when you're testing at 768px.
 
 ---
 
 ## Performance Impact: Layout Thrashing and Reflow
 
-[Layout is where the browser figures out the geometric information for elements: their size and location in the page](https://web.dev/articles/avoid-large-complex-layouts-and-layout-thrashing). When CSS changes, the browser recalculates layout for affected elements—a process called Reflow (Firefox) or Layout (Chrome). [Large layout shifts are instances of content shifting around on your page after rendering, and are measured by the Cumulative Layout Shift metric, one of Google's three Core Web Vitals](https://www.debugbear.com/blog/avoid-large-layout-shifts).
+[Layout is where the browser figures out the geometric information for elements: their size and location in the page](https://web.dev/articles/avoid-large-complex-layouts-and-layout-thrashing). When CSS changes, the browser recalculates layout for affected elements-a process called Reflow (Firefox) or Layout (Chrome). [Large layout shifts are instances of content shifting around on your page after rendering, and are measured by the Cumulative Layout Shift metric, one of Google's three Core Web Vitals](https://www.debugbear.com/blog/avoid-large-layout-shifts).
 
 Layout thrashing occurs when JavaScript reads and writes layout properties in rapid succession, forcing the browser to recalculate layout repeatedly. For example:
 
@@ -204,9 +204,9 @@ Inspect first. If toggling a single CSS rule fixes the issue, it's a quick fix. 
 
 | Approach | Speed | Accuracy | Reusability |
 |----------|-------|----------|-------------|
-| Random CSS tweaks | Fast initially, slow to fix | Low—fixes symptoms, not causes | None—each issue is new |
-| DevTools systematic inspection | Slower upfront, fast to fix | High—identifies root cause | High—patterns repeat |
-| DevTools + Element Armory capture | Fastest—inspect + capture + compare | High—side-by-side comparison | Highest—save working patterns |
+| Random CSS tweaks | Fast initially, slow to fix | Low-fixes symptoms, not causes | None-each issue is new |
+| DevTools systematic inspection | Slower upfront, fast to fix | High-identifies root cause | High-patterns repeat |
+| DevTools + Element Armory capture | Fastest-inspect + capture + compare | High-side-by-side comparison | Highest-save working patterns |
 
 ---
 

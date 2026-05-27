@@ -8,7 +8,7 @@ title: "Capture UI for Claude Code: Feed Live Websites Into Your AI Workflow"
 slug: "capture-ui-for-claude"
 date: "2026-05-12"
 author: "Element Armory Team"
-excerpt: "Learn how to capture live UI directly from websites and feed it into Claude Code for instant component extraction, iteration, and production-ready code—without leaving your IDE."
+excerpt: "Learn how to capture live UI directly from websites and feed it into Claude Code for instant component extraction, iteration, and production-ready code-without leaving your IDE."
 readTime: "7 min read"
 coverImage: "/topic-images/ai-coding-workflows/claude-code-workflows/capture-ui-for-claude.png"
 faq:
@@ -40,7 +40,7 @@ linkKeywords:
 
 ## Quick Answer
 
-Capturing UI for Claude Code means extracting live HTML and CSS from any website and feeding it directly into Claude Code prompts so the AI can instantly understand the design, extract components, and generate production-ready code. You can do this by taking screenshots, copying raw HTML, or using tools like Element Armory to grab clean, reusable UI snippets—then pasting them into Claude Code with a single prompt. This collapses the manual design-to-code workflow into a single loop: see → capture → prompt → iterate.
+Capturing UI for Claude Code means extracting live HTML and CSS from any website and feeding it directly into Claude Code prompts so the AI can instantly understand the design, extract components, and generate production-ready code. You can do this by taking screenshots, copying raw HTML, or using tools like Element Armory to grab clean, reusable UI snippets-then pasting them into Claude Code with a single prompt. This collapses the manual design-to-code workflow into a single loop: see → capture → prompt → iterate.
 
 ---
 
@@ -48,14 +48,14 @@ Capturing UI for Claude Code means extracting live HTML and CSS from any website
 
 The traditional design-to-code workflow is broken. A designer creates a mockup in Figma. A developer opens DevTools, manually inspects elements, copies styles, and rebuilds the component from scratch. Hours disappear. Context switches multiply. Mistakes compound.
 
-[Claude Code and AI-powered workflows are changing this.](https://www.figma.com/blog/introducing-claude-code-to-figma/) Instead of describing a design in words or exporting static images, you can now show Claude Code the actual live UI—and let it extract, understand, and rebuild the component in seconds.
+[Claude Code and AI-powered workflows are changing this.](https://www.figma.com/blog/introducing-claude-code-to-figma/) Instead of describing a design in words or exporting static images, you can now show Claude Code the actual live UI-and let it extract, understand, and rebuild the component in seconds.
 
 This matters because:
 
 - **Speed**: No more manual inspection and reconstruction. Capture once, prompt once, get code.
 - **Accuracy**: Claude sees the real computed styles, not your interpretation of them.
 - **Iteration**: Change the design on the live site, recapture, and Claude regenerates the code instantly.
-- **Context**: The AI understands the full visual hierarchy, spacing, colors, and interactions—not just a description.
+- **Context**: The AI understands the full visual hierarchy, spacing, colors, and interactions-not just a description.
 
 For full-stack developers and AI-assisted coders, this is the difference between a 2-hour component build and a 5-minute one.
 
@@ -79,7 +79,7 @@ This approach breaks down fast:
 - **No reusability**: You rebuild the same component for every project.
 - **AI workflows suffer**: You can't easily feed visual context into Claude Code without screenshots or manual descriptions.
 
-The real cost isn't time—it's context loss. By the time you've manually copied and rebuilt a component, you've lost the designer's intent, the spacing logic, and the responsive behavior.
+The real cost isn't time-it's context loss. By the time you've manually copied and rebuilt a component, you've lost the designer's intent, the spacing logic, and the responsive behavior.
 
 ---
 
@@ -164,7 +164,7 @@ Extract this into a reusable React component.
 Keep the styling but make it more maintainable.
 ```
 
-This is faster because Claude doesn't have to reverse-engineer the styles from a screenshot—it has the actual code to work with.
+This is faster because Claude doesn't have to reverse-engineer the styles from a screenshot-it has the actual code to work with.
 
 ### Method 3: Hybrid (Best)
 
@@ -405,7 +405,7 @@ Add ARIA labels, semantic HTML, and keyboard navigation.
 
 ## The Future of Design-to-Code
 
-[Live UI screenshots and automated capture are becoming standard in modern development workflows.](https://www.flett.cc/projects/doc-screenshots) The shift from manual inspection to AI-assisted capture isn't just about speed—it's about changing how developers think about design.
+[Live UI screenshots and automated capture are becoming standard in modern development workflows.](https://www.flett.cc/projects/doc-screenshots) The shift from manual inspection to AI-assisted capture isn't just about speed-it's about changing how developers think about design.
 
 Instead of "How do I rebuild this?" the question becomes "How do I iterate on this?"
 

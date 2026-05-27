@@ -8,7 +8,7 @@ title: "Quick UI Improvements: Make Your Interface Professional in Minutes"
 slug: "quick-ui-improvements"
 date: "2026-05-07"
 author: "Element Armory Team"
-excerpt: "Non-designers can make measurable UI improvements in minutes using simple, copy-paste techniques. Learn the 5 quickest fixes that compound into professional-looking interfaces—no design training required."
+excerpt: "Non-designers can make measurable UI improvements in minutes using simple, copy-paste techniques. Learn the 5 quickest fixes that compound into professional-looking interfaces-no design training required."
 readTime: "7 min read"
 coverImage: "/topic-images/ui-development-without-design-skills/for-non-designers/quick-ui-improvements.png"
 faq:
@@ -42,7 +42,7 @@ linkKeywords:
 
 ## Quick Answer
 
-Quick UI improvements are small, targeted changes to spacing, typography, color, and interactive feedback that take under 2 minutes each but compound into professional-looking interfaces. Non-designers can apply these fixes immediately by copying patterns from well-designed sites, adjusting a few CSS properties, or using simple tools to capture and reuse existing UI. The key is that you don't need design theory—you need a system for identifying what works and applying it consistently.
+Quick UI improvements are small, targeted changes to spacing, typography, color, and interactive feedback that take under 2 minutes each but compound into professional-looking interfaces. Non-designers can apply these fixes immediately by copying patterns from well-designed sites, adjusting a few CSS properties, or using simple tools to capture and reuse existing UI. The key is that you don't need design theory-you need a system for identifying what works and applying it consistently.
 
 ---
 
@@ -210,15 +210,15 @@ Apply this to:
 Typography is the second-most impactful fix.
 
 **Font size hierarchy:**
-- Headlines: 28px–48px
-- Subheadings: 20px–24px
-- Body text: 14px–16px
-- Small text: 12px–13px
+- Headlines: 28px-48px
+- Subheadings: 20px-24px
+- Body text: 14px-16px
+- Small text: 12px-13px
 
 **Font weight:**
-- Headlines: 600–700 (bold)
+- Headlines: 600-700 (bold)
 - Body text: 400 (regular)
-- Emphasis: 500–600 (medium)
+- Emphasis: 500-600 (medium)
 
 **Letter spacing:**
 - Headlines: -0.02em (tighter)
@@ -255,7 +255,7 @@ Color is the third pillar.
 
 **Contrast rule:** Text must have a contrast ratio of at least 4.5:1 against its background. Use a [contrast checker](https://webaim.org/resources/contrastchecker/) to verify.
 
-**Color palette:** Use 3–5 colors max.
+**Color palette:** Use 3-5 colors max.
 - Primary (brand color)
 - Secondary (accent)
 - Neutral (grays for text and backgrounds)
@@ -456,7 +456,7 @@ Using random padding and margin values instead of a scale.
 
 ### Mistake 2: Too Many Colors
 
-Using 10+ colors instead of 3–5.
+Using 10+ colors instead of 3-5.
 
 **Fix:** Limit your palette. Use shades and tints of your primary colors.
 
@@ -476,7 +476,7 @@ Buttons that don't respond to interaction.
 
 Line height of 1.2 or less.
 
-**Fix:** Use 1.5–1.6 for body text.
+**Fix:** Use 1.5-1.6 for body text.
 
 ### Mistake 6: Misaligned Elements
 
@@ -491,10 +491,10 @@ Elements scattered randomly across the page.
 | Tool | Purpose | Time Saved |
 |------|---------|-----------|
 | [WebAIM Contrast Checker](https://webaim.org/resources/contrastchecker/) | Verify text contrast ratios | 30 seconds per check |
-| Browser DevTools | Inspect and tweak CSS live | 2–5 minutes per fix |
+| Browser DevTools | Inspect and tweak CSS live | 2-5 minutes per fix |
 | Figma | Design and document components | 10+ minutes per component |
 | Storybook | Build and test component library | 30+ minutes setup, saves hours long-term |
-| CSS Grid Generator | Create responsive layouts | 2–3 minutes per layout |
+| CSS Grid Generator | Create responsive layouts | 2-3 minutes per layout |
 | Color Palette Generator | Create cohesive color schemes | 5 minutes |
 
 ---

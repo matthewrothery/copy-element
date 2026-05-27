@@ -13,7 +13,7 @@ readTime: "6 min read"
 coverImage: "/topic-images/copy-ui-from-websites/copy-ui-without-devtools/copy-html-without-inspect-element.png"
 faq:
   - question: "Can I copy HTML from any website without Inspect Element?"
-    answer: "Yes. You can use browser extensions like Element Armory to capture HTML instantly, or use the page source view (Ctrl+U / Cmd+U). Extensions are faster because they extract clean, computed HTML with styles already applied—not raw source code."
+    answer: "Yes. You can use browser extensions like Element Armory to capture HTML instantly, or use the page source view (Ctrl+U / Cmd+U). Extensions are faster because they extract clean, computed HTML with styles already applied-not raw source code."
   - question: "Is copying HTML from websites legal?"
     answer: "Copying HTML for personal learning, component reference, or internal projects is generally acceptable. However, copying entire designs or proprietary code for commercial use without permission may violate copyright. Always check the website's terms of service and use copied code responsibly."
   - question: "Why is DevTools HTML copying so tedious?"

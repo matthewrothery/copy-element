@@ -76,7 +76,7 @@ They're hard to extract because:
 1. **They're scattered.** A single component might have rules in three different media queries across a 5,000-line stylesheet.
 2. **Minification hides structure.** Production CSS is often compressed, making manual parsing error-prone.
 3. **Nesting and preprocessing.** SCSS or Less files use nesting, mixins, and variables that obscure the final breakpoints.
-4. **Multiple breakpoints per component.** A responsive card might have rules at 480px, 768px, 1024px, and 1440px—all in different places.
+4. **Multiple breakpoints per component.** A responsive card might have rules at 480px, 768px, 1024px, and 1440px-all in different places.
 
 ---
 
@@ -147,7 +147,7 @@ For developers working with source files (not live websites), [PostCSS plugins l
 
 *Workflow comparison: manual inspection vs. automated capture from live sites.*
 
-The real bottleneck isn't parsing CSS—it's identifying which elements are responsive and capturing their complete rule set across all breakpoints.
+The real bottleneck isn't parsing CSS-it's identifying which elements are responsive and capturing their complete rule set across all breakpoints.
 
 The fastest approach is to use a tool designed for this: capture the element directly from the live site, and let the tool extract all computed styles at once, including all media query rules.
 

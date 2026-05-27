@@ -43,7 +43,7 @@ linkKeywords:
 
 ## The Direct Answer
 
-Copy UI when you need to ship fast and learn from proven patterns. Design from scratch when you have time, want to solve a unique problem, or need to build deeper design intuition. The real skill isn't choosing one or the other—it's knowing which approach serves your current goal, then executing it with intention.
+Copy UI when you need to ship fast and learn from proven patterns. Design from scratch when you have time, want to solve a unique problem, or need to build deeper design intuition. The real skill isn't choosing one or the other-it's knowing which approach serves your current goal, then executing it with intention.
 
 Most developers without design training worry that copying is "cheating." It's not. It's a legitimate learning strategy used by professionals across the industry. The difference between learning through replication and mindless duplication comes down to one thing: **understanding why** the UI works the way it does.
 

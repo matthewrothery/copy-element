@@ -49,7 +49,7 @@ You can copy HTML structure, CSS code, and design patterns from any website with
 
 When you copy UI from a live website, you're dealing with two separate legal concepts: copyright and design patterns.
 
-**Copyright protects the specific creative expression** of a design—the exact arrangement of colors, typography, spacing, and visual hierarchy. It also protects the underlying code if it's original and substantial.
+**Copyright protects the specific creative expression** of a design-the exact arrangement of colors, typography, spacing, and visual hierarchy. It also protects the underlying code if it's original and substantial.
 
 **Design patterns and principles are not protected.** A button with rounded corners, a card layout, or a navigation bar structure cannot be copyrighted. These are functional design solutions that exist across thousands of websites.
 
@@ -63,7 +63,7 @@ According to [copyright law in Australia](https://www.ag.gov.au/rights-and-prote
 
 ### 1. HTML Structure and Semantic Markup
 
-The underlying HTML structure—divs, sections, lists, forms—is functional code, not creative expression. You can extract and reuse the semantic structure of any website.
+The underlying HTML structure-divs, sections, lists, forms-is functional code, not creative expression. You can extract and reuse the semantic structure of any website.
 
 **Example:** A pricing table with three columns and rows is a functional structure. Copying that structure is legal.
 
@@ -121,7 +121,7 @@ Logos, brand colors, typography systems, and the overall visual identity of a br
 
 ### 4. Substantial Portions of Code
 
-If you copy large sections of code from a website (not just techniques, but actual code blocks), you may be infringing. The threshold is "substantial"—meaning a significant portion of the original work.
+If you copy large sections of code from a website (not just techniques, but actual code blocks), you may be infringing. The threshold is "substantial"-meaning a significant portion of the original work.
 
 ### 5. Copyrighted Assets
 
@@ -150,7 +150,7 @@ Fair dealing is *not* a free pass to copy anything. Courts consider:
 
 ## UI Extraction Tools and Legal Responsibility
 
-Tools like Element Armory, CSS Scan, and DivMagic are legal. They extract code from websites, which is legal. But **using the tool doesn't make copying legal**—it just makes extraction easier.
+Tools like Element Armory, CSS Scan, and DivMagic are legal. They extract code from websites, which is legal. But **using the tool doesn't make copying legal**-it just makes extraction easier.
 
 The responsibility is yours.
 
@@ -271,7 +271,7 @@ Fair dealing allows learning and research, but not commercial reuse. Know the di
 
 ## The Practical Takeaway
 
-Copying UI from websites is legal when you're copying code, structure, and patterns. It becomes illegal when you're copying the creative expression—the specific visual design, brand identity, or substantial portions of proprietary code.
+Copying UI from websites is legal when you're copying code, structure, and patterns. It becomes illegal when you're copying the creative expression-the specific visual design, brand identity, or substantial portions of proprietary code.
 
 Use extraction tools like [Element Armory](/topics/copy-ui-from-websites) to speed up your workflow, but understand what you're extracting and how you're using it. Modify, adapt, and make it your own. When in doubt, ask permission or find inspiration elsewhere.
 

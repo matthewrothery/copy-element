@@ -47,7 +47,7 @@ If you're using DivMagic and want faster UI extraction, **Element Armory** is th
 
 ## Why Developers Are Switching From DivMagic
 
-DivMagic has been a reliable tool for copying design from websites, but it's showing its age in 2026. The core issue isn't that it doesn't work—it's that it wasn't built for modern AI-assisted development workflows.
+DivMagic has been a reliable tool for copying design from websites, but it's showing its age in 2026. The core issue isn't that it doesn't work-it's that it wasn't built for modern AI-assisted development workflows.
 
 Developers switching away cite three consistent pain points:
 
@@ -193,7 +193,7 @@ Weekly time spent on extraction: 1 hour
 
 **Weekly time saved: 2.7 hours**
 
-Over a year, that's roughly 140 hours—equivalent to 3.5 weeks of full-time work. For a developer billing hourly, that's meaningful money. For a team, it's even more significant.
+Over a year, that's roughly 140 hours-equivalent to 3.5 weeks of full-time work. For a developer billing hourly, that's meaningful money. For a team, it's even more significant.
 
 The savings come from:
 - No configuration overhead

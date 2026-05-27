@@ -52,15 +52,15 @@ The root problem: you haven't told the AI *how* responsive should work. You've o
 
 Generic prompts fail because:
 
-1. **No breakpoint definition** — The AI guesses at mobile, tablet, and desktop sizes. Your actual users might be on 375px phones or 1920px ultrawide monitors.
+1. **No breakpoint definition** - The AI guesses at mobile, tablet, and desktop sizes. Your actual users might be on 375px phones or 1920px ultrawide monitors.
 
-2. **Ambiguous layout behavior** — "Responsive" could mean a sidebar that collapses, hides, or transforms. The AI picks one; you wanted another.
+2. **Ambiguous layout behavior** - "Responsive" could mean a sidebar that collapses, hides, or transforms. The AI picks one; you wanted another.
 
-3. **Missing constraint hierarchy** — The AI doesn't know if touch targets matter more than visual density, or if performance on slow networks is a priority.
+3. **Missing constraint hierarchy** - The AI doesn't know if touch targets matter more than visual density, or if performance on slow networks is a priority.
 
-4. **No device-specific logic** — Mobile users need different interaction patterns than desktop users. A generic prompt treats them the same.
+4. **No device-specific logic** - Mobile users need different interaction patterns than desktop users. A generic prompt treats them the same.
 
-5. **Vague about reflow** — Text, images, and components can reflow in dozens of ways. Without explicit rules, the AI generates layouts that look okay at one size and break at others.
+5. **Vague about reflow** - Text, images, and components can reflow in dozens of ways. Without explicit rules, the AI generates layouts that look okay at one size and break at others.
 
 [The difference between an ugly, generic output and a professional-quality design is almost always the prompt.](https://gendesigns.ai/blog/ai-prompts-for-ui-design-complete-framework)
 
@@ -130,8 +130,8 @@ You need to specify:
 
 ```
 Breakpoints:
-- Mobile: 320px–767px (single column, full-width)
-- Tablet: 768px–1023px (two columns, sidebar collapses)
+- Mobile: 320px-767px (single column, full-width)
+- Tablet: 768px-1023px (two columns, sidebar collapses)
 - Desktop: 1024px+ (three columns, sidebar always visible)
 
 At 320px: Stack all elements vertically. Use 16px font. Buttons are full-width.
@@ -201,10 +201,10 @@ Build a responsive navigation bar for a SaaS product.
 Desktop (1024px+): Horizontal menu with logo on left, nav links in center, 
 CTA button on right. All in one row.
 
-Tablet (768px–1023px): Logo on left, hamburger menu on right. Menu items 
+Tablet (768px-1023px): Logo on left, hamburger menu on right. Menu items 
 stack vertically when opened. Slides in from the left.
 
-Mobile (320px–767px): Full-width hamburger menu. Logo centered. Menu items 
+Mobile (320px-767px): Full-width hamburger menu. Logo centered. Menu items 
 stack vertically, full-width. Touch targets are 48px tall.
 
 Use CSS media queries. No JavaScript for layout. Hamburger menu uses a 
@@ -218,10 +218,10 @@ Test on: iPhone 12 (390px), iPad (768px), MacBook (1440px).
 ```
 Build a product card grid for an e-commerce site.
 
-Mobile (320px–767px): Single column. Cards are full-width with 16px margin. 
+Mobile (320px-767px): Single column. Cards are full-width with 16px margin. 
 Image is 100% width, 200px height. Title is 16px, price is 18px bold.
 
-Tablet (768px–1023px): Two-column grid with 16px gap. Cards have 8px padding. 
+Tablet (768px-1023px): Two-column grid with 16px gap. Cards have 8px padding. 
 Image is 100% width, 250px height. Title is 18px, price is 20px bold.
 
 Desktop (1024px+): Three-column grid with 24px gap. Cards have 12px padding. 
@@ -238,11 +238,11 @@ Test on: iPhone 12, iPad, MacBook Pro 16".
 ```
 Build a dashboard with a sidebar and main content area.
 
-Mobile (320px–767px): Sidebar is hidden. Main content is full-width. 
+Mobile (320px-767px): Sidebar is hidden. Main content is full-width. 
 Sidebar slides in from left when menu button is tapped. Content area 
 has 16px padding.
 
-Tablet (768px–1023px): Sidebar is 200px wide, always visible. Main content 
+Tablet (768px-1023px): Sidebar is 200px wide, always visible. Main content 
 is full-width minus sidebar. Two-column grid for cards.
 
 Desktop (1024px+): Sidebar is 250px wide. Main content uses a three-column 
@@ -336,13 +336,13 @@ Here's a powerful workflow:
 
 1. **Find a reference UI** on a live website that has responsive behavior you like.
 
-2. **Capture it with Element Armory** — Extract the HTML and CSS from the reference site.
+2. **Capture it with Element Armory** - Extract the HTML and CSS from the reference site.
 
-3. **Analyze the responsive code** — Look at the media queries, breakpoints, and layout patterns.
+3. **Analyze the responsive code** - Look at the media queries, breakpoints, and layout patterns.
 
-4. **Embed the pattern in your prompt** — "Use a similar responsive pattern to [reference site]. At 768px, the sidebar collapses like this: [paste CSS pattern]."
+4. **Embed the pattern in your prompt** - "Use a similar responsive pattern to [reference site]. At 768px, the sidebar collapses like this: [paste CSS pattern]."
 
-5. **Generate your own version** — The AI now has a concrete example of responsive behavior, not a vague description.
+5. **Generate your own version** - The AI now has a concrete example of responsive behavior, not a vague description.
 
 This dramatically improves output quality because the AI learns from real, working code instead of guessing.
 

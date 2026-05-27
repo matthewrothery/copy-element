@@ -13,7 +13,7 @@ readTime: "6 min read"
 coverImage: "/topic-images/ui-development-without-design-skills/vibe-coding/what-is-vibe-coding.png"
 faq:
   - question: "Is vibe coding the same as no design?"
-    answer: "No. Vibe coding is intentional iteration based on feel and feedback, not random guessing. You're making deliberate choices about spacing, color, and interaction—you're just not starting with a Figma mockup."
+    answer: "No. Vibe coding is intentional iteration based on feel and feedback, not random guessing. You're making deliberate choices about spacing, color, and interaction-you're just not starting with a Figma mockup."
   - question: "Can you use vibe coding with AI tools like Cursor?"
     answer: "Yes. Vibe coding pairs naturally with AI coding assistants. You describe the feel you want, the AI generates code, you refine it based on how it looks and feels, and iterate until it's right."
   - question: "Will vibe coding produce inconsistent UI?"

@@ -13,7 +13,7 @@ readTime: "7 min read"
 coverImage: "/topic-images/copy-ui-from-websites/copy-responsive-ui/copy-responsive-components.png"
 faq:
   - question: "What's the difference between copying a responsive component and copying static CSS?"
-    answer: "Responsive components include media queries, flexible layouts (flexbox/grid), and viewport-aware styles that adapt to different screen sizes. Static CSS is fixed and won't adjust. When you copy a responsive component, you're capturing the entire system—breakpoints, fluid typography, and mobile-first logic—not just visual styles."
+    answer: "Responsive components include media queries, flexible layouts (flexbox/grid), and viewport-aware styles that adapt to different screen sizes. Static CSS is fixed and won't adjust. When you copy a responsive component, you're capturing the entire system-breakpoints, fluid typography, and mobile-first logic-not just visual styles."
   - question: "How do I know if a component I'm copying is actually responsive?"
     answer: "Inspect the component's CSS for media queries (@media), flexible units (%, em, rem), and layout properties like flex or grid. Use your browser's responsive design mode to test it at different viewport widths. If it reflows and adapts without breaking, it's responsive. If it stays fixed, it's not."
   - question: "Can I copy responsive components from any website?"
@@ -65,15 +65,15 @@ This process can take hours for a single component. Production websites have alr
 
 A responsive component isn't just code that looks okay on different screens. It's code that:
 
-1. **Adapts layout based on viewport width** — Flexbox or Grid changes direction, columns stack, or elements hide/show based on breakpoints.
+1. **Adapts layout based on viewport width** - Flexbox or Grid changes direction, columns stack, or elements hide/show based on breakpoints.
 
-2. **Scales typography proportionally** — Font sizes, line heights, and spacing adjust without breaking readability.
+2. **Scales typography proportionally** - Font sizes, line heights, and spacing adjust without breaking readability.
 
-3. **Maintains aspect ratios** — Images and media don't distort; padding-bottom tricks or aspect-ratio CSS preserve proportions.
+3. **Maintains aspect ratios** - Images and media don't distort; padding-bottom tricks or aspect-ratio CSS preserve proportions.
 
-4. **Handles touch interactions** — Buttons and clickable areas are large enough on mobile (minimum 44x44px).
+4. **Handles touch interactions** - Buttons and clickable areas are large enough on mobile (minimum 44x44px).
 
-5. **Respects user preferences** — Honors `prefers-reduced-motion`, `prefers-color-scheme`, and other media queries.
+5. **Respects user preferences** - Honors `prefers-reduced-motion`, `prefers-color-scheme`, and other media queries.
 
 When you copy a component from a live site, you're capturing all of these decisions at once. The developer who built it already tested it. You inherit that work.
 
@@ -83,11 +83,11 @@ When you copy a component from a live site, you're capturing all of these decisi
 
 Copying raw HTML and CSS from DevTools feels fast, but it creates problems:
 
-- **Styles are scattered** — CSS might be split across multiple stylesheets or embedded in `<style>` tags.
-- **Code is minified** — You get unreadable class names and condensed selectors.
-- **Breakpoints are hidden** — Media queries are buried in the stylesheet; you don't see them in the HTML.
-- **Dependencies are unclear** — The component might rely on JavaScript, utility classes, or external libraries you don't have.
-- **Reusability is low** — Without understanding the structure, you can't adapt it to your project's design system.
+- **Styles are scattered** - CSS might be split across multiple stylesheets or embedded in `<style>` tags.
+- **Code is minified** - You get unreadable class names and condensed selectors.
+- **Breakpoints are hidden** - Media queries are buried in the stylesheet; you don't see them in the HTML.
+- **Dependencies are unclear** - The component might rely on JavaScript, utility classes, or external libraries you don't have.
+- **Reusability is low** - Without understanding the structure, you can't adapt it to your project's design system.
 
 This is why developers end up rebuilding components anyway, defeating the purpose of copying.
 

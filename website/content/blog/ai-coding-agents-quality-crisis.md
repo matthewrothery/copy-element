@@ -1,5 +1,5 @@
 ---
-title: "AI Coding Agents Hit Scale—But Quality Crisis Looms"
+title: "AI Coding Agents Hit Scale-But Quality Crisis Looms"
 slug: "ai-coding-agents-quality-crisis"
 date: "2026-05-26"
 author: "Element Armory Team"
@@ -8,7 +8,7 @@ readTime: "5 min read"
 coverImage: "/blog/ai-coding-agents-quality-crisis.png"
 ---
 
-AI coding agents are becoming easier to deploy at scale, but the field is splitting on whether this is progress or a quality crisis. The real problem isn't the tools—it's that weak engineers can't distinguish good agent output from garbage, and they're the ones shipping code in volume.
+AI coding agents are becoming easier to deploy at scale, but the field is splitting on whether this is progress or a quality crisis. The real problem isn't the tools-it's that weak engineers can't distinguish good agent output from garbage, and they're the ones shipping code in volume.
 
 ## The Orchestration Layer Is Here
 
@@ -24,7 +24,7 @@ But deployment was never the real problem.
 
 This isn't a technical critique. It's a competence critique.
 
-The timing matters. Hotz's warning arrived five days after Andrej Karpathy joined Anthropic's pre-training team with the opposite view—a clear split among serious engineers on whether AI agents actually work. Not whether they *can* work. Whether they *do* work, at scale, in the hands of the people actually using them.
+The timing matters. Hotz's warning arrived five days after Andrej Karpathy joined Anthropic's pre-training team with the opposite view-a clear split among serious engineers on whether AI agents actually work. Not whether they *can* work. Whether they *do* work, at scale, in the hands of the people actually using them.
 
 That split is the story.
 
@@ -36,7 +36,7 @@ A strong engineer with Claude Code or Cursor can iterate faster, catch hallucina
 
 A weak engineer sees the agent output and ships it. They don't have the mental model to distinguish between "this looks right" and "this is actually right." They can't read the code deeply enough to catch the off-by-one error, the missing null check, or the performance trap. The agent becomes a liability amplifier.
 
-And right now, the weak engineers are the ones adopting agents at scale. They're the ones excited about "vibe coding"—the idea that you can build production UI by vibing with an AI tool. They're the ones shipping volume.
+And right now, the weak engineers are the ones adopting agents at scale. They're the ones excited about "vibe coding"-the idea that you can build production UI by vibing with an AI tool. They're the ones shipping volume.
 
 The infrastructure is mature. The tooling is accessible. But the *judgment* required to use these tools well is not distributed evenly across the engineering population. It never is.
 
@@ -48,7 +48,7 @@ A weak engineer with CodeGrid can now run five agents in parallel and pick which
 
 The volume of shipped code increases. The average quality of that code decreases. The cost of debugging and maintaining that code compounds.
 
-This is the scenario Hotz is warning about. Not that agents are bad. That agents in the hands of engineers without the competence to evaluate them are bad. And the infrastructure improvements we're seeing right now—the orchestration layers, the free open-source tools, the native integrations—make it easier for those engineers to ship more code, faster.
+This is the scenario Hotz is warning about. Not that agents are bad. That agents in the hands of engineers without the competence to evaluate them are bad. And the infrastructure improvements we're seeing right now-the orchestration layers, the free open-source tools, the native integrations-make it easier for those engineers to ship more code, faster.
 
 ## The Split Among Serious Engineers
 

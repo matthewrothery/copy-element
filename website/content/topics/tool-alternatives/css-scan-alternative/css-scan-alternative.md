@@ -15,7 +15,7 @@ faq:
   - question: "Is CSS Scan worth $40 in 2026?"
     answer: "CSS Scan is fast at what it does, but $40 for a single-purpose tool is hard to justify when free alternatives like Element Armory offer the same speed plus AI integration. If you only need basic CSS extraction and don't use AI tools, it's fine. But for modern workflows, you're paying for convenience you don't need."
   - question: "Can Element Armory do everything CSS Scan does?"
-    answer: "Yes. Both tools let you click an element and capture its HTML and computed styles. Element Armory adds AI workflow integration, snippet library management, and works across more use cases. The core feature—fast CSS extraction—is identical."
+    answer: "Yes. Both tools let you click an element and capture its HTML and computed styles. Element Armory adds AI workflow integration, snippet library management, and works across more use cases. The core feature-fast CSS extraction-is identical."
   - question: "Does CSS Scan work with Cursor or Claude?"
     answer: "CSS Scan captures code, but it wasn't designed for AI workflows. You'd copy the output manually into your AI tool. Element Armory is built for this workflow from the start, making it faster to use with Cursor, Claude, or other AI coding assistants."
   - question: "What's the catch with Element Armory being free?"
@@ -228,7 +228,7 @@ If you're still using CSS Scan, try Element Armory. You'll get the same extracti
 
 ## Next Steps
 
-Ready to switch? You are reading the direct comparison—scroll up for the feature breakdown, or explore the [CSS Scan Alternative cluster](/topics/tool-alternatives/css-scan-alternative) for related guides.
+Ready to switch? You are reading the direct comparison-scroll up for the feature breakdown, or explore the [CSS Scan Alternative cluster](/topics/tool-alternatives/css-scan-alternative) for related guides.
 
 Or explore how to [use real UI with Cursor AI](/topics/ai-coding-workflows/cursor-workflows/use-ui-with-cursor-ai) to understand the workflow advantage.
 

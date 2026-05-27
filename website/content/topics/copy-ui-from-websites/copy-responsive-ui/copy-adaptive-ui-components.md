@@ -56,25 +56,25 @@ Why they matter:
 
 **Speed.** Building responsive components from scratch means writing media queries, testing breakpoints, and iterating on layouts. Capturing adaptive components from production websites eliminates this work entirely.
 
-**Proven patterns.** Components already live on successful websites. They've been tested by real users, optimized for performance, and refined through actual usage data. You're not guessing—you're reusing what works.
+**Proven patterns.** Components already live on successful websites. They've been tested by real users, optimized for performance, and refined through actual usage data. You're not guessing-you're reusing what works.
 
 **Consistency.** [Ensure a polished, professional look across your applications](https://copyui.com/) by extracting components that already follow cohesive design systems.
 
 **AI acceleration.** When you [copy production-ready UI](/topics/copy-ui-from-websites/copy-html-css-together/copy-production-ready-ui) and feed it into tools like Cursor or Claude, the AI understands the responsive structure and can extend it intelligently rather than starting from a static mockup.
 
-The key difference: manual responsive design requires you to understand breakpoints, write media queries, and test across devices. Capturing adaptive components means the responsive logic is already baked in—you just extract it, understand how it works, and adapt it to your needs.
+The key difference: manual responsive design requires you to understand breakpoints, write media queries, and test across devices. Capturing adaptive components means the responsive logic is already baked in-you just extract it, understand how it works, and adapt it to your needs.
 
 ## The Problem: Rebuilding Responsive Components From Scratch
 
 Every responsive component you see on a live website represents hours of work: breakpoint decisions, media query logic, fluid typography calculations, and cross-device testing. When you need that same component in your project, you face a choice: rebuild it from scratch or capture it.
 
-Rebuilding means starting over. You inspect the element, note the breakpoints, write new media queries, test on mobile, tablet, and desktop, then adjust spacing and typography until it matches. Even with experience, this takes time—and you're duplicating work that's already been solved and proven in production.
+Rebuilding means starting over. You inspect the element, note the breakpoints, write new media queries, test on mobile, tablet, and desktop, then adjust spacing and typography until it matches. Even with experience, this takes time-and you're duplicating work that's already been solved and proven in production.
 
 The real cost isn't just time. It's the risk of missing edge cases. Production components have been tested across real devices, browsers, and user behaviors. When you rebuild, you lose that validation. You might miss a subtle breakpoint adjustment, forget a min-width constraint on fluid typography, or overlook how padding scales on smaller screens.
 
-[Capturing responsive components from live websites](/topics/copy-ui-from-websites/copy-responsive-ui/copy-responsive-components) eliminates this friction. Instead of reconstructing responsive logic, you extract it—media queries, breakpoints, fluid sizing rules, and all. The component arrives with its responsive behavior intact, already battle-tested in production.
+[Capturing responsive components from live websites](/topics/copy-ui-from-websites/copy-responsive-ui/copy-responsive-components) eliminates this friction. Instead of reconstructing responsive logic, you extract it-media queries, breakpoints, fluid sizing rules, and all. The component arrives with its responsive behavior intact, already battle-tested in production.
 
-This approach becomes even more powerful when feeding components into AI tools. [Adaptive interfaces get stronger when the system changes the right thing at the right time](https://yenra.com/ai20/adaptive-user-interfaces/)—and that starts with understanding the responsive patterns already embedded in production UI. By capturing rather than rebuilding, you preserve the design decisions and responsive logic that make components work across devices.
+This approach becomes even more powerful when feeding components into AI tools. [Adaptive interfaces get stronger when the system changes the right thing at the right time](https://yenra.com/ai20/adaptive-user-interfaces/)-and that starts with understanding the responsive patterns already embedded in production UI. By capturing rather than rebuilding, you preserve the design decisions and responsive logic that make components work across devices.
 
 The next section explains how adaptive components differ from static UI, and why that distinction matters for extraction and reuse.
 
@@ -133,7 +133,7 @@ When you feed these captured components into [AI tools like Cursor or Claude](/t
 
 ## Understanding Responsive Breakpoints and Media Queries
 
-Responsive breakpoints and media queries are the mechanics that make adaptive components work. A breakpoint is a screen width threshold where your layout shifts—typically at 640px, 768px, 1024px, or 1280px. Media queries are the CSS rules that trigger at those thresholds.
+Responsive breakpoints and media queries are the mechanics that make adaptive components work. A breakpoint is a screen width threshold where your layout shifts-typically at 640px, 768px, 1024px, or 1280px. Media queries are the CSS rules that trigger at those thresholds.
 
 When you capture a responsive component from a live website, you're capturing both the HTML structure *and* the media query logic embedded in its styles. This is critical: the breakpoints a production site uses reveal the design decisions behind that component.
 
@@ -141,13 +141,13 @@ Most developers rebuild this logic manually, writing media queries from scratch.
 
 The key insight: **breakpoints aren't arbitrary**. They're chosen based on real user behavior and device distribution. A SaaS dashboard might use 1024px as a primary breakpoint because that's where tablet users lose sidebar space. A mobile-first e-commerce site might prioritize 640px because that's where product grids shift from 3 columns to 2.
 
-When you capture adaptive components, Element Armory preserves the computed styles at every breakpoint. This means you see the *actual* responsive behavior, not just the source CSS. You can then feed this into AI tools like Cursor, and the AI understands the full responsive contract—which breakpoints matter, how spacing scales, where typography adapts.
+When you capture adaptive components, Element Armory preserves the computed styles at every breakpoint. This means you see the *actual* responsive behavior, not just the source CSS. You can then feed this into AI tools like Cursor, and the AI understands the full responsive contract-which breakpoints matter, how spacing scales, where typography adapts.
 
 This is why capturing beats rebuilding: you're not guessing at breakpoints. You're learning from production decisions.
 
 ## Extracting Fluid Typography and Spacing Systems
 
-Fluid typography and spacing are what make adaptive components actually work across devices. Unlike fixed pixel values, fluid systems scale smoothly between breakpoints—a heading might be 24px on mobile and 48px on desktop, with everything in between calculated automatically.
+Fluid typography and spacing are what make adaptive components actually work across devices. Unlike fixed pixel values, fluid systems scale smoothly between breakpoints-a heading might be 24px on mobile and 48px on desktop, with everything in between calculated automatically.
 
 When you capture a component from a production website, you're inheriting these calculations. Look for:
 
@@ -157,19 +157,19 @@ When you capture a component from a production website, you're inheriting these 
 --font-size-heading: clamp(1.5rem, 5vw, 3rem);
 ```
 
-The `clamp()` function is the key. It sets a minimum, preferred, and maximum value—meaning the component adapts fluidly without needing explicit media queries for every size.
+The `clamp()` function is the key. It sets a minimum, preferred, and maximum value-meaning the component adapts fluidly without needing explicit media queries for every size.
 
 **Relative units** instead of pixels:
 - `rem` for typography (scales with root font size)
 - `em` for component-relative spacing
 - `vw` / `vh` for viewport-relative sizing
 
-When you extract media queries from CSS, you'll also find breakpoint-specific overrides. These tell you *where* the fluid scaling stops and discrete jumps happen—critical information for understanding the designer's intent.
+When you extract media queries from CSS, you'll also find breakpoint-specific overrides. These tell you *where* the fluid scaling stops and discrete jumps happen-critical information for understanding the designer's intent.
 
 **Why this matters for reuse:**
 A component built with fluid spacing works on any screen size without modification. When you feed this into AI tools like Cursor, the AI sees the full responsive contract encoded in the CSS itself. No guessing. No rebuilding breakpoints.
 
-The fastest way to capture these systems intact is [using tools designed for component extraction](https://dev.to/joodi/top-7-ui-component-libraries-for-2025-copy-paste-and-create-1i84)—they preserve computed styles and variable declarations automatically, so you get the fluid logic, not just the visual output.
+The fastest way to capture these systems intact is [using tools designed for component extraction](https://dev.to/joodi/top-7-ui-component-libraries-for-2025-copy-paste-and-create-1i84)-they preserve computed styles and variable declarations automatically, so you get the fluid logic, not just the visual output.
 
 ## Building a Reusable Adaptive Component Library
 
@@ -185,7 +185,7 @@ Version your library as you refine components. The first capture might have unne
 
 For teams, consider a shared repository (GitHub, GitLab, or internal storage) where captured components live alongside usage examples. This prevents duplicate capture work and creates a single source of truth.
 
-The real power emerges when you feed these organized, adaptive components into AI coding tools. Tools like Cursor or Claude can then generate variations, adapt them to new contexts, or combine multiple components into larger layouts—all while preserving the responsive logic you captured.
+The real power emerges when you feed these organized, adaptive components into AI coding tools. Tools like Cursor or Claude can then generate variations, adapt them to new contexts, or combine multiple components into larger layouts-all while preserving the responsive logic you captured.
 
 ## Using Captured Adaptive UI With AI Tools
 
@@ -217,7 +217,7 @@ Even with the right tools, developers often stumble when extracting adaptive UI.
 
 **Ignoring breakpoint context.** You capture a component that looks perfect on desktop, but the mobile styles live in separate media queries you didn't grab. The result: a component that breaks on smaller screens. Always inspect the full cascade of media queries before copying, not just the default state.
 
-**Forgetting to preserve computed styles.** When you extract HTML and CSS separately, you might miss inherited styles or cascade rules that only apply in context. The component works on the original site but fails in isolation. This is why [preserving styles when cloning elements](/topics/copy-ui-from-websites/copy-html-css-together/clone-element-with-styles) matters—you need the *computed* result, not just the written rules.
+**Forgetting to preserve computed styles.** When you extract HTML and CSS separately, you might miss inherited styles or cascade rules that only apply in context. The component works on the original site but fails in isolation. This is why [preserving styles when cloning elements](/topics/copy-ui-from-websites/copy-html-css-together/clone-element-with-styles) matters-you need the *computed* result, not just the written rules.
 
 **Mixing vendor prefixes and modern syntax.** Older sites use `-webkit-` and `-moz-` prefixes; newer ones don't. If you copy both, you bloat your codebase. Audit what your target browsers actually need before pasting.
 

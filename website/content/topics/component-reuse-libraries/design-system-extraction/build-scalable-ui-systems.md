@@ -13,13 +13,13 @@ readTime: "8 min read"
 coverImage: "/topic-images/component-reuse-libraries/design-system-extraction/build-scalable-ui-systems.png"
 faq:
   - question: "What's the difference between a component library and a design system?"
-    answer: "A component library is a collection of reusable UI elements (buttons, cards, inputs). A design system is broader—it includes components, design tokens, documentation, guidelines, and the processes teams use to maintain consistency. A scalable design system treats components as part of a larger ecosystem."
+    answer: "A component library is a collection of reusable UI elements (buttons, cards, inputs). A design system is broader-it includes components, design tokens, documentation, guidelines, and the processes teams use to maintain consistency. A scalable design system treats components as part of a larger ecosystem."
   - question: "How do I know when to extract a component into my library?"
     answer: "Extract a component when you've built it more than once or anticipate building it again. Look for patterns: buttons with consistent styling, form layouts, card containers, navigation patterns. If it appears in 2+ places, it belongs in your library."
   - question: "Can I build a scalable UI system without a design tool?"
     answer: "Yes. You can extract components directly from your codebase using tools like Element Armory, organize them in a shared folder or package, document them with examples, and version them. A design tool helps, but isn't required to start."
   - question: "How do I keep my design system from becoming outdated?"
-    answer: "Assign ownership (a person or team), version your components, document changes, and make updates easy. Use automation where possible—linters, component tests, and CI/CD checks help catch drift before it spreads."
+    answer: "Assign ownership (a person or team), version your components, document changes, and make updates easy. Use automation where possible-linters, component tests, and CI/CD checks help catch drift before it spreads."
 relatedSlugs:
   - design-system-extraction-component-discovery
   - design-system-extraction-documentation-guidelines

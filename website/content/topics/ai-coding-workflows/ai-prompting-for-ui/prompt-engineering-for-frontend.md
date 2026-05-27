@@ -48,7 +48,7 @@ linkKeywords:
 
 # Prompt Engineering for Frontend: Write Better AI Prompts, Get Production Code
 
-**Prompt engineering for frontend** is the practice of structuring requests to AI tools so they generate clean, compilable code instead of pseudo-code or broken components. It's the difference between asking "build me a navbar" and giving the AI enough context, constraints, and examples that it produces production-ready React or Vue that you can paste directly into your project. The core skill is learning to be specific about what you want, how it should behave, and what format it should take—then iterating when the output misses the mark.
+**Prompt engineering for frontend** is the practice of structuring requests to AI tools so they generate clean, compilable code instead of pseudo-code or broken components. It's the difference between asking "build me a navbar" and giving the AI enough context, constraints, and examples that it produces production-ready React or Vue that you can paste directly into your project. The core skill is learning to be specific about what you want, how it should behave, and what format it should take-then iterating when the output misses the mark.
 
 ---
 
@@ -66,7 +66,7 @@ Then they get back code that's 60% there. Missing props. Wrong styling approach.
 
 The problem isn't the AI. It's the prompt.
 
-[Prompt engineering techniques that actually work](https://dev.to/honestai/7-prompt-engineering-techniques-that-actually-work-in-2026-with-real-examples-3aj1) show that the difference between a useless response and production-ready code comes down to **structure, specificity, and context**. When you give AI clear boundaries—what framework you're using, what the component should do, what constraints matter—the output quality jumps dramatically.
+[Prompt engineering techniques that actually work](https://dev.to/honestai/7-prompt-engineering-techniques-that-actually-work-in-2026-with-real-examples-3aj1) show that the difference between a useless response and production-ready code comes down to **structure, specificity, and context**. When you give AI clear boundaries-what framework you're using, what the component should do, what constraints matter-the output quality jumps dramatically.
 
 The best prompts follow a pattern: they tell the AI *who* it is, *what* you're building, *why* it matters, and *exactly* what format you need back. They include examples. They exclude what you don't want. They're specific enough that the AI can't guess wrong.
 
@@ -86,7 +86,7 @@ Every prompt you write should contain four explicit layers:
 
 **Format:** How should the response be structured? ("Return only JSX. Include prop types. Add inline comments for complex logic.")
 
-[When you specify format upfront, the AI can provide the response in a predefined format](https://medium.com/@atul.misra930/unlocking-data-analytics-with-prompt-engineering-917fdaefd9a7)—which means less parsing, less cleanup, less iteration.
+[When you specify format upfront, the AI can provide the response in a predefined format](https://medium.com/@atul.misra930/unlocking-data-analytics-with-prompt-engineering-917fdaefd9a7)-which means less parsing, less cleanup, less iteration.
 
 Most developers skip this. They write:
 
@@ -105,7 +105,7 @@ The difference is dramatic. The AI now knows:
 * exactly what you want
 * how you want it delivered
 
-This framework works across ChatGPT, Claude, and Cursor because it mirrors how humans actually communicate with collaborators. You don't ask a designer to "make something nice"—you give them a brief, constraints, and deliverables.
+This framework works across ChatGPT, Claude, and Cursor because it mirrors how humans actually communicate with collaborators. You don't ask a designer to "make something nice"-you give them a brief, constraints, and deliverables.
 
 [The best prompts for UI generation](/topics/ai-coding-workflows/ai-prompting-for-ui/best-prompts-for-ui-generation) follow this exact structure. Once you internalize it, you'll stop treating AI like a search engine and start treating it like a tool that responds to precision.
 
@@ -135,11 +135,11 @@ Here's what actually works: **Role + Context + Task + Format**.
 
 When you combine these four elements, the AI understands not just *what* to build, but *why* and *how* it fits into your actual workflow [Prompt engineering for frontend developers](https://www.w3tweaks.com/guide/prompt-engineering-frontend-developers/).
 
-The magic happens because you've eliminated ambiguity. The AI isn't guessing at your constraints—you've stated them explicitly.
+The magic happens because you've eliminated ambiguity. The AI isn't guessing at your constraints-you've stated them explicitly.
 
 [React component prompts](/topics/ai-coding-workflows/ai-prompting-for-ui/prompt-for-react-components) follow this exact pattern. Once you internalize it, you'll stop treating AI like a search engine and start treating it like a tool that responds to precision.
 
-The next section shows you how to apply this framework to real code tasks—and what happens when you add [captured UI into the mix](/topics/ai-coding-workflows/ui-for-ai-coding/capture-ui-for-ai-coding).
+The next section shows you how to apply this framework to real code tasks-and what happens when you add [captured UI into the mix](/topics/ai-coding-workflows/ui-for-ai-coding/capture-ui-for-ai-coding).
 
 ## Specificity Over Vagueness: The Single Most Important Rule
 
@@ -177,7 +177,7 @@ Vagueness costs iteration cycles. Specificity costs 30 seconds of clarity upfron
 
 The model doesn't matter as much as the pattern.
 
-Most prompt engineering techniques that actually work share a common structure, regardless of whether you're using ChatGPT, Claude, or Cursor. The difference between a prompt that produces garbage and one that produces production-ready code isn't the AI—it's the architecture of your request.
+Most prompt engineering techniques that actually work share a common structure, regardless of whether you're using ChatGPT, Claude, or Cursor. The difference between a prompt that produces garbage and one that produces production-ready code isn't the AI-it's the architecture of your request.
 
 Three patterns dominate:
 
@@ -214,7 +214,7 @@ Explain your approach before writing code.
 
 This works because reasoning-first responses catch errors before code generation.
 
-The key insight: [Claude and other models tend toward generic, conservative designs without guidance](https://platform.claude.com/cookbook/coding-prompting-for-frontend-aesthetics). You're not asking the AI to be creative—you're teaching it what "good" looks like in your context.
+The key insight: [Claude and other models tend toward generic, conservative designs without guidance](https://platform.claude.com/cookbook/coding-prompting-for-frontend-aesthetics). You're not asking the AI to be creative-you're teaching it what "good" looks like in your context.
 
 [Cursor workflows](/topics/ai-coding-workflows/cursor-workflows/build-ui-faster-with-cursor) amplify this further because you can reference your actual codebase as context, making patterns even more specific to your project.
 
@@ -237,7 +237,7 @@ The second prompt works because it:
 * Defines states and props upfront
 * Removes ambiguity about accessibility
 
-**Another example—form input:**
+**Another example-form input:**
 
 **Before:**
 > "Make a form input"
@@ -247,15 +247,15 @@ The second prompt works because it:
 
 The pattern is consistent: framework + styling + states + constraints + output format.
 
-[Prompt engineering](https://github.com/dair-ai/Prompt-Engineering-Guide) works best when you treat it like API documentation—the AI needs to know exactly what shape of output you expect.
+[Prompt engineering](https://github.com/dair-ai/Prompt-Engineering-Guide) works best when you treat it like API documentation-the AI needs to know exactly what shape of output you expect.
 
 One more practical shift: instead of asking the AI to "build a navbar," show it what you're building *for*. Paste your actual site structure, mention your color scheme, reference existing components. This context transforms generic output into something that fits your codebase immediately.
 
-The fastest way to get there? When you [use real UI with Cursor AI](/topics/ai-coding-workflows/cursor-workflows/use-ui-with-cursor-ai), the model mirrors your existing patterns automatically—no iteration needed.
+The fastest way to get there? When you [use real UI with Cursor AI](/topics/ai-coding-workflows/cursor-workflows/use-ui-with-cursor-ai), the model mirrors your existing patterns automatically-no iteration needed.
 
 ## How to Iterate When the First Response Isn't Right
 
-The first response from an AI tool is rarely perfect. But most developers iterate wrong—they ask vague follow-ups like "make it better" or "fix the styling." This wastes tokens and compounds confusion.
+The first response from an AI tool is rarely perfect. But most developers iterate wrong-they ask vague follow-ups like "make it better" or "fix the styling." This wastes tokens and compounds confusion.
 
 Instead, iterate with **precision**.
 
@@ -271,7 +271,7 @@ Show the AI what you wanted. [Capture the actual UI from a live site](/topics/ai
 Clarify your constraints. Instead of "make it simpler," say: "This needs to work with our existing form validation system. Here's how we handle errors:" then paste your pattern.
 
 **If the output is generic:**
-Add a reference. Claude tends toward conservative designs without guidance—so show it what distinctive means. Paste a screenshot or code snippet of the aesthetic you're targeting.
+Add a reference. Claude tends toward conservative designs without guidance-so show it what distinctive means. Paste a screenshot or code snippet of the aesthetic you're targeting.
 
 The pattern: **Show, don't tell.**
 
@@ -281,13 +281,13 @@ Each iteration should include:
 2. What you actually need (constraint, pattern, or reference)
 3. One specific change request
 
-This transforms iteration from guessing into debugging. You'll hit production-ready code in 2–3 rounds instead of 8–10.
+This transforms iteration from guessing into debugging. You'll hit production-ready code in 2-3 rounds instead of 8-10.
 
 ## Integrating Captured UI Into Your Prompts (The Multiplier Effect)
 
 This is where prompt engineering becomes a force multiplier.
 
-When you paste raw HTML and CSS directly into your prompt, you're giving the AI a reference point instead of a description. The model no longer has to *imagine* what you want—it can *see* it.
+When you paste raw HTML and CSS directly into your prompt, you're giving the AI a reference point instead of a description. The model no longer has to *imagine* what you want-it can *see* it.
 
 Here's the pattern:
 
@@ -315,7 +315,7 @@ You're saying:
 
 This eliminates ambiguity. The AI sees the spacing, colors, typography, and layout constraints all at once. No back-and-forth about "what does professional look like?"
 
-When you [send HTML to Cursor](/topics/ai-coding-workflows/cursor-workflows/send-html-to-cursor), iteration drops dramatically. You're not describing design intent—you're showing it.
+When you [send HTML to Cursor](/topics/ai-coding-workflows/cursor-workflows/send-html-to-cursor), iteration drops dramatically. You're not describing design intent-you're showing it.
 
 The multiplier effect compounds when you:
 
@@ -376,15 +376,15 @@ Most developers measure success by "did it work?" That's too vague. You need mea
 
 **Track these four metrics:**
 
-1. **Compilation rate** — Does the code run without errors on first attempt? Track this as a percentage across 10 prompts. If you're at 40% and move to 70%, your prompts got better.
+1. **Compilation rate** - Does the code run without errors on first attempt? Track this as a percentage across 10 prompts. If you're at 40% and move to 70%, your prompts got better.
 
-2. **Iteration count** — How many follow-up requests before you get usable output? Aim for 1–2 max. If you're averaging 5–6, your initial prompt is underspecified.
+2. **Iteration count** - How many follow-up requests before you get usable output? Aim for 1-2 max. If you're averaging 5-6, your initial prompt is underspecified.
 
-3. **Refactor time** — After the AI generates code, how long do you spend cleaning it up? If you're spending 20 minutes refactoring a component the AI built in 30 seconds, your prompt wasn't specific enough about your codebase conventions.
+3. **Refactor time** - After the AI generates code, how long do you spend cleaning it up? If you're spending 20 minutes refactoring a component the AI built in 30 seconds, your prompt wasn't specific enough about your codebase conventions.
 
-4. **Copy-paste ratio** — What percentage of generated code do you use as-is versus modify? Aim for 70%+. Below 50% means the AI is guessing at your requirements.
+4. **Copy-paste ratio** - What percentage of generated code do you use as-is versus modify? Aim for 70%+. Below 50% means the AI is guessing at your requirements.
 
-Prompt engineering techniques that work consistently show that developers who track these metrics improve 3–4x faster than those who don't.
+Prompt engineering techniques that work consistently show that developers who track these metrics improve 3-4x faster than those who don't.
 
 The real test: **Can you hand the same prompt to a teammate and get the same quality output?** If yes, your prompt is reproducible. If no, it's still too dependent on context only you have.
 

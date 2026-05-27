@@ -7,7 +7,7 @@ title: "Copy CSS Without DevTools: The Fastest Methods in 2026"
 slug: "copy-css-without-devtools"
 date: "2026-05-01"
 author: "Element Armory Team"
-excerpt: "Skip DevTools friction and extract production-ready CSS in seconds. Learn the fastest methods—from browser extensions to AI-integrated workflows—that let you reuse real UI without the manual overhead."
+excerpt: "Skip DevTools friction and extract production-ready CSS in seconds. Learn the fastest methods-from browser extensions to AI-integrated workflows-that let you reuse real UI without the manual overhead."
 readTime: "6 min read"
 coverImage: "/topic-images/copy-ui-from-websites/copy-css-from-website/copy-css-without-devtools.png"
 faq:

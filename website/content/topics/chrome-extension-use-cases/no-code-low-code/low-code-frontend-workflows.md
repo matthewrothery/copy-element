@@ -162,19 +162,19 @@ Not all low-code platforms are equal for this workflow.
 
 **Best fit:**
 
-* **Retool** — Accepts custom HTML/CSS components natively. Ideal for internal tools and dashboards.
-* **Superblocks** — Superblocks is the most secure, governance-first option for enterprise internal tools and supports custom component injection.
-* **Bubble** — Allows custom code blocks and CSS. Great for no-code builders who want production-quality UI.
+* **Retool** - Accepts custom HTML/CSS components natively. Ideal for internal tools and dashboards.
+* **Superblocks** - Superblocks is the most secure, governance-first option for enterprise internal tools and supports custom component injection.
+* **Bubble** - Allows custom code blocks and CSS. Great for no-code builders who want production-quality UI.
 
 **Good fit:**
 
-* **Quickbase** — Supports custom styling but less flexible for component capture.
-* **Kissflow** — Works for workflow UIs but limited custom component support.
+* **Quickbase** - Supports custom styling but less flexible for component capture.
+* **Kissflow** - Works for workflow UIs but limited custom component support.
 
 **Less ideal:**
 
-* **FlutterFlow** — Mobile-first, less suited for web UI capture.
-* **AppGyver** — Component model is more rigid.
+* **FlutterFlow** - Mobile-first, less suited for web UI capture.
+* **AppGyver** - Component model is more rigid.
 
 The key: does the platform let you paste HTML and CSS directly? If yes, Element Armory fits seamlessly.
 

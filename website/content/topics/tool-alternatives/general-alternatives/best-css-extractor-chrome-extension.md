@@ -41,7 +41,7 @@ linkKeywords:
 
 ## Quick Answer
 
-The best CSS extractor chrome extension depends on your workflow. If you need **speed and AI-readiness**, Element Armory wins. If you want a free tool with basic features, [CSS Peeper](https://csspeeper.com/) works. If you need Tailwind conversion, [SnipCSS](https://snipcss.com/) is an option—but it's slower and more complex. For most developers building components fast, Element Armory extracts clean HTML + CSS in seconds and integrates seamlessly with AI coding tools like Cursor and Claude.
+The best CSS extractor chrome extension depends on your workflow. If you need **speed and AI-readiness**, Element Armory wins. If you want a free tool with basic features, [CSS Peeper](https://csspeeper.com/) works. If you need Tailwind conversion, [SnipCSS](https://snipcss.com/) is an option-but it's slower and more complex. For most developers building components fast, Element Armory extracts clean HTML + CSS in seconds and integrates seamlessly with AI coding tools like Cursor and Claude.
 
 ---
 
@@ -59,10 +59,10 @@ The real question isn't "which tool has the most features?" It's "which tool get
 
 Speed isn't just about clicking a button. It's about the entire extraction pipeline:
 
-1. **Click-to-capture time** — How long between clicking an element and getting the code?
-2. **Code quality** — Is the output clean, or does it need manual cleanup?
-3. **Reusability** — Can you paste it directly into your project, or do you need to refactor?
-4. **AI compatibility** — Does it work with Cursor, Claude, or other AI coding tools?
+1. **Click-to-capture time** - How long between clicking an element and getting the code?
+2. **Code quality** - Is the output clean, or does it need manual cleanup?
+3. **Reusability** - Can you paste it directly into your project, or do you need to refactor?
+4. **AI compatibility** - Does it work with Cursor, Claude, or other AI coding tools?
 
 Most tools fail on at least two of these. They're either slow, produce messy code, or output in a format that doesn't play well with modern AI workflows.
 

@@ -32,7 +32,7 @@ relatedSlugs:
 
 ## Quick Answer
 
-Landing page UI components are the building blocks that make up a high-converting page: hero sections, social proof, CTAs, feature sections, pricing tables, and more. The best landing pages don't reinvent these components—they master the structure, copy, and visual hierarchy that make each one work. You can extract proven designs from successful SaaS sites and adapt them to your own landing page, saving weeks of design iteration.
+Landing page UI components are the building blocks that make up a high-converting page: hero sections, social proof, CTAs, feature sections, pricing tables, and more. The best landing pages don't reinvent these components-they master the structure, copy, and visual hierarchy that make each one work. You can extract proven designs from successful SaaS sites and adapt them to your own landing page, saving weeks of design iteration.
 
 ---
 
@@ -57,14 +57,14 @@ The best part? You don't need to design these from scratch. Proven SaaS landing 
 
 Not every landing page needs every component. But the most effective ones follow a consistent hierarchy:
 
-1. **Hero Section** – Your first impression (headline, subheadline, CTA, visual)
-2. **Social Proof & Stats** – Build credibility fast (logos, testimonials, metrics)
-3. **Problem/Solution** – Validate the visitor's pain point
-4. **Features Section** – Communicate value clearly (usually 3–6 key features)
-5. **CTA & Forms** – The conversion engine (email signup, trial, demo request)
-6. **Pricing & Comparison** – Remove purchase friction (if applicable)
-7. **FAQ or Objection Handling** – Address final doubts
-8. **Final CTA** – Reinforce the ask before they leave
+1. **Hero Section** - Your first impression (headline, subheadline, CTA, visual)
+2. **Social Proof & Stats** - Build credibility fast (logos, testimonials, metrics)
+3. **Problem/Solution** - Validate the visitor's pain point
+4. **Features Section** - Communicate value clearly (usually 3-6 key features)
+5. **CTA & Forms** - The conversion engine (email signup, trial, demo request)
+6. **Pricing & Comparison** - Remove purchase friction (if applicable)
+7. **FAQ or Objection Handling** - Address final doubts
+8. **Final CTA** - Reinforce the ask before they leave
 
 [A well-designed stats section is concise, visually attractive, and lists the most impressive and meaningful data](https://www.telerik.com/design-system/docs/ui-templates/building-blocks/landing-page/stats/). This applies to every component: clarity and visual hierarchy matter more than complexity.
 
@@ -87,7 +87,7 @@ A strong hero includes:
 
 The mistake most teams make is trying to explain everything in the hero. [Keep the messaging clear and concise, avoiding jargon or complex language](https://www.landingpage.fyi/components). Your hero should answer one question: "Is this for me?"
 
-Example: Instead of "AI-powered workflow automation platform," try "Save 5 hours a week on repetitive tasks—no coding required."
+Example: Instead of "AI-powered workflow automation platform," try "Save 5 hours a week on repetitive tasks-no coding required."
 
 ---
 
@@ -97,10 +97,10 @@ Trust is the second barrier after relevance. Social proof components remove doub
 
 Effective social proof includes:
 
-- **Customer logos** – Recognizable brands using your product
-- **Testimonials** – Short, specific quotes (not generic praise)
-- **Stats** – [Key metrics like "150+ apps successfully delivered" or "9 experts on the core team"](https://pageui.shipixen.com/docs/landing-page-components/stats) that establish scale and credibility
-- **Case study snippets** – Brief results (e.g., "Reduced onboarding time by 40%")
+- **Customer logos** - Recognizable brands using your product
+- **Testimonials** - Short, specific quotes (not generic praise)
+- **Stats** - [Key metrics like "150+ apps successfully delivered" or "9 experts on the core team"](https://pageui.shipixen.com/docs/landing-page-components/stats) that establish scale and credibility
+- **Case study snippets** - Brief results (e.g., "Reduced onboarding time by 40%")
 
 The stats section is particularly powerful because it uses numbers to prove impact. Instead of saying "many customers," show "2,500+ teams." Instead of "trusted by companies," show "trusted by Slack, Figma, and Notion."
 
@@ -129,20 +129,20 @@ Button color matters less than contrast. What matters is that your CTA stands ou
 
 Features sections explain *how* your product solves the problem introduced earlier. The best feature sections:
 
-- Show 3–6 features (not 20)
+- Show 3-6 features (not 20)
 - Lead with benefit, then explain how
 - Use icons or small visuals for scannability
-- Include a short description (1–2 sentences max)
+- Include a short description (1-2 sentences max)
 
 Structure each feature like this:
 
-1. **Icon or visual** – Immediate recognition
-2. **Feature name** – Benefit-focused (not technical)
-3. **Description** – One sentence explaining the outcome
+1. **Icon or visual** - Immediate recognition
+2. **Feature name** - Benefit-focused (not technical)
+3. **Description** - One sentence explaining the outcome
 
 Example:
 - ❌ "Advanced API integration"
-- ✅ "Connect any tool in minutes—no developer needed"
+- ✅ "Connect any tool in minutes-no developer needed"
 
 ---
 
@@ -155,7 +155,7 @@ If you're selling, pricing transparency removes a major objection. Effective pri
 - List what's included at each level
 - Make the comparison scannable (use checkmarks, not prose)
 
-Comparison tables work best when they answer: "Which plan is right for me?" Not every feature needs to be listed—only the ones that differentiate tiers.
+Comparison tables work best when they answer: "Which plan is right for me?" Not every feature needs to be listed-only the ones that differentiate tiers.
 
 | Feature | Starter | Pro | Enterprise |
 |---------|---------|-----|------------|
@@ -172,10 +172,10 @@ This is where the real speed comes in. Instead of designing from scratch, you ca
 
 The process:
 
-1. **Find a reference page** – Identify a SaaS company in your space with a landing page you admire
-2. **Inspect the component** – Use browser DevTools or a capture tool to extract the HTML and CSS
-3. **Adapt the structure** – Keep the layout and hierarchy, swap in your own copy and visuals
-4. **Test and iterate** – A/B test headlines, CTAs, and visual hierarchy
+1. **Find a reference page** - Identify a SaaS company in your space with a landing page you admire
+2. **Inspect the component** - Use browser DevTools or a capture tool to extract the HTML and CSS
+3. **Adapt the structure** - Keep the layout and hierarchy, swap in your own copy and visuals
+4. **Test and iterate** - A/B test headlines, CTAs, and visual hierarchy
 
 The key is understanding *why* a component works, not just copying it blindly. A hero section that works for a project management tool might need adjustment for a design tool, but the underlying structure (headline, subheadline, visual, CTA) remains the same.
 
@@ -189,13 +189,13 @@ The key is understanding *why* a component works, not just copying it blindly. A
 
 Even with the right components, small mistakes can tank conversion rates:
 
-1. **Too many CTAs** – Visitors get confused about what to do next
-2. **Weak headlines** – Unclear value proposition or too much jargon
-3. **Missing social proof** – No reason to trust you over competitors
-4. **Cluttered feature sections** – Too many features, no clear priority
-5. **Slow-loading visuals** – Hero images that take 3+ seconds to load
-6. **Misaligned messaging** – Ad copy doesn't match landing page headline
-7. **No mobile optimization** – Components that look good on desktop but break on mobile
+1. **Too many CTAs** - Visitors get confused about what to do next
+2. **Weak headlines** - Unclear value proposition or too much jargon
+3. **Missing social proof** - No reason to trust you over competitors
+4. **Cluttered feature sections** - Too many features, no clear priority
+5. **Slow-loading visuals** - Hero images that take 3+ seconds to load
+6. **Misaligned messaging** - Ad copy doesn't match landing page headline
+7. **No mobile optimization** - Components that look good on desktop but break on mobile
 
 The most common mistake? Trying to explain everything. [Conversion remains stuck when teams focus on changing button colors instead of addressing fundamental messaging and structure](https://seosherpa.com/landing-page-statistics/). Start with clarity, then optimize.
 
@@ -207,13 +207,13 @@ Once you've extracted a few components, you can build a personal library for fut
 
 A basic component library includes:
 
-- **Hero variations** – Different layouts for different value props
-- **Social proof templates** – Logo grids, testimonial cards, stat blocks
-- **Feature sections** – 3-column, 2-column, alternating layouts
-- **CTA variations** – Different button styles, form layouts
-- **Pricing tables** – 2-tier, 3-tier, comparison formats
+- **Hero variations** - Different layouts for different value props
+- **Social proof templates** - Logo grids, testimonial cards, stat blocks
+- **Feature sections** - 3-column, 2-column, alternating layouts
+- **CTA variations** - Different button styles, form layouts
+- **Pricing tables** - 2-tier, 3-tier, comparison formats
 
-Store these as reusable templates (Figma, HTML/CSS, or component code). When you need to build a new landing page, you're not starting at zero—you're remixing proven patterns.
+Store these as reusable templates (Figma, HTML/CSS, or component code). When you need to build a new landing page, you're not starting at zero-you're remixing proven patterns.
 
 ![A component library organized by type with variations: hero sections, social proof, features, CTAs, and pricing.](/topic-images/landing-page-saas-ui/landing-pages/landing-page-ui-components-diagram-component-library-structure.svg)
 
@@ -223,7 +223,7 @@ Store these as reusable templates (Figma, HTML/CSS, or component code). When you
 
 ## The Faster Path Forward
 
-The landing pages that convert best aren't the most original—they're the most intentional. Every component serves a purpose. Every section builds on the last.
+The landing pages that convert best aren't the most original-they're the most intentional. Every component serves a purpose. Every section builds on the last.
 
 You don't need to reinvent landing page design. You need to understand the components that work, extract them from proven sources, and adapt them to your specific audience and offer.
 

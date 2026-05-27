@@ -55,7 +55,7 @@ const clone = original.cloneNode(true);
 document.body.appendChild(clone);
 ```
 
-The clone appears unstyled because the CSS classes that styled the original are still present in the HTML, but the browser's computed styles—the actual visual result—aren't transferred. The clone has the class names, but if those classes depend on cascade, specificity, or media queries, the visual result may differ.
+The clone appears unstyled because the CSS classes that styled the original are still present in the HTML, but the browser's computed styles-the actual visual result-aren't transferred. The clone has the class names, but if those classes depend on cascade, specificity, or media queries, the visual result may differ.
 
 This is why [understanding the difference between inline and computed styles is critical](https://www.javaspring.net/blog/duplicating-an-element-and-its-style-with-javascript/) for building reliable cloning solutions.
 
@@ -187,7 +187,7 @@ function applyComputedStyles(original, clone) {
 }
 ```
 
-This ensures every element in the tree—not just the root—retains its visual appearance.
+This ensures every element in the tree-not just the root-retains its visual appearance.
 
 ![Five-step workflow for cloning a DOM element with computed styles preserved](/topic-images/copy-ui-from-websites/copy-html-css-together/clone-element-with-styles-diagram-clone-workflow.svg)
 

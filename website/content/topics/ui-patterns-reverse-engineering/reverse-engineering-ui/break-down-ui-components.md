@@ -13,7 +13,7 @@ readTime: "7 min read"
 coverImage: "/topic-images/ui-patterns-reverse-engineering/reverse-engineering-ui/break-down-ui-components.png"
 faq:
   - question: "What's the difference between a UI element and a UI component?"
-    answer: "A UI element is a single, atomic building block like a button, text field, or icon. A UI component is a complete, functional unit made from multiple elements—like a search bar (which combines a text field, button, and icon) or a navigation menu. Think of elements as ingredients and components as finished dishes."
+    answer: "A UI element is a single, atomic building block like a button, text field, or icon. A UI component is a complete, functional unit made from multiple elements-like a search bar (which combines a text field, button, and icon) or a navigation menu. Think of elements as ingredients and components as finished dishes."
   - question: "Why should I learn to break down UI components?"
     answer: "Breaking down components helps you understand design patterns, rebuild them accurately in your own projects, create reusable libraries, and work more efficiently with AI coding tools. It also trains your eye to recognize structure and consistency across interfaces."
   - question: "Can I use reverse-engineered components in my own projects?"
@@ -38,17 +38,17 @@ Breaking down UI components means deconstructing any interface element into its 
 
 ## What It Means to Break Down UI Components
 
-When you "break down" a UI component, you're reverse-engineering it—taking something finished and visible, then understanding how it was built from the ground up.
+When you "break down" a UI component, you're reverse-engineering it-taking something finished and visible, then understanding how it was built from the ground up.
 
 [UI elements are the small ingredients like buttons and icons, while UI components are full combinations made from those elements](https://read.cvspan.com/understanding-ui-design-elements-and-components/). A button is an element. A navigation bar with buttons, dropdowns, and icons is a component.
 
 Breaking down a component means:
 
-1. **Identifying the structure** — What HTML tags and hierarchy make it work?
-2. **Understanding the styling** — Which CSS properties create the visual appearance?
-3. **Recognizing the patterns** — What design conventions does it follow?
-4. **Extracting the code** — Getting clean, reusable markup and styles.
-5. **Rebuilding or adapting** — Using what you learned in your own projects.
+1. **Identifying the structure** - What HTML tags and hierarchy make it work?
+2. **Understanding the styling** - Which CSS properties create the visual appearance?
+3. **Recognizing the patterns** - What design conventions does it follow?
+4. **Extracting the code** - Getting clean, reusable markup and styles.
+5. **Rebuilding or adapting** - Using what you learned in your own projects.
 
 This is different from just copying code. You're learning *why* it's built that way, which makes you a better developer and designer.
 
@@ -56,7 +56,7 @@ This is different from just copying code. You're learning *why* it's built that 
 
 ## Elements vs. Components: The Core Distinction
 
-[UI elements provide navigational support and help users control systems through clear visual language, enabling consistent and logical messaging](https://blog.logrocket.com/ux-design/40-essential-ui-elements/). Think of elements as atomic—they can't be broken down further without losing meaning.
+[UI elements provide navigational support and help users control systems through clear visual language, enabling consistent and logical messaging](https://blog.logrocket.com/ux-design/40-essential-ui-elements/). Think of elements as atomic-they can't be broken down further without losing meaning.
 
 Common elements include:
 
@@ -68,7 +68,7 @@ Common elements include:
 - Radio buttons
 - Dropdowns
 
-[UI components add interactivity to a user interface, providing touchpoints for users as they navigate—think buttons, scrollbars, menu items and checkboxes](https://careerfoundry.com/en/blog/ui-design/ui-element-glossary/). But components are *combinations* of elements working together.
+[UI components add interactivity to a user interface, providing touchpoints for users as they navigate-think buttons, scrollbars, menu items and checkboxes](https://careerfoundry.com/en/blog/ui-design/ui-element-glossary/). But components are *combinations* of elements working together.
 
 A search bar component, for example, combines:
 
@@ -148,7 +148,7 @@ Copy the HTML and computed CSS. Clean it up, remove unnecessary classes, and org
 
 ## Common UI Patterns You'll Encounter
 
-[UI elements include buttons, text fields, checkboxes, icons, and other blocks of an interface, and choosing the right elements is crucial for projects](https://www.designmonks.co/blog/user-interface-elements). But patterns—the way elements are combined—repeat across the web.
+[UI elements include buttons, text fields, checkboxes, icons, and other blocks of an interface, and choosing the right elements is crucial for projects](https://www.designmonks.co/blog/user-interface-elements). But patterns-the way elements are combined-repeat across the web.
 
 **Navigation patterns:**
 
@@ -190,16 +190,16 @@ Learning to recognize these patterns speeds up your reverse-engineering. You'll 
 
 ## Breaking Down Data-Heavy Components
 
-Data components—dashboards, tables, charts—require extra attention because they're more complex.
+Data components-dashboards, tables, charts-require extra attention because they're more complex.
 
 [Understanding the difference between dashboards and reports is crucial for presenting the right data visualization to the right people to make data-driven decisions](https://www.uxpin.com/studio/blog/dashboard-vs-data-report-design/). A dashboard shows real-time KPIs; a report shows historical trends. The structure differs.
 
 When breaking down a data component:
 
-1. **Identify the data source** — Is it hardcoded, fetched from an API, or dynamically generated?
-2. **Understand the hierarchy** — What's the primary information? What's secondary?
-3. **Check for interactivity** — Can users filter, sort, or drill down?
-4. **Examine responsive behavior** — How does it adapt on smaller screens?
+1. **Identify the data source** - Is it hardcoded, fetched from an API, or dynamically generated?
+2. **Understand the hierarchy** - What's the primary information? What's secondary?
+3. **Check for interactivity** - Can users filter, sort, or drill down?
+4. **Examine responsive behavior** - How does it adapt on smaller screens?
 
 [Poorly designed table UI overwhelms users and hides important info, but clean, effective, and scalable UI tables are responsive, accessible, and work across use cases](https://wpdatatables.com/table-ui-design/). When you reverse-engineer a well-designed data table, you're learning how to balance information density with clarity.
 
@@ -265,7 +265,7 @@ When you feed clean, well-structured component code into tools like Cursor or Cl
 
 But this only works if your extracted code is clean and semantic. Minified, bloated, or poorly structured code confuses AI tools and produces worse results.
 
-By reverse-engineering components manually first, you train yourself to extract clean code—which then becomes fuel for faster AI-assisted development.
+By reverse-engineering components manually first, you train yourself to extract clean code-which then becomes fuel for faster AI-assisted development.
 
 ---
 
@@ -316,4 +316,4 @@ Breaking down UI components is a skill that compounds. Each component you revers
 
 The process is simple: identify boundaries, spot elements, examine layout and styling, test behavior, extract code, and rebuild in isolation. Then adapt it for your needs or feed it into AI tools for faster development.
 
-Start with simple components—buttons, cards, forms. Graduate to complex ones—modals, data tables, navigation systems. Each one makes you a better developer and designer.
+Start with simple components-buttons, cards, forms. Graduate to complex ones-modals, data tables, navigation systems. Each one makes you a better developer and designer.

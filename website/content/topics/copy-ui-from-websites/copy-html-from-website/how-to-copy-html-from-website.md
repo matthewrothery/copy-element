@@ -12,7 +12,7 @@ readTime: "7 min read"
 coverImage: "/topic-images/copy-ui-from-websites/copy-html-from-website/how-to-copy-html-from-website.png"
 faq:
   - question: "Can I copy HTML from any website?"
-    answer: "Yes. You can copy HTML from any publicly accessible website using browser DevTools or extraction tools. However, be mindful of copyright and terms of service. Use copied HTML for learning, inspiration, and component reuse in your own projects—not for republishing proprietary designs."
+    answer: "Yes. You can copy HTML from any publicly accessible website using browser DevTools or extraction tools. However, be mindful of copyright and terms of service. Use copied HTML for learning, inspiration, and component reuse in your own projects-not for republishing proprietary designs."
   - question: "Is copying HTML from a website legal?"
     answer: "Copying HTML for learning and personal projects is generally acceptable. However, avoid copying proprietary designs or entire layouts without modification. Always check the website's terms of service and respect intellectual property rights."
   - question: "What's the difference between copying HTML and copying CSS?"

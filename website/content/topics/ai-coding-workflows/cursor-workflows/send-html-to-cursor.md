@@ -77,7 +77,7 @@ Most developers still use DevTools to inspect elements, then manually copy style
 
 That's 10 steps for what should be 2.
 
-The real cost isn't time—it's **context loss**. By the time you're in Cursor asking for help, you've already lost the visual reference. You're describing the component instead of showing it.
+The real cost isn't time-it's **context loss**. By the time you're in Cursor asking for help, you've already lost the visual reference. You're describing the component instead of showing it.
 
 ---
 
@@ -220,7 +220,7 @@ Different UI elements have different capture-to-refinement workflows.
 
 **Refine in Cursor:** Update branding, add/remove links, adjust responsive breakpoints.
 
-**Time saved:** 15–20 minutes (vs. manually rebuilding from scratch).
+**Time saved:** 15-20 minutes (vs. manually rebuilding from scratch).
 
 ### Cards
 
@@ -228,7 +228,7 @@ Different UI elements have different capture-to-refinement workflows.
 
 **Refine in Cursor:** Change card layout, update spacing, add hover effects, make it a reusable component.
 
-**Time saved:** 5–10 minutes per card.
+**Time saved:** 5-10 minutes per card.
 
 ### Forms
 
@@ -236,7 +236,7 @@ Different UI elements have different capture-to-refinement workflows.
 
 **Refine in Cursor:** Add validation, change input types, update styling, convert to a form library (React Hook Form, Formik).
 
-**Time saved:** 20–30 minutes (forms are complex; having the structure saves significant work).
+**Time saved:** 20-30 minutes (forms are complex; having the structure saves significant work).
 
 ---
 
@@ -343,7 +343,7 @@ You do:
 
 * Finding inspiration → capturing → refining in Cursor → testing → done
 
-The second workflow is 3–5x faster because you're not rebuilding from scratch. You're starting with working code and refining it.
+The second workflow is 3-5x faster because you're not rebuilding from scratch. You're starting with working code and refining it.
 
 For teams building multiple projects or iterating quickly on design systems, this compounds. Every component you capture and refine becomes a template for the next project.
 

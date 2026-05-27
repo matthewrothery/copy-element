@@ -15,7 +15,7 @@ faq:
   - question: "Can I legally extract CSS from other websites to build my design system?"
     answer: "Yes, CSS code itself is not protected by copyright in most jurisdictions. However, you should extract patterns and styles for inspiration and learning, not copy entire designs wholesale. Use extracted CSS as a foundation to build your own unique system, not as a replacement for original design work."
   - question: "How do I know which CSS to extract and which to ignore?"
-    answer: "Focus on extracting foundational styles: color palettes, typography scales, spacing systems, button states, and form elements. Ignore page-specific overrides, animations, and layout hacks. Look for patterns that repeat across multiple pages—those are your system tokens."
+    answer: "Focus on extracting foundational styles: color palettes, typography scales, spacing systems, button states, and form elements. Ignore page-specific overrides, animations, and layout hacks. Look for patterns that repeat across multiple pages-those are your system tokens."
   - question: "What's the fastest way to convert extracted CSS into a design system?"
     answer: "Use a tool like Element Armory to capture clean HTML and computed styles, then organize extracted code into token categories (colors, spacing, typography). Document each token with its use case, then build components on top. This is 10x faster than manual DevTools extraction."
   - question: "Should I use CSS variables or a preprocessor for my extracted design system?"

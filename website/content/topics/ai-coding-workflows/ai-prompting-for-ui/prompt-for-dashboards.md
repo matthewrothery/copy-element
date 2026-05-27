@@ -19,9 +19,9 @@ faq:
   - question: "How do I make dashboard prompts work better with Cursor or Claude Code?"
     answer: "Feed actual UI code into your prompts. Capture a dashboard component from a live site using Element Armory, paste it into your prompt context, and ask the AI to adapt it. This grounds the prompt in real code instead of abstract descriptions."
   - question: "What's the difference between a dashboard prompt for ChatGPT vs Cursor?"
-    answer: "ChatGPT works best with detailed, narrative prompts that explain intent and context. Cursor works best with code-first prompts: show it existing code, ask for specific changes. [Copilot prompts](https://www.m365.fm/blog/copilot-prompts-for-dashboards-a-complete-guide-for-microsoft-users/) follow a similar pattern—context first, then the specific ask."
+    answer: "ChatGPT works best with detailed, narrative prompts that explain intent and context. Cursor works best with code-first prompts: show it existing code, ask for specific changes. [Copilot prompts](https://www.m365.fm/blog/copilot-prompts-for-dashboards-a-complete-guide-for-microsoft-users/) follow a similar pattern-context first, then the specific ask."
   - question: "How do I avoid getting bloated, unreadable dashboard code from AI?"
-    answer: "Constrain your prompts: specify component boundaries, ask for semantic HTML, request utility-first CSS (Tailwind or similar), and always ask for accessibility attributes. [Dashboard design principles](https://www.datacamp.com/tutorial/dashboard-design-tutorial) emphasize clarity—apply that to your prompts too."
+    answer: "Constrain your prompts: specify component boundaries, ask for semantic HTML, request utility-first CSS (Tailwind or similar), and always ask for accessibility attributes. [Dashboard design principles](https://www.datacamp.com/tutorial/dashboard-design-tutorial) emphasize clarity-apply that to your prompts too."
 relatedSlugs:
   - best-prompts-for-ui-generation
   - prompt-for-react-components
@@ -50,7 +50,7 @@ linkKeywords:
 
 # Prompt for Dashboards: Quick Answer
 
-A **prompt for dashboards** is a detailed instruction you give to AI tools (Cursor, Claude, ChatGPT) that describes the data structure, layout, components, and behavior you want in your dashboard UI. Instead of vague requests like "build me a dashboard," effective dashboard prompts specify the exact metrics, breakpoints, component hierarchy, and interaction patterns—so the AI generates production-ready code on the first attempt rather than generic templates you'll need to rebuild.
+A **prompt for dashboards** is a detailed instruction you give to AI tools (Cursor, Claude, ChatGPT) that describes the data structure, layout, components, and behavior you want in your dashboard UI. Instead of vague requests like "build me a dashboard," effective dashboard prompts specify the exact metrics, breakpoints, component hierarchy, and interaction patterns-so the AI generates production-ready code on the first attempt rather than generic templates you'll need to rebuild.
 
 ---
 
@@ -58,9 +58,9 @@ A **prompt for dashboards** is a detailed instruction you give to AI tools (Curs
 
 Most developers start with templates: "Create a React dashboard with a sidebar, cards, and charts." The result? Generic, unmaintainable code that doesn't match your data structure or design system.
 
-[Generic dashboard prompts](https://docsbot.ai/prompts/tags?tag=Dashboard) fail because they skip the foundation: your actual data shape, component constraints, and responsive behavior. AI tools fill gaps with assumptions—wrong assumptions.
+[Generic dashboard prompts](https://docsbot.ai/prompts/tags?tag=Dashboard) fail because they skip the foundation: your actual data shape, component constraints, and responsive behavior. AI tools fill gaps with assumptions-wrong assumptions.
 
-Production dashboards need specificity. [Dashboards sit between a question and a decision](https://www.datacamp.com/tutorial/dashboard-design-tutorial)—they must answer "What changed?" in seconds. That clarity starts in your prompt, not in the generated code.
+Production dashboards need specificity. [Dashboards sit between a question and a decision](https://www.datacamp.com/tutorial/dashboard-design-tutorial)-they must answer "What changed?" in seconds. That clarity starts in your prompt, not in the generated code.
 
 The difference between a failed prompt and a working one:
 
@@ -68,7 +68,7 @@ The difference between a failed prompt and a working one:
 
 **Specific:** "Create a dashboard that displays user_count (number), growth_rate (percentage), and monthly_active_users (array of {month, count}). Use a card layout for metrics, a line chart for trends. Responsive at 768px and 1024px breakpoints."
 
-The second prompt tells the AI what data it's working with, how to structure components, and where responsive behavior matters. This section covers the patterns that work—you'll learn to write prompts that generate clean, reusable dashboard code and iterate without starting over.
+The second prompt tells the AI what data it's working with, how to structure components, and where responsive behavior matters. This section covers the patterns that work-you'll learn to write prompts that generate clean, reusable dashboard code and iterate without starting over.
 
 ## The Anatomy of a Production Dashboard Prompt
 
@@ -91,7 +91,7 @@ The AI can't build a layout without knowing what it's building *from*.
 
 **2. Component Boundaries**
 
-Specify which pieces are isolated and reusable. A metric card, a chart, a status badge—each should be named and scoped. This prevents the AI from tangling logic and makes iteration faster.
+Specify which pieces are isolated and reusable. A metric card, a chart, a status badge-each should be named and scoped. This prevents the AI from tangling logic and makes iteration faster.
 
 **3. Responsive Rules**
 
@@ -101,7 +101,7 @@ State breakpoints explicitly. "On mobile, stack vertically. On tablet, 2 columns
 
 If the dashboard filters, sorts, or drills down, say so upfront. Don't let the AI guess.
 
-This structure works across [AI tools](/topics/ai-coding-workflows/ai-prompting-for-ui)—Cursor, Claude, ChatGPT—because it removes ambiguity. [Dashboard designs generated from captured data](https://docsbot.ai/prompts/analysis/dashboard-design) work best when the prompt mirrors how the data actually flows. [Benchmarking dashboards](https://chartexpo.com/blog/benchmarking-dashboard) require specific field mapping; generic prompts miss this entirely.
+This structure works across [AI tools](/topics/ai-coding-workflows/ai-prompting-for-ui)-Cursor, Claude, ChatGPT-because it removes ambiguity. [Dashboard designs generated from captured data](https://docsbot.ai/prompts/analysis/dashboard-design) work best when the prompt mirrors how the data actually flows. [Benchmarking dashboards](https://chartexpo.com/blog/benchmarking-dashboard) require specific field mapping; generic prompts miss this entirely.
 
 The patterns below show how to build these prompts step by step, then iterate without rewriting from scratch.
 
@@ -130,13 +130,13 @@ Build a React dashboard that displays these metrics in cards,
 with the revenue card taking 2 columns. Use Tailwind.
 ```
 
-This is vastly more effective than "create a beautiful SaaS dashboard." The data-first approach also makes iteration faster. When you need to add a new field or change a calculation, you update the data definition in your prompt, and the AI regenerates the layout intelligently. [prompt-based dashboard building](https://www.researchgate.net/publication/389695519_A_New_ERA_of_Data_Visualization_Prompt-Based_Dashboards_for_Revolutionizing_Business_Intelligence) shifts the work from manual layout tweaking to structured data thinking—which is exactly how production dashboards should be built.
+This is vastly more effective than "create a beautiful SaaS dashboard." The data-first approach also makes iteration faster. When you need to add a new field or change a calculation, you update the data definition in your prompt, and the AI regenerates the layout intelligently. [prompt-based dashboard building](https://www.researchgate.net/publication/389695519_A_New_ERA_of_Data_Visualization_Prompt-Based_Dashboards_for_Revolutionizing_Business_Intelligence) shifts the work from manual layout tweaking to structured data thinking-which is exactly how production dashboards should be built.
 
 This pattern works across [React component prompting](/topics/ai-coding-workflows/ai-prompting-for-ui/prompt-for-react-components) and scales to complex multi-view dashboards. The key is treating your data contract as the source of truth, not the visual design.
 
 ## Prompt Pattern 2: Component Isolation for Reusability
 
-Once your data structure is locked in, the next critical move is **breaking your dashboard into isolated, reusable components**. This is where most generic prompts fail—they generate monolithic dashboard code that's impossible to maintain or adapt.
+Once your data structure is locked in, the next critical move is **breaking your dashboard into isolated, reusable components**. This is where most generic prompts fail-they generate monolithic dashboard code that's impossible to maintain or adapt.
 
 Production dashboards aren't single blocks. They're systems of smaller pieces: metric cards, chart wrappers, filter bars, table components. Each should be independently testable and swappable.
 
@@ -172,7 +172,7 @@ Render the value prominently, the change as a small badge with color coding.
 Use Tailwind. Make it work on mobile and desktop.
 ```
 
-This is vastly more effective than "build me a dashboard." You're teaching the AI to think in components, not pages. [Copilot prompts for dashboards](https://www.m365.fm/blog/copilot-prompts-for-dashboards-a-complete-guide-for-microsoft-users/) emphasize this exact principle—breaking work into discrete, well-defined units produces cleaner iteration cycles and code that actually survives the first refactor.
+This is vastly more effective than "build me a dashboard." You're teaching the AI to think in components, not pages. [Copilot prompts for dashboards](https://www.m365.fm/blog/copilot-prompts-for-dashboards-a-complete-guide-for-microsoft-users/) emphasize this exact principle-breaking work into discrete, well-defined units produces cleaner iteration cycles and code that actually survives the first refactor.
 
 When you isolate components this way, you can [combine them into larger systems](/topics/ai-coding-workflows/ai-prompting-for-ui/best-prompts-for-ui-generation) without rewriting. Each piece stays stable. Your dashboard grows by composition, not replacement.
 
@@ -188,7 +188,7 @@ Instead of asking for "a responsive dashboard," specify behavior at each breakpo
 
 ```
 Desktop (1200px+): Show all metrics in a 4-column grid
-Tablet (768px–1199px): Collapse to 2 columns, stack charts vertically
+Tablet (768px-1199px): Collapse to 2 columns, stack charts vertically
 Mobile (< 768px): Single column, hide secondary metrics, prioritize KPIs
 ```
 
@@ -271,7 +271,7 @@ Create a React dashboard with:
 - Left column: Line chart (revenue trend, last 12 months)
 - Right column: Table (top 10 customers by ARR)
 - Footer: Last updated timestamp
-- Use Tailwind. No external chart library—use SVG or Canvas.
+- Use Tailwind. No external chart library-use SVG or Canvas.
 ```
 
 This works because it specifies data hierarchy (what metrics matter most), layout structure (grid, columns, responsive behavior), component boundaries (cards, chart, table as separate units), and constraints (no external libraries, Tailwind only).
@@ -288,7 +288,7 @@ Rebuild it as a React component with:
 - Responsive breakpoints at 768px and 1024px
 ```
 
-This approach shifts dashboard building from description to iteration. You're not asking the AI to imagine—you're showing it exactly what you want, then asking for refinement. The result: cleaner code, faster iterations, fewer misunderstandings.
+This approach shifts dashboard building from description to iteration. You're not asking the AI to imagine-you're showing it exactly what you want, then asking for refinement. The result: cleaner code, faster iterations, fewer misunderstandings.
 
 ## Common Dashboard Prompt Mistakes and How to Fix Them
 
@@ -302,7 +302,7 @@ The most common dashboard prompt failures fall into three categories: underspeci
 **Right:**
 "Create a dashboard with a fixed left sidebar (250px, dark gray) containing navigation links. Main content area has a 3-column grid. Top row: revenue card (metric + sparkline), users card (metric + trend arrow), conversion card (metric + percentage). Second row: full-width line chart showing 12-month revenue trend. Third row: two equal-width bar charts side-by-side for product performance and regional breakdown."
 
-The difference: specificity eliminates guessing. Prompt-based dashboard building shifts from description to iteration—you're not asking the AI to imagine layout; you're defining it precisely.
+The difference: specificity eliminates guessing. Prompt-based dashboard building shifts from description to iteration-you're not asking the AI to imagine layout; you're defining it precisely.
 
 ### Mistake 2: Forgetting Data Shape in the Prompt
 
@@ -322,13 +322,13 @@ AI models generate code that matches the data structure you describe. If you don
 
 ### The Fix: Iterate on Structure First
 
-Before asking for styling or interactivity, lock down the data structure and layout. Once those are solid, refine incrementally—colors, spacing, animations—rather than rewriting from scratch.
+Before asking for styling or interactivity, lock down the data structure and layout. Once those are solid, refine incrementally-colors, spacing, animations-rather than rewriting from scratch.
 
 This pattern prevents the cascade of misunderstandings that derail dashboard prompts.
 
 ## Integrating Captured UI Into Your Dashboard Prompts
 
-The gap between a generic dashboard prompt and a production-ready one often comes down to specificity. When you capture real UI from live dashboards—actual HTML, CSS, and component structure—you give your AI tool a concrete reference point instead of abstract instructions.
+The gap between a generic dashboard prompt and a production-ready one often comes down to specificity. When you capture real UI from live dashboards-actual HTML, CSS, and component structure-you give your AI tool a concrete reference point instead of abstract instructions.
 
 Instead of telling Claude or Cursor "build a metrics card," you show it an existing metrics card. The AI sees exact spacing and padding values, real color tokens and contrast ratios, actual component hierarchy, and working responsive behavior.
 
@@ -362,7 +362,7 @@ The tool you choose shapes how you structure your prompt. Each AI coding assista
 
 ### Cursor: Inline Iteration and Real-Time Feedback
 
-Cursor excels at rapid, conversational refinement. Your dashboard prompt should be **specific but incomplete**—designed to evolve through chat. Start with the data structure (exact shape), one key visual requirement, and a single interaction pattern. Then iterate in the chat. Cursor's strength is speed, not perfection on the first pass. Feed it captured UI from Element Armory, ask for tweaks, and watch it adapt in real time.
+Cursor excels at rapid, conversational refinement. Your dashboard prompt should be **specific but incomplete**-designed to evolve through chat. Start with the data structure (exact shape), one key visual requirement, and a single interaction pattern. Then iterate in the chat. Cursor's strength is speed, not perfection on the first pass. Feed it captured UI from Element Armory, ask for tweaks, and watch it adapt in real time.
 
 ### Claude: Deep Context and Complex Specifications
 

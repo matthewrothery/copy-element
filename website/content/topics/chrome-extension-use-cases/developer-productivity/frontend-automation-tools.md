@@ -39,7 +39,7 @@ linkKeywords:
 
 ## Quick Answer
 
-Frontend automation tools are browser extensions and utilities that handle repetitive UI tasks automatically—copying components, extracting CSS, debugging styles, and testing interfaces. Instead of manually inspecting elements and reconstructing code, you click once and get production-ready HTML and CSS. They're designed to fit into your existing workflow without requiring you to write automation scripts or learn new frameworks. The best ones integrate with AI coding tools like Cursor and Claude, turning UI capture into a single-click operation that saves hours per week.
+Frontend automation tools are browser extensions and utilities that handle repetitive UI tasks automatically-copying components, extracting CSS, debugging styles, and testing interfaces. Instead of manually inspecting elements and reconstructing code, you click once and get production-ready HTML and CSS. They're designed to fit into your existing workflow without requiring you to write automation scripts or learn new frameworks. The best ones integrate with AI coding tools like Cursor and Claude, turning UI capture into a single-click operation that saves hours per week.
 
 ---
 

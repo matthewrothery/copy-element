@@ -38,7 +38,7 @@ linkKeywords:
 
 ## Quick Answer
 
-AI and design systems work together as a force multiplier. When your design system is machine-readable—structured with tokens, components, and clear rules—AI tools like Cursor, Claude, and Copilot can generate code that's instantly compliant with your brand and product standards. This eliminates the manual translation step between design and code, accelerates development velocity, and keeps design consistency intact even as teams scale. The shift isn't about replacing designers or engineers; it's about automating the repetitive work so humans can focus on strategy and creativity.
+AI and design systems work together as a force multiplier. When your design system is machine-readable-structured with tokens, components, and clear rules-AI tools like Cursor, Claude, and Copilot can generate code that's instantly compliant with your brand and product standards. This eliminates the manual translation step between design and code, accelerates development velocity, and keeps design consistency intact even as teams scale. The shift isn't about replacing designers or engineers; it's about automating the repetitive work so humans can focus on strategy and creativity.
 
 ---
 
@@ -87,7 +87,7 @@ The second workflow is faster, more consistent, and scales without adding headco
 
 AI models don't understand Figma files or Storybook stories the way humans do. They need structured data.
 
-When you expose your design system as queryable data—tokens, component specs, accessibility rules, responsive breakpoints—AI tools can:
+When you expose your design system as queryable data-tokens, component specs, accessibility rules, responsive breakpoints-AI tools can:
 
 - **Generate code that respects your token system** (colors, spacing, typography)
 - **Build components with the right variants** (button sizes, states, disabled modes)

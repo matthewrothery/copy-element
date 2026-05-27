@@ -13,13 +13,13 @@ readTime: "7 min read"
 coverImage: "/topic-images/ai-coding-workflows/ui-for-ai-coding/capture-ui-for-ai-coding.png"
 faq:
   - question: "Can I capture UI from any website and use it in my AI coding tool?"
-    answer: "Yes. You can capture HTML and CSS from any publicly accessible website. However, respect copyright and licensing—use captured UI as reference or starting point, not direct copy. AI tools like Cursor and Claude work best when you feed them clean, extracted code rather than screenshots or descriptions."
+    answer: "Yes. You can capture HTML and CSS from any publicly accessible website. However, respect copyright and licensing-use captured UI as reference or starting point, not direct copy. AI tools like Cursor and Claude work best when you feed them clean, extracted code rather than screenshots or descriptions."
   - question: "What's the difference between capturing UI and just taking a screenshot?"
-    answer: "Screenshots are visual only. Captured UI gives you actual HTML and CSS code that AI tools can understand, modify, and build upon. This means your AI assistant can instantly generate variations, adapt it to your framework, or integrate it into your project—instead of having to reverse-engineer from an image."
+    answer: "Screenshots are visual only. Captured UI gives you actual HTML and CSS code that AI tools can understand, modify, and build upon. This means your AI assistant can instantly generate variations, adapt it to your framework, or integrate it into your project-instead of having to reverse-engineer from an image."
   - question: "Does captured UI work with React, Vue, and other frameworks?"
-    answer: "Captured UI is framework-agnostic—it's raw HTML and CSS. You can feed it to Claude or Cursor and ask them to convert it to JSX, Vue templates, or any framework you use. The AI handles the translation, saving you hours of manual conversion."
+    answer: "Captured UI is framework-agnostic-it's raw HTML and CSS. You can feed it to Claude or Cursor and ask them to convert it to JSX, Vue templates, or any framework you use. The AI handles the translation, saving you hours of manual conversion."
   - question: "How much faster is AI-assisted development with captured UI vs manual description?"
-    answer: "Significantly faster. Instead of describing a navbar or pricing table in text (which requires back-and-forth clarification), you capture it in seconds and paste the code directly. AI tools can then modify, adapt, or rebuild it in your framework immediately—typically 5-10x faster than describing from scratch."
+    answer: "Significantly faster. Instead of describing a navbar or pricing table in text (which requires back-and-forth clarification), you capture it in seconds and paste the code directly. AI tools can then modify, adapt, or rebuild it in your framework immediately-typically 5-10x faster than describing from scratch."
   - question: "Is capturing UI legal?"
     answer: "Capturing UI for reference, learning, or as a starting point for your own work is generally acceptable. However, directly copying proprietary designs without modification or permission may violate copyright. Always use captured UI as inspiration or a foundation to build your own unique version."
 relatedSlugs:
@@ -40,7 +40,7 @@ linkKeywords:
 
 ## The Direct Answer
 
-Capturing UI for AI coding means extracting the HTML and CSS from any live website and feeding it directly into your AI assistant (Cursor, Claude Code) so the AI can understand the exact structure and styling you want to build. Instead of describing a design in words—"I need a navbar with a logo on the left, nav links in the center, and a button on the right"—you show the AI the real code. This cuts design-to-code friction dramatically and lets your AI assistant generate components faster and more accurately.
+Capturing UI for AI coding means extracting the HTML and CSS from any live website and feeding it directly into your AI assistant (Cursor, Claude Code) so the AI can understand the exact structure and styling you want to build. Instead of describing a design in words-"I need a navbar with a logo on the left, nav links in the center, and a button on the right"-you show the AI the real code. This cuts design-to-code friction dramatically and lets your AI assistant generate components faster and more accurately.
 
 ---
 
@@ -52,7 +52,7 @@ You describe a design to your AI tool. The AI interprets your description. You g
 
 Capturing UI short-circuits this loop entirely.
 
-When you feed your AI tool actual HTML and CSS from a production website, the AI doesn't have to guess. It sees the exact structure, spacing, colors, and interactions. [AI coding tools like Cursor and Claude Code are built to work with code context](https://zapier.com/blog/ai-coding-tools/)—they excel when given real examples to learn from.
+When you feed your AI tool actual HTML and CSS from a production website, the AI doesn't have to guess. It sees the exact structure, spacing, colors, and interactions. [AI coding tools like Cursor and Claude Code are built to work with code context](https://zapier.com/blog/ai-coding-tools/)-they excel when given real examples to learn from.
 
 The result: faster components, fewer iterations, and code that matches production patterns instead of generic templates.
 
@@ -68,7 +68,7 @@ The AI generates something. It's 70% right. You tweak it. You describe the tweak
 
 This friction compounds across a project. If you're building 20 components, you're spending hours in back-and-forth description cycles.
 
-[AI tools for UI and UX design are increasingly powerful, but they still require clear input to produce accurate output](https://www.toools.design/blog-posts/best-ai-tools-ui-ux-designers-2026). The clearest input isn't words—it's code.
+[AI tools for UI and UX design are increasingly powerful, but they still require clear input to produce accurate output](https://www.toools.design/blog-posts/best-ai-tools-ui-ux-designers-2026). The clearest input isn't words-it's code.
 
 When you capture UI from a real website and paste it into your AI tool, you eliminate the interpretation layer. The AI sees:
 

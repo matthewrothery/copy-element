@@ -14,6 +14,11 @@ function escapeYaml(input: string): string {
   return input.replace(/"/g, '\\"');
 }
 
+/** Replaces em-dash (U+2014) and en-dash (U+2013) with ASCII hyphen. */
+export function sanitizeDashes(text: string): string {
+  return text.replace(/[\u2014\u2013]/g, "-");
+}
+
 function buildBlogFrontmatter(
   post: GeneratedBlogPost,
   author: string,
@@ -98,7 +103,7 @@ export function createArtifact(input: {
   const coverImageField = `/topic-images/${input.article.hubSlug}/${input.article.clusterSlug}/${coverFilename}`;
 
   const frontmatter = buildFrontmatter(input.article, input.author, coverImageField, input.keywordId);
-  const articleMarkdown = `${frontmatter}\n\n${input.article.body.trim()}\n`;
+  const articleMarkdown = sanitizeDashes(`${frontmatter}\n\n${input.article.body.trim()}\n`);
 
   const assetBuffers: ArticleArtifact["assetBuffers"] = [];
 
@@ -204,7 +209,7 @@ export function createBlogArtifact(input: {
   const coverImageField = `/blog/${coverFilename}`;
 
   const frontmatter = buildBlogFrontmatter(input.post, input.author, coverImageField);
-  const articleMarkdown = `${frontmatter}\n\n${input.post.body.trim()}\n`;
+  const articleMarkdown = sanitizeDashes(`${frontmatter}\n\n${input.post.body.trim()}\n`);
 
   const coverS3Name = `cover.${input.coverExt}`;
   const assetBuffers: ArticleArtifact["assetBuffers"] = [

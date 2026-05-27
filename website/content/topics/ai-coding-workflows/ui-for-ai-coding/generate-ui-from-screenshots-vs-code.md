@@ -51,7 +51,7 @@ Screenshot-to-code tools like [screenshot-to-code](https://github.com/abi/screen
 
 The reality is more nuanced.
 
-[Current tools rarely produce pixel-perfect output](https://aimultiple.com/screenshot-to-code). What they *do* produce is a solid foundation: correct layout structure, approximate spacing, basic styling, and a working component you can iterate on. That foundation saves time—but only if you know how to use it.
+[Current tools rarely produce pixel-perfect output](https://aimultiple.com/screenshot-to-code). What they *do* produce is a solid foundation: correct layout structure, approximate spacing, basic styling, and a working component you can iterate on. That foundation saves time-but only if you know how to use it.
 
 The mistake most developers make is expecting the tool to be a magic button. They upload a screenshot, get code, and then spend an hour fixing spacing, colors, and responsive behavior. That's not a win. That's just moving the work around.
 
@@ -69,11 +69,11 @@ If you have a Figma mockup, a competitor's landing page, or a design screenshot,
 
 **2. You're prototyping quickly**
 
-When speed matters more than perfection—early-stage prototypes, internal tools, proof-of-concept dashboards—screenshot-to-code is unbeatable. You get something interactive in minutes, not hours.
+When speed matters more than perfection-early-stage prototypes, internal tools, proof-of-concept dashboards-screenshot-to-code is unbeatable. You get something interactive in minutes, not hours.
 
 **3. You're working with complex layouts**
 
-Multi-column grids, nested flexbox structures, intricate spacing—these are tedious to hand-code. A screenshot-to-code tool handles the layout math for you. You refine the details, not rebuild the skeleton.
+Multi-column grids, nested flexbox structures, intricate spacing-these are tedious to hand-code. A screenshot-to-code tool handles the layout math for you. You refine the details, not rebuild the skeleton.
 
 **4. You're bootstrapping a component library**
 
@@ -91,7 +91,7 @@ Screenshot-to-code isn't always the fastest path.
 
 **1. Simple, standard components**
 
-A button, a card, a navbar—these are so common that you can code them faster than you can screenshot them. Your muscle memory wins.
+A button, a card, a navbar-these are so common that you can code them faster than you can screenshot them. Your muscle memory wins.
 
 **2. Custom logic or interactivity**
 

@@ -17,7 +17,7 @@ faq:
   - question: "Can I use general screenshot tools like Snagit or Loom for UI development?"
     answer: "You can, but they're inefficient. They produce images, not code. You'd still need to manually rebuild the UI in your editor. Code-first tools like Element Armory skip that step entirely."
   - question: "Which tool works best with AI coding assistants like Cursor or Claude?"
-    answer: "Tools that export clean HTML and CSS work best with AI. Element Armory is built specifically for this workflow—you capture, paste the code into your AI editor, and iterate. Screenshot tools require manual reconstruction."
+    answer: "Tools that export clean HTML and CSS work best with AI. Element Armory is built specifically for this workflow-you capture, paste the code into your AI editor, and iterate. Screenshot tools require manual reconstruction."
   - question: "Do I need a paid tool, or will free options work?"
     answer: "Free screenshot tools are fine for documentation. But if you're capturing UI regularly for development or component libraries, a code-focused tool saves hours. The ROI is immediate."
   - question: "Can these tools capture responsive or interactive UI?"
@@ -41,7 +41,7 @@ linkKeywords:
 
 ## Quick Answer
 
-The best UI capture tool for developers depends on your workflow. If you need **clean, reusable HTML and CSS code** for components, **Element Armory** is the fastest option—it captures computed styles and structure in seconds. If you're building design systems or need visual collaboration, tools like Figma or Penpot work better. For AI-assisted coding (Cursor, Claude), code-first capture tools win because they output production-ready code, not screenshots.
+The best UI capture tool for developers depends on your workflow. If you need **clean, reusable HTML and CSS code** for components, **Element Armory** is the fastest option-it captures computed styles and structure in seconds. If you're building design systems or need visual collaboration, tools like Figma or Penpot work better. For AI-assisted coding (Cursor, Claude), code-first capture tools win because they output production-ready code, not screenshots.
 
 ---
 
@@ -73,7 +73,7 @@ Screenshot tools like Snagit, ShareX, and Lightshot are fast, but they only capt
 
 This defeats the purpose of "capturing" anything. You're just taking a reference photo.
 
-Design-focused tools like Figma and Adobe XD are better—they let you import screenshots and trace over them. But they're overkill for developers who just need code. You're paying for design features you won't use, and the output is still not production-ready code.
+Design-focused tools like Figma and Adobe XD are better-they let you import screenshots and trace over them. But they're overkill for developers who just need code. You're paying for design features you won't use, and the output is still not production-ready code.
 
 The gap exists because most tools optimize for **visual designers**, not **developers who code**.
 

@@ -19,7 +19,7 @@ faq:
   - question: "What's the difference between copying UI and building with AI?"
     answer: "Copying UI is a tactic. Building with AI is a workflow. The future combines both: capture production UI as reference, feed it to AI with clear constraints, validate the output, and deploy. It's faster and more consistent than either approach alone."
   - question: "Do I need to learn new tools to stay relevant?"
-    answer: "Not new tools—new workflows. The tools you use (Cursor, Claude, VS Code) stay the same. What changes is how you feed them information. Capturing and structuring real UI becomes a core skill."
+    answer: "Not new tools-new workflows. The tools you use (Cursor, Claude, VS Code) stay the same. What changes is how you feed them information. Capturing and structuring real UI becomes a core skill."
 relatedSlugs:
   - ai-and-design-systems
   - evolution-of-ui-building
@@ -110,9 +110,9 @@ This isn't theoretical. Teams are already building this. When you [send UI to AI
 
 The competitive advantage goes to teams that:
 
-1. **Capture production UI systematically** — not randomly, but as part of a deliberate design system extraction process
-2. **Organize patterns into queryable libraries** — so AI tools can find and reuse them
-3. **Maintain standards at scale** — without slowing down iteration
+1. **Capture production UI systematically** - not randomly, but as part of a deliberate design system extraction process
+2. **Organize patterns into queryable libraries** - so AI tools can find and reuse them
+3. **Maintain standards at scale** - without slowing down iteration
 
 Teams that still maintain design systems as documentation will fall behind teams that maintain them as executable, queryable code.
 
@@ -219,10 +219,10 @@ When you [create a UI snippet library](/topics/component-reuse-libraries/snippet
 
 The teams that will dominate in 2026 are the ones that:
 
-1. **Capture systematically** — not ad hoc, but as part of their development process
-2. **Organize for AI** — structure components so AI tools can understand and reuse them
-3. **Maintain quality gates** — ensure captured and generated code meets standards
-4. **Iterate on the system itself** — improve the design system based on what works
+1. **Capture systematically** - not ad hoc, but as part of their development process
+2. **Organize for AI** - structure components so AI tools can understand and reuse them
+3. **Maintain quality gates** - ensure captured and generated code meets standards
+4. **Iterate on the system itself** - improve the design system based on what works
 
 This is why machine-readable design systems matter so much. They're not just about consistency. They're about velocity. A well-structured design system lets AI tools generate variations, adapt patterns, and maintain coherence automatically.
 

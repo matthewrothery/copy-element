@@ -15,11 +15,11 @@ faq:
   - question: "Why does my CSS rule not apply even though I wrote it correctly?"
     answer: "Usually because of specificity or cascade conflicts. A more specific selector (like an ID or inline style) is overriding your rule, or a later rule in the cascade is taking precedence. Use DevTools to inspect the element and see which rules are active and which are crossed out."
   - question: "What's the difference between inheritance and cascade in CSS?"
-    answer: "Cascade is the order and specificity of rules—later rules override earlier ones if they have equal or higher specificity. Inheritance is when child elements automatically receive property values from their parents (like font-family). Not all properties inherit; color does, but margin doesn't."
+    answer: "Cascade is the order and specificity of rules-later rules override earlier ones if they have equal or higher specificity. Inheritance is when child elements automatically receive property values from their parents (like font-family). Not all properties inherit; color does, but margin doesn't."
   - question: "How do I know which CSS properties I actually need to learn?"
     answer: "Start with the box model (margin, padding, border, width, height), display (block, inline, flex, grid), positioning (static, relative, absolute), and color/typography. These cover 80% of real-world styling. Advanced properties like transforms and animations come later."
   - question: "Is it better to inspect styles in DevTools or read the source code?"
-    answer: "DevTools shows you the *computed* styles—what the browser actually renders after cascade and inheritance. Source code shows what was written. For debugging, DevTools is faster. For understanding intent, read the source. Use both together."
+    answer: "DevTools shows you the *computed* styles-what the browser actually renders after cascade and inheritance. Source code shows what was written. For debugging, DevTools is faster. For understanding intent, read the source. Use both together."
 relatedSlugs:
   - copy-css-from-website
   - inspect-element-guide
@@ -47,11 +47,11 @@ CSS learning for developers isn't about memorizing properties. It's about unders
 
 ## What CSS Actually Does (Beyond Making Things Pretty)
 
-Most developers treat CSS like a magic box: throw styles at it until something sticks. But CSS is a system with rules. [CSS is responsible for the appearance of webpage elements](https://www.devslearning.com/technologies/css/), but more importantly, it's a *cascade*—a deliberate flow of rules that determine which style wins.
+Most developers treat CSS like a magic box: throw styles at it until something sticks. But CSS is a system with rules. [CSS is responsible for the appearance of webpage elements](https://www.devslearning.com/technologies/css/), but more importantly, it's a *cascade*-a deliberate flow of rules that determine which style wins.
 
 Think of CSS like a court system. You have rules (selectors), evidence (properties), and a judge (the browser) that decides which rule applies. The judge doesn't pick randomly. It follows a strict hierarchy.
 
-[CSS is used by 98.1% of all websites](https://w3techs.com/technologies/details/ce-css), which means understanding it deeply isn't optional—it's foundational. But most developers learn CSS backwards. They learn properties first (color, margin, padding) and never learn the system that makes those properties work.
+[CSS is used by 98.1% of all websites](https://w3techs.com/technologies/details/ce-css), which means understanding it deeply isn't optional-it's foundational. But most developers learn CSS backwards. They learn properties first (color, margin, padding) and never learn the system that makes those properties work.
 
 The system is what matters.
 
@@ -218,7 +218,7 @@ Most developers confuse padding and margin. Here's the difference:
 }
 ```
 
-If the card is 300px wide, the content area is actually 300px minus padding minus border. This is why `box-sizing: border-box` is so useful—it makes width include padding and border, so your math is simpler.
+If the card is 300px wide, the content area is actually 300px minus padding minus border. This is why `box-sizing: border-box` is so useful-it makes width include padding and border, so your math is simpler.
 
 ---
 
@@ -341,7 +341,7 @@ Instead of copying random CSS, you can:
 3. **Adapt it to your context** (change colors, spacing, breakpoints)
 4. **Reuse it across projects** (build your own component library)
 
-[HTML/CSS is used by 61.9% of developers globally](https://www.statista.com/statistics/793628/worldwide-developer-survey-most-used-languages/), and the developers who understand CSS deeply are the ones who can extract, adapt, and reuse styles effectively. They don't just copy and paste—they understand what they're copying and why.
+[HTML/CSS is used by 61.9% of developers globally](https://www.statista.com/statistics/793628/worldwide-developer-survey-most-used-languages/), and the developers who understand CSS deeply are the ones who can extract, adapt, and reuse styles effectively. They don't just copy and paste-they understand what they're copying and why.
 
 When you capture UI from a website, you're not just getting code. You're learning how experienced developers solve layout problems. Understanding the fundamentals lets you learn from that code instead of just using it.
 
