@@ -1,4 +1,5 @@
 import Image from "next/image";
+import { StructuredData } from "@/components/StructuredData";
 import { FAQ } from "@/components/FAQ";
 import type { FAQItem } from "@/components/FAQ";
 import { Footer } from "@/components/Footer";
@@ -7,14 +8,24 @@ import { Hero } from "@/components/Hero";
 import { Section } from "@/components/Section";
 import { PricingCards } from "@/components/PricingCards";
 import { GoalTrack } from "@/components/GoalTrack/GoalTrack";
+import { SITE_URL } from "@/lib/publicConfig";
+import {
+  buildPageMetadata,
+  faqPageSchema,
+  webPageSchema,
+} from "@/lib/seo";
 
 export const dynamic = "force-static";
 
-export const metadata = {
-  title: "Pricing – Element Armory",
-  description: "Element Armory pricing and plans.",
-  alternates: { canonical: "/pricing" },
-};
+const PRICING_TITLE = "UI Capture Pricing and Plans";
+const PRICING_DESCRIPTION =
+  "Start free with Element Armory, then upgrade to Pro for unlimited captures, cloud sync, advanced AI prompts, and MCP integration.";
+
+export const metadata = buildPageMetadata({
+  title: PRICING_TITLE,
+  description: PRICING_DESCRIPTION,
+  path: "/pricing",
+});
 
 const PRICING_FAQ_ITEMS: FAQItem[] = [
   {
@@ -50,8 +61,20 @@ const PRICING_FAQ_ITEMS: FAQItem[] = [
 ];
 
 export default function PricingPage(): React.ReactElement {
+  const pageUrl = `${SITE_URL}/pricing`;
+
   return (
     <>
+      <StructuredData
+        data={[
+          webPageSchema({
+            name: PRICING_TITLE,
+            description: PRICING_DESCRIPTION,
+            path: "/pricing",
+          }),
+          faqPageSchema(PRICING_FAQ_ITEMS, pageUrl),
+        ]}
+      />
       <Header />
       <main>
         <Section center>

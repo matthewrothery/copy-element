@@ -1,5 +1,5 @@
-import type { Metadata } from "next";
 import { Header } from "@/components/Header";
+import { StructuredData } from "@/components/StructuredData";
 import { Hero } from "@/components/Hero";
 import { CTABlock } from "@/components/CTABlock";
 import { FAQ } from "@/components/FAQ";
@@ -12,20 +12,29 @@ import { WorkflowComparison } from "@/components/WorkflowComparison";
 import { UseCaseComparison } from "@/components/UseCaseComparison";
 import { csspeeperData as data } from "@/data/comparisons/csspeeper";
 import { FaqSchema } from "@/components/FaqSchema";
+import { SITE_URL } from "@/lib/publicConfig";
+import { buildComparisonMetadata, webPageSchema } from "@/lib/seo";
 import "./page.css";
 
 export const dynamic = "force-static";
 
-export const metadata: Metadata = {
-  title: data.meta.title,
-  description: data.meta.description,
-  alternates: { canonical: data.meta.canonicalPath },
-};
+export const metadata = buildComparisonMetadata(data.meta);
 
 export default function CompareVsCssPeeperPage(): React.ReactElement {
+  const pageUrl = `${SITE_URL}${data.meta.canonicalPath}`;
+
   return (
     <>
-      {data.faq != null && data.faq.length > 0 && <FaqSchema items={data.faq} />}
+      <StructuredData
+        data={webPageSchema({
+          name: data.meta.title,
+          description: data.meta.description,
+          path: data.meta.canonicalPath,
+        })}
+      />
+      {data.faq != null && data.faq.length > 0 && (
+        <FaqSchema items={data.faq} pageUrl={pageUrl} />
+      )}
       <Header />
       <main>
         <Section center>

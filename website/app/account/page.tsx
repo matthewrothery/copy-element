@@ -5,11 +5,13 @@ import { AccountContent } from "@/components/AccountContent";
 
 export const dynamic = "force-static";
 
-export const metadata = {
-  title: "Account – Element Armory",
+import { buildNoIndexMetadata } from "@/lib/seo";
+
+export const metadata = buildNoIndexMetadata({
+  title: "Account",
   description: "Manage your Element Armory account and linked installs.",
-  robots: { index: false, follow: false },
-};
+  path: "/account",
+});
 
 export default function AccountPage(): React.ReactElement {
   return (

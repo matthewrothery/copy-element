@@ -1,62 +1,42 @@
 import type { ReactElement } from "react";
 import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
+import { StructuredData } from "@/components/StructuredData";
 import { TopicHubCard } from "@/components/Topic";
 import { getAllHubs } from "@/lib/parseTopics";
 import { SITE_URL } from "@/lib/publicConfig";
+import { buildPageMetadata, collectionPageSchema } from "@/lib/seo";
 import "@/styles/topics.css";
 
 export const dynamic = "force-static";
 
-export const metadata = {
-  title: "Topics – Element Armory",
-  description:
-    "In-depth guides on copying UI from websites, AI coding workflows, tool alternatives, and building UI without design skills.",
-  alternates: { canonical: "/topics" },
-};
+const TOPICS_TITLE = "UI Capture Guides and Topic Hubs";
+const TOPICS_DESCRIPTION =
+  "In-depth guides on copying UI from websites, AI coding workflows, Chrome extension tips, and alternatives to other capture tools.";
+
+export const metadata = buildPageMetadata({
+  title: TOPICS_TITLE,
+  description: TOPICS_DESCRIPTION,
+  path: "/topics",
+});
 
 export default function TopicsIndexPage(): ReactElement {
   const hubs = getAllHubs();
-
   const pageUrl = `${SITE_URL}/topics`;
-
-  const collectionSchema = {
-    "@context": "https://schema.org",
-    "@type": "CollectionPage",
-    "@id": `${pageUrl}#webpage`,
-    name: "Topics – Element Armory",
-    description:
-      "In-depth guides on copying UI, AI coding workflows, tool alternatives, and frontend development for developers.",
-    url: pageUrl,
-    inLanguage: "en-US",
-    isPartOf: {
-      "@type": "WebSite",
-      "@id": `${SITE_URL}/#website`,
-      name: "Element Armory",
-      url: SITE_URL,
-    },
-    publisher: {
-      "@type": "Organization",
-      name: "Element Armory",
-      url: SITE_URL,
-      logo: {
-        "@type": "ImageObject",
-        url: `${SITE_URL}/logo.png`,
-      },
-    },
-    hasPart: hubs.map((h) => ({
-      "@type": "WebPage",
-      name: h.title,
-      url: `${SITE_URL}/topics/${h.hub}`,
-      description: h.excerpt,
-    })),
-  };
 
   return (
     <>
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(collectionSchema) }}
+      <StructuredData
+        data={collectionPageSchema({
+          name: TOPICS_TITLE,
+          description: TOPICS_DESCRIPTION,
+          url: pageUrl,
+          hasPart: hubs.map((hub) => ({
+            name: hub.title,
+            url: `${SITE_URL}/topics/${hub.hub}`,
+            description: hub.excerpt,
+          })),
+        })}
       />
       <Header />
       <main className="topics-page">
@@ -68,7 +48,6 @@ export default function TopicsIndexPage(): ReactElement {
             products without a design background.
           </p>
         </header>
-
         <div className="topics-hub-grid">
           {hubs.map((hub) => (
             <TopicHubCard key={hub.hub} hub={hub} />

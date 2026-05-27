@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { StructuredData } from "@/components/StructuredData";
 import { Footer } from "@/components/Footer";
 import { Header } from "@/components/Header";
 import { PageHero } from "@/components/PageHero";
@@ -6,15 +7,28 @@ import "@/styles/policy.css";
 
 export const dynamic = "force-static";
 
-export const metadata = {
-  title: "Terms of Service – Element Armory",
-  description: "The terms and conditions governing your use of Element Armory.",
-  alternates: { canonical: "/terms" },
-};
+import { buildPageMetadata, webPageSchema } from "@/lib/seo";
+
+const TERMS_TITLE = "Element Armory Terms of Service";
+const TERMS_DESCRIPTION =
+  "Read the terms and conditions that govern your use of Element Armory, the website, Chrome extension, and related services.";
+
+export const metadata = buildPageMetadata({
+  title: TERMS_TITLE,
+  description: TERMS_DESCRIPTION,
+  path: "/terms",
+});
 
 export default function TermsPage(): React.ReactElement {
   return (
     <>
+      <StructuredData
+        data={webPageSchema({
+          name: TERMS_TITLE,
+          description: TERMS_DESCRIPTION,
+          path: "/terms",
+        })}
+      />
       <Header />
       <main className="content-page">
         <PageHero

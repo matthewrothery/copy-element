@@ -3,6 +3,7 @@ import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
 import { ExampleDetail } from "@/components/ExampleDetail";
 import { EXAMPLES, getExample } from "@/data/examples";
+import { buildNoIndexMetadata } from "@/lib/seo";
 
 export const dynamic = "force-static";
 
@@ -14,24 +15,15 @@ export async function generateMetadata({
   params,
 }: {
   params: Promise<{ slug: string }>;
-}): Promise<{
-  title: string;
-  description: string;
-  alternates?: { canonical: string };
-  openGraph?: { title: string; description: string };
-}> {
+}) {
   const { slug } = await params;
   const ex = getExample(slug);
-  if (!ex) return { title: "Not Found", description: "" };
-  return {
-    title: `${ex.name} – UI Examples – Element Armory`,
+  if (!ex) return { title: "Not Found" };
+  return buildNoIndexMetadata({
+    title: `Edit ${ex.name}`,
     description: ex.description,
-    alternates: { canonical: `/examples/${slug}/edit` },
-    openGraph: {
-      title: `${ex.name} – Element Armory`,
-      description: ex.description,
-    },
-  };
+    path: `/examples/${slug}/edit`,
+  });
 }
 
 export default async function ExampleEditPage({

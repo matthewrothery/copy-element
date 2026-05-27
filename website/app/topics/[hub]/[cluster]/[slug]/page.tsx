@@ -8,6 +8,7 @@ import {
   TopicCta,
   TopicRelatedLinks,
 } from "@/components/Topic";
+import { StructuredData } from "@/components/StructuredData";
 import {
   getAllArticlesFlat,
   getArticle,
@@ -17,6 +18,11 @@ import {
 } from "@/lib/parseTopics";
 import { schemaIsoDateFromFrontmatter } from "@/lib/schemaHelpers";
 import { SITE_URL } from "@/lib/publicConfig";
+import {
+  articleSchema,
+  buildPageMetadata,
+  faqPageSchema,
+} from "@/lib/seo";
 import "@/styles/topics.css";
 import "@/components/Article/ArticleBody.css";
 
@@ -42,11 +48,13 @@ export async function generateMetadata({
   const { hub, cluster, slug } = await params;
   const article = getArticle(hub, cluster, slug);
   if (!article) return { title: "Not Found" };
-  return {
-    title: `${article.title} – Element Armory`,
+  return buildPageMetadata({
+    title: article.title,
     description: article.excerpt,
-    alternates: { canonical: `/topics/${hub}/${cluster}/${slug}` },
-  };
+    path: `/topics/${hub}/${cluster}/${slug}`,
+    image: article.coverImage,
+    openGraphType: "article",
+  });
 }
 
 export default async function ArticlePage({
@@ -65,68 +73,23 @@ export default async function ArticlePage({
   const articleUrl = `${SITE_URL}/topics/${hubSlug}/${clusterSlug}/${slug}`;
   const published = schemaIsoDateFromFrontmatter(article.date);
 
-  const articleSchema = {
-    "@context": "https://schema.org",
-    "@type": "Article",
-    "@id": `${articleUrl}#article`,
-    headline: article.title,
-    description: article.excerpt,
-    datePublished: published,
-    dateModified: published,
-    inLanguage: "en-US",
-    articleSection: article.clusterTitle,
-    author: {
-      "@type": "Organization",
-      name: "Element Armory",
-      url: SITE_URL,
-    },
-    publisher: {
-      "@type": "Organization",
-      name: "Element Armory",
-      url: SITE_URL,
-      logo: {
-        "@type": "ImageObject",
-        url: `${SITE_URL}/logo.png`,
-      },
-    },
-    mainEntityOfPage: {
-      "@type": "WebPage",
-      "@id": `${articleUrl}#webpage`,
+  const schemaBlocks: Array<Record<string, unknown>> = [
+    articleSchema({
+      headline: article.title,
+      description: article.excerpt,
       url: articleUrl,
-    },
-    url: articleUrl,
-    ...(article.coverImage ? { image: `${SITE_URL}${article.coverImage}` } : {}),
-  };
-
-  const faqSchema =
-    article.faq.length > 0
-      ? {
-          "@context": "https://schema.org",
-          "@type": "FAQPage",
-          "@id": `${articleUrl}#faq`,
-          mainEntity: article.faq.map((item) => ({
-            "@type": "Question",
-            name: item.question,
-            acceptedAnswer: {
-              "@type": "Answer",
-              text: item.answer,
-            },
-          })),
-        }
-      : null;
+      datePublished: published,
+      image: article.coverImage,
+      type: "Article",
+    }),
+  ];
+  if (article.faq.length > 0) {
+    schemaBlocks.push(faqPageSchema(article.faq, articleUrl));
+  }
 
   return (
     <>
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(articleSchema) }}
-      />
-      {faqSchema && (
-        <script
-          type="application/ld+json"
-          dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }}
-        />
-      )}
+      <StructuredData data={schemaBlocks} />
       <Header />
       <main className="topics-page">
         <TopicBreadcrumb

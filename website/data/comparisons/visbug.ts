@@ -7,7 +7,7 @@ export const visbugData: ComparisonData = {
     theirs: { name: "VisBug" },
   },
   meta: {
-    title: "Element Armory vs VisBug - UI Capture Tool Comparison",
+    title: "Element Armory vs VisBug | UI Capture Tool Comparison",
     description:
       "Compare Element Armory and VisBug. Element Armory captures HTML from any site for use in code. VisBug is a visual design debugger for moving, styling, and measuring elements live in the browser - no code export.",
     canonicalPath: "/compare/element-armory-vs-visbug",

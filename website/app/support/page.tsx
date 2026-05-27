@@ -1,20 +1,33 @@
+import { StructuredData } from "@/components/StructuredData";
 import { Footer } from "@/components/Footer";
 import { Header } from "@/components/Header";
 import { PageHero } from "@/components/PageHero";
 import { Section } from "@/components/Section";
 import { SupportForm } from "@/components/SupportForm";
+import { buildPageMetadata, webPageSchema } from "@/lib/seo";
 
 export const dynamic = "force-static";
 
-export const metadata = {
-  title: "Contact Support – Element Armory",
-  description: "Get help with Element Armory. Submit a support request and we'll get back to you.",
-  alternates: { canonical: "/support" },
-};
+const SUPPORT_TITLE = "Element Armory Support for UI Capture Workflows";
+const SUPPORT_DESCRIPTION =
+  "Get help with Element Armory captures, accounts, billing, and MCP setup. Submit a support request and we will get back to you.";
+
+export const metadata = buildPageMetadata({
+  title: SUPPORT_TITLE,
+  description: SUPPORT_DESCRIPTION,
+  path: "/support",
+});
 
 export default function SupportPage(): React.ReactElement {
   return (
     <>
+      <StructuredData
+        data={webPageSchema({
+          name: SUPPORT_TITLE,
+          description: SUPPORT_DESCRIPTION,
+          path: "/support",
+        })}
+      />
       <Header />
       <main>
         <PageHero

@@ -1,13 +1,12 @@
-import type { Metadata } from "next";
 import Link from "next/link";
 import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
+import { buildNoIndexMetadata } from "@/lib/seo";
 
-export const metadata: Metadata = {
-  title: "Page Not Found – Element Armory",
+export const metadata = buildNoIndexMetadata({
+  title: "Page Not Found",
   description: "The page you are looking for does not exist.",
-  robots: { index: false, follow: false },
-};
+});
 
 export default function NotFound(): React.ReactElement {
   return (

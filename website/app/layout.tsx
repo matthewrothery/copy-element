@@ -5,32 +5,37 @@ import { JsonLd } from "@/components/JsonLd";
 import { Analytics } from "@/components/Analytics/Analytics";
 import { PlausibleAnalytics } from "@/components/PlausibleAnalytics";
 import { SITE_URL } from "@/lib/publicConfig";
+import {
+  DEFAULT_OG_IMAGE,
+  HOME_DESCRIPTION,
+  HOME_TITLE,
+  SITE_BRAND,
+} from "@/lib/seo";
 
 export const metadata: Metadata = {
-  title: "Element Armory – Capture UI Elements",
-  description:
-    "Capture UI from any site and rebuild it with AI. Clean. Clear. Powerful.",
   metadataBase: new URL(SITE_URL),
+  title: HOME_TITLE,
+  description: HOME_DESCRIPTION,
   openGraph: {
-    title: "Element Armory – Capture UI Elements",
-    description: "Capture UI from any site and rebuild it with AI. Clean. Clear. Powerful.",
+    title: HOME_TITLE,
+    description: HOME_DESCRIPTION,
     url: SITE_URL,
-    siteName: "Element Armory",
+    siteName: SITE_BRAND,
     type: "website",
     images: [
       {
-        url: "/og-image.png",
+        url: DEFAULT_OG_IMAGE,
         width: 1200,
         height: 630,
-        alt: "Element Armory – Capture UI Elements",
+        alt: HOME_TITLE,
       },
     ],
   },
   twitter: {
     card: "summary_large_image",
-    title: "Element Armory – Capture UI Elements",
-    description: "Capture UI from any site and rebuild it with AI. Clean. Clear. Powerful.",
-    images: ["/og-image.png"],
+    title: HOME_TITLE,
+    description: HOME_DESCRIPTION,
+    images: [DEFAULT_OG_IMAGE],
   },
   robots: { index: true, follow: true },
 };

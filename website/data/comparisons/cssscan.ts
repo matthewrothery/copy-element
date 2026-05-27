@@ -7,7 +7,7 @@ export const cssScanData: ComparisonData = {
     theirs: { name: "CSS Scan" },
   },
   meta: {
-    title: "Element Armory vs CSS Scan - UI Capture Tool Comparison",
+    title: "Element Armory vs CSS Scan | UI Capture Tool Comparison",
     description:
       "Compare Element Armory and CSS Scan. Element Armory captures full HTML with a free tier and MCP server integration. CSS Scan copies individual CSS properties - no HTML export, one-time purchase required.",
     canonicalPath: "/compare/element-armory-vs-css-scan",

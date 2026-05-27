@@ -7,7 +7,7 @@ export const divmagicData: ComparisonData = {
     theirs: { name: "DivMagic" },
   },
   meta: {
-    title: "Element Armory vs DivMagic – UI Capture Tool Comparison",
+    title: "Element Armory vs DivMagic | UI Capture Tool Comparison",
     description:
       "Compare Element Armory and DivMagic side by side. See which tool gives you cleaner HTML output, MCP server support, and a free tier with no account required.",
     canonicalPath: "/compare/element-armory-vs-divmagic",

@@ -4,11 +4,13 @@ import "@/components/ExtensionCallback/ExtensionCallback.css";
 
 export const dynamic = "force-static";
 
-export const metadata = {
-  title: "Connect extension – Element Armory",
+import { buildNoIndexMetadata } from "@/lib/seo";
+
+export const metadata = buildNoIndexMetadata({
+  title: "Connect extension",
   description: "Pass sign-in code to the Element Armory extension.",
-  robots: { index: false, follow: false },
-};
+  path: "/auth/extension-callback",
+});
 
 function CallbackFallback(): React.ReactElement {
   return (

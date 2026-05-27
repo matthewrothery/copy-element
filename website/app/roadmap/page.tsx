@@ -1,17 +1,29 @@
+import { StructuredData } from "@/components/StructuredData";
+import { DEFAULT_FAQ_ITEMS } from "@/components/FAQ/constants";
 import { FAQ } from "@/components/FAQ";
 import { Footer } from "@/components/Footer";
 import { Header } from "@/components/Header";
 import { PageHero } from "@/components/PageHero";
 import { Section } from "@/components/Section";
+import { SITE_URL } from "@/lib/publicConfig";
+import {
+  buildPageMetadata,
+  faqPageSchema,
+  webPageSchema,
+} from "@/lib/seo";
 import "./page.css";
 
 export const dynamic = "force-static";
 
-export const metadata = {
-  title: "Roadmap – Element Armory",
-  description: "Planned and upcoming features for Element Armory.",
-  alternates: { canonical: "/roadmap" },
-};
+const ROADMAP_TITLE = "Element Armory Product Roadmap";
+const ROADMAP_DESCRIPTION =
+  "See what Element Armory is building next: capture improvements, library features, AI workflows, and extension updates on the public roadmap.";
+
+export const metadata = buildPageMetadata({
+  title: ROADMAP_TITLE,
+  description: ROADMAP_DESCRIPTION,
+  path: "/roadmap",
+});
 
 const ROADMAP_ITEMS: { status: "in-progress" | "planned"; title: string; description: string }[] = [
   {
@@ -58,8 +70,20 @@ const STATUS_LABEL: Record<"in-progress" | "planned", string> = {
 };
 
 export default function RoadmapPage(): React.ReactElement {
+  const pageUrl = `${SITE_URL}/roadmap`;
+
   return (
     <>
+      <StructuredData
+        data={[
+          webPageSchema({
+            name: ROADMAP_TITLE,
+            description: ROADMAP_DESCRIPTION,
+            path: "/roadmap",
+          }),
+          faqPageSchema(DEFAULT_FAQ_ITEMS, pageUrl),
+        ]}
+      />
       <Header />
       <main>
         <PageHero

@@ -5,11 +5,13 @@ import { Section } from "@/components/Section";
 import { BillingContent } from "@/components/BillingContent";
 import styles from "./page.module.css";
 
-export const metadata = {
-  title: "Billing - Element Armory",
+import { buildNoIndexMetadata } from "@/lib/seo";
+
+export const metadata = buildNoIndexMetadata({
+  title: "Billing",
   description: "Manage your Element Armory billing and subscription.",
-  robots: { index: false, follow: false },
-};
+  path: "/billing",
+});
 
 export default function BillingPage(): React.ReactElement {
   return (

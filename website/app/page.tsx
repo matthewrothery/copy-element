@@ -1,5 +1,6 @@
-import type { Metadata } from "next";
 import Image from "next/image";
+import { StructuredData } from "@/components/StructuredData";
+import { DEFAULT_FAQ_ITEMS } from "@/components/FAQ/constants";
 import { Header } from "@/components/Header";
 import { Hero } from "@/components/Hero";
 import { FeatureSection } from "@/components/FeatureSection";
@@ -12,14 +13,36 @@ import { FAQ } from "@/components/FAQ";
 import { Footer } from "@/components/Footer";
 import { Section } from "@/components/Section";
 import { EXAMPLES } from "@/data/examples";
+import { SITE_URL } from "@/lib/publicConfig";
+import {
+  buildPageMetadata,
+  faqPageSchema,
+  HOME_DESCRIPTION,
+  HOME_TITLE,
+  webPageSchema,
+} from "@/lib/seo";
 
-export const metadata: Metadata = {
-  alternates: { canonical: "/" },
-};
+export const metadata = buildPageMetadata({
+  title: HOME_TITLE,
+  description: HOME_DESCRIPTION,
+  path: "/",
+});
+
+const homePageUrl = SITE_URL;
 
 export default function Home(): React.ReactElement {
   return (
     <>
+      <StructuredData
+        data={[
+          webPageSchema({
+            name: HOME_TITLE,
+            description: HOME_DESCRIPTION,
+            path: "/",
+          }),
+          faqPageSchema(DEFAULT_FAQ_ITEMS, homePageUrl),
+        ]}
+      />
       <Header />
       <main>
         <Section center>

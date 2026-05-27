@@ -7,7 +7,7 @@ export const csspeeperData: ComparisonData = {
     theirs: { name: "CSSPeeper" },
   },
   meta: {
-    title: "Element Armory vs CSSPeeper - UI Capture Tool Comparison",
+    title: "Element Armory vs CSSPeeper | UI Capture Tool Comparison",
     description:
       "Compare Element Armory and CSSPeeper. Element Armory captures full HTML for use in code with a snippet library and MCP integration. CSSPeeper is a design-focused CSS inspector showing colors, fonts, and assets.",
     canonicalPath: "/compare/element-armory-vs-csspeeper",

@@ -2,9 +2,11 @@ import { notFound } from "next/navigation";
 import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
 import { ArticleHeader, ArticleBody, ArticleCTA, SuggestedPosts } from "@/components/Article";
+import { StructuredData } from "@/components/StructuredData";
 import { getAllPosts, getPost } from "@/lib/parseBlog";
 import { schemaIsoDateFromFrontmatter } from "@/lib/schemaHelpers";
 import { SITE_URL } from "@/lib/publicConfig";
+import { articleSchema, buildPageMetadata } from "@/lib/seo";
 import "@/styles/blog.css";
 
 export const dynamic = "force-static";
@@ -17,15 +19,17 @@ export async function generateMetadata({
   params,
 }: {
   params: Promise<{ slug: string }>;
-}): Promise<{ title: string; description: string; alternates?: { canonical: string } }> {
+}) {
   const { slug } = await params;
   const post = getPost(slug);
-  if (!post) return { title: "Post Not Found", description: "" };
-  return {
-    title: `${post.title} – Element Armory`,
+  if (!post) return { title: "Post Not Found" };
+  return buildPageMetadata({
+    title: post.title,
     description: post.excerpt,
-    alternates: { canonical: `/blog/${slug}` },
-  };
+    path: `/blog/${slug}`,
+    image: post.coverImage,
+    openGraphType: "article",
+  });
 }
 
 export default async function BlogPostPage({
@@ -44,42 +48,18 @@ export default async function BlogPostPage({
   const postUrl = `${SITE_URL}/blog/${post.slug}`;
   const published = schemaIsoDateFromFrontmatter(post.date);
 
-  const articleSchema = {
-    "@context": "https://schema.org",
-    "@type": "Article",
-    "@id": `${postUrl}#article`,
-    headline: post.title,
-    description: post.excerpt,
-    datePublished: published,
-    dateModified: published,
-    inLanguage: "en-US",
-    author: {
-      "@type": "Person",
-      name: post.author,
-    },
-    publisher: {
-      "@type": "Organization",
-      name: "Element Armory",
-      url: SITE_URL,
-      logo: {
-        "@type": "ImageObject",
-        url: `${SITE_URL}/logo.png`,
-      },
-    },
-    mainEntityOfPage: {
-      "@type": "WebPage",
-      "@id": `${postUrl}#webpage`,
-      url: postUrl,
-    },
-    url: postUrl,
-    ...(post.coverImage ? { image: post.coverImage } : {}),
-  };
-
   return (
     <>
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(articleSchema) }}
+      <StructuredData
+        data={articleSchema({
+          headline: post.title,
+          description: post.excerpt,
+          url: postUrl,
+          datePublished: published,
+          authorName: post.author,
+          image: post.coverImage,
+          type: "BlogPosting",
+        })}
       />
       <Header />
       <main className="blog-page">

@@ -5,11 +5,13 @@ import "./sign-in.css";
 
 export const dynamic = "force-static";
 
-export const metadata = {
-  title: "Sign in – Element Armory",
+import { buildNoIndexMetadata } from "@/lib/seo";
+
+export const metadata = buildNoIndexMetadata({
+  title: "Sign in",
   description: "Sign in to your Element Armory account.",
-  robots: { index: false, follow: false },
-};
+  path: "/sign-in",
+});
 
 export default function SignInPage(): React.ReactElement {
   return (

@@ -8,8 +8,14 @@ import {
   TopicFaq,
   TopicCta,
 } from "@/components/Topic";
+import { StructuredData } from "@/components/StructuredData";
 import { getAllHubs, getHub } from "@/lib/parseTopics";
 import { SITE_URL } from "@/lib/publicConfig";
+import {
+  buildPageMetadata,
+  collectionPageSchema,
+  faqPageSchema,
+} from "@/lib/seo";
 import "@/styles/topics.css";
 
 export const dynamic = "force-static";
@@ -26,11 +32,11 @@ export async function generateMetadata({
   const { hub: hubSlug } = await params;
   const hub = getHub(hubSlug);
   if (!hub) return { title: "Not Found" };
-  return {
-    title: `${hub.title} – Element Armory`,
+  return buildPageMetadata({
+    title: hub.title,
     description: hub.excerpt,
-    alternates: { canonical: `/topics/${hubSlug}` },
-  };
+    path: `/topics/${hubSlug}`,
+  });
 }
 
 export default async function HubPage({
@@ -48,67 +54,25 @@ export default async function HubPage({
   );
 
   const pageUrl = `${SITE_URL}/topics/${hub.hub}`;
-
-  const collectionSchema = {
-    "@context": "https://schema.org",
-    "@type": "CollectionPage",
-    "@id": `${pageUrl}#webpage`,
-    name: hub.title,
-    description: hub.excerpt,
-    url: pageUrl,
-    inLanguage: "en-US",
-    isPartOf: {
-      "@type": "WebSite",
-      "@id": `${SITE_URL}/#website`,
-      name: "Element Armory",
-      url: SITE_URL,
-    },
-    publisher: {
-      "@type": "Organization",
-      name: "Element Armory",
-      url: SITE_URL,
-      logo: {
-        "@type": "ImageObject",
-        url: `${SITE_URL}/logo.png`,
-      },
-    },
-    hasPart: hub.clusters.map((c) => ({
-      "@type": "WebPage",
-      name: c.title,
-      url: `${SITE_URL}/topics/${hub.hub}/${c.cluster}`,
-      description: c.excerpt,
-    })),
-  };
-
-  const faqSchema =
-    hub.faq.length > 0
-      ? {
-          "@context": "https://schema.org",
-          "@type": "FAQPage",
-          "@id": `${pageUrl}#faq`,
-          mainEntity: hub.faq.map((item) => ({
-            "@type": "Question",
-            name: item.question,
-            acceptedAnswer: {
-              "@type": "Answer",
-              text: item.answer,
-            },
-          })),
-        }
-      : null;
+  const schemaBlocks: Array<Record<string, unknown>> = [
+    collectionPageSchema({
+      name: hub.title,
+      description: hub.excerpt,
+      url: pageUrl,
+      hasPart: hub.clusters.map((c) => ({
+        name: c.title,
+        url: `${SITE_URL}/topics/${hub.hub}/${c.cluster}`,
+        description: c.excerpt,
+      })),
+    }),
+  ];
+  if (hub.faq.length > 0) {
+    schemaBlocks.push(faqPageSchema(hub.faq, pageUrl));
+  }
 
   return (
     <>
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(collectionSchema) }}
-      />
-      {faqSchema && (
-        <script
-          type="application/ld+json"
-          dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }}
-        />
-      )}
+      <StructuredData data={schemaBlocks} />
       <Header />
       <main className="topics-page">
         <TopicBreadcrumb
@@ -120,9 +84,14 @@ export default async function HubPage({
 
         <header className="topics-page__header">
           <p className="topics-page__eyebrow">
-            <span>{hub.clusters.length} {hub.clusters.length === 1 ? "cluster" : "clusters"}</span>
+            <span>
+              {hub.clusters.length}{" "}
+              {hub.clusters.length === 1 ? "cluster" : "clusters"}
+            </span>
             <span aria-hidden>·</span>
-            <span>{totalArticles} {totalArticles === 1 ? "article" : "articles"}</span>
+            <span>
+              {totalArticles} {totalArticles === 1 ? "article" : "articles"}
+            </span>
           </p>
           <h1 className="topics-page__heading">{hub.title}</h1>
           <p className="topics-page__excerpt">{hub.excerpt}</p>

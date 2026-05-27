@@ -7,7 +7,7 @@ export const snipcssData: ComparisonData = {
     theirs: { name: "SnipCSS" },
   },
   meta: {
-    title: "Element Armory vs SnipCSS - UI Capture Tool Comparison",
+    title: "Element Armory vs SnipCSS | UI Capture Tool Comparison",
     description:
       "Compare Element Armory and SnipCSS side by side. See which tool captures full UI components versus CSS-only extraction, and which integrates better into a modern development workflow.",
     canonicalPath: "/compare/element-armory-vs-snipcss",

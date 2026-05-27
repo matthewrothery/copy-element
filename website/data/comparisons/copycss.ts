@@ -7,7 +7,7 @@ export const copycssData: ComparisonData = {
     theirs: { name: "CopyCSS" },
   },
   meta: {
-    title: "Element Armory vs CopyCSS - UI Capture Tool Comparison",
+    title: "Element Armory vs CopyCSS | UI Capture Tool Comparison",
     description:
       "Compare Element Armory and CopyCSS side by side. One copies CSS. The other captures full UI - HTML, a snippet library, and MCP server integration for AI coding tools.",
     canonicalPath: "/compare/element-armory-vs-copycss",

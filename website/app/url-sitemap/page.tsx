@@ -1,18 +1,24 @@
 import Link from "next/link";
+import { StructuredData } from "@/components/StructuredData";
 import { Footer } from "@/components/Footer";
 import { Header } from "@/components/Header";
 import { PageHero } from "@/components/PageHero";
 import { getAllHubs } from "@/lib/parseTopics";
+import { buildPageMetadata, webPageSchema } from "@/lib/seo";
 import "@/styles/policy.css";
 import "./sitemap-page.css";
 
 export const dynamic = "force-static";
 
-export const metadata = {
-  title: "Sitemap – Element Armory",
-  description: "All pages on Element Armory.",
-  alternates: { canonical: "/url-sitemap" },
-};
+const URL_SITEMAP_TITLE = "Element Armory HTML Sitemap";
+const URL_SITEMAP_DESCRIPTION =
+  "Browse every public page on Element Armory, including product pages, guides, comparisons, blog posts, and topic hubs.";
+
+export const metadata = buildPageMetadata({
+  title: URL_SITEMAP_TITLE,
+  description: URL_SITEMAP_DESCRIPTION,
+  path: "/url-sitemap",
+});
 
 const topicHubs = getAllHubs();
 
@@ -27,6 +33,8 @@ const STATIC_SITEMAP_SECTIONS = [
       { label: "Blog", href: "/blog" },
       { label: "Changelog", href: "/changelog" },
       { label: "Roadmap", href: "/roadmap" },
+      { label: "Support", href: "/support" },
+      { label: "Features", href: "/features" },
     ],
   },
   {
@@ -47,6 +55,8 @@ const STATIC_SITEMAP_SECTIONS = [
       { label: "Element Armory vs SnipCSS", href: "/compare/element-armory-vs-snipcss" },
       { label: "Element Armory vs CSS Scan", href: "/compare/element-armory-vs-css-scan" },
       { label: "Element Armory vs CopyCSS", href: "/compare/element-armory-vs-copycss" },
+      { label: "Element Armory vs VisBug", href: "/compare/element-armory-vs-visbug" },
+      { label: "Element Armory vs CSSPeeper", href: "/compare/element-armory-vs-csspeeper" },
     ],
   },
   {
@@ -71,6 +81,13 @@ const STATIC_SITEMAP_SECTIONS = [
 export default function SitemapPage(): React.ReactElement {
   return (
     <>
+      <StructuredData
+        data={webPageSchema({
+          name: URL_SITEMAP_TITLE,
+          description: URL_SITEMAP_DESCRIPTION,
+          path: "/url-sitemap",
+        })}
+      />
       <Header />
       <main>
         <PageHero

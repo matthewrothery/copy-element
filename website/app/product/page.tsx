@@ -1,5 +1,5 @@
-import type { Metadata } from "next";
 import Image from "next/image";
+import { StructuredData } from "@/components/StructuredData";
 import { Header } from "@/components/Header";
 import { Hero } from "@/components/Hero";
 import { ElementsShowcase } from "@/components/ElementsShowcase";
@@ -12,20 +12,78 @@ import { FAQ } from "@/components/FAQ";
 import { Footer } from "@/components/Footer";
 import { Section } from "@/components/Section";
 import { EXAMPLES } from "@/data/examples";
-import { CHROME_STORE_URL } from "@/lib/publicConfig";
+import { CHROME_STORE_URL, SITE_URL } from "@/lib/publicConfig";
+import {
+  buildPageMetadata,
+  faqPageSchema,
+  webPageSchema,
+} from "@/lib/seo";
 
-export const metadata: Metadata = {
-  title: "How It Works – Element Armory",
-  description:
-    "Click any element on any site. Get clean HTML instantly. Save it, reuse it, and pipe it straight into Cursor or Claude with the MCP server.",
-  alternates: { canonical: "/product" },
-};
+const PRODUCT_TITLE = "Capture Website UI as Clean HTML";
+const PRODUCT_DESCRIPTION =
+  "Click any element on any site and get clean HTML instantly. Save snippets to your library and send captures to Cursor or Claude with the MCP server.";
+
+const PRODUCT_FAQ_ITEMS = [
+  {
+    question: "Does it work with Cursor?",
+    answer:
+      "Yes. Element Armory ships with an MCP server. Connect it to Cursor and captured elements land directly in your editor context. Setup takes under two minutes - see the help docs for a step-by-step guide.",
+  },
+  {
+    question: "Can I use the output with any framework?",
+    answer:
+      "Yes. HTML output is clean markup with a scoped CSS style block-it works in any project without modification. Framework-neutral and requires no cleanup.",
+  },
+  {
+    question: "Do I need to sign up to start?",
+    answer:
+      "No. Install the extension and start capturing immediately. An account is required to save snippets to your library and sync across devices.",
+  },
+  {
+    question: "What sites does it work on?",
+    answer:
+      "Any publicly accessible website. Element Armory runs entirely in your browser - it doesn't need access to a site's source code or APIs.",
+  },
+  {
+    question: "Will saved snippets break if the original site changes?",
+    answer:
+      "No. Once captured, your snippet is independent of the original site. Changes to the source don't affect anything saved in your library.",
+  },
+  {
+    question: "How does the MCP server work?",
+    answer:
+      "The MCP server connects Element Armory to MCP-compatible AI editors. When you capture an element, it becomes available as context inside your editor so your AI tool can reference it directly when generating code.",
+  },
+  {
+    question: "Does it capture JavaScript behavior?",
+    answer:
+      "No - by design. Element Armory captures visual structure and styles only. No scripts, event handlers, or runtime logic are included. This keeps output portable and safe to paste into any project.",
+  },
+] as const;
+
+export const metadata = buildPageMetadata({
+  title: PRODUCT_TITLE,
+  description: PRODUCT_DESCRIPTION,
+  path: "/product",
+});
 
 export const dynamic = "force-static";
 
 export default function ProductPage(): React.ReactElement {
+  const pageUrl = `${SITE_URL}/product`;
+
   return (
     <>
+      <StructuredData
+        data={[
+          webPageSchema({
+            name: PRODUCT_TITLE,
+            description: PRODUCT_DESCRIPTION,
+            path: "/product",
+          }),
+          faqPageSchema([...PRODUCT_FAQ_ITEMS], pageUrl),
+        ]}
+      />
       <Header />
       <main>
         <Section center>
@@ -216,45 +274,7 @@ export default function ProductPage(): React.ReactElement {
         </Section>
 
         <Section id="faq">
-          <FAQ
-            items={[
-              {
-                question: "Does it work with Cursor?",
-                answer:
-                  "Yes. Element Armory ships with an MCP server. Connect it to Cursor and captured elements land directly in your editor context. Setup takes under two minutes - see the help docs for a step-by-step guide.",
-              },
-              {
-                question: "Can I use the output with any framework?",
-                answer:
-                  "Yes. HTML output is clean markup with a scoped CSS style block-it works in any project without modification. Framework-neutral and requires no cleanup.",
-              },
-              {
-                question: "Do I need to sign up to start?",
-                answer:
-                  "No. Install the extension and start capturing immediately. An account is required to save snippets to your library and sync across devices.",
-              },
-              {
-                question: "What sites does it work on?",
-                answer:
-                  "Any publicly accessible website. Element Armory runs entirely in your browser - it doesn't need access to a site's source code or APIs.",
-              },
-              {
-                question: "Will saved snippets break if the original site changes?",
-                answer:
-                  "No. Once captured, your snippet is independent of the original site. Changes to the source don't affect anything saved in your library.",
-              },
-              {
-                question: "How does the MCP server work?",
-                answer:
-                  "The MCP server connects Element Armory to MCP-compatible AI editors. When you capture an element, it becomes available as context inside your editor so your AI tool can reference it directly when generating code.",
-              },
-              {
-                question: "Does it capture JavaScript behavior?",
-                answer:
-                  "No - by design. Element Armory captures visual structure and styles only. No scripts, event handlers, or runtime logic are included. This keeps output portable and safe to paste into any project.",
-              },
-            ]}
-          />
+          <FAQ items={[...PRODUCT_FAQ_ITEMS]} />
         </Section>
 
         <Footer />

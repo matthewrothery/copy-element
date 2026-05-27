@@ -8,9 +8,15 @@ import {
   TopicFaq,
   TopicCta,
 } from "@/components/Topic";
+import { StructuredData } from "@/components/StructuredData";
 import { getAllClustersFlat, getCluster, getHub } from "@/lib/parseTopics";
 import { schemaIsoDateFromFrontmatter } from "@/lib/schemaHelpers";
 import { SITE_URL } from "@/lib/publicConfig";
+import {
+  buildPageMetadata,
+  collectionPageSchema,
+  faqPageSchema,
+} from "@/lib/seo";
 import "@/styles/topics.css";
 import "@/components/Article/ArticleBody.css";
 
@@ -28,11 +34,11 @@ export async function generateMetadata({
   const { hub: hubSlug, cluster: clusterSlug } = await params;
   const cluster = getCluster(hubSlug, clusterSlug);
   if (!cluster) return { title: "Not Found" };
-  return {
-    title: `${cluster.title} – Element Armory`,
+  return buildPageMetadata({
+    title: cluster.title,
     description: cluster.excerpt,
-    alternates: { canonical: `/topics/${hubSlug}/${clusterSlug}` },
-  };
+    path: `/topics/${hubSlug}/${clusterSlug}`,
+  });
 }
 
 export default async function ClusterPage({
@@ -45,70 +51,29 @@ export default async function ClusterPage({
   if (!cluster) notFound();
 
   const hub = getHub(hubSlug);
-
   const pageUrl = `${SITE_URL}/topics/${hubSlug}/${clusterSlug}`;
 
-  const collectionSchema = {
-    "@context": "https://schema.org",
-    "@type": "CollectionPage",
-    "@id": `${pageUrl}#webpage`,
-    name: cluster.title,
-    description: cluster.excerpt,
-    url: pageUrl,
-    inLanguage: "en-US",
-    isPartOf: {
-      "@type": "WebSite",
-      "@id": `${SITE_URL}/#website`,
-      name: "Element Armory",
-      url: SITE_URL,
-    },
-    publisher: {
-      "@type": "Organization",
-      name: "Element Armory",
-      url: SITE_URL,
-      logo: {
-        "@type": "ImageObject",
-        url: `${SITE_URL}/logo.png`,
-      },
-    },
-    hasPart: cluster.articles.map((a) => ({
-      "@type": "Article",
-      headline: a.title,
-      url: `${SITE_URL}/topics/${hubSlug}/${clusterSlug}/${a.slug}`,
-      description: a.excerpt,
-      datePublished: schemaIsoDateFromFrontmatter(a.date),
-    })),
-  };
-
-  const faqSchema =
-    cluster.faq.length > 0
-      ? {
-          "@context": "https://schema.org",
-          "@type": "FAQPage",
-          "@id": `${pageUrl}#faq`,
-          mainEntity: cluster.faq.map((item) => ({
-            "@type": "Question",
-            name: item.question,
-            acceptedAnswer: {
-              "@type": "Answer",
-              text: item.answer,
-            },
-          })),
-        }
-      : null;
+  const schemaBlocks: Array<Record<string, unknown>> = [
+    collectionPageSchema({
+      name: cluster.title,
+      description: cluster.excerpt,
+      url: pageUrl,
+      hasPart: cluster.articles.map((a) => ({
+        name: a.title,
+        url: `${SITE_URL}/topics/${hubSlug}/${clusterSlug}/${a.slug}`,
+        description: a.excerpt,
+        type: "Article",
+        datePublished: schemaIsoDateFromFrontmatter(a.date),
+      })),
+    }),
+  ];
+  if (cluster.faq.length > 0) {
+    schemaBlocks.push(faqPageSchema(cluster.faq, pageUrl));
+  }
 
   return (
     <>
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(collectionSchema) }}
-      />
-      {faqSchema && (
-        <script
-          type="application/ld+json"
-          dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }}
-        />
-      )}
+      <StructuredData data={schemaBlocks} />
       <Header />
       <main className="topics-page">
         <TopicBreadcrumb

@@ -1,4 +1,4 @@
-import type { Metadata } from "next";
+import { StructuredData } from "@/components/StructuredData";
 import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
 import { Section } from "@/components/Section";
@@ -7,20 +7,25 @@ import { FAQ } from "@/components/FAQ";
 import type { FAQItem } from "@/components/FAQ";
 import { CTABlock } from "@/components/CTABlock";
 import { HtmlToReactConverter } from "@/components/HtmlToReactConverter";
+import { SITE_URL } from "@/lib/publicConfig";
+import {
+  buildPageMetadata,
+  faqPageSchema,
+  webApplicationSchema,
+  webPageSchema,
+} from "@/lib/seo";
 
 export const dynamic = "force-static";
 
-export const metadata: Metadata = {
-  title: "HTML to React Converter – Free JSX & Tailwind Tool | Element Armory",
-  description:
-    "Convert HTML to React JSX, Vue, or Next.js components instantly. Optionally map inline CSS to Tailwind classes and apply accessibility fixes. Free, no signup required.",
-  alternates: { canonical: "/tools/html-to-react" },
-  openGraph: {
-    title: "HTML to React Converter – Element Armory",
-    description:
-      "Convert HTML to React JSX, Vue, or Next.js. Map inline CSS to Tailwind classes. Free tool, no signup.",
-  },
-};
+const TOOL_TITLE = "HTML to React Converter | Free Online Tool";
+const TOOL_DESCRIPTION =
+  "Convert HTML to React JSX, Vue, or Next.js online. Map inline CSS to utility classes and apply accessibility fixes. Free, no signup required.";
+
+export const metadata = buildPageMetadata({
+  title: TOOL_TITLE,
+  description: TOOL_DESCRIPTION,
+  path: "/tools/html-to-react",
+});
 
 const FAQ_ITEMS: FAQItem[] = [
   {
@@ -56,8 +61,25 @@ const FAQ_ITEMS: FAQItem[] = [
 ];
 
 export default function HtmlToReactPage(): React.ReactElement {
+  const pageUrl = `${SITE_URL}/tools/html-to-react`;
+
   return (
     <>
+      <StructuredData
+        data={[
+          webPageSchema({
+            name: TOOL_TITLE,
+            description: TOOL_DESCRIPTION,
+            path: "/tools/html-to-react",
+          }),
+          webApplicationSchema({
+            name: "HTML to React Converter",
+            description: TOOL_DESCRIPTION,
+            path: "/tools/html-to-react",
+          }),
+          faqPageSchema(FAQ_ITEMS, pageUrl),
+        ]}
+      />
       <Header />
       <main>
         <PageHero

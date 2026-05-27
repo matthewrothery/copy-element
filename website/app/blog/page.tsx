@@ -1,22 +1,43 @@
 import Link from "next/link";
 import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
+import { StructuredData } from "@/components/StructuredData";
 import { getAllPosts } from "@/lib/parseBlog";
+import { SITE_URL } from "@/lib/publicConfig";
+import { buildPageMetadata, collectionPageSchema } from "@/lib/seo";
 import "@/styles/blog.css";
 
 export const dynamic = "force-static";
 
-export const metadata = {
-  title: "Blog – Element Armory",
-  description: "Element Armory blog: product updates and tips.",
-  alternates: { canonical: "/blog" },
-};
+const BLOG_INDEX_TITLE = "UI Capture Guides and Product Updates";
+const BLOG_INDEX_DESCRIPTION =
+  "Read Element Armory guides on copying UI from websites, AI coding workflows, Chrome extension tips, and product updates.";
+
+export const metadata = buildPageMetadata({
+  title: BLOG_INDEX_TITLE,
+  description: BLOG_INDEX_DESCRIPTION,
+  path: "/blog",
+});
 
 export default function BlogPage(): React.ReactElement {
   const posts = getAllPosts();
+  const pageUrl = `${SITE_URL}/blog`;
 
   return (
     <>
+      <StructuredData
+        data={collectionPageSchema({
+          name: BLOG_INDEX_TITLE,
+          description: BLOG_INDEX_DESCRIPTION,
+          url: pageUrl,
+          hasPart: posts.map((post) => ({
+            name: post.title,
+            url: `${SITE_URL}/blog/${post.slug}`,
+            description: post.excerpt,
+            type: "BlogPosting",
+          })),
+        })}
+      />
       <Header />
       <main className="blog-page">
         <h1 className="blog-index__heading">Blog</h1>

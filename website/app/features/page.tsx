@@ -1,5 +1,6 @@
-import type { Metadata } from 'next'
 import Image from 'next/image'
+import { StructuredData } from '@/components/StructuredData'
+import { DEFAULT_FAQ_ITEMS } from '@/components/FAQ/constants'
 import { Footer } from '@/components/Footer'
 import { Header } from '@/components/Header'
 import { Section } from '@/components/Section'
@@ -12,8 +13,18 @@ import { CTABlock } from '@/components/CTABlock'
 import { FAQ } from '@/components/FAQ'
 import './page.css'
 import { Hero } from '@/components/Hero'
+import { SITE_URL } from '@/lib/publicConfig'
+import {
+  buildPageMetadata,
+  faqPageSchema,
+  webPageSchema
+} from '@/lib/seo'
 
 export const dynamic = 'force-static'
+
+const FEATURES_TITLE = 'UI Capture Features for AI Workflows'
+const FEATURES_DESCRIPTION =
+  'Capture any UI element, copy clean HTML, generate AI-ready prompts, and load snippets into Cursor or other MCP-compatible editors.'
 
 const FEATURE_TABLE_ROWS: FeatureTableRow[] = [
   { feature: 'Capture any UI element in one click', status: 'yes' },
@@ -33,16 +44,27 @@ const FEATURE_TABLE_ROWS: FeatureTableRow[] = [
   }
 ]
 
-export const metadata: Metadata = {
-  title: 'Features – Element Armory',
-  description:
-    'Capture any UI element, copy clean HTML, generate AI-ready prompts, and pipe snippets directly into your editor via MCP.',
-  alternates: { canonical: '/features' }
-}
+export const metadata = buildPageMetadata({
+  title: FEATURES_TITLE,
+  description: FEATURES_DESCRIPTION,
+  path: '/features'
+})
 
 export default function FeaturesPage (): React.ReactElement {
+  const pageUrl = `${SITE_URL}/features`
+
   return (
     <>
+      <StructuredData
+        data={[
+          webPageSchema({
+            name: FEATURES_TITLE,
+            description: FEATURES_DESCRIPTION,
+            path: '/features'
+          }),
+          faqPageSchema(DEFAULT_FAQ_ITEMS, pageUrl)
+        ]}
+      />
       <Header />
       <main>
         <Section center>

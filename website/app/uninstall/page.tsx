@@ -6,11 +6,13 @@ import { UninstallFeedback } from "@/components/UninstallFeedback/UninstallFeedb
 
 export const dynamic = "force-static";
 
-export const metadata = {
-  title: "You've left – Element Armory",
+import { buildNoIndexMetadata } from "@/lib/seo";
+
+export const metadata = buildNoIndexMetadata({
+  title: "You've left",
   description: "Help us improve by sharing why you uninstalled Element Armory.",
-  robots: { index: false, follow: false },
-};
+  path: "/uninstall",
+});
 
 export default function UninstallPage(): React.ReactElement {
   return (

@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { StructuredData } from "@/components/StructuredData";
 import { Footer } from "@/components/Footer";
 import { Header } from "@/components/Header";
 import { PageHero } from "@/components/PageHero";
@@ -6,15 +7,28 @@ import "@/styles/policy.css";
 
 export const dynamic = "force-static";
 
-export const metadata = {
-  title: "Cookie Policy – Element Armory",
-  description: "How Element Armory uses cookies and similar technologies.",
-  alternates: { canonical: "/cookies" },
-};
+import { buildPageMetadata, webPageSchema } from "@/lib/seo";
+
+const COOKIES_TITLE = "Element Armory Cookie Policy";
+const COOKIES_DESCRIPTION =
+  "Understand how Element Armory uses cookies and similar technologies on the marketing website and in related services.";
+
+export const metadata = buildPageMetadata({
+  title: COOKIES_TITLE,
+  description: COOKIES_DESCRIPTION,
+  path: "/cookies",
+});
 
 export default function CookiesPage(): React.ReactElement {
   return (
     <>
+      <StructuredData
+        data={webPageSchema({
+          name: COOKIES_TITLE,
+          description: COOKIES_DESCRIPTION,
+          path: "/cookies",
+        })}
+      />
       <Header />
       <main className="content-page">
         <PageHero

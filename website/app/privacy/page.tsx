@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { StructuredData } from "@/components/StructuredData";
 import { Footer } from "@/components/Footer";
 import { Header } from "@/components/Header";
 import { PageHero } from "@/components/PageHero";
@@ -6,15 +7,28 @@ import "@/styles/policy.css";
 
 export const dynamic = "force-static";
 
-export const metadata = {
-  title: "Privacy Policy – Element Armory",
-  description: "How Element Armory collects, uses, and protects your personal information.",
-  alternates: { canonical: "/privacy" },
-};
+import { buildPageMetadata, webPageSchema } from "@/lib/seo";
+
+const PRIVACY_TITLE = "Element Armory Privacy Policy";
+const PRIVACY_DESCRIPTION =
+  "Learn how Element Armory collects, uses, stores, and protects your personal information when you use the extension and website.";
+
+export const metadata = buildPageMetadata({
+  title: PRIVACY_TITLE,
+  description: PRIVACY_DESCRIPTION,
+  path: "/privacy",
+});
 
 export default function PrivacyPage(): React.ReactElement {
   return (
     <>
+      <StructuredData
+        data={webPageSchema({
+          name: PRIVACY_TITLE,
+          description: PRIVACY_DESCRIPTION,
+          path: "/privacy",
+        })}
+      />
       <Header />
       <main className="content-page">
         <PageHero
