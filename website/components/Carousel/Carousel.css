@@ -114,6 +114,8 @@
 
 .carousel.snap .carousel-track {
   scroll-snap-type: x mandatory;
+  scroll-padding-left: max(var(--carousel-padding-inline), calc((100vw - var(--content-max-width)) / 2 + 20px));
+  scroll-padding-right: max(var(--carousel-padding-inline), calc((100vw - var(--content-max-width)) / 2 + 20px));
 }
 
 .carousel.snap .carousel-track > * {
@@ -127,6 +129,11 @@
     padding-right: var(--carousel-padding-inline);
     margin-left: calc(-1 * var(--carousel-padding-inline));
     margin-right: calc(-1 * var(--carousel-padding-inline));
+  }
+
+  .carousel.snap .carousel-track {
+    scroll-padding-left: var(--carousel-padding-inline);
+    scroll-padding-right: var(--carousel-padding-inline);
   }
 
   .carousel-controls {
