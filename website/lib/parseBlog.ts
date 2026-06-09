@@ -11,6 +11,7 @@ export type BlogPost = {
   excerpt: string;
   readTime: string;
   coverImage?: string;
+  noindex?: boolean;
   contentHtml: string;
 };
 
@@ -30,6 +31,7 @@ function parsePost(filename: string): BlogPost {
     excerpt: data.excerpt as string,
     readTime: data.readTime as string,
     coverImage: data.coverImage as string | undefined,
+    noindex: (data.noindex as boolean | undefined) ?? false,
     contentHtml,
   };
 }

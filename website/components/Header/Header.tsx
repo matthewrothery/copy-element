@@ -14,7 +14,7 @@ const DEFAULT_NAV: NavItem[] = [
   { label: "Product", href: "/product" },
   { label: "Features", href: "/features" },
   { label: "Pricing", href: "/pricing" },
-  { label: "Examples", href: "/examples" },
+  { label: "Guides", href: "/topics" },
 ];
 
 export function Header({

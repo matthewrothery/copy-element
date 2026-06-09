@@ -6,6 +6,7 @@ author: "Element Armory Team"
 excerpt: "AI coding agents have crossed into critical infrastructure. But the market is consolidating around proven players while security implications of autonomous code generation remain dangerously underestimated."
 readTime: "5 min read"
 coverImage: "/blog/ai-coding-agents-consolidation-security-reckoning.png"
+noindex: true
 ---
 
 # AI Coding Agents Hit Scale-But Trust and Security Are the Real Reckoning

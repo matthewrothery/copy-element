@@ -6,7 +6,7 @@ import { StructuredData } from "@/components/StructuredData";
 import { getAllPosts, getPost } from "@/lib/parseBlog";
 import { schemaIsoDateFromFrontmatter } from "@/lib/schemaHelpers";
 import { SITE_URL } from "@/lib/publicConfig";
-import { articleSchema, buildPageMetadata } from "@/lib/seo";
+import { articleSchema, buildPageMetadata, buildNoIndexMetadata } from "@/lib/seo";
 import "@/styles/blog.css";
 
 export const dynamic = "force-static";
@@ -23,6 +23,13 @@ export async function generateMetadata({
   const { slug } = await params;
   const post = getPost(slug);
   if (!post) return { title: "Post Not Found" };
+  if (post.noindex) {
+    return buildNoIndexMetadata({
+      title: post.title,
+      description: post.excerpt,
+      path: `/blog/${slug}`,
+    });
+  }
   return buildPageMetadata({
     title: post.title,
     description: post.excerpt,

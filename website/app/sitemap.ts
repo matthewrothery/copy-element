@@ -10,12 +10,14 @@ export const dynamic = "force-static";
 export default function sitemap(): MetadataRoute.Sitemap {
   const lastModified = new Date();
 
-  const blogPosts = getAllPosts().map((post) => ({
-    url: `${SITE_URL}/blog/${post.slug}`,
-    lastModified,
-    changeFrequency: "monthly" as const,
-    priority: 0.7,
-  }));
+  const blogPosts = getAllPosts()
+    .filter((post) => !post.noindex)
+    .map((post) => ({
+      url: `${SITE_URL}/blog/${post.slug}`,
+      lastModified,
+      changeFrequency: "monthly" as const,
+      priority: 0.7,
+    }));
 
   const topicHubs = getAllHubs().map((h) => ({
     url: `${SITE_URL}/topics/${h.hub}`,

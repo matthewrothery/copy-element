@@ -1,0 +1,97 @@
+/* FeaturedContent – section wrapper */
+.featured-content {
+  --featured-card-width: min(82vw, 340px);
+  --featured-card-radius: var(--radius-md);
+  --featured-card-image-ratio: 16 / 9;
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-5);
+  overflow: visible;
+  width: 100%;
+}
+
+.featured-content .carousel {
+  width: 100%;
+}
+
+/* Card */
+.featured-card {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+  flex-shrink: 0;
+  width: var(--featured-card-width);
+  border-radius: var(--featured-card-radius);
+  border: 1px solid var(--border);
+  overflow: hidden;
+  text-decoration: none;
+  color: inherit;
+  background: var(--surface);
+  transition: border-color 160ms ease, transform 160ms ease;
+}
+
+.featured-card:hover {
+  border-color: rgba(59, 130, 246, 0.4);
+  transform: translateY(-2px);
+}
+
+/* Image */
+.featured-card__image-wrap {
+  width: 100%;
+  aspect-ratio: var(--featured-card-image-ratio);
+  overflow: hidden;
+  background: var(--surface);
+  flex-shrink: 0;
+}
+
+.featured-card__image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+/* Body */
+.featured-card__body {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+  padding: var(--space-4);
+}
+
+.featured-card__type {
+  font-size: var(--typo-label);
+  font-weight: var(--font-weight-semibold);
+  color: var(--accent);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+}
+
+.featured-card__title {
+  font-size: var(--typo-title);
+  font-weight: var(--font-weight-semibold);
+  color: var(--text);
+  line-height: 1.3;
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.featured-card__excerpt {
+  font-size: var(--typo-copy);
+  color: var(--text-muted);
+  line-height: 1.5;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+@media (max-width: 480px) {
+  .featured-content {
+    --featured-card-width: 88vw;
+  }
+}

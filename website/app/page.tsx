@@ -12,6 +12,7 @@ import { CTABlock } from "@/components/CTABlock";
 import { FAQ } from "@/components/FAQ";
 import { Footer } from "@/components/Footer";
 import { Section } from "@/components/Section";
+import { FeaturedContent, type FeaturedContentItem } from "@/components/FeaturedContent";
 import { EXAMPLES } from "@/data/examples";
 import { SITE_URL } from "@/lib/publicConfig";
 import {
@@ -29,6 +30,65 @@ export const metadata = buildPageMetadata({
 });
 
 const homePageUrl = SITE_URL;
+
+const FEATURED_CONTENT: FeaturedContentItem[] = [
+  {
+    href: "/blog/copy-any-website-element-and-convert-it-to-react",
+    title: "Copy Any Website Element and Convert It to React",
+    excerpt: "A practical workflow for capturing UI from any site and rebuilding it as a clean React component.",
+    image: "/blog/copy-any-website-element-and-convert-it-to-react.jpg",
+    type: "blog",
+  },
+  {
+    href: "/topics/copy-ui-from-websites/copy-css-from-website/easiest-way-to-copy-css",
+    title: "Easiest Way to Copy CSS from Any Website",
+    excerpt: "Compare manual DevTools methods vs automated extraction, with real workflows for AI tools.",
+    image: "/topic-images/copy-ui-from-websites/copy-css-from-website/easiest-way-to-copy-css.png",
+    type: "guide",
+  },
+  {
+    href: "/topics/ai-coding-workflows/claude-code-workflows/capture-ui-for-claude",
+    title: "Capture UI for Claude Code",
+    excerpt: "Feed production-quality HTML and CSS directly into Claude Code for faster, more accurate component generation.",
+    image: "/topic-images/ai-coding-workflows/claude-code-workflows/capture-ui-for-claude.png",
+    type: "guide",
+  },
+  {
+    href: "/topics/ai-coding-workflows/cursor-workflows/send-html-to-cursor",
+    title: "Send HTML to Cursor",
+    excerpt: "Capture any live UI element and drop it straight into Cursor as working context — no manual copy-paste.",
+    image: "/topic-images/ai-coding-workflows/cursor-workflows/send-html-to-cursor.png",
+    type: "guide",
+  },
+  {
+    href: "/blog/how-to-vibe-code-beautiful-ui",
+    title: "How to Vibe Code Beautiful UI",
+    excerpt: "Stop asking AI to invent everything. Give it structure, references, and constraints — here's the workflow.",
+    image: "/blog/how-to-vibe-code-beautiful-ui.jpg",
+    type: "blog",
+  },
+  {
+    href: "/topics/copy-ui-from-websites/copy-html-css-together/copy-production-ready-ui",
+    title: "Copy Production-Ready UI from Live Websites",
+    excerpt: "Extract complete HTML and CSS from any live website in one click. Clean output you can paste straight into your project.",
+    image: "/topic-images/copy-ui-from-websites/copy-html-css-together/copy-production-ready-ui.jpeg",
+    type: "guide",
+  },
+  {
+    href: "/blog/vibe-code-ui",
+    title: "How to Vibe Code UI Without Getting Stuck",
+    excerpt: "Capture real interfaces, break them into pieces, and rebuild with intent. The fastest path out of a stuck vibe session.",
+    image: "/blog/vibe-code-ui.jpg",
+    type: "blog",
+  },
+  {
+    href: "/topics/tool-alternatives/divmagic-alternative/divmagic-for-ai-coding",
+    title: "DivMagic for AI Coding: Why It Falls Short",
+    excerpt: "DivMagic is built for design conversion. AI coding workflows need something different — here's what works better.",
+    image: "/topic-images/tool-alternatives/divmagic-alternative/divmagic-for-ai-coding.png",
+    type: "guide",
+  },
+];
 
 export default function Home(): React.ReactElement {
   return (
@@ -183,6 +243,10 @@ export default function Home(): React.ReactElement {
 
         <Section id="pricing">
           <CTABlock />
+        </Section>
+
+        <Section id="guides">
+          <FeaturedContent items={FEATURED_CONTENT} />
         </Section>
 
         <Section id="faq">
