@@ -1,0 +1,1963 @@
+{
+  "generatedAt": "2026-06-09T11:47:20.728Z",
+  "source": "google-search-console/performance/Pages.csv",
+  "opportunities": [
+    {
+      "url": "https://elementarmory.com/topics/copy-ui-from-websites/copy-html-from-website/copy-html-of-element-chrome",
+      "path": "/topics/copy-ui-from-websites/copy-html-from-website/copy-html-of-element-chrome",
+      "clicks": 1,
+      "impressions": 470,
+      "ctr": 0.0021,
+      "position": 9.48,
+      "title": "How to Copy HTML of an Element in Chrome: The Developer's Guide",
+      "excerpt": "Learn how to extract clean, reusable HTML from any website element using Chrome's Inspect tool. Step-by-step guide for developers, with practical workflows for AI-assisted coding.",
+      "hub": "copy-ui-from-websites",
+      "hubTitle": "Copy UI from Websites",
+      "cluster": "copy-html-from-website",
+      "clusterTitle": "Copy HTML from Website",
+      "slug": "copy-html-of-element-chrome",
+      "date": "2026-05-09",
+      "updatedAt": "2026-06-09",
+      "sourcePath": "website/content/topics/copy-ui-from-websites/copy-html-from-website/copy-html-of-element-chrome.md",
+      "metrics": {
+        "wordCount": 1553,
+        "internalLinks": 2,
+        "externalLinks": 7,
+        "bodyH1Headings": 0
+      },
+      "score": 1783.65,
+      "reasons": [
+        "ranking in positions 4-15",
+        "low CTR for visible page",
+        "high product-fit extraction intent"
+      ]
+    },
+    {
+      "url": "https://elementarmory.com/topics/copy-ui-from-websites/copy-html-from-website/how-to-copy-html-from-website",
+      "path": "/topics/copy-ui-from-websites/copy-html-from-website/how-to-copy-html-from-website",
+      "clicks": 0,
+      "impressions": 113,
+      "ctr": 0,
+      "position": 14.65,
+      "title": "How to Copy HTML from Any Website",
+      "excerpt": "Learn the fastest way to copy production-ready HTML from any website. Compare manual DevTools methods vs automated extraction, with practical steps and real-world examples for developers.",
+      "hub": "copy-ui-from-websites",
+      "hubTitle": "Copy UI from Websites",
+      "cluster": "copy-html-from-website",
+      "clusterTitle": "Copy HTML from Website",
+      "slug": "how-to-copy-html-from-website",
+      "date": "2026-05-01",
+      "updatedAt": "2026-06-09",
+      "sourcePath": "website/content/topics/copy-ui-from-websites/copy-html-from-website/how-to-copy-html-from-website.md",
+      "metrics": {
+        "wordCount": 1712,
+        "internalLinks": 8,
+        "externalLinks": 0,
+        "bodyH1Headings": 0
+      },
+      "score": 428.84,
+      "reasons": [
+        "ranking in positions 4-15",
+        "low CTR for visible page",
+        "no external citations in body",
+        "high product-fit extraction intent"
+      ]
+    },
+    {
+      "url": "https://elementarmory.com/topics/copy-ui-from-websites/copy-ui-without-devtools/copy-html-without-inspect-element",
+      "path": "/topics/copy-ui-from-websites/copy-ui-without-devtools/copy-html-without-inspect-element",
+      "clicks": 1,
+      "impressions": 109,
+      "ctr": 0.0092,
+      "position": 11.17,
+      "title": "Copy HTML Without Inspect Element: The Faster Way",
+      "excerpt": "Learn how to copy HTML from any website without opening DevTools. Extract clean, production-ready code in seconds using automated methods built for developers and AI workflows.",
+      "hub": "copy-ui-from-websites",
+      "hubTitle": "Copy UI from Websites",
+      "cluster": "copy-ui-without-devtools",
+      "clusterTitle": "Copy UI Without DevTools",
+      "slug": "copy-html-without-inspect-element",
+      "date": "2026-05-02",
+      "updatedAt": "2026-06-09",
+      "sourcePath": "website/content/topics/copy-ui-from-websites/copy-ui-without-devtools/copy-html-without-inspect-element.md",
+      "metrics": {
+        "wordCount": 1824,
+        "internalLinks": 3,
+        "externalLinks": 1,
+        "bodyH1Headings": 0
+      },
+      "score": 413.66,
+      "reasons": [
+        "ranking in positions 4-15",
+        "low CTR for visible page",
+        "high product-fit extraction intent"
+      ]
+    },
+    {
+      "url": "https://elementarmory.com/topics/ui-development-without-design-skills/copy-vs-design/copying-ui-legally",
+      "path": "/topics/ui-development-without-design-skills/copy-vs-design/copying-ui-legally",
+      "clicks": 0,
+      "impressions": 61,
+      "ctr": 0,
+      "position": 8.1,
+      "title": "Copying UI Legally: What You Can and Can't Do",
+      "excerpt": "Understand the legal boundaries of copying UI from live websites. Learn what's safe to extract, what requires permission, and how to use UI tools responsibly without copyright risk.",
+      "hub": "ui-development-without-design-skills",
+      "hubTitle": "UI Development Without Design Skills",
+      "cluster": "copy-vs-design",
+      "clusterTitle": "Copy vs Design",
+      "slug": "copying-ui-legally",
+      "date": "2026-05-01",
+      "updatedAt": "2026-06-09",
+      "sourcePath": "website/content/topics/ui-development-without-design-skills/copy-vs-design/copying-ui-legally.md",
+      "metrics": {
+        "wordCount": 1729,
+        "internalLinks": 5,
+        "externalLinks": 2,
+        "bodyH1Headings": 0
+      },
+      "score": 201.3,
+      "reasons": [
+        "ranking in positions 4-15",
+        "low CTR for visible page"
+      ]
+    },
+    {
+      "url": "https://elementarmory.com/topics/copy-ui-from-websites/copy-website-design/clone-website-ui-legally",
+      "path": "/topics/copy-ui-from-websites/copy-website-design/clone-website-ui-legally",
+      "clicks": 0,
+      "impressions": 52,
+      "ctr": 0,
+      "position": 8.42,
+      "title": "Clone Website UI Legally: What You Can Copy and What You Can't",
+      "excerpt": "Learn how to legally extract and reuse website UI designs without copyright risk. Understand the legal line between inspiration and duplication, and use modern tools to study and rebuild UI patterns ethically.",
+      "hub": "copy-ui-from-websites",
+      "hubTitle": "Copy UI from Websites",
+      "cluster": "copy-website-design",
+      "clusterTitle": "Copy Website Design",
+      "slug": "clone-website-ui-legally",
+      "date": "2026-05-07",
+      "updatedAt": "2026-06-09",
+      "sourcePath": "website/content/topics/copy-ui-from-websites/copy-website-design/clone-website-ui-legally.md",
+      "metrics": {
+        "wordCount": 1725,
+        "internalLinks": 1,
+        "externalLinks": 0,
+        "bodyH1Headings": 0
+      },
+      "score": 171.6,
+      "reasons": [
+        "ranking in positions 4-15",
+        "low CTR for visible page",
+        "no external citations in body"
+      ]
+    },
+    {
+      "url": "https://elementarmory.com/topics/tool-alternatives/css-scan-alternative/css-scan-alternative",
+      "path": "/topics/tool-alternatives/css-scan-alternative/css-scan-alternative",
+      "clicks": 0,
+      "impressions": 33,
+      "ctr": 0,
+      "position": 7.06,
+      "title": "Best CSS Scan Alternative in 2026",
+      "excerpt": "CSS Scan costs $40 and does one thing well. Element Armory gives you the same speed, better AI integration, and zero subscription cost. Here's the practical comparison developers actually need.",
+      "hub": "tool-alternatives",
+      "hubTitle": "Tool Alternatives",
+      "cluster": "css-scan-alternative",
+      "clusterTitle": "CSS Scan Alternative",
+      "slug": "css-scan-alternative",
+      "date": "2026-05-01",
+      "sourcePath": "website/content/topics/tool-alternatives/css-scan-alternative/css-scan-alternative.md",
+      "metrics": {
+        "wordCount": 1554,
+        "internalLinks": 6,
+        "externalLinks": 0,
+        "bodyH1Headings": 0
+      },
+      "score": 119.79,
+      "reasons": [
+        "ranking in positions 4-15",
+        "low CTR for visible page",
+        "no external citations in body",
+        "high product-fit comparison intent"
+      ]
+    },
+    {
+      "url": "https://elementarmory.com/topics/tool-alternatives/general-alternatives/tools-like-divmagic",
+      "path": "/topics/tool-alternatives/general-alternatives/tools-like-divmagic",
+      "clicks": 1,
+      "impressions": 37,
+      "ctr": 0.027000000000000003,
+      "position": 8.54,
+      "title": "Tools Like DivMagic: Best Alternatives for Faster UI Extraction in 2026",
+      "excerpt": "DivMagic is useful, but it's not the fastest option for modern development workflows. Compare Element Armory, CSS Peeper, SnipCSS, and other alternatives to find the tool that matches your speed and code quality needs.",
+      "hub": "tool-alternatives",
+      "hubTitle": "Tool Alternatives",
+      "cluster": "general-alternatives",
+      "clusterTitle": "General Alternatives",
+      "slug": "tools-like-divmagic",
+      "date": "2026-05-05",
+      "sourcePath": "website/content/topics/tool-alternatives/general-alternatives/tools-like-divmagic.md",
+      "metrics": {
+        "wordCount": 1827,
+        "internalLinks": 0,
+        "externalLinks": 0,
+        "bodyH1Headings": 0
+      },
+      "score": 111.93,
+      "reasons": [
+        "ranking in positions 4-15",
+        "no internal links in body",
+        "no external citations in body",
+        "high product-fit comparison intent"
+      ]
+    },
+    {
+      "url": "https://elementarmory.com/topics/tool-alternatives/snipcss-alternative/snipcss-review",
+      "path": "/topics/tool-alternatives/snipcss-alternative/snipcss-review",
+      "clicks": 0,
+      "impressions": 29,
+      "ctr": 0,
+      "position": 7.31,
+      "title": "SnipCSS Review: Why Developers Are Switching Away",
+      "excerpt": "SnipCSS extracts CSS quickly, but falls short for production code, AI workflows, and component reuse. See why developers are moving to better alternatives.",
+      "hub": "tool-alternatives",
+      "hubTitle": "Tool Alternatives",
+      "cluster": "snipcss-alternative",
+      "clusterTitle": "SnipCSS Alternative",
+      "slug": "snipcss-review",
+      "date": "2026-05-28",
+      "sourcePath": "website/content/topics/tool-alternatives/snipcss-alternative/snipcss-review.md",
+      "metrics": {
+        "wordCount": 2109,
+        "internalLinks": 4,
+        "externalLinks": 5,
+        "bodyH1Headings": 1
+      },
+      "score": 105.27,
+      "reasons": [
+        "ranking in positions 4-15",
+        "low CTR for visible page",
+        "body contains H1 headings",
+        "high product-fit comparison intent"
+      ]
+    },
+    {
+      "url": "https://elementarmory.com/topics/ai-coding-workflows/claude-code-workflows/use-ui-with-claude-code",
+      "path": "/topics/ai-coding-workflows/claude-code-workflows/use-ui-with-claude-code",
+      "clicks": 0,
+      "impressions": 31,
+      "ctr": 0,
+      "position": 9.16,
+      "title": "Use UI With Claude Code: Capture Production Components and Iterate Faster",
+      "excerpt": "Learn how to capture clean HTML and CSS from live UI, give it to Claude Code, and turn concrete interface references into better frontend output.",
+      "hub": "ai-coding-workflows",
+      "hubTitle": "AI Coding Workflows",
+      "cluster": "claude-code-workflows",
+      "clusterTitle": "Claude Code Workflows",
+      "slug": "use-ui-with-claude-code",
+      "date": "2026-05-11",
+      "sourcePath": "website/content/topics/ai-coding-workflows/claude-code-workflows/use-ui-with-claude-code.md",
+      "metrics": {
+        "wordCount": 686,
+        "internalLinks": 2,
+        "externalLinks": 0,
+        "bodyH1Headings": 0
+      },
+      "score": 102.3,
+      "reasons": [
+        "ranking in positions 4-15",
+        "low CTR for visible page",
+        "no external citations in body"
+      ]
+    },
+    {
+      "url": "https://elementarmory.com/topics/tool-alternatives/divmagic-alternative/divmagic-alternative",
+      "path": "/topics/tool-alternatives/divmagic-alternative/divmagic-alternative",
+      "clicks": 0,
+      "impressions": 23,
+      "ctr": 0,
+      "position": 8.43,
+      "title": "Best DivMagic Alternative in 2026",
+      "excerpt": "DivMagic extracts CSS, but Element Armory captures full HTML + CSS in one click and integrates seamlessly with AI coding workflows. Learn why it's the upgrade developers need.",
+      "hub": "tool-alternatives",
+      "hubTitle": "Tool Alternatives",
+      "cluster": "divmagic-alternative",
+      "clusterTitle": "DivMagic Alternative",
+      "slug": "divmagic-alternative",
+      "date": "2026-05-01",
+      "sourcePath": "website/content/topics/tool-alternatives/divmagic-alternative/divmagic-alternative.md",
+      "metrics": {
+        "wordCount": 1653,
+        "internalLinks": 5,
+        "externalLinks": 3,
+        "bodyH1Headings": 0
+      },
+      "score": 83.49,
+      "reasons": [
+        "ranking in positions 4-15",
+        "low CTR for visible page",
+        "high product-fit comparison intent"
+      ]
+    },
+    {
+      "url": "https://elementarmory.com/topics/tool-alternatives/general-alternatives/best-css-extractor-chrome-extension",
+      "path": "/topics/tool-alternatives/general-alternatives/best-css-extractor-chrome-extension",
+      "clicks": 0,
+      "impressions": 17,
+      "ctr": 0,
+      "position": 8.47,
+      "title": "Best CSS Extractor Chrome Extension: Element Armory vs 5+ Alternatives",
+      "excerpt": "Compare the fastest CSS extractor extensions. See why Element Armory beats SnipCSS, CSS Peeper, CSSPicker, UI Extractor, and CSS Extractor Pro for speed, simplicity, and AI-ready workflows.",
+      "hub": "tool-alternatives",
+      "hubTitle": "Tool Alternatives",
+      "cluster": "general-alternatives",
+      "clusterTitle": "General Alternatives",
+      "slug": "best-css-extractor-chrome-extension",
+      "date": "2026-05-08",
+      "sourcePath": "website/content/topics/tool-alternatives/general-alternatives/best-css-extractor-chrome-extension.md",
+      "metrics": {
+        "wordCount": 1286,
+        "internalLinks": 0,
+        "externalLinks": 9,
+        "bodyH1Headings": 0
+      },
+      "score": 77.14,
+      "reasons": [
+        "ranking in positions 4-15",
+        "low CTR for visible page",
+        "no internal links in body",
+        "high product-fit comparison intent"
+      ]
+    },
+    {
+      "url": "https://elementarmory.com/topics/copy-ui-from-websites/copy-html-from-website/copy-html-without-scripts",
+      "path": "/topics/copy-ui-from-websites/copy-html-from-website/copy-html-without-scripts",
+      "clicks": 0,
+      "impressions": 12,
+      "ctr": 0,
+      "position": 8,
+      "title": "Copy HTML Without Scripts: Clean Extraction for Production & AI Workflows",
+      "excerpt": "Extract clean, semantic HTML from any website without JavaScript bloat. Learn manual methods, automated tools, and best practices for production-ready code and AI workflows.",
+      "hub": "copy-ui-from-websites",
+      "hubTitle": "Copy UI from Websites",
+      "cluster": "copy-html-from-website",
+      "clusterTitle": "Copy HTML from Website",
+      "slug": "copy-html-without-scripts",
+      "date": "2026-05-25",
+      "sourcePath": "website/content/topics/copy-ui-from-websites/copy-html-from-website/copy-html-without-scripts.md",
+      "metrics": {
+        "wordCount": 2662,
+        "internalLinks": 5,
+        "externalLinks": 3,
+        "bodyH1Headings": 0
+      },
+      "score": 45.54,
+      "reasons": [
+        "ranking in positions 4-15",
+        "low CTR for visible page",
+        "high product-fit extraction intent"
+      ]
+    },
+    {
+      "url": "https://elementarmory.com/topics/landing-page-saas-ui/saas-ui/saas-ui-best-practices",
+      "path": "/topics/landing-page-saas-ui/saas-ui/saas-ui-best-practices",
+      "clicks": 0,
+      "impressions": 11,
+      "ctr": 0,
+      "position": 7.18,
+      "title": "SaaS UI Best Practices: Design Interfaces Users Actually Want to Use",
+      "excerpt": "Learn the core principles of SaaS UI design that reduce friction, increase adoption, and keep users in control. From information hierarchy to dashboard design, discover what separates interfaces users love from ones they abandon.",
+      "hub": "landing-page-saas-ui",
+      "hubTitle": "Landing Page & SaaS UI",
+      "cluster": "saas-ui",
+      "clusterTitle": "SaaS UI",
+      "slug": "saas-ui-best-practices",
+      "date": "2026-05-04",
+      "sourcePath": "website/content/topics/landing-page-saas-ui/saas-ui/saas-ui-best-practices.md",
+      "metrics": {
+        "wordCount": 1884,
+        "internalLinks": 0,
+        "externalLinks": 0,
+        "bodyH1Headings": 0
+      },
+      "score": 45.38,
+      "reasons": [
+        "ranking in positions 4-15",
+        "low CTR for visible page",
+        "no internal links in body",
+        "no external citations in body"
+      ]
+    },
+    {
+      "url": "https://elementarmory.com/topics/ai-coding-workflows/ai-prompting-for-ui/prompt-for-dashboards",
+      "path": "/topics/ai-coding-workflows/ai-prompting-for-ui/prompt-for-dashboards",
+      "clicks": 0,
+      "impressions": 10,
+      "ctr": 0,
+      "position": 8.8,
+      "title": "Prompt for Dashboards: Patterns That Generate Production Code",
+      "excerpt": "Learn the exact prompt patterns that generate production-ready dashboard UIs with Cursor, Claude, and ChatGPT. Move beyond generic templates to specific, iterative prompting that works.",
+      "hub": "ai-coding-workflows",
+      "hubTitle": "AI Coding Workflows",
+      "cluster": "ai-prompting-for-ui",
+      "clusterTitle": "AI Prompting for UI",
+      "slug": "prompt-for-dashboards",
+      "date": "2026-05-27",
+      "sourcePath": "website/content/topics/ai-coding-workflows/ai-prompting-for-ui/prompt-for-dashboards.md",
+      "metrics": {
+        "wordCount": 2596,
+        "internalLinks": 8,
+        "externalLinks": 8,
+        "bodyH1Headings": 1
+      },
+      "score": 33,
+      "reasons": [
+        "ranking in positions 4-15",
+        "low CTR for visible page",
+        "body contains H1 headings"
+      ]
+    },
+    {
+      "url": "https://elementarmory.com/topics/ai-coding-workflows/cursor-workflows/use-ui-with-cursor-ai",
+      "path": "/topics/ai-coding-workflows/cursor-workflows/use-ui-with-cursor-ai",
+      "clicks": 0,
+      "impressions": 10,
+      "ctr": 0,
+      "position": 12.9,
+      "title": "How to Use Real UI with Cursor AI",
+      "excerpt": "Learn how to capture real UI from production websites and feed it directly into Cursor AI to generate production-ready components faster, without starting from scratch.",
+      "hub": "ai-coding-workflows",
+      "hubTitle": "AI Coding Workflows",
+      "cluster": "cursor-workflows",
+      "clusterTitle": "Cursor Workflows",
+      "slug": "use-ui-with-cursor-ai",
+      "date": "2026-05-01",
+      "sourcePath": "website/content/topics/ai-coding-workflows/cursor-workflows/use-ui-with-cursor-ai.md",
+      "metrics": {
+        "wordCount": 1682,
+        "internalLinks": 7,
+        "externalLinks": 1,
+        "bodyH1Headings": 0
+      },
+      "score": 33,
+      "reasons": [
+        "ranking in positions 4-15",
+        "low CTR for visible page"
+      ]
+    },
+    {
+      "url": "https://elementarmory.com/topics/inspecting-debugging-css/understanding-css/understand-layout-issues",
+      "path": "/topics/inspecting-debugging-css/understanding-css/understand-layout-issues",
+      "clicks": 0,
+      "impressions": 17,
+      "ctr": 0,
+      "position": 21.47,
+      "title": "How to Understand Layout Issues: A Developer's Guide to Diagnosing CSS Problems",
+      "excerpt": "Learn how to systematically diagnose and fix CSS layout problems using browser DevTools and inspection techniques. This guide covers root causes, debugging workflows, and practical fixes for flexbox, grid, spacing, and responsive layout failures.",
+      "hub": "inspecting-debugging-css",
+      "hubTitle": "Inspecting & Debugging CSS",
+      "cluster": "understanding-css",
+      "clusterTitle": "Understanding CSS",
+      "slug": "understand-layout-issues",
+      "date": "2026-05-12",
+      "sourcePath": "website/content/topics/inspecting-debugging-css/understanding-css/understand-layout-issues.md",
+      "metrics": {
+        "wordCount": 1551,
+        "internalLinks": 0,
+        "externalLinks": 4,
+        "bodyH1Headings": 0
+      },
+      "score": 31.88,
+      "reasons": [
+        "low CTR for visible page",
+        "no internal links in body"
+      ]
+    },
+    {
+      "url": "https://elementarmory.com/topics/ai-coding-workflows/cursor-workflows/build-ui-faster-with-cursor",
+      "path": "/topics/ai-coding-workflows/cursor-workflows/build-ui-faster-with-cursor",
+      "clicks": 0,
+      "impressions": 17,
+      "ctr": 0,
+      "position": 24.71,
+      "title": "Build UI Faster with Cursor: Practical Workflows for Production-Ready Components",
+      "excerpt": "Learn how to use Cursor's AI features to build production-ready UI components in minutes instead of hours. Practical workflows, real examples, and strategies for integrating AI-assisted development into your existing process without sacrificing code quality.",
+      "hub": "ai-coding-workflows",
+      "hubTitle": "AI Coding Workflows",
+      "cluster": "cursor-workflows",
+      "clusterTitle": "Cursor Workflows",
+      "slug": "build-ui-faster-with-cursor",
+      "date": "2026-05-01",
+      "sourcePath": "website/content/topics/ai-coding-workflows/cursor-workflows/build-ui-faster-with-cursor.md",
+      "metrics": {
+        "wordCount": 1813,
+        "internalLinks": 0,
+        "externalLinks": 2,
+        "bodyH1Headings": 1
+      },
+      "score": 31.88,
+      "reasons": [
+        "low CTR for visible page",
+        "no internal links in body",
+        "body contains H1 headings"
+      ]
+    },
+    {
+      "url": "https://elementarmory.com/topics/copy-ui-from-websites/copy-html-css-together/copy-html-and-css-from-website",
+      "path": "/topics/copy-ui-from-websites/copy-html-css-together/copy-html-and-css-from-website",
+      "clicks": 0,
+      "impressions": 15,
+      "ctr": 0,
+      "position": 23.47,
+      "title": "Copy HTML and CSS From Website in Seconds",
+      "excerpt": "Learn how to capture complete HTML and CSS together from any live website instantly. Skip manual DevTools hunting-get production-ready code in seconds with automated extraction.",
+      "hub": "copy-ui-from-websites",
+      "hubTitle": "Copy UI from Websites",
+      "cluster": "copy-html-css-together",
+      "clusterTitle": "Copy HTML & CSS Together",
+      "slug": "copy-html-and-css-from-website",
+      "date": "2026-05-29",
+      "sourcePath": "website/content/topics/copy-ui-from-websites/copy-html-css-together/copy-html-and-css-from-website.md",
+      "metrics": {
+        "wordCount": 2738,
+        "internalLinks": 4,
+        "externalLinks": 4,
+        "bodyH1Headings": 1
+      },
+      "score": 25.87,
+      "reasons": [
+        "low CTR for visible page",
+        "body contains H1 headings",
+        "high product-fit extraction intent"
+      ]
+    },
+    {
+      "url": "https://elementarmory.com/topics/tool-alternatives/css-scan-alternative/css-scan-review",
+      "path": "/topics/tool-alternatives/css-scan-alternative/css-scan-review",
+      "clicks": 0,
+      "impressions": 15,
+      "ctr": 0,
+      "position": 28,
+      "title": "CSS Scan Review: Why Developers Are Switching to Cleaner Alternatives",
+      "excerpt": "CSS Scan is fast, but it's expensive and over-copies styles. Learn why developers are switching to Element Armory for cleaner code, better AI integration, and zero subscription costs.",
+      "hub": "tool-alternatives",
+      "hubTitle": "Tool Alternatives",
+      "cluster": "css-scan-alternative",
+      "clusterTitle": "CSS Scan Alternative",
+      "slug": "css-scan-review",
+      "date": "2026-05-24",
+      "sourcePath": "website/content/topics/tool-alternatives/css-scan-alternative/css-scan-review.md",
+      "metrics": {
+        "wordCount": 1092,
+        "internalLinks": 8,
+        "externalLinks": 4,
+        "bodyH1Headings": 0
+      },
+      "score": 24.75,
+      "reasons": [
+        "low CTR for visible page",
+        "high product-fit comparison intent"
+      ]
+    },
+    {
+      "url": "https://elementarmory.com/topics/component-reuse-libraries/snippet-libraries",
+      "path": "/topics/component-reuse-libraries/snippet-libraries",
+      "clicks": 0,
+      "impressions": 16,
+      "ctr": 0,
+      "position": 74.19,
+      "score": 24,
+      "reasons": [
+        "low CTR for visible page"
+      ]
+    },
+    {
+      "url": "https://elementarmory.com/topics/ai-coding-workflows/ai-prompting-for-ui/best-prompts-for-ui-generation",
+      "path": "/topics/ai-coding-workflows/ai-prompting-for-ui/best-prompts-for-ui-generation",
+      "clicks": 0,
+      "impressions": 14,
+      "ctr": 0,
+      "position": 17.43,
+      "title": "Best Prompts for UI Generation with AI",
+      "excerpt": "Learn the exact prompt patterns that generate production-ready UI code with AI. Discover how to write specific, context-rich prompts that work with Cursor and Claude, plus how to combine captured UI with AI generation for faster iteration.",
+      "hub": "ai-coding-workflows",
+      "hubTitle": "AI Coding Workflows",
+      "cluster": "ai-prompting-for-ui",
+      "clusterTitle": "AI Prompting for UI",
+      "slug": "best-prompts-for-ui-generation",
+      "date": "2026-05-01",
+      "sourcePath": "website/content/topics/ai-coding-workflows/ai-prompting-for-ui/best-prompts-for-ui-generation.md",
+      "metrics": {
+        "wordCount": 1893,
+        "internalLinks": 5,
+        "externalLinks": 0,
+        "bodyH1Headings": 0
+      },
+      "score": 21,
+      "reasons": [
+        "low CTR for visible page",
+        "no external citations in body"
+      ]
+    },
+    {
+      "url": "https://elementarmory.com/topics/component-reuse-libraries/snippet-libraries/cursor-component-reuse",
+      "path": "/topics/component-reuse-libraries/snippet-libraries/cursor-component-reuse",
+      "clicks": 0,
+      "impressions": 9,
+      "ctr": 0,
+      "position": 8.67,
+      "title": "Reusing UI Components with Cursor",
+      "excerpt": "Learn how to accelerate component development in Cursor by capturing real UI patterns from production websites and reusing them instead of coding from scratch. Includes workflows, prompting strategies, and best practices.",
+      "hub": "component-reuse-libraries",
+      "hubTitle": "Component Reuse & Libraries",
+      "cluster": "snippet-libraries",
+      "clusterTitle": "Snippet Libraries",
+      "slug": "cursor-component-reuse",
+      "date": "2026-05-01",
+      "sourcePath": "website/content/topics/component-reuse-libraries/snippet-libraries/cursor-component-reuse.md",
+      "metrics": {
+        "wordCount": 1769,
+        "internalLinks": 4,
+        "externalLinks": 1,
+        "bodyH1Headings": 0
+      },
+      "score": 19.8,
+      "reasons": [
+        "ranking in positions 4-15"
+      ]
+    },
+    {
+      "url": "https://elementarmory.com/topics/tool-alternatives/css-scan-alternative",
+      "path": "/topics/tool-alternatives/css-scan-alternative",
+      "clicks": 0,
+      "impressions": 8,
+      "ctr": 0,
+      "position": 7.38,
+      "score": 19.36,
+      "reasons": [
+        "ranking in positions 4-15",
+        "high product-fit comparison intent"
+      ]
+    },
+    {
+      "url": "https://elementarmory.com/topics/ai-coding-workflows/ui-for-ai-coding/generate-ui-from-screenshots-vs-code",
+      "path": "/topics/ai-coding-workflows/ui-for-ai-coding/generate-ui-from-screenshots-vs-code",
+      "clicks": 0,
+      "impressions": 7,
+      "ctr": 0,
+      "position": 7,
+      "title": "Generate UI From Screenshots vs Code: When to Use Each Approach",
+      "excerpt": "Screenshot-to-code AI tools are fast, but they're not magic. Learn when to use them as a starting point in your AI workflow, when hand-coding is actually faster, and how to integrate both into Cursor, Claude, and other AI-assisted development tools.",
+      "hub": "ai-coding-workflows",
+      "hubTitle": "AI Coding Workflows",
+      "cluster": "ui-for-ai-coding",
+      "clusterTitle": "UI for AI Coding",
+      "slug": "generate-ui-from-screenshots-vs-code",
+      "date": "2026-05-12",
+      "sourcePath": "website/content/topics/ai-coding-workflows/ui-for-ai-coding/generate-ui-from-screenshots-vs-code.md",
+      "metrics": {
+        "wordCount": 1948,
+        "internalLinks": 0,
+        "externalLinks": 6,
+        "bodyH1Headings": 0
+      },
+      "score": 19.25,
+      "reasons": [
+        "ranking in positions 4-15",
+        "no internal links in body"
+      ]
+    },
+    {
+      "url": "https://elementarmory.com/topics/tool-alternatives/general-alternatives/best-ui-capture-tools",
+      "path": "/topics/tool-alternatives/general-alternatives/best-ui-capture-tools",
+      "clicks": 0,
+      "impressions": 6,
+      "ctr": 0,
+      "position": 9,
+      "title": "Best UI Capture Tools for Developers: Code-First Comparison",
+      "excerpt": "Compare the best UI capture tools for developers. Learn which tools actually save time vs. which are overhyped. Discover why code-first capture beats design-focused alternatives for reusable components and AI workflows.",
+      "hub": "tool-alternatives",
+      "hubTitle": "Tool Alternatives",
+      "cluster": "general-alternatives",
+      "clusterTitle": "General Alternatives",
+      "slug": "best-ui-capture-tools",
+      "date": "2026-05-08",
+      "sourcePath": "website/content/topics/tool-alternatives/general-alternatives/best-ui-capture-tools.md",
+      "metrics": {
+        "wordCount": 1400,
+        "internalLinks": 0,
+        "externalLinks": 0,
+        "bodyH1Headings": 0
+      },
+      "score": 18.15,
+      "reasons": [
+        "ranking in positions 4-15",
+        "no internal links in body",
+        "no external citations in body",
+        "high product-fit comparison intent"
+      ]
+    },
+    {
+      "url": "https://elementarmory.com/topics/copy-ui-from-websites/copy-css-from-website/copy-css-without-devtools",
+      "path": "/topics/copy-ui-from-websites/copy-css-from-website/copy-css-without-devtools",
+      "clicks": 0,
+      "impressions": 7,
+      "ctr": 0,
+      "position": 7.43,
+      "title": "Copy CSS Without DevTools: The Fastest Methods in 2026",
+      "excerpt": "Skip DevTools friction and extract production-ready CSS in seconds. Learn the fastest methods-from browser extensions to AI-integrated workflows-that let you reuse real UI without the manual overhead.",
+      "hub": "copy-ui-from-websites",
+      "hubTitle": "Copy UI from Websites",
+      "cluster": "copy-css-from-website",
+      "clusterTitle": "Copy CSS from Website",
+      "slug": "copy-css-without-devtools",
+      "date": "2026-05-01",
+      "sourcePath": "website/content/topics/copy-ui-from-websites/copy-css-from-website/copy-css-without-devtools.md",
+      "metrics": {
+        "wordCount": 1728,
+        "internalLinks": 6,
+        "externalLinks": 1,
+        "bodyH1Headings": 0
+      },
+      "score": 17.71,
+      "reasons": [
+        "ranking in positions 4-15",
+        "high product-fit extraction intent"
+      ]
+    },
+    {
+      "url": "https://elementarmory.com/topics/ui-development-without-design-skills/vibe-coding/vibe-coding-frontend-guide",
+      "path": "/topics/ui-development-without-design-skills/vibe-coding/vibe-coding-frontend-guide",
+      "clicks": 0,
+      "impressions": 11,
+      "ctr": 0,
+      "position": 18.36,
+      "title": "Vibe Coding Frontend: A Practical Guide",
+      "excerpt": "Vibe coding is a practical frontend workflow where developers capture real UI from production websites, adapt it with AI tools like Cursor, and deploy it as reusable components. Learn how to build interfaces faster without design skills.",
+      "hub": "ui-development-without-design-skills",
+      "hubTitle": "UI Development Without Design Skills",
+      "cluster": "vibe-coding",
+      "clusterTitle": "Vibe Coding",
+      "slug": "vibe-coding-frontend-guide",
+      "date": "2026-05-01",
+      "sourcePath": "website/content/topics/ui-development-without-design-skills/vibe-coding/vibe-coding-frontend-guide.md",
+      "metrics": {
+        "wordCount": 1778,
+        "internalLinks": 5,
+        "externalLinks": 1,
+        "bodyH1Headings": 0
+      },
+      "score": 16.5,
+      "reasons": [
+        "low CTR for visible page"
+      ]
+    },
+    {
+      "url": "https://elementarmory.com/topics/landing-page-saas-ui/saas-ui/copy-dashboard-components",
+      "path": "/topics/landing-page-saas-ui/saas-ui/copy-dashboard-components",
+      "clicks": 0,
+      "impressions": 5,
+      "ctr": 0,
+      "position": 7.2,
+      "title": "Copy Dashboard Components: Extract and Reuse SaaS UI Patterns",
+      "excerpt": "Learn how to extract dashboard components from production SaaS tools like Azure DevOps, Salesforce, and Power BI, then adapt them for your own projects. Capture widgets, layouts, and data visualizations in seconds using Element Armory instead of rebuilding from scratch.",
+      "hub": "landing-page-saas-ui",
+      "hubTitle": "Landing Page & SaaS UI",
+      "cluster": "saas-ui",
+      "clusterTitle": "SaaS UI",
+      "slug": "copy-dashboard-components",
+      "date": "2026-05-10",
+      "sourcePath": "website/content/topics/landing-page-saas-ui/saas-ui/copy-dashboard-components.md",
+      "metrics": {
+        "wordCount": 1561,
+        "internalLinks": 0,
+        "externalLinks": 4,
+        "bodyH1Headings": 0
+      },
+      "score": 13.75,
+      "reasons": [
+        "ranking in positions 4-15",
+        "no internal links in body"
+      ]
+    },
+    {
+      "url": "https://elementarmory.com/topics/copy-ui-from-websites/copy-html-from-website/extract-html-from-dom",
+      "path": "/topics/copy-ui-from-websites/copy-html-from-website/extract-html-from-dom",
+      "clicks": 1,
+      "impressions": 11,
+      "ctr": 0.0909,
+      "position": 18.73,
+      "title": "How to Extract HTML from the DOM",
+      "excerpt": "Learn how to extract HTML from the DOM efficiently. Compare manual DevTools inspection vs automated methods, understand innerHTML vs outerHTML, and integrate extracted HTML into modern development workflows with AI tools.",
+      "hub": "copy-ui-from-websites",
+      "hubTitle": "Copy UI from Websites",
+      "cluster": "copy-html-from-website",
+      "clusterTitle": "Copy HTML from Website",
+      "slug": "extract-html-from-dom",
+      "date": "2026-05-01",
+      "sourcePath": "website/content/topics/copy-ui-from-websites/copy-html-from-website/extract-html-from-dom.md",
+      "metrics": {
+        "wordCount": 1631,
+        "internalLinks": 4,
+        "externalLinks": 1,
+        "bodyH1Headings": 0
+      },
+      "score": 12.65,
+      "reasons": [
+        "high product-fit extraction intent"
+      ]
+    },
+    {
+      "url": "https://elementarmory.com/topics/inspecting-debugging-css/devtools-alternatives/debug-css-faster",
+      "path": "/topics/inspecting-debugging-css/devtools-alternatives/debug-css-faster",
+      "clicks": 0,
+      "impressions": 5,
+      "ctr": 0,
+      "position": 8.4,
+      "title": "Debug CSS Faster: 7 Pro Techniques That Actually Save Time",
+      "excerpt": "Stop wasting time in DevTools. Learn the 7 pro debugging techniques that actually save time, plus a systematic workflow to find CSS bugs in minutes instead of hours.",
+      "hub": "inspecting-debugging-css",
+      "hubTitle": "Inspecting & Debugging CSS",
+      "cluster": "devtools-alternatives",
+      "clusterTitle": "DevTools Alternatives",
+      "slug": "debug-css-faster",
+      "date": "2026-06-05",
+      "sourcePath": "website/content/topics/inspecting-debugging-css/devtools-alternatives/debug-css-faster.md",
+      "metrics": {
+        "wordCount": 2309,
+        "internalLinks": 7,
+        "externalLinks": 3,
+        "bodyH1Headings": 1
+      },
+      "score": 12.1,
+      "reasons": [
+        "ranking in positions 4-15",
+        "body contains H1 headings",
+        "high product-fit comparison intent"
+      ]
+    },
+    {
+      "url": "https://elementarmory.com/topics/tool-alternatives/general-alternatives",
+      "path": "/topics/tool-alternatives/general-alternatives",
+      "clicks": 0,
+      "impressions": 5,
+      "ctr": 0,
+      "position": 8.8,
+      "score": 12.1,
+      "reasons": [
+        "ranking in positions 4-15",
+        "high product-fit comparison intent"
+      ]
+    },
+    {
+      "url": "https://elementarmory.com/topics/tool-alternatives/divmagic-alternative/divmagic-pros-and-cons",
+      "path": "/topics/tool-alternatives/divmagic-alternative/divmagic-pros-and-cons",
+      "clicks": 0,
+      "impressions": 5,
+      "ctr": 0,
+      "position": 11.2,
+      "title": "DivMagic Pros and Cons: Why Developers Are Switching to Element Armory",
+      "excerpt": "DivMagic is fast and intuitive, but it has real limitations for developers who need production-ready code, AI-ready extraction, and deeper customization. This article honestly evaluates what DivMagic does well and where it falls short, then explains why developers are switching to Element Armory.",
+      "hub": "tool-alternatives",
+      "hubTitle": "Tool Alternatives",
+      "cluster": "divmagic-alternative",
+      "clusterTitle": "DivMagic Alternative",
+      "slug": "divmagic-pros-and-cons",
+      "date": "2026-05-24",
+      "sourcePath": "website/content/topics/tool-alternatives/divmagic-alternative/divmagic-pros-and-cons.md",
+      "metrics": {
+        "wordCount": 1311,
+        "internalLinks": 7,
+        "externalLinks": 5,
+        "bodyH1Headings": 0
+      },
+      "score": 12.1,
+      "reasons": [
+        "ranking in positions 4-15",
+        "high product-fit comparison intent"
+      ]
+    },
+    {
+      "url": "https://elementarmory.com/topics/landing-page-saas-ui/landing-pages/landing-page-ui-components",
+      "path": "/topics/landing-page-saas-ui/landing-pages/landing-page-ui-components",
+      "clicks": 0,
+      "impressions": 9,
+      "ctr": 0,
+      "position": 25.22,
+      "title": "Landing Page UI Components: Master the Essential Sections That Convert",
+      "excerpt": "Learn which landing page UI components actually drive conversions. Discover the essential sections every high-converting SaaS landing page needs, how to structure them for maximum impact, and how to extract and reuse proven designs from industry leaders.",
+      "hub": "landing-page-saas-ui",
+      "hubTitle": "Landing Page & SaaS UI",
+      "cluster": "landing-pages",
+      "clusterTitle": "Landing Pages",
+      "slug": "landing-page-ui-components",
+      "date": "2026-05-11",
+      "sourcePath": "website/content/topics/landing-page-saas-ui/landing-pages/landing-page-ui-components.md",
+      "metrics": {
+        "wordCount": 1523,
+        "internalLinks": 0,
+        "externalLinks": 5,
+        "bodyH1Headings": 0
+      },
+      "score": 11.25,
+      "reasons": [
+        "no internal links in body"
+      ]
+    },
+    {
+      "url": "https://elementarmory.com/topics/advanced-workflows-automation/future-of-frontend-dev/ai-replacing-frontend-developers",
+      "path": "/topics/advanced-workflows-automation/future-of-frontend-dev/ai-replacing-frontend-developers",
+      "clicks": 0,
+      "impressions": 5,
+      "ctr": 0,
+      "position": 9.6,
+      "title": "Is AI Replacing Frontend Developers? The Real Answer",
+      "excerpt": "AI is automating routine coding, not eliminating frontend developers. Learn why judgment and architecture matter more than ever, and how to adapt your skills for 2026.",
+      "hub": "advanced-workflows-automation",
+      "hubTitle": "Advanced Workflows & Automation",
+      "cluster": "future-of-frontend-dev",
+      "clusterTitle": "Future of Frontend Dev",
+      "slug": "ai-replacing-frontend-developers",
+      "date": "2026-05-30",
+      "sourcePath": "website/content/topics/advanced-workflows-automation/future-of-frontend-dev/ai-replacing-frontend-developers.md",
+      "metrics": {
+        "wordCount": 2337,
+        "internalLinks": 5,
+        "externalLinks": 8,
+        "bodyH1Headings": 0
+      },
+      "score": 11,
+      "reasons": [
+        "ranking in positions 4-15"
+      ]
+    },
+    {
+      "url": "https://elementarmory.com/topics/ui-development-without-design-skills/copy-vs-design/should-you-copy-ui-or-design",
+      "path": "/topics/ui-development-without-design-skills/copy-vs-design/should-you-copy-ui-or-design",
+      "clicks": 0,
+      "impressions": 5,
+      "ctr": 0,
+      "position": 14,
+      "title": "Should You Copy UI or Design From Scratch?",
+      "excerpt": "The real answer: it depends on your goal. Learn when copying UI accelerates learning, when designing from scratch builds deeper skills, and how to do both strategically without limiting your growth as a developer.",
+      "hub": "ui-development-without-design-skills",
+      "hubTitle": "UI Development Without Design Skills",
+      "cluster": "copy-vs-design",
+      "clusterTitle": "Copy vs Design",
+      "slug": "should-you-copy-ui-or-design",
+      "date": "2026-05-01",
+      "sourcePath": "website/content/topics/ui-development-without-design-skills/copy-vs-design/should-you-copy-ui-or-design.md",
+      "metrics": {
+        "wordCount": 1864,
+        "internalLinks": 10,
+        "externalLinks": 0,
+        "bodyH1Headings": 0
+      },
+      "score": 11,
+      "reasons": [
+        "ranking in positions 4-15",
+        "no external citations in body"
+      ]
+    },
+    {
+      "url": "https://elementarmory.com/topics/copy-ui-from-websites/copy-html-from-website/copy-clean-html-structure",
+      "path": "/topics/copy-ui-from-websites/copy-html-from-website/copy-clean-html-structure",
+      "clicks": 0,
+      "impressions": 3,
+      "ctr": 0,
+      "position": 10.67,
+      "title": "Copy Clean HTML Structure from Any Website",
+      "excerpt": "Learn how to extract semantic, reusable HTML from live websites without bloat. Discover why clean markup matters for AI workflows and component libraries, and the fastest methods to get production-ready code.",
+      "hub": "copy-ui-from-websites",
+      "hubTitle": "Copy UI from Websites",
+      "cluster": "copy-html-from-website",
+      "clusterTitle": "Copy HTML from Website",
+      "slug": "copy-clean-html-structure",
+      "date": "2026-05-11",
+      "sourcePath": "website/content/topics/copy-ui-from-websites/copy-html-from-website/copy-clean-html-structure.md",
+      "metrics": {
+        "wordCount": 1200,
+        "internalLinks": 0,
+        "externalLinks": 5,
+        "bodyH1Headings": 0
+      },
+      "score": 9.49,
+      "reasons": [
+        "ranking in positions 4-15",
+        "no internal links in body",
+        "high product-fit extraction intent"
+      ]
+    },
+    {
+      "url": "https://elementarmory.com/topics/ui-development-without-design-skills/vibe-coding/vibe-coding-examples",
+      "path": "/topics/ui-development-without-design-skills/vibe-coding/vibe-coding-examples",
+      "clicks": 0,
+      "impressions": 9,
+      "ctr": 0,
+      "position": 17.56,
+      "title": "Vibe Coding Examples: Practical UI Workflows for Builders",
+      "excerpt": "See practical vibe coding examples for landing pages, dashboards, forms, and onboarding flows using AI tools, captured UI references, and fast iteration.",
+      "hub": "ui-development-without-design-skills",
+      "hubTitle": "UI Development Without Design Skills",
+      "cluster": "vibe-coding",
+      "clusterTitle": "Vibe Coding",
+      "slug": "vibe-coding-examples",
+      "date": "2026-05-11",
+      "sourcePath": "website/content/topics/ui-development-without-design-skills/vibe-coding/vibe-coding-examples.md",
+      "metrics": {
+        "wordCount": 811,
+        "internalLinks": 4,
+        "externalLinks": 0,
+        "bodyH1Headings": 0
+      },
+      "score": 9,
+      "reasons": [
+        "no external citations in body"
+      ]
+    },
+    {
+      "url": "https://elementarmory.com/topics/inspecting-debugging-css/devtools-alternatives/simplify-css-debugging",
+      "path": "/topics/inspecting-debugging-css/devtools-alternatives/simplify-css-debugging",
+      "clicks": 0,
+      "impressions": 8,
+      "ctr": 0,
+      "position": 39.25,
+      "title": "Simplify CSS Debugging: 4-Step Workflow",
+      "excerpt": "Stop wasting time in DevTools. Learn a systematic 4-step CSS debugging workflow that identifies and fixes style issues in seconds instead of minutes.",
+      "hub": "inspecting-debugging-css",
+      "hubTitle": "Inspecting & Debugging CSS",
+      "cluster": "devtools-alternatives",
+      "clusterTitle": "DevTools Alternatives",
+      "slug": "simplify-css-debugging",
+      "date": "2026-05-29",
+      "sourcePath": "website/content/topics/inspecting-debugging-css/devtools-alternatives/simplify-css-debugging.md",
+      "metrics": {
+        "wordCount": 2378,
+        "internalLinks": 5,
+        "externalLinks": 6,
+        "bodyH1Headings": 0
+      },
+      "score": 8.8,
+      "reasons": [
+        "high product-fit comparison intent"
+      ]
+    },
+    {
+      "url": "https://elementarmory.com/topics/ai-coding-workflows/ai-prompting-for-ui/prompt-engineering-for-frontend",
+      "path": "/topics/ai-coding-workflows/ai-prompting-for-ui/prompt-engineering-for-frontend",
+      "clicks": 0,
+      "impressions": 4,
+      "ctr": 0,
+      "position": 13.25,
+      "title": "Prompt Engineering for Frontend: Write Better AI Prompts, Get Production Code",
+      "excerpt": "Learn the Role + Context + Task + Format framework for writing AI prompts that produce clean, compilable frontend code. Master specificity, iteration patterns, and how to integrate captured UI for maximum productivity.",
+      "hub": "ai-coding-workflows",
+      "hubTitle": "AI Coding Workflows",
+      "cluster": "ai-prompting-for-ui",
+      "clusterTitle": "AI Prompting for UI",
+      "slug": "prompt-engineering-for-frontend",
+      "date": "2026-05-25",
+      "sourcePath": "website/content/topics/ai-coding-workflows/ai-prompting-for-ui/prompt-engineering-for-frontend.md",
+      "metrics": {
+        "wordCount": 2695,
+        "internalLinks": 7,
+        "externalLinks": 6,
+        "bodyH1Headings": 1
+      },
+      "score": 8.8,
+      "reasons": [
+        "ranking in positions 4-15",
+        "body contains H1 headings"
+      ]
+    },
+    {
+      "url": "https://elementarmory.com/topics/advanced-workflows-automation/future-of-frontend-dev/evolution-of-ui-building",
+      "path": "/topics/advanced-workflows-automation/future-of-frontend-dev/evolution-of-ui-building",
+      "clicks": 0,
+      "impressions": 3,
+      "ctr": 0,
+      "position": 6,
+      "title": "The Evolution of UI Building: From Static Handoffs to Generative Systems",
+      "excerpt": "Frontend development is shifting from static design handoffs to AI-assisted, generative workflows. Learn how modern interfaces adapt in real time, why traditional UI development is becoming obsolete, and what skills matter most in 2026.",
+      "hub": "advanced-workflows-automation",
+      "hubTitle": "Advanced Workflows & Automation",
+      "cluster": "future-of-frontend-dev",
+      "clusterTitle": "Future of Frontend Dev",
+      "slug": "evolution-of-ui-building",
+      "date": "2026-05-09",
+      "sourcePath": "website/content/topics/advanced-workflows-automation/future-of-frontend-dev/evolution-of-ui-building.md",
+      "metrics": {
+        "wordCount": 1371,
+        "internalLinks": 0,
+        "externalLinks": 7,
+        "bodyH1Headings": 0
+      },
+      "score": 8.25,
+      "reasons": [
+        "ranking in positions 4-15",
+        "no internal links in body"
+      ]
+    },
+    {
+      "url": "https://elementarmory.com/topics/copy-ui-from-websites/copy-css-from-website/how-to-copy-css-from-any-website",
+      "path": "/topics/copy-ui-from-websites/copy-css-from-website/how-to-copy-css-from-any-website",
+      "clicks": 0,
+      "impressions": 7,
+      "ctr": 0,
+      "position": 39.14,
+      "title": "How to Copy CSS from Any Website",
+      "excerpt": "Learn the fastest way to extract production-ready CSS from any website. Compare manual DevTools methods to modern automation tools, with practical steps and best practices for developers and designers.",
+      "hub": "copy-ui-from-websites",
+      "hubTitle": "Copy UI from Websites",
+      "cluster": "copy-css-from-website",
+      "clusterTitle": "Copy CSS from Website",
+      "slug": "how-to-copy-css-from-any-website",
+      "date": "2026-05-01",
+      "sourcePath": "website/content/topics/copy-ui-from-websites/copy-css-from-website/how-to-copy-css-from-any-website.md",
+      "metrics": {
+        "wordCount": 1700,
+        "internalLinks": 4,
+        "externalLinks": 1,
+        "bodyH1Headings": 0
+      },
+      "score": 8.05,
+      "reasons": [
+        "high product-fit extraction intent"
+      ]
+    },
+    {
+      "url": "https://elementarmory.com/topics/copy-ui-from-websites/copy-css-from-website/copy-css-from-website-chrome",
+      "path": "/topics/copy-ui-from-websites/copy-css-from-website/copy-css-from-website-chrome",
+      "clicks": 0,
+      "impressions": 3,
+      "ctr": 0,
+      "position": 6,
+      "title": "Copy CSS From Website Chrome: Instant Extraction in Seconds",
+      "excerpt": "Extract CSS from any website in seconds using a Chrome extension. Skip DevTools hunting and get production-ready styles instantly for your projects and AI workflows.",
+      "hub": "copy-ui-from-websites",
+      "hubTitle": "Copy UI from Websites",
+      "cluster": "copy-css-from-website",
+      "clusterTitle": "Copy CSS from Website",
+      "slug": "copy-css-from-website-chrome",
+      "date": "2026-05-30",
+      "sourcePath": "website/content/topics/copy-ui-from-websites/copy-css-from-website/copy-css-from-website-chrome.md",
+      "metrics": {
+        "wordCount": 2730,
+        "internalLinks": 10,
+        "externalLinks": 6,
+        "bodyH1Headings": 0
+      },
+      "score": 7.59,
+      "reasons": [
+        "ranking in positions 4-15",
+        "high product-fit extraction intent"
+      ]
+    },
+    {
+      "url": "https://elementarmory.com/topics/ui-development-without-design-skills/vibe-coding/vibe-coding-workflows",
+      "path": "/topics/ui-development-without-design-skills/vibe-coding/vibe-coding-workflows",
+      "clicks": 0,
+      "impressions": 6,
+      "ctr": 0,
+      "position": 19.17,
+      "title": "Vibe Coding Workflows: Build Production UIs Without Design Skills",
+      "excerpt": "Vibe coding is the practical workflow that makes UI development accessible to developers without design skills. Learn how to use AI to generate, refine, and ship production-grade interfaces in hours instead of weeks.",
+      "hub": "ui-development-without-design-skills",
+      "hubTitle": "UI Development Without Design Skills",
+      "cluster": "vibe-coding",
+      "clusterTitle": "Vibe Coding",
+      "slug": "vibe-coding-workflows",
+      "date": "2026-05-11",
+      "sourcePath": "website/content/topics/ui-development-without-design-skills/vibe-coding/vibe-coding-workflows.md",
+      "metrics": {
+        "wordCount": 1778,
+        "internalLinks": 0,
+        "externalLinks": 7,
+        "bodyH1Headings": 0
+      },
+      "score": 7.5,
+      "reasons": [
+        "no internal links in body"
+      ]
+    },
+    {
+      "url": "https://elementarmory.com/topics/inspecting-debugging-css/devtools-alternatives/visual-css-inspector-tools",
+      "path": "/topics/inspecting-debugging-css/devtools-alternatives/visual-css-inspector-tools",
+      "clicks": 0,
+      "impressions": 3,
+      "ctr": 0,
+      "position": 9,
+      "title": "Visual CSS Inspector Tools: Faster Than DevTools",
+      "excerpt": "Visual CSS inspector tools extract clean styles faster than DevTools. Learn why developers switch, how they work, and when to use them instead of browser inspection.",
+      "hub": "inspecting-debugging-css",
+      "hubTitle": "Inspecting & Debugging CSS",
+      "cluster": "devtools-alternatives",
+      "clusterTitle": "DevTools Alternatives",
+      "slug": "visual-css-inspector-tools",
+      "date": "2026-06-01",
+      "sourcePath": "website/content/topics/inspecting-debugging-css/devtools-alternatives/visual-css-inspector-tools.md",
+      "metrics": {
+        "wordCount": 2589,
+        "internalLinks": 5,
+        "externalLinks": 4,
+        "bodyH1Headings": 0
+      },
+      "score": 7.26,
+      "reasons": [
+        "ranking in positions 4-15",
+        "high product-fit comparison intent"
+      ]
+    },
+    {
+      "url": "https://elementarmory.com/topics/chrome-extension-use-cases/no-code-low-code/no-code-design-copying",
+      "path": "/topics/chrome-extension-use-cases/no-code-low-code/no-code-design-copying",
+      "clicks": 0,
+      "impressions": 3,
+      "ctr": 0,
+      "position": 9.33,
+      "title": "No-Code Design Copying: Capture UI From Live Websites in Minutes",
+      "excerpt": "No-code design copying lets non-technical teams capture production UI directly from websites and adapt it instantly in no-code builders-eliminating weeks of design handoffs and shipping in hours instead.",
+      "hub": "chrome-extension-use-cases",
+      "hubTitle": "Chrome Extension Use Cases",
+      "cluster": "no-code-low-code",
+      "clusterTitle": "No-Code / Low-Code",
+      "slug": "no-code-design-copying",
+      "date": "2026-05-25",
+      "sourcePath": "website/content/topics/chrome-extension-use-cases/no-code-low-code/no-code-design-copying.md",
+      "metrics": {
+        "wordCount": 2578,
+        "internalLinks": 4,
+        "externalLinks": 5,
+        "bodyH1Headings": 1
+      },
+      "score": 6.6,
+      "reasons": [
+        "ranking in positions 4-15",
+        "body contains H1 headings"
+      ]
+    },
+    {
+      "url": "https://elementarmory.com/topics/ui-development-without-design-skills/copy-vs-design/when-to-copy-ui",
+      "path": "/topics/ui-development-without-design-skills/copy-vs-design/when-to-copy-ui",
+      "clicks": 0,
+      "impressions": 3,
+      "ctr": 0,
+      "position": 10.33,
+      "title": "When to Copy UI: A Developer's Decision Framework",
+      "excerpt": "Learn when copying UI from production sites saves time versus when you should design from scratch. A practical framework for developers building without design skills.",
+      "hub": "ui-development-without-design-skills",
+      "hubTitle": "UI Development Without Design Skills",
+      "cluster": "copy-vs-design",
+      "clusterTitle": "Copy vs Design",
+      "slug": "when-to-copy-ui",
+      "date": "2026-05-27",
+      "sourcePath": "website/content/topics/ui-development-without-design-skills/copy-vs-design/when-to-copy-ui.md",
+      "metrics": {
+        "wordCount": 2512,
+        "internalLinks": 5,
+        "externalLinks": 4,
+        "bodyH1Headings": 1
+      },
+      "score": 6.6,
+      "reasons": [
+        "ranking in positions 4-15",
+        "body contains H1 headings"
+      ]
+    },
+    {
+      "url": "https://elementarmory.com/topics/ui-patterns-reverse-engineering/reverse-engineering-ui/break-down-ui-components",
+      "path": "/topics/ui-patterns-reverse-engineering/reverse-engineering-ui/break-down-ui-components",
+      "clicks": 1,
+      "impressions": 5,
+      "ctr": 0.2,
+      "position": 20,
+      "title": "Break Down UI Components: A Developer's Guide to Reverse Engineering",
+      "excerpt": "Learn how to systematically break down any UI component into its core elements, patterns, and structure. Understand how components are built, extract them for reuse, and integrate them into your own projects or AI-assisted workflows.",
+      "hub": "ui-patterns-reverse-engineering",
+      "hubTitle": "UI Patterns & Reverse Engineering",
+      "cluster": "reverse-engineering-ui",
+      "clusterTitle": "Reverse Engineering UI",
+      "slug": "break-down-ui-components",
+      "date": "2026-05-11",
+      "sourcePath": "website/content/topics/ui-patterns-reverse-engineering/reverse-engineering-ui/break-down-ui-components.md",
+      "metrics": {
+        "wordCount": 1747,
+        "internalLinks": 0,
+        "externalLinks": 7,
+        "bodyH1Headings": 0
+      },
+      "score": 6.25,
+      "reasons": [
+        "no internal links in body"
+      ]
+    },
+    {
+      "url": "https://elementarmory.com/topics/copy-ui-from-websites/copy-html-from-website",
+      "path": "/topics/copy-ui-from-websites/copy-html-from-website",
+      "clicks": 0,
+      "impressions": 5,
+      "ctr": 0,
+      "position": 38.6,
+      "score": 5.75,
+      "reasons": [
+        "high product-fit extraction intent"
+      ]
+    },
+    {
+      "url": "https://elementarmory.com/topics/tool-alternatives/divmagic-alternative",
+      "path": "/topics/tool-alternatives/divmagic-alternative",
+      "clicks": 0,
+      "impressions": 5,
+      "ctr": 0,
+      "position": 24,
+      "score": 5.5,
+      "reasons": [
+        "high product-fit comparison intent"
+      ]
+    },
+    {
+      "url": "https://elementarmory.com/topics/advanced-workflows-automation/mcp-automation/ai-automation-for-frontend",
+      "path": "/topics/advanced-workflows-automation/mcp-automation/ai-automation-for-frontend",
+      "clicks": 0,
+      "impressions": 2,
+      "ctr": 0,
+      "position": 13.5,
+      "title": "AI Automation for Frontend Development: Building Intelligent Workflows",
+      "excerpt": "Learn how AI automation transforms frontend development from manual, repetitive tasks into intelligent workflows. Discover core patterns, tools, and strategies to integrate automation into your development process without sacrificing code quality or control.",
+      "hub": "advanced-workflows-automation",
+      "hubTitle": "Advanced Workflows & Automation",
+      "cluster": "mcp-automation",
+      "clusterTitle": "MCP & Automation",
+      "slug": "ai-automation-for-frontend",
+      "date": "2026-05-12",
+      "sourcePath": "website/content/topics/advanced-workflows-automation/mcp-automation/ai-automation-for-frontend.md",
+      "metrics": {
+        "wordCount": 1584,
+        "internalLinks": 0,
+        "externalLinks": 5,
+        "bodyH1Headings": 0
+      },
+      "score": 5.5,
+      "reasons": [
+        "ranking in positions 4-15",
+        "no internal links in body"
+      ]
+    },
+    {
+      "url": "https://elementarmory.com/topics/chrome-extension-use-cases/no-code-low-code/no-code-ui-building-tools",
+      "path": "/topics/chrome-extension-use-cases/no-code-low-code/no-code-ui-building-tools",
+      "clicks": 0,
+      "impressions": 5,
+      "ctr": 0,
+      "position": 17,
+      "title": "No-Code UI Building Tools: Speed Up Development With Component Capture",
+      "excerpt": "No-code platforms are fast, but they struggle with UI completeness. Learn how to extract production-ready components from live websites and feed them into no-code builders and AI tools for faster iteration.",
+      "hub": "chrome-extension-use-cases",
+      "hubTitle": "Chrome Extension Use Cases",
+      "cluster": "no-code-low-code",
+      "clusterTitle": "No-Code / Low-Code",
+      "slug": "no-code-ui-building-tools",
+      "date": "2026-05-24",
+      "sourcePath": "website/content/topics/chrome-extension-use-cases/no-code-low-code/no-code-ui-building-tools.md",
+      "metrics": {
+        "wordCount": 1430,
+        "internalLinks": 7,
+        "externalLinks": 5,
+        "bodyH1Headings": 0
+      },
+      "score": 5,
+      "reasons": []
+    },
+    {
+      "url": "https://elementarmory.com/topics/tool-alternatives/divmagic-alternative/divmagic-vs-element-armory",
+      "path": "/topics/tool-alternatives/divmagic-alternative/divmagic-vs-element-armory",
+      "clicks": 0,
+      "impressions": 2,
+      "ctr": 0,
+      "position": 5.5,
+      "title": "DivMagic vs Element Armory: Code-First Wins",
+      "excerpt": "DivMagic excels at design-first extraction, but Element Armory's code-first approach delivers cleaner, AI-ready HTML and CSS. See the real differences and which tool fits your workflow.",
+      "hub": "tool-alternatives",
+      "hubTitle": "Tool Alternatives",
+      "cluster": "divmagic-alternative",
+      "clusterTitle": "DivMagic Alternative",
+      "slug": "divmagic-vs-element-armory",
+      "date": "2026-06-01",
+      "sourcePath": "website/content/topics/tool-alternatives/divmagic-alternative/divmagic-vs-element-armory.md",
+      "metrics": {
+        "wordCount": 2644,
+        "internalLinks": 2,
+        "externalLinks": 4,
+        "bodyH1Headings": 0
+      },
+      "score": 4.84,
+      "reasons": [
+        "ranking in positions 4-15",
+        "high product-fit comparison intent"
+      ]
+    },
+    {
+      "url": "https://elementarmory.com/topics/copy-ui-from-websites/copy-css-from-website/copy-css-styles-quickly",
+      "path": "/topics/copy-ui-from-websites/copy-css-from-website/copy-css-styles-quickly",
+      "clicks": 0,
+      "impressions": 4,
+      "ctr": 0,
+      "position": 18.5,
+      "title": "Copy CSS Styles Quickly: Automated Extraction vs Manual DevTools",
+      "excerpt": "Learn how to copy CSS styles in seconds instead of minutes. Compare manual DevTools inspection with automated extraction for faster, production-ready component capture.",
+      "hub": "copy-ui-from-websites",
+      "hubTitle": "Copy UI from Websites",
+      "cluster": "copy-css-from-website",
+      "clusterTitle": "Copy CSS from Website",
+      "slug": "copy-css-styles-quickly",
+      "date": "2026-05-25",
+      "sourcePath": "website/content/topics/copy-ui-from-websites/copy-css-from-website/copy-css-styles-quickly.md",
+      "metrics": {
+        "wordCount": 2695,
+        "internalLinks": 5,
+        "externalLinks": 6,
+        "bodyH1Headings": 1
+      },
+      "score": 4.6,
+      "reasons": [
+        "body contains H1 headings",
+        "high product-fit extraction intent"
+      ]
+    },
+    {
+      "url": "https://elementarmory.com/topics/ai-ui-workflows",
+      "path": "/topics/ai-ui-workflows",
+      "clicks": 0,
+      "impressions": 2,
+      "ctr": 0,
+      "position": 9,
+      "score": 4.4,
+      "reasons": [
+        "ranking in positions 4-15"
+      ]
+    },
+    {
+      "url": "https://elementarmory.com/topics/ui-development-without-design-skills/vibe-coding/what-is-vibe-coding",
+      "path": "/topics/ui-development-without-design-skills/vibe-coding/what-is-vibe-coding",
+      "clicks": 0,
+      "impressions": 2,
+      "ctr": 0,
+      "position": 11,
+      "title": "What Is Vibe Coding?",
+      "excerpt": "Vibe coding is a development workflow where you build UI by feeling your way through code instead of overthinking design. Learn how it works, why developers use it, and how to integrate it into AI-assisted development.",
+      "hub": "ui-development-without-design-skills",
+      "hubTitle": "UI Development Without Design Skills",
+      "cluster": "vibe-coding",
+      "clusterTitle": "Vibe Coding",
+      "slug": "what-is-vibe-coding",
+      "date": "2026-05-01",
+      "sourcePath": "website/content/topics/ui-development-without-design-skills/vibe-coding/what-is-vibe-coding.md",
+      "metrics": {
+        "wordCount": 1858,
+        "internalLinks": 6,
+        "externalLinks": 1,
+        "bodyH1Headings": 0
+      },
+      "score": 4.4,
+      "reasons": [
+        "ranking in positions 4-15"
+      ]
+    },
+    {
+      "url": "https://elementarmory.com/topics/ai-coding-workflows/ai-prompting-for-ui/prompt-for-react-components",
+      "path": "/topics/ai-coding-workflows/ai-prompting-for-ui/prompt-for-react-components",
+      "clicks": 0,
+      "impressions": 4,
+      "ctr": 0,
+      "position": 33,
+      "title": "How to Prompt AI for React Components",
+      "excerpt": "Learn how to write effective prompts for AI tools like Claude, ChatGPT, and Cursor to generate production-ready React components faster. Includes practical patterns, real examples, and techniques that actually work.",
+      "hub": "ai-coding-workflows",
+      "hubTitle": "AI Coding Workflows",
+      "cluster": "ai-prompting-for-ui",
+      "clusterTitle": "AI Prompting for UI",
+      "slug": "prompt-for-react-components",
+      "date": "2026-05-01",
+      "sourcePath": "website/content/topics/ai-coding-workflows/ai-prompting-for-ui/prompt-for-react-components.md",
+      "metrics": {
+        "wordCount": 2147,
+        "internalLinks": 7,
+        "externalLinks": 0,
+        "bodyH1Headings": 0
+      },
+      "score": 4,
+      "reasons": [
+        "no external citations in body"
+      ]
+    },
+    {
+      "url": "https://elementarmory.com/topics/inspecting-debugging-css/understanding-css/css-learning-for-devs",
+      "path": "/topics/inspecting-debugging-css/understanding-css/css-learning-for-devs",
+      "clicks": 0,
+      "impressions": 1,
+      "ctr": 0,
+      "position": 10,
+      "title": "CSS Learning for Devs: Build a Mental Model That Sticks",
+      "excerpt": "Stop copying styles and guessing why CSS doesn't work. Learn the mental model behind cascade, specificity, and inheritance so you can debug faster and build with confidence.",
+      "hub": "inspecting-debugging-css",
+      "hubTitle": "Inspecting & Debugging CSS",
+      "cluster": "understanding-css",
+      "clusterTitle": "Understanding CSS",
+      "slug": "css-learning-for-devs",
+      "date": "2026-05-08",
+      "sourcePath": "website/content/topics/inspecting-debugging-css/understanding-css/css-learning-for-devs.md",
+      "metrics": {
+        "wordCount": 1575,
+        "internalLinks": 0,
+        "externalLinks": 4,
+        "bodyH1Headings": 0
+      },
+      "score": 2.75,
+      "reasons": [
+        "ranking in positions 4-15",
+        "no internal links in body"
+      ]
+    },
+    {
+      "url": "https://elementarmory.com/topics/copy-ui-from-websites/copy-css-from-website/copy-css-from-live-site",
+      "path": "/topics/copy-ui-from-websites/copy-css-from-website/copy-css-from-live-site",
+      "clicks": 0,
+      "impressions": 1,
+      "ctr": 0,
+      "position": 9,
+      "title": "Copy CSS from Live Sites: Fastest Method in 2026",
+      "excerpt": "Learn how to copy CSS from any live website in seconds without DevTools. Compare manual extraction vs automated capture and build reusable component libraries faster.",
+      "hub": "copy-ui-from-websites",
+      "hubTitle": "Copy UI from Websites",
+      "cluster": "copy-css-from-website",
+      "clusterTitle": "Copy CSS from Website",
+      "slug": "copy-css-from-live-site",
+      "date": "2026-05-31",
+      "sourcePath": "website/content/topics/copy-ui-from-websites/copy-css-from-website/copy-css-from-live-site.md",
+      "metrics": {
+        "wordCount": 3167,
+        "internalLinks": 7,
+        "externalLinks": 5,
+        "bodyH1Headings": 1
+      },
+      "score": 2.53,
+      "reasons": [
+        "ranking in positions 4-15",
+        "body contains H1 headings",
+        "high product-fit extraction intent"
+      ]
+    },
+    {
+      "url": "https://elementarmory.com/topics/ai-coding-workflows/ui-for-ai-coding/capture-ui-for-ai-coding",
+      "path": "/topics/ai-coding-workflows/ui-for-ai-coding/capture-ui-for-ai-coding",
+      "clicks": 0,
+      "impressions": 2,
+      "ctr": 0,
+      "position": 2,
+      "title": "Capture UI for AI Coding: Speed Up Component Building with Real Website Code",
+      "excerpt": "Learn how to capture production UI directly into AI coding tools like Cursor and Claude to accelerate component building, reduce design-to-code friction, and feed real website components into your AI workflows instead of describing designs manually.",
+      "hub": "ai-coding-workflows",
+      "hubTitle": "AI Coding Workflows",
+      "cluster": "ui-for-ai-coding",
+      "clusterTitle": "UI for AI Coding",
+      "slug": "capture-ui-for-ai-coding",
+      "date": "2026-05-08",
+      "sourcePath": "website/content/topics/ai-coding-workflows/ui-for-ai-coding/capture-ui-for-ai-coding.md",
+      "metrics": {
+        "wordCount": 1898,
+        "internalLinks": 0,
+        "externalLinks": 4,
+        "bodyH1Headings": 0
+      },
+      "score": 2.5,
+      "reasons": [
+        "no internal links in body"
+      ]
+    },
+    {
+      "url": "https://elementarmory.com/topics/ai-coding-workflows/ai-prompting-for-ui/prompt-for-responsive-ui",
+      "path": "/topics/ai-coding-workflows/ai-prompting-for-ui/prompt-for-responsive-ui",
+      "clicks": 0,
+      "impressions": 2,
+      "ctr": 0,
+      "position": 2.5,
+      "title": "How to Write AI Prompts That Generate Responsive UI That Actually Works",
+      "excerpt": "Learn how to write AI prompts that generate responsive UI without trial-and-error cycles. Master breakpoint specification, constraint-based prompting, and production-ready code across Cursor, Claude, and v0.",
+      "hub": "ai-coding-workflows",
+      "hubTitle": "AI Coding Workflows",
+      "cluster": "ai-prompting-for-ui",
+      "clusterTitle": "AI Prompting for UI",
+      "slug": "prompt-for-responsive-ui",
+      "date": "2026-05-11",
+      "sourcePath": "website/content/topics/ai-coding-workflows/ai-prompting-for-ui/prompt-for-responsive-ui.md",
+      "metrics": {
+        "wordCount": 2108,
+        "internalLinks": 0,
+        "externalLinks": 7,
+        "bodyH1Headings": 0
+      },
+      "score": 2.5,
+      "reasons": [
+        "no internal links in body"
+      ]
+    },
+    {
+      "url": "https://elementarmory.com/topics/tool-alternatives",
+      "path": "/topics/tool-alternatives",
+      "clicks": 0,
+      "impressions": 1,
+      "ctr": 0,
+      "position": 8,
+      "score": 2.42,
+      "reasons": [
+        "ranking in positions 4-15",
+        "high product-fit comparison intent"
+      ]
+    },
+    {
+      "url": "https://elementarmory.com/topics/inspecting-debugging-css/devtools-alternatives/easier-way-than-inspect-element",
+      "path": "/topics/inspecting-debugging-css/devtools-alternatives/easier-way-than-inspect-element",
+      "clicks": 0,
+      "impressions": 1,
+      "ctr": 0,
+      "position": 9,
+      "title": "Easier Way Than Inspect Element: Faster CSS Debugging Alternatives",
+      "excerpt": "Inspect Element is powerful, but it is slow for repeated CSS inspection. Learn faster ways to capture, compare, and reuse UI without digging through every style rule by hand.",
+      "hub": "inspecting-debugging-css",
+      "hubTitle": "Inspecting & Debugging CSS",
+      "cluster": "devtools-alternatives",
+      "clusterTitle": "DevTools Alternatives",
+      "slug": "easier-way-than-inspect-element",
+      "date": "2026-05-11",
+      "sourcePath": "website/content/topics/inspecting-debugging-css/devtools-alternatives/easier-way-than-inspect-element.md",
+      "metrics": {
+        "wordCount": 387,
+        "internalLinks": 2,
+        "externalLinks": 0,
+        "bodyH1Headings": 0
+      },
+      "score": 2.42,
+      "reasons": [
+        "ranking in positions 4-15",
+        "no external citations in body",
+        "high product-fit comparison intent"
+      ]
+    },
+    {
+      "url": "https://elementarmory.com/topics/tool-alternatives/snipcss-alternative",
+      "path": "/topics/tool-alternatives/snipcss-alternative",
+      "clicks": 0,
+      "impressions": 1,
+      "ctr": 0,
+      "position": 9,
+      "score": 2.42,
+      "reasons": [
+        "ranking in positions 4-15",
+        "high product-fit comparison intent"
+      ]
+    },
+    {
+      "url": "https://elementarmory.com/topics/inspecting-debugging-css/devtools-alternatives/better-than-devtools-css",
+      "path": "/topics/inspecting-debugging-css/devtools-alternatives/better-than-devtools-css",
+      "clicks": 0,
+      "impressions": 2,
+      "ctr": 0,
+      "position": 22,
+      "title": "Better Than DevTools for CSS: Faster Inspection and Extraction Tools",
+      "excerpt": "DevTools is excellent for debugging, but specialized capture tools are faster when you need clean CSS, reusable snippets, or AI-ready UI context.",
+      "hub": "inspecting-debugging-css",
+      "hubTitle": "Inspecting & Debugging CSS",
+      "cluster": "devtools-alternatives",
+      "clusterTitle": "DevTools Alternatives",
+      "slug": "better-than-devtools-css",
+      "date": "2026-05-11",
+      "sourcePath": "website/content/topics/inspecting-debugging-css/devtools-alternatives/better-than-devtools-css.md",
+      "metrics": {
+        "wordCount": 387,
+        "internalLinks": 3,
+        "externalLinks": 0,
+        "bodyH1Headings": 0
+      },
+      "score": 2.2,
+      "reasons": [
+        "no external citations in body",
+        "high product-fit comparison intent"
+      ]
+    },
+    {
+      "url": "https://elementarmory.com/topics/chrome-extension-use-cases",
+      "path": "/topics/chrome-extension-use-cases",
+      "clicks": 0,
+      "impressions": 1,
+      "ctr": 0,
+      "position": 4,
+      "score": 2.2,
+      "reasons": [
+        "ranking in positions 4-15"
+      ]
+    },
+    {
+      "url": "https://elementarmory.com/topics/advanced-workflows-automation/future-of-frontend-dev/future-of-frontend-tools",
+      "path": "/topics/advanced-workflows-automation/future-of-frontend-dev/future-of-frontend-tools",
+      "clicks": 0,
+      "impressions": 1,
+      "ctr": 0,
+      "position": 5,
+      "title": "The Future of Frontend Tools in 2026: AI-Integrated, Automation-First Development",
+      "excerpt": "Frontend tools are evolving from static frameworks into AI-integrated, automation-first systems. The future isn't about React vs Vue-it's about building with AI, capturing production UI, and automating repetitive workflows. Teams that adopt these practices now will ship 3x faster.",
+      "hub": "advanced-workflows-automation",
+      "hubTitle": "Advanced Workflows & Automation",
+      "cluster": "future-of-frontend-dev",
+      "clusterTitle": "Future of Frontend Dev",
+      "slug": "future-of-frontend-tools",
+      "date": "2026-05-24",
+      "sourcePath": "website/content/topics/advanced-workflows-automation/future-of-frontend-dev/future-of-frontend-tools.md",
+      "metrics": {
+        "wordCount": 1447,
+        "internalLinks": 12,
+        "externalLinks": 5,
+        "bodyH1Headings": 0
+      },
+      "score": 2.2,
+      "reasons": [
+        "ranking in positions 4-15"
+      ]
+    },
+    {
+      "url": "https://elementarmory.com/topics/ai-coding-workflows/ui-for-ai-coding",
+      "path": "/topics/ai-coding-workflows/ui-for-ai-coding",
+      "clicks": 0,
+      "impressions": 1,
+      "ctr": 0,
+      "position": 8,
+      "score": 2.2,
+      "reasons": [
+        "ranking in positions 4-15"
+      ]
+    },
+    {
+      "url": "https://elementarmory.com/topics/copy-ui-from-websites/copy-responsive-ui/copy-responsive-css-from-website",
+      "path": "/topics/copy-ui-from-websites/copy-responsive-ui/copy-responsive-css-from-website",
+      "clicks": 0,
+      "impressions": 1,
+      "ctr": 0,
+      "position": 8,
+      "title": "Copy Responsive CSS From Website in 30 Seconds",
+      "excerpt": "Learn how to capture responsive CSS, media queries, and breakpoint logic from any website instantly. Skip manual DevTools hunting and feed clean code into AI tools like Cursor or Claude.",
+      "hub": "copy-ui-from-websites",
+      "hubTitle": "Copy UI from Websites",
+      "cluster": "copy-responsive-ui",
+      "clusterTitle": "Copy Responsive UI",
+      "slug": "copy-responsive-css-from-website",
+      "date": "2026-06-02",
+      "sourcePath": "website/content/topics/copy-ui-from-websites/copy-responsive-ui/copy-responsive-css-from-website.md",
+      "metrics": {
+        "wordCount": 3036,
+        "internalLinks": 3,
+        "externalLinks": 3,
+        "bodyH1Headings": 0
+      },
+      "score": 2.2,
+      "reasons": [
+        "ranking in positions 4-15"
+      ]
+    },
+    {
+      "url": "https://elementarmory.com/topics/copy-ui-from-websites/extract-css-from-elements",
+      "path": "/topics/copy-ui-from-websites/extract-css-from-elements",
+      "clicks": 0,
+      "impressions": 1,
+      "ctr": 0,
+      "position": 8,
+      "score": 2.2,
+      "reasons": [
+        "ranking in positions 4-15"
+      ]
+    },
+    {
+      "url": "https://elementarmory.com/topics/landing-page-saas-ui/saas-ui/saas-ui-inspiration",
+      "path": "/topics/landing-page-saas-ui/saas-ui/saas-ui-inspiration",
+      "clicks": 0,
+      "impressions": 1,
+      "ctr": 0,
+      "position": 9,
+      "title": "SaaS UI Inspiration: Copy Patterns, Ship Faster",
+      "excerpt": "Learn how to find, capture, and reuse production-proven SaaS UI patterns instead of designing from scratch. Study dashboards, forms, and navigation from real products to accelerate your builds.",
+      "hub": "landing-page-saas-ui",
+      "hubTitle": "Landing Page & SaaS UI",
+      "cluster": "saas-ui",
+      "clusterTitle": "SaaS UI",
+      "slug": "saas-ui-inspiration",
+      "date": "2026-05-30",
+      "sourcePath": "website/content/topics/landing-page-saas-ui/saas-ui/saas-ui-inspiration.md",
+      "metrics": {
+        "wordCount": 2414,
+        "internalLinks": 5,
+        "externalLinks": 4,
+        "bodyH1Headings": 0
+      },
+      "score": 2.2,
+      "reasons": [
+        "ranking in positions 4-15"
+      ]
+    },
+    {
+      "url": "https://elementarmory.com/topics/copy-ui-from-websites/extract-css-from-elements/extract-css-from-class",
+      "path": "/topics/copy-ui-from-websites/extract-css-from-elements/extract-css-from-class",
+      "clicks": 0,
+      "impressions": 1,
+      "ctr": 0,
+      "position": 10,
+      "title": "Extract CSS Class Names Fast: Automated vs Manual Methods",
+      "excerpt": "Learn how to extract CSS class names from live websites instantly. Compare manual DevTools hunting vs automated extraction tools for design systems and AI workflows.",
+      "hub": "copy-ui-from-websites",
+      "hubTitle": "Copy UI from Websites",
+      "cluster": "extract-css-from-elements",
+      "clusterTitle": "Extract CSS from Elements",
+      "slug": "extract-css-from-class",
+      "date": "2026-05-31",
+      "sourcePath": "website/content/topics/copy-ui-from-websites/extract-css-from-elements/extract-css-from-class.md",
+      "metrics": {
+        "wordCount": 2690,
+        "internalLinks": 5,
+        "externalLinks": 7,
+        "bodyH1Headings": 1
+      },
+      "score": 2.2,
+      "reasons": [
+        "ranking in positions 4-15",
+        "body contains H1 headings"
+      ]
+    },
+    {
+      "url": "https://elementarmory.com/topics/chrome-extension-use-cases/no-code-low-code/no-code-frontend-tools",
+      "path": "/topics/chrome-extension-use-cases/no-code-low-code/no-code-frontend-tools",
+      "clicks": 0,
+      "impressions": 1,
+      "ctr": 0,
+      "position": 15,
+      "title": "No-Code Frontend Tools: Speed Meets Production Quality",
+      "excerpt": "No-code frontend tools democratize UI development, but they're most powerful when paired with production code patterns. Learn how to build faster without sacrificing quality.",
+      "hub": "chrome-extension-use-cases",
+      "hubTitle": "Chrome Extension Use Cases",
+      "cluster": "no-code-low-code",
+      "clusterTitle": "No-Code / Low-Code",
+      "slug": "no-code-frontend-tools",
+      "date": "2026-05-26",
+      "sourcePath": "website/content/topics/chrome-extension-use-cases/no-code-low-code/no-code-frontend-tools.md",
+      "metrics": {
+        "wordCount": 2578,
+        "internalLinks": 5,
+        "externalLinks": 4,
+        "bodyH1Headings": 0
+      },
+      "score": 2.2,
+      "reasons": [
+        "ranking in positions 4-15"
+      ]
+    },
+    {
+      "url": "https://elementarmory.com/topics/chrome-extension-use-cases/developer-productivity/frontend-automation-tools",
+      "path": "/topics/chrome-extension-use-cases/developer-productivity/frontend-automation-tools",
+      "clicks": 0,
+      "impressions": 1,
+      "ctr": 0,
+      "position": 3,
+      "title": "Frontend Automation Tools: Speed Up Your Workflow Without Extra Code",
+      "excerpt": "Frontend automation tools help developers eliminate repetitive UI tasks like copying components, debugging CSS, and testing. Learn how Chrome extensions fit into your automation strategy and which tools actually save time.",
+      "hub": "chrome-extension-use-cases",
+      "hubTitle": "Chrome Extension Use Cases",
+      "cluster": "developer-productivity",
+      "clusterTitle": "Developer Productivity",
+      "slug": "frontend-automation-tools",
+      "date": "2026-05-07",
+      "sourcePath": "website/content/topics/chrome-extension-use-cases/developer-productivity/frontend-automation-tools.md",
+      "metrics": {
+        "wordCount": 1706,
+        "internalLinks": 0,
+        "externalLinks": 0,
+        "bodyH1Headings": 0
+      },
+      "score": 1.25,
+      "reasons": [
+        "no internal links in body",
+        "no external citations in body"
+      ]
+    },
+    {
+      "url": "https://elementarmory.com/topics/component-reuse-libraries/snippet-libraries/create-ui-snippet-library",
+      "path": "/topics/component-reuse-libraries/snippet-libraries/create-ui-snippet-library",
+      "clicks": 0,
+      "impressions": 1,
+      "ctr": 0,
+      "position": 20,
+      "title": "How to Create a UI Snippet Library That Saves Development Time",
+      "excerpt": "Build a personal UI snippet library to capture and reuse components across projects. Learn how to organize, maintain, and integrate snippets into your workflow without the overhead of a full design system.",
+      "hub": "component-reuse-libraries",
+      "hubTitle": "Component Reuse & Libraries",
+      "cluster": "snippet-libraries",
+      "clusterTitle": "Snippet Libraries",
+      "slug": "create-ui-snippet-library",
+      "date": "2026-05-12",
+      "sourcePath": "website/content/topics/component-reuse-libraries/snippet-libraries/create-ui-snippet-library.md",
+      "metrics": {
+        "wordCount": 1498,
+        "internalLinks": 0,
+        "externalLinks": 4,
+        "bodyH1Headings": 0
+      },
+      "score": 1.25,
+      "reasons": [
+        "no internal links in body"
+      ]
+    },
+    {
+      "url": "https://elementarmory.com/topics/ui-development-without-design-skills/for-non-designers/developer-friendly-design-tips",
+      "path": "/topics/ui-development-without-design-skills/for-non-designers/developer-friendly-design-tips",
+      "clicks": 0,
+      "impressions": 1,
+      "ctr": 0,
+      "position": 26,
+      "title": "5 Design Principles Developers Need to Know",
+      "excerpt": "Master 5 core design principles-hierarchy, spacing, contrast, alignment, consistency-without formal training. Build professional UIs by learning the rules designers follow.",
+      "hub": "ui-development-without-design-skills",
+      "hubTitle": "UI Development Without Design Skills",
+      "cluster": "for-non-designers",
+      "clusterTitle": "For Non-Designers",
+      "slug": "developer-friendly-design-tips",
+      "date": "2026-05-26",
+      "sourcePath": "website/content/topics/ui-development-without-design-skills/for-non-designers/developer-friendly-design-tips.md",
+      "metrics": {
+        "wordCount": 2961,
+        "internalLinks": 4,
+        "externalLinks": 7,
+        "bodyH1Headings": 1
+      },
+      "score": 1,
+      "reasons": [
+        "body contains H1 headings"
+      ]
+    },
+    {
+      "url": "https://elementarmory.com/topics/copy-ui-from-websites/copy-ui-without-devtools",
+      "path": "/topics/copy-ui-from-websites/copy-ui-without-devtools",
+      "clicks": 0,
+      "impressions": 1,
+      "ctr": 0,
+      "position": 44,
+      "score": 1,
+      "reasons": []
+    },
+    {
+      "url": "https://elementarmory.com/topics/inspecting-debugging-css",
+      "path": "/topics/inspecting-debugging-css",
+      "clicks": 0,
+      "impressions": 1,
+      "ctr": 0,
+      "position": 75,
+      "score": 1,
+      "reasons": []
+    }
+  ]
+}

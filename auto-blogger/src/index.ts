@@ -5,7 +5,7 @@ import { sleep } from "./utils.js";
 import { applyDiagramsToArticle } from "./applyDiagrams.js";
 import { loadConfig, loadProjectConfig } from "./config.js";
 import { researchTopic } from "./research.js";
-import { parseTopicKeywords } from "./topics.js";
+import { isScheduledTopicKeywordAllowed, parseTopicKeywords } from "./topics.js";
 import { generateTopicArticle } from "./generateArticle.js";
 import { generateNewsArticle } from "./generateNewsArticle.js";
 import { validateArticleQuality, validateNewsPostQuality, hasCriticalWarnings, categorizeWarning } from "./quality.js";
@@ -61,7 +61,10 @@ export async function pickAndClaimKeywords(
   requestId: string
 ): Promise<TopicKeyword[]> {
   const available = pool.filter(
-    (kw) => !alreadyUsed.has(kw.id) && !alreadyPublished.has(kw.id)
+    (kw) =>
+      isScheduledTopicKeywordAllowed(kw) &&
+      !alreadyUsed.has(kw.id) &&
+      !alreadyPublished.has(kw.id)
   );
   const claimed: TopicKeyword[] = [];
   const shuffled = [...available].sort(() => Math.random() - 0.5);

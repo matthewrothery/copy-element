@@ -342,16 +342,14 @@ resource "aws_iam_role_policy" "scheduler_invoke_lambda" {
 
 # ─────────────────────────────────────────────────────────────────────────────
 # EventBridge Scheduler schedules (cron, Australia/Sydney timezone)
-# Topics 09:00, 11:00, 14:00, 16:00 — one article per run.
+# Topics 09:00 for one net-new article, 14:00 reserved for refresh/update work.
 # News 10:00 every day.
 # ─────────────────────────────────────────────────────────────────────────────
 
 locals {
   topics_schedules = {
-    "09h" = { hour = 9,  description = "09:00 Sydney" }
-    "11h" = { hour = 11, description = "11:00 Sydney" }
-    "14h" = { hour = 14, description = "14:00 Sydney" }
-    "16h" = { hour = 16, description = "16:00 Sydney" }
+    "09h-new"     = { hour = 9,  description = "09:00 Sydney net-new topic", slot = "new-topic" }
+    "14h-refresh" = { hour = 14, description = "14:00 Sydney refresh/update slot", slot = "refresh" }
   }
 }
 
@@ -371,6 +369,7 @@ resource "aws_scheduler_schedule" "auto_blogger_topics" {
   target {
     arn      = aws_lambda_function.auto_blogger_topics[0].arn
     role_arn = aws_iam_role.scheduler_auto_blogger[0].arn
+    input    = jsonencode({ slot = each.value.slot })
 
     retry_policy {
       maximum_retry_attempts = 0

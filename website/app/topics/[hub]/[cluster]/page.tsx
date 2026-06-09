@@ -14,6 +14,7 @@ import { schemaIsoDateFromFrontmatter } from "@/lib/schemaHelpers";
 import { SITE_URL } from "@/lib/publicConfig";
 import {
   buildPageMetadata,
+  breadcrumbListSchema,
   collectionPageSchema,
   faqPageSchema,
 } from "@/lib/seo";
@@ -54,6 +55,11 @@ export default async function ClusterPage({
   const pageUrl = `${SITE_URL}/topics/${hubSlug}/${clusterSlug}`;
 
   const schemaBlocks: Array<Record<string, unknown>> = [
+    breadcrumbListSchema([
+      { label: "Topics", href: "/topics" },
+      { label: hub?.title ?? hubSlug, href: `/topics/${hubSlug}` },
+      { label: cluster.title, href: `/topics/${hubSlug}/${clusterSlug}` },
+    ]),
     collectionPageSchema({
       name: cluster.title,
       description: cluster.excerpt,

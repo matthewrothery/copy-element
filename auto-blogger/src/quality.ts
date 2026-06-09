@@ -12,6 +12,7 @@ const CRITICAL_PATTERNS: RegExp[] = [
   /^Duplicate blog slug detected:/,
   /^Body content looks too short/,
   /^Unsupported feature claim detected:/,
+  /^Body markdown must not contain H1 headings/,
 ];
 
 export function categorizeWarning(message: string): WarningLevel {
@@ -97,6 +98,11 @@ export function validateArticleQuality(
 
   if (measureUpfrontAnswerChars(body) < MIN_UPFRONT_CHARS) {
     issues.push("Article should start with a useful upfront answer before the first section heading.");
+  }
+
+  const bodyH1Headings = article.body.match(/^#\s+/gm) ?? [];
+  if (bodyH1Headings.length > 0) {
+    issues.push(`Body markdown must not contain H1 headings; found ${bodyH1Headings.length}.`);
   }
 
   if (internalLinkCount < INTERNAL_FLOOR) {

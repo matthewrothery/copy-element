@@ -5,8 +5,11 @@ hubTitle: "Copy UI from Websites"
 cluster: copy-html-from-website
 clusterTitle: "Copy HTML from Website"
 title: "How to Copy HTML of an Element in Chrome: The Developer's Guide"
+seoTitle: "Copy HTML of an Element in Chrome DevTools"
+seoDescription: "Copy one element's HTML in Chrome with Copy outerHTML, then clean it for reuse in AI coding workflows or capture HTML and CSS faster with Element Armory."
 slug: "copy-html-of-element-chrome"
 date: "2026-05-09"
+updatedAt: "2026-06-09"
 author: "Element Armory Team"
 excerpt: "Learn how to extract clean, reusable HTML from any website element using Chrome's Inspect tool. Step-by-step guide for developers, with practical workflows for AI-assisted coding."
 readTime: "6 min read"
@@ -40,6 +43,8 @@ linkKeywords:
 ## Quick Answer
 
 To copy the HTML of a single element in Chrome, right-click the element on any webpage, select **Inspect**, then in the DevTools panel right-click the highlighted HTML line and choose **Copy > Copy outerHTML** (or **Copy innerHTML** if you only want the contents). This gives you clean, element-specific code without the bloat of the full page source.
+
+If you also need the styles, pair this with the [copy CSS from a website guide](/topics/copy-ui-from-websites/copy-css-from-website/how-to-copy-css-from-any-website) or skip the manual cleanup with [HTML extraction without DevTools](/topics/copy-ui-from-websites/copy-ui-without-devtools/copy-html-without-inspect-element).
 
 ---
 

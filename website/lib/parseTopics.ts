@@ -36,13 +36,17 @@ export type TopicArticle = {
   clusterTitle: string;
   slug: string;
   title: string;
+  seoTitle?: string;
+  seoDescription?: string;
   date: string;
+  updatedAt?: string;
   excerpt: string;
   readTime: string;
   coverImage?: string;
   faq: FaqItem[];
   relatedSlugs: string[];
   contentHtml: string;
+  sourcePath: string;
 };
 
 export type TopicCluster = {
@@ -76,13 +80,17 @@ function parseArticleFile(filePath: string): TopicArticle {
     clusterTitle: data.clusterTitle as string,
     slug: data.slug as string,
     title: data.title as string,
+    seoTitle: data.seoTitle as string | undefined,
+    seoDescription: data.seoDescription as string | undefined,
     date: data.date as string,
+    updatedAt: data.updatedAt as string | undefined,
     excerpt: data.excerpt as string,
     readTime: (data.readTime as string) ?? "5 min read",
     coverImage: data.coverImage as string | undefined,
     faq: (data.faq as FaqItem[]) ?? [],
     relatedSlugs: (data.relatedSlugs as string[]) ?? [],
     contentHtml,
+    sourcePath: filePath,
   };
 }
 

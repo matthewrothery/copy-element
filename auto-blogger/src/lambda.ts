@@ -13,9 +13,15 @@ import { buildCycleDeps, runParallelTopics, runNewsOnce } from "./index.js";
 type ScheduledEvent = {
   source?: string;
   "detail-type"?: string;
+  slot?: "new-topic" | "refresh";
 };
 
-export async function topicsHandler(_event: ScheduledEvent): Promise<void> {
+export async function topicsHandler(event: ScheduledEvent): Promise<void> {
+  if (event.slot === "refresh") {
+    console.log("[topic] Refresh slot reserved for GSC-informed update workflow; no net-new topic generated.");
+    return;
+  }
+
   const deps = await buildCycleDeps();
   const summary = await runParallelTopics(deps.config.dailyArticles, deps);
   const failed = summary.failures.length;

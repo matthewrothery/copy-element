@@ -1,7 +1,34 @@
 import test from "node:test";
 import assert from "node:assert/strict";
-import { validateNewsPostQuality, linkBudget } from "./quality.js";
-import type { GeneratedBlogPost } from "./types.js";
+import { validateArticleQuality, validateNewsPostQuality, linkBudget } from "./quality.js";
+import type { GeneratedArticle, GeneratedBlogPost } from "./types.js";
+
+function makeArticle(body: string): GeneratedArticle {
+  return {
+    title: "Copy HTML Into Cursor",
+    slug: "copy-html-into-cursor",
+    date: "2026-06-09",
+    excerpt: "A practical workflow for copying HTML and CSS into Cursor so AI tools get real UI context.",
+    readTime: "6 min read",
+    relatedSlugs: [],
+    hubSlug: "ai-coding-workflows",
+    hubTitle: "AI Coding Workflows",
+    clusterSlug: "cursor-workflows",
+    clusterTitle: "Cursor Workflows",
+    body,
+    faq: [{ question: "Does this work with CSS?", answer: "Yes, include the CSS with the HTML." }],
+    imagePrompt: "Clean technical illustration of copied UI context moving into an AI coding editor.",
+    diagrams: [],
+    linkKeywords: [
+      "copy html into cursor",
+      "cursor ui prompts",
+      "html css ai context",
+      "copy ui for ai",
+      "cursor frontend workflow",
+      "ai coding ui reference",
+    ],
+  };
+}
 
 function makePost(body: string): GeneratedBlogPost {
   return {
@@ -59,6 +86,27 @@ test("linkBudget ceiling is always target + 2", () => {
   const body = "word ".repeat(600).trim();
   const { target, ceiling } = linkBudget(body);
   assert.equal(ceiling, target + 2);
+});
+
+test("validateArticleQuality rejects body-level H1 headings", () => {
+  const article = makeArticle(
+    [
+      "This guide starts with enough practical context before the sections begin.",
+      "It explains the workflow clearly and avoids making the reader hunt.",
+      "# Duplicate page title",
+      "## Workflow",
+      "[Internal one](/topics/copy-ui-from-websites/copy-html-from-website/copy-html-of-element-chrome)",
+      "[Internal two](/topics/copy-ui-from-websites/copy-css-from-website/copy-css-without-devtools)",
+      "[Internal three](/blog/ai-ui-news)",
+      "[Source one](https://example.com/one)",
+      "[Source two](https://example.com/two)",
+      "word ".repeat(850),
+    ].join("\n\n")
+  );
+
+  const issues = validateArticleQuality(article, new Set());
+
+  assert.ok(issues.some((issue) => issue.startsWith("Body markdown must not contain H1 headings")));
 });
 
 test("validateNewsPostQuality reports missing links and unresolved placeholders", () => {

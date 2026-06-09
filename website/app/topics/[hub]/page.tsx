@@ -13,6 +13,7 @@ import { getAllHubs, getHub } from "@/lib/parseTopics";
 import { SITE_URL } from "@/lib/publicConfig";
 import {
   buildPageMetadata,
+  breadcrumbListSchema,
   collectionPageSchema,
   faqPageSchema,
 } from "@/lib/seo";
@@ -55,6 +56,10 @@ export default async function HubPage({
 
   const pageUrl = `${SITE_URL}/topics/${hub.hub}`;
   const schemaBlocks: Array<Record<string, unknown>> = [
+    breadcrumbListSchema([
+      { label: "Topics", href: "/topics" },
+      { label: hub.title, href: `/topics/${hub.hub}` },
+    ]),
     collectionPageSchema({
       name: hub.title,
       description: hub.excerpt,

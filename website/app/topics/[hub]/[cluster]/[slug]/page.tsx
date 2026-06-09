@@ -21,6 +21,7 @@ import { SITE_URL } from "@/lib/publicConfig";
 import {
   articleSchema,
   buildPageMetadata,
+  breadcrumbListSchema,
   faqPageSchema,
 } from "@/lib/seo";
 import "@/styles/topics.css";
@@ -49,8 +50,8 @@ export async function generateMetadata({
   const article = getArticle(hub, cluster, slug);
   if (!article) return { title: "Not Found" };
   return buildPageMetadata({
-    title: article.title,
-    description: article.excerpt,
+    title: article.seoTitle ?? article.title,
+    description: article.seoDescription ?? article.excerpt,
     path: `/topics/${hub}/${cluster}/${slug}`,
     image: article.coverImage,
     openGraphType: "article",
@@ -72,13 +73,24 @@ export default async function ArticlePage({
 
   const articleUrl = `${SITE_URL}/topics/${hubSlug}/${clusterSlug}/${slug}`;
   const published = schemaIsoDateFromFrontmatter(article.date);
+  const modified = schemaIsoDateFromFrontmatter(article.updatedAt ?? article.date);
 
   const schemaBlocks: Array<Record<string, unknown>> = [
+    breadcrumbListSchema([
+      { label: "Topics", href: "/topics" },
+      { label: hub?.title ?? hubSlug, href: `/topics/${hubSlug}` },
+      {
+        label: cluster?.title ?? clusterSlug,
+        href: `/topics/${hubSlug}/${clusterSlug}`,
+      },
+      { label: article.title, href: `/topics/${hubSlug}/${clusterSlug}/${slug}` },
+    ]),
     articleSchema({
       headline: article.title,
-      description: article.excerpt,
+      description: article.seoDescription ?? article.excerpt,
       url: articleUrl,
       datePublished: published,
+      dateModified: modified,
       image: article.coverImage,
       type: "Article",
     }),

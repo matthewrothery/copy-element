@@ -80,6 +80,21 @@ export function topicArticlePathForKeyword(websiteRoot: string, keyword: TopicKe
   return path.join(websiteRoot, "content", "topics", keyword.hubSlug, keyword.clusterSlug, `${slug}.md`);
 }
 
+const SCHEDULED_EXCLUDED_HUBS = new Set(["tool-alternatives"]);
+const COMPETITOR_INTENT_PATTERN =
+  /\b(?:alternative|alternatives|vs|versus|review|pros and cons|pricing|competitor|replacement)\b/i;
+const COMPETITOR_NAME_PATTERN =
+  /\b(?:divmagic|snipcss|snip css|css scan|cssscan|copycss|visbug)\b/i;
+
+export function isScheduledTopicKeywordAllowed(keyword: TopicKeyword): boolean {
+  if (SCHEDULED_EXCLUDED_HUBS.has(keyword.hubSlug)) return false;
+  const text = `${keyword.keyword} ${keyword.clusterTitle} ${keyword.hubTitle}`;
+  if (COMPETITOR_NAME_PATTERN.test(text) && COMPETITOR_INTENT_PATTERN.test(text)) {
+    return false;
+  }
+  return true;
+}
+
 /**
  * Collect listKeywordId values from topic article frontmatter (see artifact frontmatter).
  */
@@ -123,6 +138,7 @@ export function pickNextKeyword(
   const fmIds = skipExisting && websiteRoot ? loadPublishedListKeywordIds(websiteRoot) : new Set<string>();
 
   const pool = allKeywords.filter((item) => {
+    if (!isScheduledTopicKeywordAllowed(item)) return false;
     if (usedKeywordIds.has(item.id)) return false;
     if (fmIds.has(item.id)) return false;
     if (skipExisting && websiteRoot && existsSync(topicArticlePathForKeyword(websiteRoot, item))) {

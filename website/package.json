@@ -6,6 +6,7 @@
     "dev": "next dev",
     "build": "next build && node scripts/check-indexability-output.mjs",
     "check:indexability": "node scripts/check-indexability-output.mjs",
+    "topics:opportunities": "tsx scripts/analyzeTopicOpportunities.mts",
     "start": "next start",
     "lint": "eslint"
   },
