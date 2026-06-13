@@ -1,13 +1,13 @@
 {
   "name": "copy-element",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "private": true,
   "type": "module",
   "scripts": {
     "dev": "vite",
     "build": "vite build",
     "build:prod": "vite build --config vite.prod.config.ts",
-    "zip": "bash scripts/build-zip.sh",
+    "zip": "node scripts/patch-version.js && bash scripts/build-zip.sh",
     "test": "vitest run",
     "test:watch": "vitest"
   },
