@@ -2,11 +2,12 @@ import type { JSX } from "react";
 import { useState } from "react";
 import { MCP_URL } from "../../../shared/mcp-url";
 
-type ToolId = "cursor" | "claudecode" | "claudedesktop" | "other";
+type ToolId = "claudecode" | "codex" | "cursor" | "claudedesktop" | "other";
 
 const TOOLS: { id: ToolId; label: string }[] = [
-  { id: "cursor", label: "Cursor" },
   { id: "claudecode", label: "Claude Code" },
+  { id: "codex", label: "Codex" },
+  { id: "cursor", label: "Cursor" },
   { id: "claudedesktop", label: "Claude Desktop" },
   { id: "other", label: "Other" },
 ];
@@ -28,6 +29,8 @@ function buildSnippet(tool: ToolId): string {
       );
     case "claudecode":
       return `claude mcp add element-armory --transport http ${MCP_URL}`;
+    case "codex":
+      return `codex mcp add element-armory --url ${MCP_URL}`;
     case "claudedesktop":
       return MCP_URL;
     case "other":
@@ -41,6 +44,8 @@ function buildSnippetLabel(tool: ToolId): string {
       return "Add to ~/.cursor/mcp.json";
     case "claudecode":
       return "Run in terminal";
+    case "codex":
+      return "Run in terminal";
     case "claudedesktop":
       return "Custom connector URL";
     case "other":
@@ -51,18 +56,20 @@ function buildSnippetLabel(tool: ToolId): string {
 function buildSetupNote(tool: ToolId): string {
   switch (tool) {
     case "cursor":
-      return "After saving, open Cursor → Settings → MCP and verify element-armory appears with a green indicator.";
+      return "After saving, open Cursor → Settings → MCP, find element-armory, and click it to log in via your browser.";
     case "claudecode":
-      return "Run this command once. Claude Code will open a browser to log in automatically.";
+      return "Run this command once, then run /mcp inside Claude Code and select element-armory to log in via your browser.";
+    case "codex":
+      return "Run this command once, then run codex mcp login element-armory to log in via your browser.";
     case "claudedesktop":
-      return "In Claude Desktop, go to Settings → Connectors → Add custom connector, paste this URL, and click Connect. Claude will open a browser to log in.";
+      return "In Claude Desktop, go to Settings → Connectors → Add custom connector, paste this URL, click Add, then click Connect to log in via your browser.";
     case "other":
-      return "Add this URL as an HTTP MCP endpoint. Your tool will open a browser to log in.";
+      return "Add this URL as an HTTP MCP endpoint, then complete the OAuth login prompt in your browser when your tool connects.";
   }
 }
 
 export function McpConnect(): JSX.Element {
-  const [selectedTool, setSelectedTool] = useState<ToolId>("cursor");
+  const [selectedTool, setSelectedTool] = useState<ToolId>("claudecode");
   const [copied, setCopied] = useState(false);
 
   const toolIndex = TOOLS.findIndex((t) => t.id === selectedTool);
