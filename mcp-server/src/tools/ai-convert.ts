@@ -17,12 +17,12 @@ interface CaptureAsset {
 }
 
 interface CapturesListResponse {
-  captures: Array<{ id: number }>;
+  captures: Array<{ id: string }>;
 }
 
 interface CaptureDetailResponse {
   capture: {
-    id: number;
+    id: string;
     assets: CaptureAsset[];
   };
 }
@@ -32,11 +32,11 @@ interface StartResponse {
 }
 
 async function resolveHtmlCss(
-  captureId: number | undefined,
+  captureId: string | undefined,
   html: string | undefined,
   css: string | undefined,
   userId: string
-): Promise<{ html: string; css: string; resolvedCaptureId: number | null }> {
+): Promise<{ html: string; css: string; resolvedCaptureId: string | null }> {
   if (html != null && css != null) {
     return { html, css, resolvedCaptureId: captureId ?? null };
   }
@@ -90,7 +90,7 @@ export function registerAiConvertTools(server: McpServer, user: McpUser): void {
       description:
         'Convert a captured UI element into a component for your target framework using AI. Costs 5 quota units. Returns production-ready component code.',
       inputSchema: {
-        captureId: z.number().int().optional().describe('Capture ID; uses latest if omitted'),
+        captureId: z.string().optional().describe('Capture ID; uses latest if omitted'),
         html: z.string().optional().describe('Raw HTML to convert (skips fetch if provided with css)'),
         css: z.string().optional().describe('Raw CSS to convert (skips fetch if provided with html)'),
         targetFramework: z

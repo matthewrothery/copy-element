@@ -11,17 +11,17 @@ interface CaptureAsset {
 
 interface CaptureDetailResponse {
   capture: {
-    id: number;
+    id: string;
     assets: CaptureAsset[];
   };
 }
 
 interface CapturesListResponse {
-  captures: Array<{ id: number }>;
+  captures: Array<{ id: string }>;
 }
 
 async function resolveHtmlCss(
-  captureId: number | undefined,
+  captureId: string | undefined,
   html: string | undefined,
   css: string | undefined,
   userId: string
@@ -78,7 +78,7 @@ export function registerTransformTools(server: McpServer, user: McpUser): void {
       description:
         'Strip scripts, event handlers, and tracking attributes from HTML. Normalizes whitespace. Safe to paste into prompts.',
       inputSchema: {
-        captureId: z.number().int().optional().describe('Capture ID; uses latest if omitted'),
+        captureId: z.string().optional().describe('Capture ID; uses latest if omitted'),
         html: z.string().optional().describe('Raw HTML to clean (skips fetch if provided)'),
         css: z.string().optional().describe('Raw CSS to clean (skips fetch if provided)'),
       },

@@ -1,11 +1,12 @@
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 import Database from 'better-sqlite3';
+import { nanoid } from 'nanoid';
 
 // We need to mock getDb before importing the service
 const mockDb = new Database(':memory:');
 mockDb.exec(`
   CREATE TABLE captures (
-    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    id TEXT PRIMARY KEY,
     install_id TEXT NOT NULL,
     user_id TEXT,
     source_url TEXT,
@@ -19,7 +20,7 @@ mockDb.exec(`
   );
   CREATE TABLE capture_assets (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
-    capture_id INTEGER NOT NULL,
+    capture_id TEXT NOT NULL,
     asset_kind TEXT NOT NULL,
     storage_provider TEXT NOT NULL DEFAULT 's3',
     object_key TEXT NOT NULL,
@@ -49,16 +50,17 @@ const {
   createCaptureWithAssets,
 } = await import('./capture.js');
 
-function insertCapture(userId: string | null, capturedAt: number, createdAt?: number, installId = 'install1'): number {
+function insertCapture(userId: string | null, capturedAt: number, createdAt?: number, installId = 'install1'): string {
   const now = createdAt ?? Date.now();
-  const result = mockDb.prepare(
-    `INSERT INTO captures (install_id, user_id, source_url, captured_at, created_by_install_id, status, created_at, updated_at)
-     VALUES (?, ?, 'http://example.com', ?, ?, 'ok', ?, ?)`
-  ).run(installId, userId, capturedAt, installId, now, now);
-  return result.lastInsertRowid as number;
+  const id = nanoid();
+  mockDb.prepare(
+    `INSERT INTO captures (id, install_id, user_id, source_url, captured_at, created_by_install_id, status, created_at, updated_at)
+     VALUES (?, ?, ?, 'http://example.com', ?, ?, 'ok', ?, ?)`
+  ).run(id, installId, userId, capturedAt, installId, now, now);
+  return id;
 }
 
-function insertAsset(captureId: number): void {
+function insertAsset(captureId: string): void {
   mockDb.prepare(
     `INSERT INTO capture_assets (capture_id, asset_kind, object_key, created_at) VALUES (?, 'screenshot', 'key1', ?)`
   ).run(captureId, Date.now());
@@ -100,7 +102,7 @@ describe('deleteOldestCaptureByUser', () => {
 
     deleteOldestCaptureByUser('user-1');
 
-    const remaining = mockDb.prepare('SELECT id FROM captures WHERE user_id = ?').all('user-1') as { id: number }[];
+    const remaining = mockDb.prepare('SELECT id FROM captures WHERE user_id = ?').all('user-1') as { id: string }[];
     expect(remaining).toHaveLength(1);
     expect(remaining[0].id).toBe(newer);
     const deleted = mockDb.prepare('SELECT id FROM captures WHERE id = ?').get(old);
@@ -161,6 +163,12 @@ describe('createCaptureWithAssets idempotency', () => {
     created_by_install_id: 'install-idem',
     assets: [{ asset_kind: 'screenshot' as const, object_key: 'key1' }],
   };
+
+  it('assigns a nanoid string id to new captures', () => {
+    const capture = createCaptureWithAssets({ ...baseInput, snippet_id: 'snip-new' });
+    expect(typeof capture.id).toBe('string');
+    expect(capture.id.length).toBeGreaterThan(10);
+  });
 
   it('returns the same row for duplicate (install_id, snippet_id)', () => {
     const first = createCaptureWithAssets({ ...baseInput, snippet_id: 'snip-1' });

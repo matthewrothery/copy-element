@@ -111,7 +111,7 @@ export async function deleteServerCapture(serverCaptureId: string): Promise<void
 
 /**
  * Uploads a snippet to the server. Returns the server-assigned capture ID
- * (stringified integer) on success, or null on any failure.
+ * (nanoid string) on success, or null on any failure.
  */
 export async function syncCaptureToServer(snippet: Snippet): Promise<string | null> {
   try {
@@ -183,8 +183,8 @@ export async function syncCaptureToServer(snippet: Snippet): Promise<string | nu
       throw new Error(`POST /api/captures failed: ${res.status}`);
     }
 
-    const data = await res.json() as { id: number };
-    return String(data.id);
+    const data = await res.json() as { id: string };
+    return data.id;
   } catch (error) {
     console.error("[sync-capture]", error);
     return null;

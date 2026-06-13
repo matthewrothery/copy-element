@@ -187,6 +187,7 @@ All timestamps stored as epoch milliseconds (`INTEGER`). Use `Date.now()` — ne
 - **005** — `stripe_customers`, `subscriptions`, `subscription_events` (idempotency + audit via `stripe_event_id` UNIQUE)
 - **006** — `captures` (`install_id`, `user_id` nullable denormalized, `source_url`, `captured_at`, `status`, `metadata_json`), `capture_assets` (`capture_id`, `asset_kind`, `object_key`, `storage_provider`, `content_type`, `byte_size`, checksums)
 - **022** — `captures.snippet_id` (TEXT, nullable; backfilled from `metadata_json.snippet_id`), index `idx_captures_install_snippet` on `(install_id, snippet_id)`
+- **023** — `captures.id` migrated from `INTEGER AUTOINCREMENT` to `TEXT` (nanoid, generated in application code); `capture_assets.capture_id` and `ai_conversion_requests.capture_id` updated to `TEXT` to match. `capture_assets.id` remains `INTEGER AUTOINCREMENT`
 
 ---
 

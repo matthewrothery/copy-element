@@ -3,7 +3,7 @@ import { getDb } from '../db/connection.js';
 
 export interface StartConversionParams {
   userId: string;
-  captureId?: number | null;
+  captureId?: string | null;
   targetFramework: string;
   targetStyling: string;
   aiModel: string;

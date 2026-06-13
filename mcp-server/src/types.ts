@@ -15,7 +15,7 @@ export interface CaptureAsset {
 }
 
 export interface CaptureRecord {
-  id: number;
+  id: string;
   user_id: string | null;
   source_url: string | null;
   captured_at: number;
@@ -25,14 +25,14 @@ export interface CaptureRecord {
 }
 
 export interface CaptureSummary {
-  id: number;
+  id: string;
   source_url: string | null;
   captured_at: number;
   status: string;
 }
 
 export interface CaptureContent {
-  id: number;
+  id: string;
   sourceUrl: string | null;
   capturedAt: number;
   html: string;
@@ -41,7 +41,7 @@ export interface CaptureContent {
 }
 
 export interface ConvertCaptureInput {
-  captureId?: number;
+  captureId?: string;
   html?: string;
   css?: string;
   targetFramework: TargetFramework;

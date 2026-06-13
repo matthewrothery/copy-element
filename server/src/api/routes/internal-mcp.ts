@@ -38,14 +38,14 @@ router.get('/captures', (req, res) => {
  */
 router.get('/captures/:id', async (req, res) => {
   const { userId } = req.query as { userId?: string };
-  const captureId = parseInt(req.params.id, 10);
+  const captureId = req.params.id;
 
   if (!userId) {
     res.status(400).json({ error: 'userId required' });
     return;
   }
 
-  if (Number.isNaN(captureId)) {
+  if (!captureId) {
     res.status(400).json({ error: 'Invalid capture id' });
     return;
   }
@@ -82,7 +82,7 @@ router.post('/usage/increment', (req, res) => {
 router.post('/ai-conversion/start', (req, res) => {
   const { userId, captureId, targetFramework, targetStyling, aiModel } = req.body as {
     userId?: string;
-    captureId?: number;
+    captureId?: string;
     targetFramework?: string;
     targetStyling?: string;
     aiModel?: string;

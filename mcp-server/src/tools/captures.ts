@@ -11,7 +11,7 @@ interface CaptureAsset {
 }
 
 interface CaptureWithAssets {
-  id: number;
+  id: string;
   source_url: string | null;
   captured_at: number;
   assets: CaptureAsset[];
@@ -19,7 +19,7 @@ interface CaptureWithAssets {
 
 interface CapturesListResponse {
   captures: Array<{
-    id: number;
+    id: string;
     source_url: string | null;
     captured_at: number;
     status: string;
@@ -31,7 +31,7 @@ interface CaptureDetailResponse {
   capture: CaptureWithAssets;
 }
 
-async function fetchCaptureContent(captureId: number, userId: string): Promise<CaptureContent> {
+async function fetchCaptureContent(captureId: string, userId: string): Promise<CaptureContent> {
   const data = await apiGet<CaptureDetailResponse>(
     `/internal/mcp/captures/${captureId}?userId=${encodeURIComponent(userId)}`
   );
@@ -95,7 +95,7 @@ export function registerCaptureTools(server: McpServer, user: McpUser): void {
     {
       description: 'Get a specific captured UI element by ID with its HTML and CSS content.',
       inputSchema: {
-        id: z.number().int().describe('Capture ID from listCaptures'),
+        id: z.string().describe('Capture ID from listCaptures'),
       },
     },
     async ({ id }) => {

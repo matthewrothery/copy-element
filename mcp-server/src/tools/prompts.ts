@@ -10,12 +10,12 @@ interface CaptureAsset {
 }
 
 interface CapturesListResponse {
-  captures: Array<{ id: number; source_url: string | null }>;
+  captures: Array<{ id: string; source_url: string | null }>;
 }
 
 interface CaptureDetailResponse {
   capture: {
-    id: number;
+    id: string;
     source_url: string | null;
     captured_at: number;
     assets: CaptureAsset[];
@@ -23,9 +23,9 @@ interface CaptureDetailResponse {
 }
 
 async function resolveCapture(
-  captureId: number | undefined,
+  captureId: string | undefined,
   userId: string
-): Promise<{ html: string; css: string; sourceUrl: string | null; captureId: number } | null> {
+): Promise<{ html: string; css: string; sourceUrl: string | null; captureId: string } | null> {
   let id = captureId;
 
   if (id == null) {
@@ -59,7 +59,7 @@ export function registerPromptTools(server: McpServer, user: McpUser): void {
       description:
         'Get a formatted prompt for AI tools containing the captured HTML and CSS. Paste directly into your AI chat.',
       inputSchema: {
-        captureId: z.number().int().optional().describe('Capture ID; uses latest if omitted'),
+        captureId: z.string().optional().describe('Capture ID; uses latest if omitted'),
       },
     },
     async ({ captureId }) => {
@@ -95,7 +95,7 @@ Rebuild this UI component using the HTML and CSS above. Preserve visual appearan
       description:
         'Get an enhanced prompt with element structure and resource mapping. Pro plan only.',
       inputSchema: {
-        captureId: z.number().int().optional().describe('Capture ID; uses latest if omitted'),
+        captureId: z.string().optional().describe('Capture ID; uses latest if omitted'),
         includeStructure: z.boolean().optional().describe('Include element structure analysis'),
       },
     },

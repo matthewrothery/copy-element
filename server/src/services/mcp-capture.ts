@@ -12,7 +12,7 @@ export interface CaptureAssetWithUrl {
 }
 
 export interface CaptureWithSignedAssets {
-  id: number;
+  id: string;
   user_id: string | null;
   source_url: string | null;
   captured_at: number;
@@ -31,7 +31,7 @@ export interface ListCapturesOptions {
  * Enforces ownership check.
  */
 export async function getCaptureWithAssets(
-  captureId: number,
+  captureId: string,
   userId: string
 ): Promise<CaptureWithSignedAssets | null> {
   const db = getDb();
@@ -40,7 +40,7 @@ export async function getCaptureWithAssets(
     .prepare('SELECT * FROM captures WHERE id = ? AND user_id = ?')
     .get(captureId, userId) as
     | {
-        id: number;
+        id: string;
         user_id: string | null;
         source_url: string | null;
         captured_at: number;

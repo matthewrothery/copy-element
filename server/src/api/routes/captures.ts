@@ -338,7 +338,7 @@ capturesRouter.get(
         ]);
 
         return {
-          server_capture_id: String(capture.id),
+          server_capture_id: capture.id,
           snippet_id: snippetId,
           title: typeof metadata.title === 'string' ? metadata.title : 'Untitled',
           source_url: capture.source_url ?? null,
@@ -378,12 +378,12 @@ capturesRouter.delete(
       res.status(403).json({ error: 'Cannot delete another install\'s captures' });
       return;
     }
-    const captureIdRaw = parseInt(routeParam(req.params.captureId), 10);
-    if (Number.isNaN(captureIdRaw)) {
+    const captureId = routeParam(req.params.captureId);
+    if (!captureId) {
       res.status(400).json({ error: 'Invalid capture ID' });
       return;
     }
-    const deleted = deleteCaptureById(captureIdRaw, installId);
+    const deleted = deleteCaptureById(captureId, installId);
     if (!deleted) {
       res.status(404).json({ error: 'Capture not found or not owned by this install' });
       return;
@@ -438,7 +438,7 @@ capturesRouter.get(
       ]);
 
       return {
-        id: String(capture.id),
+        id: capture.id,
         title: typeof metadata.title === 'string' ? metadata.title : 'Untitled',
         width: typeof metadata.width === 'number' ? metadata.width : 400,
         height: typeof metadata.height === 'number' ? metadata.height : 200,

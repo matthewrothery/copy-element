@@ -1,3 +1,4 @@
+import { nanoid } from 'nanoid';
 import { getDb } from '../db/connection.js';
 
 export type AssetKind = 'screenshot' | 'html' | 'stylesheet';
@@ -24,7 +25,7 @@ export interface CreateCaptureInput {
 }
 
 export interface CaptureRow {
-  id: number;
+  id: string;
   install_id: string;
   user_id: string | null;
   source_url: string | null;
@@ -66,8 +67,8 @@ export function createCaptureWithAssets(input: CreateCaptureInput): CaptureRow {
     'SELECT id FROM captures WHERE install_id = ? AND snippet_id = ?'
   );
   const insertCapture = db.prepare(
-    `INSERT INTO captures (install_id, user_id, source_url, captured_at, created_by_install_id, status, metadata_json, snippet_id, created_at, updated_at)
-     VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`
+    `INSERT INTO captures (id, install_id, user_id, source_url, captured_at, created_by_install_id, status, metadata_json, snippet_id, created_at, updated_at)
+     VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`
   );
   const insertAsset = db.prepare(
     `INSERT INTO capture_assets (capture_id, asset_kind, storage_provider, object_key, public_url, checksum_sha256, content_type, byte_size, created_at)
@@ -76,11 +77,13 @@ export function createCaptureWithAssets(input: CreateCaptureInput): CaptureRow {
 
   const run = db.transaction(() => {
     if (snippetId) {
-      const existing = findExisting.get(input.install_id, snippetId) as { id: number } | undefined;
+      const existing = findExisting.get(input.install_id, snippetId) as { id: string } | undefined;
       if (existing) return getCaptureById(existing.id);
     }
 
-    const result = insertCapture.run(
+    const captureId = nanoid();
+    insertCapture.run(
+      captureId,
       input.install_id,
       userId,
       input.source_url ?? null,
@@ -92,7 +95,6 @@ export function createCaptureWithAssets(input: CreateCaptureInput): CaptureRow {
       now,
       now
     );
-    const captureId = result.lastInsertRowid as number;
     const provider = 's3';
     for (const a of input.assets) {
       insertAsset.run(
@@ -113,7 +115,7 @@ export function createCaptureWithAssets(input: CreateCaptureInput): CaptureRow {
   return run();
 }
 
-function getCaptureById(id: number): CaptureRow {
+function getCaptureById(id: string): CaptureRow {
   const db = getDb();
   const row = db.prepare('SELECT * FROM captures WHERE id = ?').get(id) as CaptureRow;
   if (!row) throw new Error('Capture not found');
@@ -221,7 +223,7 @@ export function countCapturesByInstall(installId: string): number {
  */
 export function deleteOldestCaptureForInstall(installId: string): void {
   const db = getDb();
-  const oldest = db.prepare('SELECT id FROM captures WHERE install_id = ? ORDER BY captured_at ASC LIMIT 1').get(installId) as { id: number } | undefined;
+  const oldest = db.prepare('SELECT id FROM captures WHERE install_id = ? ORDER BY captured_at ASC LIMIT 1').get(installId) as { id: string } | undefined;
   if (!oldest) return;
   db.transaction(() => {
     db.prepare('DELETE FROM capture_assets WHERE capture_id = ?').run(oldest.id);
@@ -243,7 +245,7 @@ export function countCapturesByUser(userId: string): number {
  */
 export function deleteOldestCaptureByUser(userId: string): void {
   const db = getDb();
-  const oldest = db.prepare('SELECT id FROM captures WHERE user_id = ? ORDER BY captured_at ASC LIMIT 1').get(userId) as { id: number } | undefined;
+  const oldest = db.prepare('SELECT id FROM captures WHERE user_id = ? ORDER BY captured_at ASC LIMIT 1').get(userId) as { id: string } | undefined;
   if (!oldest) return;
   db.transaction(() => {
     db.prepare('DELETE FROM capture_assets WHERE capture_id = ?').run(oldest.id);
@@ -255,7 +257,7 @@ export function deleteOldestCaptureByUser(userId: string): void {
  * Delete a capture by ID, verifying it belongs to the given install. Returns true if deleted,
  * false if not found or owned by a different install.
  */
-export function deleteCaptureById(captureId: number, installId: string): boolean {
+export function deleteCaptureById(captureId: string, installId: string): boolean {
   const db = getDb();
   const row = db.prepare('SELECT install_id FROM captures WHERE id = ?').get(captureId) as { install_id: string } | undefined;
   if (!row || row.install_id !== installId) return false;
