@@ -7,7 +7,10 @@ const nextConfig: NextConfig = {
   output: "export",
   turbopack: { root: process.cwd() },
   async rewrites() {
-    return [{ source: "/api/:path*", destination: `${apiProxyTarget}/api/:path*` }];
+    return [
+      { source: "/api/:path*", destination: `${apiProxyTarget}/api/:path*` },
+      { source: "/oauth/:path*", destination: `${apiProxyTarget}/oauth/:path*` },
+    ];
   },
   images: {
     unoptimized: true,

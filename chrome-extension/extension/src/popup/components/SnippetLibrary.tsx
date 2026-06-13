@@ -11,9 +11,11 @@ interface SnippetLibraryProps {
   onCopyPromptAsGuest?: (snippet: Snippet) => void;
   isFree?: boolean;
   onCopyPromptAsFree?: (snippet: Snippet) => void;
+  showSyncStatus?: boolean;
+  onRetrySync?: (id: string) => void;
 }
 
-export function SnippetLibrary({ snippets, onOpen, onDelete, onCopy, isGuest, onCopyPromptAsGuest, isFree, onCopyPromptAsFree }: SnippetLibraryProps): React.ReactElement {
+export function SnippetLibrary({ snippets, onOpen, onDelete, onCopy, isGuest, onCopyPromptAsGuest, isFree, onCopyPromptAsFree, showSyncStatus, onRetrySync }: SnippetLibraryProps): React.ReactElement {
   return (
     <section className="snippet-grid" aria-label="Snippet library">
       {snippets.map((snippet) => (
@@ -27,6 +29,8 @@ export function SnippetLibrary({ snippets, onOpen, onDelete, onCopy, isGuest, on
           onCopyPromptAsGuest={onCopyPromptAsGuest ? () => onCopyPromptAsGuest(snippet) : undefined}
           isFree={isFree}
           onCopyPromptAsFree={onCopyPromptAsFree ? () => onCopyPromptAsFree(snippet) : undefined}
+          showSyncStatus={showSyncStatus}
+          onRetrySync={onRetrySync}
         />
       ))}
     </section>

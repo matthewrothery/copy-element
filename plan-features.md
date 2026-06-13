@@ -33,6 +33,8 @@
 
 **Library "⋮" more menu:** Shows only Delete (Copy JSX, Copy MCP, Copy Tailwind hidden).
 
+**Sign-in sync:** On sign-in (Guest → Free transition), any captures saved while signed out are uploaded to the server in the background (`background/index.ts` `retryPendingSyncs`), deduplicated server-side by `(install_id, snippet_id)`. A toast/status broadcast (`CAPTURE_SYNC_STATUS`) reports progress if a view is open.
+
 ## Free Tier (signed in, no paid plan)
 
 **Definition:** `signed_in && user_plan` not in `['pro', 'team']`.

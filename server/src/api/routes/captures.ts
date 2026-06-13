@@ -132,6 +132,7 @@ capturesRouter.post(
 
     const source_url = typeof body?.source_url === 'string' ? body.source_url : '';
     const captured_at = typeof body?.captured_at === 'number' ? body.captured_at : Date.now();
+    const snippet_id = typeof body?.metadata?.snippet_id === 'string' ? body.metadata.snippet_id : null;
     const metadata_json =
       body?.metadata != null
         ? (JSON.stringify(body.metadata).length <= MAX_METADATA_JSON_LENGTH
@@ -220,6 +221,7 @@ capturesRouter.post(
         captured_at,
         created_by_install_id: installId,
         metadata_json,
+        snippet_id,
         assets,
       });
 

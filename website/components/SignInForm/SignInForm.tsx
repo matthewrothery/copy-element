@@ -22,6 +22,12 @@ function getCallbackUrl(): string {
       );
     }
     const returnTo = params.get("return_to");
+    if (returnTo && returnTo.startsWith("/oauth/")) {
+      // /oauth/authorize is a server route, not a website route — resolve
+      // against the API origin so the post-login redirect lands on the
+      // server, not the statically-exported website.
+      return getApiUrl(returnTo);
+    }
     if (returnTo && returnTo.startsWith("/")) {
       return window.location.origin + returnTo;
     }

@@ -2,11 +2,12 @@ import type { JSX } from "react";
 import { useState } from "react";
 import { MCP_URL } from "../../../shared/mcp-url";
 
-type ToolId = "cursor" | "claudecode" | "other";
+type ToolId = "cursor" | "claudecode" | "claudedesktop" | "other";
 
 const TOOLS: { id: ToolId; label: string }[] = [
   { id: "cursor", label: "Cursor" },
   { id: "claudecode", label: "Claude Code" },
+  { id: "claudedesktop", label: "Claude Desktop" },
   { id: "other", label: "Other" },
 ];
 
@@ -27,6 +28,8 @@ function buildSnippet(tool: ToolId): string {
       );
     case "claudecode":
       return `claude mcp add element-armory --transport http ${MCP_URL}`;
+    case "claudedesktop":
+      return MCP_URL;
     case "other":
       return MCP_URL;
   }
@@ -38,6 +41,8 @@ function buildSnippetLabel(tool: ToolId): string {
       return "Add to ~/.cursor/mcp.json";
     case "claudecode":
       return "Run in terminal";
+    case "claudedesktop":
+      return "Custom connector URL";
     case "other":
       return "MCP server URL";
   }
@@ -49,6 +54,8 @@ function buildSetupNote(tool: ToolId): string {
       return "After saving, open Cursor → Settings → MCP and verify element-armory appears with a green indicator.";
     case "claudecode":
       return "Run this command once. Claude Code will open a browser to log in automatically.";
+    case "claudedesktop":
+      return "In Claude Desktop, go to Settings → Connectors → Add custom connector, paste this URL, and click Connect. Claude will open a browser to log in.";
     case "other":
       return "Add this URL as an HTTP MCP endpoint. Your tool will open a browser to log in.";
   }

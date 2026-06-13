@@ -1,5 +1,5 @@
 import { useRef, useState, useEffect } from "react";
-import { Code, Copy, ExternalLink, MoreVertical, Trash2 } from "lucide-react";
+import { CloudCheck, CloudOff, Code, Copy, ExternalLink, Loader2, MoreVertical, Trash2 } from "lucide-react";
 import { DRAG_TYPE_SNIPPET } from "../../shared/constants";
 import { buildCopyHtml } from "../../shared/utils/preview-srcdoc-builder";
 import type { Snippet } from "../../shared/types/snippet";
@@ -33,9 +33,49 @@ interface SnippetCardProps {
   isFree?: boolean;
   onCopyPromptAsFree?: () => void;
   onCopyMcpAsFree?: () => void;
+  /** Show the cloud sync status indicator. Only meaningful when signed in (guests don't sync). */
+  showSyncStatus?: boolean;
+  onRetrySync?: (id: string) => void;
 }
 
-export function SnippetCard({ snippet, onOpen, onDelete, onCopy, isGuest, onCopyPromptAsGuest, isFree, onCopyPromptAsFree, onCopyMcpAsFree }: SnippetCardProps) {
+function SyncStatusIndicator({ snippet, onRetrySync }: { snippet: Snippet; onRetrySync?: (id: string) => void }) {
+  const status = snippet.syncStatus;
+
+  if (status === "synced") {
+    return (
+      <span className="sync-status sync-status-synced" title="Synced with Element Armory" aria-label="Synced with Element Armory">
+        <CloudCheck size={14} aria-hidden />
+      </span>
+    );
+  }
+
+  if (status === "syncing" || status === "pending") {
+    return (
+      <span className="sync-status sync-status-pending" title="Syncing to Element Armory…" aria-label="Syncing to Element Armory">
+        <Loader2 size={14} className="sync-status-spin" aria-hidden />
+      </span>
+    );
+  }
+
+  if (status === "failed") {
+    return (
+      <button
+        type="button"
+        className="sync-status sync-status-failed sync-status-retry"
+        title="Sync failed — click to retry"
+        aria-label={`Retry sync for ${snippet.title}`}
+        onClick={() => onRetrySync?.(snippet.id)}
+      >
+        <CloudOff size={14} aria-hidden />
+      </button>
+    );
+  }
+
+  // No syncStatus: pre-sync legacy snippet — nothing to show.
+  return null;
+}
+
+export function SnippetCard({ snippet, onOpen, onDelete, onCopy, isGuest, onCopyPromptAsGuest, isFree, onCopyPromptAsFree, onCopyMcpAsFree, showSyncStatus, onRetrySync }: SnippetCardProps) {
   const [menuOpen, setMenuOpen] = useState(false);
   const [isDragging, setIsDragging] = useState(false);
   const menuRef = useRef<HTMLDivElement>(null);
@@ -86,7 +126,10 @@ export function SnippetCard({ snippet, onOpen, onDelete, onCopy, isGuest, onCopy
         <h3 className="snippet-card-title" title={snippet.title}>
           {snippet.title}
         </h3>
-        <p className="snippet-card-meta">{meta}</p>
+        <div className="snippet-card-meta-row">
+          <p className="snippet-card-meta">{meta}</p>
+          {showSyncStatus && <SyncStatusIndicator snippet={snippet} onRetrySync={onRetrySync} />}
+        </div>
       </div>
       <div className="snippet-actions snippet-actions-primary">
         <button

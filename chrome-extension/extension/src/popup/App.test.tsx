@@ -127,6 +127,9 @@ describe("App – paywall gating", () => {
         local: {
           get: vi.fn(async () => ({
             [SAVES_THIS_MONTH_KEY]: { monthKey: currentMonth, count: 20 },
+            "element-armory-auth-token": "tok",
+            "element-armory-user-email": "user@test.com",
+            "element-armory-user-plan": "free",
           })),
           set: vi.fn(async () => undefined),
         },

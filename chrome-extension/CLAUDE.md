@@ -43,6 +43,34 @@ DOM operations must be efficient. Avoid: full page traversal, expensive query se
 
 ---
 
+## Auth State and Capture Sync
+
+### Live auth state
+
+`useAuthState()` (`extension/src/app/shared/hooks/useAuthState.ts`) is the canonical way for any UI (popup, library, MCP page) to read sign-in status. It returns `{ signedIn, userEmail, userPlan, loading }`, backed by `chrome.storage.onChanged` so views update live when sign-in completes in another context — never read auth storage keys directly or roll a one-off listener.
+
+### Post-sign-in guest-capture sync
+
+When a previously-guest install signs in (via `EXCHANGE_AUTH_CODE` or silent auth), the background worker:
+
+1. Restores any cloud captures for the account (`restoreCapturesFromCloud`)
+2. Pushes the local guest-capture backlog to the server (`retryPendingSyncs`), uploading each snippet with `syncStatus: "pending"` or `"failed"`
+
+`retryPendingSyncs` is guarded against concurrent/duplicate runs (module-level in-flight flag + `Set<string>` of snippet IDs currently uploading) and against orphaned `"syncing"` snippets across worker restarts (`reconcileOrphanedSyncs`, run on `onStartup` before any retry pass). Server-side idempotency is keyed on `(install_id, snippet_id)` — see `server/CLAUDE.md`.
+
+### CAPTURE_SYNC_STATUS broadcast
+
+While a sync pass triggered with `{ notify: true }` runs, the background sends loosely-typed `chrome.runtime` broadcasts (same pattern as `CAPTURE_READY`, not part of the `RuntimeMessage` union):
+
+```ts
+{ type: "CAPTURE_SYNC_STATUS", payload: { phase: "start", total } }
+{ type: "CAPTURE_SYNC_STATUS", payload: { phase: "done", total, synced, failed } }
+```
+
+UI views consume this via `useCaptureSyncStatus()` (`extension/src/app/shared/hooks/useCaptureSyncStatus.ts`), which exposes `{ phase, message }` and auto-dismisses the `"done"` state after 2s. Popup and library feed `message` into their existing toast; the MCP page renders an inline `role="status"` region (`.mcp-sync-status`).
+
+---
+
 ## DOM Capture Rules
 
 Element capture must produce a portable snippet.

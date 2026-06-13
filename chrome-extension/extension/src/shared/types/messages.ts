@@ -89,6 +89,21 @@ export interface DeleteSnippetRequest {
   payload: { id: string };
 }
 
+/** Retries the cloud sync for a single snippet (used when its syncStatus is 'failed'). */
+export interface RetrySnippetSyncRequest {
+  type: "RETRY_SNIPPET_SYNC";
+  payload: { id: string };
+}
+
+export interface RetrySnippetSyncPayload {
+  syncStatus: Snippet["syncStatus"];
+}
+
+/** Retries all pending/failed snippet syncs; mirrors the post-sign-in backlog push. */
+export interface RetryAllSyncsRequest {
+  type: "RETRY_ALL_SYNCS";
+}
+
 export interface GetFoldersRequest {
   type: "GET_FOLDERS";
 }
@@ -204,6 +219,19 @@ export interface RefreshPlanPayload {
   plan_code: string;
 }
 
+/** Broadcast from background when a post-sign-in capture sync starts/finishes. */
+export interface CaptureSyncStatusPayload {
+  phase: "start" | "done";
+  total?: number;
+  synced?: number;
+  failed?: number;
+}
+
+export interface CaptureSyncStatusBroadcast {
+  type: "CAPTURE_SYNC_STATUS";
+  payload: CaptureSyncStatusPayload;
+}
+
 export type RuntimeMessage =
   | StartCaptureRequest
   | CancelCaptureRequest
@@ -217,6 +245,8 @@ export type RuntimeMessage =
   | GetSnippetByIdRequest
   | GetLatestCaptureRequest
   | DeleteSnippetRequest
+  | RetrySnippetSyncRequest
+  | RetryAllSyncsRequest
   | GetFoldersRequest
   | SaveFolderRequest
   | DeleteFolderRequest

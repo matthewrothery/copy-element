@@ -89,6 +89,10 @@
   flex-shrink: 0;
 }
 
+.library-resync-btn {
+  flex-shrink: 0;
+}
+
 .library-snippets-section {
   margin-top: 0;
 }

@@ -5,14 +5,17 @@ import {
   deleteFolderFromBackground,
   deleteSnippetFromBackground,
   getFoldersFromBackground,
-  getAuthStateFromBackground,
   getInstallIdFromBackground,
   getSnippetsFromBackground,
   openSignInPage,
   openUpgradePage,
+  retryAllSyncs,
+  retrySnippetSync,
   saveFolderToBackground,
   saveSnippetToBackground
 } from "../popup/api";
+import { useAuthState } from "../app/shared/hooks/useAuthState";
+import { useCaptureSyncStatus } from "../app/shared/hooks/useCaptureSyncStatus";
 import { DeleteConfirmationModal } from "../popup/components/DeleteConfirmationModal";
 import { SignInPromoModal } from "../popup/components/SignInPromoModal";
 import { UpgradePromoModal } from "../popup/components/UpgradePromoModal";
@@ -70,8 +73,9 @@ export function LibraryApp(): JSX.Element {
   const [folderToRename, setFolderToRename] = useState<Folder | null>(null);
   const [showNewFolder, setShowNewFolder] = useState(false);
   const [toastMessage, setToastMessage] = useState("");
-  const [isGuest, setIsGuest] = useState(false);
-  const [isPaid, setIsPaid] = useState(false);
+  const { signedIn, userPlan } = useAuthState();
+  const isGuest = !signedIn;
+  const isPaid = signedIn && PAID_PLANS.includes(userPlan as never);
   const [showPromoModal, setShowPromoModal] = useState(false);
   const [promoModalVariant, setPromoModalVariant] = useState<"default" | "limit-reached">("default");
   const [showUpgradeModal, setShowUpgradeModal] = useState(false);
@@ -181,22 +185,16 @@ export function LibraryApp(): JSX.Element {
   }, []);
 
   useEffect(() => {
-    void (async () => {
-      try {
-        const state = await getAuthStateFromBackground();
-        setIsGuest(!state.signed_in);
-        setIsPaid(state.signed_in && PAID_PLANS.includes(state.user_plan as never));
-      } catch {
-        // ignore; default to guest
-      }
-    })();
-  }, []);
-
-  useEffect(() => {
     if (!toastMessage) return;
     const timeoutId = window.setTimeout(() => setToastMessage(""), 2000);
     return () => window.clearTimeout(timeoutId);
   }, [toastMessage]);
+
+  // Post-sign-in capture sync (start/done) surfaces as a toast if this view is open.
+  const syncStatus = useCaptureSyncStatus();
+  useEffect(() => {
+    if (syncStatus.message) setToastMessage(syncStatus.message);
+  }, [syncStatus.message]);
 
   async function handleDeleteSnippet(id: string): Promise<void> {
     try {
@@ -207,6 +205,24 @@ export function LibraryApp(): JSX.Element {
       setToastMessage("Snippet deleted");
     } catch {
       setToastMessage("Failed to delete snippet");
+    }
+  }
+
+  async function handleRetrySync(id: string): Promise<void> {
+    try {
+      const { syncStatus: result } = await retrySnippetSync(id);
+      setSnippets((prev) => prev.map((s) => (s.id === id ? { ...s, syncStatus: result } : s)));
+      setToastMessage(result === "synced" ? "Capture synced" : "Sync failed — try again later");
+    } catch {
+      setToastMessage("Sync failed — try again later");
+    }
+  }
+
+  async function handleRetryAllSyncs(): Promise<void> {
+    try {
+      await retryAllSyncs();
+    } catch {
+      setToastMessage("Failed to resync captures");
     }
   }
 
@@ -356,6 +372,8 @@ export function LibraryApp(): JSX.Element {
       ? `${snippets.length} saved snippets`
       : `${snippetsInCurrentFolder.length} snippet${snippetsInCurrentFolder.length === 1 ? "" : "s"} in this folder`;
 
+  const hasFailedSyncs = !isGuest && snippets.some((s) => s.syncStatus === "failed");
+
   return (
     <div className="app-shell library-shell">
       <header className="library-header">
@@ -383,6 +401,15 @@ export function LibraryApp(): JSX.Element {
           <option value="name-asc">Name A–Z</option>
           <option value="name-desc">Name Z–A</option>
         </select>
+        {hasFailedSyncs && (
+          <button
+            type="button"
+            className="btn-secondary library-resync-btn"
+            onClick={() => void handleRetryAllSyncs()}
+          >
+            Resync all
+          </button>
+        )}
         <button
           type="button"
           className="btn-primary library-new-folder-btn"
@@ -434,6 +461,8 @@ export function LibraryApp(): JSX.Element {
               onCopyPromptAsGuest={(snippet) => void handleCopyPromptAsGuest(snippet)}
               isFree={!isGuest && !isPaid}
               onCopyPromptAsFree={(snippet) => void handleCopyPromptAsFree(snippet)}
+              showSyncStatus={!isGuest}
+              onRetrySync={(id) => void handleRetrySync(id)}
             />
           </section>
         ) : snippets.length > 0 ? (

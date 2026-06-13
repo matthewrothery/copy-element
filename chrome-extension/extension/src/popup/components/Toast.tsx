@@ -5,5 +5,9 @@ interface ToastProps {
 }
 
 export function Toast({ message }: ToastProps): JSX.Element {
-  return <div className="toast">{message}</div>;
+  return (
+    <div className="toast" role="status" aria-live="polite" aria-atomic="true">
+      {message}
+    </div>
+  );
 }

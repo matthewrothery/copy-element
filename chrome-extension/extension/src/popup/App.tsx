@@ -1,15 +1,15 @@
 import { useEffect, useMemo, useState, type JSX } from "react";
 import {
   RuntimeRequestError,
-  getAuthStateFromBackground,
   getInstallIdFromBackground,
   getSnippetsFromBackground,
   openLibraryInNewTab,
   openSignInPage,
-  refreshPlanFromBackground,
   startCapture,
   trySilentAuthFromBackground,
 } from "./api";
+import { useAuthState } from "../app/shared/hooks/useAuthState";
+import { useCaptureSyncStatus } from "../app/shared/hooks/useCaptureSyncStatus";
 import { isCapturableUrl, getUnsupportedPageMessage } from "../shared/utils/capture-url";
 import { trackPopupEvent } from "../shared/analytics";
 import type { CaptureMode } from "../shared/types/messages";
@@ -87,11 +87,9 @@ export function App(): JSX.Element {
   const [preferences, setPreferences] = useState<UiPreferences>(DEFAULT_PREFERENCES);
   const [loadingState, setLoadingState] = useState(false);
   const [storedUsage, setStoredUsage] = useState<{ used: number; limit: number } | null>(null);
-  const [isSignedIn, setIsSignedIn] = useState(false);
-  const [isPaid, setIsPaid] = useState(false);
+  const { signedIn: isSignedIn, userEmail, userPlan, loading: authLoading } = useAuthState();
+  const isPaid = isSignedIn && PAID_PLANS.includes(userPlan as never);
   const [paywallView, setPaywallView] = useState<PaywallView>(null);
-  const [userEmail, setUserEmail] = useState<string | null>(null);
-  const [userPlan, setUserPlan] = useState<string | null>(null);
   const [captureBlockedReason, setCaptureBlockedReason] = useState<string | null>(null);
   const [captureError, setCaptureError] = useState<{ message: string; showReload: boolean } | null>(null);
 
@@ -194,52 +192,12 @@ export function App(): JSX.Element {
     }
   }, [isSignedIn]);
 
+  // Not signed in — attempt silent auth using the website session cookie.
+  // If it succeeds, useAuthState's storage listener picks up the new token.
   useEffect(() => {
-    void (async () => {
-      try {
-        const state = await getAuthStateFromBackground();
-        setIsSignedIn(state.signed_in);
-        setIsPaid(state.signed_in && PAID_PLANS.includes(state.user_plan as never));
-        if (state.signed_in) {
-          setUserEmail(state.user_email);
-          setUserPlan(state.user_plan);
-        } else {
-          // Not signed in — attempt silent auth using the website session cookie.
-          // If it succeeds, the storage change listener will re-render the signed-in state.
-          void trySilentAuthFromBackground().catch(() => {});
-        }
-      } catch {
-        // ignore
-      }
-    })();
-
-    if (typeof chrome !== "undefined" && chrome.storage?.onChanged?.addListener) {
-      const listener = (
-        changes: { [key: string]: chrome.storage.StorageChange },
-        areaName: string
-      ): void => {
-        if (areaName === "local" && "element-armory-auth-token" in changes) {
-          if (!changes["element-armory-auth-token"].newValue) {
-            setIsSignedIn(false);
-            setIsPaid(false);
-            setUserEmail(null);
-            setUserPlan(null);
-          } else {
-            void getAuthStateFromBackground().then((state) => {
-              setIsSignedIn(state.signed_in);
-              setIsPaid(state.signed_in && PAID_PLANS.includes(state.user_plan as never));
-              if (state.signed_in) {
-                setUserEmail(state.user_email);
-                setUserPlan(state.user_plan);
-              }
-            }).catch(() => {});
-          }
-        }
-      };
-      chrome.storage.onChanged.addListener(listener);
-      return () => chrome.storage.onChanged.removeListener(listener);
-    }
-  }, []);
+    if (authLoading || isSignedIn) return;
+    void trySilentAuthFromBackground().catch(() => {});
+  }, [authLoading, isSignedIn]);
 
   useEffect(() => {
     if (!toastMessage) {
@@ -249,6 +207,12 @@ export function App(): JSX.Element {
     const timeoutId = window.setTimeout(() => setToastMessage(""), 2000);
     return () => window.clearTimeout(timeoutId);
   }, [toastMessage]);
+
+  // Post-sign-in capture sync (start/done) surfaces as a toast if this view is open.
+  const syncStatus = useCaptureSyncStatus();
+  useEffect(() => {
+    if (syncStatus.message) setToastMessage(syncStatus.message);
+  }, [syncStatus.message]);
 
   function dismissPaywall(): void {
     if (paywallView === "signin-nudge" && hasStorageLocal) {
@@ -369,7 +333,6 @@ export function App(): JSX.Element {
         ) : view === "account" ? (
           <AccountPanel
             onBack={() => setView("home")}
-            onSignedInChange={setIsSignedIn}
           />
         ) : (
           <MainPanel

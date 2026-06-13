@@ -1,6 +1,6 @@
 import type { JSX } from "react";
-import { useEffect, useState } from "react";
-import { getAuthState } from "../../shared/storage/auth-storage";
+import { useAuthState } from "../shared/hooks/useAuthState";
+import { useCaptureSyncStatus } from "../shared/hooks/useCaptureSyncStatus";
 import { McpSignedOut } from "./mcp/McpSignedOut";
 import { McpConnect } from "./mcp/McpConnect";
 
@@ -40,18 +40,10 @@ const TOOLS: { category: string; items: { name: string; description: string; not
   },
 ];
 
-type PageState = "loading" | "signed-out" | "ready";
-
 export function MCPPage(): JSX.Element {
-  const [state, setState] = useState<PageState>("loading");
-
-  useEffect(() => {
-    void getAuthState().then((auth) => {
-      setState(auth.signed_in ? "ready" : "signed-out");
-    }).catch(() => {
-      setState("signed-out");
-    });
-  }, []);
+  const { signedIn, loading } = useAuthState();
+  const state = loading ? "loading" : signedIn ? "ready" : "signed-out";
+  const syncStatus = useCaptureSyncStatus();
 
   return (
     <div className="app-page">
@@ -72,6 +64,15 @@ export function MCPPage(): JSX.Element {
 
       {state === "ready" && (
         <>
+          {syncStatus.phase && (
+            <div className="mcp-sync-status" role="status" aria-live="polite" aria-atomic="true">
+              {syncStatus.phase === "start" && (
+                <span className="mcp-spinner mcp-spinner--inline" aria-hidden="true" />
+              )}
+              <span>{syncStatus.message}</span>
+            </div>
+          )}
+
           <McpConnect />
 
           <section className="app-page-section mcp-tools-section" aria-labelledby="mcp-tools-heading">

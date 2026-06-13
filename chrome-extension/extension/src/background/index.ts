@@ -15,6 +15,7 @@ import { SERVER_URL } from "../shared/server-url";
 import { trackExtensionEvent } from "../shared/analytics";
 import type {
   AuthStatePayload,
+  CaptureSyncStatusPayload,
   ExtractCssViaCdpPayload,
   RefreshPlanPayload,
   RuntimeErrorCode,
@@ -159,8 +160,9 @@ async function trySilentAuth(installId: string, installSecret: string): Promise<
     // Silently fail — user info is non-critical
   }
 
-  // Restore cloud captures after silent login
-  void restoreCapturesFromCloud(planCode).catch(() => {});
+  // Restore cloud captures, then push any local guest backlog, after silent login
+  await restoreCapturesFromCloud(planCode).catch(() => {});
+  void retryPendingSyncs({ notify: true }).catch(() => {});
 
   return true;
 }
@@ -169,7 +171,10 @@ chrome.runtime.onStartup.addListener(() => {
   void chrome.runtime.setUninstallURL(UNINSTALL_URL);
   void registerInstall();
   void scheduleRefreshAlarm();
-  void retryPendingSyncs();
+  void (async () => {
+    await reconcileOrphanedSyncs();
+    await retryPendingSyncs();
+  })();
   void (async () => {
     const token = await getAuthToken();
     if (!token) return;
@@ -313,16 +318,115 @@ export async function sendToTargetTab(
   }
 }
 
-async function retryPendingSyncs(): Promise<void> {
-  const token = await getAuthToken();
-  if (!token) return;
+// In-memory concurrency guard. Valid for the lifetime of this service worker
+// (ASSUMPTION-001: MV3 runs a single worker instance, no true parallel workers).
+let retryInFlight = false;
+let pendingNotify = false;
+const syncingIds = new Set<string>();
+
+function claimSync(id: string): boolean {
+  if (syncingIds.has(id)) return false;
+  syncingIds.add(id);
+  return true;
+}
+
+function releaseSync(id: string): void {
+  syncingIds.delete(id);
+}
+
+interface SyncRunResult {
+  total: number;
+  synced: number;
+  failed: number;
+}
+
+function broadcastSyncStatus(payload: CaptureSyncStatusPayload): void {
+  chrome.runtime.sendMessage({ type: "CAPTURE_SYNC_STATUS", payload }).catch(() => {
+    /* No open views to receive the broadcast */
+  });
+}
+
+function announceSyncResult(result: SyncRunResult): void {
+  broadcastSyncStatus({ phase: "start", total: result.total });
+  broadcastSyncStatus({ phase: "done", total: result.total, synced: result.synced, failed: result.failed });
+}
+
+/** Reset any snippet orphaned mid-upload (syncStatus 'syncing') by a dead worker so it is retried. */
+export async function reconcileOrphanedSyncs(): Promise<void> {
   const snippets = await getSnippets();
-  const pending = snippets.filter((s) => s.syncStatus === "pending" || s.syncStatus === "failed");
+  const orphaned = snippets.filter((s) => s.syncStatus === "syncing");
+  for (const snippet of orphaned) {
+    await saveSnippet({ ...snippet, syncStatus: "failed" }).catch(() => {});
+  }
+}
+
+async function runSyncPass(notify: boolean): Promise<SyncRunResult> {
+  const token = await getAuthToken();
+  if (!token) return { total: 0, synced: 0, failed: 0 };
+
+  const snippets = await getSnippets();
+  const pending = snippets.filter(
+    (s) => (s.syncStatus === "pending" || s.syncStatus === "failed") && !syncingIds.has(s.id)
+  );
+  if (pending.length === 0) return { total: 0, synced: 0, failed: 0 };
+
+  if (notify) {
+    broadcastSyncStatus({ phase: "start", total: pending.length });
+  }
+
+  let synced = 0;
+  let failed = 0;
   for (const snippet of pending) {
-    const serverId = await syncCaptureToServer(snippet);
-    if (serverId) {
-      await saveSnippet({ ...snippet, syncStatus: "synced", serverCaptureId: serverId }).catch(() => {});
+    if (!claimSync(snippet.id)) continue;
+    try {
+      await saveSnippet({ ...snippet, syncStatus: "syncing" }).catch(() => {});
+      const serverId = await syncCaptureToServer(snippet);
+      if (serverId) {
+        await saveSnippet({ ...snippet, syncStatus: "synced", serverCaptureId: serverId }).catch(() => {});
+        synced++;
+      } else {
+        await saveSnippet({ ...snippet, syncStatus: "failed" }).catch(() => {});
+        failed++;
+      }
+    } finally {
+      releaseSync(snippet.id);
     }
+  }
+
+  const result: SyncRunResult = { total: pending.length, synced, failed };
+  if (notify) {
+    broadcastSyncStatus({ phase: "done", ...result });
+  }
+  return result;
+}
+
+/**
+ * Re-uploads any 'pending'/'failed' snippets. Guarded against overlapping runs
+ * (e.g. onStartup retry racing a post-sign-in retry): a call that arrives while
+ * a run is in flight queues a single notify-only follow-up rather than starting
+ * a second pass, so a requested toast is never silently dropped (REQ-003).
+ */
+export async function retryPendingSyncs(options?: { notify?: boolean }): Promise<void> {
+  const notify = options?.notify ?? false;
+
+  if (retryInFlight) {
+    if (notify) pendingNotify = true;
+    return;
+  }
+
+  retryInFlight = true;
+  try {
+    let result = await runSyncPass(notify);
+    while (pendingNotify) {
+      pendingNotify = false;
+      if (result.total > 0) {
+        announceSyncResult(result);
+      } else {
+        result = await runSyncPass(true);
+      }
+    }
+  } finally {
+    retryInFlight = false;
   }
 }
 
@@ -526,13 +630,19 @@ chrome.runtime.onMessage.addListener((message: RuntimeMessage, sender, sendRespo
         });
         // Sync in background and update status once complete
         void (async () => {
-          const serverId = await syncCaptureToServer(pendingSnippet);
-          const updated: Snippet = {
-            ...pendingSnippet,
-            syncStatus: serverId ? 'synced' : 'failed',
-            ...(serverId ? { serverCaptureId: serverId } : {}),
-          };
-          await saveSnippet(updated).catch(() => {});
+          if (!claimSync(pendingSnippet.id)) return;
+          try {
+            await saveSnippet({ ...pendingSnippet, syncStatus: 'syncing' }).catch(() => {});
+            const serverId = await syncCaptureToServer(pendingSnippet);
+            const updated: Snippet = {
+              ...pendingSnippet,
+              syncStatus: serverId ? 'synced' : 'failed',
+              ...(serverId ? { serverCaptureId: serverId } : {}),
+            };
+            await saveSnippet(updated).catch(() => {});
+          } finally {
+            releaseSync(pendingSnippet.id);
+          }
         })();
       } catch (error: unknown) {
         void getOrCreateInstallCredentials().then((creds) => {
@@ -568,6 +678,50 @@ chrome.runtime.onMessage.addListener((message: RuntimeMessage, sender, sendRespo
 
   if (message.type === "DELETE_SNIPPET") {
     void deleteSnippet(message.payload.id)
+      .then(() => sendResponse(success(null)))
+      .catch((error: unknown) => sendResponse(failure(String(error), "UNKNOWN_ERROR")));
+    return true;
+  }
+
+  if (message.type === "RETRY_SNIPPET_SYNC") {
+    void (async () => {
+      const snippet = await getSnippetById(message.payload.id);
+      if (!snippet) {
+        sendResponse(failure("Snippet not found", "UNKNOWN_ERROR"));
+        return;
+      }
+      if (snippet.syncStatus === "synced" || snippet.syncStatus === "syncing") {
+        sendResponse(success({ syncStatus: snippet.syncStatus }));
+        return;
+      }
+      const token = await getAuthToken();
+      if (!token) {
+        sendResponse(failure("Sign in to sync captures", "UNKNOWN_ERROR"));
+        return;
+      }
+      if (!claimSync(snippet.id)) {
+        sendResponse(success({ syncStatus: "syncing" }));
+        return;
+      }
+      try {
+        await saveSnippet({ ...snippet, syncStatus: "syncing" }).catch(() => {});
+        const serverId = await syncCaptureToServer(snippet);
+        const updated: Snippet = {
+          ...snippet,
+          syncStatus: serverId ? "synced" : "failed",
+          ...(serverId ? { serverCaptureId: serverId } : {}),
+        };
+        await saveSnippet(updated).catch(() => {});
+        sendResponse(success({ syncStatus: updated.syncStatus }));
+      } finally {
+        releaseSync(snippet.id);
+      }
+    })();
+    return true;
+  }
+
+  if (message.type === "RETRY_ALL_SYNCS") {
+    void retryPendingSyncs({ notify: true })
       .then(() => sendResponse(success(null)))
       .catch((error: unknown) => sendResponse(failure(String(error), "UNKNOWN_ERROR")));
     return true;
@@ -652,8 +806,9 @@ chrome.runtime.onMessage.addListener((message: RuntimeMessage, sender, sendRespo
               if (email) {
                 await saveUserProfile(email, planCode);
               }
-              // Restore cloud captures after login
-              void restoreCapturesFromCloud(planCode).catch(() => {});
+              // Restore cloud captures, then push any local guest backlog, after login
+              await restoreCapturesFromCloud(planCode).catch(() => {});
+              void retryPendingSyncs({ notify: true }).catch(() => {});
             } catch {
               // Silently fail — user info is non-critical
             }

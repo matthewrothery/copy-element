@@ -13,6 +13,7 @@ mockDb.exec(`
     created_by_install_id TEXT NOT NULL,
     status TEXT NOT NULL DEFAULT 'ok',
     metadata_json TEXT,
+    snippet_id TEXT,
     created_at INTEGER NOT NULL,
     updated_at INTEGER NOT NULL
   );
@@ -29,6 +30,10 @@ mockDb.exec(`
     created_at INTEGER NOT NULL,
     FOREIGN KEY (capture_id) REFERENCES captures(id)
   );
+  CREATE TABLE installs (
+    install_id TEXT PRIMARY KEY,
+    user_id TEXT
+  );
 `);
 
 vi.mock('../db/connection.js', () => ({
@@ -41,6 +46,7 @@ const {
   countCapturesByInstallThisMonth,
   countCapturesByUserThisMonth,
   deleteOldestCaptureByUser,
+  createCaptureWithAssets,
 } = await import('./capture.js');
 
 function insertCapture(userId: string | null, capturedAt: number, createdAt?: number, installId = 'install1'): number {
@@ -61,6 +67,7 @@ function insertAsset(captureId: number): void {
 beforeEach(() => {
   mockDb.prepare('DELETE FROM capture_assets').run();
   mockDb.prepare('DELETE FROM captures').run();
+  mockDb.prepare('DELETE FROM installs').run();
 });
 
 describe('countCapturesByUser', () => {
@@ -143,6 +150,41 @@ describe('countCapturesByInstallThisMonth', () => {
     insertCapture(null, thisMonthMs, thisMonthMs, 'install-a');
     insertCapture(null, thisMonthMs, thisMonthMs, 'install-b');
     expect(countCapturesByInstallThisMonth('install-a')).toBe(1);
+  });
+});
+
+describe('createCaptureWithAssets idempotency', () => {
+  const baseInput = {
+    install_id: 'install-idem',
+    source_url: 'http://example.com',
+    captured_at: 1000,
+    created_by_install_id: 'install-idem',
+    assets: [{ asset_kind: 'screenshot' as const, object_key: 'key1' }],
+  };
+
+  it('returns the same row for duplicate (install_id, snippet_id)', () => {
+    const first = createCaptureWithAssets({ ...baseInput, snippet_id: 'snip-1' });
+    const second = createCaptureWithAssets({ ...baseInput, snippet_id: 'snip-1' });
+
+    expect(second.id).toBe(first.id);
+    const rows = mockDb.prepare('SELECT id FROM captures WHERE install_id = ? AND snippet_id = ?').all('install-idem', 'snip-1');
+    expect(rows).toHaveLength(1);
+  });
+
+  it('inserts a new row when snippet_id is null', () => {
+    const first = createCaptureWithAssets({ ...baseInput, snippet_id: null });
+    const second = createCaptureWithAssets({ ...baseInput, snippet_id: null });
+
+    expect(second.id).not.toBe(first.id);
+    const rows = mockDb.prepare('SELECT id FROM captures WHERE install_id = ?').all('install-idem');
+    expect(rows).toHaveLength(2);
+  });
+
+  it('inserts distinct rows for different snippet_id values', () => {
+    const first = createCaptureWithAssets({ ...baseInput, snippet_id: 'snip-a' });
+    const second = createCaptureWithAssets({ ...baseInput, snippet_id: 'snip-b' });
+
+    expect(second.id).not.toBe(first.id);
   });
 });
 

@@ -186,6 +186,7 @@ All timestamps stored as epoch milliseconds (`INTEGER`). Use `Date.now()` — ne
 - **004** — `extension_codes` (one-time codes, deleted after use), `extension_sessions` (`token_hash` SHA-256, 90d TTL)
 - **005** — `stripe_customers`, `subscriptions`, `subscription_events` (idempotency + audit via `stripe_event_id` UNIQUE)
 - **006** — `captures` (`install_id`, `user_id` nullable denormalized, `source_url`, `captured_at`, `status`, `metadata_json`), `capture_assets` (`capture_id`, `asset_kind`, `object_key`, `storage_provider`, `content_type`, `byte_size`, checksums)
+- **022** — `captures.snippet_id` (TEXT, nullable; backfilled from `metadata_json.snippet_id`), index `idx_captures_install_snippet` on `(install_id, snippet_id)`
 
 ---
 
@@ -317,6 +318,10 @@ The Stripe webhook handler **must** be mounted before `express.json()` and use `
 ### Captures: DB holds metadata only
 
 Raw screenshots and large blobs go to S3. DB `capture_assets` stores object keys and URLs. Never store binary data in `captures` or `capture_assets` rows.
+
+### Capture idempotency by (install_id, snippet_id)
+
+`POST /api/captures` (and the matching internal create path) checks for an existing row with the same `(install_id, snippet_id)` before inserting. This lets the extension safely retry capture uploads — e.g. when re-syncing a guest's pre-sign-in backlog after sign-in — without creating duplicate capture records. `snippet_id` is the extension-local snippet identifier; captures created without one (`snippet_id IS NULL`) are not deduplicated.
 
 ### Entitlements check, not raw Stripe
 

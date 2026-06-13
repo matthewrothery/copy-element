@@ -25,6 +25,10 @@ function getS3Client(): S3Client {
     });
     clientInstance = new S3Client({
       region: config.S3_REGION,
+      // Avoid the SDK's default flexible-checksum behavior adding an
+      // x-amz-checksum-crc32 query param to presigned URLs (computed
+      // against an empty body, which then fails to match real uploads).
+      requestChecksumCalculation: 'WHEN_REQUIRED',
       ...(config.S3_ENDPOINT && { endpoint: config.S3_ENDPOINT }),
       ...(config.S3_FORCE_PATH_STYLE && { forcePathStyle: true }),
       ...(config.AWS_ACCESS_KEY_ID && config.AWS_SECRET_ACCESS_KEY && {

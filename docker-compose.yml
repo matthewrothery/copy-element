@@ -136,7 +136,7 @@ services:
     hostname: mcp-server
     working_dir: /app
     env_file:
-      - ./server/.env
+      - ./mcp-server/.env
     environment:
       MCP_PORT: 80
     ports:

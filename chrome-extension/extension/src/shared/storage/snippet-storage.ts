@@ -68,7 +68,12 @@ function normalizeSnippet(value: Snippet): Snippet {
   if (value.folderId === null || typeof value.folderId === "string") {
     normalized.folderId = value.folderId;
   }
-  if (value.syncStatus === 'pending' || value.syncStatus === 'synced' || value.syncStatus === 'failed') {
+  if (
+    value.syncStatus === 'pending' ||
+    value.syncStatus === 'syncing' ||
+    value.syncStatus === 'synced' ||
+    value.syncStatus === 'failed'
+  ) {
     normalized.syncStatus = value.syncStatus;
   }
   if (typeof value.serverCaptureId === 'string') {

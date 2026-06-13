@@ -1,7 +1,7 @@
 import { nanoid } from "nanoid";
 import type { Folder } from "../shared/types/folder";
 import type { CapturedElementData, Snippet } from "../shared/types/snippet";
-import type { AuthStatePayload, CaptureMode, RefreshPlanPayload, RuntimeErrorCode, RuntimeMessage, RuntimeResponse, TrySilentAuthPayload } from "../shared/types/messages";
+import type { AuthStatePayload, CaptureMode, RefreshPlanPayload, RetrySnippetSyncPayload, RuntimeErrorCode, RuntimeMessage, RuntimeResponse, TrySilentAuthPayload } from "../shared/types/messages";
 import { SERVER_URL } from "../shared/server-url";
 
 export class RuntimeRequestError extends Error {
@@ -86,6 +86,14 @@ export async function saveSnippetFromCapture(
 
 export async function deleteSnippetFromBackground(id: string): Promise<void> {
   await sendRuntimeMessage<null>({ type: "DELETE_SNIPPET", payload: { id } });
+}
+
+export async function retrySnippetSync(id: string): Promise<RetrySnippetSyncPayload> {
+  return sendRuntimeMessage<RetrySnippetSyncPayload>({ type: "RETRY_SNIPPET_SYNC", payload: { id } });
+}
+
+export async function retryAllSyncs(): Promise<void> {
+  await sendRuntimeMessage<null>({ type: "RETRY_ALL_SYNCS" });
 }
 
 export async function saveSnippetToBackground(snippet: Snippet): Promise<void> {

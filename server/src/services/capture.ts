@@ -19,6 +19,7 @@ export interface CreateCaptureInput {
   created_by_install_id: string;
   status?: string;
   metadata_json?: string | null;
+  snippet_id?: string | null;
   assets: CaptureAssetInput[];
 }
 
@@ -31,6 +32,7 @@ export interface CaptureRow {
   created_by_install_id: string;
   status: string;
   metadata_json: string | null;
+  snippet_id: string | null;
   created_at: number;
   updated_at: number;
 }
@@ -54,14 +56,18 @@ export function createCaptureWithAssets(input: CreateCaptureInput): CaptureRow {
   const db = getDb();
   const now = Date.now();
   const status = input.status ?? DEFAULT_STATUS;
+  const snippetId = input.snippet_id ?? null;
   const install = db
     .prepare('SELECT user_id FROM installs WHERE install_id = ?')
     .get(input.install_id) as { user_id: string | null } | undefined;
   const userId = install?.user_id ?? null;
 
+  const findExisting = db.prepare(
+    'SELECT id FROM captures WHERE install_id = ? AND snippet_id = ?'
+  );
   const insertCapture = db.prepare(
-    `INSERT INTO captures (install_id, user_id, source_url, captured_at, created_by_install_id, status, metadata_json, created_at, updated_at)
-     VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)`
+    `INSERT INTO captures (install_id, user_id, source_url, captured_at, created_by_install_id, status, metadata_json, snippet_id, created_at, updated_at)
+     VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`
   );
   const insertAsset = db.prepare(
     `INSERT INTO capture_assets (capture_id, asset_kind, storage_provider, object_key, public_url, checksum_sha256, content_type, byte_size, created_at)
@@ -69,6 +75,11 @@ export function createCaptureWithAssets(input: CreateCaptureInput): CaptureRow {
   );
 
   const run = db.transaction(() => {
+    if (snippetId) {
+      const existing = findExisting.get(input.install_id, snippetId) as { id: number } | undefined;
+      if (existing) return getCaptureById(existing.id);
+    }
+
     const result = insertCapture.run(
       input.install_id,
       userId,
@@ -77,6 +88,7 @@ export function createCaptureWithAssets(input: CreateCaptureInput): CaptureRow {
       input.created_by_install_id,
       status,
       input.metadata_json ?? null,
+      snippetId,
       now,
       now
     );

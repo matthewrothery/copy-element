@@ -10,12 +10,11 @@ import {
 
 interface AccountPanelProps {
   onBack?: () => void;
-  onSignedInChange?: (signedIn: boolean) => void;
 }
 
 type AccountView = "loading" | "signed-out" | "signed-in";
 
-export function AccountPanel({ onBack, onSignedInChange }: AccountPanelProps): JSX.Element {
+export function AccountPanel({ onBack }: AccountPanelProps): JSX.Element {
   const [view, setView] = useState<AccountView>("loading");
   const [userEmail, setUserEmail] = useState<string | null>(null);
   const [userPlan, setUserPlan] = useState<string | null>(null);
@@ -30,10 +29,8 @@ export function AccountPanel({ onBack, onSignedInChange }: AccountPanelProps): J
           setUserEmail(state.user_email);
           setUserPlan(state.user_plan);
           setView("signed-in");
-          onSignedInChange?.(true);
         } else {
           setView("signed-out");
-          onSignedInChange?.(false);
         }
       } catch {
         setView("signed-out");
@@ -58,7 +55,6 @@ export function AccountPanel({ onBack, onSignedInChange }: AccountPanelProps): J
       setUserEmail(null);
       setUserPlan(null);
       setView("signed-out");
-      onSignedInChange?.(false);
     } catch {
       setError("Failed to sign out. Please try again.");
     }
