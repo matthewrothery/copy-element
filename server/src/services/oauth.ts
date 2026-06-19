@@ -25,11 +25,18 @@ function jwtKey(): Uint8Array {
   return new TextEncoder().encode(config.JWT_SECRET);
 }
 
+// Must match the issuer advertised in oauth.ts's /.well-known/oauth-authorization-server
+// (the plain origin — those OAuth endpoints are mounted at the app root, not under
+// BETTER_AUTH_URL's /api/auth path).
+function jwtIssuer(): string {
+  return config.FRONTEND_URL || config.BETTER_AUTH_URL;
+}
+
 export async function issueJwt(userId: string, planCode: PlanCode, scope: string): Promise<string> {
   return new SignJWT({ plan: planCode, scope })
     .setProtectedHeader({ alg: 'HS256' })
     .setSubject(userId)
-    .setIssuer(config.BETTER_AUTH_URL)
+    .setIssuer(jwtIssuer())
     .setAudience(config.MCP_SERVER_URL)
     .setIssuedAt()
     .setExpirationTime(Math.floor((Date.now() + ACCESS_TOKEN_TTL_MS) / 1000))
@@ -38,7 +45,7 @@ export async function issueJwt(userId: string, planCode: PlanCode, scope: string
 
 export async function validateJwt(token: string): Promise<OAuthJwtPayload> {
   const { payload } = await jwtVerify(token, jwtKey(), {
-    issuer: config.BETTER_AUTH_URL,
+    issuer: jwtIssuer(),
     audience: config.MCP_SERVER_URL,
   });
   return {

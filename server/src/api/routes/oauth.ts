@@ -14,7 +14,10 @@ import {
 const router = Router();
 
 router.get('/.well-known/oauth-authorization-server', (_req, res) => {
-  const base = config.BETTER_AUTH_URL.replace(/\/$/, '');
+  // These endpoints (oauth/authorize, oauth/token, oauth/register) are mounted
+  // at the app root, not under BETTER_AUTH_URL's /api/auth path (that path is
+  // owned by the separate Better Auth library mount). Use the plain origin.
+  const base = (config.FRONTEND_URL || config.BETTER_AUTH_URL).replace(/\/$/, '');
   res.json({
     issuer: base,
     authorization_endpoint: `${base}/oauth/authorize`,
