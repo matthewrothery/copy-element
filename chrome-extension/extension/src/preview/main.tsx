@@ -1,7 +1,5 @@
 import React from "react";
 import { createRoot } from "react-dom/client";
-import { loader } from "@monaco-editor/react";
-import * as monaco from "monaco-editor";
 import editorWorker from "monaco-editor/esm/vs/editor/editor.worker?worker";
 import htmlWorker from "monaco-editor/esm/vs/language/html/html.worker?worker";
 import cssWorker from "monaco-editor/esm/vs/language/css/css.worker?worker";
@@ -22,9 +20,6 @@ import { App } from "./App";
     return new editorWorker();
   }
 };
-
-// Use locally bundled monaco instead of CDN
-loader.config({ monaco });
 
 const container = document.getElementById("root");
 if (!container) throw new Error("Root container not found.");

@@ -283,6 +283,11 @@ body,
   overflow: hidden;
 }
 
+.monaco-editor-container {
+  width: 100%;
+  height: 100%;
+}
+
 .code-editor-divider {
   width: 1px;
   background: var(--preview-border);

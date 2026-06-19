@@ -11,7 +11,7 @@ export default defineManifest({
   manifest_version: 3,
   name: "Element Armory – Capture UI Elements",
   description: "Capture and save styled page elements as reusable snippets.",
-  version: "1.0.1",
+  version: "1.0.2",
   icons: extensionIcons,
   permissions: [
     "activeTab",

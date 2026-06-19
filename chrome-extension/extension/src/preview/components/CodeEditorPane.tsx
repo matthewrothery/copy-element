@@ -1,4 +1,4 @@
-import Editor from "@monaco-editor/react";
+import { MonacoEditor } from "./MonacoEditor";
 
 const EDITOR_OPTIONS = {
   minimap: { enabled: false },
@@ -33,14 +33,7 @@ export function CodeEditorPane({ html, css, onHtmlChange, onCssChange }: CodeEdi
           <span className="code-editor-label">HTML</span>
         </div>
         <div className="code-editor-body">
-          <Editor
-            height="100%"
-            language="html"
-            value={html}
-            onChange={(value) => onHtmlChange(value ?? "")}
-            options={EDITOR_OPTIONS}
-            theme="vs"
-          />
+          <MonacoEditor language="html" value={html} onChange={onHtmlChange} options={EDITOR_OPTIONS} theme="vs" />
         </div>
       </div>
       <div className="code-editor-divider" aria-hidden />
@@ -49,14 +42,7 @@ export function CodeEditorPane({ html, css, onHtmlChange, onCssChange }: CodeEdi
           <span className="code-editor-label">CSS</span>
         </div>
         <div className="code-editor-body">
-          <Editor
-            height="100%"
-            language="css"
-            value={css}
-            onChange={(value) => onCssChange(value ?? "")}
-            options={EDITOR_OPTIONS}
-            theme="vs"
-          />
+          <MonacoEditor language="css" value={css} onChange={onCssChange} options={EDITOR_OPTIONS} theme="vs" />
         </div>
       </div>
     </div>
