@@ -8,6 +8,10 @@ export interface AppConfig {
   DATABASE_PATH: string;
   BETTER_AUTH_SECRET: string;
   BETTER_AUTH_URL: string;
+  /** Origin of BETTER_AUTH_URL (no path) — the issuer for the custom MCP OAuth
+   * routes (oauth/authorize, oauth/token, etc.), which are mounted at the app
+   * root, not under BETTER_AUTH_URL's /api/auth path. */
+  OAUTH_ISSUER: string;
   GOOGLE_CLIENT_ID: string;
   GOOGLE_CLIENT_SECRET: string;
   AWS_SES_REGION: string;

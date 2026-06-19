@@ -6,12 +6,15 @@ function getConfig(): AppConfig {
   const portRaw = process.env[ENV_KEYS.PORT];
   const port = portRaw ? parseInt(portRaw, 10) : DEFAULTS.PORT;
   const nodeEnv = process.env[ENV_KEYS.NODE_ENV] ?? 'development';
+  const betterAuthUrl =
+    process.env[ENV_KEYS.BETTER_AUTH_URL] ?? `http://localhost:${Number.isNaN(port) ? DEFAULTS.PORT : port}`;
   return {
     NODE_ENV: nodeEnv,
     PORT: Number.isNaN(port) ? DEFAULTS.PORT : port,
     DATABASE_PATH: process.env[ENV_KEYS.DATABASE_PATH] ?? DEFAULTS.DATABASE_PATH,
     BETTER_AUTH_SECRET: process.env[ENV_KEYS.BETTER_AUTH_SECRET] ?? '',
-    BETTER_AUTH_URL: process.env[ENV_KEYS.BETTER_AUTH_URL] ?? `http://localhost:${Number.isNaN(port) ? DEFAULTS.PORT : port}`,
+    BETTER_AUTH_URL: betterAuthUrl,
+    OAUTH_ISSUER: new URL(betterAuthUrl).origin,
     GOOGLE_CLIENT_ID: process.env[ENV_KEYS.GOOGLE_CLIENT_ID] ?? '',
     GOOGLE_CLIENT_SECRET: process.env[ENV_KEYS.GOOGLE_CLIENT_SECRET] ?? '',
     AWS_SES_REGION:

@@ -87,13 +87,14 @@ locals {
 
     MCP_SERVER_URL="https://${var.mcp_subdomain}.${var.hosted_zone}"
 
-    # Public JWT issuer — must match the server's OAuth issuer exactly (the
-    # plain origin FRONTEND_URL, since oauth/authorize, oauth/token, etc. are
-    # mounted at the app root — NOT BETTER_AUTH_URL's /api/auth path, which
-    # belongs to the separate Better Auth library mount). Distinct from
-    # MAIN_SERVER_URL (set in docker-compose.prod.yml to the internal app:80
-    # address for server-to-server API calls), which is not publicly reachable
-    # and must never be used as the OAuth discovery issuer.
+    # Public JWT issuer — must match the server's config.OAUTH_ISSUER exactly,
+    # which is BETTER_AUTH_URL's origin with the /api/auth path stripped (the
+    # custom oauth/authorize, oauth/token, etc. routes are mounted at the app
+    # root, not under /api/auth — that path belongs to the separate Better Auth
+    # library mount). Distinct from MAIN_SERVER_URL (set in
+    # docker-compose.prod.yml to the internal app:80 address for
+    # server-to-server API calls), which is not publicly reachable and must
+    # never be used as the OAuth discovery issuer.
     MAIN_SERVER_ISSUER="https://${var.website_domain}"
 
     NODE_ENV=production

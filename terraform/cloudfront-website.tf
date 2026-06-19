@@ -78,6 +78,37 @@ resource "aws_cloudfront_distribution" "website" {
     origin_request_policy_id = data.aws_cloudfront_origin_request_policy.all_viewer.id
   }
 
+  # MCP OAuth authorization-server endpoints (oauth/authorize, oauth/token,
+  # oauth/register) live on the server/app container at fixed, spec-mandated
+  # paths — they can't be moved under /api/* since /.well-known/* paths are
+  # standardized (RFC 8414) and the registered redirect/token URLs are fixed.
+  # Without these, CloudFront sends them to the S3 static site, which 404s.
+  ordered_cache_behavior {
+    path_pattern     = "/.well-known/*"
+    allowed_methods  = ["DELETE", "GET", "HEAD", "OPTIONS", "PATCH", "POST", "PUT"]
+    cached_methods   = ["GET", "HEAD"]
+    target_origin_id = "website-collect-ec2"
+
+    viewer_protocol_policy = "redirect-to-https"
+    compress               = false
+
+    cache_policy_id          = data.aws_cloudfront_cache_policy.caching_disabled.id
+    origin_request_policy_id = data.aws_cloudfront_origin_request_policy.all_viewer.id
+  }
+
+  ordered_cache_behavior {
+    path_pattern     = "/oauth/*"
+    allowed_methods  = ["DELETE", "GET", "HEAD", "OPTIONS", "PATCH", "POST", "PUT"]
+    cached_methods   = ["GET", "HEAD"]
+    target_origin_id = "website-collect-ec2"
+
+    viewer_protocol_policy = "redirect-to-https"
+    compress               = false
+
+    cache_policy_id          = data.aws_cloudfront_cache_policy.caching_disabled.id
+    origin_request_policy_id = data.aws_cloudfront_origin_request_policy.all_viewer.id
+  }
+
   ordered_cache_behavior {
     path_pattern     = "/_next/static/*"
     allowed_methods  = ["GET", "HEAD", "OPTIONS"]
