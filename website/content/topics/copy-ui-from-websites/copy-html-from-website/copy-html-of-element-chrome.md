@@ -88,15 +88,29 @@ The HTML line corresponding to your element is already highlighted in blue. You'
 
 Right-click the highlighted HTML line in DevTools and choose one of these options:
 
-- **Copy outerHTML**: Copies the entire element including its opening and closing tags
-- **Copy innerHTML**: Copies only the contents inside the element (useful for extracting child elements)
-- **Copy element**: Copies the element as a DOM node reference (less useful for code reuse)
+| Option | What it copies | Use it when |
+|---|---|---|
+| **Copy outerHTML** | The element plus its opening/closing tags and children | You need the full element, ready to drop into another page |
+| **Copy innerHTML** | Only the contents inside the element, tags excluded | You only need the children, not the wrapper itself |
+| **Copy JS path** | A JavaScript expression that selects the element (e.g. `document.querySelector(...)`) | You want to reference the element in a script or console snippet, not copy its markup |
 
 [You can select and copy the parent line directly from the element window, and the trick is to select and copy the parent line to get either the outerHTML or the element.](https://superuser.com/questions/1343995/copy-contents-of-html)
 
 ### Step 5: Paste Into Your Editor
 
 Open your code editor and paste. You now have clean, reusable HTML.
+
+---
+
+## What `outerHTML` Does and Doesn't Capture
+
+`outerHTML` serializes the element and its descendants into a markup string, but it has real limits worth knowing before you rely on it:
+
+- **No computed CSS.** You get the inline `style` attribute and class names, not the styles those classes resolve to from external stylesheets. Pair this with [the copy CSS guide](/topics/copy-ui-from-websites/copy-css-from-website/how-to-copy-css-from-any-website) if you need the actual rendered look.
+- **No scripts or event listeners.** Attached JavaScript behavior isn't part of the HTML string, so buttons and interactive elements will render but won't behave like the original.
+- **No shadow roots.** If the element uses a shadow DOM (common in web components), `outerHTML` skips the shadow tree entirely-you'll get an empty custom element tag with no visible content.
+
+Knowing these gaps upfront saves you from debugging "missing" styles or behavior that was never going to come along with a plain `outerHTML` copy.
 
 ---
 
@@ -168,16 +182,11 @@ Some sites minify their HTML. If you see single-line code with no indentation, i
 
 ## Faster Alternative: Element Armory Extension
 
-While Chrome Inspect is built-in and free, it requires multiple steps: right-click, inspect, navigate the DOM, copy, paste, clean up.
+DevTools is the right call for inspecting one element once. Right-click, inspect, copy outerHTML, done. But the moment you need that element's actual *computed* styles-not just its markup-or you need to repeat this five times in a session, the manual flow stops being free. You're back in the Styles panel hunting down which rules actually apply, then copying them by hand.
 
-[Extensions like Copy HTML allow you to easily copy any page's HTML element to the clipboard with the press of a button or keyboard shortcut.](https://chromewebstore.google.com/detail/copy-html/indfogjkdbmkihaohndcnkoaheopbhjf) Element Armory takes this further by:
+[Extensions like Copy HTML allow you to easily copy any page's HTML element to the clipboard with the press of a button or keyboard shortcut.](https://chromewebstore.google.com/detail/copy-html/indfogjkdbmkihaohndcnkoaheopbhjf) [Element Armory](/product) takes this further by capturing HTML and its computed CSS together in one click, automatically stripping data attributes and tracking bloat, and saving the result to a reusable snippet library you can pull from later.
 
-- Capturing clean HTML + computed CSS in one click
-- Automatically removing bloat (data attributes, tracking code)
-- Organizing snippets in a reusable library
-- Integrating directly with AI coding workflows
-
-For developers working with AI tools daily, this saves significant time.
+For developers working with AI tools daily, this saves significant time-clean HTML and CSS in one paste beats reconstructing styles from an `outerHTML` copy every time.
 
 ---
 

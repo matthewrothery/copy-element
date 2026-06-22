@@ -19,11 +19,21 @@ import {
   webPageSchema,
 } from "@/lib/seo";
 
-const PRODUCT_TITLE = "Capture Website UI as Clean HTML";
+const PRODUCT_TITLE = "Copy Website UI as Clean HTML";
 const PRODUCT_DESCRIPTION =
-  "Click any element on any site and get clean HTML instantly. Save snippets to your library and send captures to Cursor or Claude with the MCP server.";
+  "Click any element on any site and copy clean HTML in one click. Save reusable snippets to your library and send captures straight into Cursor or Claude for AI-assisted coding.";
 
 const PRODUCT_FAQ_ITEMS = [
+  {
+    question: "Can I copy HTML from any website?",
+    answer:
+      "Yes. Element Armory works on any publicly accessible site. Click an element and it captures the HTML structure plus the computed styles that apply to it - no need to hand-pick rules from a stylesheet.",
+  },
+  {
+    question: "How is this different from Chrome DevTools Copy outerHTML?",
+    answer:
+      "Copy outerHTML gives you the element's markup and inline styles only - no computed CSS from external stylesheets, no cleanup. Element Armory captures the HTML and its actual computed styles together, strips tracking and data attributes automatically, and saves the result to a reusable library instead of a one-off clipboard paste.",
+  },
   {
     question: "Does it work with Cursor?",
     answer:
@@ -32,7 +42,7 @@ const PRODUCT_FAQ_ITEMS = [
   {
     question: "Can I use the output with any framework?",
     answer:
-      "Yes. HTML output is clean markup with a scoped CSS style block-it works in any project without modification. Framework-neutral and requires no cleanup.",
+      "Yes. HTML output is clean markup with a scoped CSS style block-it works in any project without modification. Framework-neutral and requires no cleanup. HTML is the only export format today - there's no JSX or Tailwind conversion, so you paste markup and adapt it with your own framework tooling or AI assistant.",
   },
   {
     question: "Do I need to sign up to start?",

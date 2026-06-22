@@ -272,6 +272,18 @@ Fair dealing allows learning and research, but not commercial reuse. Know the di
 
 ---
 
+## Practical Developer Scenarios
+
+These three situations cover most of what developers actually do day to day:
+
+1. **Learning from a component.** You see a pricing table or nav pattern you don't understand. Use [Element Armory or DevTools to copy the HTML](/topics/copy-ui-from-websites/copy-html-from-website/copy-html-of-element-chrome) and study the structure. This is research, not infringement-you're not shipping anything yet.
+2. **Capturing a reference for internal prototyping.** You need a rough version of a layout to test an idea internally, before anyone outside your team sees it. Extracted structure used as a scaffold for an internal prototype carries low risk, especially if it never reaches production unmodified.
+3. **Rebuilding a pattern with different copy, layout, and brand tokens.** This is the safe default for anything that ships. Take the structural idea (a three-column pricing grid, a sticky header), then swap in your own copy, your own spacing scale, and your own color tokens. The result is inspired by what you saw, not a copy of it.
+
+The further you move from scenario 1 toward scenario 3, the safer you are for production use.
+
+---
+
 ## The Practical Takeaway
 
 Copying UI from websites is legal when you're copying code, structure, and patterns. It becomes illegal when you're copying the creative expression-the specific visual design, brand identity, or substantial portions of proprietary code.

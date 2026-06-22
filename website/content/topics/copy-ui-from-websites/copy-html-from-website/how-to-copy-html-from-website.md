@@ -189,7 +189,7 @@ Here's what breaks down:
 
 ## The Fastest Way: Use Element Armory
 
-Element Armory is a browser extension designed specifically for this problem. It captures clean, production-ready HTML from any website in seconds.
+[Element Armory](/product) is a browser extension designed specifically for this problem. It captures clean, production-ready HTML from any website in seconds.
 
 Here's how it works:
 
@@ -217,28 +217,16 @@ With the CSS already extracted and organized.
 
 ---
 
-## When to Use Each Method
+## Decision Table: Which Method Fits Your Task
 
-### Use DevTools If:
+| Method | Best for | What you get | What's missing |
+|---|---|---|---|
+| **View Source** (`Ctrl+U`/`Cmd+U`) | Capturing the full initial page in one view | Raw server-rendered HTML | Content injected by JavaScript after load |
+| **DevTools Copy outerHTML** | Inspecting or grabbing one element quickly | Rendered HTML for that element, including inline styles | Computed CSS from external stylesheets, scripts |
+| **Console `element.outerHTML`** | Targeting an element by CSS selector without clicking around | Same rendered HTML, scriptable | Same gaps as DevTools-still raw and messy |
+| **Element Armory** | Repeated extraction, component libraries, AI workflows | Clean HTML plus the computed CSS that applies to it | Nothing extra to clean up before reuse |
 
-- You need to inspect a single element quickly
-- You're debugging CSS or JavaScript
-- You only need a small snippet of HTML
-- You're learning how a site is structured
-
-### Use DOM Console If:
-
-- You're comfortable with JavaScript
-- You need to extract multiple elements programmatically
-- You want to automate the process with a script
-
-### Use Element Armory If:
-
-- You need production-ready HTML fast
-- You're copying multiple components
-- You want reusable code without cleanup
-- You're working with [AI tools like Cursor](/topics/component-reuse-libraries/snippet-libraries/cursor-component-reuse) for code generation
-- You're building a component library
+Use View Source or DevTools for a single quick look. Reach for Element Armory once you're extracting more than one or two components in a session-the cleanup time on manual methods adds up fast.
 
 ---
 
@@ -346,6 +334,19 @@ Now you can reuse this component anywhere:
 
 ---
 
+## Quick AI Workflow Once You Have Clean HTML
+
+Once you've captured HTML with any of the methods above, feeding it into an AI coding tool takes four steps:
+
+1. **Capture or copy the element** using View Source, DevTools, or Element Armory.
+2. **Clean the HTML/CSS context**-strip scripts and tracking attributes if you copied manually; skip this step if you used an extraction tool.
+3. **Paste into the AI tool with a precise instruction**, e.g. "Adapt this pricing card to my project's spacing and color tokens."
+4. **Ask the AI to adapt the structure** to your codebase's framework and conventions, not just to restyle it.
+
+The cleaner the input, the less back-and-forth this takes. See [how to use real UI with Cursor AI](/topics/ai-coding-workflows/cursor-workflows/use-ui-with-cursor-ai) for a deeper walkthrough.
+
+---
+
 ## Copying HTML Legally: What You Need to Know
 
 This is important: **copying HTML from a website is legal for learning and personal use, but there are boundaries.**
@@ -375,5 +376,6 @@ For more on this, see [Copying UI Legally: What You Can and Can't Do](/topics/ui
 - [How to Extract HTML from the DOM](/topics/copy-ui-from-websites/copy-html-from-website/extract-html-from-dom)
 - [Copy CSS Without DevTools: The Fastest Methods in 2026](/topics/copy-ui-from-websites/copy-css-from-website/copy-css-without-devtools)
 - [How to Copy CSS from Any Website](/topics/copy-ui-from-websites/copy-css-from-website/how-to-copy-css-from-any-website)
+- [Copy HTML and CSS From a Website Together](/topics/copy-ui-from-websites/copy-html-css-together/copy-html-and-css-from-website)
 - [Should You Copy UI or Design From Scratch?](/topics/ui-development-without-design-skills/copy-vs-design/should-you-copy-ui-or-design)
 - [How to Use Real UI with Cursor AI](/topics/ai-coding-workflows/cursor-workflows/use-ui-with-cursor-ai)

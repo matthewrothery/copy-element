@@ -191,17 +191,18 @@ You built a great card component for Project A. Now you need it in Project B.
 
 ---
 
-## Comparison: Manual vs Automated Extraction
+## Comparison: View Source, Console Shortcuts, and Extension Capture
 
-| Aspect | Manual DevTools | Automated Extraction |
-|--------|-----------------|----------------------|
-| **Time per component** | 10-15 minutes | 30 seconds |
-| **Code quality** | Incomplete (missing styles) | Complete (all styles included) |
-| **Reusability** | Low (one-off snippets) | High (saved library) |
-| **AI workflow friendly** | No (requires cleanup) | Yes (production-ready) |
-| **Learning curve** | Moderate | Minimal |
-| **Scalability** | Poor (doesn't scale) | Excellent (unlimited) |
-| **Formatting** | Messy (minified or raw) | Clean (readable) |
+| Aspect | View Source (`Ctrl+U`) | Console `outerHTML` Snippet | DevTools Inspect | Extension Capture |
+|--------|------------------------|------------------------------|-------------------|--------------------|
+| **Opens DevTools** | No | Yes (Console tab) | Yes (Elements tab) | No |
+| **Time per component** | Seconds, but full page only | 1-2 minutes per element | 10-15 minutes | 30 seconds |
+| **Code quality** | Raw, pre-JavaScript HTML | Same gaps as DevTools, scriptable | Incomplete (missing computed styles) | Complete (HTML + computed CSS) |
+| **Reusability** | Low (whole-page dump) | Low (one-off snippets) | Low (one-off snippets) | High (saved library) |
+| **AI workflow friendly** | No (too much noise) | No (requires cleanup) | No (requires cleanup) | Yes (production-ready) |
+| **Scalability** | Poor | Poor | Poor (doesn't scale) | Excellent (unlimited) |
+
+View Source and console snippets skip the right-click menu, but they don't skip the cleanup. They're useful when you specifically need to avoid opening the Elements panel-for quick reference or scripting-but neither produces output you can paste straight into a project.
 
 ---
 
@@ -290,10 +291,10 @@ For developers working with AI tools, the benefit is even larger. Clean HTML and
 
 ## Start Capturing HTML Today
 
-The fastest way to copy HTML from any website is to stop using DevTools for this task. Install Element Armory, click any element, and get production-ready code in seconds.
+The fastest way to copy HTML from any website is to stop using DevTools for this task. Install [Element Armory](/product), click any element, and get production-ready code in seconds.
 
 Build your component library. Speed up your AI workflows. Stop wasting time on manual extraction.
 
 [Add to Chrome - It's Free](https://chromewebstore.google.com/detail/element-armory-%E2%80%93-capture/ihndemikooddnhleamneebgedomkench)
 
-For adjacent workflows, read [how to use real UI with Cursor AI](/topics/ai-coding-workflows/cursor-workflows/use-ui-with-cursor-ai), [how to use UI with Claude Code](/topics/ai-coding-workflows/claude-code-workflows/use-ui-with-claude-code), and [DevTools alternatives](/topics/inspecting-debugging-css/devtools-alternatives).
+For adjacent workflows, read [how to use real UI with Cursor AI](/topics/ai-coding-workflows/cursor-workflows/use-ui-with-cursor-ai), [how to use UI with Claude Code](/topics/ai-coding-workflows/claude-code-workflows/use-ui-with-claude-code), [copy HTML and CSS together](/topics/copy-ui-from-websites/copy-html-css-together/copy-html-and-css-from-website), and [DevTools alternatives](/topics/inspecting-debugging-css/devtools-alternatives).

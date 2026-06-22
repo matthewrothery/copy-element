@@ -301,6 +301,16 @@ This approach gives you the speed of AI without the legal risk of copying protec
 
 ---
 
+## Practical Developer Scenarios
+
+- **Learning from a component.** Capture the HTML structure of a card or nav pattern to understand how it's built. See [how to copy HTML of an element in Chrome](/topics/copy-ui-from-websites/copy-html-from-website/copy-html-of-element-chrome) for the manual method, or use an extraction tool for speed.
+- **Capturing a reference for internal prototyping.** Pull structure into a throwaway prototype to test a layout idea before committing engineering time to build it from scratch.
+- **Rebuilding a pattern with different copy, layout, and brand tokens.** Once you're shipping to production, treat the captured structure as a sketch: swap in your own text, adjust spacing and grid proportions, and apply your own color and type tokens so the result reads as your own design.
+
+This is general guidance, not legal advice-when a project is commercially significant or the resemblance feels close, a quick check with a lawyer is cheaper than a dispute later.
+
+---
+
 ## The Bottom Line
 
 Cloning website UI legally is about **learning the design, not stealing the code**. You can study any website, understand how it's structured, and rebuild it yourself. What you cannot do is copy the actual code, images, or unique creative elements.
