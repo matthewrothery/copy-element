@@ -8,10 +8,10 @@
 # Terraform owns config only — lifecycle.ignore_changes covers the code.
 
 locals {
-  lambda_zip_path      = "${path.module}/../auto-blogger/dist/lambda/lambda.zip"
-  lambda_topics_name   = "${var.project}-${local.normalized_env}-auto-blogger-topics"
-  lambda_news_name     = "${var.project}-${local.normalized_env}-auto-blogger-news"
-  dynamodb_table_name  = "${var.project}-${local.normalized_env}-auto-blogger-state"
+  lambda_zip_path     = "${path.module}/../auto-blogger/dist/lambda/lambda.zip"
+  lambda_topics_name  = "${var.project}-${local.normalized_env}-auto-blogger-topics"
+  lambda_news_name    = "${var.project}-${local.normalized_env}-auto-blogger-news"
+  dynamodb_table_name = "${var.project}-${local.normalized_env}-auto-blogger-state"
 }
 
 # ─────────────────────────────────────────────────────────────────────────────
@@ -185,7 +185,7 @@ resource "aws_lambda_function" "auto_blogger_topics" {
   # GHA calls `aws lambda update-function-code` on every push — terraform
   # controls config only. lifecycle.ignore_changes prevents terraform from
   # rolling back code deployments made by GHA.
-  filename         = local.lambda_zip_path
+  filename = local.lambda_zip_path
   # Only hash the zip when the flag is true (zip must be built before first apply).
   # Terraform short-circuits the ternary so filebase64sha256 is not called when count=0.
   source_code_hash = var.enable_auto_blogger_lambdas ? filebase64sha256(local.lambda_zip_path) : ""
@@ -202,21 +202,21 @@ resource "aws_lambda_function" "auto_blogger_topics" {
       # require()s @exodus/bytes (ESM-only). Node 22 throws ERR_REQUIRE_ESM
       # without this flag. Default-on in Node 22.12+, but the Lambda nodejs22.x
       # runtime currently ships an older patch.
-      NODE_OPTIONS          = "--experimental-require-module"
-      ANTHROPIC_API_KEY     = var.anthropic_api_key
-      GEMINI_API_KEY        = var.gemini_api_key
-      OPENAI_API_KEY        = var.openai_api_key
-      AUTO_BLOG_S3_BUCKET   = local.s3_auto_blog_bucket_name
-      AUTO_BLOG_S3_PREFIX   = "auto-blogger"
-      AUTO_BLOG_NOTIFY_TO   = var.auto_blog_notify_to
-      AUTO_BLOG_NOTIFY_FROM = var.from_email
-      AUTO_BLOG_STATE_TABLE = local.dynamodb_table_name
-      AWS_SES_REGION        = "us-east-1"
-      NODE_ENV              = "production"
-      DAILY_ARTICLES        = "1"
-      AI_CALL_DELAY_MS      = "2000"
-      AUTO_BLOG_IMAGE_MODEL = "gemini-2.5-flash-image"
-      AUTO_BLOG_IMAGE_STYLE = "stencil"
+      NODE_OPTIONS            = "--experimental-require-module"
+      ANTHROPIC_API_KEY       = var.anthropic_api_key
+      GEMINI_API_KEY          = var.gemini_api_key
+      OPENAI_API_KEY          = var.openai_api_key
+      AUTO_BLOG_S3_BUCKET     = local.s3_auto_blog_bucket_name
+      AUTO_BLOG_S3_PREFIX     = "auto-blogger"
+      AUTO_BLOG_NOTIFY_TO     = var.auto_blog_notify_to
+      AUTO_BLOG_NOTIFY_FROM   = var.from_email
+      AUTO_BLOG_STATE_TABLE   = local.dynamodb_table_name
+      AWS_SES_REGION          = "us-east-1"
+      NODE_ENV                = "production"
+      DAILY_ARTICLES          = "1"
+      AI_CALL_DELAY_MS        = "2000"
+      AUTO_BLOG_IMAGE_MODEL   = "gemini-2.5-flash-image"
+      AUTO_BLOG_IMAGE_STYLE   = "stencil"
       AUTO_BLOG_IMAGE_PALETTE = "vibrant"
     }
   }
@@ -252,19 +252,19 @@ resource "aws_lambda_function" "auto_blogger_news" {
       # require()s @exodus/bytes (ESM-only). Node 22 throws ERR_REQUIRE_ESM
       # without this flag. Default-on in Node 22.12+, but the Lambda nodejs22.x
       # runtime currently ships an older patch.
-      NODE_OPTIONS          = "--experimental-require-module"
-      ANTHROPIC_API_KEY     = var.anthropic_api_key
-      GEMINI_API_KEY        = var.gemini_api_key
-      OPENAI_API_KEY        = var.openai_api_key
-      AUTO_BLOG_S3_BUCKET   = local.s3_auto_blog_bucket_name
-      AUTO_BLOG_S3_PREFIX   = "auto-blogger"
-      AUTO_BLOG_NOTIFY_TO   = var.auto_blog_notify_to
-      AUTO_BLOG_NOTIFY_FROM = var.from_email
-      AUTO_BLOG_STATE_TABLE = local.dynamodb_table_name
-      AWS_SES_REGION        = "us-east-1"
-      NODE_ENV              = "production"
-      AUTO_BLOG_IMAGE_MODEL = "gemini-2.5-flash-image"
-      AUTO_BLOG_IMAGE_STYLE = "stencil"
+      NODE_OPTIONS            = "--experimental-require-module"
+      ANTHROPIC_API_KEY       = var.anthropic_api_key
+      GEMINI_API_KEY          = var.gemini_api_key
+      OPENAI_API_KEY          = var.openai_api_key
+      AUTO_BLOG_S3_BUCKET     = local.s3_auto_blog_bucket_name
+      AUTO_BLOG_S3_PREFIX     = "auto-blogger"
+      AUTO_BLOG_NOTIFY_TO     = var.auto_blog_notify_to
+      AUTO_BLOG_NOTIFY_FROM   = var.from_email
+      AUTO_BLOG_STATE_TABLE   = local.dynamodb_table_name
+      AWS_SES_REGION          = "us-east-1"
+      NODE_ENV                = "production"
+      AUTO_BLOG_IMAGE_MODEL   = "gemini-2.5-flash-image"
+      AUTO_BLOG_IMAGE_STYLE   = "stencil"
       AUTO_BLOG_IMAGE_PALETTE = "vibrant"
     }
   }
@@ -330,8 +330,8 @@ resource "aws_iam_role_policy" "scheduler_invoke_lambda" {
   policy = jsonencode({
     Version = "2012-10-17"
     Statement = [{
-      Effect   = "Allow"
-      Action   = "lambda:InvokeFunction"
+      Effect = "Allow"
+      Action = "lambda:InvokeFunction"
       Resource = [
         aws_lambda_function.auto_blogger_topics[0].arn,
         aws_lambda_function.auto_blogger_news[0].arn
@@ -348,7 +348,7 @@ resource "aws_iam_role_policy" "scheduler_invoke_lambda" {
 
 locals {
   topics_schedules = {
-    "09h-new"     = { hour = 9,  description = "09:00 Sydney net-new topic", slot = "new-topic" }
+    "09h-new"     = { hour = 9, description = "09:00 Sydney net-new topic", slot = "new-topic" }
     "14h-refresh" = { hour = 14, description = "14:00 Sydney refresh/update slot", slot = "refresh" }
   }
 }
@@ -358,6 +358,7 @@ resource "aws_scheduler_schedule" "auto_blogger_topics" {
   name        = "${var.project}-${local.normalized_env}-auto-blogger-topics-${each.key}"
   group_name  = "default"
   description = "Auto-blogger topic article (${each.value.description})"
+  state       = var.enable_auto_blogger_schedules ? "ENABLED" : "DISABLED"
 
   schedule_expression          = "cron(0 ${each.value.hour} * * ? *)"
   schedule_expression_timezone = "Australia/Sydney"
@@ -382,6 +383,7 @@ resource "aws_scheduler_schedule" "auto_blogger_news" {
   name        = "${var.project}-${local.normalized_env}-auto-blogger-news"
   group_name  = "default"
   description = "Daily auto-blogger news post (10:00 Sydney)"
+  state       = var.enable_auto_blogger_schedules ? "ENABLED" : "DISABLED"
 
   schedule_expression          = "cron(0 10 * * ? *)"
   schedule_expression_timezone = "Australia/Sydney"

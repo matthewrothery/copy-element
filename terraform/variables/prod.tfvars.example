@@ -30,6 +30,9 @@ ec2_key_pair_name = ""
 # ECR repository name
 ecr_server_repo = "element-armory-server"
 ecr_auto_blogger_repo = "element-armory-auto-blogger"
+enable_auto_blogger_lambdas = false
+# Keep automatic topic/news generation paused until editorial review is restored.
+enable_auto_blogger_schedules = false
 
 # S3 bucket names
 s3_website_bucket = "elementarmory.com"

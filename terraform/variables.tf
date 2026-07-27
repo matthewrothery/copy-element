@@ -213,7 +213,13 @@ variable "ecr_auto_blogger_repo" {
 }
 
 variable "enable_auto_blogger_lambdas" {
-  description = "When true, creates the auto-blogger Lambda functions, DynamoDB state table, and EventBridge Scheduler entries. Set enable_auto_blogger_timers = false at the same time to perform an atomic cutover from EC2 systemd timers to Lambda."
+  description = "When true, creates the auto-blogger Lambda functions and supporting infrastructure."
+  type        = bool
+  default     = false
+}
+
+variable "enable_auto_blogger_schedules" {
+  description = "When true, enables automatic topic and news generation schedules. Keep false while publication is human-reviewed."
   type        = bool
   default     = false
 }

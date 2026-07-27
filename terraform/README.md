@@ -142,7 +142,11 @@ The infrastructure creates an IAM user for GitHub Actions deployment. To use it:
 
 ## Auto-blogger Lambda
 
-The auto-blogger runs as two Lambda functions defined in `lambda.tf`. Both are gated by `var.enable_auto_blogger_lambdas` (default `false`).
+The auto-blogger uses two Lambda functions defined in `lambda.tf`. The functions
+are gated by `var.enable_auto_blogger_lambdas` (default `false`). Automatic
+generation is controlled separately by `var.enable_auto_blogger_schedules` and
+is disabled by default so content can be generated and published manually after
+editorial review.
 
 ### Enabling
 
@@ -156,6 +160,7 @@ Then set in `variables/prod.tfvars`:
 
 ```hcl
 enable_auto_blogger_lambdas = true
+enable_auto_blogger_schedules = false
 ```
 
 And apply:
@@ -164,9 +169,27 @@ And apply:
 AWS_REGION=us-east-2 aws-vault exec demoly -- docker-compose run --rm terraform apply -var-file=./variables/prod.tfvars
 ```
 
-### Disabling
+### Pausing automatic generation
 
-Set `enable_auto_blogger_lambdas = false` and apply. The DynamoDB table is unconditional and persists (cheap on-demand billing; retains claimed keyword history). Destroy it manually if you want a clean slate.
+Keep the Lambda functions available but disable all automatic generation:
+
+```hcl
+enable_auto_blogger_lambdas   = true
+enable_auto_blogger_schedules = false
+```
+
+Apply Terraform after changing the value. This leaves the Lambda functions,
+DynamoDB history, and manual invocation path intact while setting every
+EventBridge schedule to `DISABLED`.
+
+The `Import auto-blog content` GitHub workflow is manual-only. Use its
+`workflow_dispatch` action only after pending artifacts have passed editorial
+review.
+
+To remove the Lambda functions entirely, set `enable_auto_blogger_lambdas =
+false` and apply. The DynamoDB table is unconditional and persists (cheap
+on-demand billing; retains claimed keyword history). Destroy it manually only
+if you want a clean slate.
 
 ### Resources created
 
@@ -175,8 +198,8 @@ Set `enable_auto_blogger_lambdas = false` and apply. The DynamoDB table is uncon
 | DynamoDB table | `{project}-{env}-auto-blogger-state` |
 | Lambda (topics) | `{project}-{env}-auto-blogger-topics` |
 | Lambda (news) | `{project}-{env}-auto-blogger-news` |
-| EventBridge schedule | `{project}-{env}-auto-blogger-topics` — 09:00 Australia/Sydney |
-| EventBridge schedule | `{project}-{env}-auto-blogger-news` — 10:00 Australia/Sydney |
+| EventBridge schedule | `{project}-{env}-auto-blogger-topics-*` — disabled unless explicitly enabled |
+| EventBridge schedule | `{project}-{env}-auto-blogger-news` — disabled unless explicitly enabled |
 | CloudWatch log group | `/aws/lambda/{project}-{env}-auto-blogger-topics` (30-day retention) |
 | CloudWatch log group | `/aws/lambda/{project}-{env}-auto-blogger-news` (30-day retention) |
 

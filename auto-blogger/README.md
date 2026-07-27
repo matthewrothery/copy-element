@@ -1,6 +1,8 @@
 # Auto Blogger
 
-Generates topical authority articles and daily news commentary for a project's blog. Runs as two AWS Lambda functions on EventBridge Scheduler.
+Generates topical authority articles and news commentary for a project's blog.
+The AWS Lambda functions remain available for manual, human-reviewed runs;
+automatic EventBridge schedules are paused.
 
 - `topicsHandler` — picks N keywords from `list.md`, generates N articles in parallel via `Promise.all`, stages artifacts in S3, sends one digest email.
 - `newsHandler` — fetches recent AI/developer news, generates one commentary post, stages in S3, sends digest email.
@@ -52,12 +54,16 @@ The zip is built by `build.lambda.mjs` (esbuild + adm-zip). `@aws-sdk/*` is excl
 
 Two Lambda functions in `terraform/lambda.tf`, both in `us-east-2`:
 
-| Function | Handler | Schedule (Australia/Sydney) |
+| Function | Handler | Automatic schedule |
 |---|---|---|
-| `element-armory-prod-auto-blogger-topics` | `index.topicsHandler` | `09:00` daily |
-| `element-armory-prod-auto-blogger-news` | `index.newsHandler` | `10:00` daily |
+| `element-armory-prod-auto-blogger-topics` | `index.topicsHandler` | Disabled |
+| `element-armory-prod-auto-blogger-news` | `index.newsHandler` | Disabled |
 
 State: DynamoDB on-demand table `element-armory-prod-auto-blogger-state`.
+
+The scheduled GitHub importer is also disabled. Trigger generation and import
+manually only after an editor has approved the intended topic and reviewed the
+resulting artifact.
 
 Code updates: GitHub Actions `build_auto_blogger_lambda` job builds the zip and calls `aws lambda update-function-code` on every push to `master` touching `auto-blogger/**`.
 

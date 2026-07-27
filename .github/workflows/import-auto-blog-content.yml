@@ -2,17 +2,6 @@
 name: Import auto-blog content
 
 on:
-  schedule:
-    # Catches 9am AEST topic + 10am AEST news (23:00/00:00 UTC prev/current day)
-    - cron: "0 0 * * *"
-    # Catches 11am AEST topic (01:00 UTC)
-    - cron: "30 1 * * *"
-    # Catches 2pm AEST topic (04:00 UTC)
-    - cron: "0 5 * * *"
-    # Catches 4pm AEST topic (06:00 UTC)
-    - cron: "0 7 * * *"
-    # Afternoon catch-all
-    - cron: "0 13 * * *"
   workflow_dispatch:
 
 env:
